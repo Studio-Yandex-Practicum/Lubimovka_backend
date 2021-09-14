@@ -1,0 +1,16 @@
+version: '3.8'
+
+volumes:
+  postgres_data:
+
+services:
+  postgres-local:
+    image: postgres:13.3
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: lyubimovka
+      POSTGRES_PASSWORD: pg_password
