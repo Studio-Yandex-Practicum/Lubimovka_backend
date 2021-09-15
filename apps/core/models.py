@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class TimeStampedModel(models.Model):
+class BaseModel(models.Model):
     """
     An abstract base class model that provides self-updating ``created`` and
     ``modified`` fields.

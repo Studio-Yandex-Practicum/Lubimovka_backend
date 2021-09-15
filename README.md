@@ -52,18 +52,18 @@
     ```shell
     pre-commit install --all
     ```
-6. Для запуска базы данных используйте local.yaml и docker-compose.
+6. Для запуска базы данных используйте postgres-local.yaml и docker-compose.
     ```
-    docker-compose -f local.yaml up -d
+    docker-compose -f postgres-local.yaml up -d
     ```
 7. Остановка, удаление и все остальные команды как с любым контейнером docker
     - Остановить контейнер с БД:
         ```shell
-        docker-compose -f local.yaml down
+        docker-compose -f postgres-local.yaml down
         ```
     - Остановить контейнер с БД удалив данные:
         ```shell
-        docker-compose -f local.yaml down --volumes
+        docker-compose -f postgres-local.yaml down --volumes
         ```
 8. Локальные настройки не требуют переменных окружения. Если они потребуются:
     - раскоментируйте подключение **.env** в файле настроек **config.settings.local**
