@@ -13,6 +13,10 @@
 - djoser для эндпоинтов пользователя
 - автодокументация swagger/redoc (http://base_url/api/schema/swagger-ui/ или http://base_url/api/schema/redoc/)
 
+## Правила работы с git (как делать коммиты и pull request-ы)
+**Не написано, ждёт когда кто-то напишет.**\
+В планах придерживаться [вот таких](https://habr.com/ru/post/106912/) и [таких](https://www.atlassian.com/ru/git/tutorials/comparing-workflows/gitflow-workflow) схем
+
 ## Подготовка окружения для разработки
 
 Что нужно подготовить предварительно:
