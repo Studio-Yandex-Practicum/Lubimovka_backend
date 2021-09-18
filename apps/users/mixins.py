@@ -1,4 +1,4 @@
-class _Perms:
+class _BasePermissions:
     """
     Base class for permissions checker
     """
@@ -19,7 +19,7 @@ class _Perms:
         return True
 
 
-class AdminOnlyPermissionsMixin(_Perms):
+class AdminOnlyPermissionsMixin(_BasePermissions):
     """
     Give all rights for admin
     """
@@ -27,12 +27,10 @@ class AdminOnlyPermissionsMixin(_Perms):
     def check_perm(self, user_obj):
         if user_obj.is_anonymous:
             return False
-        if user_obj.is_admin or user_obj.is_superuser:
-            return True
-        return False
+        return user_obj.is_admin or user_obj.is_superuser
 
 
-class EditorAndAdminPermissionsMixin(_Perms):
+class EditorAndAdminPermissionsMixin(_BasePermissions):
     """
     Give all rights for editor and admin
     """
@@ -40,6 +38,4 @@ class EditorAndAdminPermissionsMixin(_Perms):
     def check_perm(self, user_obj):
         if user_obj.is_anonymous:
             return False
-        if user_obj.is_superuser or user_obj.is_admin or user_obj.is_editor:
-            return True
-        return False
+        return user_obj.is_superuser or user_obj.is_admin or user_obj.is_editor

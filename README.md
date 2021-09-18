@@ -82,7 +82,7 @@
 
 Пример использования прав:
   ```python
-    from users.utils import AdminOnlyPermissionsMixin
+    from users.mixins import AdminOnlyPermissionsMixin
     from .models import Foo
 
     class FooAdmin(AdminOnlyPermissionsMixin, Foo):
