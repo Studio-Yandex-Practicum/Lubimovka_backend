@@ -1,5 +1,5 @@
 from rest_framework import generics
 
 
-class AfishaAPIView(generics.ListAPIView):
+class EventsAPIView(generics.ListAPIView):
     pass

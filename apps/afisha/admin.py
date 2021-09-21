@@ -1,10 +1,10 @@
 from django.contrib import admin
 
-from apps.afisha.models import Afisha
+from apps.afisha.models import Event
 
 
-class AfishaAdmin(admin.ModelAdmin):
+class EventAdmin(admin.ModelAdmin):
     pass
 
 
-admin.site.register(Afisha, AfishaAdmin)
+admin.site.register(Event, EventAdmin)
