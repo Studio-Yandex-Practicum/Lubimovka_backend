@@ -12,3 +12,15 @@ class BaseModel(models.Model):
 
     class Meta:
         abstract = True
+
+
+class Image(BaseModel):
+    image = models.ImageField(
+        upload_to="images/",
+        verbose_name="Изображение",
+        help_text="Загрузите фотографию",
+    )
+
+    class Meta:
+        verbose_name = "Изображение"
+        verbose_name_plural = "Изображения"
