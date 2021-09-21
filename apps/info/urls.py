@@ -12,7 +12,7 @@ router.register(
 
 
 info_urls = [
-    path("", include(router.urls)),
+    path("info/", include(router.urls)),
 ]
 
 urlpatterns = [

@@ -12,9 +12,9 @@ router.register(
 
 
 afisha_urls = [
-    path("", include(router.urls)),
+    path("afisha/", include(router.urls)),
 ]
 
 urlpatterns = [
-    path("v1/afisha/", include(afisha_urls)),
+    path("v1/", include(afisha_urls)),
 ]

@@ -38,7 +38,7 @@ router.register(
 
 
 library_urls = [
-    path("", include(router.urls)),
+    path("library", include(router.urls)),
 ]
 
 urlpatterns = [
