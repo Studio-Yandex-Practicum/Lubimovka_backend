@@ -9,3 +9,7 @@ class Event(BaseModel):
         unique=True,
         verbose_name="Название события",
     )
+
+    class Meta:
+        verbose_name = "Событие"
+        verbose_name_plural = "События"
