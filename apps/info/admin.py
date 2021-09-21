@@ -1,17 +1,17 @@
 from django.contrib import admin
 
-from .models import Partners
+from .models import Partner
 
 
-class PartnersAdmin(admin.ModelAdmin):
+class PartnerAdmin(admin.ModelAdmin):
     list_display = (
-        'id',
-        'name',
-        'type',
-        'url',
-        #'image',
-
+        "id",
+        "name",
+        "type",
+        "url",
+        # 'image',
     )
     empty_value_display = "-пусто-"
 
-admin.site.register(Partners, PartnersAdmin)
+
+admin.site.register(Partner, PartnerAdmin)
