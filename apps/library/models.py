@@ -9,6 +9,10 @@ class Play(BaseModel):
         unique=True,
         verbose_name="Название пьесы",
     )
+    is_draft = models.BooleanField(
+        default=True,
+        verbose_name="Черновик",
+    )
 
     class Meta:
         verbose_name = "Пьеса"
@@ -56,15 +60,3 @@ class ReviewPerformance(BaseModel):
     class Meta:
         verbose_name = "Отзыв зрителя на спектакль"
         verbose_name_plural = "Отзывы зрителей на спектакль"
-
-
-class PlayDraft(BaseModel):
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-        verbose_name="Название пьесы",
-    )
-
-    class Meta:
-        verbose_name = "Черновик пьесы"
-        verbose_name_plural = "Черновики пьес"
