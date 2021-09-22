@@ -2,11 +2,11 @@ from django.contrib import admin
 
 from apps.library.models import (
     Author,
-    DraftPlay,
-    MediaReviewSpectacle,
+    MediaReviewPerformance,
+    Performance,
     Play,
-    Spectacle,
-    WatcherReviewSpectacle,
+    PlayDraft,
+    ReviewPerformance,
 )
 
 
@@ -14,11 +14,11 @@ class PlayAdmin(admin.ModelAdmin):
     pass
 
 
-class DraftPlayAdmin(admin.ModelAdmin):
+class PlayDraftAdmin(admin.ModelAdmin):
     pass
 
 
-class SpectacleAdmin(admin.ModelAdmin):
+class PerformanceAdmin(admin.ModelAdmin):
     pass
 
 
@@ -26,17 +26,17 @@ class AuthorAdmin(admin.ModelAdmin):
     pass
 
 
-class MediaReviewSpectacleAdmin(admin.ModelAdmin):
+class MediaReviewPerformanceAdmin(admin.ModelAdmin):
     pass
 
 
-class WatcherReviewSpectacleAdmin(admin.ModelAdmin):
+class ReviewPerformanceAdmin(admin.ModelAdmin):
     pass
 
 
 admin.site.register(Play, PlayAdmin)
-admin.site.register(DraftPlay, DraftPlayAdmin)
-admin.site.register(Spectacle, SpectacleAdmin)
+admin.site.register(PlayDraft, PlayDraftAdmin)
+admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Author, AuthorAdmin)
-admin.site.register(MediaReviewSpectacle, MediaReviewSpectacleAdmin)
-admin.site.register(WatcherReviewSpectacle, WatcherReviewSpectacleAdmin)
+admin.site.register(MediaReviewPerformance, MediaReviewPerformanceAdmin)
+admin.site.register(ReviewPerformance, ReviewPerformanceAdmin)

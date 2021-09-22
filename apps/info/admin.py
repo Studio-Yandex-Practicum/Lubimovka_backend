@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Partner
+from .models import Partner, Question
 
 
 class PartnerAdmin(admin.ModelAdmin):
@@ -14,4 +14,9 @@ class PartnerAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
+class QuestionAdmin(admin.ModelAdmin):
+    pass
+
+
 admin.site.register(Partner, PartnerAdmin)
+admin.site.register(Question, QuestionAdmin)

@@ -15,7 +15,7 @@ class NewsItem(BaseModel):
         verbose_name_plural = "Новости"
 
 
-class ArticleBlog(BaseModel):
+class BlogItem(BaseModel):
     name = models.CharField(
         max_length=200,
         unique=True,

@@ -1,11 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.articles.views import (
-    ArticlesBlogAPIView,
-    NewsAPIView,
-    ProjectsAPIView,
-)
+from apps.articles.views import BlogAPIView, NewsAPIView, ProjectsAPIView
 
 router = DefaultRouter()
 router.register(
@@ -14,9 +10,9 @@ router.register(
     basename="news",
 )
 router.register(
-    "blog-articles",
-    ArticlesBlogAPIView,
-    basename="blog-articles",
+    "blog",
+    BlogAPIView,
+    basename="blog",
 )
 router.register(
     "projects",

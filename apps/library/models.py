@@ -15,7 +15,7 @@ class Play(BaseModel):
         verbose_name_plural = "Пьесы"
 
 
-class Spectacle(BaseModel):
+class Performance(BaseModel):
     name = models.CharField(
         max_length=200,
         unique=True,
@@ -38,7 +38,7 @@ class Author(BaseModel):
         verbose_name_plural = "Авторы"
 
 
-class MediaReviewSpectacle(BaseModel):
+class MediaReviewPerformance(BaseModel):
     text = models.TextField(
         verbose_name="Текст отзыва",
     )
@@ -48,7 +48,7 @@ class MediaReviewSpectacle(BaseModel):
         verbose_name_plural = "Медиа отзывы на спектакль"
 
 
-class WatcherReviewSpectacle(BaseModel):
+class ReviewPerformance(BaseModel):
     text = models.TextField(
         verbose_name="Текст отзыва",
     )
@@ -58,7 +58,7 @@ class WatcherReviewSpectacle(BaseModel):
         verbose_name_plural = "Отзывы зрителей на спектакль"
 
 
-class DraftPlay(BaseModel):
+class PlayDraft(BaseModel):
     name = models.CharField(
         max_length=200,
         unique=True,

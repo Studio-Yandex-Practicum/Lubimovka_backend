@@ -3,10 +3,10 @@ from rest_framework.routers import DefaultRouter
 
 from apps.library.views import (
     AuthorsAPIView,
-    MediaReviewsSpectacleAPIView,
+    MediaReviewsPerformanceAPIView,
+    PerformancesAPIView,
     PlaysAPIView,
-    SpectaclesAPIView,
-    WatcherReviewsSpectacleAPIView,
+    ReviewsPerformanceAPIView,
 )
 
 router = DefaultRouter()
@@ -16,9 +16,9 @@ router.register(
     basename="plays",
 )
 router.register(
-    "spectacles",
-    SpectaclesAPIView,
-    basename="spectacles",
+    "performances",
+    PerformancesAPIView,
+    basename="performances",
 )
 router.register(
     "authors",
@@ -27,18 +27,18 @@ router.register(
 )
 router.register(
     "media-reviews",
-    MediaReviewsSpectacleAPIView,
+    MediaReviewsPerformanceAPIView,
     basename="media-reviews",
 )
 router.register(
-    "watcher-reviews",
-    WatcherReviewsSpectacleAPIView,
-    basename="watcher-reviews",
+    "reviews",
+    ReviewsPerformanceAPIView,
+    basename="reviews",
 )
 
 
 library_urls = [
-    path("library", include(router.urls)),
+    path("library/", include(router.urls)),
 ]
 
 urlpatterns = [

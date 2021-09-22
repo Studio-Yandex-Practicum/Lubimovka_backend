@@ -5,7 +5,7 @@ class PlaysAPIView(generics.ListAPIView):
     pass
 
 
-class SpectaclesAPIView(generics.ListAPIView):
+class PerformancesAPIView(generics.ListAPIView):
     pass
 
 
@@ -13,9 +13,9 @@ class AuthorsAPIView(generics.ListAPIView):
     pass
 
 
-class MediaReviewsSpectacleAPIView(generics.ListAPIView):
+class MediaReviewsPerformanceAPIView(generics.ListAPIView):
     pass
 
 
-class WatcherReviewsSpectacleAPIView(generics.ListAPIView):
+class ReviewsPerformanceAPIView(generics.ListAPIView):
     pass

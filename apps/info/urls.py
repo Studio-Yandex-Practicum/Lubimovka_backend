@@ -1,13 +1,18 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.info.views import PartnersAPIView
+from apps.info.views import PartnersAPIView, QuestionsAPIView
 
 router = DefaultRouter()
 router.register(
     "partners",
     PartnersAPIView,
     basename="partners",
+)
+router.register(
+    "questions",
+    QuestionsAPIView,
+    basename="questions",
 )
 
 

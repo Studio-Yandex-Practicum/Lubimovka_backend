@@ -5,7 +5,7 @@ class NewsAPIView(generics.ListAPIView):
     pass
 
 
-class ArticlesBlogAPIView(generics.ListAPIView):
+class BlogAPIView(generics.ListAPIView):
     pass
 
 
