@@ -3,10 +3,10 @@ from rest_framework.routers import DefaultRouter
 
 from apps.library.views import (
     AuthorsAPIView,
-    MediaReviewsPerformanceAPIView,
+    PerformanceMediaReviewsAPIView,
+    PerformanceReviewsAPIView,
     PerformancesAPIView,
     PlaysAPIView,
-    ReviewsPerformanceAPIView,
 )
 
 router = DefaultRouter()
@@ -27,12 +27,12 @@ router.register(
 )
 router.register(
     "media-reviews",
-    MediaReviewsPerformanceAPIView,
+    PerformanceMediaReviewsAPIView,
     basename="media-reviews",
 )
 router.register(
     "reviews",
-    ReviewsPerformanceAPIView,
+    PerformanceReviewsAPIView,
     basename="reviews",
 )
 

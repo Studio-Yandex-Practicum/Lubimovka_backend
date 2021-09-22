@@ -13,9 +13,9 @@ class AuthorsAPIView(generics.ListAPIView):
     pass
 
 
-class MediaReviewsPerformanceAPIView(generics.ListAPIView):
+class PerformanceMediaReviewsAPIView(generics.ListAPIView):
     pass
 
 
-class ReviewsPerformanceAPIView(generics.ListAPIView):
+class PerformanceReviewsAPIView(generics.ListAPIView):
     pass

@@ -42,7 +42,7 @@ class Author(BaseModel):
         verbose_name_plural = "Авторы"
 
 
-class MediaReviewPerformance(BaseModel):
+class PerformanceMediaReview(BaseModel):
     text = models.TextField(
         verbose_name="Текст отзыва",
     )
@@ -52,7 +52,7 @@ class MediaReviewPerformance(BaseModel):
         verbose_name_plural = "Медиа отзывы на спектакль"
 
 
-class ReviewPerformance(BaseModel):
+class PerformanceReview(BaseModel):
     text = models.TextField(
         verbose_name="Текст отзыва",
     )
