@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -50,3 +51,23 @@ class Question(BaseModel):
     class Meta:
         verbose_name = "Вопрос"
         verbose_name_plural = "Вопросы"
+
+
+class Place(BaseModel):
+    name = models.CharField(max_length=50, verbose_name="Название")
+    description = models.CharField(max_length=255, verbose_name="Описание")
+    city = models.CharField(max_length=50, verbose_name="Город")
+    address = models.CharField(max_length=50, verbose_name="Адрес")
+    map_link = models.URLField(verbose_name="Ссылка на карту")
+
+    class Meta:
+        verbose_name = "Площадка"
+        verbose_name_plural = "Площадки"
+
+    def __str__(self):
+        return self.name
+
+    def clean(self):
+        place = Place.objects.filter(name=self.name, city=self.city)
+        if place:
+            raise ValidationError("Такая площадка уже существует")
