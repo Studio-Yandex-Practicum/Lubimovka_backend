@@ -1,19 +1,7 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models
 
 
 class User(AbstractUser):
-    class Role(models.TextChoices):
-        EDITOR = "Редактор", "Редактор"
-        ADMIN = "Администратор", "Администратор"
-
-    role = models.CharField(
-        max_length=13,
-        choices=Role.choices,
-        default=Role.EDITOR,
-        verbose_name="Роль",
-    )
-
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
@@ -26,18 +14,24 @@ class User(AbstractUser):
         """
         Return True if user is admin
         """
-        return self.role == self.Role.ADMIN
+        # gr = self.groups.all().filter(name='admin')
+        # print(self.groups.all().filter(name='admin'))
+        return self.groups.all().filter(name="admin").exists()
 
     @property
     def is_editor(self):
         """
         Return True if user is editor
         """
-        return self.role == self.Role.EDITOR
+        return self.groups.all().filter(name="editor").exists()
 
     def save(self, *args, **kwargs):
+        print(self.groups.all())
+        print(self.is_editor)
+        print(self.is_admin)
         """
         Make every user is staff for access in admin panel
         """
+
         self.is_staff = True
         super().save(*args, **kwargs)
