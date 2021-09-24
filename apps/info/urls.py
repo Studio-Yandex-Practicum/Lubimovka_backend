@@ -1,27 +1,24 @@
 from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
-from apps.info.views import PlaceAPIView  # , QuestionsAPIView, PartnersAPIView
+from apps.info.views import PartnersAPIView, QuestionsAPIView
 
-# from rest_framework.routers import DefaultRouter
-
-
-#
-# router = DefaultRouter()
-# router.register(
-#     "partners",
-#     PartnersAPIView,
-#     basename="partners",
-# )
-# router.register(
-#     "questions",
-#     QuestionsAPIView,
-#     basename="questions",
-# )
+router = DefaultRouter()
+router.register(
+    "partners",
+    PartnersAPIView,
+    basename="partners",
+)
+router.register(
+    "questions",
+    QuestionsAPIView,
+    basename="questions",
+)
 
 info_urls = [
-    path("places/", PlaceAPIView.as_view(), name="places"),
+    path("info/", include(router.urls)),
 ]
 
 urlpatterns = [
-    path("v1/info/", include(info_urls)),
+    path("v1/", include(info_urls)),
 ]
