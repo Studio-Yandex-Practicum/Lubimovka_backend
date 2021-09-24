@@ -69,5 +69,5 @@ class Place(BaseModel):
 
     def clean(self):
         place = Place.objects.filter(name=self.name, city=self.city)
-        if place:
+        if place and self not in place:
             raise ValidationError("Такая площадка уже существует")
