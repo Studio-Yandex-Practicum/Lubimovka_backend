@@ -5,8 +5,6 @@ from django.contrib.auth.models import Group
 
 from .forms import GroupAdminForm, UserAdminForm
 
-# from .models import Group
-
 User = get_user_model()
 
 

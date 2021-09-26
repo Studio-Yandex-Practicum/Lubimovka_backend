@@ -17,7 +17,7 @@ class User(AbstractUser):
         Return True if user is admin
         """
 
-        return self.groups.all().filter(name="admin").exists()
+        return self.groups.filter(name="admin").exists()
 
     @property
     def is_editor(self):
@@ -25,11 +25,11 @@ class User(AbstractUser):
         Return True if user is editor
         """
 
-        return self.groups.all().filter(name="editor").exists()
+        return self.groups.filter(name="editor").exists()
 
     def save(self, *args, **kwargs):
         """
-        Make every user is staff for access in admin panel
+        Set "is_staff" for each user
         """
 
         self.is_staff = True
