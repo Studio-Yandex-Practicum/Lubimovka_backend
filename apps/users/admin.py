@@ -19,6 +19,9 @@ class UserAdmin(DjangoUserAdmin):
     list_filter = ["email", "username"]
 
     def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return ["is_superuser"]
+        return super().get_readonly_fields(request, obj)
         if request.user.is_superuser:
             return super().get_readonly_fields(request, obj)
         return ["is_superuser"]
