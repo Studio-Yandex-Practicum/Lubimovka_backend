@@ -7,15 +7,16 @@ class User(AbstractUser):
         verbose_name_plural = "Пользователи"
 
     def __str__(self):
-        return self.username
+        return "{} ({})".format(
+            self.username, self.groups.first() if self.groups.first() else "-"
+        )
 
     @property
     def is_admin(self):
         """
         Return True if user is admin
         """
-        # gr = self.groups.all().filter(name='admin')
-        # print(self.groups.all().filter(name='admin'))
+
         return self.groups.all().filter(name="admin").exists()
 
     @property
@@ -23,12 +24,10 @@ class User(AbstractUser):
         """
         Return True if user is editor
         """
+
         return self.groups.all().filter(name="editor").exists()
 
     def save(self, *args, **kwargs):
-        print(self.groups.all())
-        print(self.is_editor)
-        print(self.is_admin)
         """
         Make every user is staff for access in admin panel
         """

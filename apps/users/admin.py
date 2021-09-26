@@ -1,48 +1,43 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
+from django.contrib.auth.models import Group
+
+from .forms import GroupAdminForm, UserAdminForm
+
+# from .models import Group
 
 User = get_user_model()
 
 
 class UserAdmin(DjangoUserAdmin):
-    pass
-    # list_display = (
-    #     "id",
-    #     "username",
-    #     "is_active",
-    #     "role",
-    # )
-    # list_filter = ["email", "username", "role"]
-    # fieldsets = (
-    #     (None, {"fields": ("username", "email", "password", "role")}),
-    #     (_("Personal info"), {"fields": ("first_name", "last_name")}),
-    #     (
-    #         _("Permissions"),
-    #         {
-    #             "fields": (
-    #                 "is_active",
-    #                 "is_superuser",
-    #             ),
-    #         },
-    #     ),
-    #     (_("Important dates"), {"fields": ("last_login", "date_joined")}),
-    # )
-    # add_fieldsets = (
-    #     (
-    #         None,
-    #         {
-    #             "classes": ("wide",),
-    #             "fields": ("username", "password1", "password2", "role"),
-    #         },
-    #     ),
-    # )
-    #
-    # def get_readonly_fields(self, request, obj=None):
-    #     if request.user.is_superuser:
-    #         return super().get_readonly_fields(request, obj)
-    #     return ["is_superuser"]
+    form = UserAdminForm
+    list_display = (
+        "id",
+        "username",
+        "is_active",
+        "role",
+    )
+    list_filter = ["email", "username"]
+
+    def get_readonly_fields(self, request, obj=None):
+        if request.user.is_superuser:
+            return super().get_readonly_fields(request, obj)
+        return ["is_superuser"]
+
+    def role(self, obj):
+        return obj.groups.first()
+
+    role.short_description = "Роль"
 
 
-# admin.site.unregister(Group)
+class GroupAdmin(admin.ModelAdmin):
+
+    form = GroupAdminForm
+    list_display = ["name"]
+    filter_horizontal = ("permissions",)
+
+
+admin.site.unregister(Group)
+admin.site.register(Group, GroupAdmin)
 admin.site.register(User, UserAdmin)

@@ -10,7 +10,6 @@
 - pre-commit хуки
 - используется PostgreSQL
 - базовая модель TimeStampedModel (импортировать из core.models)
-- djoser для эндпоинтов пользователя
 - автодокументация swagger/redoc (http://base_url/api/schema/swagger-ui/ или http://base_url/api/schema/redoc/)
 
 ## Правила работы с git (как делать коммиты и pull request-ы)
