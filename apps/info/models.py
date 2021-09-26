@@ -46,7 +46,9 @@ class Question(BaseModel):
         unique=True,
         verbose_name="Текст вопроса",
     )
+    name = models.CharField(max_length=50, verbose_name="Имя")
+    email = models.EmailField(verbose_name="Электронная почта")
 
     class Meta:
-        verbose_name = "Вопрос"
-        verbose_name_plural = "Вопросы"
+        verbose_name = "Вопрос или предложение"
+        verbose_name_plural = "Вопросы или предложения"
