@@ -130,3 +130,7 @@ dmypy.json
 
 # vscode settings
 .vscode
+
+# Media and Static Django
+/media
+/static
