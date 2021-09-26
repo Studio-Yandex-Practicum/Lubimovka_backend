@@ -62,7 +62,11 @@ class Place(BaseModel):
     class Meta:
         verbose_name = "Площадка"
         verbose_name_plural = "Площадки"
-        unique_together = (("name", "city"),)
+        constraints = [
+            models.UniqueConstraint(
+                fields=["name", "city"], name="unique_place"
+            ),
+        ]
 
     def __str__(self):
         return self.name
