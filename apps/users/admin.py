@@ -22,9 +22,6 @@ class UserAdmin(DjangoUserAdmin):
         if not request.user.is_superuser:
             return ["is_superuser"]
         return super().get_readonly_fields(request, obj)
-        if request.user.is_superuser:
-            return super().get_readonly_fields(request, obj)
-        return ["is_superuser"]
 
     def role(self, obj):
         return obj.groups.first()
