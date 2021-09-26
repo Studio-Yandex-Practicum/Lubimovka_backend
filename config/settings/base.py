@@ -44,6 +44,13 @@ THIRD_PARTY_APPS = [
 ]
 LOCAL_APPS = [
     "apps.users",
+    "apps.core",
+    "apps.main",
+    "apps.afisha",
+    "apps.library",
+    "apps.articles",
+    "apps.history",
+    "apps.info",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -118,7 +125,7 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,
-    'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%S",
+    "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
