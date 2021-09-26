@@ -84,20 +84,3 @@
 ## Про тесты
 
 Тестов нет, но есть настройки для ускорения тестов + настройки для запуска unittest через pytest (удобно в vscode)
-
-
-## Про систему ролей и права доступа:
-**В системе две группы пользователей: админы и редакторы**
-
-Пример использования прав:
-  ```python
-    from users.mixins import AdminOnlyPermissionsMixin
-    from .models import Foo
-
-    class FooAdmin(AdminOnlyPermissionsMixin, Foo):
-        pass
-  ```
-- **AdminOnlyPermissionsMixin** - переопределяет права и дает полный доступ к сущностями для юзеров с ролью (admin)
-- **EditorAndAdminPermissionsMixin** - переопределяет права и дает полный доступ к сущностями для юзеров с ролью (editor, admin)
-
-_Если миксин не используется, сохраняются базовые права, т.е. доступ к сущностям будет только у суперюзера._
