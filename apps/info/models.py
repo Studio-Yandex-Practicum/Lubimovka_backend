@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -63,11 +62,7 @@ class Place(BaseModel):
     class Meta:
         verbose_name = "Площадка"
         verbose_name_plural = "Площадки"
+        unique_together = (("name", "city"),)
 
     def __str__(self):
         return self.name
-
-    def clean(self):
-        place = Place.objects.filter(name=self.name, city=self.city)
-        if place and self not in place:
-            raise ValidationError("Такая площадка уже существует")
