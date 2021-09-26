@@ -12,7 +12,6 @@ class UserAdminForm(forms.ModelForm):
         groups = self.cleaned_data["groups"]
 
         if groups.count() > 1:
-
             raise ValidationError("Выбрать можно только одну группу.")
 
 
