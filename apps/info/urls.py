@@ -15,7 +15,6 @@ router.register(
     basename="questions",
 )
 
-
 info_urls = [
     path("info/", include(router.urls)),
 ]
