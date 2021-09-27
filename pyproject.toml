@@ -14,6 +14,13 @@ exclude = '''
 )
 '''
 
+[tool.isort]
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+line_length = 79
+
 [tool.poetry]
 name = "lubimovka_backend"
 version = "0.1.0"
@@ -29,9 +36,7 @@ djangorestframework = "^3.12.4"
 psycopg2-binary = "^2.9.1"
 gunicorn = "^20.1.0"
 drf-spectacular = "^0.18.2"
-djangorestframework-simplejwt = "^4.8.0"
 django-filter = "^2.4.0"
-djoser = "^2.1.0"
 Pillow = "^8.3.2"
 
 [tool.poetry.dev-dependencies]
