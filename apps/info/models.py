@@ -63,13 +63,20 @@ class Person(BaseModel):
         max_length=50,
         verbose_name="Фамилия",
     )
+    middle_name = models.CharField(
+        max_length=50,
+        verbose_name="Отчество",
+        blank=True,
+    )
     city = models.CharField(
         max_length=50,
         verbose_name="Город проживания",
+        blank=True,
     )
     email = models.EmailField(
         max_length=200,
         verbose_name="Электронная почта",
+        blank=True,
     )
     image = models.ImageField(
         upload_to="images/person_avatars",
@@ -115,7 +122,7 @@ class FestivalTeam(BaseModel):
         )
 
 
-class Trustee(BaseModel):
+class Sponsor(BaseModel):
     person = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
@@ -134,7 +141,7 @@ class Trustee(BaseModel):
         return f"{self.person.first_name} {self.person.last_name}"
 
 
-class FestivalVolunteer(BaseModel):
+class Volunteer(BaseModel):
     person = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
@@ -144,6 +151,9 @@ class FestivalVolunteer(BaseModel):
         default=timezone.now().year,
         validators=[MinValueValidator(1990), MaxValueValidator(2500)],
         verbose_name="Год участия в фестивале",
+    )
+    review = models.TextField(
+        verbose_name="Текст отзыва",
     )
 
     class Meta:
@@ -159,7 +169,7 @@ class FestivalVolunteer(BaseModel):
 
 class VolunteerReview(BaseModel):
     volunteer = models.ForeignKey(
-        FestivalVolunteer,
+        Volunteer,
         on_delete=models.PROTECT,
         verbose_name="Волонтёр",
     )
@@ -194,21 +204,21 @@ class Festival(BaseModel):
         validators=[MinValueValidator(1990), MaxValueValidator(2500)],
         verbose_name="Год фестиваля",
     )
-    team = models.ManyToManyField(
+    teams = models.ManyToManyField(
         FestivalTeam,
         related_name="festivalteams",
         verbose_name="Арт-дирекция и команда",
         blank=False,
     )
-    trustees = models.ManyToManyField(
-        Trustee,
-        related_name="festivaltrustees",
+    sponsors = models.ManyToManyField(
+        Sponsor,
+        related_name="festivalsponsors",
         verbose_name="Попечители фестиваля",
         blank=False,
     )
     volunteers = models.ManyToManyField(
-        FestivalVolunteer,
-        related_name="festivalvolunteers",
+        Volunteer,
+        related_name="volunteers",
         verbose_name="Волонтёры фестиваля",
         blank=False,
     )

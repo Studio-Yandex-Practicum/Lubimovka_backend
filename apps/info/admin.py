@@ -3,11 +3,11 @@ from django.contrib import admin
 from apps.info.models import (
     Festival,
     FestivalTeam,
-    FestivalVolunteer,
     Partner,
     Person,
     Question,
-    Trustee,
+    Sponsor,
+    Volunteer,
     VolunteerReview,
 )
 
@@ -43,7 +43,7 @@ class FestivalTeamAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
-class TrusteeAdmin(admin.ModelAdmin):
+class SponsorAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "person",
@@ -51,7 +51,7 @@ class TrusteeAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
-class FestivalVolunteerAdmin(admin.ModelAdmin):
+class VolunteerAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "person",
@@ -85,7 +85,7 @@ admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Question, QuestionAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(FestivalTeam, FestivalTeamAdmin)
-admin.site.register(FestivalVolunteer, FestivalVolunteerAdmin)
-admin.site.register(Trustee, TrusteeAdmin)
+admin.site.register(Volunteer, VolunteerAdmin)
+admin.site.register(Sponsor, SponsorAdmin)
 admin.site.register(VolunteerReview, VolunteerReviewAdmin)
 admin.site.register(Festival, FestivalAdmin)
