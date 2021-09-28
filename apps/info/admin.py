@@ -79,6 +79,18 @@ class PlaceAdmin(admin.ModelAdmin):
     search_fields = ("name", "address")
 
 
+class PlaceAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "city",
+        "address",
+    )
+
+    list_filter = ("city",)
+    search_fields = ("name", "address")
+
+
 admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(FestivalTeam, FestivalTeamAdmin)
