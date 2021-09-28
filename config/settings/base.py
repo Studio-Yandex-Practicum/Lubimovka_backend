@@ -49,7 +49,6 @@ LOCAL_APPS = [
     "apps.afisha",
     "apps.library",
     "apps.articles",
-    "apps.history",
     "apps.info",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps

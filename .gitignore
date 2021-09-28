@@ -133,4 +133,4 @@ dmypy.json
 
 # Media and Static Django
 /media
-/static
+/staticfiles

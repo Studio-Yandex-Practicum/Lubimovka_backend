@@ -1,9 +1,11 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.models import BaseModel, Image
+from apps.core.models import BaseModel, Image, Person
 
 
 class Partner(BaseModel):
@@ -54,44 +56,6 @@ class Question(BaseModel):
         verbose_name_plural = "Вопросы"
 
 
-class Person(BaseModel):
-    first_name = models.CharField(
-        max_length=50,
-        verbose_name="Имя",
-    )
-    last_name = models.CharField(
-        max_length=50,
-        verbose_name="Фамилия",
-    )
-    middle_name = models.CharField(
-        max_length=50,
-        verbose_name="Отчество",
-        blank=True,
-    )
-    city = models.CharField(
-        max_length=50,
-        verbose_name="Город проживания",
-        blank=True,
-    )
-    email = models.EmailField(
-        max_length=200,
-        verbose_name="Электронная почта",
-        blank=True,
-    )
-    image = models.ImageField(
-        upload_to="images/person_avatars",
-        verbose_name="Фотография",
-    )
-
-    class Meta:
-        verbose_name = "Человек"
-        verbose_name_plural = "Люди"
-        ordering = ("last_name",)
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
-
-
 class FestivalTeam(BaseModel):
     class TeamType(models.IntegerChoices):
         ART_DIRECTION = 1, _("Арт-дирекция фестиваля")
@@ -106,7 +70,7 @@ class FestivalTeam(BaseModel):
         choices=TeamType.choices,
         verbose_name="Тип команды",
     )
-    appointment = models.CharField(
+    position = models.CharField(
         max_length=150,
         verbose_name="Должность",
     )
@@ -114,12 +78,25 @@ class FestivalTeam(BaseModel):
     class Meta:
         verbose_name = "Команда фестиваля"
         verbose_name_plural = "Команды фестиваля"
+        constraints = [
+            UniqueConstraint(
+                fields=["person", "team"],
+                name="unique_person_team",
+            )
+        ]
 
     def __str__(self):
         return (
             f"{self.person.first_name} {self.person.last_name} - "
             f"{self.team}"
         )
+
+    def clean(self):
+        team_person = FestivalTeam.objects.filter(
+            person=self.person, team=self.team
+        )
+        if self not in team_person and team_person:
+            raise ValidationError("Этот человек уже есть в этой команде")
 
 
 class Sponsor(BaseModel):
@@ -128,7 +105,7 @@ class Sponsor(BaseModel):
         on_delete=models.PROTECT,
         verbose_name="Человек",
     )
-    appointment = models.CharField(
+    position = models.CharField(
         max_length=150,
         verbose_name="Должность",
     )
@@ -136,6 +113,12 @@ class Sponsor(BaseModel):
     class Meta:
         verbose_name = "Попечитель фестиваля"
         verbose_name_plural = "Попечители фестиваля"
+        constraints = [
+            UniqueConstraint(
+                fields=["person", "position"],
+                name="unique_sponsor",
+            )
+        ]
 
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name}"
@@ -159,6 +142,12 @@ class Volunteer(BaseModel):
     class Meta:
         verbose_name = "Волонтёр фестиваля"
         verbose_name_plural = "Волонтёры фестиваля"
+        constraints = [
+            UniqueConstraint(
+                fields=["person", "year"],
+                name="unique_volunteer",
+            )
+        ]
 
     def __str__(self):
         return (
@@ -166,26 +155,12 @@ class Volunteer(BaseModel):
             f"фестиваля {self.year} года"
         )
 
-
-class VolunteerReview(BaseModel):
-    volunteer = models.ForeignKey(
-        Volunteer,
-        on_delete=models.PROTECT,
-        verbose_name="Волонтёр",
-    )
-    review = models.TextField(
-        verbose_name="Текст отзыва",
-    )
-
-    class Meta:
-        verbose_name = "Отзыв волонтёра"
-        verbose_name_plural = "Отзывы волнтёров"
-
-    def __str__(self):
-        return (
-            f"Отзыв волонтёра {self.volunteer.person.first_name} "
-            f"{self.volunteer.person.last_name}"
+    def clean(self):
+        volunteer = Volunteer.objects.filter(
+            person=self.person, year=self.year
         )
+        if self not in volunteer and volunteer:
+            raise ValidationError("Волонтёр уже в участниках фестиваля")
 
 
 class Festival(BaseModel):
@@ -202,6 +177,7 @@ class Festival(BaseModel):
     year = models.PositiveSmallIntegerField(
         default=timezone.now().year,
         validators=[MinValueValidator(1990), MaxValueValidator(2500)],
+        unique=True,
         verbose_name="Год фестиваля",
     )
     teams = models.ManyToManyField(
@@ -222,9 +198,8 @@ class Festival(BaseModel):
         verbose_name="Волонтёры фестиваля",
         blank=False,
     )
-    reviews = models.ManyToManyField(
-        VolunteerReview,
-        related_name="volunteerreviews",
+    reviews = models.CharField(  # Не придумал ещё реализацию
+        max_length=3,
         verbose_name="Отзывы волонтёров о фестивале",
     )
     images = models.ManyToManyField(
@@ -260,7 +235,7 @@ class Festival(BaseModel):
         default=1,
         verbose_name="Количество учавствующих городов",
     )
-    video_linl = models.URLField(
+    video_link = models.URLField(
         max_length=250,
         verbose_name="Ссылка на видео о фестивале",
     )
