@@ -42,15 +42,15 @@ class Project(BaseModel):
         verbose_name_plural = "Проекты"
 
 
-class PresentPiece(BaseModel):
+class ParticipationApplicationFestival(BaseModel):
     first_name = models.CharField(max_length=200, verbose_name="Имя")
     last_name = models.CharField(max_length=200, verbose_name="Фамилия")
     birthday = models.DateField(verbose_name="День рождения")
     city = models.CharField(max_length=50, verbose_name="Город проживания")
-    phone_regex = r"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
+    PHONE_REGEX = r"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
     phone_number = models.CharField(
         max_length=12,
-        validators=[RegexValidator(regex=phone_regex)],
+        validators=[RegexValidator(regex=PHONE_REGEX)],
         verbose_name="Номер телефона",
     )
     email = models.EmailField(max_length=100, verbose_name="Электронная почта")
@@ -62,3 +62,10 @@ class PresentPiece(BaseModel):
     )
     file_link = models.URLField(verbose_name="Ссылка на файл")
     status = models.BooleanField(verbose_name="Статус")
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name_plural = 'Заявления на участие'
+        verbose_name = 'Заявление'
