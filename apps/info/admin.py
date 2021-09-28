@@ -5,7 +5,7 @@ from apps.info.models import (
     Festival,
     FestivalTeam,
     Partner,
-    Question,
+    Place,
     Sponsor,
     Volunteer,
 )
@@ -67,14 +67,22 @@ class FestivalAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
-class QuestionAdmin(admin.ModelAdmin):
-    pass
+class PlaceAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "name",
+        "city",
+        "address",
+    )
+
+    list_filter = ("city",)
+    search_fields = ("name", "address")
 
 
 admin.site.register(Partner, PartnerAdmin)
-admin.site.register(Question, QuestionAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(FestivalTeam, FestivalTeamAdmin)
 admin.site.register(Volunteer, VolunteerAdmin)
 admin.site.register(Sponsor, SponsorAdmin)
 admin.site.register(Festival, FestivalAdmin)
+admin.site.register(Place, PlaceAdmin)
