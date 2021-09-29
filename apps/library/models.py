@@ -55,7 +55,7 @@ class PerformanceMediaReview(BaseModel):
         verbose_name="Текст отзыва",
     )
     image = models.ImageField(
-        upload_to='reviews/',
+        upload_to="reviews/",
         verbose_name="Изображение",
     )
     performance = models.ForeignKey(
@@ -76,7 +76,7 @@ class PerformanceMediaReview(BaseModel):
     )
 
     class Meta:
-        ordering = ('-created',)
+        ordering = ("-created",)
         verbose_name = "Медиа отзыв на спектакль"
         verbose_name_plural = "Медиа отзывы на спектакль"
 
@@ -111,7 +111,7 @@ class PerformanceReview(BaseModel):
     )
 
     class Meta:
-        ordering = ('-created',)
+        ordering = ("-created",)
         verbose_name = "Отзыв зрителя на спектакль"
         verbose_name_plural = "Отзывы зрителей на спектакль"
 
