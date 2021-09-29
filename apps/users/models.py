@@ -7,8 +7,10 @@ class User(AbstractUser):
         verbose_name_plural = "Пользователи"
 
     def __str__(self):
-        return "{} ({})".format(
-            self.username, self.groups.first() if self.groups.first() else "-"
+
+        return (
+            f"{self.username} "
+            f"({self.groups.first() if self.groups.first() else '-'})"
         )
 
     @property
