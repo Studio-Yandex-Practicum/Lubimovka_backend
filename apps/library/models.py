@@ -68,6 +68,7 @@ class PerformanceMediaReview(BaseModel):
         max_length=200,
         blank=True,
         verbose_name="Ссылка на отзыв",
+        unique=True,
     )
     pub_date = models.DateTimeField(
         blank=True,
@@ -79,9 +80,12 @@ class PerformanceMediaReview(BaseModel):
         verbose_name = "Медиа отзыв на спектакль"
         verbose_name_plural = "Медиа отзывы на спектакль"
 
+    def __str__(self):
+        return self.media_name
+
 
 class PerformanceReview(BaseModel):
-    name = models.CharField(
+    reviewer_name = models.CharField(
         max_length=100,
         verbose_name="Имя зрителя",
     )
@@ -99,6 +103,7 @@ class PerformanceReview(BaseModel):
         max_length=200,
         blank=True,
         verbose_name="Ссылка на отзыв",
+        unique=True,
     )
     pub_date = models.DateTimeField(
         blank=True,
@@ -109,3 +114,6 @@ class PerformanceReview(BaseModel):
         ordering = ('-created',)
         verbose_name = "Отзыв зрителя на спектакль"
         verbose_name_plural = "Отзывы зрителей на спектакль"
+
+    def __str__(self):
+        return self.reviewer_name
