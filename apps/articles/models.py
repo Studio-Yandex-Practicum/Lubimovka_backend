@@ -4,6 +4,8 @@ from django.db import models
 
 from apps.core.models import BaseModel
 
+from .fields import OrderField
+
 
 class NewsItem(BaseModel):
     name = models.CharField(
@@ -41,51 +43,65 @@ class Project(BaseModel):
         verbose_name_plural = "Проекты"
 
 
-class BlockTitle(BaseModel):
-    title = models.CharField(
-        max_length=200,
-        verbose_name="Блок заголовок",
-    )
-
-    def __str__(self) -> str:
-        return self.title
-
-
-class BlockText(BaseModel):
-    text = models.TextField(
-        max_length=500,
-        verbose_name="Блок с текстом",
-    )
-
-    def __str__(self) -> str:
-        return self.text
-
-
-class Content(BaseModel):
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-    )
-    description = models.TextField(
-        blank=True,
-    )
+class Module(models.Model):
     project = models.ForeignKey(
         Project,
         related_name="modules",
         on_delete=models.CASCADE,
     )
+    title = models.CharField(max_length=200)
+    description = models.TextField(blank=True)
+    order = OrderField(blank=True, for_fields=["project"])
+
+    def __str__(self):
+        return f"{self.order}. {self.title}"
+
+    class Meta:
+        ordering = ["order"]
+
+
+class Content(models.Model):
+    module = models.ForeignKey(
+        Module,
+        related_name="contents",
+        on_delete=models.CASCADE,
+    )
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,
-        limit_choices_to={
-            "model__in": (
-                "blocktitle",
-                "blocktext",
-            )
-        },
+        limit_choices_to={"model__in": ("text", "video", "image", "file")},
     )
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey("content_type", "object_id")
+    order = OrderField(blank=True, for_fields=["module"])
+
+    class Meta:
+        ordering = ["order"]
+
+
+class ItemBase(models.Model):
+    title = models.CharField(max_length=250)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        abstract = True
 
     def __str__(self):
-        return self.name
+        return self.title
+
+
+class Text(ItemBase):
+    content = models.TextField()
+
+
+class File(ItemBase):
+    file = models.FileField(upload_to="files")
+
+
+class Image(ItemBase):
+    file = models.FileField(upload_to="images")
+
+
+class Video(ItemBase):
+    url = models.URLField()

@@ -1,13 +1,7 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericTabularInline
 
-from apps.articles.models import (
-    BlockText,
-    BlockTitle,
-    BlogItem,
-    Content,
-    NewsItem,
-    Project,
-)
+from apps.articles.models import BlogItem, Content, Module, NewsItem, Project
 
 
 class NewsItemAdmin(admin.ModelAdmin):
@@ -18,23 +12,26 @@ class BlogItemAdmin(admin.ModelAdmin):
     pass
 
 
+class ContentInline(GenericTabularInline):
+    model = Content
+
+
+@admin.register(Module)
+class ModuleAdmin(admin.ModelAdmin):
+    inlines = [
+        ContentInline,
+    ]
+
+
+class ModuleInline(admin.StackedInline):
+    model = Module
+
+
 class ProjectAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(BlockText)
-class BlockTextAdmin(admin.ModelAdmin):
-    list_display = ["text"]
-
-
-@admin.register(BlockTitle)
-class BlockTitleAdmin(admin.ModelAdmin):
-    list_display = ["title"]
-
-
-@admin.register(Content)
-class ContentAdmin(admin.ModelAdmin):
     list_display = ["name"]
+    list_filter = ["name"]
+    search_fields = ["name"]
+    inlines = [ModuleInline]
 
 
 admin.site.register(NewsItem, NewsItemAdmin)
