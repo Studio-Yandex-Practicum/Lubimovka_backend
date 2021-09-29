@@ -28,19 +28,35 @@ class PerformanceMediaReviewAdmin(admin.ModelAdmin):
         "pub_date",
     )
 
-    list_filter = ("media_name", "performance__name", "pub_date")
-    search_fields = ("media_name", "performance__name", "pub_date")
+    list_filter = [
+        "media_name",
+        "performance__name",
+        "pub_date",
+    ]
+    search_fields = [
+        "media_name",
+        "performance__name",
+        "pub_date",
+    ]
 
 
 class PerformanceReviewAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
+    list_display = [
+        "reviewer_name",
         "performance",
         "pub_date",
-    )
+    ]
 
-    list_filter = ("name", "performance__name", "pub_date")
-    search_fields = ("name", "performance__name", "pub_date")
+    list_filter = [
+        "reviewer_name",
+        "performance__name",
+        "pub_date",
+    ]
+    search_fields = [
+        "reviewer_name",
+        "performance__name",
+        "pub_date",
+    ]
 
 
 admin.site.register(Play, PlayAdmin)
