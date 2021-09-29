@@ -49,6 +49,7 @@ class Person(BaseModel):
     email = models.EmailField(
         max_length=200,
         verbose_name="Электронная почта",
+        null=True,
         blank=True,
         unique=True,
     )

@@ -80,11 +80,10 @@ class FestivalTeam(BaseModel):
         )
 
     def clean(self):
-        team_person = FestivalTeam.objects.filter(
-            person=self.person, team=self.team
-        )
-        if self not in team_person and team_person:
-            raise ValidationError("Этот человек уже есть в этой команде")
+        if not self.person.email:
+            raise ValidationError("Для члена команды необходимо указать email")
+        if not self.person.city:
+            raise ValidationError("Для члена команды необходимо указать город")
 
 
 class Sponsor(BaseModel):
@@ -101,15 +100,14 @@ class Sponsor(BaseModel):
     class Meta:
         verbose_name = "Попечитель фестиваля"
         verbose_name_plural = "Попечители фестиваля"
-        constraints = [
-            UniqueConstraint(
-                fields=["person", "position"],
-                name="unique_sponsor",
-            )
-        ]
 
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name}"
+
+    def clean(self):
+        sponsor = Sponsor.objects.filter(person=self.person)
+        if self not in sponsor and sponsor:
+            raise ValidationError("Этот человек уже есть в попечителях")
 
 
 class Volunteer(BaseModel):
@@ -144,11 +142,8 @@ class Volunteer(BaseModel):
         )
 
     def clean(self):
-        volunteer = Volunteer.objects.filter(
-            person=self.person, year=self.year
-        )
-        if self not in volunteer and volunteer:
-            raise ValidationError("Волонтёр уже в участниках фестиваля")
+        if not self.person.email:
+            raise ValidationError("Укажите email для волонтёра")
 
 
 class Place(BaseModel):
