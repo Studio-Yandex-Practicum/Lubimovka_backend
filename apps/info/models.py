@@ -254,3 +254,25 @@ class Festival(BaseModel):
 
     def __str__(self):
         return f"Фестиваль {self.year} года"
+
+
+class Question(BaseModel):
+    question = models.CharField(
+        max_length=500,
+        verbose_name="Текст вопроса",
+    )
+    name = models.CharField(
+        max_length=50,
+        verbose_name="Имя",
+    )
+    email = models.EmailField(
+        max_length=50,
+        verbose_name="Электронная почта",
+    )
+
+    class Meta:
+        verbose_name = "Вопрос или предложение"
+        verbose_name_plural = "Вопросы или предложения"
+
+    def __str__(self):
+        return f"{self.name} {self.question}"
