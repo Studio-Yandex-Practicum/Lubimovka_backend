@@ -1,6 +1,14 @@
 from django.contrib import admin
 
-from .models import Partner, Place, Question
+from apps.core.models import Person
+from apps.info.models import (
+    Festival,
+    FestivalTeam,
+    Partner,
+    Place,
+    Sponsor,
+    Volunteer,
+)
 
 
 class PartnerAdmin(admin.ModelAdmin):
@@ -9,13 +17,54 @@ class PartnerAdmin(admin.ModelAdmin):
         "name",
         "type",
         "url",
-        # 'image',
+        "image",
     )
     empty_value_display = "-пусто-"
 
 
-class QuestionAdmin(admin.ModelAdmin):
-    pass
+class PersonAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "first_name",
+        "last_name",
+        "city",
+        "image",
+    )
+    empty_value_display = "-пусто-"
+
+
+class FestivalTeamAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "person",
+        "team",
+    )
+    empty_value_display = "-пусто-"
+
+
+class SponsorAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "person",
+    )
+    empty_value_display = "-пусто-"
+
+
+class VolunteerAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "person",
+        "year",
+    )
+    empty_value_display = "-пусто-"
+
+
+class FestivalAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "year",
+    )
+    empty_value_display = "-пусто-"
 
 
 class PlaceAdmin(admin.ModelAdmin):
@@ -31,5 +80,9 @@ class PlaceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Partner, PartnerAdmin)
-admin.site.register(Question, QuestionAdmin)
+admin.site.register(Person, PersonAdmin)
+admin.site.register(FestivalTeam, FestivalTeamAdmin)
+admin.site.register(Volunteer, VolunteerAdmin)
+admin.site.register(Sponsor, SponsorAdmin)
+admin.site.register(Festival, FestivalAdmin)
 admin.site.register(Place, PlaceAdmin)

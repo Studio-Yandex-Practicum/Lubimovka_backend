@@ -12,6 +12,8 @@
 - базовая модель TimeStampedModel (импортировать из core.models)
 - автодокументация swagger/redoc (http://base_url/api/schema/swagger-ui/ или http://base_url/api/schema/redoc/)
 
+## Общие требования к стилю кода - [ссылка](docs/codestyle.md)
+
 ## Правила работы с git (как делать коммиты и pull request-ы)
 1. Две основные ветки: master и develop
 2. Ветка develop — “предрелизная”. Т.е. здесь должен быть рабочий и выверенный код
