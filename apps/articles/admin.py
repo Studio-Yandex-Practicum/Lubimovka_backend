@@ -23,15 +23,10 @@ class ModuleAdmin(admin.ModelAdmin):
     ]
 
 
-class ModuleInline(admin.StackedInline):
-    model = Module
-
-
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ["name"]
     list_filter = ["name"]
     search_fields = ["name"]
-    inlines = [ModuleInline]
 
 
 admin.site.register(NewsItem, NewsItemAdmin)

@@ -31,24 +31,7 @@ class BlogItem(BaseModel):
         verbose_name_plural = "Статьи"
 
 
-class Project(BaseModel):
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-        verbose_name="Название проекта",
-    )
-
-    class Meta:
-        verbose_name = "Проект"
-        verbose_name_plural = "Проекты"
-
-
 class Module(models.Model):
-    project = models.ForeignKey(
-        Project,
-        related_name="modules",
-        on_delete=models.CASCADE,
-    )
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
     order = OrderField(blank=True, for_fields=["project"])
@@ -58,6 +41,23 @@ class Module(models.Model):
 
     class Meta:
         ordering = ["order"]
+
+
+class Project(BaseModel):
+    name = models.CharField(
+        max_length=200,
+        unique=True,
+        verbose_name="Название проекта",
+    )
+    content_modules = models.ManyToManyField(
+        "Module",
+        related_name="projects",
+        verbose_name="Модули контента",
+    )
+
+    class Meta:
+        verbose_name = "Проект"
+        verbose_name_plural = "Проекты"
 
 
 class Content(models.Model):
