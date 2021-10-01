@@ -1,7 +1,6 @@
 from django.contrib import admin
-from django.contrib.contenttypes.admin import GenericTabularInline
 
-from apps.articles.models import BlogItem, Content, Module, NewsItem, Project
+from apps.articles.models import BlogItem, NewsItem, Project
 
 
 class NewsItemAdmin(admin.ModelAdmin):
@@ -10,17 +9,6 @@ class NewsItemAdmin(admin.ModelAdmin):
 
 class BlogItemAdmin(admin.ModelAdmin):
     pass
-
-
-class ContentInline(GenericTabularInline):
-    model = Content
-
-
-@admin.register(Module)
-class ModuleAdmin(admin.ModelAdmin):
-    inlines = [
-        ContentInline,
-    ]
 
 
 class ProjectAdmin(admin.ModelAdmin):
