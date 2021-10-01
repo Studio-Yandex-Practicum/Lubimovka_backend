@@ -41,6 +41,7 @@ THIRD_PARTY_APPS = [
     "rest_framework_simplejwt",
     "drf_spectacular",
     "djoser",
+    "phonenumber_field",
 ]
 LOCAL_APPS = [
     "apps.users",

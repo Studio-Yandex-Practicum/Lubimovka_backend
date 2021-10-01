@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from django.core.validators import RegexValidator
+from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
 
@@ -47,12 +47,7 @@ class ParticipationApplicationFestival(BaseModel):
     last_name = models.CharField(max_length=200, verbose_name="Фамилия")
     birthday = models.DateField(verbose_name="День рождения")
     city = models.CharField(max_length=50, verbose_name="Город проживания")
-    PHONE_REGEX = r"^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$"
-    phone_number = models.CharField(
-        max_length=12,
-        validators=[RegexValidator(regex=PHONE_REGEX)],
-        verbose_name="Номер телефона",
-    )
+    phone_number = PhoneNumberField()
     email = models.EmailField(max_length=100, verbose_name="Электронная почта")
     title = models.CharField(max_length=200, verbose_name="Название пьесы")
     year = models.CharField(
