@@ -63,4 +63,4 @@ class ParticipationApplicationFestival(BaseModel):
 
     class Meta:
         verbose_name_plural = 'Заявления на участие'
-        verbose_name = 'Заявление'
+        verbose_name = 'Заявление на участие'
