@@ -89,7 +89,7 @@ class FestivalTeam(BaseModel):
 
 
 class Sponsor(BaseModel):
-    person = models.ForeignKey(
+    person = models.OneToOneField(
         Person,
         on_delete=models.PROTECT,
         verbose_name="Человек",
@@ -107,9 +107,6 @@ class Sponsor(BaseModel):
         return f"{self.person.first_name} {self.person.last_name}"
 
     def clean(self):
-        sponsor = Sponsor.objects.filter(person=self.person)
-        if self not in sponsor and sponsor:
-            raise ValidationError("Этот человек уже есть в попечителях")
         if not self.person.image:
             raise ValidationError("Для спонсора необходимо выбрать его фото")
 
