@@ -2,14 +2,13 @@ from django.contrib import admin
 
 from apps.library.models import (
     Author,
+    MasterClass,
     Performance,
     PerformanceMediaReview,
     PerformanceReview,
     Play,
-    EventHeader,
-    Reading,
-    MasterClass,
     Program,
+    Reading,
 )
 
 
@@ -35,7 +34,7 @@ class PlayAdmin(admin.ModelAdmin):
         "name",
         "city",
         "program_name",
-        "festival_year"
+        "festival_year",
     ]
 
 
@@ -85,10 +84,6 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
     ]
 
 
-class EventHeaderAdmin(admin.ModelAdmin):
-    pass
-
-
 class ReadingAdmin(admin.ModelAdmin):
     list_display = (
         "play",
@@ -113,26 +108,24 @@ class MasterClassAdmin(admin.ModelAdmin):
         "name",
         "director",
         "dramatist",
-        "leading",
+        "host",
     )
     list_filter = [
         "director__last_name",
         "dramatist__last_name",
-        "leading__last_name",
+        "host__last_name",
     ]
     search_fields = [
         "play__name",
         "name",
         "director__last_name",
         "dramatist__last_name",
-        "leading__last_name",
+        "host__last_name",
     ]
 
 
 class ProgramAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-    )
+    list_display = ("name",)
     list_filter = [
         "name",
     ]
@@ -146,7 +139,6 @@ admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
-admin.site.register(EventHeader, EventHeaderAdmin)
 admin.site.register(Reading, ReadingAdmin)
 admin.site.register(MasterClass, MasterClassAdmin)
 admin.site.register(Program, ProgramAdmin)

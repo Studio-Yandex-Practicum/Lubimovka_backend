@@ -1,15 +1,9 @@
 from django.db import models
+from django.db.models import UniqueConstraint
 
+from apps.afisha.models import BaseEvent
 from apps.core.models import BaseModel, Person
 from apps.info.models import Festival
-
-
-class EventHeader(BaseModel):
-
-    class Meta:
-        ordering = ("-created",)
-        verbose_name = "Заголовок события"
-        verbose_name_plural = "Заголовки событий"
 
 
 class Author(BaseModel):
@@ -32,6 +26,10 @@ class Program(BaseModel):
         unique=True,
         verbose_name="Название программы",
     )
+
+    class Meta:
+        verbose_name = "Программа"
+        verbose_name_plural = "Программы"
 
     def __str__(self):
         return self.name
@@ -83,7 +81,12 @@ class Play(BaseModel):
     )
 
     class Meta:
-        unique_together = ('name', 'festival')
+        constraints = [
+            UniqueConstraint(
+                fields=["name", "festival"],
+                name="unique_play",
+            )
+        ]
         verbose_name = "Пьеса"
         verbose_name_plural = "Пьесы"
 
@@ -208,7 +211,7 @@ class Reading(BaseModel):
         verbose_name="Драматург",
     )
     event = models.OneToOneField(
-        EventHeader,
+        BaseEvent,
         on_delete=models.PROTECT,
         related_name="event_reading",
         verbose_name="Заголовок события",
@@ -244,14 +247,14 @@ class MasterClass(BaseModel):
         related_name="dramatist_masterclass",
         verbose_name="Драматург",
     )
-    leading = models.ForeignKey(
+    host = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
         related_name="leading_masterclass",
         verbose_name="Ведущий",
     )
     event = models.OneToOneField(
-        EventHeader,
+        BaseEvent,
         on_delete=models.PROTECT,
         related_name="event_masterclass",
         verbose_name="Заголовок события",
