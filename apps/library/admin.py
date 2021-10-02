@@ -15,7 +15,6 @@ from apps.library.models import (
 
 class PlayAdmin(admin.ModelAdmin):
     filter_horizontal = ("author",)
-    # raw_id_fields = ("author",)
     list_display = [
         "name",
         "city",
