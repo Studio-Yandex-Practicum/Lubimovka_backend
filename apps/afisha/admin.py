@@ -9,6 +9,7 @@ class BaseEventAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
+
 class EventAdmin(admin.ModelAdmin):
     list_display = ("pk", "base_event", "type", "date_time", "paid")
     list_filter = ("type",)

@@ -210,10 +210,6 @@ class Festival(BaseModel):
         related_name="festivalimages",
         verbose_name="Изображения",
     )
-    programms = models.CharField(
-        max_length=10,
-        verbose_name="Программы фестиваля",  # Ждет создание сущности
-    )
     plays_count = models.PositiveIntegerField(
         default=1,
         verbose_name="Общее количество пьес",
@@ -254,3 +250,25 @@ class Festival(BaseModel):
 
     def __str__(self):
         return f"Фестиваль {self.year} года"
+
+
+class Question(BaseModel):
+    question = models.CharField(
+        max_length=500,
+        verbose_name="Текст вопроса",
+    )
+    name = models.CharField(
+        max_length=50,
+        verbose_name="Имя",
+    )
+    email = models.EmailField(
+        max_length=50,
+        verbose_name="Электронная почта",
+    )
+
+    class Meta:
+        verbose_name = "Вопрос или предложение"
+        verbose_name_plural = "Вопросы или предложения"
+
+    def __str__(self):
+        return f"{self.name} {self.question}"
