@@ -6,11 +6,38 @@ from apps.library.models import (
     PerformanceMediaReview,
     PerformanceReview,
     Play,
+    EventHeader,
+    Reading,
+    MasterClass,
+    Program,
 )
 
 
 class PlayAdmin(admin.ModelAdmin):
-    pass
+    filter_horizontal = ("author",)
+    # raw_id_fields = ("author",)
+    list_display = [
+        "name",
+        "city",
+        "program",
+        "festival",
+        "is_draft",
+    ]
+
+    list_filter = [
+        "author",
+        "city",
+        "program",
+        "festival",
+        "is_draft",
+    ]
+    search_fields = [
+        "author_name",
+        "name",
+        "city",
+        "program_name",
+        "festival_year"
+    ]
 
 
 class PerformanceAdmin(admin.ModelAdmin):
@@ -59,8 +86,68 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
     ]
 
 
+class EventHeaderAdmin(admin.ModelAdmin):
+    pass
+
+
+class ReadingAdmin(admin.ModelAdmin):
+    list_display = (
+        "play",
+        "name",
+        "director",
+        "dramatist",
+    )
+    list_filter = [
+        "director__last_name",
+        "dramatist__last_name",
+    ]
+    search_fields = [
+        "play__name",
+        "name",
+        "director__last_name",
+        "dramatist__last_name",
+    ]
+
+
+class MasterClassAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "director",
+        "dramatist",
+        "leading",
+    )
+    list_filter = [
+        "director__last_name",
+        "dramatist__last_name",
+        "leading__last_name",
+    ]
+    search_fields = [
+        "play__name",
+        "name",
+        "director__last_name",
+        "dramatist__last_name",
+        "leading__last_name",
+    ]
+
+
+class ProgramAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+    )
+    list_filter = [
+        "name",
+    ]
+    search_fields = [
+        "name",
+    ]
+
+
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
+admin.site.register(EventHeader, EventHeaderAdmin)
+admin.site.register(Reading, ReadingAdmin)
+admin.site.register(MasterClass, MasterClassAdmin)
+admin.site.register(Program, ProgramAdmin)
