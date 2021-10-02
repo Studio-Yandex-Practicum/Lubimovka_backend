@@ -1,6 +1,14 @@
 from django.db import models
 
-from apps.core.models import BaseModel
+from apps.core.models import BaseModel, Person
+
+LINK_CHOICES = (
+    ("fb", "Facebook"),
+    ("inst", "Instagram"),
+    ("ytube", "YouTube"),
+    ("tlgrm", "Telegram"),
+    ("vk", "Вконтакте"),
+)
 
 
 class Play(BaseModel):
@@ -34,15 +42,124 @@ class Performance(BaseModel):
         return self.name
 
 
+class Achievement(BaseModel):
+    tag = models.CharField(
+        max_length=40,
+        verbose_name="Достижения в виде тега",
+        help_text="Не более 40 символов",
+    )
+
+    class Meta:
+        verbose_name = "Достижение"
+        verbose_name_plural = "Достижения"
+
+
 class Author(BaseModel):
-    name = models.CharField(
-        max_length=100,
-        verbose_name="Имя автора",
+    person = models.ForeignKey(
+        Person, on_delete=models.CASCADE, verbose_name="Автор"
+    )
+    quote = models.CharField(
+        max_length=200,
+        verbose_name="Цитата",
+    )
+    biography = models.TextField(
+        max_length=3000, verbose_name="Текст про автора"
+    )
+    achievements = models.ManyToManyField(
+        Achievement,
+        verbose_name="Достижения",
+    )
+    social_network_links = models.ManyToManyField(
+        "LinkSocialNetwork",
+        verbose_name="Ссылки на социальные сети",
+        related_name="author_socialnetworklinks",
+    )
+    other_links = models.ManyToManyField(
+        "LinkOther",
+        verbose_name="Ссылки на внешние ресурсы",
+        related_name="author_otherlinks",
+    )
+    authors_plays_links = models.ManyToManyField(
+        Play,
+        verbose_name="Ссылки на пьесы автора",
+        related_name="author_authorsplayslinks",
+    )
+    other_plays_links = models.ManyToManyField(
+        "OtherPlay",
+        blank=True,
+        verbose_name="Ссылки на другие пьесы",
+        related_name="author_otherplayslinks",
     )
 
     class Meta:
         verbose_name = "Автор"
         verbose_name_plural = "Авторы"
+
+
+class LinkSocialNetwork(BaseModel):
+    author = models.ForeignKey(
+        Author, on_delete=models.CASCADE, verbose_name="Автор"
+    )
+    name = models.CharField(
+        max_length=200,
+        choices=LINK_CHOICES,
+        verbose_name="Название",
+    )
+    link = models.URLField(
+        max_length=500,
+        verbose_name="Ссылка",
+    )
+
+    class Meta:
+        verbose_name = "Ссылка на социальную сеть"
+        verbose_name_plural = "Ссылки на социальные сети"
+
+
+class LinkOther(BaseModel):
+    author = models.ForeignKey(
+        Author, on_delete=models.CASCADE, verbose_name="Автор"
+    )
+    name = models.CharField(
+        max_length=200,
+        verbose_name="Название",
+    )
+    link = models.URLField(
+        max_length=500,
+        verbose_name="Ссылка",
+    )
+    anchored = models.BooleanField(
+        verbose_name="Закрепить вверху страницы",
+        help_text="Закрепить запись вверху страницы или нет",
+    )
+    serial_number = models.PositiveSmallIntegerField(
+        verbose_name="Порядковый номер",
+        help_text="Указывается для формирования порядка вывода информации",
+    )
+
+    class Meta:
+        ordering = ["serial_number"]
+        verbose_name = "Ссылка на сторонний ресурс"
+        verbose_name_plural = "Ссылки на стороннии ресурсы"
+
+
+class OtherPlay(BaseModel):
+    author = models.ForeignKey(
+        Author,
+        on_delete=models.CASCADE,
+        verbose_name="Автор",
+    )
+    name = models.CharField(
+        max_length=40,
+        verbose_name="Название",
+    )
+    link = models.URLField(
+        max_length=1000,
+        verbose_name="Ссылка на скачивание файла",
+    )
+
+    class Meta:
+        verbose_name = "Другая пьеса"
+        verbose_name_plural = "Другие пьесы"
 
 
 class PerformanceMediaReview(BaseModel):

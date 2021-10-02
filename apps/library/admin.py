@@ -1,7 +1,11 @@
 from django.contrib import admin
 
 from apps.library.models import (
+    Achievement,
     Author,
+    LinkOther,
+    LinkSocialNetwork,
+    OtherPlay,
     Performance,
     PerformanceMediaReview,
     PerformanceReview,
@@ -17,8 +21,39 @@ class PerformanceAdmin(admin.ModelAdmin):
     pass
 
 
+class AchievementAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "tag",
+    )
+
+
 class AuthorAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("id", "person", "quote", "biography")
+
+
+class LinkSocialNetworkAdmin(admin.ModelAdmin):
+    list_display = ("id", "author", "name", "link")
+
+
+class LinkOtherAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "author",
+        "name",
+        "link",
+        "anchored",
+        "serial_number",
+    )
+
+
+class OtherPlayAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "author",
+        "name",
+        "link",
+    )
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
@@ -61,6 +96,10 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
 
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
+admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Author, AuthorAdmin)
+admin.site.register(LinkSocialNetwork, LinkSocialNetworkAdmin)
+admin.site.register(LinkOther, LinkOtherAdmin)
+admin.site.register(OtherPlay, OtherPlayAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
