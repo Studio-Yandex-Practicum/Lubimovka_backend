@@ -3,13 +3,13 @@ from django.contrib import admin
 from apps.library.models import (
     Achievement,
     Author,
-    LinkOther,
-    LinkSocialNetwork,
+    OtherLink,
     OtherPlay,
     Performance,
     PerformanceMediaReview,
     PerformanceReview,
     Play,
+    SocialNetworkLink,
 )
 
 
@@ -32,11 +32,11 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = ("id", "person", "quote", "biography")
 
 
-class LinkSocialNetworkAdmin(admin.ModelAdmin):
+class SocialNetworkLinkAdmin(admin.ModelAdmin):
     list_display = ("id", "author", "name", "link")
 
 
-class LinkOtherAdmin(admin.ModelAdmin):
+class OtherLinkAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "author",
@@ -98,8 +98,8 @@ admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Author, AuthorAdmin)
-admin.site.register(LinkSocialNetwork, LinkSocialNetworkAdmin)
-admin.site.register(LinkOther, LinkOtherAdmin)
+admin.site.register(SocialNetworkLink, SocialNetworkLinkAdmin)
+admin.site.register(OtherLink, OtherLinkAdmin)
 admin.site.register(OtherPlay, OtherPlayAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)

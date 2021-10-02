@@ -1,14 +1,7 @@
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
-
-LINK_CHOICES = (
-    ("fb", "Facebook"),
-    ("inst", "Instagram"),
-    ("ytube", "YouTube"),
-    ("tlgrm", "Telegram"),
-    ("vk", "Вконтакте"),
-)
 
 
 class Play(BaseModel):
@@ -53,6 +46,9 @@ class Achievement(BaseModel):
         verbose_name = "Достижение"
         verbose_name_plural = "Достижения"
 
+    def __str__(self):
+        return self.tag
+
 
 class Author(BaseModel):
     person = models.ForeignKey(
@@ -72,37 +68,47 @@ class Author(BaseModel):
     social_network_links = models.ManyToManyField(
         "LinkSocialNetwork",
         verbose_name="Ссылки на социальные сети",
-        related_name="author_socialnetworklinks",
+        related_name="authors",
     )
     other_links = models.ManyToManyField(
         "LinkOther",
         verbose_name="Ссылки на внешние ресурсы",
-        related_name="author_otherlinks",
+        related_name="authors",
     )
     authors_plays_links = models.ManyToManyField(
         Play,
         verbose_name="Ссылки на пьесы автора",
-        related_name="author_authorsplayslinks",
+        related_name="authors",
     )
     other_plays_links = models.ManyToManyField(
         "OtherPlay",
         blank=True,
         verbose_name="Ссылки на другие пьесы",
-        related_name="author_otherplayslinks",
+        related_name="authors",
     )
 
     class Meta:
         verbose_name = "Автор"
         verbose_name_plural = "Авторы"
 
+    def __str__(self):
+        return self.person
 
-class LinkSocialNetwork(BaseModel):
+
+class SocialNetworkLink(BaseModel):
+    class SocialNetwor(models.TextChoices):
+        FACEBOOK = "fb", _("Facebook")
+        INSTAGRAM = "inst", _("Instagram")
+        YOUTUBE = "ytube", _("YouTube")
+        TELEGRAM = "tlgrm", _("Telegram")
+        VKONTAKTE = "vk", _("Вконтакте")
+
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE, verbose_name="Автор"
     )
     name = models.CharField(
         max_length=200,
-        choices=LINK_CHOICES,
+        choices=SocialNetwor.choices,
         verbose_name="Название",
     )
     link = models.URLField(
@@ -113,9 +119,17 @@ class LinkSocialNetwork(BaseModel):
     class Meta:
         verbose_name = "Ссылка на социальную сеть"
         verbose_name_plural = "Ссылки на социальные сети"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["author", "name"], name="unique_social_networ"
+            )
+        ]
+
+    def __str__(self):
+        return self.name
 
 
-class LinkOther(BaseModel):
+class OtherLink(BaseModel):
     author = models.ForeignKey(
         Author, on_delete=models.CASCADE, verbose_name="Автор"
     )
@@ -127,9 +141,9 @@ class LinkOther(BaseModel):
         max_length=500,
         verbose_name="Ссылка",
     )
-    anchored = models.BooleanField(
-        verbose_name="Закрепить вверху страницы",
-        help_text="Закрепить запись вверху страницы или нет",
+    is_pinned = models.BooleanField(
+        verbose_name="Закрепить ссылку",
+        help_text="Закрепить ссылку вверху страницы?",
     )
     serial_number = models.PositiveSmallIntegerField(
         verbose_name="Порядковый номер",
@@ -140,6 +154,9 @@ class LinkOther(BaseModel):
         ordering = ["serial_number"]
         verbose_name = "Ссылка на сторонний ресурс"
         verbose_name_plural = "Ссылки на стороннии ресурсы"
+
+    def __str__(self):
+        return self.name
 
 
 class OtherPlay(BaseModel):
@@ -160,6 +177,9 @@ class OtherPlay(BaseModel):
     class Meta:
         verbose_name = "Другая пьеса"
         verbose_name_plural = "Другие пьесы"
+
+    def __str__(self):
+        return self.name
 
 
 class PerformanceMediaReview(BaseModel):
