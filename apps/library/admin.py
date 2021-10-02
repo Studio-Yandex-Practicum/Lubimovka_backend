@@ -7,13 +7,13 @@ from apps.library.models import (
     PerformanceMediaReview,
     PerformanceReview,
     Play,
-    Program,
+    ProgramType,
     Reading,
 )
 
 
 class PlayAdmin(admin.ModelAdmin):
-    filter_horizontal = ("author",)
+    filter_horizontal = ("authors",)
     list_display = [
         "name",
         "city",
@@ -23,14 +23,14 @@ class PlayAdmin(admin.ModelAdmin):
     ]
 
     list_filter = [
-        "author",
+        "authors",
         "city",
         "program",
         "festival",
         "is_draft",
     ]
     search_fields = [
-        "author_name",
+        "authors_name",
         "name",
         "city",
         "program_name",
@@ -124,7 +124,7 @@ class MasterClassAdmin(admin.ModelAdmin):
     ]
 
 
-class ProgramAdmin(admin.ModelAdmin):
+class ProgramTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
     list_filter = [
         "name",
@@ -141,4 +141,4 @@ admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
 admin.site.register(Reading, ReadingAdmin)
 admin.site.register(MasterClass, MasterClassAdmin)
-admin.site.register(Program, ProgramAdmin)
+admin.site.register(ProgramType, ProgramTypeAdmin)

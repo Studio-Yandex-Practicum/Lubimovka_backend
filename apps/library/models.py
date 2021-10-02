@@ -1,5 +1,7 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.utils import timezone
 
 from apps.afisha.models import BaseEvent
 from apps.core.models import BaseModel, Person
@@ -20,7 +22,7 @@ class Author(BaseModel):
         return self.name
 
 
-class Program(BaseModel):
+class ProgramType(BaseModel):
     name = models.CharField(
         max_length=200,
         unique=True,
@@ -36,9 +38,9 @@ class Program(BaseModel):
 
 
 class Play(BaseModel):
-    author = models.ManyToManyField(
+    authors = models.ManyToManyField(
         Author,
-        related_name="author_play",
+        related_name="play",
         verbose_name="Автор",
     )
     name = models.CharField(
@@ -50,6 +52,14 @@ class Play(BaseModel):
         max_length=200,
         unique=True,
         verbose_name="Город",
+    )
+    year = models.PositiveSmallIntegerField(
+        validators=[
+            MinValueValidator(1990),
+            MaxValueValidator(timezone.now().year),
+        ],
+        unique=True,
+        verbose_name="Год написания пьесы",
     )
     url_download = models.URLField(
         max_length=200,
@@ -64,15 +74,15 @@ class Play(BaseModel):
         unique=True,
     )
     program = models.ForeignKey(
-        Program,
+        ProgramType,
         on_delete=models.PROTECT,
-        related_name="program_play",
+        related_name="play",
         verbose_name="Программа",
     )
     festival = models.ForeignKey(
         Festival,
         on_delete=models.PROTECT,
-        related_name="festival_play",
+        related_name="play",
         verbose_name="Фестиваль",
     )
     is_draft = models.BooleanField(
@@ -187,7 +197,7 @@ class Reading(BaseModel):
     play = models.ForeignKey(
         Play,
         on_delete=models.PROTECT,
-        related_name="play_reading",
+        related_name="reading",
         verbose_name="Пьеса",
     )
     name = models.CharField(
@@ -213,7 +223,7 @@ class Reading(BaseModel):
     event = models.OneToOneField(
         BaseEvent,
         on_delete=models.PROTECT,
-        related_name="event_reading",
+        related_name="reading",
         verbose_name="Заголовок события",
     )
 
@@ -256,7 +266,7 @@ class MasterClass(BaseModel):
     event = models.OneToOneField(
         BaseEvent,
         on_delete=models.PROTECT,
-        related_name="event_masterclass",
+        related_name="masterclass",
         verbose_name="Заголовок события",
     )
 
