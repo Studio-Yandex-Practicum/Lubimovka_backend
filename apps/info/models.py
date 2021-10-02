@@ -210,10 +210,6 @@ class Festival(BaseModel):
         related_name="festivalimages",
         verbose_name="Изображения",
     )
-    programms = models.CharField(
-        max_length=10,
-        verbose_name="Программы фестиваля",  # Ждет создание сущности
-    )
     plays_count = models.PositiveIntegerField(
         default=1,
         verbose_name="Общее количество пьес",
