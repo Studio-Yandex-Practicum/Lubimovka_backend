@@ -29,11 +29,21 @@ class AchievementAdmin(admin.ModelAdmin):
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ("id", "person", "quote", "biography")
+    list_display = (
+        "id",
+        "person",
+        "quote",
+        "biography",
+    )
 
 
 class SocialNetworkLinkAdmin(admin.ModelAdmin):
-    list_display = ("id", "author", "name", "link")
+    list_display = (
+        "id",
+        "author",
+        "name",
+        "link",
+    )
 
 
 class OtherLinkAdmin(admin.ModelAdmin):

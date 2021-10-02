@@ -52,14 +52,17 @@ class Achievement(BaseModel):
 
 class Author(BaseModel):
     person = models.OneToOneField(
-        Person, on_delete=models.CASCADE, verbose_name="Автор"
+        Person,
+        on_delete=models.CASCADE,
+        verbose_name="Автор",
     )
     quote = models.CharField(
         max_length=200,
         verbose_name="Цитата",
     )
     biography = models.TextField(
-        max_length=3000, verbose_name="Текст про автора"
+        max_length=3000,
+        verbose_name="Текст про автора",
     )
     achievements = models.ManyToManyField(
         Achievement,
@@ -104,7 +107,9 @@ class SocialNetworkLink(BaseModel):
         VKONTAKTE = "vk", _("Вконтакте")
 
     author = models.ForeignKey(
-        Author, on_delete=models.CASCADE, verbose_name="Автор"
+        Author,
+        on_delete=models.CASCADE,
+        verbose_name="Автор",
     )
     name = models.CharField(
         max_length=200,
@@ -121,7 +126,8 @@ class SocialNetworkLink(BaseModel):
         verbose_name_plural = "Ссылки на социальные сети"
         constraints = [
             models.UniqueConstraint(
-                fields=["author", "name"], name="unique_social_networ"
+                fields=["author", "name"],
+                name="unique_social_networ",
             )
         ]
 
@@ -131,7 +137,9 @@ class SocialNetworkLink(BaseModel):
 
 class OtherLink(BaseModel):
     author = models.ForeignKey(
-        Author, on_delete=models.CASCADE, verbose_name="Автор"
+        Author,
+        on_delete=models.CASCADE,
+        verbose_name="Автор",
     )
     name = models.CharField(
         max_length=200,
@@ -156,7 +164,8 @@ class OtherLink(BaseModel):
         verbose_name_plural = "Ссылки на стороннии ресурсы"
         constraints = [
             models.UniqueConstraint(
-                fields=["author", "name"], name="unique_link"
+                fields=["author", "name"],
+                name="unique_link",
             )
         ]
 
