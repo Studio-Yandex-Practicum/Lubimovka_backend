@@ -201,10 +201,6 @@ class Festival(BaseModel):
         verbose_name="Волонтёры фестиваля",
         blank=False,
     )
-    reviews = models.CharField(  # Не придумал ещё реализацию
-        max_length=3,
-        verbose_name="Отзывы волонтёров о фестивале",
-    )
     images = models.ManyToManyField(
         Image,
         related_name="festivalimages",
