@@ -5,6 +5,7 @@ from apps.content_pages.models import (
     ContentPage,
     Image,
     ImagesBlock,
+    OrderedImage,
     Text,
 )
 
@@ -21,8 +22,18 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class OrderedImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderedImage
+        fields = "__all__"
+
+
 class ImagesBlockSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True, read_only=True)
+    images = OrderedImageSerializer(
+        many=True,
+        read_only=True,
+        source="ordered_images",
+    )
 
     class Meta:
         model = ImagesBlock
@@ -59,7 +70,7 @@ class ContentSerializer(serializers.ModelSerializer):
         model = Content
         fields = [
             "content_item",
-            "id",
+            "order",
         ]
 
 

@@ -6,6 +6,7 @@ from apps.content_pages.models import (
     ContentPage,
     Image,
     ImagesBlock,
+    OrderedImage,
     Text,
 )
 
@@ -32,7 +33,17 @@ class ItemAdmin(admin.ModelAdmin):
     inlines = [GenericContentInline]
 
 
+class OrderedImageInline(admin.TabularInline):
+    model = OrderedImage
+    min_num = 1
+    extra = 0
+
+
+class ImagesBlockAdmin(admin.ModelAdmin):
+    inlines = [GenericContentInline, OrderedImageInline]
+
+
 admin.site.register(ContentPage, ContentPageAdmin)
 admin.site.register(Text, ItemAdmin)
 admin.site.register(Image, ItemAdmin)
-admin.site.register(ImagesBlock, ItemAdmin)
+admin.site.register(ImagesBlock, ImagesBlockAdmin)

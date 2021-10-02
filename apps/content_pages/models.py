@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.deletion import CASCADE
 
 from apps.content_pages.fields import OrderField
 from apps.core.models import BaseModel
@@ -46,6 +47,9 @@ class Content(models.Model):
     class Meta:
         ordering = ["order"]
 
+    def __str__(self):
+        return f"Блок сложной верстки — {self.item}"
+
 
 class ItemBase(BaseModel):
     title = models.CharField(max_length=250)
@@ -69,12 +73,38 @@ class Image(ItemBase):
     file = models.FileField(upload_to="images")
 
 
+class ImagesBlock(ItemBase):
+    images = models.ManyToManyField(
+        to=Image,
+        through="OrderedImage",
+    )
+
+
+class OrderedImage(models.Model):
+    image = models.ForeignKey(
+        Image,
+        on_delete=CASCADE,
+        related_name="ordered_images",
+    )
+    image_block = models.ForeignKey(
+        ImagesBlock,
+        on_delete=CASCADE,
+        related_name="ordered_images",
+    )
+    order = OrderField(
+        blank=True,
+        for_fields=["image_block"],
+    )
+
+    class Meta:
+        ordering = ["order"]
+
+    def __str__(self):
+        return f"{self.order} — {self.image}"
+
+
 class Video(ItemBase):
     url = models.URLField()
-
-
-class ImagesBlock(ItemBase):
-    images = models.ManyToManyField(Image)
 
 
 class ExampleObject(BaseModel):
