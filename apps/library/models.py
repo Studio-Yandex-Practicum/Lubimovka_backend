@@ -51,7 +51,7 @@ class Achievement(BaseModel):
 
 
 class Author(BaseModel):
-    person = models.ForeignKey(
+    person = models.OneToOneField(
         Person, on_delete=models.CASCADE, verbose_name="Автор"
     )
     quote = models.CharField(
@@ -66,12 +66,12 @@ class Author(BaseModel):
         verbose_name="Достижения",
     )
     social_network_links = models.ManyToManyField(
-        "LinkSocialNetwork",
+        "SocialNetworkLink",
         verbose_name="Ссылки на социальные сети",
         related_name="authors",
     )
     other_links = models.ManyToManyField(
-        "LinkOther",
+        "OtherLink",
         verbose_name="Ссылки на внешние ресурсы",
         related_name="authors",
     )
@@ -145,15 +145,20 @@ class OtherLink(BaseModel):
         verbose_name="Закрепить ссылку",
         help_text="Закрепить ссылку вверху страницы?",
     )
-    serial_number = models.PositiveSmallIntegerField(
+    order_number = models.PositiveSmallIntegerField(
         verbose_name="Порядковый номер",
         help_text="Указывается для формирования порядка вывода информации",
     )
 
     class Meta:
-        ordering = ["serial_number"]
+        ordering = ["order_number"]
         verbose_name = "Ссылка на сторонний ресурс"
         verbose_name_plural = "Ссылки на стороннии ресурсы"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["author", "name"], name="unique_link"
+            )
+        ]
 
     def __str__(self):
         return self.name

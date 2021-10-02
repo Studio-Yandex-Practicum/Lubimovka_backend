@@ -42,8 +42,8 @@ class OtherLinkAdmin(admin.ModelAdmin):
         "author",
         "name",
         "link",
-        "anchored",
-        "serial_number",
+        "is_pinned",
+        "order_number",
     )
 
 
