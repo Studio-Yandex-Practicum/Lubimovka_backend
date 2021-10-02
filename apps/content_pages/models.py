@@ -26,7 +26,15 @@ class Content(models.Model):
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,
-        limit_choices_to={"model__in": ("text", "video", "image", "file")},
+        limit_choices_to={
+            "model__in": (
+                "text",
+                "video",
+                "image",
+                "file",
+                "imagesblock",
+            )
+        },
     )
     object_id = models.PositiveIntegerField()
     item = GenericForeignKey()
@@ -39,10 +47,8 @@ class Content(models.Model):
         ordering = ["order"]
 
 
-class ItemBase(models.Model):
+class ItemBase(BaseModel):
     title = models.CharField(max_length=250)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
@@ -65,6 +71,10 @@ class Image(ItemBase):
 
 class Video(ItemBase):
     url = models.URLField()
+
+
+class ImagesBlock(ItemBase):
+    images = models.ManyToManyField(Image)
 
 
 class ExampleObject(BaseModel):

@@ -1,7 +1,13 @@
 from django.contrib import admin
 from django.contrib.contenttypes.admin import GenericTabularInline
 
-from apps.content_pages.models import Content, ContentPage, Image, Text
+from apps.content_pages.models import (
+    Content,
+    ContentPage,
+    Image,
+    ImagesBlock,
+    Text,
+)
 
 
 class ContentInline(admin.StackedInline):
@@ -29,3 +35,4 @@ class ItemAdmin(admin.ModelAdmin):
 admin.site.register(ContentPage, ContentPageAdmin)
 admin.site.register(Text, ItemAdmin)
 admin.site.register(Image, ItemAdmin)
+admin.site.register(ImagesBlock, ItemAdmin)
