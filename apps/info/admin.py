@@ -64,6 +64,12 @@ class FestivalAdmin(admin.ModelAdmin):
         "id",
         "year",
     )
+    filter_horizontal = (
+        "teams",
+        "sponsors",
+        "volunteers",
+        "images",
+    )
     empty_value_display = "-пусто-"
 
 
