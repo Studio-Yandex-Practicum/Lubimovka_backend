@@ -40,7 +40,7 @@ class ProgramType(BaseModel):
 class Play(BaseModel):
     authors = models.ManyToManyField(
         Author,
-        related_name="play",
+        related_name="plays",
         verbose_name="Автор",
     )
     name = models.CharField(
@@ -76,13 +76,13 @@ class Play(BaseModel):
     program = models.ForeignKey(
         ProgramType,
         on_delete=models.PROTECT,
-        related_name="play",
+        related_name="plays",
         verbose_name="Программа",
     )
     festival = models.ForeignKey(
         Festival,
         on_delete=models.PROTECT,
-        related_name="play",
+        related_name="plays",
         verbose_name="Фестиваль",
     )
     is_draft = models.BooleanField(
@@ -197,7 +197,7 @@ class Reading(BaseModel):
     play = models.ForeignKey(
         Play,
         on_delete=models.PROTECT,
-        related_name="reading",
+        related_name="readings",
         verbose_name="Пьеса",
     )
     name = models.CharField(
@@ -211,19 +211,19 @@ class Reading(BaseModel):
     director = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
-        related_name="director_reading",
+        related_name="director_readings",
         verbose_name="Режиссер",
     )
     dramatist = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
-        related_name="dramatist_reading",
+        related_name="dramatist_readings",
         verbose_name="Драматург",
     )
     event = models.OneToOneField(
         BaseEvent,
         on_delete=models.PROTECT,
-        related_name="reading",
+        related_name="readings",
         verbose_name="Заголовок события",
     )
 
@@ -248,25 +248,25 @@ class MasterClass(BaseModel):
     director = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
-        related_name="director_masterclass",
+        related_name="director_masterclasses",
         verbose_name="Режиссер",
     )
     dramatist = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
-        related_name="dramatist_masterclass",
+        related_name="dramatist_masterclasses",
         verbose_name="Драматург",
     )
     host = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
-        related_name="leading_masterclass",
+        related_name="leading_masterclasses",
         verbose_name="Ведущий",
     )
     event = models.OneToOneField(
         BaseEvent,
         on_delete=models.PROTECT,
-        related_name="masterclass",
+        related_name="masterclasses",
         verbose_name="Заголовок события",
     )
 
