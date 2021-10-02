@@ -191,6 +191,12 @@ class OtherPlay(BaseModel):
     class Meta:
         verbose_name = "Другая пьеса"
         verbose_name_plural = "Другие пьесы"
+        constraints = [
+            models.UniqueConstraint(
+                fields=["author", "name"],
+                name="unique_play",
+            )
+        ]
 
     def __str__(self):
         return self.name
