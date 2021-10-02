@@ -84,6 +84,8 @@ class FestivalTeam(BaseModel):
             raise ValidationError("Для члена команды необходимо указать email")
         if not self.person.city:
             raise ValidationError("Для члена команды необходимо указать город")
+        if not self.person.image:
+            raise ValidationError("Для члена команды необходимо выбрать фото")
 
 
 class Sponsor(BaseModel):
@@ -108,6 +110,8 @@ class Sponsor(BaseModel):
         sponsor = Sponsor.objects.filter(person=self.person)
         if self not in sponsor and sponsor:
             raise ValidationError("Этот человек уже есть в попечителях")
+        if not self.person.image:
+            raise ValidationError("Для спонсора необходимо выбрать его фото")
 
 
 class Volunteer(BaseModel):
@@ -144,6 +148,8 @@ class Volunteer(BaseModel):
     def clean(self):
         if not self.person.email:
             raise ValidationError("Укажите email для волонтёра")
+        if not self.person.image:
+            raise ValidationError("Для волонтёра необходимо выбрать его фото")
 
 
 class Place(BaseModel):
