@@ -43,7 +43,7 @@ class Event(BaseModel):
         max_length=50,
     )
     date_time = models.DateTimeField(verbose_name="Дата и время")
-    paid = models.BooleanField(verbose_name="Платное")
+    paid = models.BooleanField(verbose_name="Платное", default=False)
     url = models.URLField(
         max_length=200,
         blank=True,
