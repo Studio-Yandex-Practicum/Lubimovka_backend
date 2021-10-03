@@ -28,6 +28,21 @@ class AchievementAdmin(admin.ModelAdmin):
     )
 
 
+class SocialNetworkLinkInline(admin.TabularInline):
+    model = SocialNetworkLink
+    extra = 1
+
+
+class OtherLinkInline(admin.TabularInline):
+    model = OtherLink
+    extra = 1
+
+
+class OtherPlayInline(admin.StackedInline):
+    model = OtherPlay
+    extra = 1
+
+
 class AuthorAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -35,35 +50,17 @@ class AuthorAdmin(admin.ModelAdmin):
         "quote",
         "biography",
     )
-
-
-class SocialNetworkLinkAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "author",
-        "name",
-        "link",
+    inlines = (
+        SocialNetworkLinkInline,
+        OtherLinkInline,
+        OtherPlayInline,
     )
-
-
-class OtherLinkAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "author",
-        "name",
-        "link",
-        "is_pinned",
-        "order_number",
+    exclude = (
+        "social_network_links",
+        "other_links",
+        "other_plays_links",
     )
-
-
-class OtherPlayAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "author",
-        "name",
-        "link",
-    )
+    empty_value_display = "-пусто-"
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
@@ -108,8 +105,9 @@ admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Author, AuthorAdmin)
-admin.site.register(SocialNetworkLink, SocialNetworkLinkAdmin)
-admin.site.register(OtherLink, OtherLinkAdmin)
-admin.site.register(OtherPlay, OtherPlayAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
+
+admin.site.register(SocialNetworkLink)
+admin.site.register(OtherPlay)
+admin.site.register(OtherLink)

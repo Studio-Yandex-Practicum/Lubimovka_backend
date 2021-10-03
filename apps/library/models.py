@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -95,7 +96,15 @@ class Author(BaseModel):
         verbose_name_plural = "Авторы"
 
     def __str__(self):
-        return self.person
+        return f"{self.person.first_name} {self.person.last_name}"
+
+    def clean(self):
+        if not self.person.email:
+            raise ValidationError("Для автора необходимо указать email")
+        if not self.person.city:
+            raise ValidationError("Для автора необходимо указать город")
+        if not self.person.image:
+            raise ValidationError("Для автора необходимо выбрать фото")
 
 
 class SocialNetworkLink(BaseModel):
@@ -127,7 +136,7 @@ class SocialNetworkLink(BaseModel):
         constraints = [
             models.UniqueConstraint(
                 fields=["author", "name"],
-                name="unique_social_networ",
+                name="unique_social_network",
             )
         ]
 
