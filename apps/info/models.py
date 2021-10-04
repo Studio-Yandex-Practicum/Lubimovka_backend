@@ -84,10 +84,12 @@ class FestivalTeam(BaseModel):
             raise ValidationError("Для члена команды необходимо указать email")
         if not self.person.city:
             raise ValidationError("Для члена команды необходимо указать город")
+        if not self.person.image:
+            raise ValidationError("Для члена команды необходимо выбрать фото")
 
 
 class Sponsor(BaseModel):
-    person = models.ForeignKey(
+    person = models.OneToOneField(
         Person,
         on_delete=models.PROTECT,
         verbose_name="Человек",
@@ -105,9 +107,8 @@ class Sponsor(BaseModel):
         return f"{self.person.first_name} {self.person.last_name}"
 
     def clean(self):
-        sponsor = Sponsor.objects.filter(person=self.person)
-        if self not in sponsor and sponsor:
-            raise ValidationError("Этот человек уже есть в попечителях")
+        if not self.person.image:
+            raise ValidationError("Для спонсора необходимо выбрать его фото")
 
 
 class Volunteer(BaseModel):
@@ -144,6 +145,8 @@ class Volunteer(BaseModel):
     def clean(self):
         if not self.person.email:
             raise ValidationError("Укажите email для волонтёра")
+        if not self.person.image:
+            raise ValidationError("Для волонтёра необходимо выбрать его фото")
 
 
 class Place(BaseModel):
@@ -201,18 +204,10 @@ class Festival(BaseModel):
         verbose_name="Волонтёры фестиваля",
         blank=False,
     )
-    reviews = models.CharField(  # Не придумал ещё реализацию
-        max_length=3,
-        verbose_name="Отзывы волонтёров о фестивале",
-    )
     images = models.ManyToManyField(
         Image,
         related_name="festivalimages",
         verbose_name="Изображения",
-    )
-    programms = models.CharField(
-        max_length=10,
-        verbose_name="Программы фестиваля",  # Ждет создание сущности
     )
     plays_count = models.PositiveIntegerField(
         default=1,

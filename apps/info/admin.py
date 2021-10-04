@@ -33,36 +33,50 @@ class PersonAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
-class FestivalTeamAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "person",
-        "team",
-    )
-    empty_value_display = "-пусто-"
+class FestivalTeamInline(admin.TabularInline):
+    model = Festival.teams.through
+    verbose_name = "Команда и Арт-дирекция"
+    verbose_name_plural = "Команда и Арт-дирекция"
+    extra = 1
 
 
-class SponsorAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "person",
-    )
-    empty_value_display = "-пусто-"
+class SponsorInline(admin.TabularInline):
+    model = Festival.sponsors.through
+    verbose_name = "Попечитель"
+    verbose_name_plural = "Попечители"
+    extra = 1
 
 
-class VolunteerAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "person",
-        "year",
-    )
-    empty_value_display = "-пусто-"
+class VolunteerInline(admin.TabularInline):
+    model = Festival.volunteers.through
+    verbose_name = "Волонтёр"
+    verbose_name_plural = "Волонтёры"
+    extra = 1
+
+
+class FestivalImagesInline(admin.TabularInline):
+    model = Festival.images.through
+    verbose_name = "Изображение"
+    verbose_name_plural = "Изображения"
+    extra = 1
 
 
 class FestivalAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "year",
+    )
+    inlines = (
+        FestivalTeamInline,
+        SponsorInline,
+        VolunteerInline,
+        FestivalImagesInline,
+    )
+    exclude = (
+        "teams",
+        "sponsors",
+        "volunteers",
+        "images",
     )
     empty_value_display = "-пусто-"
 
@@ -79,10 +93,10 @@ class PlaceAdmin(admin.ModelAdmin):
     search_fields = ("name", "address")
 
 
+admin.site.register(Festival, FestivalAdmin)
 admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
-admin.site.register(FestivalTeam, FestivalTeamAdmin)
-admin.site.register(Volunteer, VolunteerAdmin)
-admin.site.register(Sponsor, SponsorAdmin)
-admin.site.register(Festival, FestivalAdmin)
 admin.site.register(Place, PlaceAdmin)
+admin.site.register(FestivalTeam)
+admin.site.register(Volunteer)
+admin.site.register(Sponsor)

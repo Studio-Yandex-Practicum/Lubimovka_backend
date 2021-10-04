@@ -56,6 +56,7 @@ class Person(BaseModel):
     image = models.ImageField(
         upload_to="images/person_avatars",
         verbose_name="Фотография",
+        blank=True,
     )
 
     class Meta:
