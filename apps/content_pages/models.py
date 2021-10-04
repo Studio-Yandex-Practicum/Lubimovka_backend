@@ -2,6 +2,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.db.models.deletion import CASCADE
+from gfklookupwidget.fields import GfkLookupField
 
 from apps.content_pages.fields import OrderField
 from apps.core.models import BaseModel
@@ -37,7 +38,7 @@ class Content(models.Model):
             )
         },
     )
-    object_id = models.PositiveIntegerField()
+    object_id = GfkLookupField("content_type")
     item = GenericForeignKey()
     order = OrderField(
         blank=True,

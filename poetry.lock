@@ -216,6 +216,14 @@ python-versions = ">=3.5"
 Django = ">=2.2"
 
 [[package]]
+name = "django-gfklookupwidget"
+version = "1.0.9"
+description = "A widget to replace the object_id in a generic relation with a search link."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "djangorestframework"
 version = "3.12.4"
 description = "Web APIs for Django, made easy."
@@ -800,7 +808,7 @@ watchdog = ["watchdog"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "0db168bc82169ad1301f528ade36264f1f225ea77239e79a9d60962a319e832b"
+content-hash = "7ae6d8bd0c5d0605282a31eb167fde929f64f250a6fcfa1dc415363966a7d3d2"
 
 [metadata.files]
 appnope = [
@@ -928,6 +936,9 @@ django-extensions = [
 django-filter = [
     {file = "django-filter-2.4.0.tar.gz", hash = "sha256:84e9d5bb93f237e451db814ed422a3a625751cbc9968b484ecc74964a8696b06"},
     {file = "django_filter-2.4.0-py3-none-any.whl", hash = "sha256:e00d32cebdb3d54273c48f4f878f898dced8d5dfaad009438fe61ebdf535ace1"},
+]
+django-gfklookupwidget = [
+    {file = "django-gfklookupwidget-1.0.9.tar.gz", hash = "sha256:7b02e121c30a92634000dd0d98cb4e036e290ca43bbdd7bc0ae64da0732f96fb"},
 ]
 djangorestframework = [
     {file = "djangorestframework-3.12.4-py3-none-any.whl", hash = "sha256:6d1d59f623a5ad0509fe0d6bfe93cbdfe17b8116ebc8eda86d45f6e16e819aaf"},

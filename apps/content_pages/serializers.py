@@ -10,25 +10,32 @@ from apps.content_pages.models import (
 )
 
 
-class TextSerializer(serializers.ModelSerializer):
+class BaseModelSerializer(serializers.ModelSerializer):
+    object_type = serializers.SerializerMethodField()
+
+    def get_object_type(self, obj):
+        return obj.__class__.__name__.lower()
+
+
+class TextSerializer(BaseModelSerializer):
     class Meta:
         model = Text
         fields = "__all__"
 
 
-class ImageSerializer(serializers.ModelSerializer):
+class ImageSerializer(BaseModelSerializer):
     class Meta:
         model = Image
         fields = "__all__"
 
 
-class OrderedImageSerializer(serializers.ModelSerializer):
+class OrderedImageSerializer(BaseModelSerializer):
     class Meta:
         model = OrderedImage
         fields = "__all__"
 
 
-class ImagesBlockSerializer(serializers.ModelSerializer):
+class ImagesBlockSerializer(BaseModelSerializer):
     images = OrderedImageSerializer(
         many=True,
         read_only=True,
