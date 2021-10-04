@@ -1,14 +1,18 @@
 from django.contrib import admin
 
 from apps.library.models import (
+    Achievement,
     Author,
     MasterClass,
+    OtherLink,
+    OtherPlay,
     Performance,
     PerformanceMediaReview,
     PerformanceReview,
     Play,
     ProgramType,
     Reading,
+    SocialNetworkLink,
 )
 
 
@@ -42,8 +46,46 @@ class PerformanceAdmin(admin.ModelAdmin):
     pass
 
 
+class AchievementAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "tag",
+    )
+
+
+class SocialNetworkLinkInline(admin.TabularInline):
+    model = SocialNetworkLink
+    extra = 1
+
+
+class OtherLinkInline(admin.TabularInline):
+    model = OtherLink
+    extra = 1
+
+
+class OtherPlayInline(admin.StackedInline):
+    model = OtherPlay
+    extra = 1
+
+
 class AuthorAdmin(admin.ModelAdmin):
-    pass
+    list_display = (
+        "id",
+        "person",
+        "quote",
+        "biography",
+    )
+    inlines = (
+        SocialNetworkLinkInline,
+        OtherLinkInline,
+        OtherPlayInline,
+    )
+    exclude = (
+        "social_network_links",
+        "other_links",
+        "other_plays_links",
+    )
+    empty_value_display = "-пусто-"
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
@@ -136,9 +178,14 @@ class ProgramTypeAdmin(admin.ModelAdmin):
 
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
+admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
+
+admin.site.register(SocialNetworkLink)
+admin.site.register(OtherPlay)
+admin.site.register(OtherLink)
 admin.site.register(Reading, ReadingAdmin)
 admin.site.register(MasterClass, MasterClassAdmin)
 admin.site.register(ProgramType, ProgramTypeAdmin)
