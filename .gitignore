@@ -128,5 +128,18 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# vscode settings
-.vscode
+# Media and Static Django
+/media
+/staticfiles
+
+# Папки, создаваемые средой разработки
+.idea
+.DS_Store
+.AppleDouble
+.LSOverride
+
+*.sublime-project
+*.sublime-workspace
+
+.vscode/
+*.code-workspace

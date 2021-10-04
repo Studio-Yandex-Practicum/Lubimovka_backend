@@ -38,10 +38,12 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework",
-    "rest_framework_simplejwt",
     "drf_spectacular",
+<<<<<<< HEAD
     "djoser",
     "phonenumber_field",
+=======
+>>>>>>> develop
 ]
 LOCAL_APPS = [
     "apps.users",
@@ -50,7 +52,6 @@ LOCAL_APPS = [
     "apps.afisha",
     "apps.library",
     "apps.articles",
-    "apps.history",
     "apps.info",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -117,9 +118,6 @@ AUTH_PASSWORD_VALIDATORS = [
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAdminUser",
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
