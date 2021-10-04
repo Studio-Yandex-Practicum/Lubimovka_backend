@@ -5,14 +5,17 @@ from apps.core.models import BaseModel
 
 class BaseEvent(BaseModel):
     def __str__(self):
-        if hasattr(self, "masterclasses"):
-            return self.masterclasses.name
-        elif hasattr(self, "readings"):
-            return self.readings.name
-        elif hasattr(self, "performances"):
-            return self.performances.name
-        else:
-            return str(self.pk)
+        return f"{repr(self.event_name)}"
+
+    @property
+    def event_name(self):
+        if getattr(self, "masterclasses", None) is not None:
+            return self.masterclasses
+        if getattr(self, "readings", None) is not None:
+            return self.readings
+        if getattr(self, "performances", None) is not None:
+            return self.performances
+        return None
 
     class Meta:
         ordering = ("-created",)
