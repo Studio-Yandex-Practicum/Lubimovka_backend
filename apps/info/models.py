@@ -9,17 +9,17 @@ from apps.core.models import BaseModel, Image, Person
 
 
 class Partner(BaseModel):
-    class PartnerType(models.IntegerChoices):
-        GENERAL_PARTNER = 1, _("Генеральный партнер")
-        FESTIVAL_PARTNER = 2, _("Партнер фестиваля")
-        INFO_PARTNER = 3, _("Информационный партнер")
+    class PartnerType(models.TextChoices):
+        GENERAL_PARTNER = "general", _("Генеральный партнер")
+        FESTIVAL_PARTNER = "festival", _("Партнер фестиваля")
+        INFO_PARTNER = "info", _("Информационный партнер")
 
     name = models.CharField(
         max_length=200,
         verbose_name="Наименование",
     )
     type = models.CharField(
-        max_length=2,
+        max_length=8,
         choices=PartnerType.choices,
         verbose_name="Тип",
     )
@@ -27,13 +27,10 @@ class Partner(BaseModel):
         max_length=200,
         verbose_name="Ссылка на сайт",
     )
-    picture = models.ImageField(
+    image = models.ImageField(
         upload_to="images/info/partnerslogo",
         verbose_name="Логотип",
-    )
-    image = models.CharField(
-        max_length=200,
-        verbose_name="Логотип",
+        help_text="Загрузите логотип партнёра",
     )
 
     class Meta:
