@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.core.models import Image, Person
+from apps.core.models import Person
 from apps.info.models import (
     Festival,
     FestivalTeam,
@@ -100,4 +100,3 @@ admin.site.register(Place, PlaceAdmin)
 admin.site.register(FestivalTeam)
 admin.site.register(Volunteer)
 admin.site.register(Sponsor)
-admin.site.register(Image)
