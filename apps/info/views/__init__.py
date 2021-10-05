@@ -1,0 +1,1 @@
+from .partners import PartnersViewSet
