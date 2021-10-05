@@ -231,7 +231,7 @@ class Festival(BaseModel):
     )
     cities_count = models.PositiveSmallIntegerField(
         default=1,
-        verbose_name="Количество учавствующих городов",
+        verbose_name="Количество участвующих городов",
     )
     video_link = models.URLField(
         max_length=250,
@@ -252,7 +252,7 @@ class Festival(BaseModel):
 
 
 class Question(BaseModel):
-    question = models.CharField(
+    question = models.TextField(
         max_length=500,
         verbose_name="Текст вопроса",
     )
