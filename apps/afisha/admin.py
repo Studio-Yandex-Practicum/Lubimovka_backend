@@ -4,7 +4,7 @@ from apps.afisha.models import BaseEvent, Event
 
 
 class BaseEventAdmin(admin.ModelAdmin):
-    list_display = ("pk", "event_name")
+    list_display = ("pk", "target_model")
     list_filter = ("created",)
     empty_value_display = "-пусто-"
 

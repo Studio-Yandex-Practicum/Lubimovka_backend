@@ -4,11 +4,23 @@ from apps.core.models import BaseModel
 
 
 class BaseEvent(BaseModel):
+    """
+    Промежуточная модель, связывающая модели Спектакля, Мастер-класса и Читки
+    с моделью События (Event).
+    Связь реализована через OneToOneFields в моделях Performance, Masterclass
+    и Reading (поле event), а также ForeignKey в моделе Event (поле
+    base_event).
+    Подробнее о данном способе связи - в статье:
+    https://lukeplant.me.uk/blog/posts/avoid-django-genericforeignkey/
+    (блок 'Alternative 3 - intermediate table with OneToOneFields on
+    destination models')
+    """
+
     def __str__(self):
-        return f"{repr(self.event_name)}"
+        return f"{repr(self.target_model)}"
 
     @property
-    def event_name(self):
+    def target_model(self):
         if getattr(self, "masterclasses", None) is not None:
             return self.masterclasses
         if getattr(self, "readings", None) is not None:
@@ -17,6 +29,8 @@ class BaseEvent(BaseModel):
             return self.performances
         return None
 
+    target_model.fget.short_description = "Спектакль/Мастер-класс/Читка"
+
     class Meta:
         ordering = ("-created",)
         verbose_name = "Базовое событие"
@@ -24,13 +38,13 @@ class BaseEvent(BaseModel):
 
 
 class Event(BaseModel):
-    PERFORMANCE = "performance"
-    MASTER_CLASS = "masterclass"
-    READING = "reading"
+    PERFORMANCE = "Спектакль"
+    MASTER_CLASS = "Мастер-класс"
+    READING = "Читка"
     EVENT_TYPES = [
-        (PERFORMANCE, "Спектакль"),
-        (MASTER_CLASS, "Мастер-класс"),
-        (READING, "Читка"),
+        (PERFORMANCE, PERFORMANCE),
+        (MASTER_CLASS, MASTER_CLASS),
+        (READING, READING),
     ]
 
     base_event = models.ForeignKey(
