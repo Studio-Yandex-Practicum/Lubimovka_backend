@@ -40,6 +40,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework",
     "drf_spectacular",
+    "phonenumber_field",
 ]
 LOCAL_APPS = [
     "apps.users",
