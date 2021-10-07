@@ -3,7 +3,7 @@ from django.db import models
 from apps.core.models import BaseModel
 
 
-class BaseEvent(BaseModel):
+class CommonEvent(BaseModel):
     """
     Промежуточная модель, связывающая модели Спектакля, Мастер-класса и Читки
     с моделью События (Event).
@@ -47,8 +47,8 @@ class Event(BaseModel):
         (READING, READING),
     ]
 
-    base_event = models.ForeignKey(
-        BaseEvent,
+    common_event = models.ForeignKey(
+        CommonEvent,
         on_delete=models.CASCADE,
         related_name="body",
         verbose_name="Событие",
@@ -70,7 +70,7 @@ class Event(BaseModel):
     place = models.CharField(verbose_name="Место", max_length=200)
 
     def __str__(self):
-        return f"{self.base_event} - {self.type}, {self.date_time}"
+        return f"{self.common_event} - {self.type}, {self.date_time}"
 
     class Meta:
         ordering = ("-created",)
