@@ -9,7 +9,7 @@ class CommonEvent(BaseModel):
     с моделью События (Event).
     Связь реализована через OneToOneFields в моделях Performance, Masterclass
     и Reading (поле event), а также ForeignKey в моделе Event (поле
-    base_event).
+    common_event).
     Подробнее о данном способе связи - в статье:
     https://lukeplant.me.uk/blog/posts/avoid-django-genericforeignkey/
     (блок 'Alternative 3 - intermediate table with OneToOneFields on
