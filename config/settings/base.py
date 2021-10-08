@@ -75,10 +75,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
 ]
 
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-TEMPLATES_DIR=os.path.join(BASE_DIR, "templates")
+TEMPLATES_DIR=os.path.join(ROOT_DIR, "templates")
 
 TEMPLATES = [
     {
@@ -186,12 +183,6 @@ EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
     default="django.core.mail.backends.smtp.EmailBackend",
 )
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_HOST = os.getenv("EMAIL_HOST")
-EMAIL_PORT = os.getenv("EMAIL_PORT")
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
