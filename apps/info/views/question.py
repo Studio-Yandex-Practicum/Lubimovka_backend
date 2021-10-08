@@ -4,6 +4,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.viewsets import generics
 
 from apps.info.serializers import QuestionSerializer
+from apps.main.models import MainSettings
 
 
 class QuestionCreate(generics.CreateAPIView):
@@ -20,10 +21,14 @@ class QuestionCreate(generics.CreateAPIView):
                 "email": serializer.validated_data["email"],
             },
         )
+        settings = MainSettings.objects.first()
         message = EmailMessage(
             "SUBJECT",
             html_message,
-            to=["sova408@mail.ru", "sova408@mail.ru"],
+            to=[
+                person.email
+                for person in settings.persons_how_get_questions.all()
+            ],
         )
         message.content_subtype = "html"
         message.send()

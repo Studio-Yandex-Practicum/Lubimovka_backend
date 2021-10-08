@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 
 from apps.core.models import BaseModel, Person
@@ -10,12 +9,14 @@ class MainSettings(BaseModel):
         verbose_name="Состояние Фестиваль или нет",
     )
 
-    persons_how_get_questions = models.ForeignKey(
+    persons_how_get_questions = models.ManyToManyField(
         Person,
-        on_delete=models.PROTECT,
         verbose_name="Люди, получающие вопросы на почту",
     )
 
-    def clean(self):
-        if MainSettings.objects.count() == 1:
-            raise ValidationError("Объект настроек уже создан")
+    class Meta:
+        verbose_name = "Основные настройки"
+        verbose_name_plural = "Основные настройки"
+
+    def __str__(self):
+        return "Основные настройки"

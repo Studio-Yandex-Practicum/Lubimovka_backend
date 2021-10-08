@@ -2,8 +2,8 @@ import os  # noqa
 
 from .base import *  # noqa
 
-# env_file = os.path.join(ROOT_DIR, ".env") # noqa
-# environ.Env.read_env(env_file) # noqa
+env_file = os.path.join(ROOT_DIR, ".env") # noqa
+environ.Env.read_env(env_file) # noqa
 
 
 # GENERAL
@@ -42,10 +42,10 @@ INSTALLED_APPS += ["django_extensions"]  # noqa: F405
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.console.EmailBackend",
-)
+# EMAIL_BACKEND = env(
+#     "DJANGO_EMAIL_BACKEND",
+#     default="django.core.mail.backends.console.EmailBackend",
+# )
 
 # Your stuff...
 # ------------------------------------------------------------------------------
@@ -62,3 +62,10 @@ DATABASES = {
         "PORT": env("POSTGRES_PORT", default="5432"),
     }
 }
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_HOST = env("EMAIL_HOST")
+EMAIL_PORT = env("EMAIL_PORT")
+EMAIL_HOST_USER = env("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
+SECURITY_EMAIL_SENDER = env("EMAIL_HOST_USER")
