@@ -8,7 +8,7 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0002_auto_20211002_2212'),
+        ('library', '0002_auto_20211004_1737'),
         ('afisha', '0003_baseevent'),
     ]
 
