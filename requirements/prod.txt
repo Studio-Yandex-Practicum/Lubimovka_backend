@@ -1,5 +1,6 @@
 asgiref==3.4.1; python_version >= "3.6"
 attrs==21.2.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
+django-admin-sortable2==1.0.2
 django-cors-headers==3.8.0; python_version >= "3.6"
 django-environ==0.7.0; python_version >= "3.4" and python_version < "4"
 django-filter==2.4.0; python_version >= "3.5"

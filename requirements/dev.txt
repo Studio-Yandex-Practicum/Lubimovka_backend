@@ -11,6 +11,7 @@ colorama==0.4.4; sys_platform == "win32" and python_version >= "3.7" and python_
 coverage==5.5; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0" and python_version < "4")
 decorator==5.1.0; python_version >= "3.7"
 distlib==0.3.3; python_full_version >= "3.6.1"
+django-admin-sortable2==1.0.2
 django-cors-headers==3.8.0; python_version >= "3.6"
 django-debug-toolbar==3.2.2; python_version >= "3.6"
 django-environ==0.7.0; python_version >= "3.4" and python_version < "4"

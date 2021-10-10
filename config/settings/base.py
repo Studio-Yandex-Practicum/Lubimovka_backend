@@ -39,6 +39,7 @@ THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework",
     "drf_spectacular",
+    "adminsortable2",
 ]
 LOCAL_APPS = [
     "apps.users",

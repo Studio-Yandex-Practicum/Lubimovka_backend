@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.content_pages.views import ContentPageViewSet, ContentViewSet
+from apps.content_pages.views import ContentViewSet
 
 router = DefaultRouter()
 
@@ -9,12 +9,6 @@ router.register(
     "contents",
     ContentViewSet,
     basename="contents",
-)
-
-router.register(
-    "content-pages",
-    ContentPageViewSet,
-    basename="content-pages",
 )
 
 

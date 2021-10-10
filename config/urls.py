@@ -23,9 +23,9 @@ apps_patterns = [
     path("", include("apps.main.urls")),
     # path("", include("apps.afisha.urls")),
     # path("", include("apps.library.urls")),
-    # path("", include("apps.articles.urls")),
-    # path("", include("apps.info.urls")),
     path("", include("apps.content_pages.urls")),
+    path("", include("apps.articles.urls")),
+    # path("", include("apps.info.urls")),
 ]
 
 api_schema_patterns = [
