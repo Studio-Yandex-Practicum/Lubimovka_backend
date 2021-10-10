@@ -4,8 +4,9 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from phonenumber_field.modelfields import PhoneNumberField
 
-from apps.afisha.models import BaseEvent
+from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Person
 from apps.info.models import Festival
 
@@ -384,7 +385,7 @@ class Reading(BaseModel):
         verbose_name="Драматург",
     )
     event = models.OneToOneField(
-        BaseEvent,
+        CommonEvent,
         on_delete=models.PROTECT,
         related_name="readings",
         verbose_name="Заголовок события",
@@ -427,7 +428,7 @@ class MasterClass(BaseModel):
         verbose_name="Ведущий",
     )
     event = models.OneToOneField(
-        BaseEvent,
+        CommonEvent,
         on_delete=models.PROTECT,
         related_name="masterclasses",
         verbose_name="Заголовок события",
@@ -440,3 +441,47 @@ class MasterClass(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class ParticipationApplicationFestival(BaseModel):
+    first_name = models.CharField(
+        max_length=200,
+        verbose_name="Имя",
+    )
+    last_name = models.CharField(
+        max_length=200,
+        verbose_name="Фамилия",
+    )
+    birthday = models.DateField(
+        verbose_name="День рождения",
+    )
+    city = models.CharField(
+        max_length=50,
+        verbose_name="Город проживания",
+    )
+    phone_number = PhoneNumberField()
+    email = models.EmailField(
+        max_length=100,
+        verbose_name="Электронная почта",
+    )
+    title = models.CharField(
+        max_length=200,
+        verbose_name="Название пьесы",
+    )
+    year = models.CharField(
+        max_length=4,
+        verbose_name="Год написания",
+    )
+    file_link = models.URLField(
+        verbose_name="Ссылка на файл",
+    )
+    status = models.BooleanField(
+        verbose_name="Статус",
+    )
+
+    class Meta:
+        verbose_name_plural = "Заявления на участие"
+        verbose_name = "Заявление на участие"
+
+    def __str__(self):
+        return self.title

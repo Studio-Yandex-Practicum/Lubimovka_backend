@@ -40,6 +40,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "drf_spectacular",
     "adminsortable2",
+    "phonenumber_field",
 ]
 LOCAL_APPS = [
     "apps.users",
