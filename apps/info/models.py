@@ -1,5 +1,9 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    MaxValueValidator,
+    MinLengthValidator,
+    MinValueValidator,
+)
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils import timezone
@@ -254,6 +258,11 @@ class Festival(BaseModel):
 class Question(BaseModel):
     question = models.TextField(
         max_length=500,
+        validators=[
+            MinLengthValidator(
+                2, "Вопрос должен состоять более чем из 2 символов"
+            )
+        ],
         verbose_name="Текст вопроса",
     )
     name = models.CharField(

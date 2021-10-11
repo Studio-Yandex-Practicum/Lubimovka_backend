@@ -1,7 +1,7 @@
 from .partners import PartnersAPIView
-from .question import QuestionCreate
+from .question import QuestionCreateAPI
 
 __all__ = [
-    "QuestionCreate",
+    "QuestionCreateAPI",
     "PartnersAPIView",
 ]

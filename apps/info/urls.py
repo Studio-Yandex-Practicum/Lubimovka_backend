@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.info.views import QuestionCreate
+from apps.info.views import QuestionCreateAPI
 
 router = DefaultRouter()
 # router.register(
@@ -12,7 +12,7 @@ router = DefaultRouter()
 
 info_urls = [
     # path("", include(router.urls)),
-    path("questions/", QuestionCreate.as_view(), name="questions"),
+    path("questions/", QuestionCreateAPI.as_view(), name="questions"),
 ]
 
 urlpatterns = [
