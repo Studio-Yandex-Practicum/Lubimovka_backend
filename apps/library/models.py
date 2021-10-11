@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
-from apps.afisha.models import BaseEvent
+from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Person
 from apps.info.models import Festival
 
@@ -385,7 +385,7 @@ class Reading(BaseModel):
         verbose_name="Драматург",
     )
     event = models.OneToOneField(
-        BaseEvent,
+        CommonEvent,
         on_delete=models.PROTECT,
         related_name="readings",
         verbose_name="Заголовок события",
@@ -428,7 +428,7 @@ class MasterClass(BaseModel):
         verbose_name="Ведущий",
     )
     event = models.OneToOneField(
-        BaseEvent,
+        CommonEvent,
         on_delete=models.PROTECT,
         related_name="masterclasses",
         verbose_name="Заголовок события",
