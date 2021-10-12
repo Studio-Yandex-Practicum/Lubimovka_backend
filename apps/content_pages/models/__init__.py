@@ -1,4 +1,4 @@
-from .content import Content
+from .content import Content, ContentPage
 from .content_blocks import (
     Image,
     ImagesBlock,
@@ -30,4 +30,5 @@ __all__ = (
     Video,
     VideosBlock,
     Content,
+    ContentPage,
 )

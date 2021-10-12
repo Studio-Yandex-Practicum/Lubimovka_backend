@@ -1,13 +1,17 @@
-from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 
-from apps.articles.models import OrderedProjectContent, Project, ProjectContent
-from apps.content_pages.admin import BaseContentAdmin
+from apps.articles.models import Project, ProjectContentPage
+from apps.content_pages.admin import BaseContentInline
 
 
-class ProjectContentAdmin(BaseContentAdmin):
+class ProjectContentInline(BaseContentInline):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Could be a service or some type of mixin.
+        Limits avaliable models to choose while creating ContentPage object.
+        """
+
         if db_field.name == "content_type":
             kwargs["queryset"] = ContentType.objects.filter(
                 app_label="content_pages",
@@ -24,13 +28,8 @@ class ProjectContentAdmin(BaseContentAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class OrderedProjectContentInline(
-    SortableInlineAdminMixin,
-    admin.StackedInline,
-):
-    model = OrderedProjectContent
-    extra = 0
-    show_change_link = True
+class ProjectContentPageAdmin(admin.ModelAdmin):
+    inlines = [ProjectContentInline]
 
 
 class ProjectAdmin(admin.ModelAdmin):
@@ -38,8 +37,7 @@ class ProjectAdmin(admin.ModelAdmin):
         "name",
         "description",
     ]
-    inlines = [OrderedProjectContentInline]
 
 
 admin.site.register(Project, ProjectAdmin)
-admin.site.register(ProjectContent, ProjectContentAdmin)
+admin.site.register(ProjectContentPage, ProjectContentPageAdmin)

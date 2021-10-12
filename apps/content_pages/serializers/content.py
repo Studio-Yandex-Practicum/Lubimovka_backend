@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.content_pages.models import (
+    ContentPage,
     Image,
     ImagesBlock,
     Link,
@@ -10,13 +11,16 @@ from apps.content_pages.models import (
     Video,
     VideosBlock,
 )
-
-from .image import ImagesBlockSerializer, ImageSerializer
-from .link import LinkSerializer
-from .performance import PerformancesBlockSerializer
-from .person import PersonsBlockSerializer
-from .play import PlaysBlockSerializer
-from .video import VideosBlockSerializer, VideoSerializer
+from apps.content_pages.serializers.content_blocks import (
+    ImagesBlockSerializer,
+    ImageSerializer,
+    LinkSerializer,
+    PerformancesBlockSerializer,
+    PersonsBlockSerializer,
+    PlaysBlockSerializer,
+    VideosBlockSerializer,
+    VideoSerializer,
+)
 
 
 class ContentObjectRelatedField(serializers.RelatedField):
@@ -53,11 +57,44 @@ class ContentObjectRelatedField(serializers.RelatedField):
 class BaseContentSerializer(serializers.Serializer):
     order = serializers.IntegerField()
     content_type = serializers.SlugRelatedField(
-        source="content_item.content_type",
         slug_field="model",
         read_only=True,
     )
     content_item = ContentObjectRelatedField(
-        source="content_item.item",
+        source="item",
         read_only=True,
     )
+
+
+class ContentPageSerializer(serializers.ModelSerializer):
+    contents = BaseContentSerializer(
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = ContentPage
+        fields = ["contents"]
+
+
+class ModelWithContentPageSerializer(serializers.ModelSerializer):
+    """
+    Basic serializer for models with relations on ContentPage.
+    The field 'contents' returns 'content_page' related object content and
+    makes serialized objects look better.
+    """
+
+    contents = BaseContentSerializer(
+        source="content_page.contents",
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = None
+        fields = [
+            "name",
+            "description",
+            "image",
+            "contents",
+        ]

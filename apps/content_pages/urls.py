@@ -1,14 +1,14 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.content_pages.views import ContentViewSet
+from apps.content_pages.views import ContentPageViewSet
 
 router = DefaultRouter()
 
 router.register(
-    "contents",
-    ContentViewSet,
-    basename="contents",
+    "content-pages",
+    ContentPageViewSet,
+    basename="content-pages",
 )
 
 

@@ -1,16 +1,7 @@
-from rest_framework import serializers
-
 from apps.articles.models import Project
-from apps.content_pages.serializers import BaseContentSerializer
+from apps.content_pages.serializers import ModelWithContentPageSerializer
 
 
-class ProjectSerializer(serializers.ModelSerializer):
-    contents = BaseContentSerializer(
-        source="project_contents",
-        many=True,
-        read_only=True,
-    )
-
-    class Meta:
+class ProjectSerializer(ModelWithContentPageSerializer):
+    class Meta(ModelWithContentPageSerializer.Meta):
         model = Project
-        fields = "__all__"
