@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.afisha.models import CommonEvent
-from apps.core.models import BaseModel, Person
+from apps.core.models import BaseModel, Image, Person
 from apps.info.models import Festival
 
 
@@ -88,21 +88,6 @@ class Play(BaseModel):
         ]
         verbose_name = "Пьеса"
         verbose_name_plural = "Пьесы"
-
-    def __str__(self):
-        return self.name
-
-
-class Performance(BaseModel):
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-        verbose_name="Название спектакля",
-    )
-
-    class Meta:
-        verbose_name = "Спектакль"
-        verbose_name_plural = "Спектакли"
 
     def __str__(self):
         return self.name
@@ -278,6 +263,59 @@ class OtherPlay(BaseModel):
                 name="unique_other_play",
             )
         ]
+
+    def __str__(self):
+        return self.name
+
+
+class Performance(BaseModel):
+    name = models.CharField(
+        max_length=200,
+        verbose_name="Название спектакля",
+    )
+    play = models.ForeignKey(
+        Play,
+        on_delete=models.PROTECT,
+        related_name="performances",
+        verbose_name="Пьеса",
+    )
+    event = models.OneToOneField(
+        CommonEvent,
+        on_delete=models.PROTECT,
+        related_name="performances",
+        verbose_name="Базовое событие",
+    )
+    main_image = models.ImageField(
+        upload_to="performances/",
+        verbose_name="Главное изображение",
+    )
+    bottom_image = models.ImageField(
+        upload_to="performances/",
+        verbose_name="Изображение внизу страницы",
+    )
+    images_in_block = models.ManyToManyField(
+        Image,
+        verbose_name="Фотографии спектакля в блоке фотографий",
+        blank=True,
+        null=True,
+    )
+    video = models.FileField(upload_to="performances/", verbose_name="Видео")
+    short_description = models.TextField(
+        max_length=500,
+        verbose_name="Краткое описание",
+    )
+    full_description = models.TextField(
+        verbose_name="Полное описание",
+    )
+    age_limit = models.CharField(
+        max_length=3,
+        verbose_name="Возрастное ограничение",
+    )
+
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "Спектакль"
+        verbose_name_plural = "Спектакли"
 
     def __str__(self):
         return self.name

@@ -1,4 +1,6 @@
+from django import forms
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 
 from apps.library.models import (
     Achievement,
@@ -40,10 +42,6 @@ class PlayAdmin(admin.ModelAdmin):
         "program_name",
         "festival_year",
     ]
-
-
-class PerformanceAdmin(admin.ModelAdmin):
-    pass
 
 
 class AchievementAdmin(admin.ModelAdmin):
@@ -173,6 +171,35 @@ class ProgramTypeAdmin(admin.ModelAdmin):
     ]
     search_fields = [
         "name",
+    ]
+
+
+class PerformanceReviewInline(admin.TabularInline):
+    model = PerformanceReview
+
+
+class PerformanceMediaReviewInline(admin.TabularInline):
+    model = PerformanceMediaReview
+
+
+class PerformanceForm(forms.ModelForm):
+    class Meta:
+        model = Performance
+        fields = "__all__"
+
+    def clean(self):
+        print(self.cleaned_data)
+        images_in_block = self.cleaned_data.get("images_in_block")
+        if images_in_block.count() > 8:
+            raise ValidationError("Too many images!")
+        return self.cleaned_data
+
+
+class PerformanceAdmin(admin.ModelAdmin):
+    form = PerformanceForm
+    inlines = [
+        PerformanceReviewInline,
+        PerformanceMediaReviewInline,
     ]
 
 
