@@ -19,7 +19,6 @@ from apps.content_pages.models import (
     Video,
     VideosBlock,
 )
-from apps.content_pages.models.content import ContentPage
 
 
 class OrderedInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -67,7 +66,7 @@ class PersonsBlockAdmin(admin.ModelAdmin):
     inlines = [OrderedPersonInline]
 
 
-class BaseContentInline(SortableInlineAdminMixin, admin.StackedInline):
+class BaseContentInlineMixin:
     formfield_overrides = {
         models.PositiveIntegerField: {
             "widget": GfkLookupWidget(
@@ -76,12 +75,7 @@ class BaseContentInline(SortableInlineAdminMixin, admin.StackedInline):
             )
         },
     }
-    model = Content
     extra = 0
-
-
-class BaseContentPageAdmin(admin.ModelAdmin):
-    inlines = [BaseContentInline]
 
 
 admin.site.register(Image)
@@ -92,4 +86,3 @@ admin.site.register(VideosBlock, VideosBlockAdmin)
 admin.site.register(PerformancesBlock, PerformancesBlockAdmin)
 admin.site.register(PlaysBlock, PlaysBlockAdmin)
 admin.site.register(PersonsBlock, PersonsBlockAdmin)
-admin.site.register(ContentPage, BaseContentPageAdmin)

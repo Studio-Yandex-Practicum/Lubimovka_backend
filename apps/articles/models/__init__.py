@@ -1,10 +1,10 @@
 from .blog_item import BlogItem
 from .news_item import NewsItem
-from .project import Project, ProjectContentPage
+from .project import Project, ProjectContent
 
 __all__ = (
     BlogItem,
     NewsItem,
     Project,
-    ProjectContentPage,
+    ProjectContent,
 )

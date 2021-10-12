@@ -1,8 +1,4 @@
-from .content import (
-    BaseContentSerializer,
-    ContentPageSerializer,
-    ModelWithContentPageSerializer,
-)
+from .content import BaseContentSerializer
 from .content_blocks import (
     ImagesBlockSerializer,
     ImageSerializer,
@@ -24,6 +20,4 @@ __all__ = (
     VideosBlockSerializer,
     VideoSerializer,
     BaseContentSerializer,
-    ContentPageSerializer,
-    ModelWithContentPageSerializer,
 )

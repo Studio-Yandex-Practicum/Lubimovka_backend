@@ -1,11 +1,19 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 
-from apps.articles.models import Project, ProjectContentPage
-from apps.content_pages.admin import BaseContentInline
+from apps.articles.models import Project
+from apps.articles.models.project import ProjectContent
+from apps.content_pages.admin import BaseContentInlineMixin
 
 
-class ProjectContentInline(BaseContentInline):
+class ProjectContentInline(
+    BaseContentInlineMixin,
+    SortableInlineAdminMixin,
+    admin.StackedInline,
+):
+    model = ProjectContent
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """
         Could be a service or some type of mixin.
@@ -28,16 +36,12 @@ class ProjectContentInline(BaseContentInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class ProjectContentPageAdmin(admin.ModelAdmin):
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = [
+        "title",
+        "description",
+    ]
     inlines = [ProjectContentInline]
 
 
-class ProjectAdmin(admin.ModelAdmin):
-    list_display = [
-        "name",
-        "description",
-    ]
-
-
 admin.site.register(Project, ProjectAdmin)
-admin.site.register(ProjectContentPage, ProjectContentPageAdmin)

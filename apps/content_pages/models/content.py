@@ -8,16 +8,17 @@ from apps.core.models import BaseModel
 class ContentPage(BaseModel):
     title = models.CharField(
         max_length=200,
-        verbose_name="Заголовок блока элементов сложной верстки",
+        verbose_name="Заголовок страницы",
     )
     description = models.TextField(
         max_length=500,
-        verbose_name="Описание что будет в блоке сложной верстки",
+        verbose_name="Описание страницы",
     )
 
     class Meta:
-        verbose_name = "Блок элементов сложной верстки"
-        verbose_name_plural = "Блоки элементов сложной верстки"
+        abstract = True
+        verbose_name = "Шаблон объекта с сложной версткой"
+        verbose_name_plural = "Шаблоны объектов с сложной версткой"
         ordering = ["-modified"]
 
     def __str__(self):
@@ -45,6 +46,7 @@ class Content(models.Model):
     )
 
     class Meta:
+        abstract = True
         ordering = ["order"]
         verbose_name = "Элемент сложной верстки"
         verbose_name_plural = "Элементы сложной верстки"

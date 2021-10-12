@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from apps.content_pages.models import (
-    ContentPage,
     Image,
     ImagesBlock,
     Link,
@@ -64,37 +63,3 @@ class BaseContentSerializer(serializers.Serializer):
         source="item",
         read_only=True,
     )
-
-
-class ContentPageSerializer(serializers.ModelSerializer):
-    contents = BaseContentSerializer(
-        many=True,
-        read_only=True,
-    )
-
-    class Meta:
-        model = ContentPage
-        fields = ["contents"]
-
-
-class ModelWithContentPageSerializer(serializers.ModelSerializer):
-    """
-    Basic serializer for models with relations on ContentPage.
-    The field 'contents' returns 'content_page' related object content and
-    makes serialized objects look better.
-    """
-
-    contents = BaseContentSerializer(
-        source="content_page.contents",
-        many=True,
-        read_only=True,
-    )
-
-    class Meta:
-        model = None
-        fields = [
-            "name",
-            "description",
-            "image",
-            "contents",
-        ]
