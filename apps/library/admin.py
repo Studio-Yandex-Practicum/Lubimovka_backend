@@ -176,10 +176,14 @@ class ProgramTypeAdmin(admin.ModelAdmin):
 
 class PerformanceReviewInline(admin.TabularInline):
     model = PerformanceReview
+    extra = 1
+    max_num = 8
 
 
 class PerformanceMediaReviewInline(admin.TabularInline):
     model = PerformanceMediaReview
+    extra = 1
+    max_num = 8
 
 
 class PerformanceForm(forms.ModelForm):
@@ -188,7 +192,6 @@ class PerformanceForm(forms.ModelForm):
         fields = "__all__"
 
     def clean(self):
-        print(self.cleaned_data)
         images_in_block = self.cleaned_data.get("images_in_block")
         if images_in_block.count() > 8:
             raise ValidationError("Too many images!")
@@ -196,6 +199,15 @@ class PerformanceForm(forms.ModelForm):
 
 
 class PerformanceAdmin(admin.ModelAdmin):
+    filter_horizontal = ("images_in_block",)
+    list_filter = [
+        "age_limit",
+    ]
+    search_fields = [
+        "play__name",
+        "name",
+        "text",
+    ]
     form = PerformanceForm
     inlines = [
         PerformanceReviewInline,

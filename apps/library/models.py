@@ -125,21 +125,25 @@ class Author(BaseModel):
     achievements = models.ManyToManyField(
         Achievement,
         verbose_name="Достижения",
+        blank=True,
     )
     social_network_links = models.ManyToManyField(
         "SocialNetworkLink",
         verbose_name="Ссылки на социальные сети",
         related_name="authors",
+        blank=True,
     )
     other_links = models.ManyToManyField(
         "OtherLink",
         verbose_name="Ссылки на внешние ресурсы",
         related_name="authors",
+        blank=True,
     )
-    authors_plays_links = models.ManyToManyField(
+    author_plays_links = models.ManyToManyField(
         Play,
         verbose_name="Ссылки на пьесы автора",
         related_name="authors_links",
+        blank=True,
     )
     other_plays_links = models.ManyToManyField(
         "OtherPlay",
@@ -299,17 +303,25 @@ class Performance(BaseModel):
         blank=True,
         null=True,
     )
-    video = models.FileField(upload_to="performances/", verbose_name="Видео")
-    short_description = models.TextField(
+    video = models.URLField(
+        max_length=200,
+        blank=True,
+        unique=True,
+        verbose_name="Видео",
+    )
+    description = models.TextField(
         max_length=500,
         verbose_name="Краткое описание",
     )
-    full_description = models.TextField(
+    text = models.TextField(
         verbose_name="Полное описание",
     )
-    age_limit = models.CharField(
-        max_length=3,
+    age_limit = models.PositiveSmallIntegerField(
         verbose_name="Возрастное ограничение",
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(18),
+        ],
     )
 
     class Meta:
