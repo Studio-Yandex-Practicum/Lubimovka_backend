@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.afisha.models import CommonEvent
-from apps.core.models import BaseModel, Person
+from apps.core.models import BaseModel, Image, Person
 from apps.info.models import Festival
 
 
@@ -93,21 +93,6 @@ class Play(BaseModel):
         return self.name
 
 
-class Performance(BaseModel):
-    name = models.CharField(
-        max_length=200,
-        unique=True,
-        verbose_name="Название спектакля",
-    )
-
-    class Meta:
-        verbose_name = "Спектакль"
-        verbose_name_plural = "Спектакли"
-
-    def __str__(self):
-        return self.name
-
-
 class Achievement(BaseModel):
     tag = models.CharField(
         max_length=40,
@@ -140,21 +125,25 @@ class Author(BaseModel):
     achievements = models.ManyToManyField(
         Achievement,
         verbose_name="Достижения",
+        blank=True,
     )
     social_network_links = models.ManyToManyField(
         "SocialNetworkLink",
         verbose_name="Ссылки на социальные сети",
         related_name="authors",
+        blank=True,
     )
     other_links = models.ManyToManyField(
         "OtherLink",
         verbose_name="Ссылки на внешние ресурсы",
         related_name="authors",
+        blank=True,
     )
-    authors_plays_links = models.ManyToManyField(
+    author_plays_links = models.ManyToManyField(
         Play,
         verbose_name="Ссылки на пьесы автора",
         related_name="authors_links",
+        blank=True,
     )
     other_plays_links = models.ManyToManyField(
         "OtherPlay",
@@ -278,6 +267,67 @@ class OtherPlay(BaseModel):
                 name="unique_other_play",
             )
         ]
+
+    def __str__(self):
+        return self.name
+
+
+class Performance(BaseModel):
+    name = models.CharField(
+        max_length=200,
+        verbose_name="Название спектакля",
+    )
+    play = models.ForeignKey(
+        Play,
+        on_delete=models.PROTECT,
+        related_name="performances",
+        verbose_name="Пьеса",
+    )
+    event = models.OneToOneField(
+        CommonEvent,
+        on_delete=models.PROTECT,
+        related_name="performances",
+        verbose_name="Базовое событие",
+    )
+    main_image = models.ImageField(
+        upload_to="performances/",
+        verbose_name="Главное изображение",
+    )
+    bottom_image = models.ImageField(
+        upload_to="performances/",
+        verbose_name="Изображение внизу страницы",
+    )
+    images_in_block = models.ManyToManyField(
+        Image,
+        verbose_name="Фотографии спектакля в блоке фотографий",
+        blank=True,
+        null=True,
+    )
+    video = models.URLField(
+        max_length=200,
+        blank=True,
+        unique=True,
+        verbose_name="Видео",
+    )
+    description = models.TextField(
+        max_length=500,
+        verbose_name="Краткое описание",
+    )
+    text = models.TextField(
+        verbose_name="Полное описание",
+    )
+    age_limit = models.PositiveSmallIntegerField(
+        verbose_name="Возрастное ограничение",
+        validators=[
+            MinValueValidator(0),
+            MaxValueValidator(18),
+        ],
+    )
+
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "Спектакль"
+        verbose_name_plural = "Спектакли"
 
     def __str__(self):
         return self.name
