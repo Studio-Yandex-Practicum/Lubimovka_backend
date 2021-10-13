@@ -1,22 +1,12 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.info.views import PartnersAPIView, QuestionsAPIView
+from apps.info.views import QuestionCreateAPI
 
 router = DefaultRouter()
-router.register(
-    "partners",
-    PartnersAPIView,
-    basename="partners",
-)
-router.register(
-    "questions",
-    QuestionsAPIView,
-    basename="questions",
-)
 
 info_urls = [
-    path("info/", include(router.urls)),
+    path("questions/", QuestionCreateAPI.as_view(), name="questions"),
 ]
 
 urlpatterns = [

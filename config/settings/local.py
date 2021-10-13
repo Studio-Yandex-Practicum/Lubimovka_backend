@@ -11,7 +11,6 @@ from .base import *  # noqa
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env("DEBUG", default=True)
 
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
