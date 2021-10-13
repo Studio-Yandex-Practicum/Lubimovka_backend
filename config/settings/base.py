@@ -75,7 +75,7 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
 ]
 
-TEMPLATES_DIR=os.path.join(ROOT_DIR, "templates")
+TEMPLATES_DIR = os.path.join(ROOT_DIR, "templates")
 
 TEMPLATES = [
     {
@@ -187,4 +187,4 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
-EMAIL_SEND_TO = env("EMAIL_SEND_TO", default="user@mail.ru")
+EMAIL_SEND_TO = env("EMAIL_SEND_TO", default="user@none.ru")

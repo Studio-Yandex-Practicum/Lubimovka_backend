@@ -265,11 +265,11 @@ class Question(BaseModel):
         ],
         verbose_name="Текст вопроса",
     )
-    name = models.CharField(
+    author_name = models.CharField(
         max_length=50,
         verbose_name="Имя",
     )
-    email = models.EmailField(
+    author_email = models.EmailField(
         max_length=50,
         verbose_name="Электронная почта",
     )
