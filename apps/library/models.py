@@ -323,6 +323,10 @@ class Performance(BaseModel):
             MaxValueValidator(18),
         ],
     )
+    team_members = models.ManyToManyField(
+        Person,
+        through="PerformanceTeam",
+    )
 
     class Meta:
         ordering = ("-created",)
@@ -331,6 +335,21 @@ class Performance(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class PerformanceTeam(BaseModel):
+    performance = models.ForeignKey(
+        Performance,
+        on_delete=models.CASCADE,
+    )
+    member = models.ForeignKey(
+        Person,
+        on_delete=models.PROTECT,
+    )
+    role = models.CharField(
+        verbose_name="Роль в команде спектакля",
+        max_length=200,
+    )
 
 
 class PerformanceMediaReview(BaseModel):
