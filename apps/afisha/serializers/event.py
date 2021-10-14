@@ -9,6 +9,7 @@ from apps.library.serializers.reading import ReadingSerializer
 
 class EventSerializer(serializers.ModelSerializer):
     event_body = serializers.SerializerMethodField()
+    date_time = serializers.DateTimeField(format="%Y-%m-%dT%H:%M")
 
     def get_event_body(self, obj):
         event_body_serializers = {
