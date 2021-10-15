@@ -1,6 +1,6 @@
 from django.urls import include, path
 
-from apps.info.views import PartnersViewSet
+from apps.info.views import PartnersViewSet, QuestionCreateAPI
 
 # from rest_framework.routers import DefaultRouter
 
@@ -22,6 +22,7 @@ from apps.info.views import PartnersViewSet
 info_urls = [
     # path("about-festival/", include(festival_urls)),
     path("partners/", PartnersViewSet.as_view(), name="partners"),
+    path("questions/", QuestionCreateAPI.as_view(), name="questions"),
 ]
 
 urlpatterns = [
