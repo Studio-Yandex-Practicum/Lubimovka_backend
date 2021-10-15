@@ -46,16 +46,17 @@ class Partner(BaseModel):
 
 
 class FestivalTeam(BaseModel):
-    class TeamType(models.IntegerChoices):
-        ART_DIRECTION = 1, _("Арт-дирекция фестиваля")
-        FESTIVAL_TEAM = 2, _("Команда фестиваля")
+    class TeamType(models.TextChoices):
+        ART_DIRECTION = "art", _("Арт-дирекция фестиваля")
+        FESTIVAL_TEAM = "fest", _("Команда фестиваля")
 
     person = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
         verbose_name="Человек",
     )
-    team = models.SmallIntegerField(
+    team = models.CharField(
+        max_length=5,
         choices=TeamType.choices,
         verbose_name="Тип команды",
     )

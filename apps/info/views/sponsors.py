@@ -1,10 +1,12 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import AllowAny
 
-# from apps.info.models import FestivalTeam, Partner, Sponsor, Volunteer
+from apps.info.models import Sponsor
+from apps.info.serializers import SponsorSerializer
 
 
-class PartnersViewSet(ReadOnlyModelViewSet):
-    # queryset = Partner.objects.all()
-    # serializer_class = TagSerializer
-    # permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+class SponsorViewSet(ListAPIView):
+    queryset = Sponsor.objects.all()
+    serializer_class = SponsorSerializer
+    permission_classes = (AllowAny,)
     pagination_class = None

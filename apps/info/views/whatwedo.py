@@ -1,5 +1,5 @@
-from rest_framework.viewsets import ReadOnlyModelViewSet
+from rest_framework.generics import ListAPIView
 
 
-class WhatWeDoViewSet(ReadOnlyModelViewSet):
+class WhatWeDoViewSet(ListAPIView):
     pass

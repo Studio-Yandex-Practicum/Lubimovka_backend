@@ -1,12 +1,12 @@
 from rest_framework import serializers
 
-from apps.info.models import Sponsor
+from apps.info.models import FestivalTeam
 from apps.info.serializers.person import PersonsSerializer
 
 
-class SponsorSerializer(serializers.ModelSerializer):
+class FestivalTeamsSerializer(serializers.ModelSerializer):
     person = PersonsSerializer()
 
     class Meta:
-        model = Sponsor
+        model = FestivalTeam
         exclude = ["created", "modified"]
