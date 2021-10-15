@@ -2,9 +2,9 @@ from rest_framework import serializers
 
 from apps.afisha.models import Event
 from apps.library.models import MasterClass, Performance, Reading
-from apps.library.serializers.masterclass import MasterClassSerializer
-from apps.library.serializers.performance import PerformanceSerializer
-from apps.library.serializers.reading import ReadingSerializer
+from apps.library.serializers.masterclass import MasterClassEventSerializer
+from apps.library.serializers.performance import PerformanceEventSerializer
+from apps.library.serializers.reading import ReadingEventSerializer
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -13,9 +13,9 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_event_body(self, obj):
         event_body_serializers = {
-            MasterClass: MasterClassSerializer,
-            Performance: PerformanceSerializer,
-            Reading: ReadingSerializer,
+            MasterClass: MasterClassEventSerializer,
+            Performance: PerformanceEventSerializer,
+            Reading: ReadingEventSerializer,
         }
         event_body = obj.common_event.target_model
         return event_body_serializers[type(event_body)](event_body).data
