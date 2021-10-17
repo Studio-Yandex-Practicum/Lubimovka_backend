@@ -467,18 +467,6 @@ class MasterClass(BaseModel):
         max_length=500,
         verbose_name="Описание",
     )
-    director = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT,
-        related_name="director_masterclasses",
-        verbose_name="Режиссер",
-    )
-    dramatist = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT,
-        related_name="dramatist_masterclasses",
-        verbose_name="Драматург",
-    )
     host = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,

@@ -65,7 +65,6 @@ class Event(BaseModel):
         max_length=200,
         blank=True,
         verbose_name="Ссылка",
-        unique=True,
     )
     place = models.CharField(verbose_name="Место", max_length=200)
 
