@@ -441,6 +441,14 @@ class Reading(BaseModel):
         verbose_name="Заголовок события",
     )
 
+    @property
+    def director_full_name(self):
+        return f"{self.director.first_name} {self.director.last_name}"
+
+    @property
+    def dramatist_ful_name(self):
+        return f"{self.dramatist.first_name} {self.dramatist.last_name}"
+
     class Meta:
         ordering = ("-created",)
         verbose_name = "Читка"
@@ -483,6 +491,10 @@ class MasterClass(BaseModel):
         related_name="masterclasses",
         verbose_name="Заголовок события",
     )
+
+    @property
+    def host_full_name(self):
+        return f"{self.host.first_name} {self.host.last_name}"
 
     class Meta:
         ordering = ("-created",)

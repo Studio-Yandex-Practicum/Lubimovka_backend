@@ -4,10 +4,7 @@ from apps.library.models import MasterClass
 
 
 class MasterClassEventSerializer(serializers.ModelSerializer):
-    host = serializers.SerializerMethodField()
-
-    def get_host(self, obj):
-        return f"{obj.host.first_name} {obj.host.last_name}"
+    host = serializers.CharField(source="host_full_name")
 
     class Meta:
         model = MasterClass
