@@ -441,6 +441,14 @@ class Reading(BaseModel):
         verbose_name="Заголовок события",
     )
 
+    @property
+    def director_full_name(self):
+        return f"{self.director.first_name} {self.director.last_name}"
+
+    @property
+    def dramatist_ful_name(self):
+        return f"{self.dramatist.first_name} {self.dramatist.last_name}"
+
     class Meta:
         ordering = ("-created",)
         verbose_name = "Читка"
@@ -459,18 +467,6 @@ class MasterClass(BaseModel):
         max_length=500,
         verbose_name="Описание",
     )
-    director = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT,
-        related_name="director_masterclasses",
-        verbose_name="Режиссер",
-    )
-    dramatist = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT,
-        related_name="dramatist_masterclasses",
-        verbose_name="Драматург",
-    )
     host = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
@@ -483,6 +479,10 @@ class MasterClass(BaseModel):
         related_name="masterclasses",
         verbose_name="Заголовок события",
     )
+
+    @property
+    def host_full_name(self):
+        return f"{self.host.first_name} {self.host.last_name}"
 
     class Meta:
         ordering = ("-created",)
