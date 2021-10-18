@@ -338,6 +338,18 @@ class Performance(BaseModel):
 
 
 class PerformanceTeam(BaseModel):
+    ACTOR = "Актёр"
+    ADAPTER = "Адаптация текста"
+    DRAMATIST = "Драматург"
+    DIRECTOR = "Режиссёр"
+    INTERPRETER = "Переводчик"
+    TEAM_ROLES = [
+        (ACTOR, ACTOR),
+        (ADAPTER, ADAPTER),
+        (DRAMATIST, DRAMATIST),
+        (DIRECTOR, DIRECTOR),
+        (INTERPRETER, INTERPRETER),
+    ]
     performance = models.ForeignKey(
         Performance,
         on_delete=models.CASCADE,
@@ -349,6 +361,7 @@ class PerformanceTeam(BaseModel):
     role = models.CharField(
         verbose_name="Роль в команде спектакля",
         max_length=200,
+        choices=TEAM_ROLES,
     )
 
 

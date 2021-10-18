@@ -11,6 +11,7 @@ from apps.library.models import (
     Performance,
     PerformanceMediaReview,
     PerformanceReview,
+    PerformanceTeam,
     Play,
     ProgramType,
     Reading,
@@ -186,6 +187,11 @@ class PerformanceMediaReviewInline(admin.TabularInline):
     max_num = 8
 
 
+class PerformanceTeamInline(admin.TabularInline):
+    model = PerformanceTeam
+    extra = 1
+
+
 class PerformanceForm(forms.ModelForm):
     class Meta:
         model = Performance
@@ -199,7 +205,10 @@ class PerformanceForm(forms.ModelForm):
 
 
 class PerformanceAdmin(admin.ModelAdmin):
-    filter_horizontal = ("images_in_block",)
+    filter_horizontal = (
+        "images_in_block",
+        "team_members",
+    )
     list_filter = [
         "age_limit",
     ]
@@ -212,6 +221,7 @@ class PerformanceAdmin(admin.ModelAdmin):
     inlines = [
         PerformanceReviewInline,
         PerformanceMediaReviewInline,
+        PerformanceTeamInline,
     ]
 
 
