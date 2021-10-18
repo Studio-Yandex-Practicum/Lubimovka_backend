@@ -301,7 +301,6 @@ class Performance(BaseModel):
         Image,
         verbose_name="Фотографии спектакля в блоке фотографий",
         blank=True,
-        null=True,
     )
     video = models.URLField(
         max_length=200,
