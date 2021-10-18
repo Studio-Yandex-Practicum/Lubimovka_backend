@@ -20,6 +20,7 @@ class PartnerAdmin(admin.ModelAdmin):
         "image",
     )
     empty_value_display = "-пусто-"
+    ordering = ("type",)
 
 
 class PersonAdmin(admin.ModelAdmin):
