@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.main.models import InfoBlock, MainSettings
+from apps.main.models import InfoBlock, MainSettings, Text
 
 
 class BlockInline(admin.StackedInline):
@@ -9,11 +9,9 @@ class BlockInline(admin.StackedInline):
 
 class TextAdmin(admin.ModelAdmin):
     list_display = (
-        "name",
-        "type",
         "text",
+        "text_order",
     )
-    search_fields = ("type", "value_type", "name")
 
 
 class MainSettingsAdmin(admin.ModelAdmin):
@@ -59,3 +57,4 @@ class MainSettingsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(MainSettings, MainSettingsAdmin)
+admin.site.register(Text, TextAdmin)

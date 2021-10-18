@@ -16,7 +16,7 @@ class Text(models.Model):
         verbose_name_plural = "Тексты"
 
     def __str__(self):
-        return self.text_order
+        return self.text[:15]
 
 
 class MainSettings(models.Model):
