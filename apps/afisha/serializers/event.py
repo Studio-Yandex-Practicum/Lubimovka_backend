@@ -2,9 +2,11 @@ from rest_framework import serializers
 
 from apps.afisha.models import Event
 from apps.library.models import MasterClass, Performance, Reading
-from apps.library.serializers.masterclass import MasterClassEventSerializer
-from apps.library.serializers.performance import PerformanceEventSerializer
-from apps.library.serializers.reading import ReadingEventSerializer
+from apps.library.serializers import (
+    MasterClassEventSerializer,
+    PerformanceEventSerializer,
+    ReadingEventSerializer,
+)
 
 
 class EventSerializer(serializers.ModelSerializer):

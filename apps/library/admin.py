@@ -147,20 +147,14 @@ class ReadingAdmin(admin.ModelAdmin):
 class MasterClassAdmin(admin.ModelAdmin):
     list_display = (
         "name",
-        "director",
-        "dramatist",
         "host",
     )
     list_filter = [
-        "director__last_name",
-        "dramatist__last_name",
         "host__last_name",
     ]
     search_fields = [
         "play__name",
         "name",
-        "director__last_name",
-        "dramatist__last_name",
         "host__last_name",
     ]
 
