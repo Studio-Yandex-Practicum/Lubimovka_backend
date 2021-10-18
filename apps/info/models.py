@@ -1,5 +1,9 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    MaxValueValidator,
+    MinLengthValidator,
+    MinValueValidator,
+)
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils import timezone
@@ -9,17 +13,17 @@ from apps.core.models import BaseModel, Image, Person
 
 
 class Partner(BaseModel):
-    class PartnerType(models.IntegerChoices):
-        GENERAL_PARTNER = 1, _("Генеральный партнер")
-        FESTIVAL_PARTNER = 2, _("Партнер фестиваля")
-        INFO_PARTNER = 3, _("Информационный партнер")
+    class PartnerType(models.TextChoices):
+        GENERAL_PARTNER = "general", _("Генеральный партнер")
+        FESTIVAL_PARTNER = "festival", _("Партнер фестиваля")
+        INFO_PARTNER = "info", _("Информационный партнер")
 
     name = models.CharField(
         max_length=200,
         verbose_name="Наименование",
     )
     type = models.CharField(
-        max_length=2,
+        max_length=8,
         choices=PartnerType.choices,
         verbose_name="Тип",
     )
@@ -27,13 +31,10 @@ class Partner(BaseModel):
         max_length=200,
         verbose_name="Ссылка на сайт",
     )
-    picture = models.ImageField(
+    image = models.ImageField(
         upload_to="images/info/partnerslogo",
         verbose_name="Логотип",
-    )
-    image = models.CharField(
-        max_length=200,
-        verbose_name="Логотип",
+        help_text="Загрузите логотип партнёра",
     )
 
     class Meta:
@@ -45,16 +46,17 @@ class Partner(BaseModel):
 
 
 class FestivalTeam(BaseModel):
-    class TeamType(models.IntegerChoices):
-        ART_DIRECTION = 1, _("Арт-дирекция фестиваля")
-        FESTIVAL_TEAM = 2, _("Команда фестиваля")
+    class TeamType(models.TextChoices):
+        ART_DIRECTION = "art", _("Арт-дирекция фестиваля")
+        FESTIVAL_TEAM = "fest", _("Команда фестиваля")
 
     person = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
         verbose_name="Человек",
     )
-    team = models.SmallIntegerField(
+    team = models.CharField(
+        max_length=5,
         choices=TeamType.choices,
         verbose_name="Тип команды",
     )
@@ -231,7 +233,7 @@ class Festival(BaseModel):
     )
     cities_count = models.PositiveSmallIntegerField(
         default=1,
-        verbose_name="Количество учавствующих городов",
+        verbose_name="Количество участвующих городов",
     )
     video_link = models.URLField(
         max_length=250,
@@ -252,15 +254,20 @@ class Festival(BaseModel):
 
 
 class Question(BaseModel):
-    question = models.CharField(
+    question = models.TextField(
         max_length=500,
+        validators=[
+            MinLengthValidator(
+                2, "Вопрос должен состоять более чем из 2 символов"
+            )
+        ],
         verbose_name="Текст вопроса",
     )
-    name = models.CharField(
+    author_name = models.CharField(
         max_length=50,
         verbose_name="Имя",
     )
-    email = models.EmailField(
+    author_email = models.EmailField(
         max_length=50,
         verbose_name="Электронная почта",
     )
