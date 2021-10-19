@@ -10,7 +10,6 @@ from .content_items import (
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split
 
-from .content import BaseContentSerializer
 from .content_blocks import (
     ImagesBlockSerializer,
     PerformancesBlockSerializer,
@@ -18,6 +17,11 @@ from .content_blocks import (
     PlaysBlockSerializer,
     VideosBlockSerializer,
 )
+
+# Prevent isort to rearrange imports and prevent circular imports.
+# isort: split
+
+from .content import BaseContentSerializer
 
 __all__ = (
     ImagesBlockSerializer,

@@ -10,7 +10,7 @@ from apps.content_pages.models import (
     Video,
     VideosBlock,
 )
-from apps.content_pages.serializers.content_blocks import (
+from apps.content_pages.serializers import (
     ImagesBlockSerializer,
     ImageSerializer,
     LinkSerializer,
@@ -57,7 +57,6 @@ class ContentObjectRelatedField(serializers.RelatedField):
 
 
 class BaseContentSerializer(serializers.Serializer):
-    order = serializers.IntegerField()
     content_type = serializers.SlugRelatedField(
         slug_field="model",
         read_only=True,

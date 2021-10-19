@@ -1,27 +1,27 @@
 from rest_framework import serializers
 
 from apps.content_pages.models import (
-    Image,
     ImagesBlock,
-    Link,
+    OrderedImage,
+    OrderedPerformance,
+    OrderedPerson,
+    OrderedPlay,
+    OrderedVideo,
     PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
-    Video,
     VideosBlock,
 )
 from apps.content_pages.serializers import (
     ImageSerializer,
-    LinkSerializer,
     PerformanceSerializer,
     PersonSerializer,
     PlaySerializer,
     VideoSerializer,
 )
-from apps.library.models import Performance, Person, Play
 
 
-class OrderedItemSerializerField(serializers.Field):
+class OrderedItemSerializerField(serializers.RelatedField):
     """
     A custom field to serialize 'OrderedItem' object.
     It takes 'value' class and finds related serializer. If none of
@@ -31,12 +31,11 @@ class OrderedItemSerializerField(serializers.Field):
     def to_representation(self, value):
 
         item_serializers = {
-            Image: ImageSerializer,
-            Link: LinkSerializer,
-            Video: VideoSerializer,
-            Performance: PerformanceSerializer,
-            Play: PlaySerializer,
-            Person: PersonSerializer,
+            OrderedImage: ImageSerializer,
+            OrderedPerformance: PerformanceSerializer,
+            OrderedPerson: PersonSerializer,
+            OrderedPlay: PlaySerializer,
+            OrderedVideo: VideoSerializer,
         }
 
         item_class = value._meta.model
@@ -45,26 +44,13 @@ class OrderedItemSerializerField(serializers.Field):
         if not serializer:
             raise Exception("Unexpected type of ordered object")
 
-        serializer = serializer(value)
+        serializer = serializer(value.item)
         return serializer.data
-
-
-class BaseOrderedItemSerializer(serializers.Serializer):
-    """OrderedItem object serializer.
-
-    The serializer is independent of model class because OrderedItems
-    has to have only two fields:
-        - item
-        - order
-    """
-
-    item = OrderedItemSerializerField()
-    order = serializers.IntegerField()
 
 
 class VideosBlockSerializer(serializers.ModelSerializer):
 
-    items = BaseOrderedItemSerializer(
+    items = OrderedItemSerializerField(
         many=True,
         read_only=True,
         source="ordered_videos",
@@ -79,7 +65,7 @@ class VideosBlockSerializer(serializers.ModelSerializer):
 
 
 class ImagesBlockSerializer(serializers.ModelSerializer):
-    items = BaseOrderedItemSerializer(
+    items = OrderedItemSerializerField(
         many=True,
         read_only=True,
         source="ordered_images",
@@ -94,7 +80,7 @@ class ImagesBlockSerializer(serializers.ModelSerializer):
 
 
 class PerformancesBlockSerializer(serializers.ModelSerializer):
-    items = BaseOrderedItemSerializer(
+    items = OrderedItemSerializerField(
         many=True,
         read_only=True,
         source="ordered_performances",
@@ -109,7 +95,7 @@ class PerformancesBlockSerializer(serializers.ModelSerializer):
 
 
 class PersonsBlockSerializer(serializers.ModelSerializer):
-    items = BaseOrderedItemSerializer(
+    items = OrderedItemSerializerField(
         many=True,
         read_only=True,
         source="ordered_persons",
@@ -124,7 +110,7 @@ class PersonsBlockSerializer(serializers.ModelSerializer):
 
 
 class PlaysBlockSerializer(serializers.ModelSerializer):
-    items = BaseOrderedItemSerializer(
+    items = OrderedItemSerializerField(
         many=True,
         read_only=True,
         source="ordered_plays",
