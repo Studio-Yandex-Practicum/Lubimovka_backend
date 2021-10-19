@@ -5,7 +5,13 @@ from django.db import models
 from apps.core.models import BaseModel
 
 
-class ContentPage(BaseModel):
+class AbstractContentPage(BaseModel):
+    """Model with basic CMS functionality.
+
+    The model is abstract. Please subclass it and 'Content' model to create
+    new model with CMS functionality.
+    """
+
     title = models.CharField(
         max_length=200,
         verbose_name="Заголовок страницы",
@@ -25,9 +31,28 @@ class ContentPage(BaseModel):
         return self.title
 
 
-class Content(models.Model):
+class AbstractContent(models.Model):
+    """The base block of the CMS ='ContentPage' object.
+
+    The model is abstract. Please subclass it and set the right 'ContenPage'
+    model in 'content_type' field.
+    You can also limit available models for 'content' with 'limit_choices_to'
+    attribute.
+
+    The block has several fields/attributes:
+        1. foreign key to 'parent' ContentPage object
+        2. 'content' element. The type of 'content' objects may vary.
+            To handle it we have to use GenereForeginKey relation and 3 fields:
+                - content_type
+                - object_id
+                - item
+            Please go through django-docs for any question.
+        3. 'order' field. It is used for managing the order of the 'content'
+            elements in 'parent' object.
+    """
+
     content_page = models.ForeignKey(
-        ContentPage,
+        AbstractContentPage,
         related_name="contents",
         on_delete=models.CASCADE,
         verbose_name="Блок элементов сложной верстки",

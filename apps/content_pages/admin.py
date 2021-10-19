@@ -4,7 +4,7 @@ from django.db import models
 from gfklookupwidget.widgets import GfkLookupWidget
 
 from apps.content_pages.models import (
-    Content,
+    AbstractContent,
     Image,
     ImagesBlock,
     Link,
@@ -67,11 +67,17 @@ class PersonsBlockAdmin(admin.ModelAdmin):
 
 
 class BaseContentInlineMixin:
+    """Sets custom widget to GFKey field.
+
+    It adds magnifier icon next to Generic Foreign Key and helps to choose
+    item.
+    """
+
     formfield_overrides = {
         models.PositiveIntegerField: {
             "widget": GfkLookupWidget(
                 content_type_field_name="content_type",
-                parent_field=Content._meta.get_field("content_type"),
+                parent_field=AbstractContent._meta.get_field("content_type"),
             )
         },
     }

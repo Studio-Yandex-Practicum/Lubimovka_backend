@@ -24,14 +24,11 @@ from apps.content_pages.serializers.content_blocks import (
 
 class ContentObjectRelatedField(serializers.RelatedField):
     """
-    A custom field to use for the `content_object` generic relationship.
+    Custom related field to use for the 'content_object' generic relationship.
     """
 
     def to_representation(self, value):
-        """
-        Serialize content objects to a simple representation.
-        """
-
+        """Serialize content objects to a simple representation."""
         if isinstance(value, Image):
             serializer = ImageSerializer(value)
         elif isinstance(value, ImagesBlock):
@@ -47,6 +44,12 @@ class ContentObjectRelatedField(serializers.RelatedField):
         elif isinstance(value, Video):
             serializer = VideoSerializer(value)
         elif isinstance(value, VideosBlock):
+            # FYI try to uncomment the line after the comment and see
+            # serialized result.
+            # It looks great but we can't use serialization like that:
+            # blocks with array of elements has to have static fields.
+
+            # serializer = VideoSerializer(value.items, many=True)
             serializer = VideosBlockSerializer(value)
         else:
             raise Exception("Unexpected type of content object")

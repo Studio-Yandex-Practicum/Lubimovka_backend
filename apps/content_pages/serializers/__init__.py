@@ -1,13 +1,22 @@
+from .content_items import (
+    ImageSerializer,
+    LinkSerializer,
+    PerformanceSerializer,
+    PersonSerializer,
+    PlaySerializer,
+    VideoSerializer,
+)
+
+# Prevent isort to rearrange imports and prevent circular imports.
+# isort: split
+
 from .content import BaseContentSerializer
 from .content_blocks import (
     ImagesBlockSerializer,
-    ImageSerializer,
-    LinkSerializer,
     PerformancesBlockSerializer,
     PersonsBlockSerializer,
     PlaysBlockSerializer,
     VideosBlockSerializer,
-    VideoSerializer,
 )
 
 __all__ = (
@@ -20,4 +29,7 @@ __all__ = (
     VideosBlockSerializer,
     VideoSerializer,
     BaseContentSerializer,
+    PerformanceSerializer,
+    PersonSerializer,
+    PlaySerializer,
 )

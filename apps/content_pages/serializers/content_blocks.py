@@ -4,161 +4,67 @@ from apps.content_pages.models import (
     Image,
     ImagesBlock,
     Link,
-    OrderedImage,
-    OrderedPerformance,
-    OrderedPerson,
-    OrderedPlay,
-    OrderedVideo,
     PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
     Video,
     VideosBlock,
 )
+from apps.content_pages.serializers import (
+    ImageSerializer,
+    LinkSerializer,
+    PerformanceSerializer,
+    PersonSerializer,
+    PlaySerializer,
+    VideoSerializer,
+)
+from apps.library.models import Performance, Person, Play
 
 
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = [
-            "title",
-            "image",
-        ]
+class OrderedItemSerializerField(serializers.Field):
+    """
+    A custom field to serialize 'OrderedItem' object.
+    It takes 'value' class and finds related serializer. If none of
+    serializers found exception raises.
+    """
+
+    def to_representation(self, value):
+
+        item_serializers = {
+            Image: ImageSerializer,
+            Link: LinkSerializer,
+            Video: VideoSerializer,
+            Performance: PerformanceSerializer,
+            Play: PlaySerializer,
+            Person: PersonSerializer,
+        }
+
+        item_class = value._meta.model
+        serializer = item_serializers.get(item_class, None)
+
+        if not serializer:
+            raise Exception("Unexpected type of ordered object")
+
+        serializer = serializer(value)
+        return serializer.data
 
 
-class OrderedImageSerializer(serializers.ModelSerializer):
-    image = ImageSerializer()
+class BaseOrderedItemSerializer(serializers.Serializer):
+    """OrderedItem object serializer.
 
-    class Meta:
-        model = OrderedImage
-        fields = [
-            "order",
-            "image",
-        ]
+    The serializer is independent of model class because OrderedItems
+    has to have only two fields:
+        - item
+        - order
+    """
 
-
-class ImagesBlockSerializer(serializers.ModelSerializer):
-    images = OrderedImageSerializer(
-        many=True,
-        read_only=True,
-        source="ordered_images",
-    )
-
-    class Meta:
-        model = ImagesBlock
-        fields = [
-            "title",
-            "images",
-        ]
-
-
-class LinkSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Link
-        fields = [
-            "title",
-            "description",
-            "url",
-        ]
-
-
-class OrderedPerformanceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderedPerformance
-        fields = [
-            "order",
-            "performance",
-        ]
-        depth = 1
-
-
-class PerformancesBlockSerializer(serializers.ModelSerializer):
-    performances = OrderedPerformanceSerializer(
-        many=True,
-        read_only=True,
-        source="ordered_performances",
-    )
-
-    class Meta:
-        model = PerformancesBlock
-        fields = [
-            "title",
-            "performances",
-        ]
-
-
-class OrderedPersonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderedPerson
-        fields = [
-            "order",
-            "person",
-        ]
-        depth = 1
-
-
-class PersonsBlockSerializer(serializers.ModelSerializer):
-    persons = OrderedPersonSerializer(
-        many=True,
-        read_only=True,
-        source="ordered_persons",
-    )
-
-    class Meta:
-        model = PersonsBlock
-        fields = [
-            "title",
-            "persons",
-        ]
-
-
-class OrderedPlaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderedPlay
-        fields = [
-            "order",
-            "play",
-        ]
-        depth = 1
-
-
-class PlaysBlockSerializer(serializers.ModelSerializer):
-    plays = OrderedPlaySerializer(
-        many=True,
-        read_only=True,
-        source="ordered_plays",
-    )
-
-    class Meta:
-        model = PlaysBlock
-        fields = [
-            "title",
-            "plays",
-        ]
-
-
-class VideoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Video
-        fields = [
-            "title",
-            "url",
-        ]
-
-
-class OrderedVideoSerializer(serializers.ModelSerializer):
-    video = VideoSerializer()
-
-    class Meta:
-        model = OrderedVideo
-        fields = [
-            "order",
-            "video",
-        ]
+    item = OrderedItemSerializerField()
+    order = serializers.IntegerField()
 
 
 class VideosBlockSerializer(serializers.ModelSerializer):
-    images = OrderedVideoSerializer(
+
+    items = BaseOrderedItemSerializer(
         many=True,
         read_only=True,
         source="ordered_videos",
@@ -168,5 +74,65 @@ class VideosBlockSerializer(serializers.ModelSerializer):
         model = VideosBlock
         fields = [
             "title",
-            "videos",
+            "items",
+        ]
+
+
+class ImagesBlockSerializer(serializers.ModelSerializer):
+    items = BaseOrderedItemSerializer(
+        many=True,
+        read_only=True,
+        source="ordered_images",
+    )
+
+    class Meta:
+        model = ImagesBlock
+        fields = [
+            "title",
+            "items",
+        ]
+
+
+class PerformancesBlockSerializer(serializers.ModelSerializer):
+    items = BaseOrderedItemSerializer(
+        many=True,
+        read_only=True,
+        source="ordered_performances",
+    )
+
+    class Meta:
+        model = PerformancesBlock
+        fields = [
+            "title",
+            "items",
+        ]
+
+
+class PersonsBlockSerializer(serializers.ModelSerializer):
+    items = BaseOrderedItemSerializer(
+        many=True,
+        read_only=True,
+        source="ordered_persons",
+    )
+
+    class Meta:
+        model = PersonsBlock
+        fields = [
+            "title",
+            "items",
+        ]
+
+
+class PlaysBlockSerializer(serializers.ModelSerializer):
+    items = BaseOrderedItemSerializer(
+        many=True,
+        read_only=True,
+        source="ordered_plays",
+    )
+
+    class Meta:
+        model = PlaysBlock
+        fields = [
+            "title",
+            "items",
         ]
