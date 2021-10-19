@@ -26,9 +26,12 @@ class OrderedItemSerializerField(serializers.RelatedField):
     A custom field to serialize 'OrderedItem' object.
     It takes 'value' class and finds related serializer. If none of
     serializers found exception raises.
+
+    OrderedObject has to have item attribute.
     """
 
     def to_representation(self, value):
+        assert hasattr(value, "item"), f"{value} has to have 'item' attribute."
 
         item_serializers = {
             OrderedImage: ImageSerializer,

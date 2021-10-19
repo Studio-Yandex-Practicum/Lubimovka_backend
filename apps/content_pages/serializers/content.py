@@ -29,30 +29,25 @@ class ContentObjectRelatedField(serializers.RelatedField):
 
     def to_representation(self, value):
         """Serialize content objects to a simple representation."""
-        if isinstance(value, Image):
-            serializer = ImageSerializer(value)
-        elif isinstance(value, ImagesBlock):
-            serializer = ImagesBlockSerializer(value)
-        elif isinstance(value, Link):
-            serializer = LinkSerializer(value)
-        elif isinstance(value, PerformancesBlock):
-            serializer = PerformancesBlockSerializer(value)
-        elif isinstance(value, PersonsBlock):
-            serializer = PersonsBlockSerializer(value)
-        elif isinstance(value, PlaysBlock):
-            serializer = PlaysBlockSerializer(value)
-        elif isinstance(value, Video):
-            serializer = VideoSerializer(value)
-        elif isinstance(value, VideosBlock):
-            # FYI try to uncomment the line after the comment and see
-            # serialized result.
-            # It looks great but we can't use serialization like that:
-            # blocks with array of elements has to have static fields.
 
-            # serializer = VideoSerializer(value.items, many=True)
-            serializer = VideosBlockSerializer(value)
-        else:
-            raise Exception("Unexpected type of content object")
+        content_item_serializers = {
+            Image: ImageSerializer,
+            ImagesBlock: ImagesBlockSerializer,
+            Link: LinkSerializer,
+            PerformancesBlock: PerformancesBlockSerializer,
+            PersonsBlock: PersonsBlockSerializer,
+            PlaysBlock: PlaysBlockSerializer,
+            Video: VideoSerializer,
+            VideosBlock: VideosBlockSerializer,
+        }
+
+        content_item_class = value._meta.model
+        serializer = content_item_serializers.get(content_item_class, None)
+
+        if not serializer:
+            raise Exception("Unexpected type of content object block.")
+
+        serializer = serializer(value)
         return serializer.data
 
 
