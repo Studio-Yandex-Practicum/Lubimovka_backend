@@ -97,6 +97,7 @@ class ImagesBlock(AbstractItemBase):
     items = models.ManyToManyField(
         to=Image,
         through=OrderedImage,
+        related_name="image_blocks",
     )
 
     class Meta:
@@ -108,6 +109,7 @@ class PerformancesBlock(AbstractItemBase):
     items = models.ManyToManyField(
         to=Performance,
         through=OrderedPerformance,
+        related_name="performance_blocks",
     )
 
     class Meta:
@@ -119,6 +121,7 @@ class PersonsBlock(AbstractItemBase):
     items = models.ManyToManyField(
         to=Person,
         through=OrderedPerson,
+        related_name="person_blocks",
     )
 
     class Meta:
@@ -130,6 +133,7 @@ class PlaysBlock(AbstractItemBase):
     items = models.ManyToManyField(
         to=Play,
         through=OrderedPlay,
+        related_name="play_blocks",
     )
 
     class Meta:
@@ -141,6 +145,7 @@ class VideosBlock(AbstractItemBase):
     items = models.ManyToManyField(
         to=Video,
         through=OrderedVideo,
+        related_name="video_blocks",
     )
 
     class Meta:
