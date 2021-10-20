@@ -1,4 +1,4 @@
-name: production backend build and deploy
+name: backend lubimovka build and deploy
 
 on:
   push:
