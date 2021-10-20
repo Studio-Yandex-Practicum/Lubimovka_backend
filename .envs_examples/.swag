@@ -1,0 +1,13 @@
+# Swag
+# Это файл пример, как будет выглядеть. Создавать вручную не требуется.
+# Создается автоматически в процессе CI/CD
+# ---------------------------------------------------------------------
+
+# Run on your server command 'id $user' and set UID and GUI
+# https://docs.linuxserver.io/general/understanding-puid-and-pgid
+PUID={{чтоб узнать ID выполните команду 'id $user' на сервере}}
+PGID={{чтоб узнать ID выполните команду 'id $user' на сервере}}
+
+# URL will be used to run main site
+# https://docs.linuxserver.io/general/swag#create-container-via-http-validation
+URL={{ укажите здесь адрес основного сайта. Например foodgram.ru }}

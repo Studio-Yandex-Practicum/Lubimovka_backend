@@ -96,6 +96,12 @@ jobs:
             echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .django
             echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .django
             echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .django
+            touch .envs/.swag
+            echo PUID=$(id -u) > .envs/.swag
+            echo PGID=$(id -g) >> .envs/.swag
+            echo URL=${{ secrets.SITE_URL }} >> .envs/.swag
+            echo CERTPROVIDER=zerossl >> .envs/.swag
+            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .envs/.swag
             sudo docker-compose -f production.yaml up -d
   send_message:
     runs-on: ubuntu-latest

@@ -32,17 +32,28 @@ services:
     env_file:
       - ./.envs/.postgres
       - ./.envs/.django
-  nginx:
-    image: nginx:1.19.3
-    restart: unless-stopped
-    ports:
-      - "80:80"
+  swag:
+    image: ghcr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=Europe/Moscow
+      - VALIDATION=http
+      - CERTPROVIDER=zerossl
+    env_file:
+      - ./.envs/.swag
     volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      - static_value:/code/staticfiles/
-      - media_value:/code/media/
+      - ./swag_config/:/config/
+      - ./swag_nginx.conf:/config/nginx/site-confs/default
+      - static_value:/config/staticfiles/
+      - media_value:/config/media/
+    ports:
+      - 443:443
+      - 80:80
     depends_on:
       - backend
+    restart: unless-stopped
 
 volumes:
   postgres_data:
