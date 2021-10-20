@@ -7,6 +7,10 @@ on:
       - master
       - feature/deploy_CD/CI
 
+defaults:
+  run:
+    working-directory: .
+
 jobs:
   tests:
     name: Run test.
