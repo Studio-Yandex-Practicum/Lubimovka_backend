@@ -46,8 +46,8 @@ services:
     volumes:
       - ./swag_config/:/config/
       - ./swag_nginx.conf:/config/nginx/site-confs/default
-      - static_value:/config/staticfiles/
-      - media_value:/config/media/
+      - static_value:/code/staticfiles/
+      - media_value:/code/media/
     ports:
       - 443:443
       - 80:80
