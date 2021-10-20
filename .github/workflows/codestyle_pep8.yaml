@@ -3,9 +3,7 @@ name: codestyle with PEP8
 on:
   push:
     branches:
-      - master
-      - develop
-      - feature/codestyle_action
+      - '**'
   pull_request:
     branches:
       - develop
