@@ -55,7 +55,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          context: backend
+          context: .
           tags: ${{ secrets.DOCKER_USERNAME }}/lubimovka_back:latest
 
   deploy:
