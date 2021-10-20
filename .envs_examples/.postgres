@@ -1,0 +1,5 @@
+POSTGRES_DB={{ задайте название БД }}
+POSTGRES_USER={{ задайте имя пользователя }}
+POSTGRES_PASSWORD={{ задайте пароль }}
+POSTGRES_HOST=postgres
+POSTGRES_PORT=5432
