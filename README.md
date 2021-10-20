@@ -1,3 +1,4 @@
+[![codestyle PEP8](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/codestyle_pep8.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/codestyle_pep8.yaml)
 # Бэкенд "Любимовка"
 
 ## Что сделано и чем отличается от структуры по умолчанию
