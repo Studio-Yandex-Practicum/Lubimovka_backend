@@ -99,7 +99,7 @@ jobs:
             touch .envs/.swag
             echo PUID=$(id -u) > .envs/.swag
             echo PGID=$(id -g) >> .envs/.swag
-            echo URL=${{ secrets.HOST }} >> .envs/.swag
+            echo URL=${{ secrets.SITE_URL }} >> .envs/.swag
             echo CERTPROVIDER=zerossl >> .envs/.swag
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .envs/.swag
             sudo docker-compose -f production.yaml up -d
