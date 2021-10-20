@@ -54,3 +54,8 @@ services:
     depends_on:
       - backend
     restart: unless-stopped
+
+volumes:
+  postgres_data:
+  static_value:
+  media_value:
