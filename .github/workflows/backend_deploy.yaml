@@ -5,6 +5,7 @@ on:
     branches:
       - develop
       - master
+      - feature/deploy_CD/CI
 
 jobs:
   tests:
