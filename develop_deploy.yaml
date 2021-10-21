@@ -9,7 +9,7 @@ services:
     env_file:
       - ./.envs/.postgres
   backend:
-    image: raikhert/lubimovka_back:latest
+    image: "ghcr.io/konstantinraikhert/lubimovka_backend:develop_latest"
     restart: always
     volumes:
       - static_value:/code/staticfiles/
@@ -20,7 +20,7 @@ services:
       - ./.envs/.postgres
       - ./.envs/.django
   migrations:
-    image: raikhert/lubimovka_back:latest
+    image: "ghcr.io/konstantinraikhert/lubimovka_backend:develop_latest"
     volumes:
       - static_value:/code/staticfiles/
       - media_value:/code/media/
