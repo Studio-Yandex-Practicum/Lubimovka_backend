@@ -13,7 +13,7 @@ def main_get_settings(request):
     serializer = SettingsSerializer(data=request.data)
     if serializer.is_valid():
         if len(request.data["settings"]) == 1:
-            if request.data["settings"] in MainSettings.SettingsType.values:
+            if request.data["settings"][0] in MainSettings.SettingsType.values:
                 settings = MainSettings.get_settings_type(
                     request.data["settings"][0]
                 )

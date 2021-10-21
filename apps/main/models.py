@@ -60,7 +60,16 @@ class MainSettings(models.Model):
             return data
         else:
             for field in cls.SETTINGS_FIELDS[settings_key]:
-                data[settings_key] = getattr(setting, field)
+                if field != "image":
+                    data[settings_key] = getattr(setting, field)
+                else:
+                    serializer = ImageSerializer(
+                        data={
+                            "image": setting.image,
+                        }
+                    )
+                    if serializer.is_valid():
+                        data[settings_key] = serializer.data
             return data
 
     class SettingsType(models.TextChoices):
