@@ -26,6 +26,9 @@ class Image(BaseModel):
         verbose_name = "Изображение"
         verbose_name_plural = "Изображения"
 
+    def __str__(self):
+        return f"{self.id}"
+
 
 class Person(BaseModel):
     first_name = models.CharField(

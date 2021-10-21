@@ -1,60 +1,63 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 
-from apps.main.models import InfoBlock, MainSettings, Text
+from apps.main.models import InfoBlock, MainSettings, SettingsImageRelation
 
 
 class BlockInline(admin.StackedInline):
     model = InfoBlock
+    extra = 0
+
+    def clean(self):
+        count = 0
+        for form in self.forms:
+            try:
+                if form.cleaned_data:
+                    count += 1
+            except AttributeError:
+                # annoyingly, if a subform is invalid Django explicity raises
+                # an AttributeError for cleaned_data
+                pass
+        if count < 1:
+            raise ValidationError("You must have at least one order")
 
 
-class TextAdmin(admin.ModelAdmin):
-    list_display = (
-        "text",
-        "text_order",
-    )
+class SettingsImageRelationInline(admin.StackedInline):
+    model = SettingsImageRelation
+    extra = 0
 
 
 class MainSettingsAdmin(admin.ModelAdmin):
-    filter_horizontal = ("texts_for_page", "images_for_page")
+    filter_horizontal = ("images_for_page",)
     list_display = (
-        "name",
         "type",
-        "text",
+        "settings_key",
+        "boolean",
     )
-    search_fields = ("type", "value_type", "name")
-    inlines = [
-        BlockInline,
-    ]
+    list_filter = ("type",)
+    search_fields = ("type", "settings_key")
+    inlines = [BlockInline, SettingsImageRelationInline]
 
     def get_inlines(self, request, obj):
-        if not obj or obj.value_type != MainSettings.BLOCKS:
+        if not obj:
             return list()
-        return self.inlines
+        else:
+            saved_obj = MainSettings.objects.get(pk=obj.pk)
+            if saved_obj.settings_key not in [
+                MainSettings.SettingsKey.WHAT_WE_DO_PAGE_INFO,
+                MainSettings.SettingsKey.IDEOLOGY_PAGE_INFO,
+                MainSettings.SettingsKey.HISTORY_PAGE_INFO,
+            ]:
+                return list()
+            else:
+                return self.inlines
 
     def get_fields(self, request, obj=None):
-        fields = ["type", "value_type", "name"]
+        fields = ["type", "settings_key"]
         if obj is None:
             return fields
         else:
-            if obj.value_type == MainSettings.EMAIL:
-                return fields + ["email"]
-            elif obj.value_type == MainSettings.BOOL:
-                return fields + ["boolean"]
-            elif obj.value_type == MainSettings.TEXT:
-                return fields + ["text"]
-            elif obj.value_type == MainSettings.IMAGE:
-                return fields + ["image"]
-            elif obj.value_type == (
-                MainSettings.TITLE_DESCRIPTION_IMAGES_AND_TEXTS
-            ):
-                return fields + [
-                    "title",
-                    "description",
-                    "texts_for_page",
-                    "images_for_page",
-                ]
-        return fields
+            return fields + MainSettings.SETTINGS_FIELDS[obj.settings_key]
 
 
 admin.site.register(MainSettings, MainSettingsAdmin)
-admin.site.register(Text, TextAdmin)
