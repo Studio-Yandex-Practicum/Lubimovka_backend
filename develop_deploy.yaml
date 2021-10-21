@@ -9,7 +9,7 @@ services:
     env_file:
       - ./.envs/.postgres
   backend:
-    image: "ghcr.io/konstantinraikhert/lubimovka_backend:develop_latest"
+    image: "ghcr.io/konstantinraikhert/lubimovka_backend:feature-deploy_CD-CI"
     restart: always
     volumes:
       - static_value:/code/staticfiles/
@@ -20,7 +20,7 @@ services:
       - ./.envs/.postgres
       - ./.envs/.django
   migrations:
-    image: "ghcr.io/konstantinraikhert/lubimovka_backend:develop_latest"
+    image: "ghcr.io/konstantinraikhert/lubimovka_backend:feature-deploy_CD-CI"
     volumes:
       - static_value:/code/staticfiles/
       - media_value:/code/media/
