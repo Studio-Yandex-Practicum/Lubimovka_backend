@@ -7,9 +7,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - ./.envs/.postgres
+      - .env
   backend:
-    image: "ghcr.io/konstantinraikhert/lubimovka_backend:feature-deploy_CD-CI"
+    image: "ghcr.io/konstantinraikhert/lubimovka_backend:${BRANCH_TAG}"
     restart: always
     volumes:
       - static_value:/code/staticfiles/
@@ -17,10 +17,9 @@ services:
     depends_on:
       - postgres
     env_file:
-      - ./.envs/.postgres
-      - ./.envs/.django
+      - .env
   migrations:
-    image: "ghcr.io/konstantinraikhert/lubimovka_backend:feature-deploy_CD-CI"
+    image: "ghcr.io/konstantinraikhert/lubimovka_backend:${BRANCH_TAG}"
     volumes:
       - static_value:/code/staticfiles/
       - media_value:/code/media/
@@ -30,8 +29,7 @@ services:
     depends_on:
       - backend
     env_file:
-      - ./.envs/.postgres
-      - ./.envs/.django
+      - .env
   swag:
     image: ghcr.io/linuxserver/swag
     container_name: swag
@@ -42,7 +40,7 @@ services:
       - VALIDATION=http
       - CERTPROVIDER=zerossl
     env_file:
-      - ./.envs/.swag
+      - .env
     volumes:
       - ./swag_config/:/config/
       - ./swag_nginx.conf:/config/nginx/site-confs/default

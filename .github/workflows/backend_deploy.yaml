@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - develop
-  push:
-    branches:
-      - feature/deploy_CD/CI
 
 env:
   REGISTRY: ghcr.io
@@ -86,33 +83,37 @@ jobs:
           script: |
             cd ${{ github.event.repository.name }}
             git pull
+
+            touch .env
+
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+
+            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env
+            echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .env
+            echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .env
+            echo DJANGO_EMAIL_SUBJECT_PREFIX=${{ secrets.DJANGO_EMAIL_SUBJECT_PREFIX }} >> .env
+            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env
+            echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env
+            echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env
+            echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env
+
+            echo PUID=$(id -u) >> .env
+            echo PGID=$(id -g) >> .env
+            echo URL=${{ secrets.SITE_URL }} >> .env
+            echo CERTPROVIDER=zerossl >> .env
+            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env
+
+            echo BRANCH_TAG=${{ github.event.inputs.branch }} >> .env
+
             sudo docker-compose -f develop_deploy.yaml stop
             sudo docker-compose -f develop_deploy.yaml rm -f backend
-            mkdir -p ./.envs/
-            touch .envs/.postgres
-            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .postgres
-            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .postgres
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .postgres
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .postgres
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .postgres
-            touch .envs/.django
-            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .django
-            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .django
-            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .django
-            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .django
-            echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .django
-            echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .django
-            echo DJANGO_EMAIL_SUBJECT_PREFIX=${{ secrets.DJANGO_EMAIL_SUBJECT_PREFIX }} >> .django
-            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .django
-            echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .django
-            echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .django
-            echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .django
-            touch .envs/.swag
-            echo PUID=$(id -u) > .envs/.swag
-            echo PGID=$(id -g) >> .envs/.swag
-            echo URL=${{ secrets.SITE_URL }} >> .envs/.swag
-            echo CERTPROVIDER=zerossl >> .envs/.swag
-            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .envs/.swag
             sudo docker-compose -f develop_deploy.yaml up -d
   send_message:
     runs-on: ubuntu-latest
