@@ -11,14 +11,13 @@ from .base import *  # noqa
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env("DEBUG", default=True)
 
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="&m&ip^h2lp5xypo^pb1^il!9lsp+7ay2p1hw1ke+l5cn91+2+a",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["127.0.0.1"]
 
 
 # django-debug-toolbar

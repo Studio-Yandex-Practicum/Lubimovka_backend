@@ -1,3 +1,6 @@
+[![codestyle PEP8](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/codestyle_pep8.yaml)
+[![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/run_tests.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/run_tests.yaml)
+[![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/backend_deploy.yaml)
 # Бэкенд "Любимовка"
 
 ## Что сделано и чем отличается от структуры по умолчанию
@@ -10,8 +13,9 @@
 - pre-commit хуки
 - используется PostgreSQL
 - базовая модель TimeStampedModel (импортировать из core.models)
-- djoser для эндпоинтов пользователя
 - автодокументация swagger/redoc (http://base_url/api/schema/swagger-ui/ или http://base_url/api/schema/redoc/)
+
+## Общие требования к стилю кода - [ссылка](docs/codestyle.md)
 
 ## Правила работы с git (как делать коммиты и pull request-ы)
 1. Две основные ветки: master и develop
@@ -85,3 +89,19 @@
 ## Про тесты
 
 Тестов нет, но есть настройки для ускорения тестов + настройки для запуска unittest через pytest (удобно в vscode)
+
+## Заполнение БД тестовыми данными
+Доступна команда для наполнения БД данными:
+```
+./ manage.py filldb
+```
+Команда сейчас немного "сырая". Но заполняет такими тестовыми данными, как:
+- персоны
+- партнёры
+- попечители
+- волонтёры
+- команды фестиваля
+Для очистки БД от данных (но не удаления таблиц) можно использовать команду:
+```
+./ manage.py flush
+```
