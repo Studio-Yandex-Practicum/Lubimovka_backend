@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.shortcuts import get_object_or_404
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import Image
@@ -25,7 +26,10 @@ class MainSettings(models.Model):
 
     @classmethod
     def get_setting(cls, settings_key):
-        setting = MainSettings.objects.get(settings_key=settings_key)
+        setting = get_object_or_404(
+            MainSettings,
+            settings_key=settings_key,
+        )
         data = {}
         if settings_key in cls.SETTINGS_OBJECTS:
             data["images"] = {}
