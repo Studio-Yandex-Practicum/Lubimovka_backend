@@ -14,7 +14,9 @@ class MainSettings(models.Model):
         data = {}
         settings = MainSettings.objects.filter(type=settings_type)
         for setting in settings:
-            data[setting.settings_key] = cls.get_setting(setting.settings_key)
+            data[setting.settings_key] = cls.get_setting(setting.settings_key)[
+                setting.settings_key
+            ]
         return data
 
     @classmethod
