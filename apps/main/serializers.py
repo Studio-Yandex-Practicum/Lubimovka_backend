@@ -1,11 +1,15 @@
 from rest_framework import serializers
 
-from apps.main.models import MainSettings
+from apps.core.models import Image
 
 
-class MainSettigsSerializer(serializers.ModelSerializer):
+class ImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = MainSettings
-        fields = [
-            "settings_key",
-        ]
+        model = Image
+        fields = "__all__"
+
+
+class SettingsSerializer(serializers.Serializer):
+    settings = serializers.ListField(
+        child=serializers.CharField(max_length=100, min_length=3)
+    )

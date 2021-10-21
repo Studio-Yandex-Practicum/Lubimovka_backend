@@ -4,16 +4,60 @@ from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import Image
+from apps.main.serializers import ImageSerializer
 
 
 class MainSettings(models.Model):
     @classmethod
-    def get_settings(cls, settings_type):
-        return MainSettings.objects.filter(type=settings_type)
+    def get_settings_type(cls, settings_type):
+        data = {}
+        settings = MainSettings.objects.filter(type=settings_type)
+        for setting in settings:
+            data[setting.settings_key] = cls.get_setting(setting.settings_key)
+        return data
+
+    @classmethod
+    def get_settings(cls, settings_keys):
+        data = {}
+        for settings_key in settings_keys:
+            data[settings_key] = cls.get_setting(settings_key)
+        return data
 
     @classmethod
     def get_setting(cls, settings_key):
-        return MainSettings.objects.get(settings_key=settings_key)
+        setting = MainSettings.objects.get(settings_key=settings_key)
+        data = {}
+        if settings_key in cls.SETTINGS_OBJECTS:
+            data["images"] = {}
+            settings_images_relation_qs = SettingsImageRelation.objects.filter(
+                settings_id=setting.id
+            )
+            for settings_images_relation in settings_images_relation_qs:
+                serializer = ImageSerializer(
+                    data={
+                        "image": Image.objects.get(
+                            id=settings_images_relation.image_id,
+                        ).image,
+                    }
+                )
+                if serializer.is_valid():
+                    data["images"][
+                        settings_images_relation.image_order
+                    ] = serializer.data
+            data["info"] = {}
+            info_blocks = InfoBlock.objects.filter(setting_id=setting.id)
+            for info_block in info_blocks:
+                data["info"][info_block.block] = {}
+            for info_block in info_blocks:
+                data["info"][info_block.block][info_block.block_order] = {
+                    "title": info_block.block_title,
+                    "text": info_block.block_text,
+                }
+            return data
+        else:
+            for field in cls.SETTINGS_FIELDS[settings_key]:
+                data[settings_key] = getattr(setting, field)
+            return data
 
     class SettingsType(models.TextChoices):
         FESTIVAL_SETTINGS = "Festival_settings", _("Настройки фестиваля")
@@ -91,6 +135,8 @@ class MainSettings(models.Model):
         SettingsKey.MAIN_URL: ["url"],
         SettingsKey.MAIN_IMAGE: ["image"],
         SettingsKey.MAIL_SEND_TO: ["email"],
+    }
+    SETTINGS_OBJECTS = {
         SettingsKey.WHAT_WE_DO_PAGE_INFO: [],
         SettingsKey.IDEOLOGY_PAGE_INFO: [],
         SettingsKey.HISTORY_PAGE_INFO: [],
@@ -236,15 +282,6 @@ class InfoBlock(models.Model):
         verbose_name="Порядок отображения внутри блоков странице сверху вниз",
     )
 
-    def clean(self):
-        if self.block == InfoBlock.BlockType.MAIN and self.pk is not None:
-            if (
-                InfoBlock.objects.filter(block=InfoBlock.BlockType.MAIN)
-                .exclude(id=self.id)
-                .exists()
-            ):
-                raise ValidationError("Главный блок может быть только один")
-
     class Meta:
         constraints = [
             UniqueConstraint(
@@ -277,10 +314,15 @@ class SettingsImageRelation(models.Model):
         blank=False,
         null=False,
         verbose_name="Порядковый номер картинки на странице сверху вниз",
-        unique=True,
     )
 
     class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=["settings", "image_order"],
+                name="unique_image_order",
+            )
+        ]
         ordering = ["image_order"]
         verbose_name = "Картинка"
         verbose_name_plural = "Картинки"

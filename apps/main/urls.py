@@ -1,7 +1,7 @@
 from django.urls import path
 
-from apps.main.views import MainApiView
+from apps.main.views import main_get_settings
 
 urlpatterns = [
-    path("v1/main/", MainApiView.as_view(), name="main_page"),
+    path("v1/main/", main_get_settings, name="main_get_settings"),
 ]
