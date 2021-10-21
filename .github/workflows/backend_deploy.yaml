@@ -88,8 +88,6 @@ jobs:
             echo CERTPROVIDER=zerossl >> .env
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env
 
-            echo BRANCH_TAG=${{ github.ref }} >> .env
-
             sudo docker-compose -f develop_deploy.yaml stop
             sudo docker-compose -f develop_deploy.yaml rm -f backend
             sudo docker-compose -f develop_deploy.yaml up -d
