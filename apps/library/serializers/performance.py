@@ -34,7 +34,7 @@ class PerformanceTeamSerializer(serializers.ModelSerializer):
         model = PerformanceTeam
 
 
-class PerformanceEventSerializer(serializers.ModelSerializer):
+class PerformanceSerializer(serializers.ModelSerializer):
     play = PlayInPerformanceSerializer()
     team_members = PerformanceTeamSerializer(
         source="performanceteam_set",
