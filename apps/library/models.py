@@ -363,6 +363,11 @@ class PerformanceTeam(BaseModel):
         choices=TEAM_ROLES,
     )
 
+    class Meta:
+        ordering = ("role",)
+        verbose_name = "Член команды"
+        verbose_name_plural = "Члены команды"
+
 
 class PerformanceMediaReview(BaseModel):
     media_name = models.CharField(
@@ -427,6 +432,7 @@ class PerformanceReview(BaseModel):
     pub_date = models.DateTimeField(
         blank=True,
         verbose_name="Дата публикации",
+        # auto_now_add=True,
     )
 
     class Meta:

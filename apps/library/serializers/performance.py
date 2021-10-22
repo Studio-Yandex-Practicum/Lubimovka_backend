@@ -37,7 +37,8 @@ class PerformanceTeamSerializer(serializers.ModelSerializer):
 class PerformanceEventSerializer(serializers.ModelSerializer):
     play = PlayInPerformanceSerializer()
     team_members = PerformanceTeamSerializer(
-        source="performanceteam_set", many=True
+        source="performanceteam_set",
+        many=True,
     )
 
     class Meta:

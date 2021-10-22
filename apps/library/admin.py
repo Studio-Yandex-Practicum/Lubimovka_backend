@@ -194,7 +194,7 @@ class PerformanceForm(forms.ModelForm):
     def clean(self):
         images_in_block = self.cleaned_data.get("images_in_block")
         if images_in_block.count() > 8:
-            raise ValidationError("Too many images!")
+            raise ValidationError({"images_in_block": "Too many images!"})
         return self.cleaned_data
 
 
