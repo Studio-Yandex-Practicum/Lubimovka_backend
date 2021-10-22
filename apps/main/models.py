@@ -10,69 +10,74 @@ from apps.main.serializers import ImageSerializer
 
 class MainSettings(models.Model):
     @classmethod
+    def get_settings(cls, settings):
+        data = {}
+        for setting in settings:
+            if setting in cls.SettingsType:
+                settings_data = cls.get_settings_type(setting)
+            else:
+                settings_data = cls.get_setting(setting)
+            if len(settings_data) > 0:
+                data[setting] = settings_data
+        return data
+
+    @classmethod
     def get_settings_type(cls, settings_type):
         data = {}
         settings = MainSettings.objects.filter(type=settings_type)
         for setting in settings:
-            data[setting.settings_key] = cls.get_setting(setting.settings_key)[
-                setting.settings_key
-            ]
-        return data
-
-    @classmethod
-    def get_settings(cls, settings_keys):
-        data = {}
-        for settings_key in settings_keys:
-            data[settings_key] = cls.get_setting(settings_key)
+            data[setting.settings_key] = cls.get_setting(setting.settings_key)
         return data
 
     @classmethod
     def get_setting(cls, settings_key):
-        setting = get_object_or_404(
-            MainSettings,
-            settings_key=settings_key,
-        )
         data = {}
-        if settings_key in cls.SETTINGS_OBJECTS:
-            data["images"] = {}
-            settings_images_relation_qs = SettingsImageRelation.objects.filter(
-                settings_id=setting.id
+        if MainSettings.objects.filter(settings_key=settings_key).exists():
+            setting = get_object_or_404(
+                MainSettings,
+                settings_key=settings_key,
             )
-            for settings_images_relation in settings_images_relation_qs:
-                serializer = ImageSerializer(
-                    data={
-                        "image": Image.objects.get(
-                            id=settings_images_relation.image_id,
-                        ).image,
-                    }
+            if settings_key in cls.SETTINGS_OBJECTS:
+                data["images"] = {}
+                settings_images_relation_qs = (
+                    SettingsImageRelation.objects.filter(
+                        settings_id=setting.id
+                    )
                 )
-                if serializer.is_valid():
-                    data["images"][
-                        settings_images_relation.image_order
-                    ] = serializer.data
-            data["info"] = {}
-            info_blocks = InfoBlock.objects.filter(setting_id=setting.id)
-            for info_block in info_blocks:
-                data["info"][info_block.block] = {}
-            for info_block in info_blocks:
-                data["info"][info_block.block][info_block.block_order] = {
-                    "title": info_block.block_title,
-                    "text": info_block.block_text,
-                }
-            return data
-        else:
-            for field in cls.SETTINGS_FIELDS[settings_key]:
-                if field != "image":
-                    data[settings_key] = getattr(setting, field)
-                else:
+                for settings_images_relation in settings_images_relation_qs:
                     serializer = ImageSerializer(
                         data={
-                            "image": setting.image,
+                            "image": Image.objects.get(
+                                id=settings_images_relation.image_id,
+                            ).image,
                         }
                     )
                     if serializer.is_valid():
-                        data[settings_key] = serializer.data
-            return data
+                        data["images"][
+                            settings_images_relation.image_order
+                        ] = serializer.data["image"]
+                data["info"] = {}
+                info_blocks = InfoBlock.objects.filter(setting_id=setting.id)
+                for info_block in info_blocks:
+                    data["info"][info_block.block] = {}
+                for info_block in info_blocks:
+                    data["info"][info_block.block][info_block.block_order] = {
+                        "title": info_block.block_title,
+                        "text": info_block.block_text,
+                    }
+            else:
+                for field in cls.SETTINGS_FIELDS[settings_key]:
+                    if field != "image":
+                        data = getattr(setting, field)
+                    else:
+                        serializer = ImageSerializer(
+                            data={
+                                "image": setting.image,
+                            }
+                        )
+                        if serializer.is_valid():
+                            data = serializer.data["image"]
+        return data
 
     class SettingsType(models.TextChoices):
         FESTIVAL_SETTINGS = "Festival_settings", _("Настройки фестиваля")
