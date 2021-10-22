@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.core.models import Image
 from apps.library.models import Author, Performance, PerformanceTeam, Play
 
 
@@ -34,13 +35,31 @@ class PerformanceTeamSerializer(serializers.ModelSerializer):
         model = PerformanceTeam
 
 
+class ImagesInBlockSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = [
+            "image",
+        ]
+
+
 class PerformanceSerializer(serializers.ModelSerializer):
     play = PlayInPerformanceSerializer()
     team_members = PerformanceTeamSerializer(
         source="performanceteam_set",
         many=True,
     )
+    images_in_block = ImagesInBlockSerializer(many=True)
 
     class Meta:
-        fields = ("name", "play", "team_members")
+        exclude = [
+            "created",
+            "modified",
+        ]
         model = Performance
+
+
+class PerformanceEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Performance
+        fields = ["id", "name", "description"]
