@@ -21,7 +21,9 @@ class MainSettings(models.Model):
                 settings_data = cls.get_settings_type(setting)
             else:
                 settings_data = cls.get_setting(setting)
-            if len(settings_data) > 0:
+            if type(settings_data) is bool:
+                data[setting] = settings_data
+            elif len(settings_data) > 0:
                 data[setting] = settings_data
         return data
 
@@ -150,6 +152,9 @@ class MainSettings(models.Model):
         MAIL_SEND_TO = "Mail_send_to", _(
             "Email для отправки вопросов на сайте"
         )
+        FORM_TO_SUBMIT_A_PLAY = "Form_to_submit_a_play", _(
+            "Форма для подачи пьесы (включить/выключить)"
+        )
 
     # Соответствие key настроек и доступными для них полей, кроме тех для
     # которых требуются поля many to many и
@@ -165,6 +170,7 @@ class MainSettings(models.Model):
         SettingsKey.MAIN_URL: ["url"],
         SettingsKey.MAIN_IMAGE: ["image"],
         SettingsKey.MAIL_SEND_TO: ["email"],
+        SettingsKey.FORM_TO_SUBMIT_A_PLAY: ["boolean"],
     }
     # Key для который доступно поле Images m2m и модель InfoBlock
     SETTINGS_OBJECTS = {
@@ -192,7 +198,10 @@ class MainSettings(models.Model):
             SettingsKey.IDEOLOGY_PAGE_SECOND_TITLE,
             SettingsKey.IDEOLOGY_PAGE_INFO,
         ],
-        SettingsType.OTHER_SETTINGS: [SettingsKey.MAIL_SEND_TO],
+        SettingsType.OTHER_SETTINGS: [
+            SettingsKey.MAIL_SEND_TO,
+            SettingsKey.FORM_TO_SUBMIT_A_PLAY,
+        ],
     }
 
     type = models.CharField(
