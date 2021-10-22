@@ -80,6 +80,8 @@ class MainSettings(models.Model):
         return data
 
     class SettingsType(models.TextChoices):
+        """Группы настроек"""
+
         FESTIVAL_SETTINGS = "Festival_settings", _("Настройки фестиваля")
         MAIN_PAGE_SETTINGS = "Main_page_settings", _(
             "Настройки главной страницы"
@@ -98,6 +100,8 @@ class MainSettings(models.Model):
         OTHER_SETTINGS = "Other_settings", _("Прочие настройки")
 
     class SettingsKey(models.TextChoices):
+        """Key настроек по которым их можно будет найти"""
+
         FESTIVAL_STATUS = "Festival_status", _("Состояние фестиваля (Да/Нет)")
 
         MAIN_TITLE = "Main_title", _("Заголовок для главной страницы")
@@ -143,6 +147,8 @@ class MainSettings(models.Model):
             "Email для отправки вопросов на сайте"
         )
 
+    # Соответствие key настроек и доступными для них полей, кроме тех для
+    # которых требуются поля many to many и
     SETTINGS_FIELDS = {
         SettingsKey.FESTIVAL_STATUS: ["boolean"],
         SettingsKey.MAIN_TITLE: ["title"],
@@ -156,12 +162,13 @@ class MainSettings(models.Model):
         SettingsKey.MAIN_IMAGE: ["image"],
         SettingsKey.MAIL_SEND_TO: ["email"],
     }
+    # Key для который доступно поле Images m2m и модель InfoBlock
     SETTINGS_OBJECTS = {
         SettingsKey.WHAT_WE_DO_PAGE_INFO: [],
         SettingsKey.IDEOLOGY_PAGE_INFO: [],
         SettingsKey.HISTORY_PAGE_INFO: [],
     }
-
+    # Соответствие ключей настроек и доступными для них полей
     SETTINGS_GROUPS = {
         SettingsType.FESTIVAL_SETTINGS: [SettingsKey.FESTIVAL_STATUS],
         SettingsType.MAIN_PAGE_SETTINGS: [
@@ -246,6 +253,7 @@ class MainSettings(models.Model):
             )
 
     def save(self, *args, **kwargs):
+        """В случае изменения типа настройки - все прочие поля очищаются"""
         fields = {
             "boolean": False,
             "title": "",
@@ -254,11 +262,7 @@ class MainSettings(models.Model):
             "image": "",
             "email": "",
         }
-        if self.settings_key not in [
-            MainSettings.SettingsKey.WHAT_WE_DO_PAGE_INFO,
-            MainSettings.SettingsKey.IDEOLOGY_PAGE_INFO,
-            MainSettings.SettingsKey.HISTORY_PAGE_INFO,
-        ]:
+        if self.settings_key not in self.SETTINGS_OBJECTS:
             SettingsImageRelation.objects.filter(settings=self.id).delete()
             InfoBlock.objects.filter(setting=self.id).delete()
             for field in self.SETTINGS_FIELDS[self.settings_key]:
