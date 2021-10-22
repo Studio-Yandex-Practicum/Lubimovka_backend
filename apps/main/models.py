@@ -11,6 +11,10 @@ from apps.main.serializers import ImageSerializer
 class MainSettings(models.Model):
     @classmethod
     def get_settings(cls, settings):
+        """Метод класса с помощью которого можно получить значение
+        настроек в формате json. "settings" -это список, который может
+        состоять из ключей (settings_key) или групп запрашиваемых настроек (
+        type)"""
         data = {}
         for setting in settings:
             if setting in cls.SettingsType:
