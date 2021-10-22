@@ -23,6 +23,12 @@ class MainSettingsAdmin(admin.ModelAdmin):
     list_filter = ("type",)
     search_fields = ("type", "settings_key")
     inlines = [BlockInline, SettingsImageRelationInline]
+    readonly_fields = ["type", "settings_key"]
+
+    def get_readonly_fields(self, request, obj=None):
+        if request.user.is_superuser:
+            return list()
+        return self.readonly_fields
 
     def get_inlines(self, request, obj):
         if not obj:
