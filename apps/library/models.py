@@ -1,5 +1,9 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    FileExtensionValidator,
+    MaxValueValidator,
+    MinValueValidator,
+)
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils import timezone
@@ -8,7 +12,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Image, Person
+from apps.core.utilities.slugify import slugify
 from apps.info.models import Festival
+from apps.library.validators import year_validator
 
 
 class ProgramType(BaseModel):
@@ -494,11 +500,11 @@ class MasterClass(BaseModel):
 
 class ParticipationApplicationFestival(BaseModel):
     first_name = models.CharField(
-        max_length=200,
+        max_length=50,
         verbose_name="Имя",
     )
     last_name = models.CharField(
-        max_length=200,
+        max_length=50,
         verbose_name="Фамилия",
     )
     birthday = models.DateField(
@@ -517,15 +523,20 @@ class ParticipationApplicationFestival(BaseModel):
         max_length=200,
         verbose_name="Название пьесы",
     )
-    year = models.CharField(
-        max_length=4,
+    year = models.PositiveSmallIntegerField(
+        validators=[year_validator],
         verbose_name="Год написания",
     )
-    file_link = models.URLField(
-        verbose_name="Ссылка на файл",
+    file = models.FileField(
+        validators=[
+            FileExtensionValidator(["doc", "docx", "txt", "odt", "pdf"])
+        ],
+        verbose_name="Файл",
     )
-    status = models.BooleanField(
-        verbose_name="Статус",
+
+    draft = models.BooleanField(
+        default=True,
+        verbose_name="Черновик",
     )
 
     class Meta:
@@ -533,4 +544,23 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name = "Заявление на участие"
 
     def __str__(self):
-        return self.title
+        return self.file.name
+
+    @property
+    def get_filename(self):
+        first_name = slugify(self.first_name)
+        if "-" in first_name:
+            first_name = first_name.replace("-", "_")
+
+        title = slugify(self.title)
+        if "-" in title:
+            title = title.replace("-", "_")
+        return f"{first_name.title()}-{title.title()}"
+
+    def clean(self):
+        """
+        Filename couldn't contains cyrillic, whitespaces.
+        Must be "First_name-Title" format.
+        """
+        if self.file.name.split(".")[0] != self.get_filename:
+            raise ValidationError(f"Название должно быть {self.get_filename}")

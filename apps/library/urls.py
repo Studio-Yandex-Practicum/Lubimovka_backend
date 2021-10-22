@@ -1,44 +1,17 @@
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
-from apps.library.views import (
-    AuthorsAPIView,
-    PerformanceMediaReviewsAPIView,
-    PerformanceReviewsAPIView,
-    PerformancesAPIView,
-    PlaysAPIView,
-)
+from apps.library.views import ParticipationCreateAPI
 
-router = DefaultRouter()
-router.register(
-    "plays",
-    PlaysAPIView,
-    basename="plays",
-)
-router.register(
-    "performances",
-    PerformancesAPIView,
-    basename="performances",
-)
-router.register(
-    "authors",
-    AuthorsAPIView,
-    basename="authors",
-)
-router.register(
-    "media-reviews",
-    PerformanceMediaReviewsAPIView,
-    basename="media-reviews",
-)
-router.register(
-    "reviews",
-    PerformanceReviewsAPIView,
-    basename="reviews",
-)
-
+paths = [
+    path(
+        "participation",
+        ParticipationCreateAPI.as_view(),
+        name="participation",
+    ),
+]
 
 library_urls = [
-    path("library/", include(router.urls)),
+    path("library/", include(paths)),
 ]
 
 urlpatterns = [
