@@ -52,7 +52,7 @@ jobs:
         uses: DrSkunk/gp-docker-action@1.1.9
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          image-name: ${{ env.IMAGE_NAME }}
+          image-name: lubimovka_backend
           image-tag: develop
       #   name: Log in to the Container registry
       #   uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
@@ -87,7 +87,7 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          run: |
+          script: |
             cd ${{ github.event.repository.name }}
             chmod u+x env_script.sh
             ./env_script.sh
