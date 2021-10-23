@@ -1,9 +1,9 @@
-from rest_framework import viewsets
+from rest_framework import mixins, viewsets
 
 from apps.library.models import Performance
-from apps.library.serializers.performance import PerformanceSerializer
+from apps.library.serializers import PerformanceSerializer
 
 
-class PerformancesAPIView(viewsets.ReadOnlyModelViewSet):
+class PerformancesAPIView(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Performance.objects.all()
     serializer_class = PerformanceSerializer

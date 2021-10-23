@@ -1,7 +1,6 @@
-from django import forms
 from django.contrib import admin
-from django.core.exceptions import ValidationError
 
+from apps.library.forms import PerformanceForm
 from apps.library.models import (
     Achievement,
     Author,
@@ -184,18 +183,6 @@ class PerformanceMediaReviewInline(admin.TabularInline):
 class PerformanceTeamInline(admin.TabularInline):
     model = PerformanceTeam
     extra = 1
-
-
-class PerformanceForm(forms.ModelForm):
-    class Meta:
-        model = Performance
-        fields = "__all__"
-
-    def clean(self):
-        images_in_block = self.cleaned_data.get("images_in_block")
-        if images_in_block.count() > 8:
-            raise ValidationError({"images_in_block": "Too many images!"})
-        return self.cleaned_data
 
 
 class PerformanceAdmin(admin.ModelAdmin):
