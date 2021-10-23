@@ -498,7 +498,11 @@ class MasterClass(BaseModel):
         return self.name
 
 
-class ParticipationApplicationFestival(BaseModel):
+class Participant(BaseModel):
+    """
+    Участники, отправившие свои заявки
+    """
+
     first_name = models.CharField(
         max_length=50,
         verbose_name="Имя",
@@ -534,9 +538,9 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name="Файл",
     )
 
-    draft = models.BooleanField(
-        default=True,
-        verbose_name="Черновик",
+    BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
+    verified = models.BooleanField(
+        default=False, verbose_name="Проверена?", choices=BOOL_CHOICES
     )
 
     class Meta:
@@ -544,7 +548,7 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name = "Заявление на участие"
 
     def __str__(self):
-        return self.file.name
+        return self.get_filename
 
     @property
     def get_filename(self):
@@ -563,4 +567,6 @@ class ParticipationApplicationFestival(BaseModel):
         Must be "First_name-Title" format.
         """
         if self.file.name.split(".")[0] != self.get_filename:
-            raise ValidationError(f"Название должно быть {self.get_filename}")
+            raise ValidationError(
+                f"Название файла должно быть {self.get_filename}"
+            )

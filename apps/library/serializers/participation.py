@@ -1,19 +1,19 @@
 from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
-from apps.library.models import ParticipationApplicationFestival
+from apps.library.models import Participant
 
 
 class ParticipationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ParticipationApplicationFestival
+        model = Participant
         exclude = [
-            "draft",
+            "verified",
         ]
 
     def validate(self, data):
         """Raise model errors"""
-        instance = ParticipationApplicationFestival(**data)
+        instance = Participant(**data)
         try:
             instance.clean()
         except ValidationError as e:

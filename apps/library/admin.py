@@ -8,7 +8,7 @@ from apps.library.models import (
     MasterClass,
     OtherLink,
     OtherPlay,
-    ParticipationApplicationFestival,
+    Participant,
     Performance,
     PerformanceMediaReview,
     PerformanceReview,
@@ -213,7 +213,7 @@ class PerformanceAdmin(admin.ModelAdmin):
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = (
         "id",
-        "draft",
+        "verified",
         "title",
         "first_name",
         "last_name",
@@ -224,7 +224,7 @@ class ParticipationAdmin(admin.ModelAdmin):
     )
     list_filter = [
         "year",
-        "draft",
+        "verified",
         "city",
     ]
     search_fields = [
@@ -242,7 +242,7 @@ admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
-admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
+admin.site.register(Participant, ParticipationAdmin)
 
 admin.site.register(SocialNetworkLink)
 admin.site.register(OtherPlay)
