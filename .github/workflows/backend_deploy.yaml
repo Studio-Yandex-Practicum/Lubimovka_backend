@@ -89,6 +89,7 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd ${{ github.event.repository.name }}
+            git pull origin bugfix/deploy_env
             chmod u+x env_script.sh
             ./env_script.sh
   send_message:
