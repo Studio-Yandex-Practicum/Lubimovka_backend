@@ -1,8 +1,5 @@
-#go to the folder with the project code
-cd ${{ github.event.repository.name }}
-
 #updating the code from the Github repository
-git pull
+git pull origin bugfix/deploy_env
 
 # checking the availability .env in the catalog
 file=.env
