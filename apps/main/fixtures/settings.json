@@ -1,0 +1,498 @@
+[
+  {
+    "model": "main.MainSettings",
+    "pk": "1",
+    "fields": {
+      "id": 1,
+      "type": "Festival_settings",
+      "field_type": "boolean",
+      "settings_key": "Festival_status",
+      "boolean": 1,
+      "title": "",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "2",
+    "fields": {
+      "id": 2,
+      "type": "Main_page_settings",
+      "field_type": "title",
+      "settings_key": "Main_title",
+      "boolean": 0,
+      "title": "Заголовок",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "3",
+    "fields": {
+      "id": 3,
+      "type": "Main_page_settings",
+      "field_type": "text",
+      "settings_key": "Main_description",
+      "boolean": 0,
+      "title": "",
+      "text": "ТекстТекстТекстТекстТекстТекстТекст",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "4",
+    "fields": {
+      "id": 4,
+      "type": "Main_page_settings",
+      "field_type": "url",
+      "settings_key": "Main_url",
+      "boolean": 0,
+      "title": "",
+      "text": "",
+      "url": "https://sdfasdfsgfbsfd/aesfagd/",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "5",
+    "fields": {
+      "id": 5,
+      "type": "Main_page_settings",
+      "field_type": "image",
+      "settings_key": "Main_image",
+      "boolean": 0,
+      "title": "",
+      "text": "",
+      "url": "",
+      "image": "main/2021-09-30_14.38.40_4zBLm7c.jpg",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "6",
+    "fields": {
+      "id": 6,
+      "type": "About_festival_what_we_do_page_settings",
+      "field_type": "title",
+      "settings_key": "What_we_do_main_title",
+      "boolean": 0,
+      "title": "Заголовок",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "7",
+    "fields": {
+      "id": 7,
+      "type": "About_festival_what_we_do_page_settings",
+      "field_type": "title",
+      "settings_key": "What_we_do_title",
+      "boolean": 0,
+      "title": "Подзаголовок",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "8",
+    "fields": {
+      "id": 8,
+      "type": "About_festival_ideology_page_settings",
+      "field_type": "title",
+      "settings_key": "Ideology_first_title",
+      "boolean": 0,
+      "title": "Подзаголовок",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "9",
+    "fields": {
+      "id": 9,
+      "type": "About_festival_ideology_page_settings",
+      "field_type": "title",
+      "settings_key": "Ideology_second_title",
+      "boolean": 0,
+      "title": "Подзаголовок2",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "10",
+    "fields": {
+      "id": 10,
+      "type": "History_page_settings",
+      "field_type": "title",
+      "settings_key": "History_title",
+      "boolean": 0,
+      "title": "Подзаголовок2",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.MainSettings",
+    "pk": "11",
+    "fields": {
+      "id": 11,
+      "type": "Other_settings",
+      "field_type": "title",
+      "settings_key": "Mail_send_to",
+      "boolean": 0,
+      "title": "",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": "weref@dfgsd.ff"
+    }
+  },
+    {
+    "model": "main.MainSettings",
+    "pk": "12",
+    "fields": {
+      "id": 12,
+      "type": "Other_settings",
+      "field_type": "title",
+      "settings_key": "Form_to_submit_a_play",
+      "boolean": 1,
+      "title": "",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+    {
+    "model": "main.MainSettings",
+    "pk": "13",
+    "fields": {
+      "id": 13,
+      "type": "About_festival_what_we_do_page_settings",
+      "field_type": "block",
+      "settings_key": "What_we_do_page_info",
+      "boolean": 0,
+      "title": "",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+    {
+    "model": "main.MainSettings",
+    "pk": "14",
+    "fields": {
+      "id": 14,
+      "type": "History_page_settings",
+      "field_type": "block",
+      "settings_key": "History_info",
+      "boolean": 0,
+      "title": "",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+    {
+    "model": "main.MainSettings",
+    "pk": "15",
+    "fields": {
+      "id": 15,
+      "type": "About_festival_ideology_page_settings",
+      "field_type": "block",
+      "settings_key": "Ideology_info",
+      "boolean": 0,
+      "title": "",
+      "text": "",
+      "url": "",
+      "image": "",
+      "email": ""
+    }
+  },
+  {
+    "model": "main.InfoBlock",
+    "pk": "16",
+    "fields": {
+      "id": 1,
+      "block_title": "",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 13,
+      "block": "Main",
+      "block_order": 1
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "17",
+    "fields": {
+      "id": 2,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 13,
+      "block": "First",
+      "block_order": 1
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "18",
+    "fields": {
+      "id": 3,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 13,
+      "block": "First",
+      "block_order": 2
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "19",
+    "fields": {
+      "id": 4,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 13,
+      "block": "First",
+      "block_order": 3
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "20",
+    "fields": {
+      "id": 5,
+      "block_title": "",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 14,
+      "block": "First",
+      "block_order": 4
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "21",
+    "fields": {
+      "id": 6,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 14,
+      "block": "First",
+      "block_order": 2
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "22",
+    "fields": {
+      "id": 7,
+      "block_title": "",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 14,
+      "block": "First",
+      "block_order": 3
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "23",
+    "fields": {
+      "id": 8,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 15,
+      "block": "First",
+      "block_order": 1
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "24",
+    "fields": {
+      "id": 9,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 15,
+      "block": "First",
+      "block_order": 2
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "25",
+    "fields": {
+      "id": 10,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 15,
+      "block": "First",
+      "block_order": 3
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "26",
+    "fields": {
+      "id": 11,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 15,
+      "block": "Second",
+      "block_order": 1
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "27",
+    "fields": {
+      "id": 12,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 15,
+      "block": "Second",
+      "block_order": 2
+    }
+  },
+    {
+    "model": "main.InfoBlock",
+    "pk": "27",
+    "fields": {
+      "id": 13,
+      "block_title": "Описание",
+      "block_text": "ТекстТекстТекст",
+      "setting_id": 15,
+      "block": "Second",
+      "block_order": 3
+    }
+  },
+  {
+    "model": "core.Image",
+    "pk": "28",
+    "fields": {
+      "id": 1123,
+      "created":"2021-10-23 12:45:22.000",
+      "modified": "2021-10-23 12:45:22.000",
+      "image": "images/2021-09-30_14.38.40_fnb3wUg.jpg"
+    }
+  },
+  {
+    "model": "main.SettingsImageRelation",
+    "pk": "29",
+    "fields": {
+      "id": 2,
+      "image_order": 2,
+      "image_id": 1123,
+      "settings_id": 13
+    }
+  },
+  {
+    "model": "main.SettingsImageRelation",
+    "pk": "30",
+    "fields": {
+      "id": 3,
+      "image_order": 3,
+      "image_id": 1123,
+      "settings_id": 13
+    }
+  },
+  {
+    "model": "main.SettingsImageRelation",
+    "pk": "31",
+    "fields": {
+      "id": 4,
+      "image_order": 1,
+      "image_id": 1123,
+      "settings_id": 14
+    }
+  },
+  {
+    "model": "main.SettingsImageRelation",
+    "pk": "32",
+    "fields": {
+      "id": 5,
+      "image_order": 2,
+      "image_id": 1123,
+      "settings_id": 14
+    }
+  },
+  {
+    "model": "main.SettingsImageRelation",
+    "pk": "33",
+    "fields": {
+      "id": 6,
+      "image_order": 3,
+      "image_id": 1123,
+      "settings_id": 14
+    }
+  },
+  {
+    "model": "main.SettingsImageRelation",
+    "pk": "34",
+    "fields": {
+      "id": 7,
+      "image_order": 4,
+      "image_id": 1123,
+      "settings_id": 14
+    }
+  },
+  {
+    "model": "main.SettingsImageRelation",
+    "pk": "35",
+    "fields": {
+      "id": 8,
+      "image_order": 1,
+      "image_id": 1123,
+      "settings_id": 15
+    }
+  },
+  {
+    "model": "main.SettingsImageRelation",
+    "pk": "36",
+    "fields": {
+      "id": 9,
+      "image_order": 2,
+      "image_id": 1123,
+      "settings_id": 15
+    }
+  },
+  {
+    "model": "main.SettingsImageRelation",
+    "pk": "29",
+    "fields": {
+      "id": 1,
+      "image_order": 1,
+      "image_id": 1123,
+      "settings_id": 13
+    }
+  }
+]

@@ -1,4 +1,3 @@
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.shortcuts import get_object_or_404
@@ -43,7 +42,7 @@ class MainSettings(models.Model):
                 MainSettings,
                 settings_key=settings_key,
             )
-            if settings_key in cls.SETTINGS_OBJECTS:
+            if setting.field_type == MainSettings.SettingFieldType.BLOCK:
                 data["images"] = {}
                 settings_images_relation_qs = (
                     SettingsImageRelation.objects.filter(
@@ -72,17 +71,16 @@ class MainSettings(models.Model):
                         "text": info_block.block_text,
                     }
             else:
-                for field in cls.SETTINGS_FIELDS[settings_key]:
-                    if field != "image":
-                        data = getattr(setting, field)
-                    else:
-                        serializer = ImageSerializer(
-                            data={
-                                "image": setting.image,
-                            }
-                        )
-                        if serializer.is_valid():
-                            data = serializer.data["image"]
+                if setting.field_type != "image":
+                    data = getattr(setting, setting.field_type)
+                else:
+                    serializer = ImageSerializer(
+                        data={
+                            "image": setting.image,
+                        }
+                    )
+                    if serializer.is_valid():
+                        data = serializer.data["image"]
         return data
 
     class SettingsType(models.TextChoices):
@@ -105,114 +103,29 @@ class MainSettings(models.Model):
         )
         OTHER_SETTINGS = "Other_settings", _("Прочие настройки")
 
-    class SettingsKey(models.TextChoices):
-        """Key настроек по которым их можно будет найти"""
+    class SettingFieldType(models.TextChoices):
+        """Поле для настроек"""
 
-        FESTIVAL_STATUS = "Festival_status", _("Состояние фестиваля (Да/Нет)")
-
-        MAIN_TITLE = "Main_title", _("Заголовок для главной страницы")
-        MAIN_DESCRIPTION = "Main_description", _(
-            "Описание не главной страницы"
-        )
-        MAIN_URL = "Main_url", _("Ссылка для главной страницы")
-        MAIN_IMAGE = "Main_image", _("Картинка для главной страницы")
-
-        WHAT_WE_DO_PAGE_MAIN_TITLE = (
-            "What_we_do_main_title",
-            _("Главный заголовок страницы Что мы делаем?"),
-        )
-        WHAT_WE_DO_PAGE_TITLE = (
-            "What_we_do_title",
-            _("Подзаголовок страницы Что мы делаем?"),
-        )
-        WHAT_WE_DO_PAGE_INFO = (
-            "What_we_do_page_info",
-            _("Информационные блоки для страницы Что мы делаем?"),
-        )
-        IDEOLOGY_PAGE_FIRST_TITLE = (
-            "Ideology_first_title",
-            _("Первый подзаголовок страницы Идеология"),
-        )
-        IDEOLOGY_PAGE_SECOND_TITLE = (
-            "Ideology_second_title",
-            _("Второй подзаголовок страницы Идеология"),
-        )
-        IDEOLOGY_PAGE_INFO = (
-            "Ideology_info",
-            _("Информационные блоки для страницы Идеология"),
-        )
-        HISTORY_PAGE_TITLE = (
-            "History_title",
-            _("Подзаголовок страницы История"),
-        )
-        HISTORY_PAGE_INFO = (
-            "History_info",
-            _("Информационные блоки для страницы История"),
-        )
-        MAIL_SEND_TO = "Mail_send_to", _(
-            "Email для отправки вопросов на сайте"
-        )
-        FORM_TO_SUBMIT_A_PLAY = "Form_to_submit_a_play", _(
-            "Форма для подачи пьесы (включить/выключить)"
-        )
-
-    # Соответствие key настроек и доступными для них полей, кроме тех для
-    # которых требуются поля many to many и
-    SETTINGS_FIELDS = {
-        SettingsKey.FESTIVAL_STATUS: ["boolean"],
-        SettingsKey.MAIN_TITLE: ["title"],
-        SettingsKey.WHAT_WE_DO_PAGE_MAIN_TITLE: ["title"],
-        SettingsKey.WHAT_WE_DO_PAGE_TITLE: ["title"],
-        SettingsKey.IDEOLOGY_PAGE_FIRST_TITLE: ["title"],
-        SettingsKey.IDEOLOGY_PAGE_SECOND_TITLE: ["title"],
-        SettingsKey.HISTORY_PAGE_TITLE: ["title"],
-        SettingsKey.MAIN_DESCRIPTION: ["text"],
-        SettingsKey.MAIN_URL: ["url"],
-        SettingsKey.MAIN_IMAGE: ["image"],
-        SettingsKey.MAIL_SEND_TO: ["email"],
-        SettingsKey.FORM_TO_SUBMIT_A_PLAY: ["boolean"],
-    }
-    # Key для который доступно поле Images m2m и модель InfoBlock
-    SETTINGS_OBJECTS = {
-        SettingsKey.WHAT_WE_DO_PAGE_INFO: [],
-        SettingsKey.IDEOLOGY_PAGE_INFO: [],
-        SettingsKey.HISTORY_PAGE_INFO: [],
-    }
-    # Соответствие ключей настроек и доступными для них полей
-    SETTINGS_GROUPS = {
-        SettingsType.FESTIVAL_SETTINGS: [SettingsKey.FESTIVAL_STATUS],
-        SettingsType.MAIN_PAGE_SETTINGS: [
-            SettingsKey.MAIN_TITLE,
-            SettingsKey.MAIN_DESCRIPTION,
-            SettingsKey.MAIN_URL,
-            SettingsKey.MAIN_IMAGE,
-        ],
-        SettingsType.HISTORY_PAGE_SETTINGS: [SettingsKey.HISTORY_PAGE_INFO],
-        SettingsType.ABOUT_FESTIVAL_WHAT_WE_DO_PAGE_SETTINGS: [
-            SettingsKey.WHAT_WE_DO_PAGE_MAIN_TITLE,
-            SettingsKey.WHAT_WE_DO_PAGE_TITLE,
-            SettingsKey.WHAT_WE_DO_PAGE_INFO,
-        ],
-        SettingsType.ABOUT_FESTIVAL_IDEOLOGY_PAGE_SETTINGS: [
-            SettingsKey.IDEOLOGY_PAGE_FIRST_TITLE,
-            SettingsKey.IDEOLOGY_PAGE_SECOND_TITLE,
-            SettingsKey.IDEOLOGY_PAGE_INFO,
-        ],
-        SettingsType.OTHER_SETTINGS: [
-            SettingsKey.MAIL_SEND_TO,
-            SettingsKey.FORM_TO_SUBMIT_A_PLAY,
-        ],
-    }
+        BOOLEAN = "boolean", _("Да/Нет")
+        TITLE = "title", _("Заголовок/Описание")
+        TEXT = "text", _("Текст")
+        URL = "url", _("URL")
+        IMAGE = "image", _("Картинка")
+        BLOCK = "block", _("Блок для страницы")
 
     type = models.CharField(
         choices=SettingsType.choices,
         max_length=40,
         verbose_name="Выбор типа настроек",
     )
-    settings_key = models.CharField(
-        choices=SettingsKey.choices,
+    field_type = models.CharField(
+        choices=SettingFieldType.choices,
         max_length=40,
-        verbose_name="Выбор ключа настроек",
+        verbose_name="Выбор поля настроек",
+    )
+    settings_key = models.SlugField(
+        max_length=40,
+        verbose_name="Ключ настроек",
         unique=True,
     )
     boolean = models.BooleanField(
@@ -251,6 +164,14 @@ class MainSettings(models.Model):
         verbose_name="Email",
     )
 
+    SETTINGS_FIELDS = {
+        SettingFieldType.BOOLEAN: ["boolean"],
+        SettingFieldType.TITLE: ["title"],
+        SettingFieldType.TEXT: ["text"],
+        SettingFieldType.URL: ["url"],
+        SettingFieldType.IMAGE: ["image"],
+    }
+
     class Meta:
         ordering = ["id"]
         verbose_name = "Общие настройки"
@@ -259,14 +180,8 @@ class MainSettings(models.Model):
     def __str__(self):
         return self.settings_key
 
-    def clean(self, *args, **kwargs):
-        if self.settings_key not in self.SETTINGS_GROUPS[self.type]:
-            raise ValidationError(
-                "SettingsKey настройки не соответствует type"
-            )
-
     def save(self, *args, **kwargs):
-        """В случае изменения типа настройки - все прочие поля очищаются"""
+        """В случае изменения типа поля - все прочие поля очищаются"""
         fields = {
             "boolean": False,
             "title": "",
@@ -275,11 +190,10 @@ class MainSettings(models.Model):
             "image": "",
             "email": "",
         }
-        if self.settings_key not in self.SETTINGS_OBJECTS:
+        if self.field_type != MainSettings.SettingFieldType.BLOCK:
             SettingsImageRelation.objects.filter(settings=self.id).delete()
             InfoBlock.objects.filter(setting=self.id).delete()
-            for field in self.SETTINGS_FIELDS[self.settings_key]:
-                del fields[field]
+            del fields[self.field_type]
         for settings_key, value in fields.items():
             setattr(self, settings_key, value)
         super().save(*args, **kwargs)
@@ -322,7 +236,7 @@ class InfoBlock(models.Model):
     class Meta:
         constraints = [
             UniqueConstraint(
-                fields=["block", "block_order"],
+                fields=["setting", "block", "block_order"],
                 name="unique_order",
             )
         ]
