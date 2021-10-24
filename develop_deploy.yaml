@@ -9,7 +9,7 @@ services:
     env_file:
       - .env
   backend:
-    image: "ghcr.io/konstantinraikhert/lubimovka_backend:develop"
+    image: "ghcr.io/konstantinraikhert/lubimovka_backend/lubimovka_backend:develop"
     restart: always
     volumes:
       - static_value:/code/staticfiles/
@@ -19,7 +19,7 @@ services:
     env_file:
       - .env
   migrations:
-    image: "ghcr.io/konstantinraikhert/lubimovka_backend:develop"
+    image: "ghcr.io/konstantinraikhert/lubimovka_backend/lubimovka_backend:develop"
     volumes:
       - static_value:/code/staticfiles/
       - media_value:/code/media/
