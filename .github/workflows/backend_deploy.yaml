@@ -8,7 +8,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.event.repository.name }}
+  IMAGE_NAME: lubimovka_backend
 
 defaults:
   run:
