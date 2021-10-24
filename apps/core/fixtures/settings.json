@@ -1,6 +1,6 @@
 [
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "1",
     "fields": {
       "id": 1,
@@ -16,7 +16,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "2",
     "fields": {
       "id": 2,
@@ -32,7 +32,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "3",
     "fields": {
       "id": 3,
@@ -48,7 +48,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "4",
     "fields": {
       "id": 4,
@@ -64,7 +64,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "5",
     "fields": {
       "id": 5,
@@ -80,7 +80,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "6",
     "fields": {
       "id": 6,
@@ -96,7 +96,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "7",
     "fields": {
       "id": 7,
@@ -112,7 +112,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "8",
     "fields": {
       "id": 8,
@@ -128,7 +128,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "9",
     "fields": {
       "id": 9,
@@ -144,7 +144,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "10",
     "fields": {
       "id": 10,
@@ -160,7 +160,7 @@
     }
   },
   {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "11",
     "fields": {
       "id": 11,
@@ -176,7 +176,7 @@
     }
   },
     {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "12",
     "fields": {
       "id": 12,
@@ -192,7 +192,7 @@
     }
   },
     {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "13",
     "fields": {
       "id": 13,
@@ -208,7 +208,7 @@
     }
   },
     {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "14",
     "fields": {
       "id": 14,
@@ -224,7 +224,7 @@
     }
   },
     {
-    "model": "main.MainSettings",
+    "model": "core.Settings",
     "pk": "15",
     "fields": {
       "id": 15,
@@ -240,7 +240,7 @@
     }
   },
   {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "16",
     "fields": {
       "id": 1,
@@ -252,7 +252,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "17",
     "fields": {
       "id": 2,
@@ -264,7 +264,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "18",
     "fields": {
       "id": 3,
@@ -276,7 +276,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "19",
     "fields": {
       "id": 4,
@@ -288,7 +288,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "20",
     "fields": {
       "id": 5,
@@ -300,7 +300,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "21",
     "fields": {
       "id": 6,
@@ -312,7 +312,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "22",
     "fields": {
       "id": 7,
@@ -324,7 +324,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "23",
     "fields": {
       "id": 8,
@@ -336,7 +336,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "24",
     "fields": {
       "id": 9,
@@ -348,7 +348,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "25",
     "fields": {
       "id": 10,
@@ -360,7 +360,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "26",
     "fields": {
       "id": 11,
@@ -372,7 +372,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "27",
     "fields": {
       "id": 12,
@@ -384,7 +384,7 @@
     }
   },
     {
-    "model": "main.InfoBlock",
+    "model": "core.InfoBlock",
     "pk": "27",
     "fields": {
       "id": 13,
@@ -406,7 +406,7 @@
     }
   },
   {
-    "model": "main.SettingsImageRelation",
+    "model": "core.SettingImageRelation",
     "pk": "29",
     "fields": {
       "id": 2,
@@ -416,7 +416,7 @@
     }
   },
   {
-    "model": "main.SettingsImageRelation",
+    "model": "core.SettingImageRelation",
     "pk": "30",
     "fields": {
       "id": 3,
@@ -426,7 +426,7 @@
     }
   },
   {
-    "model": "main.SettingsImageRelation",
+    "model": "core.SettingImageRelation",
     "pk": "31",
     "fields": {
       "id": 4,
@@ -436,7 +436,7 @@
     }
   },
   {
-    "model": "main.SettingsImageRelation",
+    "model": "core.SettingImageRelation",
     "pk": "32",
     "fields": {
       "id": 5,
@@ -446,7 +446,7 @@
     }
   },
   {
-    "model": "main.SettingsImageRelation",
+    "model": "core.SettingImageRelation",
     "pk": "33",
     "fields": {
       "id": 6,
@@ -456,7 +456,7 @@
     }
   },
   {
-    "model": "main.SettingsImageRelation",
+    "model": "core.SettingImageRelation",
     "pk": "34",
     "fields": {
       "id": 7,
@@ -466,7 +466,7 @@
     }
   },
   {
-    "model": "main.SettingsImageRelation",
+    "model": "core.SettingImageRelation",
     "pk": "35",
     "fields": {
       "id": 8,
@@ -476,7 +476,7 @@
     }
   },
   {
-    "model": "main.SettingsImageRelation",
+    "model": "core.SettingImageRelation",
     "pk": "36",
     "fields": {
       "id": 9,
@@ -486,7 +486,7 @@
     }
   },
   {
-    "model": "main.SettingsImageRelation",
+    "model": "core.SettingImageRelation",
     "pk": "29",
     "fields": {
       "id": 1,

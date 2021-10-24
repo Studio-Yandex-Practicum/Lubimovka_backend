@@ -1,5 +1,10 @@
 from django.http import JsonResponse
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
+from apps.core.models import Settings
+from apps.core.serializers import SettingsSerializer
 
 
 def error500(request, *args, **kwargs):
@@ -24,3 +29,12 @@ def error404(request, exception, *args, **kwargs):
     """
     data = {"error": "Http404", "message": "Запрошенный ресурс не найден"}
     return JsonResponse(data, status=status.HTTP_404_NOT_FOUND)
+
+
+@api_view(["GET"])
+@permission_classes([AllowAny])
+def get_settings(request):
+    serializer = SettingsSerializer(data=request.data)
+    if serializer.is_valid():
+        settings = Settings.get_settings(request.data["settings"])
+        return JsonResponse(settings, status=status.HTTP_200_OK)
