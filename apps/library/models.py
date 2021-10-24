@@ -299,8 +299,8 @@ class Performance(BaseModel):
     )
     images_in_block = models.ManyToManyField(
         Image,
-        verbose_name="Фотографии спектакля в блоке фотографий",
         blank=True,
+        verbose_name="Фотографии спектакля в блоке фотографий",
     )
     video = models.URLField(
         max_length=200,
@@ -316,15 +316,17 @@ class Performance(BaseModel):
         verbose_name="Полное описание",
     )
     age_limit = models.PositiveSmallIntegerField(
-        verbose_name="Возрастное ограничение",
         validators=[
             MinValueValidator(0),
             MaxValueValidator(18),
         ],
+        verbose_name="Возрастное ограничение",
     )
-    team_members = models.ManyToManyField(
+    members = models.ManyToManyField(
         Person,
         through="PerformanceTeam",
+        related_name="performances",
+        verbose_name="Члены команды",
     )
 
     class Meta:
@@ -337,30 +339,27 @@ class Performance(BaseModel):
 
 
 class PerformanceTeam(BaseModel):
-    ACTOR = "Актёр"
-    ADAPTER = "Адаптация текста"
-    DRAMATIST = "Драматург"
-    DIRECTOR = "Режиссёр"
-    INTERPRETER = "Переводчик"
-    TEAM_ROLES = [
-        (ACTOR, ACTOR),
-        (ADAPTER, ADAPTER),
-        (DRAMATIST, DRAMATIST),
-        (DIRECTOR, DIRECTOR),
-        (INTERPRETER, INTERPRETER),
-    ]
+    class Roles(models.TextChoices):
+        """Роли"""
+
+        ACTOR = "Actor", _("Актёр")
+        ADAPTER = "Adapter", _("Адаптация текста")
+        DRAMATIST = "Dramatist", _("Драматург")
+        DIRECTOR = "Director", _("Режиссёр")
+        INTERPRETER = "Interpreter", _("Переводчик")
+
     performance = models.ForeignKey(
         Performance,
+        related_name="members_set",
         on_delete=models.CASCADE,
     )
     member = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT,
+        Person, on_delete=models.PROTECT, verbose_name="Член команды"
     )
     role = models.CharField(
-        verbose_name="Роль в команде спектакля",
         max_length=200,
-        choices=TEAM_ROLES,
+        choices=Roles.choices,
+        verbose_name="Роль в команде спектакля",
     )
 
     class Meta:

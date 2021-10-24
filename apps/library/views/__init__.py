@@ -1,5 +1,5 @@
-from .performance import PerformancesAPIView
+from .performance import PerformanceAPIView
 
 __all__ = [
-    PerformancesAPIView,
+    PerformanceAPIView,
 ]

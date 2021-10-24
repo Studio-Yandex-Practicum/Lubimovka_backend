@@ -1,13 +1,13 @@
 from rest_framework import serializers
 
 from apps.library.models import Play
-from apps.library.serializers import AuthorsInPlayInPerformanceSerializer
+from apps.library.serializers import PerformancePlayAuthorSerializer
 
 
-class PlayInPerformanceSerializer(serializers.ModelSerializer):
+class PerformancePlaySerializer(serializers.ModelSerializer):
     """Сериализатор Пьесы для вложения в сериализатор Спектакля"""
 
-    authors = AuthorsInPlayInPerformanceSerializer(many=True)
+    authors = PerformancePlayAuthorSerializer(many=True)
 
     class Meta:
         fields = (

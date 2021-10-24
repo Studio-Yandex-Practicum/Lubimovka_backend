@@ -45,10 +45,10 @@ class PlayAdmin(admin.ModelAdmin):
 
 
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         "id",
         "tag",
-    )
+    ]
 
 
 class SocialNetworkLinkInline(admin.TabularInline):
@@ -67,31 +67,31 @@ class OtherPlayInline(admin.StackedInline):
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         "id",
         "person",
         "quote",
         "biography",
-    )
-    inlines = (
+    ]
+    inlines = [
         SocialNetworkLinkInline,
         OtherLinkInline,
         OtherPlayInline,
-    )
-    exclude = (
+    ]
+    exclude = [
         "social_network_links",
         "other_links",
         "other_plays_links",
-    )
+    ]
     empty_value_display = "-пусто-"
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         "media_name",
         "performance",
         "pub_date",
-    )
+    ]
 
     list_filter = [
         "media_name",
@@ -125,12 +125,12 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
 
 
 class ReadingAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         "play",
         "name",
         "director",
         "dramatist",
-    )
+    ]
     list_filter = [
         "director__last_name",
         "dramatist__last_name",
@@ -186,10 +186,10 @@ class PerformanceTeamInline(admin.TabularInline):
 
 
 class PerformanceAdmin(admin.ModelAdmin):
-    filter_horizontal = (
+    filter_horizontal = [
         "images_in_block",
-        "team_members",
-    )
+        "members",
+    ]
     list_filter = [
         "age_limit",
     ]

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.library.models import Author
 
 
-class AuthorsInPlayInPerformanceSerializer(serializers.ModelSerializer):
+class PerformancePlayAuthorSerializer(serializers.ModelSerializer):
     """Сериализатор Автора для вложения в сериализатор Пьесы,
     который, в свою очередь, вложен в сериализатор Спектакля"""
 

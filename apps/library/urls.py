@@ -1,12 +1,12 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.library.views import PerformancesAPIView
+from apps.library.views import PerformanceAPIView
 
 router = DefaultRouter()
 router.register(
     "performances",
-    PerformancesAPIView,
+    PerformanceAPIView,
     basename="performances",
 )
 
