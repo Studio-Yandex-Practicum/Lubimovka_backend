@@ -1,15 +1,15 @@
-from .author import PerformancePlayAuthorSerializer
+from .author import AuthorNameSerializer
 from .masterclass import MasterClassEventSerializer
 from .performance import PerformanceEventSerializer, PerformanceSerializer
 from .performanceteam import PerformanceTeamSerializer
-from .play import PerformancePlaySerializer
+from .play import PlaySerializer
 from .reading import ReadingEventSerializer
 
 __all__ = [
     MasterClassEventSerializer,
     PerformanceEventSerializer,
-    PerformancePlaySerializer,
-    PerformancePlayAuthorSerializer,
+    PlaySerializer,
+    AuthorNameSerializer,
     PerformanceSerializer,
     PerformanceTeamSerializer,
     ReadingEventSerializer,

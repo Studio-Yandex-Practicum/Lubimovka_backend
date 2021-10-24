@@ -4,13 +4,13 @@ from apps.core.serializers import PerformanceImagesBlockSerializer
 from apps.library.models import Performance
 
 from .performanceteam import PerformanceTeamSerializer
-from .play import PerformancePlaySerializer
+from .play import PlaySerializer
 
 
 class PerformanceSerializer(serializers.ModelSerializer):
     """Сериализатор Спектакля для отображения на странице Спектакля"""
 
-    play = PerformancePlaySerializer()
+    play = PlaySerializer()
     members = PerformanceTeamSerializer(
         source="members_set",
         many=True,
