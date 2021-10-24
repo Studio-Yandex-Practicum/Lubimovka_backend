@@ -3,6 +3,9 @@ git pull origin bugfix/deploy_env
 
 # checking the availability .env in the catalog
 file=.env
+secrets=$1
+
+echo secrets
 
 if [ -f $file ]
 then

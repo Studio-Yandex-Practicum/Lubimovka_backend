@@ -80,24 +80,21 @@ jobs:
     # needs: build-and-push-image-to-github-packages
     steps:
       -
-        name: view the secrets context
-        shell: bash
-        run: echo "$SECRETS_CONTEXT"
-        env:
-          SECRETS_CONTEXT: ${{ toJson(secrets) }}
-  #     -
-  #       name: executing remote ssh commands to deploy
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ secrets.USERNAME }}
-  #         key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #         passphrase: ${{ secrets.PASSPHRASE }}
-  #         script: |
-  #           cd ${{ github.event.repository.name }}
-  #           git pull origin bugfix/deploy_env
-  #           chmod u+x env_script.sh
-  #           ./env_script.sh
+        name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          env:
+            secrets: ${{ toJson(secrets) }}
+          script: |
+            cd ${{ github.event.repository.name }}
+            git pull origin bugfix/deploy_env
+            chmod u+x env_script.sh
+            ./env_script.sh "$secrets"
+
   # send_message:
   #   runs-on: ubuntu-latest
   #   needs: deploy
