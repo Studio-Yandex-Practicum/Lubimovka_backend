@@ -498,7 +498,12 @@ class MasterClass(BaseModel):
         return self.name
 
 
-class Participant(BaseModel):
+def get_upload_to(instance, filename):
+    festival = Festival.objects.last()
+    return f"application/{festival.year}/{filename}"
+
+
+class ParticipationApplicationFestival(BaseModel):
     """
     Участники, отправившие свои заявки
     """
@@ -536,11 +541,14 @@ class Participant(BaseModel):
             FileExtensionValidator(["doc", "docx", "txt", "odt", "pdf"])
         ],
         verbose_name="Файл",
+        upload_to=get_upload_to,
     )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
     verified = models.BooleanField(
-        default=False, verbose_name="Проверена?", choices=BOOL_CHOICES
+        default=False,
+        verbose_name="Проверена?",
+        choices=BOOL_CHOICES,
     )
 
     class Meta:
@@ -559,14 +567,18 @@ class Participant(BaseModel):
         title = slugify(self.title)
         if "-" in title:
             title = title.replace("-", "_")
-        return f"{first_name.title()}-{title.title()}"
+        return (
+            f"{first_name.title()}-{title.title()}.{self.get_file_extension}"
+        )
 
-    def clean(self):
+    @property
+    def get_file_extension(self):
+        return self.file.name.split(".")[1]
+
+    def save(self, *args, **kwargs):
         """
-        Filename couldn't contains cyrillic, whitespaces.
-        Must be "First_name-Title" format.
+        Generate new filename as "First_name-Title" format
         """
-        if self.file.name.split(".")[0] != self.get_filename:
-            raise ValidationError(
-                f"Название файла должно быть {self.get_filename}"
-            )
+
+        self.file.name = self.get_filename
+        super().save(*args, **kwargs)

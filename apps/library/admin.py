@@ -8,7 +8,7 @@ from apps.library.models import (
     MasterClass,
     OtherLink,
     OtherPlay,
-    Participant,
+    ParticipationApplicationFestival,
     Performance,
     PerformanceMediaReview,
     PerformanceReview,
@@ -242,7 +242,7 @@ admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
-admin.site.register(Participant, ParticipationAdmin)
+admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
 
 admin.site.register(SocialNetworkLink)
 admin.site.register(OtherPlay)

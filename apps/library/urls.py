@@ -1,11 +1,11 @@
 from django.urls import include, path
 
-from apps.library.views import ParticipationCreateAPI
+from apps.library.views import ParticipationAPIView
 
 paths = [
     path(
         "participation",
-        ParticipationCreateAPI.as_view(),
+        ParticipationAPIView.as_view(),
         name="participation",
     ),
 ]

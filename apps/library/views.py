@@ -24,6 +24,6 @@ class PerformanceReviewsAPIView(generics.ListAPIView):
     pass
 
 
-class ParticipationCreateAPI(generics.CreateAPIView):
+class ParticipationAPIView(generics.CreateAPIView):
     serializer_class = ParticipationSerializer
     permission_classes = [AllowAny]
