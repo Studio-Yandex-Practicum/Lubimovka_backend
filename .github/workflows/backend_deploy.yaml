@@ -87,13 +87,12 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
-          env:
-            secrets: ${{ toJson(secrets) }}
           script: |
+            echo ${{ secrets }}
             cd ${{ github.event.repository.name }}
             git pull origin bugfix/deploy_env
             chmod u+x env_script.sh
-            ./env_script.sh "$secrets"
+            ./env_script.sh
 
   # send_message:
   #   runs-on: ubuntu-latest
