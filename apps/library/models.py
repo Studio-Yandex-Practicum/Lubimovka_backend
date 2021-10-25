@@ -39,7 +39,6 @@ class Play(BaseModel):
     )
     city = models.CharField(
         max_length=200,
-        unique=True,
         verbose_name="Город",
     )
     year = models.PositiveSmallIntegerField(
