@@ -15,6 +15,9 @@ class BaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.id}"
+
     class Meta:
         abstract = True
 
@@ -29,9 +32,6 @@ class Image(BaseModel):
     class Meta:
         verbose_name = "Изображение"
         verbose_name_plural = "Изображения"
-
-    def __str__(self):
-        return f"{self.id}"
 
 
 class Person(BaseModel):
