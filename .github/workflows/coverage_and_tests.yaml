@@ -1,4 +1,4 @@
-name: Tests with pytest snd coverage report
+name: Tests with pytest and coverage report
 
 on:
   push:
@@ -38,3 +38,6 @@ jobs:
     -
       name: Upload Coverage to Codecov
       uses: codecov/codecov-action@v1
+      with:
+        files: ./lib.c.gcov
+        token: ${{ secrets.CODECOV_TOKEN }}
