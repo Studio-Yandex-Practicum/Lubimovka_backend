@@ -10,12 +10,12 @@ class PlaySerializer(serializers.ModelSerializer):
     authors = AuthorNameSerializer(many=True)
 
     class Meta:
-        fields = (
+        fields = [
             "name",
             "authors",
             "city",
             "year",
             "url_download",
             "url_reading",
-        )
+        ]
         model = Play

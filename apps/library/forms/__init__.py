@@ -1,5 +1,5 @@
-from .performance import PerformanceForm
+from .performance import PerformanceAdminForm
 
 __all__ = [
-    PerformanceForm,
+    PerformanceAdminForm,
 ]

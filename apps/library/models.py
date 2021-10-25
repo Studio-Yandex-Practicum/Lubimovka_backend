@@ -431,7 +431,6 @@ class PerformanceReview(BaseModel):
     pub_date = models.DateTimeField(
         blank=True,
         verbose_name="Дата публикации",
-        # auto_now_add=True,
     )
 
     class Meta:

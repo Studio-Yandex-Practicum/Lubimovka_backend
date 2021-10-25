@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.library.forms import PerformanceForm
+from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
     Author,
@@ -198,7 +198,7 @@ class PerformanceAdmin(admin.ModelAdmin):
         "name",
         "text",
     ]
-    form = PerformanceForm
+    form = PerformanceAdminForm
     inlines = [
         PerformanceReviewInline,
         PerformanceMediaReviewInline,

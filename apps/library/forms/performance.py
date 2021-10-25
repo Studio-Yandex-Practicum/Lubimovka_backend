@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from apps.library.models import Performance
 
 
-class PerformanceForm(forms.ModelForm):
+class PerformanceAdminForm(forms.ModelForm):
     class Meta:
         model = Performance
         fields = "__all__"

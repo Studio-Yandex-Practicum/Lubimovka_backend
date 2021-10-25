@@ -10,5 +10,5 @@ class PerformanceTeamSerializer(serializers.ModelSerializer):
     member = serializers.ReadOnlyField(source="member.full_name")
 
     class Meta:
-        fields = ("role", "member")
+        fields = ["role", "member"]
         model = PerformanceTeam
