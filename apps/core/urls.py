@@ -1,7 +1,7 @@
 from django.urls import path
 
-from apps.core.views import get_settings
+from apps.core.views import get_setting
 
 urlpatterns = [
-    path("v1/settings/", get_settings, name="get_settings"),
+    path("v1/setting/", get_setting, name="setting"),
 ]

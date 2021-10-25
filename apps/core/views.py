@@ -33,8 +33,8 @@ def error404(request, exception, *args, **kwargs):
 
 @api_view(["GET"])
 @permission_classes([AllowAny])
-def get_settings(request):
+def get_setting(request):
     serializer = SettingsSerializer(data=request.data)
     if serializer.is_valid():
-        settings = Settings.get_settings(request.data["settings"])
+        settings = Settings.get_setting(request.data["settings"])
         return JsonResponse(settings, status=status.HTTP_200_OK)

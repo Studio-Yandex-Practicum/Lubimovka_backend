@@ -11,7 +11,7 @@ def loadfixture(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0005_auto_20211025_1445'),
+        ('core', '0005_settings'),
     ]
 
     operations = [
