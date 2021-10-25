@@ -10,8 +10,8 @@ on:
       - master
 
 jobs:
-  codestyle:
-    name: Check codestyle PEP8
+  tests_and_coverage:
+    name: Run tests and Generate Coverage Report
     runs-on: ubuntu-latest
     steps:
     -
@@ -28,11 +28,13 @@ jobs:
         python -m pip install --upgrade pip
         pip install -r requirements/dev.txt
     -
-      name: Lint with flake8
-      run: flake8 .
-    -
-      name: Codestyle by black
-      run: black --check .
-    -
       name: Test with pytest
       run: pytest
+    -
+      name: Generate Report
+      run: |
+        pip install coverage
+        coverage run -m pytest
+    -
+      name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v1
