@@ -1,4 +1,4 @@
-name: codestyle with PEP8 and tests
+name: Tests with pytest snd coverage report
 
 on:
   push:
