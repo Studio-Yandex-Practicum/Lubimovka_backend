@@ -12,7 +12,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Image, Person
-from apps.core.utilities.slugify import slugify
+from apps.core.utilities.filename import generate_filename
 from apps.info.models import Festival
 from apps.library.validators import year_validator
 
@@ -556,29 +556,11 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name = "Заявление на участие"
 
     def __str__(self):
-        return self.get_filename
-
-    @property
-    def get_filename(self):
-        first_name = slugify(self.first_name)
-        if "-" in first_name:
-            first_name = first_name.replace("-", "_")
-
-        title = slugify(self.title)
-        if "-" in title:
-            title = title.replace("-", "_")
-        return (
-            f"{first_name.title()}-{title.title()}.{self.get_file_extension}"
-        )
-
-    @property
-    def get_file_extension(self):
-        return self.file.name.split(".")[1]
+        return f"{self.last_name}-{self.title}"
 
     def save(self, *args, **kwargs):
         """
-        Generate new filename as "First_name-Title" format
+        Save generated filename
         """
-
-        self.file.name = self.get_filename
+        self.file.name = generate_filename(self)
         super().save(*args, **kwargs)
