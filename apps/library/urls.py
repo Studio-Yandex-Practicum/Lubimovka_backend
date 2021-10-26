@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.library.views import PerformanceAPIView
+from apps.library.views import AuthorsReadViewSet, PerformanceAPIView
 
 router = DefaultRouter()
 router.register(
@@ -9,6 +9,12 @@ router.register(
     PerformanceAPIView,
     basename="performances",
 )
+router.register(
+    "authors",
+    AuthorsReadViewSet,
+    basename="authors",
+)
+
 
 library_urls = [
     path("library/", include(router.urls)),
