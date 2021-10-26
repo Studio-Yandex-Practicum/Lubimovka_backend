@@ -1,10 +1,20 @@
+import random
 import urllib
 
 import factory
 from django.core.files.base import ContentFile
+from faker import Faker
 
 from apps.core.models import Person
-from apps.info.models import FestivalTeam, Partner, Sponsor, Volunteer
+from apps.info.models import (
+    Festival,
+    FestivalTeam,
+    Partner,
+    Sponsor,
+    Volunteer,
+)
+
+fake = Faker(locale="en_US")
 
 
 class PartnerFactory(factory.django.DjangoModelFactory):
@@ -66,3 +76,29 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
         getter=lambda choice: choice[0],
     )
     position = factory.Faker("job", locale="ru_RU")
+
+
+class FestivalFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Festival
+
+    start_date = factory.Faker("past_date")
+    end_date = factory.Faker("future_date")
+    description = factory.Faker("sentence", locale="ru_RU")
+    year = factory.LazyFunction(
+        lambda: random.choice(
+            [
+                x
+                for x in range(1990, 2500)
+                if x not in [fest.year for fest in Festival.objects.all()]
+            ]
+        )
+    )
+    video_link = factory.LazyFunction(
+        lambda: f"{fake.word()}.com/{fake.word()}/"
+    )
+    # blog_entries необходимо изменить после
+    # корректировки поля модели фестиваля
+    blog_entries = factory.LazyFunction(
+        lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"])
+    )
