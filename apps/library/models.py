@@ -12,7 +12,10 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Image, Person
-from apps.core.utilities.filename import generate_filename
+from apps.core.utilities.file import (
+    generate_class_name_path,
+    generate_filename,
+)
 from apps.info.models import Festival
 from apps.library.validators import year_validator
 
@@ -498,14 +501,9 @@ class MasterClass(BaseModel):
         return self.name
 
 
-def get_upload_to(instance, filename):
-    festival = Festival.objects.last()
-    return f"application/{festival.year}/{filename}"
-
-
 class ParticipationApplicationFestival(BaseModel):
     """
-    Участники, отправившие свои заявки
+    Заявки на участие в фестивале
     """
 
     first_name = models.CharField(
@@ -541,7 +539,7 @@ class ParticipationApplicationFestival(BaseModel):
             FileExtensionValidator(["doc", "docx", "txt", "odt", "pdf"])
         ],
         verbose_name="Файл",
-        upload_to=get_upload_to,
+        upload_to=generate_class_name_path,
     )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
@@ -554,6 +552,21 @@ class ParticipationApplicationFestival(BaseModel):
     class Meta:
         verbose_name_plural = "Заявления на участие"
         verbose_name = "Заявление на участие"
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "first_name",
+                    "last_name",
+                    "birthday",
+                    "city",
+                    "phone_number",
+                    "email",
+                    "title",
+                    "year",
+                ],
+                name="unique_application",
+            ),
+        ]
 
     def __str__(self):
         return f"{self.last_name}-{self.title}"
