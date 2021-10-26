@@ -27,11 +27,6 @@ class ProgramType(BaseModel):
 
 
 class Play(BaseModel):
-    authors = models.ManyToManyField(
-        "Author",
-        related_name="plays",
-        verbose_name="Автор",
-    )
     name = models.CharField(
         max_length=200,
         unique=True,
@@ -46,18 +41,19 @@ class Play(BaseModel):
             MinValueValidator(1990),
             MaxValueValidator(timezone.now().year),
         ],
-        unique=True,
         verbose_name="Год написания пьесы",
     )
     url_download = models.URLField(
         max_length=200,
         blank=True,
+        null=True,
         verbose_name="Ссылка на скачивание пьесы",
         unique=True,
     )
     url_reading = models.URLField(
         max_length=200,
         blank=True,
+        null=True,
         verbose_name="Ссылка на читку",
         unique=True,
     )
@@ -111,7 +107,7 @@ class Author(BaseModel):
     person = models.OneToOneField(
         Person,
         on_delete=models.CASCADE,
-        verbose_name="Автор",
+        verbose_name="Человек",
     )
     quote = models.CharField(
         max_length=200,
@@ -124,32 +120,19 @@ class Author(BaseModel):
     achievements = models.ManyToManyField(
         Achievement,
         verbose_name="Достижения",
-        blank=True,
-    )
-    social_network_links = models.ManyToManyField(
-        "SocialNetworkLink",
-        verbose_name="Ссылки на социальные сети",
         related_name="authors",
         blank=True,
     )
-    other_links = models.ManyToManyField(
-        "OtherLink",
-        verbose_name="Ссылки на внешние ресурсы",
-        related_name="authors",
-        blank=True,
-    )
-    author_plays_links = models.ManyToManyField(
+    plays = models.ManyToManyField(
         Play,
-        verbose_name="Ссылки на пьесы автора",
-        related_name="authors_links",
+        verbose_name="Пьесы автора",
+        related_name="authors",
         blank=True,
     )
-    other_plays_links = models.ManyToManyField(
-        "OtherPlay",
-        blank=True,
-        verbose_name="Ссылки на другие пьесы",
-        related_name="authors_links",
-    )
+
+    @property
+    def image(self):
+        return self.person.image
 
     class Meta:
         verbose_name = "Автор"
@@ -163,8 +146,6 @@ class Author(BaseModel):
             raise ValidationError("Для автора необходимо указать email")
         if not self.person.city:
             raise ValidationError("Для автора необходимо указать город")
-        if not self.person.image:
-            raise ValidationError("Для автора необходимо выбрать фото")
 
 
 class SocialNetworkLink(BaseModel):
@@ -178,6 +159,7 @@ class SocialNetworkLink(BaseModel):
     author = models.ForeignKey(
         Author,
         on_delete=models.CASCADE,
+        related_name="social_networks",
         verbose_name="Автор",
     )
     name = models.CharField(
@@ -207,6 +189,7 @@ class SocialNetworkLink(BaseModel):
 class OtherLink(BaseModel):
     author = models.ForeignKey(
         Author,
+        related_name="other_links",
         on_delete=models.CASCADE,
         verbose_name="Автор",
     )
@@ -246,6 +229,7 @@ class OtherPlay(BaseModel):
     author = models.ForeignKey(
         Author,
         on_delete=models.CASCADE,
+        related_name="other_plays_links",
         verbose_name="Автор",
     )
     name = models.CharField(
