@@ -1,13 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.library.views import (
-    AuthorsAPIView,
-    PerformanceMediaReviewsAPIView,
-    PerformanceReviewsAPIView,
-    PerformancesAPIView,
-    PlaysAPIView,
-)
+from apps.library.views import AuthorsReadViewSet, PlaysAPIView
 
 router = DefaultRouter()
 router.register(
@@ -15,26 +9,26 @@ router.register(
     PlaysAPIView,
     basename="plays",
 )
-router.register(
-    "performances",
-    PerformancesAPIView,
-    basename="performances",
-)
+# router.register(
+#     "performances",
+#     PerformancesAPIView,
+#     basename="performances",
+# )
 router.register(
     "authors",
-    AuthorsAPIView,
+    AuthorsReadViewSet,
     basename="authors",
 )
-router.register(
-    "media-reviews",
-    PerformanceMediaReviewsAPIView,
-    basename="media-reviews",
-)
-router.register(
-    "reviews",
-    PerformanceReviewsAPIView,
-    basename="reviews",
-)
+# router.register(
+#     "media-reviews",
+#     PerformanceMediaReviewsAPIView,
+#     basename="media-reviews",
+# )
+# router.register(
+#     "reviews",
+#     PerformanceReviewsAPIView,
+#     basename="reviews",
+# )
 
 
 library_urls = [

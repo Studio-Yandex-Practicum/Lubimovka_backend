@@ -239,7 +239,7 @@ class Festival(BaseModel):
         max_length=250,
         verbose_name="Ссылка на видео о фестивале",
     )
-    blog_entries = models.CharField(
+    blog_entries = models.CharField(  # При изменении скорректировать фабрику
         max_length=10,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
     )

@@ -59,6 +59,14 @@ class Person(BaseModel):
         blank=True,
     )
 
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
+    def reverse_full_name(self):
+        return f"{self.last_name} {self.first_name}"
+
     class Meta:
         verbose_name = "Человек"
         verbose_name_plural = "Люди"
