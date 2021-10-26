@@ -12,9 +12,6 @@ class BaseModel(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
-    def __str__(self):
-        return f"{self.id}"
-
     class Meta:
         abstract = True
 
@@ -75,6 +72,10 @@ class Person(BaseModel):
         ]
 
     def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+    @property
+    def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
 

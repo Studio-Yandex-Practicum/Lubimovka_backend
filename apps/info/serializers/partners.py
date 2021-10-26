@@ -6,4 +6,4 @@ from apps.info.models import Partner
 class PartnerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Partner
-        exclude = ["created", "modified"]
+        exclude = ("created", "modified")
