@@ -5,13 +5,11 @@ from apps.core.models import Image, Settings
 
 class SettingsAdmin(admin.ModelAdmin):
     list_display = (
-        "type",
-        "field_type",
         "settings_key",
+        "field_type",
     )
-    list_filter = ("type",)
-    search_fields = ("type", "field_type", "settings_key")
-    readonly_fields = ["type", "field_type", "settings_key"]
+    search_fields = ("field_type", "settings_key")
+    readonly_fields = ["field_type", "settings_key"]
 
     def get_readonly_fields(self, request, obj=None):
         if request.user.is_superuser:
@@ -19,7 +17,9 @@ class SettingsAdmin(admin.ModelAdmin):
         return self.readonly_fields
 
     def get_fields(self, request, obj=None):
-        return ["type", "field_type", "settings_key"] + [obj.field_type]
+        return ["field_type", "settings_key"] + [
+            Settings.TYPES_AND_FIELDS[obj.field_type]
+        ]
 
 
 admin.site.register(Settings, SettingsAdmin)

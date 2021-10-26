@@ -78,41 +78,24 @@ class Person(BaseModel):
         return f"{self.first_name} {self.last_name}"
 
 
-class Settings(models.Model):
-    class SettingType(models.TextChoices):
-        """Группы настроек"""
-
-        FESTIVAL_SETTINGS = "Festival_settings", _("Настройки фестиваля")
-        MAIN_PAGE_SETTINGS = "Main_page_settings", _(
-            "Настройки главной страницы"
-        )
-        HISTORY_PAGE_SETTINGS = "History_page_settings", _(
-            "Настройки страницы истории"
-        )
-        ABOUT_FESTIVAL_WHAT_WE_DO_PAGE_SETTINGS = (
-            "About_festival_what_we_do_page_settings",
-            _("Настройки страницы О фестивале. Что мы делаем?"),
-        )
-        ABOUT_FESTIVAL_IDEOLOGY_PAGE_SETTINGS = (
-            "About_festival_ideology_page_settings",
-            _("Настройки страницы О фестивале. Идеология."),
-        )
-        OTHER_SETTINGS = "Other_settings", _("Прочие настройки")
-
+class Settings(BaseModel):
     class SettingFieldType(models.TextChoices):
-        """Поле для настроек"""
+        BOOLEAN = "BOOLEAN", _("Да/Нет")
+        TITLE = "TITLE", _("Заголовок/Описание")
+        TEXT = "TEXT", _("Текст")
+        URL = "URL", _("URL")
+        IMAGE = "IMAGE", _("Картинка")
+        EMAIL = "EMAIL", _("EMAIL")
 
-        BOOLEAN = "boolean", _("Да/Нет")
-        TITLE = "title", _("Заголовок/Описание")
-        TEXT = "text", _("Текст")
-        URL = "url", _("URL")
-        IMAGE = "image", _("Картинка")
+    TYPES_AND_FIELDS = {
+        SettingFieldType.BOOLEAN: "boolean",
+        SettingFieldType.TITLE: "title",
+        SettingFieldType.TEXT: "text",
+        SettingFieldType.URL: "url",
+        SettingFieldType.IMAGE: "image",
+        SettingFieldType.EMAIL: "email",
+    }
 
-    type = models.CharField(
-        choices=SettingType.choices,
-        max_length=40,
-        verbose_name="Выбор типа настроек",
-    )
     field_type = models.CharField(
         choices=SettingFieldType.choices,
         max_length=40,
@@ -147,14 +130,12 @@ class Settings(models.Model):
         blank=True,
         verbose_name="Изображение",
     )
-
     email = models.EmailField(
         blank=True,
         verbose_name="Email",
     )
 
     class Meta:
-        ordering = ["id"]
         verbose_name = "Общие настройки"
         verbose_name_plural = "Общие настройки"
 
@@ -170,7 +151,7 @@ class Settings(models.Model):
             "image": "",
             "email": "",
         }
-        del fields[self.field_type]
+        del fields[self.TYPES_AND_FIELDS[self.field_type]]
         for settings_key, value in fields.items():
             setattr(self, settings_key, value)
         super().save(*args, **kwargs)
@@ -179,4 +160,8 @@ class Settings(models.Model):
     def get_setting(cls, settings_key):
         if Settings.objects.filter(settings_key=settings_key).exists():
             setting = Settings.objects.get(settings_key=settings_key)
-            return {settings_key: getattr(setting, setting.field_type)}
+            return {
+                settings_key: getattr(
+                    setting, cls.TYPES_AND_FIELDS[setting.field_type]
+                )
+            }

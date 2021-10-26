@@ -4,8 +4,9 @@
     "pk": "1",
     "fields": {
       "id": 1,
-      "type": "Festival_settings",
-      "field_type": "boolean",
+      "created": "2021-10-26 23:46:03.000",
+      "modified": "2021-10-26 23:46:03.000",
+      "field_type": "BOOLEAN",
       "settings_key": "Festival_status",
       "boolean": 1,
       "title": "",
@@ -20,11 +21,12 @@
     "pk": "2",
     "fields": {
       "id": 2,
-      "type": "Main_page_settings",
-      "field_type": "title",
-      "settings_key": "Main_title",
+      "created": "2021-10-26 23:46:03.000",
+      "modified": "2021-10-26 23:46:03.000",
+      "field_type": "TITLE",
+      "settings_key": "Site_color",
       "boolean": 0,
-      "title": "Заголовок",
+      "title": "green",
       "text": "",
       "url": "",
       "image": "",
@@ -36,56 +38,9 @@
     "pk": "3",
     "fields": {
       "id": 3,
-      "type": "Main_page_settings",
-      "field_type": "text",
-      "settings_key": "Main_description",
-      "boolean": 0,
-      "title": "",
-      "text": "ТекстТекстТекстТекстТекстТекстТекст",
-      "url": "",
-      "image": "",
-      "email": ""
-    }
-  },
-  {
-    "model": "core.Settings",
-    "pk": "4",
-    "fields": {
-      "id": 4,
-      "type": "Main_page_settings",
-      "field_type": "url",
-      "settings_key": "Main_url",
-      "boolean": 0,
-      "title": "",
-      "text": "",
-      "url": "https://sdfasdfsgfbsfd/aesfagd/",
-      "image": "",
-      "email": ""
-    }
-  },
-  {
-    "model": "core.Settings",
-    "pk": "5",
-    "fields": {
-      "id": 5,
-      "type": "Main_page_settings",
-      "field_type": "image",
-      "settings_key": "Main_image",
-      "boolean": 0,
-      "title": "",
-      "text": "",
-      "url": "",
-      "image": "main/2021-09-30_14.38.40_4zBLm7c.jpg",
-      "email": ""
-    }
-  },
-  {
-    "model": "core.Settings",
-    "pk": "6",
-    "fields": {
-      "id": 6,
-      "type": "Other_settings",
-      "field_type": "email",
+      "created": "2021-10-26 23:46:03.000",
+      "modified": "2021-10-26 23:46:03.000",
+      "field_type": "EMAIL",
       "settings_key": "Mail_send_to",
       "boolean": 0,
       "title": "",
@@ -95,13 +50,14 @@
       "email": "weref@dfgsd.ff"
     }
   },
-    {
+  {
     "model": "core.Settings",
-    "pk": "7",
+    "pk": "4",
     "fields": {
-      "id": 7,
-      "type": "Other_settings",
-      "field_type": "boolean",
+      "id": 4,
+      "created": "2021-10-26 23:46:03.000",
+      "modified": "2021-10-26 23:46:03.000",
+      "field_type": "BOOLEAN",
       "settings_key": "Form_to_submit_a_play",
       "boolean": 1,
       "title": "",
