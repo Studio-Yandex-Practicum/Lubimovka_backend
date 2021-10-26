@@ -39,7 +39,6 @@ class Play(BaseModel):
     )
     city = models.CharField(
         max_length=200,
-        unique=True,
         verbose_name="Город",
     )
     year = models.PositiveSmallIntegerField(
@@ -299,8 +298,8 @@ class Performance(BaseModel):
     )
     images_in_block = models.ManyToManyField(
         Image,
-        verbose_name="Фотографии спектакля в блоке фотографий",
         blank=True,
+        verbose_name="Фотографии спектакля в блоке фотографий",
     )
     video = models.URLField(
         max_length=200,
@@ -316,11 +315,17 @@ class Performance(BaseModel):
         verbose_name="Полное описание",
     )
     age_limit = models.PositiveSmallIntegerField(
-        verbose_name="Возрастное ограничение",
         validators=[
             MinValueValidator(0),
             MaxValueValidator(18),
         ],
+        verbose_name="Возрастное ограничение",
+    )
+    persons = models.ManyToManyField(
+        Person,
+        through="PerformancePerson",
+        related_name="performances",
+        verbose_name="Члены команды",
     )
 
     class Meta:
@@ -330,6 +335,40 @@ class Performance(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class PerformancePerson(BaseModel):
+    class Roles(models.TextChoices):
+        """Роли"""
+
+        ACTOR = "Actor", _("Актёр")
+        ADAPTER = "Adapter", _("Адаптация текста")
+        DRAMATIST = "Dramatist", _("Драматург")
+        DIRECTOR = "Director", _("Режиссёр")
+        INTERPRETER = "Interpreter", _("Переводчик")
+
+    performance = models.ForeignKey(
+        Performance,
+        related_name="performance_persons",
+        verbose_name="Спектакль",
+        on_delete=models.CASCADE,
+    )
+    person = models.ForeignKey(
+        Person,
+        on_delete=models.PROTECT,
+        verbose_name="Член команды",
+        related_name="performance_persons",
+    )
+    role = models.CharField(
+        max_length=200,
+        choices=Roles.choices,
+        verbose_name="Роль в команде спектакля",
+    )
+
+    class Meta:
+        ordering = ("role",)
+        verbose_name = "Член команды"
+        verbose_name_plural = "Члены команды"
 
 
 class PerformanceMediaReview(BaseModel):
