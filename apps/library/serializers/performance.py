@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
-from apps.core.serializers import PerformanceImagesBlockSerializer
+from apps.core.serializers import ImageSerializer
 from apps.library.models import Performance
 
-from .performanceteam import PerformanceTeamSerializer
+from .performanceperson import PerformancePersonSerializer
 from .play import PlaySerializer
 
 
@@ -11,11 +11,11 @@ class PerformanceSerializer(serializers.ModelSerializer):
     """Сериализатор Спектакля для отображения на странице Спектакля"""
 
     play = PlaySerializer()
-    members = PerformanceTeamSerializer(
-        source="members_set",
+    persons = PerformancePersonSerializer(
+        source="performance_persons",
         many=True,
     )
-    images_in_block = PerformanceImagesBlockSerializer(many=True)
+    images_in_block = ImageSerializer(many=True)
 
     class Meta:
         exclude = [

@@ -3,8 +3,8 @@ from rest_framework import serializers
 from apps.core.models import Image
 
 
-class PerformanceImagesBlockSerializer(serializers.ModelSerializer):
-    """Сериализатор Изображения для вложения в сериализатор Спектакля"""
+class ImageSerializer(serializers.ModelSerializer):
+    """Сериализатор Изображения"""
 
     class Meta:
         model = Image

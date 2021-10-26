@@ -321,9 +321,9 @@ class Performance(BaseModel):
         ],
         verbose_name="Возрастное ограничение",
     )
-    members = models.ManyToManyField(
+    persons = models.ManyToManyField(
         Person,
-        through="PerformanceTeam",
+        through="PerformancePerson",
         related_name="performances",
         verbose_name="Члены команды",
     )
@@ -337,7 +337,7 @@ class Performance(BaseModel):
         return self.name
 
 
-class PerformanceTeam(BaseModel):
+class PerformancePerson(BaseModel):
     class Roles(models.TextChoices):
         """Роли"""
 
@@ -349,11 +349,15 @@ class PerformanceTeam(BaseModel):
 
     performance = models.ForeignKey(
         Performance,
-        related_name="members_set",
+        related_name="performance_persons",
+        verbose_name="Спектакль",
         on_delete=models.CASCADE,
     )
-    member = models.ForeignKey(
-        Person, on_delete=models.PROTECT, verbose_name="Член команды"
+    person = models.ForeignKey(
+        Person,
+        on_delete=models.PROTECT,
+        verbose_name="Член команды",
+        related_name="performance_persons",
     )
     role = models.CharField(
         max_length=200,

@@ -9,8 +9,8 @@ from apps.library.models import (
     OtherPlay,
     Performance,
     PerformanceMediaReview,
+    PerformancePerson,
     PerformanceReview,
-    PerformanceTeam,
     Play,
     ProgramType,
     Reading,
@@ -181,14 +181,14 @@ class PerformanceMediaReviewInline(admin.TabularInline):
 
 
 class PerformanceTeamInline(admin.TabularInline):
-    model = PerformanceTeam
+    model = PerformancePerson
     extra = 1
 
 
 class PerformanceAdmin(admin.ModelAdmin):
     filter_horizontal = [
         "images_in_block",
-        "members",
+        "persons",
     ]
     list_filter = [
         "age_limit",

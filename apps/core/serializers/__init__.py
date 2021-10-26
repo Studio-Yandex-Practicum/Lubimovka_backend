@@ -1,5 +1,5 @@
-from .image import PerformanceImagesBlockSerializer
+from .image import ImageSerializer
 
 __all__ = [
-    PerformanceImagesBlockSerializer,
+    ImageSerializer,
 ]
