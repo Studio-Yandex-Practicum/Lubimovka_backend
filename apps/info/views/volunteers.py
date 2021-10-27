@@ -7,4 +7,5 @@ from apps.info.serializers import VolunteersSerializer
 class VolunteersViewSet(ListAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteersSerializer
+    filterset_fields = ("year",)
     pagination_class = None

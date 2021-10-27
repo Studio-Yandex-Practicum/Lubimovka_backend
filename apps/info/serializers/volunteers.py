@@ -9,4 +9,4 @@ class VolunteersSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Volunteer
-        exclude = ["created", "modified"]
+        exclude = ("created", "modified")
