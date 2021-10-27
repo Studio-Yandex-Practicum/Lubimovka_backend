@@ -14,25 +14,36 @@ from .play import PlaySerializer
 class AchievementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Achievement
-        fields = ["tag"]
+        fields = ("tag",)
 
 
 class OtherLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = OtherLink
-        fields = ["name", "link", "is_pinned", "order_number"]
+        fields = (
+            "name",
+            "link",
+            "is_pinned",
+            "order_number",
+        )
 
 
 class OtherPlayLinksSerializer(serializers.ModelSerializer):
     class Meta:
         model = OtherPlay
-        fields = ["name", "link"]
+        fields = (
+            "name",
+            "link",
+        )
 
 
 class SocialNetworkSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialNetworkLink
-        fields = ["name", "link"]
+        fields = (
+            "name",
+            "link",
+        )
 
 
 class AuthorRetrieveSerializer(serializers.ModelSerializer):
@@ -54,7 +65,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = [
+        fields = (
             "id",
             "name",
             "city",
@@ -67,14 +78,17 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
             "plays",
             "other_plays_links",
             "image",
-        ]
+        )
 
 
 class AuthorListSerializer(serializers.ModelSerializer):
     name = serializers.SlugRelatedField(
-        source="person", slug_field="reverse_full_name", read_only=True
+        source="person", slug_field="reversed_full_name", read_only=True
     )
 
     class Meta:
         model = Author
-        fields = ["id", "name"]
+        fields = (
+            "id",
+            "name",
+        )

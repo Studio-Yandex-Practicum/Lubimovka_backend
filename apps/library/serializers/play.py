@@ -10,7 +10,7 @@ class AuthorForPlaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = ["name"]
+        fields = ("name",)
 
 
 class PlaySerializer(serializers.ModelSerializer):
@@ -19,7 +19,7 @@ class PlaySerializer(serializers.ModelSerializer):
     authors = AuthorForPlaySerializer(many=True)
 
     class Meta:
-        fields = [
+        fields = (
             "id",
             "name",
             "authors",
@@ -27,5 +27,5 @@ class PlaySerializer(serializers.ModelSerializer):
             "year",
             "url_download",
             "url_reading",
-        ]
+        )
         model = Play

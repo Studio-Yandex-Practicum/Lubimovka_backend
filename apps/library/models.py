@@ -125,14 +125,10 @@ class Author(BaseModel):
     )
     plays = models.ManyToManyField(
         Play,
-        verbose_name="Пьесы автора",
         related_name="authors",
         blank=True,
+        verbose_name="Пьесы автора",
     )
-
-    @property
-    def image(self):
-        return self.person.image
 
     class Meta:
         verbose_name = "Автор"
@@ -147,9 +143,13 @@ class Author(BaseModel):
         if not self.person.city:
             raise ValidationError("Для автора необходимо указать город")
 
+    @property
+    def image(self):
+        return self.person.image
+
 
 class SocialNetworkLink(BaseModel):
-    class SocialNetwor(models.TextChoices):
+    class SocialNetwork(models.TextChoices):
         FACEBOOK = "fb", _("Facebook")
         INSTAGRAM = "inst", _("Instagram")
         YOUTUBE = "ytube", _("YouTube")
@@ -164,7 +164,7 @@ class SocialNetworkLink(BaseModel):
     )
     name = models.CharField(
         max_length=200,
-        choices=SocialNetwor.choices,
+        choices=SocialNetwork.choices,
         verbose_name="Название",
     )
     link = models.URLField(
@@ -229,7 +229,7 @@ class OtherPlay(BaseModel):
     author = models.ForeignKey(
         Author,
         on_delete=models.CASCADE,
-        related_name="other_plays_links",
+        related_name="other_plays",
         verbose_name="Автор",
     )
     name = models.CharField(

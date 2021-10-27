@@ -78,8 +78,5 @@ class Person(BaseModel):
         return f"{self.first_name} {self.last_name}"
 
     @property
-    def reverse_full_name(self):
-        """
-        For AuthorListSerializer
-        """
+    def reversed_full_name(self):
         return f"{self.last_name} {self.first_name}"

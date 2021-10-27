@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import filters, viewsets
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import viewsets
 
+from apps.library.filters import AuthorFilter
 from apps.library.models import Author
 from apps.library.serializers import (
     AuthorListSerializer,
@@ -9,21 +11,13 @@ from apps.library.serializers import (
 
 
 class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
-    filter_backends = [filters.SearchFilter]
-    search_fields = ["person__last_name", "person__first_name"]
-
-    def get_queryset(self):
-        queryset = Author.objects.order_by("person__last_name")
-        first_letter = self.request.query_params.get("startswith")
-        if first_letter:
-            queryset = queryset.filter(
-                person__last_name__startswith=first_letter
-            )
-        return queryset
+    queryset = Author.objects.select_related("person").all()
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = AuthorFilter
 
     def get_object(self):
         author = get_object_or_404(
-            Author.objects.select_related("person").prefetch_related(
+            Author.objects.prefetch_related(
                 "achievements",
                 "social_networks",
                 "other_links",

@@ -1,4 +1,3 @@
-import random
 import urllib
 
 import factory
@@ -81,19 +80,12 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
 class FestivalFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Festival
+        django_get_or_create = ("year",)
 
     start_date = factory.Faker("past_date")
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
-    year = factory.LazyFunction(
-        lambda: random.choice(
-            [
-                x
-                for x in range(1990, 2500)
-                if x not in [fest.year for fest in Festival.objects.all()]
-            ]
-        )
-    )
+    year = factory.Faker("random_int", min=1990, max=2500, step=1)
     video_link = factory.LazyFunction(
         lambda: f"{fake.word()}.com/{fake.word()}/"
     )

@@ -15,7 +15,7 @@ from apps.library.models import (
     SocialNetworkLink,
 )
 
-fake = Faker(["en_US", "ru_RU"])
+fake = Faker("ru_RU")
 
 
 class AchievementFactory(factory.django.DjangoModelFactory):
@@ -26,40 +26,49 @@ class AchievementFactory(factory.django.DjangoModelFactory):
 
 
 class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
+    """
+    Create SocialNetworkLink object.
+    You should create at list one Author before use this factory.
+    """
+
     class Meta:
         model = SocialNetworkLink
 
-    author = factory.SubFactory("apps.library.tests.factories.AuthorFactory")
+    author = factory.Iterator(Author.objects.all())
     name = factory.LazyFunction(
-        lambda: choice(SocialNetworkLink.SocialNetwor.choices)[0]
+        lambda: choice(SocialNetworkLink.SocialNetwork.choices)[0]
     )
-    link = factory.LazyAttribute(
-        lambda s: f"{s.name}.com/{fake['en_US'].word()}/"
-    )
+    link = factory.Faker("url")
 
 
 class OtherLinkFactory(factory.django.DjangoModelFactory):
+    """
+    Create OtherLink object.
+    You should create at list one Author before use this factory.
+    """
+
     class Meta:
         model = OtherLink
 
-    author = factory.SubFactory("apps.library.tests.factories.AuthorFactory")
+    author = factory.Iterator(Author.objects.all())
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
-    link = factory.LazyFunction(
-        lambda: f"{fake['en_US'].word()}.com/{fake['en_US'].word()}/"
-    )
+    link = factory.Faker("url")
     is_pinned = factory.Faker("pybool")
     order_number = factory.Sequence(lambda x: x)
 
 
 class OtherPlayFactory(factory.django.DjangoModelFactory):
+    """
+    Create OtherPlay object.
+    You should create at list one Author before use this factory.
+    """
+
     class Meta:
         model = OtherPlay
 
-    author = factory.SubFactory("apps.library.tests.factories.AuthorFactory")
+    author = factory.Iterator(Author.objects.all())
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
-    link = factory.LazyFunction(
-        lambda: f"{fake['en_US'].word()}.com/{fake['en_US'].word()}/"
-    )
+    link = factory.Faker("url")
 
 
 class ProgramFactory(factory.django.DjangoModelFactory):
@@ -72,33 +81,20 @@ class ProgramFactory(factory.django.DjangoModelFactory):
 class PlayFactory(factory.django.DjangoModelFactory):
     """
     Create Play object.
-    If related objects (ProgramType, Festival) exist last of them will be used
-    else will be created new ones.
+    You should create at list one Festival and Program
+    before use this factory.
     """
 
     class Meta:
         model = Play
-        exclude = ["last_festival", "last_program"]
 
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
     city = factory.Faker("city_name", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2021, step=1)
-    url_download = factory.LazyFunction(
-        lambda: f"{fake['en_US'].word()}.com/{fake['en_US'].word()}/"
-    )
-    url_reading = factory.LazyFunction(
-        lambda: f"{fake['en_US'].word()}.com/{fake['en_US'].word()}/"
-    )
-    if last_program := ProgramType.objects.last():
-        program = last_program
-    else:
-        program = factory.SubFactory(ProgramFactory)
-    if last_festival := Festival.objects.last():
-        festival = last_festival
-    else:
-        festival = factory.SubFactory(
-            "apps.info.tests.factories.FestivalFactory"
-        )
+    url_download = factory.Faker("url")
+    url_reading = factory.Faker("url")
+    program = factory.Iterator(ProgramType.objects.all())
+    festival = factory.Iterator(Festival.objects.all())
 
 
 class AuthorFactory(factory.django.DjangoModelFactory):
