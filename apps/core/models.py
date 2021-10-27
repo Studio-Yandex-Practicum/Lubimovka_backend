@@ -15,6 +15,9 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
+    def __str__(self):
+        return self.id
+
 
 class Image(BaseModel):
     image = models.ImageField(
@@ -116,8 +119,8 @@ class Settings(BaseModel):
         blank=True,
         verbose_name="Заголовок",
     )
-    text = models.CharField(
-        max_length=100,
+    text = models.TextField(
+        max_length=500,
         blank=True,
         verbose_name="Текст",
     )
@@ -144,6 +147,8 @@ class Settings(BaseModel):
         return self.settings_key
 
     def save(self, *args, **kwargs):
+        """Cleaning other fields"""
+
         fields = {
             "boolean": False,
             "title": "",
@@ -159,10 +164,11 @@ class Settings(BaseModel):
 
     @classmethod
     def get_setting(cls, settings_key):
-        if Settings.objects.filter(settings_key=settings_key).exists():
+        if Settings.objects.get(settings_key=settings_key):
             setting = Settings.objects.get(settings_key=settings_key)
             return {
                 settings_key: getattr(
-                    setting, cls.TYPES_AND_FIELDS[setting.field_type]
+                    setting,
+                    cls.TYPES_AND_FIELDS[setting.field_type],
                 )
             }
