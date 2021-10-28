@@ -85,7 +85,6 @@ class Person(BaseModel):
 class Settings(BaseModel):
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")
-        TITLE = "TITLE", _("Заголовок/Описание")
         TEXT = "TEXT", _("Текст")
         URL = "URL", _("URL")
         IMAGE = "IMAGE", _("Картинка")
@@ -93,7 +92,6 @@ class Settings(BaseModel):
 
     TYPES_AND_FIELDS = {
         SettingFieldType.BOOLEAN: "boolean",
-        SettingFieldType.TITLE: "title",
         SettingFieldType.TEXT: "text",
         SettingFieldType.URL: "url",
         SettingFieldType.IMAGE: "image",
@@ -114,13 +112,8 @@ class Settings(BaseModel):
         default=False,
         verbose_name="Да или Нет",
     )
-    title = models.CharField(
+    text = models.CharField(
         max_length=100,
-        blank=True,
-        verbose_name="Заголовок",
-    )
-    text = models.TextField(
-        max_length=500,
         blank=True,
         verbose_name="Текст",
     )
@@ -146,29 +139,15 @@ class Settings(BaseModel):
     def __str__(self):
         return self.settings_key
 
-    def save(self, *args, **kwargs):
-        """Cleaning other fields"""
-
-        fields = {
-            "boolean": False,
-            "title": "",
-            "text": "",
-            "url": "",
-            "image": "",
-            "email": "",
-        }
-        del fields[self.TYPES_AND_FIELDS[self.field_type]]
-        for settings_key, value in fields.items():
-            setattr(self, settings_key, value)
-        super().save(*args, **kwargs)
+    @property
+    def value(self):
+        return getattr(
+            self,
+            self.TYPES_AND_FIELDS[self.field_type],
+        )
 
     @classmethod
     def get_setting(cls, settings_key):
-        if Settings.objects.get(settings_key=settings_key):
+        if Settings.objects.filter(settings_key=settings_key).exists():
             setting = Settings.objects.get(settings_key=settings_key)
-            return {
-                settings_key: getattr(
-                    setting,
-                    cls.TYPES_AND_FIELDS[setting.field_type],
-                )
-            }
+            return setting.value

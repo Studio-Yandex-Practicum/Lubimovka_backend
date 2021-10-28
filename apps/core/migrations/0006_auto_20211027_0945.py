@@ -12,9 +12,9 @@ def add_settings(apps, schema_editor):
         boolean=True,
     )
     Settings.objects.create(
-        field_type="TITLE",
+        field_type="TEXT",
         settings_key="Site_color",
-        title="green",
+        text="green",
     )
     Settings.objects.create(
         field_type="EMAIL",
