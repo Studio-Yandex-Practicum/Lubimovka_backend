@@ -1,7 +1,11 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.library.views import ParticipationAPIView, PerformanceAPIView
+from apps.library.views import (
+    AuthorsReadViewSet,
+    ParticipationAPIView,
+    PerformanceAPIView,
+)
 
 router = DefaultRouter()
 router.register(
@@ -9,6 +13,12 @@ router.register(
     PerformanceAPIView,
     basename="performances",
 )
+router.register(
+    "authors",
+    AuthorsReadViewSet,
+    basename="authors",
+)
+
 
 paths = [
     path(

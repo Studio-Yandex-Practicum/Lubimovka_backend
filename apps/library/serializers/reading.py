@@ -9,4 +9,10 @@ class ReadingEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Reading
-        fields = ["id", "name", "description", "director", "dramatist"]
+        fields = (
+            "id",
+            "name",
+            "description",
+            "director",
+            "dramatist",
+        )
