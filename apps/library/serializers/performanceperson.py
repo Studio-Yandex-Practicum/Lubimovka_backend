@@ -10,5 +10,8 @@ class PerformancePersonSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source="person.full_name")
 
     class Meta:
-        fields = ["role", "name"]
+        fields = (
+            "role",
+            "name",
+        )
         model = PerformancePerson

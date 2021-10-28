@@ -8,4 +8,9 @@ class MasterClassEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MasterClass
-        fields = ["id", "name", "description", "host"]
+        fields = (
+            "id",
+            "name",
+            "description",
+            "host",
+        )
