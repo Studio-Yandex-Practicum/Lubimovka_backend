@@ -1,4 +1,4 @@
-name: backend lubimovka build and deploy
+name: telegram message
 
 on:
   [push]
