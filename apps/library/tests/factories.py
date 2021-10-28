@@ -28,7 +28,7 @@ class AchievementFactory(factory.django.DjangoModelFactory):
 class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
     """
     Create SocialNetworkLink object.
-    You should create at list one Author before use this factory.
+    You should create at least one Author before use this factory.
     """
 
     class Meta:
@@ -44,7 +44,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
 class OtherLinkFactory(factory.django.DjangoModelFactory):
     """
     Create OtherLink object.
-    You should create at list one Author before use this factory.
+    You should create at least one Author before use this factory.
     """
 
     class Meta:
@@ -60,7 +60,7 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
 class OtherPlayFactory(factory.django.DjangoModelFactory):
     """
     Create OtherPlay object.
-    You should create at list one Author before use this factory.
+    You should create at least one Author before use this factory.
     """
 
     class Meta:
@@ -81,7 +81,7 @@ class ProgramFactory(factory.django.DjangoModelFactory):
 class PlayFactory(factory.django.DjangoModelFactory):
     """
     Create Play object.
-    You should create at list one Festival and Program
+    You should create at least one Festival and Program
     before use this factory.
     """
 
