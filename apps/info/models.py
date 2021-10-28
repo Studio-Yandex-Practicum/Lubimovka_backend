@@ -242,7 +242,7 @@ class Festival(BaseModel):
     blog_entries = models.CharField(
         max_length=10,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
-    )
+    )  # При изменении - скорректировать фабрику в части создания данного поля
 
     class Meta:
         verbose_name = "Фестиваль"
