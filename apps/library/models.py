@@ -12,10 +12,8 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Image, Person
-from apps.core.utilities.file import (
-    generate_class_name_path,
-    generate_filename,
-)
+from apps.core.utilities.file import generate_class_name_path
+from apps.core.utilities.slugify import slugify
 from apps.info.models import Festival
 from apps.library.validators import year_validator
 
@@ -610,9 +608,18 @@ class ParticipationApplicationFestival(BaseModel):
     def __str__(self):
         return f"{self.last_name}-{self.title}"
 
+    def generate_filename(self):
+        """
+        Generate new filename as "Last_name-Title" format
+        """
+
+        filename = f"{self.last_name}_{self.first_name}___{self.title}"
+        filename = slugify(filename).replace("-", "_")
+        return f"{filename.title()}.{self.file.name.split('.')[1]}"
+
     def save(self, *args, **kwargs):
         """
         Save generated filename
         """
-        self.file.name = generate_filename(self)
+        self.file.name = self.generate_filename()
         super().save(*args, **kwargs)

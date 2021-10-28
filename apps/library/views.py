@@ -1,7 +1,5 @@
 from rest_framework import generics
 
-from apps.library.serializers.participation import ParticipationSerializer
-
 
 class PlaysAPIView(generics.ListAPIView):
     pass
@@ -21,7 +19,3 @@ class PerformanceMediaReviewsAPIView(generics.ListAPIView):
 
 class PerformanceReviewsAPIView(generics.ListAPIView):
     pass
-
-
-class ParticipationAPIView(generics.CreateAPIView):
-    serializer_class = ParticipationSerializer
