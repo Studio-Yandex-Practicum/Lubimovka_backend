@@ -7,6 +7,7 @@ from apps.library.models import (
     MasterClass,
     OtherLink,
     OtherPlay,
+    ParticipationApplicationFestival,
     Performance,
     PerformanceMediaReview,
     PerformancePerson,
@@ -206,12 +207,39 @@ class PerformanceAdmin(admin.ModelAdmin):
     ]
 
 
+class ParticipationAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "verified",
+        "title",
+        "first_name",
+        "last_name",
+        "city",
+        "year",
+        "created",
+        "file",
+    )
+    list_filter = [
+        "year",
+        "verified",
+        "city",
+    ]
+    search_fields = [
+        "title",
+        "first_name",
+        "last_name",
+        "city",
+        "year",
+    ]
+
+
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
+admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
 
 admin.site.register(SocialNetworkLink)
 admin.site.register(OtherPlay)
