@@ -81,12 +81,11 @@ class Person(BaseModel):
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
-
     @property
     def reversed_full_name(self):
         return f"{self.last_name} {self.first_name}"
 
-      
+
 class Settings(BaseModel):
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")
