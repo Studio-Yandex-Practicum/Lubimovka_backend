@@ -18,19 +18,13 @@ jobs:
           to: ${{ secrets.TELEGRAM_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-                  ${{ github.workflow }} success!
+                  Код на сервере обновлён!
 
-                  ${{ github.event }}
+                  Изменения можно посмотреть в коммите:
+                  https://github.com/${{ github.repository }}/commit/${{github.sha}}
 
-                  ${{ github.event_name }}
-                  See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
+                  Сcылка на документацию в Swagger:
+                  https://lubimovka.kiryanov.ru/api/schema/swagger-ui/
 
-                  ${{ github.ref.head }}
-
-                  ${{ github.ref.tag }}
-
-                  ${{ github.base_ref }}
-
-                  ${{ github.head_ref }}
-
-                  ${{  github.event.pull_request }}
+                  Панель администратора:
+                  https://lubimovka.kiryanov.ru/admin/
