@@ -1,15 +1,16 @@
-from django import forms
 from django.contrib import admin
-from django.core.exceptions import ValidationError
 
+from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
     Author,
     MasterClass,
     OtherLink,
     OtherPlay,
+    ParticipationApplicationFestival,
     Performance,
     PerformanceMediaReview,
+    PerformancePerson,
     PerformanceReview,
     Play,
     ProgramType,
@@ -45,10 +46,10 @@ class PlayAdmin(admin.ModelAdmin):
 
 
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         "id",
         "tag",
-    )
+    ]
 
 
 class SocialNetworkLinkInline(admin.TabularInline):
@@ -67,31 +68,31 @@ class OtherPlayInline(admin.StackedInline):
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         "id",
         "person",
         "quote",
         "biography",
-    )
-    inlines = (
+    ]
+    inlines = [
         SocialNetworkLinkInline,
         OtherLinkInline,
         OtherPlayInline,
-    )
-    exclude = (
+    ]
+    exclude = [
         "social_network_links",
         "other_links",
         "other_plays_links",
-    )
+    ]
     empty_value_display = "-пусто-"
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         "media_name",
         "performance",
         "pub_date",
-    )
+    ]
 
     list_filter = [
         "media_name",
@@ -125,12 +126,12 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
 
 
 class ReadingAdmin(admin.ModelAdmin):
-    list_display = (
+    list_display = [
         "play",
         "name",
         "director",
         "dramatist",
-    )
+    ]
     list_filter = [
         "director__last_name",
         "dramatist__last_name",
@@ -180,20 +181,16 @@ class PerformanceMediaReviewInline(admin.TabularInline):
     max_num = 8
 
 
-class PerformanceForm(forms.ModelForm):
-    class Meta:
-        model = Performance
-        fields = "__all__"
-
-    def clean(self):
-        images_in_block = self.cleaned_data.get("images_in_block")
-        if images_in_block.count() > 8:
-            raise ValidationError("Too many images!")
-        return self.cleaned_data
+class PerformanceTeamInline(admin.TabularInline):
+    model = PerformancePerson
+    extra = 1
 
 
 class PerformanceAdmin(admin.ModelAdmin):
-    filter_horizontal = ("images_in_block",)
+    filter_horizontal = [
+        "images_in_block",
+        "persons",
+    ]
     list_filter = [
         "age_limit",
     ]
@@ -202,10 +199,37 @@ class PerformanceAdmin(admin.ModelAdmin):
         "name",
         "text",
     ]
-    form = PerformanceForm
+    form = PerformanceAdminForm
     inlines = [
         PerformanceReviewInline,
         PerformanceMediaReviewInline,
+        PerformanceTeamInline,
+    ]
+
+
+class ParticipationAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "verified",
+        "title",
+        "first_name",
+        "last_name",
+        "city",
+        "year",
+        "created",
+        "file",
+    )
+    list_filter = [
+        "year",
+        "verified",
+        "city",
+    ]
+    search_fields = [
+        "title",
+        "first_name",
+        "last_name",
+        "city",
+        "year",
     ]
 
 
@@ -215,6 +239,7 @@ admin.site.register(Achievement, AchievementAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
+admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
 
 admin.site.register(SocialNetworkLink)
 admin.site.register(OtherPlay)

@@ -1,0 +1,30 @@
+name: telegram message
+
+on:
+  [push]
+
+
+jobs:
+  send_message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: send message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: ${{ github.workflow }} success!
+
+                  ${{ github.event }}
+
+                  ${{ github.event_name }}
+
+                  ${{ github.ref.head }}
+
+                  ${{ github.ref.tag }}
+
+                  ${{ github.base_ref }}
+
+                  ${{ github.head_ref }}
+
+                  ${{  github.event.pull_request }}

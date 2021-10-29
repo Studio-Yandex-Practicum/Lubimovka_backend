@@ -9,4 +9,4 @@ class FestivalTeamsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FestivalTeam
-        exclude = ["created", "modified"]
+        exclude = ("created", "modified")

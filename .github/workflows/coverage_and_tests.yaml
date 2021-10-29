@@ -1,4 +1,4 @@
-name: run tests with pytest
+name: Tests with pytest and coverage report
 
 on:
   push:
@@ -10,8 +10,8 @@ on:
       - master
 
 jobs:
-  tests:
-    name: Run test.
+  tests_and_coverage:
+    name: Run tests and Generate Coverage Report
     runs-on: ubuntu-latest
     steps:
     -
@@ -30,3 +30,14 @@ jobs:
     -
       name: Test with pytest
       run: pytest
+    -
+      name: Generate Report
+      run: |
+        pip install coverage
+        coverage run -m pytest
+    -
+      name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v1
+      with:
+        files: ./lib.c.gcov
+        token: ${{ secrets.CODECOV_TOKEN }}

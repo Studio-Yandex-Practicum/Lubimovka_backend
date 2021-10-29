@@ -1,6 +1,6 @@
 [![codestyle PEP8](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/codestyle_pep8.yaml)
-[![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/run_tests.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/run_tests.yaml)
 [![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/backend_deploy.yaml)
+[![codecov](https://codecov.io/github.com/Studio-Yandex-Practicum/Lubimovka_backend/branch/develop/graph/badge.svg?token=I7JK9K2B6T)](https://codecov.io/github.com/Studio-Yandex-Practicum/Lubimovka_backend)
 # Бэкенд "Любимовка"
 
 ## Что сделано и чем отличается от структуры по умолчанию
