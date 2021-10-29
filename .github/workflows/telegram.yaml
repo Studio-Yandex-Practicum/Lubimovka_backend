@@ -8,16 +8,22 @@ jobs:
   send_message:
     runs-on: ubuntu-latest
     steps:
+      - name: Print GitHub context
+        run: echo "$GITHUB_CONTEXT"
+        env:
+          GITHUB_CONTEXT: ${{ toJson(github) }}
       - name: send message
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: ${{ github.workflow }} success!
+          message: |
+                  ${{ github.workflow }} success!
 
                   ${{ github.event }}
 
                   ${{ github.event_name }}
+                  See changes: https://github.com/${{ github.repository }}/commit/${{github.sha}}
 
                   ${{ github.ref.head }}
 
