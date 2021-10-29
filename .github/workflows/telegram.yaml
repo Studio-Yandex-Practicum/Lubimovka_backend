@@ -27,4 +27,4 @@ jobs:
 
                   ${{ github.head_ref }}
 
-                  ${{ github }}
+                  ${{  github.event.pull_request }}
