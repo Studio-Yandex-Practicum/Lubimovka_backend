@@ -42,6 +42,7 @@ THIRD_PARTY_APPS = [
     "django_filters",
     "drf_spectacular",
     "phonenumber_field",
+    "markdownx",
 ]
 LOCAL_APPS = [
     "apps.users",
@@ -51,6 +52,7 @@ LOCAL_APPS = [
     "apps.library",
     "apps.articles",
     "apps.info",
+    "apps.static_pages",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

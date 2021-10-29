@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.conf.urls import url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
@@ -58,6 +59,7 @@ urlpatterns = [
         route="api/schema/",
         view=include(api_schema_patterns),
     ),
+    url(r"^markdownx/", include("markdownx.urls")),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
 
 
