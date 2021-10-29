@@ -1,22 +1,12 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.articles.views import BlogAPIView, NewsAPIView, ProjectsAPIView
+from apps.articles.views import ProjectsViewSet
 
 router = DefaultRouter()
 router.register(
-    "news",
-    NewsAPIView,
-    basename="news",
-)
-router.register(
-    "blog",
-    BlogAPIView,
-    basename="blog",
-)
-router.register(
     "projects",
-    ProjectsAPIView,
+    ProjectsViewSet,
     basename="projects",
 )
 

@@ -22,8 +22,8 @@ apps_patterns = [
     # path("", include("apps.users.urls")),
     # path("", include("apps.core.urls")),
     path("", include("apps.afisha.urls")),
+    path("", include("apps.articles.urls")),
     path("", include("apps.library.urls")),
-    # path("", include("apps.articles.urls")),
     path("", include("apps.info.urls")),
 ]
 
