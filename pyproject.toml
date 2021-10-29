@@ -38,6 +38,8 @@ gunicorn = "^20.1.0"
 drf-spectacular = "^0.18.2"
 django-filter = "^2.4.0"
 Pillow = "^8.3.2"
+django-gfklookupwidget = "^1.0.9"
+django-admin-sortable2 = "^1.0.2"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "^5.2.0"}
 factory-boy = "^3.2.0"
 
