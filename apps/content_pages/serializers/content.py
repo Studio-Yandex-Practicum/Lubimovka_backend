@@ -27,7 +27,7 @@ class ContentObjectRelatedField(serializers.RelatedField):
     Custom related field to use for the 'content_object' generic relationship.
     """
 
-    def to_representation(self, value):
+    def to_representation(self, obj):
         """Serialize content objects to a simple representation."""
 
         content_item_serializers = {
@@ -41,13 +41,13 @@ class ContentObjectRelatedField(serializers.RelatedField):
             VideosBlock: VideosBlockSerializer,
         }
 
-        content_item_class = value._meta.model
+        content_item_class = obj._meta.model
         serializer = content_item_serializers.get(content_item_class, None)
 
         if not serializer:
             raise Exception("Unexpected type of content object block.")
 
-        serializer = serializer(value)
+        serializer = serializer(obj, context=self.context)
         return serializer.data
 
 

@@ -6,7 +6,10 @@ from apps.core.models import BaseModel
 class AbstractItemBase(BaseModel):
     """Base abstract model for 1-item 'content' block."""
 
-    title = models.CharField(max_length=250)
+    title = models.CharField(
+        max_length=250,
+        verbose_name="Заголовок",
+    )
 
     class Meta:
         abstract = True
@@ -18,7 +21,10 @@ class AbstractItemBase(BaseModel):
 class Image(AbstractItemBase):
     """Image with title for 'content' blocks."""
 
-    image = models.FileField(upload_to="content_images")
+    image = models.ImageField(
+        upload_to="content_images",
+        verbose_name="Изображение",
+    )
 
     class Meta:
         verbose_name = "Изображение"
@@ -45,6 +51,7 @@ class Video(AbstractItemBase):
     description = models.TextField(
         max_length=500,
         blank=True,
+        verbose_name="Описание видео",
     )
     url = models.URLField()
 

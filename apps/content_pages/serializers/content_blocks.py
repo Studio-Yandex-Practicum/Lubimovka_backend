@@ -2,11 +2,6 @@ from rest_framework import serializers
 
 from apps.content_pages.models import (
     ImagesBlock,
-    OrderedImage,
-    OrderedPerformance,
-    OrderedPerson,
-    OrderedPlay,
-    OrderedVideo,
     PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
@@ -21,107 +16,107 @@ from apps.content_pages.serializers import (
 )
 
 
-class OrderedItemSerializerField(serializers.RelatedField):
+class SlugRelatedSerializerField(serializers.SlugRelatedField):
     """
-    A custom field to serialize 'OrderedItem' object.
-    It takes 'value' class and finds related serializer. If none of
-    serializers found exception raises.
-
-    OrderedObject has to have item attribute.
+    The field works exactly as SlugRelatedField but returns full object
+    serialized with 'serializer_class'.
     """
 
-    def to_representation(self, value):
-        assert hasattr(value, "item"), f"{value} has to have 'item' attribute."
+    def __init__(self, serializer_class=None, **kwargs):
+        assert (
+            serializer_class is not None
+        ), "The 'serializer_class' argument is required."
+        self.serializer_class = serializer_class
+        super().__init__(**kwargs)
 
-        item_serializers = {
-            OrderedImage: ImageSerializer,
-            OrderedPerformance: PerformanceSerializer,
-            OrderedPerson: PersonSerializer,
-            OrderedPlay: PlaySerializer,
-            OrderedVideo: VideoSerializer,
-        }
-
-        item_class = value._meta.model
-        serializer = item_serializers.get(item_class, None)
-
-        if not serializer:
-            raise Exception("Unexpected type of ordered object")
-
-        serializer = serializer(value.item)
+    def to_representation(self, obj):
+        item = getattr(obj, self.slug_field)
+        serializer = self.serializer_class(item, context=self.context)
         return serializer.data
 
 
 class VideosBlockSerializer(serializers.ModelSerializer):
+    serializers.SlugRelatedField
 
-    items = OrderedItemSerializerField(
+    items = SlugRelatedSerializerField(
         many=True,
         read_only=True,
         source="ordered_videos",
+        slug_field="item",
+        serializer_class=VideoSerializer,
     )
 
     class Meta:
         model = VideosBlock
-        fields = [
+        fields = (
             "title",
             "items",
-        ]
+        )
 
 
 class ImagesBlockSerializer(serializers.ModelSerializer):
-    items = OrderedItemSerializerField(
+    items = SlugRelatedSerializerField(
         many=True,
         read_only=True,
         source="ordered_images",
+        slug_field="item",
+        serializer_class=ImageSerializer,
     )
 
     class Meta:
         model = ImagesBlock
-        fields = [
+        fields = (
             "title",
             "items",
-        ]
+        )
 
 
 class PerformancesBlockSerializer(serializers.ModelSerializer):
-    items = OrderedItemSerializerField(
+    items = SlugRelatedSerializerField(
         many=True,
         read_only=True,
         source="ordered_performances",
+        slug_field="item",
+        serializer_class=PerformanceSerializer,
     )
 
     class Meta:
         model = PerformancesBlock
-        fields = [
+        fields = (
             "title",
             "items",
-        ]
+        )
 
 
 class PersonsBlockSerializer(serializers.ModelSerializer):
-    items = OrderedItemSerializerField(
+    items = SlugRelatedSerializerField(
         many=True,
         read_only=True,
         source="ordered_persons",
+        slug_field="item",
+        serializer_class=PersonSerializer,
     )
 
     class Meta:
         model = PersonsBlock
-        fields = [
+        fields = (
             "title",
             "items",
-        ]
+        )
 
 
 class PlaysBlockSerializer(serializers.ModelSerializer):
-    items = OrderedItemSerializerField(
+    items = SlugRelatedSerializerField(
         many=True,
         read_only=True,
         source="ordered_plays",
+        slug_field="item",
+        serializer_class=PlaySerializer,
     )
 
     class Meta:
         model = PlaysBlock
-        fields = [
+        fields = (
             "title",
             "items",
-        ]
+        )

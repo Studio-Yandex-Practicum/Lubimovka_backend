@@ -20,9 +20,9 @@ class AbstractOrderedItemBase(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Промежуточная модель %(class)s"
+        verbose_name = "Промежуточная модель"
         abstract = True
-        ordering = ["order"]
+        ordering = ("order",)
 
     def __str__(self):
         return f"{self.order} — {self.item}"

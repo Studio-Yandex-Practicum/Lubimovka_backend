@@ -6,10 +6,13 @@ from apps.core.models import BaseModel
 
 
 class AbstractContentPage(BaseModel):
-    """Model with basic CMS functionality.
+    """Шаблон модели с конструктором.
 
-    The model is abstract. Please subclass it and 'Content' model to create
-    new model with CMS functionality.
+    Для создания полноценной модели с конструктором создайте две новые модели
+    унаследовав их от 'AbstractContentPage' и 'AbstractContent'.
+
+    Модель обладает обычными полями (title, description). К ней подключается
+    блок с конструктором.
     """
 
     title = models.CharField(
@@ -25,56 +28,65 @@ class AbstractContentPage(BaseModel):
         abstract = True
         verbose_name = "Шаблон объекта с сложной версткой"
         verbose_name_plural = "Шаблоны объектов с сложной версткой"
-        ordering = ["-modified"]
+        ordering = ("-modified",)
 
     def __str__(self):
         return self.title
 
 
 class AbstractContent(models.Model):
-    """The base block of the CMS ='ContentPage' object.
+    """Шаблон базового блока конструктора.
 
-    The model is abstract. Please subclass it and set the right 'ContenPage'
-    model in 'content_type' field.
-    You can also limit available models for 'content' with 'limit_choices_to'
-    attribute.
+    При наследовании укажите модель к которой будут подключаться блоки
+    конструктора (реальную модель вместо 'AbstractContentPage' в поле
+    'content_page').
 
-    The block has several fields/attributes:
-        1. foreign key to 'parent' ContentPage object
-        2. 'content' element. The type of 'content' objects may vary.
-            To handle it we have to use GenereForeginKey relation and 3 fields:
-                - content_type
-                - object_id
-                - item
-            Please go through django-docs for any question.
-        3. 'order' field. It is used for managing the order of the 'content'
-            elements in 'parent' object.
+    Для ограничения количества типов объектов в конструкторе задайте их список
+    переопределив поле 'content' и атрибут 'limit_choices_to'.
+
+    Описание полей:
+        1. 'content_page' - foreign key для подключения к родительской
+            'AbstractContentPage' модели
+        2. 'item' - элемент 'контента'. Так как элементы контента могут быть
+            разных типов реализуется с помощью ключа GenereForeginKey и двух
+            дополнительных полей.
+                - content_type = указывает на модель с типом контента
+                - object_id = указывает на id объекта типа 'content_type'
+            Т.е. 3 поля в сумме дают GenereForeginKey.
+            Если остаются вопросы по реализации пожалуйста смотрите
+            документацию django.
+        3. 'order' — поле для упорядочивания блоков конструктора относительно
+            родительского 'AbstractContentPage' объекта.
     """
 
     content_page = models.ForeignKey(
         AbstractContentPage,
         related_name="contents",
         on_delete=models.CASCADE,
-        verbose_name="Блок элементов сложной верстки",
+        verbose_name="Страница с конструктором",
     )
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,
         limit_choices_to={"app_label": "content_pages"},
+        verbose_name="Тип объекта",
     )
-    object_id = models.PositiveIntegerField()
+    object_id = models.PositiveIntegerField(
+        verbose_name="ID объекта",
+    )
     item = GenericForeignKey()
-    order = models.PositiveIntegerField(
+    order = models.PositiveSmallIntegerField(
         default=0,
         blank=False,
         null=False,
+        verbose_name="Порядок",
     )
 
     class Meta:
         abstract = True
-        ordering = ["order"]
-        verbose_name = "Элемент сложной верстки"
-        verbose_name_plural = "Элементы сложной верстки"
+        ordering = ("order",)
+        verbose_name = "Блок/элемент конструктора"
+        verbose_name_plural = "Блоки/элементы конструктора"
 
     def __str__(self):
-        return f"Блок сложной верстки — {self.item}"
+        return f"Блок/элемент — {self.item}"

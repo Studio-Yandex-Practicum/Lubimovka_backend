@@ -7,29 +7,29 @@ from apps.library.models import Performance, Person, Play
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = [
+        fields = (
             "title",
             "image",
-        ]
+        )
 
 
 class LinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Link
-        fields = [
+        fields = (
             "title",
             "description",
             "url",
-        ]
+        )
 
 
 class VideoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Video
-        fields = [
+        fields = (
             "title",
             "url",
-        ]
+        )
 
 
 class PerformanceSerializer(serializers.ModelSerializer):

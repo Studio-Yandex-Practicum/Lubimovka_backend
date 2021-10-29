@@ -1,13 +1,8 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
-from django.db import models
-from gfklookupwidget.widgets import GfkLookupWidget
 
 from apps.content_pages.models import (
-    AbstractContent,
-    Image,
     ImagesBlock,
-    Link,
     OrderedImage,
     OrderedPerformance,
     OrderedPerson,
@@ -16,7 +11,6 @@ from apps.content_pages.models import (
     PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
-    Video,
     VideosBlock,
 )
 
@@ -66,27 +60,6 @@ class PersonsBlockAdmin(admin.ModelAdmin):
     inlines = [OrderedPersonInline]
 
 
-class BaseContentInlineMixin:
-    """Sets custom widget to GFKey field.
-
-    It adds magnifier icon next to Generic Foreign Key and helps to choose
-    item.
-    """
-
-    formfield_overrides = {
-        models.PositiveIntegerField: {
-            "widget": GfkLookupWidget(
-                content_type_field_name="content_type",
-                parent_field=AbstractContent._meta.get_field("content_type"),
-            )
-        },
-    }
-    extra = 0
-
-
-admin.site.register(Image)
-admin.site.register(Video)
-admin.site.register(Link)
 admin.site.register(ImagesBlock, ImagesBlockAdmin)
 admin.site.register(VideosBlock, VideosBlockAdmin)
 admin.site.register(PerformancesBlock, PerformancesBlockAdmin)
