@@ -1,4 +1,4 @@
-name: backend lubimovka build and deploy
+name: develop backend build and deploy
 
 on:
   push:
@@ -114,8 +114,8 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env
 
             # re-run backend docker container
-            sudo docker-compose -f develop_deploy.yaml stop
-            sudo docker-compose -f develop_deploy.yaml rm -f backend
+            docker pull $REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME:develop
+            sudo docker-compose -f develop_deploy.yaml down
             sudo docker-compose -f develop_deploy.yaml up -d
 
   send_message:
@@ -127,4 +127,14 @@ jobs:
         with:
           to: ${{ secrets.TELEGRAM_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: ${{ github.workflow }} success!
+          message: |
+                  Код на сервере разработки обновлён!
+
+                  Изменения можно посмотреть в коммите:
+                  https://github.com/${{ github.repository }}/commit/${{github.sha}}
+
+                  Сcылка на документацию в Swagger:
+                  https://lubimovka.kiryanov.ru/api/schema/swagger-ui/
+
+                  Панель администратора:
+                  https://lubimovka.kiryanov.ru/admin/
