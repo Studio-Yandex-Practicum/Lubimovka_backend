@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13.3
+    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+  backend:
+    image: "ghcr.io/studio-yandex-practicum/lubimovka_backend:develop"
+    restart: always
+    volumes:
+      - static_value:/code/staticfiles/
+      - media_value:/code/media/
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+  migrations:
+    image: "ghcr.io/studio-yandex-practicum/lubimovka_backend:develop"
+    volumes:
+      - static_value:/code/staticfiles/
+      - media_value:/code/media/
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput"
+    depends_on:
+      - backend
+    env_file:
+      - .env
+  swag:
+    image: ghcr.io/linuxserver/swag
+    container_name: swag
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=Europe/Moscow
+      - VALIDATION=http
+      - CERTPROVIDER=zerossl
+    env_file:
+      - .env
+    volumes:
+      - ./swag_config/:/config/
+      - ./swag_nginx.conf:/config/nginx/site-confs/default
+      - static_value:/config/static/
+      - media_value:/config/media/
+    ports:
+      - 443:443
+      - 80:80
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  static_value:
+  media_value:
