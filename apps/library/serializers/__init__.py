@@ -4,6 +4,7 @@ from .performance import PerformanceEventSerializer, PerformanceSerializer
 from .performanceperson import PerformancePersonSerializer
 from .play import PlaySerializer
 from .reading import ReadingEventSerializer
+from .searchresult import SearchResultSerializer
 
 __all__ = [
     MasterClassEventSerializer,
@@ -13,4 +14,5 @@ __all__ = [
     PerformanceSerializer,
     PerformancePersonSerializer,
     ReadingEventSerializer,
+    SearchResultSerializer,
 ]

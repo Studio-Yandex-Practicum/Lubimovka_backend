@@ -1,7 +1,11 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.library.views import PerformanceAPIView, PlayAPIView
+from apps.library.views import (
+    PerformanceAPIView,
+    PlayAPIView,
+    SearchResultsAPIView,
+)
 
 router = DefaultRouter()
 router.register(
@@ -13,6 +17,11 @@ router.register(
     "plays",
     PlayAPIView,
     basename="plays",
+)
+router.register(
+    "search-result",
+    SearchResultsAPIView,
+    basename="search-result",
 )
 
 library_urls = [
