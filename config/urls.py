@@ -20,10 +20,10 @@ handler500 = error500
 
 apps_patterns = [
     # path("", include("apps.users.urls")),
-    path("", include("apps.main.urls")),
+    # path("", include("apps.core.urls")),
     path("", include("apps.afisha.urls")),
+    path("", include("apps.articles.urls")),
     path("", include("apps.library.urls")),
-    # path("", include("apps.articles.urls")),
     path("", include("apps.info.urls")),
 ]
 
