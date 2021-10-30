@@ -115,6 +115,9 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env
 
             # Pull docker image from github packages with tag develop
+            echo $REGISTRY/$ORGANIZATION/$IMAGE_NAME:develop
+            echo ${{env.REGISTRY}}/${{env.ORGANIZATION}}/${{env.IMAGE_NAME}}:develop
+
             docker pull $REGISTRY/$ORGANIZATION/$IMAGE_NAME:develop
 
             # re-run backend docker container
