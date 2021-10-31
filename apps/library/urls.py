@@ -6,7 +6,7 @@ from apps.library.views import (
     ParticipationAPIView,
     PerformanceAPIView,
     PlayAPIView,
-    SearchResultsAPIView,
+    SearchResultAPIViewSet,
 )
 
 router = DefaultRouter()
@@ -22,7 +22,7 @@ router.register(
 )
 router.register(
     "search-result",
-    SearchResultsAPIView,
+    SearchResultAPIViewSet,
     basename="search-result",
 )
 router.register(

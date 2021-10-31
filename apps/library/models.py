@@ -138,6 +138,9 @@ class Author(BaseModel):
     )
 
     class Meta:
+        ordering = [
+            "person__last_name",
+        ]
         verbose_name = "Автор"
         verbose_name_plural = "Авторы"
 

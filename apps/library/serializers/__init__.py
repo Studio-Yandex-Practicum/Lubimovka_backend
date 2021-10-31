@@ -1,4 +1,8 @@
-from .author import AuthorListSerializer, AuthorRetrieveSerializer
+from .author import (
+    AuthorForSearchSerializer,
+    AuthorListSerializer,
+    AuthorRetrieveSerializer,
+)
 from .masterclass import MasterClassEventSerializer
 from .performance import PerformanceEventSerializer, PerformanceSerializer
 from .performanceperson import PerformancePersonSerializer
@@ -9,6 +13,7 @@ from .searchresult import SearchResultSerializer
 __all__ = [
     AuthorListSerializer,
     AuthorRetrieveSerializer,
+    AuthorForSearchSerializer,
     MasterClassEventSerializer,
     PerformanceEventSerializer,
     PlaySerializer,

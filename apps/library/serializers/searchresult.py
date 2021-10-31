@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .author import AuthorNameSerializer
+from .author import AuthorListSerializer
 from .play import PlaySerializer
 
 # from apps.library.models import Author, Play
@@ -8,4 +8,4 @@ from .play import PlaySerializer
 
 class SearchResultSerializer(serializers.Serializer):
     plays = PlaySerializer()
-    authors = AuthorNameSerializer()
+    authors = AuthorListSerializer()
