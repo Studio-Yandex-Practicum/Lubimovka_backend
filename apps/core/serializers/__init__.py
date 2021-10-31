@@ -1,6 +1,5 @@
-from .image import ImageSerializer, MarkdownSerializer
+from .image import ImageSerializer
 
 __all__ = [
     ImageSerializer,
-    MarkdownSerializer,
 ]

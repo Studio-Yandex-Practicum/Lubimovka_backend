@@ -1,6 +1,5 @@
 from django.urls import include, path
 
-from apps.core.views import MarkdownViewSet
 from apps.info.views import (
     FestivalTeamsViewSet,
     IdeologyViewSet,
@@ -11,7 +10,7 @@ from apps.info.views import (
     WhatWeDoViewSet,
 )
 
-festival_urls = [
+about_festival_urls = [
     path(
         "what-we-do/",
         WhatWeDoViewSet.as_view(),
@@ -42,7 +41,7 @@ festival_urls = [
 info_urls = [
     path(
         "about-festival/",
-        include(festival_urls),
+        include(about_festival_urls),
     ),
     path(
         "partners/",
@@ -54,16 +53,18 @@ info_urls = [
         QuestionCreateAPI.as_view(),
         name="questions",
     ),
+]
+
+app_prefix = [
     path(
-        "mark/",
-        MarkdownViewSet.as_view(),
-        name="mark",
-    ),
+        "info/",
+        include(info_urls),
+    )
 ]
 
 urlpatterns = [
     path(
         "v1/",
-        include(info_urls),
+        include(app_prefix),
     ),
 ]

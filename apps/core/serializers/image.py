@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.core.models import Image, MarkdownModel
+from apps.core.models import Image
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -11,9 +11,3 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = [
             "image",
         ]
-
-
-class MarkdownSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = MarkdownModel
-        exclude = ("created", "modified")

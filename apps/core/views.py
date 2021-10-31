@@ -1,9 +1,5 @@
 from django.http import JsonResponse
 from rest_framework import status
-from rest_framework.generics import ListAPIView
-
-from apps.core.models import MarkdownModel
-from apps.core.serializers import MarkdownSerializer
 
 
 def error500(request, *args, **kwargs):
@@ -28,9 +24,3 @@ def error404(request, exception, *args, **kwargs):
     """
     data = {"error": "Http404", "message": "Запрошенный ресурс не найден"}
     return JsonResponse(data, status=status.HTTP_404_NOT_FOUND)
-
-
-class MarkdownViewSet(ListAPIView):
-    queryset = MarkdownModel.objects.all()
-    serializer_class = MarkdownSerializer
-    pagination_class = None
