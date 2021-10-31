@@ -41,6 +41,7 @@ THIRD_PARTY_APPS = [
     "rest_framework",
     "django_filters",
     "drf_spectacular",
+    "adminsortable2",
     "phonenumber_field",
     "markdownx",
 ]
@@ -53,6 +54,7 @@ LOCAL_APPS = [
     "apps.articles",
     "apps.info",
     "apps.static_pages",
+    "apps.content_pages",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

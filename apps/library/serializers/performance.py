@@ -18,10 +18,10 @@ class PerformanceSerializer(serializers.ModelSerializer):
     images_in_block = ImageSerializer(many=True)
 
     class Meta:
-        exclude = [
+        exclude = (
             "created",
             "modified",
-        ]
+        )
         model = Performance
 
 
@@ -30,4 +30,8 @@ class PerformanceEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Performance
-        fields = ["id", "name", "description"]
+        fields = (
+            "id",
+            "name",
+            "description",
+        )

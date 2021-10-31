@@ -1,5 +1,9 @@
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import (
+    FileExtensionValidator,
+    MaxValueValidator,
+    MinValueValidator,
+)
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils import timezone
@@ -8,7 +12,10 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Image, Person
+from apps.core.utilities.file import generate_class_name_path
+from apps.core.utilities.slugify import slugify
 from apps.info.models import Festival
+from apps.library.validators import year_validator
 
 
 class ProgramType(BaseModel):
@@ -27,11 +34,6 @@ class ProgramType(BaseModel):
 
 
 class Play(BaseModel):
-    authors = models.ManyToManyField(
-        "Author",
-        related_name="plays",
-        verbose_name="Автор",
-    )
     name = models.CharField(
         max_length=200,
         unique=True,
@@ -46,18 +48,19 @@ class Play(BaseModel):
             MinValueValidator(1990),
             MaxValueValidator(timezone.now().year),
         ],
-        unique=True,
         verbose_name="Год написания пьесы",
     )
     url_download = models.URLField(
         max_length=200,
         blank=True,
+        null=True,
         verbose_name="Ссылка на скачивание пьесы",
         unique=True,
     )
     url_reading = models.URLField(
         max_length=200,
         blank=True,
+        null=True,
         verbose_name="Ссылка на читку",
         unique=True,
     )
@@ -111,7 +114,7 @@ class Author(BaseModel):
     person = models.OneToOneField(
         Person,
         on_delete=models.CASCADE,
-        verbose_name="Автор",
+        verbose_name="Человек",
     )
     quote = models.CharField(
         max_length=200,
@@ -124,31 +127,14 @@ class Author(BaseModel):
     achievements = models.ManyToManyField(
         Achievement,
         verbose_name="Достижения",
-        blank=True,
-    )
-    social_network_links = models.ManyToManyField(
-        "SocialNetworkLink",
-        verbose_name="Ссылки на социальные сети",
         related_name="authors",
         blank=True,
     )
-    other_links = models.ManyToManyField(
-        "OtherLink",
-        verbose_name="Ссылки на внешние ресурсы",
-        related_name="authors",
-        blank=True,
-    )
-    author_plays_links = models.ManyToManyField(
+    plays = models.ManyToManyField(
         Play,
-        verbose_name="Ссылки на пьесы автора",
-        related_name="authors_links",
+        related_name="authors",
         blank=True,
-    )
-    other_plays_links = models.ManyToManyField(
-        "OtherPlay",
-        blank=True,
-        verbose_name="Ссылки на другие пьесы",
-        related_name="authors_links",
+        verbose_name="Пьесы автора",
     )
 
     class Meta:
@@ -163,12 +149,14 @@ class Author(BaseModel):
             raise ValidationError("Для автора необходимо указать email")
         if not self.person.city:
             raise ValidationError("Для автора необходимо указать город")
-        if not self.person.image:
-            raise ValidationError("Для автора необходимо выбрать фото")
+
+    @property
+    def image(self):
+        return self.person.image
 
 
 class SocialNetworkLink(BaseModel):
-    class SocialNetwor(models.TextChoices):
+    class SocialNetwork(models.TextChoices):
         FACEBOOK = "fb", _("Facebook")
         INSTAGRAM = "inst", _("Instagram")
         YOUTUBE = "ytube", _("YouTube")
@@ -178,11 +166,12 @@ class SocialNetworkLink(BaseModel):
     author = models.ForeignKey(
         Author,
         on_delete=models.CASCADE,
+        related_name="social_networks",
         verbose_name="Автор",
     )
     name = models.CharField(
         max_length=200,
-        choices=SocialNetwor.choices,
+        choices=SocialNetwork.choices,
         verbose_name="Название",
     )
     link = models.URLField(
@@ -207,6 +196,7 @@ class SocialNetworkLink(BaseModel):
 class OtherLink(BaseModel):
     author = models.ForeignKey(
         Author,
+        related_name="other_links",
         on_delete=models.CASCADE,
         verbose_name="Автор",
     )
@@ -246,6 +236,7 @@ class OtherPlay(BaseModel):
     author = models.ForeignKey(
         Author,
         on_delete=models.CASCADE,
+        related_name="other_plays",
         verbose_name="Автор",
     )
     name = models.CharField(
@@ -532,12 +523,16 @@ class MasterClass(BaseModel):
 
 
 class ParticipationApplicationFestival(BaseModel):
+    """
+    Заявки на участие в фестивале
+    """
+
     first_name = models.CharField(
-        max_length=200,
+        max_length=50,
         verbose_name="Имя",
     )
     last_name = models.CharField(
-        max_length=200,
+        max_length=50,
         verbose_name="Фамилия",
     )
     birthday = models.DateField(
@@ -556,20 +551,59 @@ class ParticipationApplicationFestival(BaseModel):
         max_length=200,
         verbose_name="Название пьесы",
     )
-    year = models.CharField(
-        max_length=4,
+    year = models.PositiveSmallIntegerField(
+        validators=[year_validator],
         verbose_name="Год написания",
     )
-    file_link = models.URLField(
-        verbose_name="Ссылка на файл",
+    file = models.FileField(
+        validators=[
+            FileExtensionValidator(["doc", "docx", "txt", "odt", "pdf"])
+        ],
+        verbose_name="Файл",
+        upload_to=generate_class_name_path,
     )
-    status = models.BooleanField(
-        verbose_name="Статус",
+
+    BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
+    verified = models.BooleanField(
+        default=False,
+        verbose_name="Проверена?",
+        choices=BOOL_CHOICES,
     )
 
     class Meta:
         verbose_name_plural = "Заявления на участие"
         verbose_name = "Заявление на участие"
+        constraints = [
+            models.UniqueConstraint(
+                fields=[
+                    "first_name",
+                    "last_name",
+                    "birthday",
+                    "city",
+                    "phone_number",
+                    "email",
+                    "title",
+                    "year",
+                ],
+                name="unique_application",
+            ),
+        ]
 
     def __str__(self):
-        return self.title
+        return f"{self.last_name}-{self.title}"
+
+    def generate_filename(self):
+        """
+        Generate new filename as "Last_name-Title" format
+        """
+
+        filename = f"{self.last_name}_{self.first_name}___{self.title}"
+        filename = slugify(filename).replace("-", "_")
+        return f"{filename.title()}.{self.file.name.split('.')[1]}"
+
+    def save(self, *args, **kwargs):
+        """
+        Save generated filename
+        """
+        self.file.name = self.generate_filename()
+        super().save(*args, **kwargs)
