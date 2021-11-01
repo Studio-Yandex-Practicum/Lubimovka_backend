@@ -26,6 +26,11 @@ def add_settings(apps, schema_editor):
         settings_key="Form_to_submit_a_play",
         boolean=True,
     )
+    Settings.objects.create(
+        field_type="TEXT",
+        settings_key="Subject_in_email",
+        text="lubimovka",
+    )
 
 
 class Migration(migrations.Migration):
