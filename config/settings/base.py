@@ -44,6 +44,7 @@ THIRD_PARTY_APPS = [
     "adminsortable2",
     "phonenumber_field",
     "markdownx",
+    "drf_multiple_model",
 ]
 LOCAL_APPS = [
     "apps.users",
