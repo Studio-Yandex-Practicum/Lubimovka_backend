@@ -5,11 +5,23 @@ from markdownx.widgets import AdminMarkdownxWidget
 from apps.static_pages.models import StaticPagesModel
 
 
-class MyModelAdmin(admin.ModelAdmin):
+class StaticPagesModelAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.TextField: {"widget": AdminMarkdownxWidget},
     }
-    list_display = ("page_type",)
+    exclude = ("title", "static_page_url")
+
+    def has_add_permission(self, request, obj=None):
+        """
+        removes the save and add new button
+        """
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        """
+        removes the delete button
+        """
+        return False
 
 
-admin.site.register(StaticPagesModel, MyModelAdmin)
+admin.site.register(StaticPagesModel, StaticPagesModelAdmin)

@@ -2,19 +2,18 @@ from django.urls import include, path
 
 from apps.info.views import (
     FestivalTeamsViewSet,
-    IdeologyViewSet,
     PartnersViewSet,
     QuestionCreateAPI,
     SponsorViewSet,
     VolunteersViewSet,
-    WhatWeDoViewSet,
 )
+from apps.static_pages.views import StaticPagesView
 
 about_festival_urls = [
     path(
-        "what-we-do/",
-        WhatWeDoViewSet.as_view(),
-        name="what-we-do",
+        "<slug:static_page_url>/",
+        StaticPagesView.as_view(),
+        name="static_page",
     ),
     path(
         "festival-teams/",
@@ -30,11 +29,6 @@ about_festival_urls = [
         "volunteers/",
         VolunteersViewSet.as_view(),
         name="volunteers",
-    ),
-    path(
-        "ideology/",
-        IdeologyViewSet.as_view(),
-        name="ideology",
     ),
 ]
 

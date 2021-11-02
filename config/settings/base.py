@@ -197,4 +197,5 @@ EMAIL_SEND_TO = env("EMAIL_SEND_TO", default="user@none.ru")
 # See markdownx docs https://neutronx.github.io/django-markdownx/
 MARKDOWNX_MARKDOWN_EXTENSIONS = ("markdown.extensions.extra",)
 MARKDOWNX_MEDIA_PATH = "static_pages/"
-MARKDOWNX_IMAGE_MAX_SIZE = {"size": (1000, 1000), "quality": 90}
+MARKDOWNX_URLS_PATH = "/admin/markdownx/markdownify/"
+MARKDOWNX_IMAGE_MAX_SIZE = {"size": (1000, 1000), "quality": 100}
