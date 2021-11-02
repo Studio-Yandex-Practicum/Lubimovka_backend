@@ -60,7 +60,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
     )
     other_links = OtherLinkSerializer(many=True)
     plays = PlaySerializer(many=True)
-    other_plays_links = OtherPlayLinksSerializer(many=True)
+    other_plays = OtherPlayLinksSerializer(many=True)
     image = serializers.ImageField()
 
     class Meta:
@@ -76,7 +76,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
             "email",
             "other_links",
             "plays",
-            "other_plays_links",
+            "other_plays",
             "image",
         )
 
@@ -91,4 +91,24 @@ class AuthorListSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "name",
+        )
+
+
+class AuthorForSearchSerializer(serializers.ModelSerializer):
+    name = serializers.SlugRelatedField(
+        source="person",
+        slug_field="reversed_full_name",
+        read_only=True,
+    )
+    first_letter = serializers.SerializerMethodField()
+
+    def get_first_letter(self, obj):
+        return obj.person.last_name[0].upper()
+
+    class Meta:
+        model = Author
+        fields = (
+            "id",
+            "name",
+            "first_letter",
         )

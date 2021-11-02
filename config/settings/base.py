@@ -43,6 +43,7 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "adminsortable2",
     "phonenumber_field",
+    "drf_multiple_model",
 ]
 LOCAL_APPS = [
     "apps.users",
