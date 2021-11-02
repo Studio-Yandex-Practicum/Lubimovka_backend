@@ -21,9 +21,9 @@ router.register(
     basename="plays",
 )
 router.register(
-    "search-result",
+    "search",
     SearchResultAPIViewSet,
-    basename="search-result",
+    basename="search",
 )
 router.register(
     "authors",
