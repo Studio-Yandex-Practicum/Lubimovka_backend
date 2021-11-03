@@ -1,5 +1,13 @@
-from .content import AbstractContent, AbstractContentPage
-from .content_items import AbstractItemBase, Image, Link, Video
+from .content_items import (
+    AbstractItemWithTitle,
+    Image,
+    Link,
+    Quote,
+    Text,
+    Title,
+    Video,
+)
+from .contents import AbstractContent, AbstractContentPage
 
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split
@@ -18,9 +26,10 @@ from .content_blocks import (
 )
 
 __all__ = (
-    AbstractItemBase,
+    AbstractItemWithTitle,
     AbstractContent,
     AbstractContentPage,
+    Quote,
     Image,
     ImagesBlock,
     Link,
@@ -32,6 +41,8 @@ __all__ = (
     PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
+    Text,
+    Title,
     Video,
     VideosBlock,
 )
