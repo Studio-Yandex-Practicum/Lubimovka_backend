@@ -193,8 +193,6 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
-EMAIL_SEND_TO = env("EMAIL_SEND_TO", default="user@none.ru")
-
 # See markdownx docs https://neutronx.github.io/django-markdownx/
 MARKDOWNX_MARKDOWN_EXTENSIONS = ("markdown.extensions.extra",)
 MARKDOWNX_MEDIA_PATH = "static_pages/"
