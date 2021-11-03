@@ -1,3 +1,4 @@
+from .festival import FestivalSerializer
 from .festivalteams import FestivalTeamsSerializer
 from .partners import PartnerSerializer
 from .places import PlaceSerializer
@@ -12,4 +13,5 @@ __all__ = [
     "SponsorSerializer",
     "FestivalTeamsSerializer",
     "VolunteersSerializer",
+    "FestivalSerializer",
 ]

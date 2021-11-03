@@ -2,6 +2,7 @@ from django.urls import include, path
 
 from apps.info.views import (
     FestivalTeamsViewSet,
+    FestivalViewSet,
     PartnersViewSet,
     QuestionCreateAPI,
     SponsorViewSet,
@@ -33,6 +34,11 @@ about_festival_urls = [
 ]
 
 info_urls = [
+    path(
+        "festival/",
+        FestivalViewSet.as_view(),
+        name="festival",
+    ),
     path(
         "about-festival/",
         include(about_festival_urls),

@@ -1,3 +1,4 @@
+from .festival import FestivalViewSet
 from .festivalteams import FestivalTeamsViewSet
 from .partners import PartnersViewSet
 from .question import QuestionCreateAPI
