@@ -52,6 +52,20 @@ class AchievementAdmin(admin.ModelAdmin):
     ]
 
 
+class AchievementInline(admin.TabularInline):
+    model = Author.achievements.through
+    extra = 1
+    verbose_name = "Достижение"
+    verbose_name_plural = "Достижения"
+
+
+class PlayInline(admin.TabularInline):
+    model = Author.plays.through
+    extra = 1
+    verbose_name = "Пьеса"
+    verbose_name_plural = "Пьесы"
+
+
 class SocialNetworkLinkInline(admin.TabularInline):
     model = SocialNetworkLink
     extra = 1
@@ -75,11 +89,15 @@ class AuthorAdmin(admin.ModelAdmin):
         "biography",
     ]
     inlines = [
+        AchievementInline,
+        PlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
         OtherPlayInline,
     ]
     exclude = [
+        "achievements",
+        "plays",
         "social_network_links",
         "other_links",
         "other_plays_links",
