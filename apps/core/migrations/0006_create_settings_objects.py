@@ -8,28 +8,28 @@ def add_settings(apps, schema_editor):
     Settings = apps.get_model('core', 'Settings')
     Settings.objects.create(
         field_type="BOOLEAN",
-        settings_key="Festival_status",
+        settings_key="festival_status",
         boolean=True,
     )
     Settings.objects.create(
         field_type="TEXT",
-        settings_key="Site_color",
+        settings_key="site_color",
         text="green",
     )
     Settings.objects.create(
         field_type="EMAIL",
-        settings_key="Mail_send_to",
+        settings_key="mail_send_to",
         email="testtest@testtest.test",
     )
     Settings.objects.create(
         field_type="BOOLEAN",
-        settings_key="Form_to_submit_a_play",
+        settings_key="form_to_submit_a_play",
         boolean=True,
     )
     Settings.objects.create(
         field_type="TEXT",
-        settings_key="Subject_in_email",
-        text="lubimovka",
+        settings_key="email_subject_for_question",
+        text="Вопрос Любимовке",
     )
 
 

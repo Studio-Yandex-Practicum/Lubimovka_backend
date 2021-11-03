@@ -14,10 +14,10 @@ def send_question(serializer):
         },
     )
     message = EmailMessage(
-        Settings.get_setting("Subject_in_email"),
+        Settings.get_setting("email_subject_for_question"),
         html_message,
         to=[
-            Settings.get_setting("Mail_send_to"),
+            Settings.get_setting("mail_send_to"),
         ],
     )
     message.content_subtype = "html"
