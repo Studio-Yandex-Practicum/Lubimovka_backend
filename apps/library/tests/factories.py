@@ -176,7 +176,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         """
         Create a Play object and add it to other_plays_links field for Author.
         You should create at least one Festival and Program
-        before use this factory.
+        before use this method.
         To use "add_play=True"
         """
         if not created:
@@ -190,7 +190,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         """
         Create Author object with fully populated fields.
         You should create at least one Festival and Program
-        before use this factory.
+        before use this method.
         """
         return cls.create(
             add_achievement=True,
