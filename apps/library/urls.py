@@ -5,6 +5,8 @@ from apps.library.views import (
     AuthorsReadViewSet,
     ParticipationAPIView,
     PerformanceAPIView,
+    PlayAPIView,
+    SearchResultAPIViewSet,
 )
 
 router = DefaultRouter()
@@ -12,6 +14,16 @@ router.register(
     "performances",
     PerformanceAPIView,
     basename="performances",
+)
+router.register(
+    "plays",
+    PlayAPIView,
+    basename="plays",
+)
+router.register(
+    "search",
+    SearchResultAPIViewSet,
+    basename="search",
 )
 router.register(
     "authors",
