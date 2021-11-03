@@ -21,35 +21,35 @@ from apps.library.models import (
 
 class PlayAdmin(admin.ModelAdmin):
     filter_horizontal = ("authors",)
-    list_display = [
+    list_display = (
         "name",
         "city",
         "program",
         "festival",
         "is_draft",
-    ]
+    )
 
-    list_filter = [
+    list_filter = (
         "authors",
         "city",
         "program",
         "festival",
         "is_draft",
-    ]
-    search_fields = [
+    )
+    search_fields = (
         "authors_name",
         "name",
         "city",
         "program_name",
         "festival_year",
-    ]
+    )
 
 
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         "id",
         "tag",
-    ]
+    )
 
 
 class AchievementInline(admin.TabularInline):
@@ -82,84 +82,82 @@ class OtherPlayInline(admin.StackedInline):
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         "id",
         "person",
         "quote",
         "biography",
-    ]
-    inlines = [
+    )
+    inlines = (
         AchievementInline,
         PlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
         OtherPlayInline,
-    ]
-    exclude = [
+    )
+    exclude = (
         "achievements",
         "plays",
         "social_network_links",
         "other_links",
         "other_plays_links",
-    ]
+    )
     empty_value_display = "-пусто-"
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         "media_name",
         "performance",
         "pub_date",
-    ]
-
-    list_filter = [
+    )
+    list_filter = (
         "media_name",
         "performance__name",
         "pub_date",
-    ]
-    search_fields = [
+    )
+    search_fields = (
         "media_name",
         "performance__name",
         "pub_date",
-    ]
+    )
 
 
 class PerformanceReviewAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         "reviewer_name",
         "performance",
         "pub_date",
-    ]
-
-    list_filter = [
+    )
+    list_filter = (
         "reviewer_name",
         "performance__name",
         "pub_date",
-    ]
-    search_fields = [
+    )
+    search_fields = (
         "reviewer_name",
         "performance__name",
         "pub_date",
-    ]
+    )
 
 
 class ReadingAdmin(admin.ModelAdmin):
-    list_display = [
+    list_display = (
         "play",
         "name",
         "director",
         "dramatist",
-    ]
-    list_filter = [
+    )
+    list_filter = (
         "director__last_name",
         "dramatist__last_name",
-    ]
-    search_fields = [
+    )
+    search_fields = (
         "play__name",
         "name",
         "director__last_name",
         "dramatist__last_name",
-    ]
+    )
 
 
 class MasterClassAdmin(admin.ModelAdmin):
@@ -167,24 +165,18 @@ class MasterClassAdmin(admin.ModelAdmin):
         "name",
         "host",
     )
-    list_filter = [
-        "host__last_name",
-    ]
-    search_fields = [
+    list_filter = ("host__last_name",)
+    search_fields = (
         "play__name",
         "name",
         "host__last_name",
-    ]
+    )
 
 
 class ProgramTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
-    list_filter = [
-        "name",
-    ]
-    search_fields = [
-        "name",
-    ]
+    list_filter = ("name",)
+    search_fields = ("name",)
 
 
 class PerformanceReviewInline(admin.TabularInline):
@@ -205,24 +197,22 @@ class PerformanceTeamInline(admin.TabularInline):
 
 
 class PerformanceAdmin(admin.ModelAdmin):
-    filter_horizontal = [
+    filter_horizontal = (
         "images_in_block",
         "persons",
-    ]
-    list_filter = [
-        "age_limit",
-    ]
-    search_fields = [
+    )
+    list_filter = ("age_limit",)
+    search_fields = (
         "play__name",
         "name",
         "text",
-    ]
+    )
     form = PerformanceAdminForm
-    inlines = [
+    inlines = (
         PerformanceReviewInline,
         PerformanceMediaReviewInline,
         PerformanceTeamInline,
-    ]
+    )
 
 
 class ParticipationAdmin(admin.ModelAdmin):
@@ -237,18 +227,18 @@ class ParticipationAdmin(admin.ModelAdmin):
         "created",
         "file",
     )
-    list_filter = [
+    list_filter = (
         "year",
         "verified",
         "city",
-    ]
-    search_fields = [
+    )
+    search_fields = (
         "title",
         "first_name",
         "last_name",
         "city",
         "year",
-    ]
+    )
 
 
 admin.site.register(Play, PlayAdmin)
