@@ -43,6 +43,7 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "adminsortable2",
     "phonenumber_field",
+    "markdownx",
     "drf_multiple_model",
 ]
 LOCAL_APPS = [
@@ -53,6 +54,7 @@ LOCAL_APPS = [
     "apps.library",
     "apps.articles",
     "apps.info",
+    "apps.static_pages",
     "apps.content_pages",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -192,3 +194,9 @@ EMAIL_BACKEND = env(
 EMAIL_TIMEOUT = 5
 
 EMAIL_SEND_TO = env("EMAIL_SEND_TO", default="user@none.ru")
+
+# See markdownx docs https://neutronx.github.io/django-markdownx/
+MARKDOWNX_MARKDOWN_EXTENSIONS = ("markdown.extensions.extra",)
+MARKDOWNX_MEDIA_PATH = "static_pages/"
+MARKDOWNX_URLS_PATH = "/admin/markdownx/markdownify/"
+MARKDOWNX_IMAGE_MAX_SIZE = {"size": (1000, 1000), "quality": 100}
