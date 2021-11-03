@@ -8,7 +8,7 @@ def festival():
     return Festival.objects.create(
         start_date="2021-07-14",
         end_date="2021-07-15",
-        description="Test",
+        description="TestTest",
         year=2021,
         blog_entries="Test",
         video_link="http://test/",
