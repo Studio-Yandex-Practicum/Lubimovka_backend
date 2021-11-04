@@ -51,8 +51,8 @@ def restrictions(checks: dict[str, list[Any]]):
                 is_arg = kwargs.get(arg)
                 if not is_arg:
                     continue
-                ending = base_error_msg_ending + f" with {arg}=True"
-                check_restriction(models, ending)
+                final_ending = base_error_msg_ending + f" with {arg}=True"
+                check_restriction(models, final_ending)
             return method(*args, **kwargs)
 
         return wrapped
