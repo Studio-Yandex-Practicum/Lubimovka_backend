@@ -132,6 +132,11 @@ class PlayFactory(factory.django.DjangoModelFactory):
     def create(cls, **kwargs):
         return super().create(**kwargs)
 
+    @classmethod
+    @restrictions({"global": [Festival, ProgramType]})
+    def create_batch(cls, size, **kwargs):
+        return super().create_batch(size, **kwargs)
+
 
 class AuthorFactory(factory.django.DjangoModelFactory):
     """
