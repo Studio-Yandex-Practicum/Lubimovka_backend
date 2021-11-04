@@ -21,12 +21,10 @@ from apps.content_pages.serializers import (
     PersonsBlockSerializer,
     PlaysBlockSerializer,
     QuoteSerializer,
-    VideosBlockSerializer,
-    VideoSerializer,
-)
-from apps.content_pages.serializers.content_items import (
     TextSerializer,
     TitleSerializer,
+    VideosBlockSerializer,
+    VideoSerializer,
 )
 
 

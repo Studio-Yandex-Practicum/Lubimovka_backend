@@ -12,7 +12,7 @@
 - pre-commit хуки
 - используется PostgreSQL
 - базовая модель TimeStampedModel (импортировать из core.models)
-- автодокументация swagger/redoc (http://base_url/api/schema/swagger-ui/ или http://base_url/api/schema/redoc/)
+- автодокументация swagger/redoc (http://base_url/api/v1/schema/swagger-ui/ или http://base_url/api/v1/schema/redoc/)
 
 ## Общие требования к стилю кода - [ссылка](docs/codestyle.md)
 
