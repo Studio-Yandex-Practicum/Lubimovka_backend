@@ -2,12 +2,12 @@ from functools import wraps
 from typing import Any
 
 
-def check_restriction(models: list[Any], method_info: str):
+def check_restriction(models: list[Any], factory_info: str):
     model_names = [model.__qualname__ for model in models]
     required_instances = ", ".join(model_names)
     error_msg = (
         f"You should create at least one {required_instances} "
-        f"before use {method_info}"
+        f"before use {factory_info}"
     )
     for model in models:
         assert model.objects.first(), error_msg
