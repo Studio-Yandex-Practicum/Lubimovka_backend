@@ -14,7 +14,7 @@ from apps.library.models import (
     ProgramType,
     SocialNetworkLink,
 )
-from apps.library.tests.utilities import restrictions
+from apps.library.tests.utilities import restrict_factory
 
 fake = Faker("ru_RU")
 
@@ -26,6 +26,7 @@ class AchievementFactory(factory.django.DjangoModelFactory):
     tag = factory.Faker("word", locale="ru_RU")
 
 
+@restrict_factory({"global": [Author]})
 class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
     """
     Create SocialNetworkLink object.
@@ -41,17 +42,8 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
     )
     link = factory.Faker("url")
 
-    @classmethod
-    @restrictions({"global": [Author]})
-    def create(cls, **kwargs):
-        return super().create(**kwargs)
 
-    @classmethod
-    @restrictions({"global": [Author]})
-    def create_batch(cls, size, **kwargs):
-        return super().create_batch(size, **kwargs)
-
-
+@restrict_factory({"global": [Author]})
 class OtherLinkFactory(factory.django.DjangoModelFactory):
     """
     Create OtherLink object.
@@ -67,17 +59,8 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
     is_pinned = factory.Faker("pybool")
     order_number = factory.Sequence(lambda x: x)
 
-    @classmethod
-    @restrictions({"global": [Author]})
-    def create(cls, **kwargs):
-        return super().create(**kwargs)
 
-    @classmethod
-    @restrictions({"global": [Author]})
-    def create_batch(cls, size, **kwargs):
-        return super().create_batch(size, **kwargs)
-
-
+@restrict_factory({"global": [Author]})
 class OtherPlayFactory(factory.django.DjangoModelFactory):
     """
     Create OtherPlay object.
@@ -91,16 +74,6 @@ class OtherPlayFactory(factory.django.DjangoModelFactory):
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
     link = factory.Faker("url")
 
-    @classmethod
-    @restrictions({"global": [Author]})
-    def create(cls, **kwargs):
-        return super().create(**kwargs)
-
-    @classmethod
-    @restrictions({"global": [Author]})
-    def create_batch(cls, size, **kwargs):
-        return super().create_batch(size, **kwargs)
-
 
 class ProgramFactory(factory.django.DjangoModelFactory):
     class Meta:
@@ -109,6 +82,7 @@ class ProgramFactory(factory.django.DjangoModelFactory):
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
 
 
+@restrict_factory({"global": [Festival, ProgramType]})
 class PlayFactory(factory.django.DjangoModelFactory):
     """
     Create Play object.
@@ -127,17 +101,8 @@ class PlayFactory(factory.django.DjangoModelFactory):
     program = factory.Iterator(ProgramType.objects.all())
     festival = factory.Iterator(Festival.objects.all())
 
-    @classmethod
-    @restrictions({"global": [Festival, ProgramType]})
-    def create(cls, **kwargs):
-        return super().create(**kwargs)
 
-    @classmethod
-    @restrictions({"global": [Festival, ProgramType]})
-    def create_batch(cls, size, **kwargs):
-        return super().create_batch(size, **kwargs)
-
-
+@restrict_factory({"add_play": [Festival, ProgramType]})
 class AuthorFactory(factory.django.DjangoModelFactory):
     """
     Creates Author objects.
@@ -227,7 +192,6 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             self.plays.add(play)
 
     @classmethod
-    @restrictions({"global": [Festival, ProgramType]})
     def complex_create(cls):
         """
         Create Author object with fully populated fields.
@@ -241,13 +205,3 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             add_other_play=True,
             add_play=True,
         )
-
-    @classmethod
-    @restrictions({"add_play": [Festival, ProgramType]})
-    def create(cls, **kwargs):
-        return super().create(**kwargs)
-
-    @classmethod
-    @restrictions({"add_play": [Festival, ProgramType]})
-    def create_batch(cls, size, **kwargs):
-        return super().create_batch(size, **kwargs)

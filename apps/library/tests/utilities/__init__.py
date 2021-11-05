@@ -1,3 +1,3 @@
-from .decorators import restrictions
+from .decorators import restrict_factory
 
-__all__ = (restrictions,)
+__all__ = (restrict_factory,)
