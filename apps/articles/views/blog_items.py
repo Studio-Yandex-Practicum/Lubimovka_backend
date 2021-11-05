@@ -9,12 +9,11 @@ from apps.articles.serializers import (
 
 class BlogItemsViewSet(ReadOnlyModelViewSet):
     queryset = BlogItem.objects.all()
-    serializer_class = BlogItemSerializer
 
     def get_serializer_class(self):
         if self.action == "list":
             return BlogItemListSerializer
-        return super().get_serializer_class()
+        return BlogItemSerializer
 
     class Meta:
         model = BlogItem

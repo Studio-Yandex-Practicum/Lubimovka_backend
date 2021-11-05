@@ -9,12 +9,11 @@ from apps.articles.serializers import (
 
 class NewsItemsViewSet(ReadOnlyModelViewSet):
     queryset = NewsItem.objects.all()
-    serializer_class = NewsItemSerializer
 
     def get_serializer_class(self):
         if self.action == "list":
             return NewsItemListSerializer
-        return super().get_serializer_class()
+        return NewsItemSerializer
 
     class Meta:
         model = NewsItem
