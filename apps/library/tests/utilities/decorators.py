@@ -17,7 +17,7 @@ def restrict_factory_method(restrictions: dict[str, list[Any]]):
     def decorator(method):
         @wraps(method)
         def wrapped(*args, **kwargs):
-            factory_name = restrictions.pop("_class_name")
+            factory_name = restrictions.pop("_factory_name")
             if "global" in restrictions:
                 models = restrictions.pop("global")
                 check_restriction(models, factory_name)
@@ -74,7 +74,7 @@ def restrict_factory(restrictions: dict[str, list[Any]]):
     """
 
     def decorator(klass):
-        restrictions.update({"_class_name": klass.__name__})
+        restrictions.update({"_factory_name": klass.__name__})
 
         class Factory(klass):
             @classmethod
