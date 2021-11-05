@@ -3,6 +3,7 @@ from random import choice
 import factory
 from faker import Faker
 
+from apps.core.decorators import restrict_factory
 from apps.core.tests.factories import PersonFactory
 from apps.info.models import Festival
 from apps.library.models import (
@@ -14,7 +15,6 @@ from apps.library.models import (
     ProgramType,
     SocialNetworkLink,
 )
-from apps.library.tests.utilities import restrict_factory
 
 fake = Faker("ru_RU")
 

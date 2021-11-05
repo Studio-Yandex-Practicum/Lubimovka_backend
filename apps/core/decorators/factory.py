@@ -1,4 +1,3 @@
-from functools import wraps
 from typing import Any
 
 
@@ -13,32 +12,9 @@ def check_restriction(models: list[Any], factory_info: str):
         assert model.objects.first(), error_msg
 
 
-def restrict_factory_method(restrictions: dict[str, list[Any]]):
-    def decorator(method):
-        @wraps(method)
-        def wrapped(*args, **kwargs):
-            factory_name = restrictions.pop("_factory_name")
-            if "global" in restrictions:
-                models = restrictions.pop("global")
-                check_restriction(models, factory_name)
-            method_keyword_variables = kwargs
-            for keyword_variable in method_keyword_variables:
-                if keyword_variable in restrictions:
-                    models = restrictions[keyword_variable]
-                    factory_info = (
-                        factory_name + f" with {keyword_variable}=True"
-                    )
-                    check_restriction(models, factory_info)
-            return method(*args, **kwargs)
-
-        return wrapped
-
-    return decorator
-
-
 def restrict_factory(restrictions: dict[str, list[Any]]):
     """
-    Checks if instances of required models exist before use the fabric.
+    Checks if instances of required models exist before use the factory.
 
     How to use:
     The decorator takes a dictionary as a parameter.
@@ -47,7 +23,7 @@ def restrict_factory(restrictions: dict[str, list[Any]]):
     Values is a list of models whose instances must exist in order
     to use the tested method.
 
-    The decorator is applied to fabric class and expands create classmethod
+    The decorator is applied to factory class and expands create classmethod
     with necessary checks.
 
     Use the 'global' key if the related model instances are required
@@ -74,12 +50,21 @@ def restrict_factory(restrictions: dict[str, list[Any]]):
     """
 
     def decorator(klass):
-        restrictions.update({"_factory_name": klass.__name__})
-
         class Factory(klass):
             @classmethod
-            @restrict_factory_method(restrictions)
             def create(cls, **kwargs):
+                factory_name = klass.__name__
+                if "global" in restrictions:
+                    models = restrictions.pop("global")
+                    check_restriction(models, factory_name)
+                method_keyword_variables = kwargs
+                for keyword_variable in method_keyword_variables:
+                    if keyword_variable in restrictions:
+                        models = restrictions[keyword_variable]
+                        factory_info = (
+                            factory_name + f" with {keyword_variable}=True"
+                        )
+                        check_restriction(models, factory_info)
                 return super().create(**kwargs)
 
         return Factory
