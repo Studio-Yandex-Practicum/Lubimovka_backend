@@ -1,20 +1,8 @@
 from rest_framework import serializers
 
-from apps.library.models import (
-    Achievement,
-    Author,
-    OtherLink,
-    OtherPlay,
-    SocialNetworkLink,
-)
+from apps.library.models import Author, OtherLink, OtherPlay, SocialNetworkLink
 
 from .play import PlaySerializer
-
-
-class AchievementSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Achievement
-        fields = ("tag",)
 
 
 class OtherLinkSerializer(serializers.ModelSerializer):
@@ -53,7 +41,9 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
     city = serializers.SlugRelatedField(
         source="person", slug_field="city", read_only=True
     )
-    achievements = AchievementSerializer(many=True)
+    achievements = serializers.SlugRelatedField(
+        slug_field="tag", read_only=True, many=True
+    )
     social_networks = SocialNetworkSerializer(many=True)
     email = serializers.SlugRelatedField(
         source="person", slug_field="email", read_only=True
