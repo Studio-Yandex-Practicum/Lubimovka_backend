@@ -1,4 +1,4 @@
-from .festival import FestivalViewSet
+from .festival import FestivalViewSet, festival_years
 from .festivalteams import FestivalTeamsViewSet
 from .partners import PartnersViewSet
 from .question import QuestionCreateAPI
@@ -12,4 +12,5 @@ __all__ = [
     "FestivalTeamsViewSet",
     "VolunteersViewSet",
     "FestivalViewSet",
+    "festival_years",
 ]

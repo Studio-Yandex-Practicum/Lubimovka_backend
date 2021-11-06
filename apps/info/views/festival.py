@@ -1,17 +1,20 @@
-from rest_framework.generics import ListAPIView
+from django.http import JsonResponse
+from rest_framework import status
+from rest_framework.decorators import api_view
+from rest_framework.generics import ListAPIView, RetrieveAPIView
 
 from apps.info.models import Festival
-from apps.info.serializers import FestivalListSerializer, FestivalSerializer
+from apps.info.serializers import FestivalSerializer
 
 
-class FestivalViewSet(ListAPIView):
+class FestivalViewSet(RetrieveAPIView, ListAPIView):
     queryset = Festival.objects.all()
     serializer_class = FestivalSerializer
-    filterset_fields = ("year",)
+    lookup_field = "year"
     pagination_class = None
 
-    def get_serializer_class(self):
-        if len(self.request.query_params) == 0:
-            return FestivalSerializer
-        else:
-            return FestivalListSerializer
+
+@api_view(["GET"])
+def festival_years(request):
+    data = [festival.year for festival in Festival.objects.all()]
+    return JsonResponse({"years": data}, status=status.HTTP_200_OK)

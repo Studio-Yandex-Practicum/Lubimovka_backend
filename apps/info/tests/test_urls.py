@@ -1,6 +1,11 @@
 import pytest
+from django.urls import reverse
 
 from apps.info.models import Festival
+
+YEAR = 2021
+FESTIVAL_URL = reverse("festival", kwargs={"year": YEAR})
+FESTIVAL_YEARS_URL = reverse("festival_years")
 
 
 @pytest.fixture
@@ -9,7 +14,7 @@ def festival():
         start_date="2021-07-14",
         end_date="2021-07-15",
         description="TestTest",
-        year=2021,
+        year=YEAR,
         blog_entries="Test",
         video_link="http://test/",
     )
@@ -17,16 +22,18 @@ def festival():
 
 class TestFestivalAPI:
     @pytest.mark.django_db
-    def test_get_festival(self, client):
-        response = client.get("/api/v1/info/festival/")
-        assert response.status_code == 200, (
-            "Проверьте, что при GET запросе `/api/v1/info/festival/` "
-            "возвращается статус 200"
-        )
+    def test_festival_urls(self, client, festival):
+        urls = (FESTIVAL_YEARS_URL, FESTIVAL_URL)
+        for url in urls:
+            response = client.get(url)
+            assert response.status_code == 200, (
+                f"Проверьте, что при GET запросе {url} "
+                f"возвращается статус 200"
+            )
 
     @pytest.mark.django_db
-    def test_get_festival_filter_detail(self, client, festival):
-        response = client.get("/api/v1/info/festival/?year=2021")
+    def test_get_festival_detail(self, client, festival):
+        response = client.get(f"/api/v1/info/festival/{festival.year}/")
         data = response.json()
         for field in [
             "start_date",
@@ -36,17 +43,17 @@ class TestFestivalAPI:
             "blog_entries",
             "video_link",
         ]:
-            assert data[0].get(field) == getattr(festival, field), (
+            assert data.get(field) == getattr(festival, field), (
                 f"Проверьте, что при GET запросе `//api/v1/info/festival/`"
                 f"возвращаются данные объекта. Значение {field} неправильное"
             )
 
     @pytest.mark.django_db
-    def test_get_festival_detail(self, client, festival):
-        response = client.get("/api/v1/info/festival/")
+    def test_get_festival_years(self, client, festival):
+        response = client.get("/api/v1/info/festival/years/")
         data = response.json()
 
-        assert data[0].get("year") == getattr(festival, "year"), (
+        assert getattr(festival, "year") in data.get("years"), (
             "Проверьте, что при GET запросе `//api/v1/info/festival/ "
             "возвращаются данные объекта. Значение year неправильное"
         )
