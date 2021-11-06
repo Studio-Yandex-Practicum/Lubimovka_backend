@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.content_pages.models import AbstractItemBase, Image, Video
+from apps.content_pages.models import AbstractItemWithTitle, Image, Video
 from apps.core.models import BaseModel
 from apps.library.models import Performance, Person, Play
 
@@ -14,13 +14,12 @@ class AbstractOrderedItemBase(BaseModel):
     """
 
     order = models.PositiveIntegerField(
-        default=0,
-        blank=False,
-        null=False,
+        default=0, blank=False, null=False, verbose_name="Порядок в блоке"
     )
 
     class Meta:
-        verbose_name = "Промежуточная модель"
+        verbose_name = "Содержимое блока"
+        verbose_name_plural = "Содержимое блоков"
         abstract = True
         ordering = ("order",)
 
@@ -33,6 +32,7 @@ class OrderedImage(AbstractOrderedItemBase):
         Image,
         on_delete=models.CASCADE,
         related_name="ordered_images",
+        verbose_name="Изображение",
     )
     block = models.ForeignKey(
         "ImagesBlock",
@@ -46,6 +46,7 @@ class OrderedPerformance(AbstractOrderedItemBase):
         Performance,
         on_delete=models.CASCADE,
         related_name="ordered_performances",
+        verbose_name="Спектакль",
     )
     block = models.ForeignKey(
         "PerformancesBlock",
@@ -59,6 +60,7 @@ class OrderedPerson(AbstractOrderedItemBase):
         Person,
         on_delete=models.CASCADE,
         related_name="ordered_persons",
+        verbose_name="Персона/человек",
     )
     block = models.ForeignKey(
         "PersonsBlock",
@@ -72,6 +74,7 @@ class OrderedPlay(AbstractOrderedItemBase):
         Play,
         on_delete=models.CASCADE,
         related_name="ordered_plays",
+        verbose_name="Пьеса",
     )
     block = models.ForeignKey(
         "PlaysBlock",
@@ -85,6 +88,7 @@ class OrderedVideo(AbstractOrderedItemBase):
         Video,
         on_delete=models.CASCADE,
         related_name="ordered_videos",
+        verbose_name="Видео",
     )
     block = models.ForeignKey(
         "VideosBlock",
@@ -93,7 +97,7 @@ class OrderedVideo(AbstractOrderedItemBase):
     )
 
 
-class ImagesBlock(AbstractItemBase):
+class ImagesBlock(AbstractItemWithTitle):
     items = models.ManyToManyField(
         to=Image,
         through=OrderedImage,
@@ -105,7 +109,7 @@ class ImagesBlock(AbstractItemBase):
         verbose_name_plural = "Блоки изображений"
 
 
-class PerformancesBlock(AbstractItemBase):
+class PerformancesBlock(AbstractItemWithTitle):
     items = models.ManyToManyField(
         to=Performance,
         through=OrderedPerformance,
@@ -117,7 +121,7 @@ class PerformancesBlock(AbstractItemBase):
         verbose_name_plural = "Блоки спектаклей"
 
 
-class PersonsBlock(AbstractItemBase):
+class PersonsBlock(AbstractItemWithTitle):
     items = models.ManyToManyField(
         to=Person,
         through=OrderedPerson,
@@ -129,7 +133,7 @@ class PersonsBlock(AbstractItemBase):
         verbose_name_plural = "Блоки персон"
 
 
-class PlaysBlock(AbstractItemBase):
+class PlaysBlock(AbstractItemWithTitle):
     items = models.ManyToManyField(
         to=Play,
         through=OrderedPlay,
@@ -141,7 +145,7 @@ class PlaysBlock(AbstractItemBase):
         verbose_name_plural = "Блоки пьес"
 
 
-class VideosBlock(AbstractItemBase):
+class VideosBlock(AbstractItemWithTitle):
     items = models.ManyToManyField(
         to=Video,
         through=OrderedVideo,

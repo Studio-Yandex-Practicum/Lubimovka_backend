@@ -59,7 +59,7 @@ urlpatterns = [
         view=include(apps_patterns),
     ),
     path(
-        route="api/schema/",
+        route="api/v1/schema/",
         view=include(api_schema_patterns),
     ),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
