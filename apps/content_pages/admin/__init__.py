@@ -1,4 +1,3 @@
-from .content import BaseContentInline
 from .content_blocks import (
     ImagesBlockAdmin,
     OrderedImageInline,
@@ -11,7 +10,8 @@ from .content_blocks import (
     PlaysBlockAdmin,
     VideosBlockAdmin,
 )
-from .content_items import Image, Link, Video
+from .content_items import Image, Link, Quote, Text, Title, Video
+from .contents import BaseContentInline
 
 __all__ = (
     OrderedImageInline,
@@ -27,5 +27,8 @@ __all__ = (
     Image,
     Video,
     Link,
+    Quote,
+    Text,
+    Title,
     BaseContentInline,
 )

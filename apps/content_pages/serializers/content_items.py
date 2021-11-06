@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import Image, Link, Video
+from apps.content_pages.models import Image, Link, Quote, Text, Title, Video
 from apps.library.models import Performance, Person, Play
 
 
@@ -13,6 +13,12 @@ class ImageSerializer(serializers.ModelSerializer):
         )
 
 
+class QuoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quote
+        fields = ("quote",)
+
+
 class LinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Link
@@ -21,6 +27,18 @@ class LinkSerializer(serializers.ModelSerializer):
             "description",
             "url",
         )
+
+
+class TextSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Text
+        fields = ("text",)
+
+
+class TitleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Title
+        fields = ("title",)
 
 
 class VideoSerializer(serializers.ModelSerializer):

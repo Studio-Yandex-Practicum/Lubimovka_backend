@@ -3,7 +3,7 @@ from django.db import models
 from apps.core.models import BaseModel
 
 
-class AbstractItemBase(BaseModel):
+class AbstractItemWithTitle(BaseModel):
     """Base abstract model for 1-item 'content' block."""
 
     title = models.CharField(
@@ -18,7 +18,55 @@ class AbstractItemBase(BaseModel):
         return self.title
 
 
-class Image(AbstractItemBase):
+class Quote(BaseModel):
+    """Quote item cor "content" blocks without any additional fields."""
+
+    quote = models.TextField(
+        max_length=500,
+        verbose_name="Цитата",
+    )
+
+    class Meta:
+        verbose_name = "Цитата"
+        verbose_name_plural = "Цитаты"
+
+    def __str__(self):
+        return self.quote
+
+
+class Title(BaseModel):
+    """Text item for 'content' blocks without any additional fields."""
+
+    title = models.CharField(
+        max_length=250,
+        verbose_name="Заголовок",
+    )
+
+    class Meta:
+        verbose_name = "Заголовок"
+        verbose_name_plural = "Заголовки"
+
+    def __str__(self):
+        return self.title
+
+
+class Text(BaseModel):
+    """Text item for 'content' blocks without any additional fields."""
+
+    text = models.TextField(
+        max_length=500,
+        verbose_name="Текст",
+    )
+
+    class Meta:
+        verbose_name = "Текст"
+        verbose_name_plural = "Тексты"
+
+    def __str__(self):
+        return self.text
+
+
+class Image(AbstractItemWithTitle):
     """Image with title for 'content' blocks."""
 
     image = models.ImageField(
@@ -31,7 +79,7 @@ class Image(AbstractItemBase):
         verbose_name_plural = "Изображения"
 
 
-class Link(AbstractItemBase):
+class Link(AbstractItemWithTitle):
     """Link with title for 'content' blocks."""
 
     description = models.TextField(
@@ -45,7 +93,7 @@ class Link(AbstractItemBase):
         verbose_name_plural = "Ссылки с описанием"
 
 
-class Video(AbstractItemBase):
+class Video(AbstractItemWithTitle):
     """Video with title for 'content' blocks."""
 
     description = models.TextField(

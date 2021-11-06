@@ -4,6 +4,9 @@ from .content_items import (
     PerformanceSerializer,
     PersonSerializer,
     PlaySerializer,
+    QuoteSerializer,
+    TextSerializer,
+    TitleSerializer,
     VideoSerializer,
 )
 
@@ -21,19 +24,20 @@ from .content_blocks import (
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split
 
-from .content import BaseContentSerializer
+from .contents import BaseContentPageSerializer, BaseContentSerializer
 
 __all__ = (
+    BaseContentPageSerializer,
+    BaseContentSerializer,
     ImagesBlockSerializer,
     ImageSerializer,
     LinkSerializer,
     PerformancesBlockSerializer,
-    PlaysBlockSerializer,
+    PerformanceSerializer,
     PersonsBlockSerializer,
+    PersonSerializer,
+    PlaysBlockSerializer,
+    PlaySerializer,
     VideosBlockSerializer,
     VideoSerializer,
-    BaseContentSerializer,
-    PerformanceSerializer,
-    PersonSerializer,
-    PlaySerializer,
 )
