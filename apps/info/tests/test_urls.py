@@ -55,7 +55,7 @@ class TestFestivalAPI:
 
         assert getattr(festival, "year") in data.get("years"), (
             "Проверьте, что при GET запросе `//api/v1/info/festival/ "
-            "возвращаются данные объекта. Значение year неправильное"
+            "возвращается список годов фестивалей"
         )
 
 

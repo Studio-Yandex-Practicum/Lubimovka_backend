@@ -16,5 +16,5 @@ class FestivalViewSet(RetrieveAPIView, ListAPIView):
 
 @api_view(["GET"])
 def festival_years(request):
-    data = [festival.year for festival in Festival.objects.all()]
+    data = list(festival.year for festival in Festival.objects.all())
     return JsonResponse({"years": data}, status=status.HTTP_200_OK)
