@@ -3,6 +3,7 @@ from random import choice
 import factory
 from faker import Faker
 
+from apps.core.decorators import restrict_factory
 from apps.core.tests.factories import PersonFactory
 from apps.info.models import Festival
 from apps.library.models import (
@@ -25,6 +26,7 @@ class AchievementFactory(factory.django.DjangoModelFactory):
     tag = factory.Faker("word", locale="ru_RU")
 
 
+@restrict_factory({"global": [Author]})
 class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
     """
     Create SocialNetworkLink object.
@@ -41,6 +43,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
     link = factory.Faker("url")
 
 
+@restrict_factory({"global": [Author]})
 class OtherLinkFactory(factory.django.DjangoModelFactory):
     """
     Create OtherLink object.
@@ -57,6 +60,7 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
     order_number = factory.Sequence(lambda x: x)
 
 
+@restrict_factory({"global": [Author]})
 class OtherPlayFactory(factory.django.DjangoModelFactory):
     """
     Create OtherPlay object.
@@ -78,6 +82,7 @@ class ProgramFactory(factory.django.DjangoModelFactory):
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
 
 
+@restrict_factory({"global": [Festival, ProgramType]})
 class PlayFactory(factory.django.DjangoModelFactory):
     """
     Create Play object.
@@ -97,6 +102,7 @@ class PlayFactory(factory.django.DjangoModelFactory):
     festival = factory.Iterator(Festival.objects.all())
 
 
+@restrict_factory({"add_play": [Festival, ProgramType]})
 class AuthorFactory(factory.django.DjangoModelFactory):
     """
     Creates Author objects.
@@ -175,6 +181,8 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     def add_play(self, created, extracted, **kwargs):
         """
         Create a Play object and add it to other_plays_links field for Author.
+        You should create at least one Festival and Program
+        before use this method.
         To use "add_play=True"
         """
         if not created:
@@ -186,7 +194,9 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     @classmethod
     def complex_create(cls):
         """
-        Create Author object with fully populated fields
+        Create Author object with fully populated fields.
+        You should create at least one Festival and Program
+        before use this method.
         """
         return cls.create(
             add_achievement=True,
