@@ -11,4 +11,5 @@ __all__ = [
     "SponsorViewSet",
     "FestivalTeamsViewSet",
     "VolunteersViewSet",
+    "FestivalViewSet",
 ]
