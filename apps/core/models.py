@@ -16,7 +16,7 @@ class BaseModel(models.Model):
         abstract = True
 
     def __str__(self):
-        return self.id
+        return f"{self.id}"
 
 
 class Image(BaseModel):
