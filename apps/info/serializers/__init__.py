@@ -6,7 +6,7 @@ from .question import QuestionSerializer
 from .sponsors import SponsorSerializer
 from .volunteers import VolunteersSerializer
 
-__all__ = [
+__all__ = (
     "PartnerSerializer",
     "PlaceSerializer",
     "QuestionSerializer",
@@ -14,4 +14,4 @@ __all__ = [
     "FestivalTeamsSerializer",
     "VolunteersSerializer",
     "FestivalSerializer",
-]
+)

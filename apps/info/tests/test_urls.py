@@ -4,8 +4,8 @@ from django.urls import reverse
 from apps.info.models import Festival
 
 YEAR = 2021
-FESTIVAL_URL = reverse("festival", kwargs={"year": YEAR})
-FESTIVAL_YEARS_URL = reverse("festival_years")
+FESTIVAL_URL = reverse("festivals", kwargs={"year": YEAR})
+FESTIVAL_YEARS_URL = reverse("festivals_years")
 
 
 @pytest.fixture
@@ -33,7 +33,7 @@ class TestFestivalAPI:
 
     @pytest.mark.django_db
     def test_get_festival_detail(self, client, festival):
-        response = client.get(f"/api/v1/info/festival/{festival.year}/")
+        response = client.get(FESTIVAL_URL)
         data = response.json()
         for field in [
             "start_date",
@@ -44,18 +44,18 @@ class TestFestivalAPI:
             "video_link",
         ]:
             assert data.get(field) == getattr(festival, field), (
-                f"Проверьте, что при GET запросе `//api/v1/info/festival/`"
+                f"Проверьте, что при GET запросе {FESTIVAL_URL}"
                 f"возвращаются данные объекта. Значение {field} неправильное"
             )
 
     @pytest.mark.django_db
     def test_get_festival_years(self, client, festival):
-        response = client.get("/api/v1/info/festival/years/")
+        response = client.get(FESTIVAL_YEARS_URL)
         data = response.json()
 
         assert getattr(festival, "year") in data.get("years"), (
-            "Проверьте, что при GET запросе `//api/v1/info/festival/ "
-            "возвращается список годов фестивалей"
+            f"Проверьте, что при GET запросе {FESTIVAL_YEARS_URL} "
+            f"возвращается список годов фестивалей"
         )
 
 

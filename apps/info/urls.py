@@ -7,7 +7,7 @@ from apps.info.views import (
     QuestionCreateAPI,
     SponsorViewSet,
     VolunteersViewSet,
-    festival_years,
+    festivals_years,
 )
 from apps.static_pages.views import StaticPagesView
 
@@ -36,14 +36,14 @@ about_festival_urls = [
 
 info_urls = [
     path(
-        "festival/years/",
-        festival_years,
-        name="festival_years",
+        "festivals/years/",
+        festivals_years,
+        name="festivals_years",
     ),
     path(
-        "festival/<int:year>/",
+        "festivals/<int:year>/",
         FestivalViewSet.as_view(),
-        name="festival",
+        name="festivals",
     ),
     path(
         "about-festival/",
