@@ -12,9 +12,11 @@
 - pre-commit хуки
 - используется PostgreSQL
 - базовая модель TimeStampedModel (импортировать из core.models)
-- автодокументация swagger/redoc (http://base_url/api/schema/swagger-ui/ или http://base_url/api/schema/redoc/)
+- автодокументация swagger/redoc (http://base_url/api/v1/schema/swagger-ui/ или http://base_url/api/v1/schema/redoc/)
 
 ## Общие требования к стилю кода - [ссылка](docs/codestyle.md)
+
+## Что нужно проверить, когда вы сделали PR - [чек-лист для PR](docs/pull_request.md)
 
 ## Правила работы с git (как делать коммиты и pull request-ы)
 1. Две основные ветки: master и develop
