@@ -72,10 +72,7 @@ jobs:
           echo $VERSION
 
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          echo $IMAGE_NAME
-          echo $IMAGE_ID:$VERSION
-          echo VERSION=$VERSION
-          echo $VERSION
+          docker images
 
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           echo $IMAGE_NAME
