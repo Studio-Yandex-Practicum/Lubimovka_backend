@@ -1,0 +1,84 @@
+name: Deploy your branch for testing
+
+on:
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Please, enter your name and surname'
+        default: 'Иван Иванов'
+        required: true
+
+env:
+  REGISTRY: ghcr.io
+  ORGANIZATION: studio-yandex-practicum
+  IMAGE_NAME: lubimovka_backend
+
+defaults:
+  run:
+    working-directory: .
+
+jobs:
+  tests:
+      name: Run tests
+      runs-on: ubuntu-latest
+      steps:
+      -
+        name: Check out the repo
+        uses: actions/checkout@v2
+      -
+        name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      -
+        name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/dev.txt
+      -
+        name: Test with pytest
+        run: pytest
+  build-and-push-image-to-github-packages:
+    name: Push Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    needs: tests
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push image
+        run: |
+          IMAGE_ID=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
+
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
+
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
+  greet:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Runs a single command using the runners shell
+    - name: Send greeting
+      run: |
+        echo "Hello ${{ github.event.inputs.name }}"
+        echo ${{ github.ref }}
