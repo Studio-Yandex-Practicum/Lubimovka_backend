@@ -53,30 +53,9 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Push image
         run: |
-          IMAGE_ID=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          # [ "$VERSION" == "master" ] && VERSION=latest
-          echo IMAGE_ID=$IMAGE_ID
-          echo $IMAGE_ID
-          echo VERSION=$VERSION
-          echo $VERSION
-
+          IMAGE_ID=ghcr.io/${{ github.repository_owner }}/$IMAGE_NAME
+          VERSION=latest
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          docker images
-
-          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          echo $IMAGE_NAME
-          echo $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
   # greet:
   #   # The type of runner that the job will run on
