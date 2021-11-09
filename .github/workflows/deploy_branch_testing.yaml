@@ -72,8 +72,8 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-          echo "TAG=$VERSION" >> $GITHUB_ENV
-          echo "${{ env.TAG }}"
+          echo "TAG_TEST=534647" >> $GITHUB_ENV
+          echo "${{ env.TAG_TEST }}"
   deploy_testing_branch:
     name: Deploy branch for testing in the server
     runs-on: ubuntu-latest
@@ -93,7 +93,7 @@ jobs:
             git pull
             ./check_env_script.sh .env_branch_testing
 
-            echo "TAG=${{ env.TAG }}" >> .env_branch_testing
+            echo "TAG=${{ env.TAG_TEST }}" >> .env_branch_testing
 
             # PostgreSQL variables: reading and writing Github secrets in .env
             # echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
