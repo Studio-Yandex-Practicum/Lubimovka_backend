@@ -47,8 +47,8 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v2
-      - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+      # - name: Build image
+      #   run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Push image
@@ -80,26 +80,26 @@ jobs:
         id: step_two
         run: |
           echo "${{ env.action_state }}"
-  # deploy_testing_branch:
-  #   name: Deploy branch for testing in the server
-  #   runs-on: ubuntu-latest
-  #   needs: build-and-push-image-to-github-packages
-  #   steps:
-  #     -
-  #       name: executing remote ssh commands to deploy
-  #       uses: appleboy/ssh-action@master
-  #       with:
-  #         host: ${{ secrets.HOST }}
-  #         username: ${{ secrets.USERNAME }}
-  #         key: ${{ secrets.SSH_PRIVATE_KEY }}
-  #         passphrase: ${{ secrets.PASSPHRASE }}
-  #         script: |
-  #           cd education/${{ github.event.repository.name }}
-  #           echo ${{ github.event.repository.name }}
-  #           git pull
-  #           ./check_env_script.sh .env_branch_testing
+  deploy_testing_branch:
+    name: Deploy branch for testing in the server
+    runs-on: ubuntu-latest
+    needs: build-and-push-image-to-github-packages
+    steps:
+      -
+        name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd education/${{ github.event.repository.name }}
+            echo ${{ github.event.repository.name }}
+            git pull
+            ./check_env_script.sh .env_branch_testing
 
-  #           echo "TAG=${{ env.TAG_TEST }}" >> .env_branch_testing
+            echo "TAG=${{ env.action_state }}" >> .env_branch_testing
 
   #           # PostgreSQL variables: reading and writing Github secrets in .env
   #           # echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
