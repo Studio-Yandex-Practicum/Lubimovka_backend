@@ -101,8 +101,8 @@ jobs:
             ./check_env_script.sh .env_branch_testing
 
             echo ${{env.REGISTRY}}/${{env.ORGANIZATION}}/${{env.IMAGE_NAME}}:develop
-            echo ${{ github.ref.name }}
-            echo ${{ github.event.repository }}
+            echo ${{ github.ref }}
+            echo ${{ github.repository }}
             echo "TAG=${{ env.action_state }}" >> .env_branch_testing
   #           # PostgreSQL variables: reading and writing Github secrets in .env
   #           # echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
