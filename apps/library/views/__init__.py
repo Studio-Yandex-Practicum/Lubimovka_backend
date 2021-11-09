@@ -1,13 +1,13 @@
 from .author import AuthorsReadViewSet
-from .participation import ParticipationAPIView
-from .performance import PerformanceAPIView
-from .play import PlayAPIView
-from .searchresult import SearchResultAPIViewSet
+from .participation import ParticipationViewSet
+from .performance import PerformanceViewSet
+from .play import PlayViewSet
+from .searchresult import SearchResultViewSet
 
 __all__ = (
     AuthorsReadViewSet,
-    ParticipationAPIView,
-    PerformanceAPIView,
-    PlayAPIView,
-    SearchResultAPIViewSet,
+    ParticipationViewSet,
+    PerformanceViewSet,
+    PlayViewSet,
+    SearchResultViewSet,
 )

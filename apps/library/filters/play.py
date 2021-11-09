@@ -13,4 +13,7 @@ class PlayFilter(filters.FilterSet):
 
     class Meta:
         model = Play
-        fields = ["program", "festival"]
+        fields = (
+            "program",
+            "festival",
+        )
