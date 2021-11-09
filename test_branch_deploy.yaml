@@ -7,7 +7,7 @@ services:
     volumes:
       - postgres_data_test:/var/lib/postgresql/data
     env_file:
-      - .env_branch_testing
+      - .env1
   backend_test:
     image: "${IMAGE}:${IMAGE_TAG}"
     restart: always
@@ -17,7 +17,7 @@ services:
     depends_on:
       - postgres_test
     env_file:
-      - .env_branch_testing
+      - .env1
   migrations_test:
     image: "${IMAGE}:${IMAGE_TAG}"
     volumes:
@@ -29,8 +29,8 @@ services:
     depends_on:
       - backend_test
     env_file:
-      - .env_branch_testing
-  swag:
+      - .env1
+  swag_test:
     image: ghcr.io/linuxserver/swag
     container_name: swag_test
     cap_add:
@@ -40,10 +40,10 @@ services:
       - VALIDATION=http
       - CERTPROVIDER=zerossl
     env_file:
-      - .env_branch_testing
+      - .env1
     volumes:
       - ./swag_test_config/:/config/
-      - ./swag_nginx.conf:/config/nginx/site-confs/default
+      - ./swag_nginx_test.conf:/config/nginx/site-confs/default
       - static_value_test:/config/static/
       - media_value_test:/config/media/
     ports:

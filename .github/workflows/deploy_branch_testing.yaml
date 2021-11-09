@@ -97,38 +97,38 @@ jobs:
             cd education/${{ github.event.repository.name }}
             echo ${{ github.event.repository.name }}
             git pull
-            ./check_env_script.sh .env_branch_testing
+            ./check_env_script.sh .env1
 
             # Github package name: reading and writing in .env
-            echo "IMAGE=${{ env.IMAGE }}" >> .env_branch_testing
-            echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .env_branch_testing
+            echo "IMAGE=${{ env.IMAGE }}" >> .env1
+            echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .env1
 
-            # PostgreSQL variables: reading and writing Github secrets in .env_branch_testing
-            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env_branch_testing
-            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env_branch_testing
-            echo POSTGRES_DB_TEST=${{ secrets.POSTGRES_DB_TEST }} >> .env_branch_testing
-            echo POSTGRES_USER_TEST=${{ secrets.POSTGRES_USER_TEST }} >> .env_branch_testing
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env_branch_testing
+            # PostgreSQL variables: reading and writing Github secrets in .env1
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env1
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env1
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB_TEST }} >> .env1
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER_TEST }} >> .env1
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env1
 
-            # Django variables: reading and writing Github secrets in .env_branch_testing
-            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env_branch_testing
-            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env_branch_testing
-            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env_branch_testing
-            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env_branch_testing
-            echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .env_branch_testing
-            echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .env_branch_testing
-            echo DJANGO_EMAIL_SUBJECT_PREFIX=${{ secrets.DJANGO_EMAIL_SUBJECT_PREFIX }} >> .env_branch_testing
-            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env_branch_testing
-            echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env_branch_testing
-            echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env_branch_testing
-            echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env_branch_testing
+            # Django variables: reading and writing Github secrets in .env1
+            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env1
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env1
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env1
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env1
+            echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .env1
+            echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .env1
+            echo DJANGO_EMAIL_SUBJECT_PREFIX=${{ secrets.DJANGO_EMAIL_SUBJECT_PREFIX }} >> .env1
+            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env1
+            echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env1
+            echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env1
+            echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env1
 
             # Swag-nginx variables: reading and writing Github secrets in .env
-            echo PUID=$(id -u) >> .env_branch_testing
-            echo PGID=$(id -g) >> .env_branch_testing
-            echo URL=${{ secrets.SITE_URL }} >> .env_branch_testing
-            echo CERTPROVIDER=zerossl >> .env_branch_testing
-            echo EMAIL=${{ secrets.URL_TEST }} >> .env_branch_testing
+            echo PUID=$(id -u) >> .env1
+            echo PGID=$(id -g) >> .env1
+            echo URL=${{ secrets.URL_TEST }} >> .env1
+            echo CERTPROVIDER=zerossl >> .env1
+            echo EMAIL=${{ secrets.EMAIL }} >> .env1
 
             # Pull docker image from github packages with tag develop
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
