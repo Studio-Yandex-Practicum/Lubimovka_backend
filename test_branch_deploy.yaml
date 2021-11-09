@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  postgres_test:
+    image: postgres:13.3
+    restart: always
+    volumes:
+      - postgres_data_test:/var/lib/postgresql/data
+    env_file:
+      - .env_branch_testing
+  backend_test:
+    image: "${IMAGE}:${IMAGE_TAG}"
+    restart: always
+    volumes:
+      - static_value_test:/code/staticfiles/
+      - media_value_test:/code/media/
+    depends_on:
+      - postgres_test
+    env_file:
+      - .env_branch_testing
+  migrations_test:
+    image: "${IMAGE}:${IMAGE_TAG}"
+    volumes:
+      - static_value_test:/code/staticfiles/
+      - media_value_test:/code/media/
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput"
+    depends_on:
+      - backend_test
+    env_file:
+      - .env_branch_testing
+  swag:
+    image: ghcr.io/linuxserver/swag
+    container_name: swag_test
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=Europe/Moscow
+      - VALIDATION=http
+      - CERTPROVIDER=zerossl
+    env_file:
+      - .env_branch_testing
+    volumes:
+      - ./swag_test_config/:/config/
+      - ./swag_nginx.conf:/config/nginx/site-confs/default
+      - static_value_test:/config/static/
+      - media_value_test:/config/media/
+    ports:
+      - 443:443
+      - 80:80
+    depends_on:
+      - backend_test
+    restart: unless-stopped
+
+volumes:
+  postgres_data_test:
+  static_value_test:
+  media_value_test:

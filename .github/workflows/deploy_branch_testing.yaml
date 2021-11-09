@@ -11,7 +11,7 @@ on:
 env:
   REGISTRY: ghcr.io
   ORGANIZATION: studio-yandex-practicum
-  IMAGE_NAME: lubimovka_backend
+  REPOSITORY_NAME: lubimovka_backend
 
 defaults:
   run:
@@ -47,13 +47,13 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v2
-      # - name: Build image
-      #   run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $REPOSITORY_NAME --label "runnumber=${GITHUB_RUN_ID}"
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Push image
         run: |
-          IMAGE_ID=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
+          IMAGE_ID=$REGISTRY/${{ github.repository_owner }}/$REPOSITORY_NAME
 
           # Change all uppercase to lowercase
           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
@@ -69,23 +69,22 @@ jobs:
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
 
-          # docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-          # docker push $IMAGE_ID:$VERSION
-
-          echo "action_state=yellow" >> $GITHUB_ENV
-
-          echo "TAG_TEST=$VERSION" >> $GITHUB_ENV
-      - name: Use the value
-        id: step_two
-        run: |
-          echo "${{ env.action_state }}"
-          echo "${{ env.TAG_TEST }}"
-
+          docker tag $REPOSITORY_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
   deploy_testing_branch:
     name: Deploy branch for testing in the server
     runs-on: ubuntu-latest
     needs: build-and-push-image-to-github-packages
     steps:
+      - name: Getting docker image name and tag, write in environment
+        run: |
+          IMAGE=$REGISTRY/${{ github.repository_owner }}/$REPOSITORY_NAME
+          IMAGE=$(echo $IMAGE | tr '[A-Z]' '[a-z]')
+          IMAGE_TAG=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && IMAGE_TAG=$(echo $IMAGE_TAG | sed -e 's/^v//')
+
+          echo IMAGE=$IMAGE >> $GITHUB_ENV
+          echo IMAGE_TAG=$IMAGE_TAG >> $GITHUB_ENV
       -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -100,43 +99,43 @@ jobs:
             git pull
             ./check_env_script.sh .env_branch_testing
 
-            echo ${{env.REGISTRY}}/${{env.ORGANIZATION}}/${{env.IMAGE_NAME}}:develop
-            echo ${{ github.ref }}
-            echo ${{ github.repository }}
-            echo "TAG=${{ env.action_state }}" >> .env_branch_testing
-  #           # PostgreSQL variables: reading and writing Github secrets in .env
-  #           # echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
-  #           # echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env
-  #           # echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
-  #           # echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
-  #           # echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            # Github package name: reading and writing in .env
+            echo "IMAGE=${{ env.IMAGE }}" >> .env_branch_testing
+            echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .env_branch_testing
 
-  #           # Django variables: reading and writing Github secrets in .env
-  #           # echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env
-  #           # echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env
-  #           # echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env
-  #           # echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env
-  #           # echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .env
-  #           # echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .env
-  #           # echo DJANGO_EMAIL_SUBJECT_PREFIX=${{ secrets.DJANGO_EMAIL_SUBJECT_PREFIX }} >> .env
-  #           # echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env
-  #           # echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env
-  #           # echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env
-  #           # echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env
+            # PostgreSQL variables: reading and writing Github secrets in .env_branch_testing
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env_branch_testing
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env_branch_testing
+            echo POSTGRES_DB_TEST=${{ secrets.POSTGRES_DB_TEST }} >> .env_branch_testing
+            echo POSTGRES_USER_TEST=${{ secrets.POSTGRES_USER_TEST }} >> .env_branch_testing
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env_branch_testing
 
-  #           # Swag-nginx variables: reading and writing Github secrets in .env
-  #           # echo PUID=$(id -u) >> .env
-  #           # echo PGID=$(id -g) >> .env
-  #           # echo URL=${{ secrets.SITE_URL }} >> .env
-  #           # echo CERTPROVIDER=zerossl >> .env
-  #           # echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env
+            # Django variables: reading and writing Github secrets in .env_branch_testing
+            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env_branch_testing
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env_branch_testing
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env_branch_testing
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env_branch_testing
+            echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .env_branch_testing
+            echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .env_branch_testing
+            echo DJANGO_EMAIL_SUBJECT_PREFIX=${{ secrets.DJANGO_EMAIL_SUBJECT_PREFIX }} >> .env_branch_testing
+            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env_branch_testing
+            echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env_branch_testing
+            echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env_branch_testing
+            echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env_branch_testing
 
-  #           # Pull docker image from github packages with tag develop
-  #           # docker pull ${{env.REGISTRY}}/${{env.ORGANIZATION}}/${{env.IMAGE_NAME}}:develop
+            # Swag-nginx variables: reading and writing Github secrets in .env
+            echo PUID=$(id -u) >> .env_branch_testing
+            echo PGID=$(id -g) >> .env_branch_testing
+            echo URL=${{ secrets.SITE_URL }} >> .env_branch_testing
+            echo CERTPROVIDER=zerossl >> .env_branch_testing
+            echo EMAIL=${{ secrets.URL_TEST }} >> .env_branch_testing
 
-  #           # re-run backend docker container
-  #           # sudo docker-compose -f develop_deploy.yaml down
-  #           # sudo docker-compose -f develop_deploy.yaml up -d
+            # Pull docker image from github packages with tag develop
+            docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+
+            # re-run backend docker container
+            sudo docker-compose -f test_branch_deploy.yaml down
+            sudo docker-compose -f test_branch_deploy.yaml up -d
   # # greet:
   #   # The type of runner that the job will run on
   #   runs-on: ubuntu-latest
