@@ -72,8 +72,8 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-          ${{ .env.TAG }}=$VERSION
-          echo ${{ .env.TAG }}
+          ${{env.TAG}}=$VERSION
+          echo ${{env.TAG}}
   deploy_testing_branch:
     name: Deploy branch for testing in the server
     runs-on: ubuntu-latest
@@ -93,7 +93,7 @@ jobs:
             git pull
             ./check_env_script.sh .env_branch_testing
 
-            echo ${{ .env.TAG }}
+            echo ${{env.TAG}}
 
             # PostgreSQL variables: reading and writing Github secrets in .env
             # echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
