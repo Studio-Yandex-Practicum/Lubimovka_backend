@@ -72,8 +72,7 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-          ${{env.TAG}}=$VERSION
-          echo ${{env.TAG}}
+          echo TAG=$VERSION >> ${{env}}
   deploy_testing_branch:
     name: Deploy branch for testing in the server
     runs-on: ubuntu-latest
