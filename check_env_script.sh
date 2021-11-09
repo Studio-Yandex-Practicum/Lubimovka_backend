@@ -1,13 +1,13 @@
 # checking the availability .env in the catalog
-file=.env
+file=$1
 
 if [ -f $file ]
 then
-        echo ".env is available in the catalog"
+        echo "$1 is available in the catalog"
         echo "Deleting old Github secrets"
-        echo -n "" > .env
+        echo -n "" > $1
 else
-        echo ".env is not available in the catalog"
-        echo "Creating .env"
-        touch .env
+        echo "$1 is not available in the catalog"
+        echo "Creating $1"
+        touch $1
 fi
