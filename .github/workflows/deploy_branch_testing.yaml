@@ -99,6 +99,8 @@ jobs:
             git pull
             ./check_env_script.sh .env_branch_testing
 
+            echo $GITHUB_REF_NAME
+            echo $GITHUB_REPOSITORY
             echo "TAG=${{ env.action_state }}" >> .env_branch_testing
 
   #           # PostgreSQL variables: reading and writing Github secrets in .env
