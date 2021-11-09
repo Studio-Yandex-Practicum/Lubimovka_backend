@@ -74,12 +74,13 @@ jobs:
 
           echo "action_state=yellow" >> $GITHUB_ENV
 
-          # echo "TAG_TEST=534647" >> $GITHUB_ENV
-          # echo "${{ env.TAG_TEST }}"
+          echo "TAG_TEST=$VERSION" >> $GITHUB_ENV
       - name: Use the value
         id: step_two
         run: |
           echo "${{ env.action_state }}"
+          echo "${{ env.TAG_TEST }}"
+
   deploy_testing_branch:
     name: Deploy branch for testing in the server
     runs-on: ubuntu-latest
@@ -99,6 +100,7 @@ jobs:
             git pull
             ./check_env_script.sh .env_branch_testing
 
+            echo ${{env.REGISTRY}}/${{env.ORGANIZATION}}/${{env.IMAGE_NAME}}:develop
             echo $GITHUB_REF_NAME
             echo $GITHUB_REPOSITORY
             echo "TAG=${{ env.action_state }}" >> .env_branch_testing
