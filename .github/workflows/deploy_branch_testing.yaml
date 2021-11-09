@@ -72,7 +72,7 @@ jobs:
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
           docker push $IMAGE_ID:$VERSION
 
-          echo TAG=$VERSION >> ${{env}}
+          echo TAG=$VERSION >> $GITHUB_ENV
   deploy_testing_branch:
     name: Deploy branch for testing in the server
     runs-on: ubuntu-latest
