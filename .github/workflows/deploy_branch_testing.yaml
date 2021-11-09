@@ -80,10 +80,6 @@ jobs:
         run: |
           echo "${{ env.action_state }}"
           echo "${{ env.TAG_TEST }}"
-      - name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
 
   deploy_testing_branch:
     name: Deploy branch for testing in the server
@@ -105,16 +101,9 @@ jobs:
             ./check_env_script.sh .env_branch_testing
 
             echo ${{env.REGISTRY}}/${{env.ORGANIZATION}}/${{env.IMAGE_NAME}}:develop
-            echo $GITHUB_REF_NAME
-            echo $GITHUB_REPOSITORY
+            echo ${{ github.ref.name }}
+            echo ${{ github.event.repository }}
             echo "TAG=${{ env.action_state }}" >> .env_branch_testing
-
-      -
-        name: Dump GitHub context
-        env:
-          GITHUB_CONTEXT: ${{ toJson(github) }}
-        run: echo "$GITHUB_CONTEXT"
-
   #           # PostgreSQL variables: reading and writing Github secrets in .env
   #           # echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
   #           # echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env
