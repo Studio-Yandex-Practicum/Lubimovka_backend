@@ -295,8 +295,8 @@ class Performance(BaseModel):
     )
     video = models.URLField(
         max_length=200,
-        blank=True,
         unique=True,
+        blank=True,
         null=True,
         verbose_name="Видео",
     )

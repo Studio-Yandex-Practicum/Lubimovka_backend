@@ -6,7 +6,10 @@ from apps.library.serializers import AuthorSearchSerializer, PlaySerializer
 
 
 class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
-    """Поиск авторов по имени и фамилии и пьес по названию"""
+    """
+    Поиск авторов по имени и фамилии и пьес по названию.
+    При пустом поисковом запросе отдаются пустые массивы.
+    """
 
     pagination_class = None
 
