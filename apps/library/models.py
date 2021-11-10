@@ -82,12 +82,12 @@ class Play(BaseModel):
     )
 
     class Meta:
-        constraints = [
+        constraints = (
             UniqueConstraint(
-                fields=["name", "festival"],
+                fields=("name", "festival"),
                 name="unique_play",
-            )
-        ]
+            ),
+        )
         verbose_name = "Пьеса"
         verbose_name_plural = "Пьесы"
 
@@ -138,9 +138,7 @@ class Author(BaseModel):
     )
 
     class Meta:
-        ordering = [
-            "person__last_name",
-        ]
+        ordering = ("person__last_name",)
         verbose_name = "Автор"
         verbose_name_plural = "Авторы"
 
@@ -297,8 +295,9 @@ class Performance(BaseModel):
     )
     video = models.URLField(
         max_length=200,
-        blank=True,
         unique=True,
+        blank=True,
+        null=True,
         verbose_name="Видео",
     )
     description = models.TextField(
@@ -555,13 +554,13 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name="Название пьесы",
     )
     year = models.PositiveSmallIntegerField(
-        validators=[year_validator],
+        validators=(year_validator,),
         verbose_name="Год написания",
     )
     file = models.FileField(
-        validators=[
-            FileExtensionValidator(["doc", "docx", "txt", "odt", "pdf"])
-        ],
+        validators=(
+            FileExtensionValidator(["doc", "docx", "txt", "odt", "pdf"]),
+        ),
         verbose_name="Файл",
         upload_to=generate_class_name_path,
     )
@@ -576,9 +575,9 @@ class ParticipationApplicationFestival(BaseModel):
     class Meta:
         verbose_name_plural = "Заявления на участие"
         verbose_name = "Заявление на участие"
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
-                fields=[
+                fields=(
                     "first_name",
                     "last_name",
                     "birthday",
@@ -587,10 +586,10 @@ class ParticipationApplicationFestival(BaseModel):
                     "email",
                     "title",
                     "year",
-                ],
+                ),
                 name="unique_application",
             ),
-        ]
+        )
 
     def __str__(self):
         return f"{self.last_name}-{self.title}"
