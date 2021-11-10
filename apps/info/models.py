@@ -124,7 +124,12 @@ class Volunteer(BaseModel):
         validators=[MinValueValidator(1990), MaxValueValidator(2500)],
         verbose_name="Год участия в фестивале",
     )
-    review = models.TextField(
+    review_title = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name="Заголовок отзыва",
+    )
+    review_text = models.TextField(
         verbose_name="Текст отзыва",
     )
 
