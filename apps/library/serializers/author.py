@@ -84,7 +84,7 @@ class AuthorListSerializer(serializers.ModelSerializer):
         )
 
 
-class AuthorForSearchSerializer(serializers.ModelSerializer):
+class AuthorSearchSerializer(serializers.ModelSerializer):
     name = serializers.SlugRelatedField(
         source="person",
         slug_field="reversed_full_name",

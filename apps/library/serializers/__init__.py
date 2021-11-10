@@ -1,7 +1,7 @@
 from .author import (
-    AuthorForSearchSerializer,
     AuthorListSerializer,
     AuthorRetrieveSerializer,
+    AuthorSearchSerializer,
 )
 from .masterclass import MasterClassEventSerializer
 from .performance import PerformanceEventSerializer, PerformanceSerializer
@@ -12,7 +12,7 @@ from .reading import ReadingEventSerializer
 __all__ = (
     AuthorListSerializer,
     AuthorRetrieveSerializer,
-    AuthorForSearchSerializer,
+    AuthorSearchSerializer,
     MasterClassEventSerializer,
     PerformanceEventSerializer,
     PlaySerializer,
