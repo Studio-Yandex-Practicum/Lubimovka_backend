@@ -155,6 +155,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
 
+CKEDITOR_UPLOAD_PATH = "uploads/"
 
 # MEDIA
 # ------------------------------------------------------------------------------

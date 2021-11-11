@@ -1,10 +1,21 @@
+from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.core.exceptions import ValidationError
 
+from apps.content_pages.models import Text
+
 User = get_user_model()
+
+
+class TextAdminForm(forms.ModelForm):
+    text = forms.CharField(label="Текст", widget=CKEditorUploadingWidget())
+
+    class Meta:
+        model = Text
+        fields = "__all__"
 
 
 class UserAdminForm(forms.ModelForm):

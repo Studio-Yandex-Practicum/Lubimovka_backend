@@ -3,7 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Group
 
-from .forms import GroupAdminForm, UserAdminForm
+from ..content_pages.models import Text
+from .forms import GroupAdminForm, TextAdminForm, UserAdminForm
 
 User = get_user_model()
 
@@ -36,6 +37,12 @@ class GroupAdmin(admin.ModelAdmin):
     filter_horizontal = ("permissions",)
 
 
+class TextAdmin(admin.ModelAdmin):
+
+    form = TextAdminForm
+
+
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(User, UserAdmin)
+admin.site.register(Text, TextAdmin)
