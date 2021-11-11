@@ -10,7 +10,7 @@ from .content_blocks import (
     PlaysBlockAdmin,
     VideosBlockAdmin,
 )
-from .content_items import Image, Link, Quote, Text, Title, Video
+from .content_items import Image, Link, Quote, Title, Video
 from .contents import BaseContentInline
 
 __all__ = (
@@ -28,7 +28,6 @@ __all__ = (
     Video,
     Link,
     Quote,
-    Text,
     Title,
     BaseContentInline,
 )
