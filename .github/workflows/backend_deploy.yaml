@@ -102,7 +102,8 @@ jobs:
             echo "IMAGE=${{ env.IMAGE }}" >> .github_image
             echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .github_image
             source .github_image
-            export IMAGE IMAGE_TAG
+            export IMAGE
+            export IMAGE_TAG
 
             # PostgreSQL variables: reading and writing Github secrets in .env-dev
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
@@ -135,8 +136,8 @@ jobs:
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
             # re-run backend docker container
-            sudo docker-compose -f develop_deploy.yaml down
-            sudo docker-compose -f develop_deploy.yaml up -d
+            docker-compose -f develop_deploy.yaml down
+            docker-compose -f develop_deploy.yaml up -d
 
   send_message:
     name: Send message in telegram group
