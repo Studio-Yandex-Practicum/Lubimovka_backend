@@ -25,7 +25,8 @@ services:
       - media_value:/code/media/
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput"
+             python manage.py collectstatic --noinput &&
+             python manage.py createsuperuser --noinput"
     depends_on:
       - backend
     env_file:
