@@ -7,7 +7,6 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  ORGANIZATION: studio-yandex-practicum
   IMAGE_NAME: lubimovka_backend
 
 defaults:
@@ -76,6 +75,16 @@ jobs:
     needs: build-and-push-image-to-github-packages
     steps:
       -
+        name: Getting docker image name and tag, write in environment
+        run: |
+          IMAGE=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
+          IMAGE=$(echo $IMAGE | tr '[A-Z]' '[a-z]')
+          IMAGE_TAG=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && IMAGE_TAG=$(echo $IMAGE_TAG | sed -e 's/^v//')
+
+          echo IMAGE=$IMAGE >> $GITHUB_ENV
+          echo IMAGE_TAG=$IMAGE_TAG >> $GITHUB_ENV
+      -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         with:
@@ -86,37 +95,41 @@ jobs:
           script: |
             cd ${{ github.event.repository.name }}
             git pull
-            ./check_env_script.sh .env
+            ./check_env_script.sh .env-dev
 
-            # PostgreSQL variables: reading and writing Github secrets in .env
-            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env
-            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
+            # Github package name: writing in .env
+            export IMAGE=${{ env.IMAGE }}
+            export IMAGE_TAG=${{ env.IMAGE_TAG }}
 
-            # Django variables: reading and writing Github secrets in .env
-            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env
-            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env
-            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env
-            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env
-            echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .env
-            echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .env
-            echo DJANGO_EMAIL_SUBJECT_PREFIX=${{ secrets.DJANGO_EMAIL_SUBJECT_PREFIX }} >> .env
-            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env
-            echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env
-            echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env
-            echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env
+            # PostgreSQL variables: reading and writing Github secrets in .env-dev
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-dev
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env-dev
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env-dev
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-dev
 
-            # Swag-nginx variables: reading and writing Github secrets in .env
-            echo PUID=$(id -u) >> .env
-            echo PGID=$(id -g) >> .env
-            echo URL=${{ secrets.SITE_URL }} >> .env
-            echo CERTPROVIDER=zerossl >> .env
-            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env
+            # Django variables: reading and writing Github secrets in .env-dev
+            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-dev
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-dev
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-dev
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-dev
+            echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .env-dev
+            echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .env-dev
+            echo DJANGO_EMAIL_SUBJECT_PREFIX=${{ secrets.DJANGO_EMAIL_SUBJECT_PREFIX }} >> .env-dev
+            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env-dev
+            echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env-dev
+            echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env-dev
+            echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env-dev
+
+            # Swag-nginx variables: reading and writing Github secrets in .env-dev
+            echo PUID=$(id -u) >> .env-dev
+            echo PGID=$(id -g) >> .env-dev
+            echo URL=${{ secrets.SITE_URL }} >> .env-dev
+            echo CERTPROVIDER=zerossl >> .env-dev
+            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
             # Pull docker image from github packages with tag develop
-            docker pull ${{env.REGISTRY}}/${{env.ORGANIZATION}}/${{env.IMAGE_NAME}}:develop
+            docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
             # re-run backend docker container
             sudo docker-compose -f develop_deploy.yaml down

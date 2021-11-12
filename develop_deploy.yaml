@@ -7,9 +7,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - .env
+      - .env-dev
   backend:
-    image: "ghcr.io/studio-yandex-practicum/lubimovka_backend:develop"
+    image: "${IMAGE}:${IMAGE_TAG}"
     restart: always
     volumes:
       - static_value:/code/staticfiles/
@@ -17,9 +17,9 @@ services:
     depends_on:
       - postgres
     env_file:
-      - .env
+      - .env-dev
   migrations:
-    image: "ghcr.io/studio-yandex-practicum/lubimovka_backend:develop"
+    image: "${IMAGE}:${IMAGE_TAG}"
     volumes:
       - static_value:/code/staticfiles/
       - media_value:/code/media/
@@ -29,7 +29,7 @@ services:
     depends_on:
       - backend
     env_file:
-      - .env
+      - .env-dev
   swag:
     image: ghcr.io/linuxserver/swag
     container_name: swag
@@ -40,7 +40,7 @@ services:
       - VALIDATION=http
       - CERTPROVIDER=zerossl
     env_file:
-      - .env
+      - .env-dev
     volumes:
       - ./swag_config/:/config/
       - ./swag_nginx.conf:/config/nginx/site-confs/default
