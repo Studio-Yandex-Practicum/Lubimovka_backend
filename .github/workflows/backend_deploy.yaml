@@ -97,9 +97,12 @@ jobs:
             git pull
             ./check_env_script.sh .env-dev
 
-            # Github package name: writing in .env
-            export IMAGE=${{ env.IMAGE }}
-            export IMAGE_TAG=${{ env.IMAGE_TAG }}
+            # Github package name: writing in .env to read in docker-compose script
+            ./check_env_script.sh .github_image
+            echo "IMAGE=${{ env.IMAGE }}" >> .github_image
+            echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .github_image
+            source .github_image
+            export IMAGE IMAGE_TAG
 
             # PostgreSQL variables: reading and writing Github secrets in .env-dev
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
