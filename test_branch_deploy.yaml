@@ -7,7 +7,7 @@ services:
     volumes:
       - postgres_data_test:/var/lib/postgresql/data
     env_file:
-      - .env1
+      - .env-dev
   backend_test:
     image: "${IMAGE}:${IMAGE_TAG}"
     restart: always
@@ -17,7 +17,7 @@ services:
     depends_on:
       - postgres_test
     env_file:
-      - .env1
+      - .env-dev
   migrations_test:
     image: "${IMAGE}:${IMAGE_TAG}"
     volumes:
@@ -29,29 +29,29 @@ services:
     depends_on:
       - backend_test
     env_file:
-      - .env1
-  swag_test:
-    image: ghcr.io/linuxserver/swag
-    container_name: swag_test
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - TZ=Europe/Moscow
-      - VALIDATION=http
-      - CERTPROVIDER=zerossl
-    env_file:
-      - .env1
-    volumes:
-      - ./swag_test_config/:/config/
-      - ./swag_nginx_test.conf:/config/nginx/site-confs/default
-      - static_value_test:/config/static/
-      - media_value_test:/config/media/
-    ports:
-      - 443:443
-      - 80:80
-    depends_on:
-      - backend_test
-    restart: unless-stopped
+      - .env-dev
+  # swag_test:
+  #   image: ghcr.io/linuxserver/swag
+  #   container_name: swag_test
+  #   cap_add:
+  #     - NET_ADMIN
+  #   environment:
+  #     - TZ=Europe/Moscow
+  #     - VALIDATION=http
+  #     - CERTPROVIDER=zerossl
+  #   env_file:
+  #     - .env-dev
+  #   volumes:
+  #     - ./swag_test_config/:/config/
+  #     - ./swag_nginx_test.conf:/config/nginx/site-confs/default
+  #     - static_value_test:/config/static/
+  #     - media_value_test:/config/media/
+  #   ports:
+  #     - 443:443
+  #     - 80:80
+  #   depends_on:
+  #     - backend_test
+  #   restart: unless-stopped
 
 volumes:
   postgres_data_test:
