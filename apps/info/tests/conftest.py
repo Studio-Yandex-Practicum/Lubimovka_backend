@@ -11,7 +11,7 @@ from apps.info.tests.factories import (
 )
 
 
-@pytest.fixture()
+@pytest.fixture
 def sponsors():
     return list(
         SponsorFactory(person=PersonFactory())
@@ -19,7 +19,7 @@ def sponsors():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def teams():
     return list(
         FestivalTeamFactory(person=PersonFactory())
@@ -27,7 +27,7 @@ def teams():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def volunteers():
     return list(
         VolunteerFactory(person=PersonFactory())
@@ -35,19 +35,19 @@ def volunteers():
     )
 
 
-@pytest.fixture()
+@pytest.fixture
 def images():
     return list(ImageFactory() for _ in range(random.randint(0, 3)))
 
 
-@pytest.fixture()
+@pytest.fixture
 def festival(teams, images, sponsors, volunteers):
     images = images
     return FestivalFactory(
         start_date="2021-07-14",
         end_date="2021-07-15",
-        teams=teams,
-        sponsors=sponsors,
-        volunteers=volunteers,
-        images=images,
+        # teams=teams,
+        # sponsors=sponsors,
+        # volunteers=volunteers,
+        # images=images,
     )

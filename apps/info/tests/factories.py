@@ -1,10 +1,11 @@
+import random
 import urllib
 
 import factory
 from django.core.files.base import ContentFile
 from faker import Faker
 
-from apps.core.models import Person
+from apps.core.models import Image, Person
 from apps.info.models import (
     Festival,
     FestivalTeam,
@@ -95,6 +96,11 @@ class FestivalFactory(factory.django.DjangoModelFactory):
         if extracted:
             for team in extracted:
                 self.teams.add(team)
+        else:
+            teams_count = FestivalTeam.objects.count()
+            how_many = min(teams_count, random.randint(1, 7))
+            tags = FestivalTeam.objects.order_by("?")[:how_many]
+            self.teams.add(*tags)
 
     @factory.post_generation
     def sponsors(self, create, extracted, **kwargs):
@@ -103,6 +109,11 @@ class FestivalFactory(factory.django.DjangoModelFactory):
         if extracted:
             for sponsor in extracted:
                 self.sponsors.add(sponsor)
+        else:
+            sponsors_count = Sponsor.objects.count()
+            how_many = min(sponsors_count, random.randint(1, 7))
+            sponsors = Sponsor.objects.order_by("?")[:how_many]
+            self.sponsors.add(*sponsors)
 
     @factory.post_generation
     def volunteers(self, create, extracted, **kwargs):
@@ -111,6 +122,11 @@ class FestivalFactory(factory.django.DjangoModelFactory):
         if extracted:
             for volunteer in extracted:
                 self.volunteers.add(volunteer)
+        else:
+            volunteers_count = Volunteer.objects.count()
+            how_many = min(volunteers_count, random.randint(1, 7))
+            volunteers = Volunteer.objects.order_by("?")[:how_many]
+            self.volunteers.add(*volunteers)
 
     @factory.post_generation
     def images(self, create, extracted, **kwargs):
@@ -119,6 +135,15 @@ class FestivalFactory(factory.django.DjangoModelFactory):
         if extracted:
             for image in extracted:
                 self.images.add(image)
+        else:
+            at_least = 1
+            how_many = extracted or at_least
+
+            images_count = Image.objects.count()
+            how_many = min(images_count, how_many)
+
+            images = Image.objects.order_by("?")[:how_many]
+            self.images.add(*images)
 
     plays_count = factory.Faker("random_int", min=1, max=25, step=1)
     selected_plays_count = factory.Faker("random_int", min=1, max=200, step=1)

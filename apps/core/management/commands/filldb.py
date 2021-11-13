@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from apps.core.tests.factories import PersonFactory
 from apps.info.tests.factories import (
+    FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
     SponsorFactory,
@@ -57,6 +58,7 @@ class Command(BaseCommand):
             sponsors = SponsorFactory.create_batch(50)
             volunteers = VolunteerFactory.create_batch(50)
             teams = FestivalTeamFactory.create_batch(70)
+            festival = FestivalFactory.create_batch(4)
             self.stdout.write(
                 self.style.SUCCESS(
                     f"{len(partners)} партнёров успешно созданы"
@@ -75,6 +77,11 @@ class Command(BaseCommand):
             self.stdout.write(
                 self.style.SUCCESS(
                     f"{len(teams)} членов команд успешно созданы"
+                )
+            )
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"{len(festival)} фестивалей успешно созданы"
                 )
             )
         except CommandError:
