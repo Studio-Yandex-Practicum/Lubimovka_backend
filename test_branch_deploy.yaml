@@ -6,6 +6,8 @@ services:
     restart: always
     volumes:
       - postgres_data_test:/var/lib/postgresql/data
+    ports:
+      - 5962:5432
     env_file:
       - .env-dev
   backend_test:
