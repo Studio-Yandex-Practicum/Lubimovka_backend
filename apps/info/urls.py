@@ -13,12 +13,7 @@ from apps.static_pages.views import StaticPagesView
 
 about_festival_urls = [
     path(
-        "<slug:static_page_url>/",
-        StaticPagesView.as_view(),
-        name="static_page",
-    ),
-    path(
-        "festival-teams/",
+        "team/",
         FestivalTeamsViewSet.as_view(),
         name="festival-teams",
     ),
@@ -31,6 +26,11 @@ about_festival_urls = [
         "volunteers/",
         VolunteersViewSet.as_view(),
         name="volunteers",
+    ),
+    path(
+        "<slug:static_page_url>/",
+        StaticPagesView.as_view(),
+        name="static_page",
     ),
 ]
 
