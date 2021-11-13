@@ -1,10 +1,11 @@
+import random
 import urllib
 
 import factory
 from django.core.files.base import ContentFile
 from faker import Faker
 
-from apps.core.models import Person
+from apps.core.models import Image, Person
 from apps.core.utilities.slugify import slugify
 
 fake = Faker(locale="ru_RU")
@@ -68,3 +69,17 @@ class PersonFactory(factory.django.DjangoModelFactory):
                 ContentFile(image),
                 save=False,
             )
+
+
+class ImageFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Image
+        django_get_or_create = ["image"]
+
+    image = factory.django.ImageField(
+        color=factory.LazyFunction(
+            lambda: random.choice(["blue", "yellow", "green", "orange"])
+        ),
+        width=factory.LazyFunction(lambda: random.randint(10, 1000)),
+        height=factory.SelfAttribute("width"),
+    )

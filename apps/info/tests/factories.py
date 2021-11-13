@@ -53,11 +53,12 @@ class VolunteerFactory(factory.django.DjangoModelFactory):
         model = Volunteer
         django_get_or_create = ["person"]
 
-    person = person = factory.Iterator(
+    person = factory.Iterator(
         Person.objects.filter(email__isnull=False).exclude(image__exact="")
     )
     year = factory.Faker("random_int", min=2018, max=2021, step=1)
-    review = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
+    review_title = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
+    review_text = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
 
 
 class FestivalTeamFactory(factory.django.DjangoModelFactory):
@@ -86,6 +87,45 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2500, step=1)
+
+    @factory.post_generation
+    def teams(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            for team in extracted:
+                self.teams.add(team)
+
+    @factory.post_generation
+    def sponsors(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            for sponsor in extracted:
+                self.sponsors.add(sponsor)
+
+    @factory.post_generation
+    def volunteers(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            for volunteer in extracted:
+                self.volunteers.add(volunteer)
+
+    @factory.post_generation
+    def images(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            for image in extracted:
+                self.images.add(image)
+
+    plays_count = factory.Faker("random_int", min=1, max=25, step=1)
+    selected_plays_count = factory.Faker("random_int", min=1, max=200, step=1)
+    selectors_count = factory.Faker("random_int", min=1, max=20, step=1)
+    volunteers_count = factory.Faker("random_int", min=1, max=20, step=1)
+    events_count = factory.Faker("random_int", min=1, max=20, step=1)
+    cities_count = factory.Faker("random_int", min=1, max=20, step=1)
     video_link = factory.LazyFunction(
         lambda: f"{fake.word()}.com/{fake.word()}/"
     )
