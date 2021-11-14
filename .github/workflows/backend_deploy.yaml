@@ -96,7 +96,7 @@ jobs:
             cd ${{ github.event.repository.name }}
             git pull
             cd infra_deploy
-            chmod u+x check_env_script.sh
+            chmod +x check_env_script.sh
             ./check_env_script.sh .env-dev
 
             # Github package name: writing in .env to read in docker-compose script
