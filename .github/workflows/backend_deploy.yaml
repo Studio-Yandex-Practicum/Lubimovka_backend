@@ -138,10 +138,10 @@ jobs:
             echo CERTPROVIDER=zerossl >> .env-dev
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
-            # Pull docker image from github packages with tag develop
+            # Pull docker image from github packages with tag
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
-            # re-run backend docker container
+            # re-run docker containers
             docker-compose -f develop_deploy.yaml down
             docker-compose -f develop_deploy.yaml up -d
 

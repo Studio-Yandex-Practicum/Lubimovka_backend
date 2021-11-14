@@ -115,7 +115,7 @@ jobs:
             # Django variables: reading and writing Github secrets in .env-test
             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-test
             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-test
-            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-test
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS_TEST }} >> .env-test
             echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-test
             echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .env-test
             echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .env-test
@@ -130,11 +130,13 @@ jobs:
             echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env-test
             echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env-test
 
-            # Pull docker image from github packages with tag develop
+            # Pull docker image from github packages with tag
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
-            # re-run backend docker container
+            # re-run docker containers and remove test containers
+            docker-compose -f develop_deploy.yaml down
             docker-compose -f test_branch_deploy.yaml down --volumes
+            docker-compose -f develop_deploy.yaml up -d
             docker-compose -f test_branch_deploy.yaml up -d
   send_message:
     name: Send message in telegram group
