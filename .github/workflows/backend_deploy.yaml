@@ -95,6 +95,7 @@ jobs:
           script: |
             cd ${{ github.event.repository.name }}
             git pull
+            chmod u+x check_env_script.sh
             ./check_env_script.sh .env-dev
 
             # Github package name: writing in .env to read in docker-compose script
@@ -172,7 +173,7 @@ jobs:
                   https://github.com/${{ github.repository }}/pull/${{env.PR}}
 
                   Сcылка на документацию в Swagger:
-                  https://lubimovka.kiryanov.ru/api/schema/swagger-ui/
+                  https://develop.prostringer.ru/api/schema/swagger-ui/
 
                   Панель администратора:
-                  https://lubimovka.kiryanov.ru/admin/
+                  https://develop.prostringer.ru/admin/

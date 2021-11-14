@@ -3,6 +3,7 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13.3
+    container_name: postgres_develop
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -12,6 +13,7 @@ services:
       - develop_db_network
   backend:
     image: "${IMAGE}:${IMAGE_TAG}"
+    container_name: backend_develop
     restart: always
     volumes:
       - static_value:/code/staticfiles/
@@ -25,6 +27,7 @@ services:
       - develop_swag_network
   migrations:
     image: "${IMAGE}:${IMAGE_TAG}"
+    container_name: migrations_develop
     volumes:
       - static_value:/code/staticfiles/
       - media_value:/code/media/
@@ -47,15 +50,19 @@ services:
       - TZ=Europe/Moscow
       - VALIDATION=http
       - CERTPROVIDER=zerossl
+      - SUBDOMAINS=develop,testing
+      - ONLY_SUBDOMAINS=true
     env_file:
       - .env-dev
     networks:
-      - develop_swag_network
+      - swag_network
     volumes:
       - ./swag_config/:/config/
-      - ./swag_nginx.conf:/config/nginx/site-confs/default
+      - ./swag-nginx.conf:/config/nginx/site-confs/default
       - static_value:/config/static/
       - media_value:/config/media/
+      - static_value_test:/config/test/static/
+      - media_value_test:/config/test/media/
     ports:
       - 443:443
       - 80:80
@@ -66,10 +73,12 @@ services:
 networks:
     develop_db_network:
       driver: bridge
-    develop_swag_network:
+    swag_network:
       driver: bridge
 
 volumes:
   postgres_data:
   static_value:
   media_value:
+  static_value_test:
+  media_value_test:

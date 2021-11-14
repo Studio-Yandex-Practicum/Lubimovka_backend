@@ -130,13 +130,6 @@ jobs:
             echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env-test
             echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env-test
 
-            # # Swag-nginx variables: reading and writing Github secrets in .env-test
-            echo PUID=$(id -u) >> .env-test
-            echo PGID=$(id -g) >> .env-test
-            echo URL=${{ secrets.URL_TEST }} >> .env-test
-            echo CERTPROVIDER=zerossl >> .env-test
-            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
-
             # Pull docker image from github packages with tag develop
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
@@ -154,12 +147,12 @@ jobs:
           to: ${{ secrets.TELEGRAM_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-                  **Новая ветка в тестировании** - ${{ github.ref_name }}
+                  Новая ветка в тестировании - ${{ github.ref_name }}
 
-                  **Тестирует** - ${{ github.event.inputs.name }}
+                  Тестирует - ${{ github.event.inputs.name }}
 
                   Сcылка на документацию в Swagger:
-                  https://testing.develop.ru/api/schema/swagger-ui/
+                  https://testing.prostringer.ru/api/schema/swagger-ui/
 
                   Панель администратора:
-                  https://testing.develop.ru/admin/
+                  https://testing.prostringer.ru/admin/

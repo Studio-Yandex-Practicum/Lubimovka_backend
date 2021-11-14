@@ -3,6 +3,7 @@ version: '3.8'
 services:
   postgres_test:
     image: postgres:13.3
+    container_name: postgres_test
     restart: always
     volumes:
       - postgres_data_test:/var/lib/postgresql/data
@@ -12,6 +13,7 @@ services:
       - test_db_network
   backend_test:
     image: "${IMAGE}:${IMAGE_TAG}"
+    container_name: backend_test
     restart: always
     volumes:
       - static_value_test:/code/staticfiles/
@@ -22,9 +24,10 @@ services:
       - .env-test
     networks:
       - test_db_network
-      - test_swag_network
+      - swag_network
   migrations_test:
     image: "${IMAGE}:${IMAGE_TAG}"
+    container_name: migrations_test
     volumes:
       - static_value_test:/code/staticfiles/
       - media_value_test:/code/media/
@@ -38,35 +41,11 @@ services:
       - .env-test
     networks:
       - test_db_network
-  swag_test:
-    image: ghcr.io/linuxserver/swag
-    container_name: swag_test
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - TZ=Europe/Moscow
-      - VALIDATION=http
-      - CERTPROVIDER=zerossl
-    env_file:
-      - .env-test
-    networks:
-      - test_swag_network
-    volumes:
-      - ./swag_test_config/:/config/
-      - ./swag_nginx_test.conf:/config/nginx/site-confs/default
-      - static_value_test:/config/static/
-      - media_value_test:/config/media/
-    ports:
-      - 443:443
-      - 80:80
-    depends_on:
-      - backend_test
-    restart: unless-stopped
 
 networks:
   test_db_network:
     driver: bridge
-  test_swag_network:
+  swag_network:
     driver: bridge
 
 volumes:
