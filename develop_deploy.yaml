@@ -24,7 +24,7 @@ services:
       - .env-dev
     networks:
       - develop_db_network
-      - develop_swag_network
+      - swag_network
   migrations:
     image: "${IMAGE}:${IMAGE_TAG}"
     container_name: migrations_develop

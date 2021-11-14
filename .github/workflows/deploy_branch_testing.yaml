@@ -147,7 +147,8 @@ jobs:
           to: ${{ secrets.TELEGRAM_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-                  Новая ветка в тестировании - ${{ github.ref_name }}
+                  Новая ветка в тестировании:
+                  https://github.com/${{ github.repository }}/tree/${{ github.ref_name }}
 
                   Тестирует - ${{ github.event.inputs.name }}
 
