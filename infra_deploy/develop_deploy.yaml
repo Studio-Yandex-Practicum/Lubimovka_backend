@@ -49,7 +49,6 @@ services:
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
-      - CERTPROVIDER=zerossl
       - SUBDOMAINS=develop,testing
       - ONLY_SUBDOMAINS=true
     env_file:

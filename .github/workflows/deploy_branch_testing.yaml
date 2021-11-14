@@ -5,12 +5,11 @@ on:
     inputs:
       name:
         description: 'Please, enter your name and surname'
-        default: 'Иван Иванов'
+        default: 'Имя Фамилия'
         required: true
 
 env:
   REGISTRY: ghcr.io
-  ORGANIZATION: studio-yandex-practicum
   REPOSITORY_NAME: lubimovka_backend
 
 defaults:
@@ -94,7 +93,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ${{ github.event.repository.name }}
+            cd ${{ github.event.repository.name }}/infra_deploy
             ./check_env_script.sh .env-test
 
             # Github package name: writing in .env to read in docker-compose script
@@ -154,7 +153,7 @@ jobs:
                   Тестирует - ${{ github.event.inputs.name }}
 
                   Сcылка на документацию в Swagger:
-                  https://testing.prostringer.ru/api/schema/swagger-ui/
+                  https://testing.prostringer.ru/api/v1/schema/swagger-ui/
 
                   Панель администратора:
                   https://testing.prostringer.ru/admin/

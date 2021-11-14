@@ -95,6 +95,7 @@ jobs:
           script: |
             cd ${{ github.event.repository.name }}
             git pull
+            cd infra_deploy
             chmod u+x check_env_script.sh
             ./check_env_script.sh .env-dev
 
@@ -135,7 +136,6 @@ jobs:
             echo PUID=$(id -u) >> .env-dev
             echo PGID=$(id -g) >> .env-dev
             echo URL=${{ secrets.SITE_URL }} >> .env-dev
-            echo CERTPROVIDER=zerossl >> .env-dev
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
             # Pull docker image from github packages with tag
@@ -173,7 +173,7 @@ jobs:
                   https://github.com/${{ github.repository }}/pull/${{env.PR}}
 
                   Сcылка на документацию в Swagger:
-                  https://develop.prostringer.ru/api/schema/swagger-ui/
+                  https://develop.prostringer.ru/api/v1/schema/swagger-ui/
 
                   Панель администратора:
                   https://develop.prostringer.ru/admin/
