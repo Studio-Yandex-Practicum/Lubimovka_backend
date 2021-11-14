@@ -133,10 +133,9 @@ jobs:
             # Pull docker image from github packages with tag
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
-            # re-run docker containers and remove test containers
-            docker-compose -f develop_deploy.yaml down
-            docker-compose -f test_branch_deploy.yaml down --volumes
-            docker-compose -f develop_deploy.yaml up -d
+            # re-run docker containers and remove database volumes
+            docker-compose -f test_branch_deploy.yaml down
+            docker volume rm lubimovka_backend_postgres_data_test
             docker-compose -f test_branch_deploy.yaml up -d
   send_message:
     name: Send message in telegram group
