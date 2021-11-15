@@ -58,7 +58,7 @@ class VolunteerFactory(factory.django.DjangoModelFactory):
         Person.objects.filter(email__isnull=False).exclude(image__exact="")
     )
     year = factory.Faker("random_int", min=2018, max=2021, step=1)
-    review_title = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
+    review_title = factory.Faker("text", max_nb_chars=50, locale="ru_RU")
     review_text = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
 
 
