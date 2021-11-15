@@ -42,12 +42,7 @@ def images():
 
 @pytest.fixture
 def festival(teams, images, sponsors, volunteers):
-    images = images
     return FestivalFactory(
         start_date="2021-07-14",
         end_date="2021-07-15",
-        # teams=teams,
-        # sponsors=sponsors,
-        # volunteers=volunteers,
-        # images=images,
     )

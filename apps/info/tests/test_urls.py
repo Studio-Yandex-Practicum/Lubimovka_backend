@@ -43,8 +43,6 @@ class TestFestivalAPI:
                 f"возвращаются данные объекта. Значение {field} неправильное"
             )
         for field in [
-            "teams",
-            "sponsors",
             "volunteers",
             "images",
         ]:

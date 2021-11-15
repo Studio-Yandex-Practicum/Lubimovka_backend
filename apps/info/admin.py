@@ -34,20 +34,6 @@ class PersonAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
-class FestivalTeamInline(admin.TabularInline):
-    model = Festival.teams.through
-    verbose_name = "Команда и Арт-дирекция"
-    verbose_name_plural = "Команда и Арт-дирекция"
-    extra = 1
-
-
-class SponsorInline(admin.TabularInline):
-    model = Festival.sponsors.through
-    verbose_name = "Попечитель"
-    verbose_name_plural = "Попечители"
-    extra = 1
-
-
 class VolunteerInline(admin.TabularInline):
     model = Festival.volunteers.through
     verbose_name = "Волонтёр"
@@ -68,8 +54,6 @@ class FestivalAdmin(admin.ModelAdmin):
         "year",
     )
     inlines = (
-        FestivalTeamInline,
-        SponsorInline,
         VolunteerInline,
         FestivalImagesInline,
     )
