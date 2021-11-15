@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres_test:
+    image: postgres:13.3
+    container_name: postgres_test
+    restart: always
+    volumes:
+      - postgres_data_test:/var/lib/postgresql/data
+    env_file:
+      - .env-test
+    networks:
+      - test_db_network
+  backend_test:
+    image: "${IMAGE}:${IMAGE_TAG}"
+    container_name: backend_test
+    restart: always
+    volumes:
+      - static_value_test:/code/staticfiles/
+      - media_value_test:/code/media/
+    depends_on:
+      - postgres_test
+    env_file:
+      - .env-test
+    networks:
+      - test_db_network
+      - swag_network
+  migrations_test:
+    image: "${IMAGE}:${IMAGE_TAG}"
+    container_name: migrations_test
+    volumes:
+      - static_value_test:/code/staticfiles/
+      - media_value_test:/code/media/
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput &&
+             python manage.py createsuperuser --noinput"
+    depends_on:
+      - backend_test
+    env_file:
+      - .env-test
+    networks:
+      - test_db_network
+
+networks:
+  test_db_network:
+    driver: bridge
+  swag_network:
+    driver: bridge
+
+volumes:
+  postgres_data_test:
+  static_value_test:
+  media_value_test:
