@@ -34,7 +34,7 @@ DEBUG = False
 # SECURE_PROXY_SSL_HEADER
 # -----------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/3.2/ref/settings/#secure-proxy-ssl-header
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 
 # EMAIL
@@ -60,3 +60,8 @@ EMAIL_PORT = env("EMAIL_PORT")
 EMAIL_HOST_USER = env("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = env("EMAIL_HOST_PASSWORD")
 SECURITY_EMAIL_SENDER = env("EMAIL_HOST_USER")
+
+# https://docs.djangoproject.com/en/3.0/ref/django-admin/#django-admin-createsuperuser
+DJANGO_SUPERUSER_USERNAME = env("DJANGO_SUPERUSER_USERNAME")
+DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL")
+DJANGO_SUPERUSER_PASSWORD = env("DJANGO_SUPERUSER_PASSWORD")
