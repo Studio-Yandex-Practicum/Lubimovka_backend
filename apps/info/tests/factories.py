@@ -110,12 +110,8 @@ class FestivalFactory(factory.django.DjangoModelFactory):
             for image in extracted:
                 self.images.add(image)
         else:
-            at_least = 1
-            how_many = extracted or at_least
-
             images_count = Image.objects.count()
-            how_many = min(images_count, how_many)
-
+            how_many = min(images_count, random.randint(1, 7))
             images = Image.objects.order_by("?")[:how_many]
             self.images.add(*images)
 
