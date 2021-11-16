@@ -58,8 +58,8 @@ class Command(BaseCommand):
             sponsors = SponsorFactory.create_batch(50)
             volunteers = VolunteerFactory.create_batch(50)
             teams = FestivalTeamFactory.create_batch(70)
-            images = ImageFactory.create_batch(4)
-            festivals = FestivalFactory.create_batch(4)
+            images = ImageFactory.create_batch(5)
+            festivals = FestivalFactory.create_batch(10)
             self.stdout.write(
                 self.style.SUCCESS(
                     f"{len(partners)} партнёров успешно созданы"
@@ -86,7 +86,7 @@ class Command(BaseCommand):
                 )
             )
             self.stdout.write(
-                self.style.SUCCESS(f"{len(images)} фестивалей успешно созданы")
+                self.style.SUCCESS(f"{len(images)} картинки успешно созданы")
             )
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполения БД"))
