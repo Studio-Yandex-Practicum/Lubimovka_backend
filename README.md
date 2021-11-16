@@ -81,6 +81,7 @@
         docker-compose -f postgres-local.yaml down
         ```
     - Остановить контейнер с БД удалив данные:
+
         ```shell
         docker-compose -f postgres-local.yaml down --volumes
         ```
