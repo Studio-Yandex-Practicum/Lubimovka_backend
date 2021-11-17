@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.core.models import Image, Settings
+from apps.core.models import Settings
 
 
 class SettingsAdmin(admin.ModelAdmin):
@@ -21,4 +21,3 @@ class SettingsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Settings, SettingsAdmin)
-admin.site.register(Image)
