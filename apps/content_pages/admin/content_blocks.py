@@ -1,7 +1,6 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 
-
 from apps.content_pages.models import (
     ImagesBlock,
     OrderedImage,
@@ -42,7 +41,10 @@ class OrderedPersonInline(OrderedInline):
 
 
 class ImagesBlockAdmin(admin.ModelAdmin):
-    list_display = ("id", "title",)
+    list_display = (
+        "id",
+        "title",
+    )
     inlines = [OrderedImageInline]
 
 

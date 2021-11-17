@@ -1,7 +1,7 @@
 from django.contrib import admin
-from apps.core.utilities.mixins import AdminImagePreview
 
 from apps.core.models import Person
+from apps.core.utilities.mixins import AdminImagePreview
 from apps.info.models import (
     Festival,
     FestivalTeam,
@@ -19,7 +19,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
         "type",
         "url",
         "image",
-        "image_preview_list_page"
+        "image_preview_list_page",
     )
     empty_value_display = "-пусто-"
     ordering = ("type",)
@@ -33,7 +33,7 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
         "last_name",
         "city",
         "image",
-        "image_preview_list_page"
+        "image_preview_list_page",
     )
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)

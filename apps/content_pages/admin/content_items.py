@@ -5,7 +5,10 @@ from apps.core.utilities.mixins import AdminImagePreview
 
 
 class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
-    list_display = ("id", "image_preview_list_page",)
+    list_display = (
+        "id",
+        "image_preview_list_page",
+    )
     readonly_fields = ("image_preview_change_page",)
 
 
