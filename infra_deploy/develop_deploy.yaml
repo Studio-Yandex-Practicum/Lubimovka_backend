@@ -3,13 +3,17 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13.3
+    container_name: postgres_develop
     restart: always
     volumes:
       - postgres_data:/var/lib/postgresql/data
     env_file:
-      - .env
+      - .env-dev
+    networks:
+      - develop_db_network
   backend:
-    image: "ghcr.io/studio-yandex-practicum/lubimovka_backend:develop"
+    image: "${IMAGE}:${IMAGE_TAG}"
+    container_name: backend_develop
     restart: always
     volumes:
       - static_value:/code/staticfiles/
@@ -17,19 +21,26 @@ services:
     depends_on:
       - postgres
     env_file:
-      - .env
+      - .env-dev
+    networks:
+      - develop_db_network
+      - swag_network
   migrations:
-    image: "ghcr.io/studio-yandex-practicum/lubimovka_backend:develop"
+    image: "${IMAGE}:${IMAGE_TAG}"
+    container_name: migrations_develop
     volumes:
       - static_value:/code/staticfiles/
       - media_value:/code/media/
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput"
+             python manage.py collectstatic --noinput &&
+             python manage.py createsuperuser --noinput"
     depends_on:
       - backend
     env_file:
-      - .env
+      - .env-dev
+    networks:
+      - develop_db_network
   swag:
     image: ghcr.io/linuxserver/swag
     container_name: swag
@@ -38,14 +49,20 @@ services:
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
+      - SUBDOMAINS=lubimovka,test-lubimovka
       - CERTPROVIDER=zerossl
+      - ONLY_SUBDOMAINS=true
     env_file:
-      - .env
+      - .env-dev
+    networks:
+      - swag_network
     volumes:
       - ./swag_config/:/config/
-      - ./swag_nginx.conf:/config/nginx/site-confs/default
+      - ./swag/swag_nginx.conf:/config/nginx/site-confs/default
       - static_value:/config/static/
       - media_value:/config/media/
+      - static_value_test:/config/test/static/
+      - media_value_test:/config/test/media/
     ports:
       - 443:443
       - 80:80
@@ -53,7 +70,15 @@ services:
       - backend
     restart: unless-stopped
 
+networks:
+    develop_db_network:
+      driver: bridge
+    swag_network:
+      driver: bridge
+
 volumes:
   postgres_data:
   static_value:
   media_value:
+  static_value_test:
+  media_value_test:
