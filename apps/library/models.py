@@ -614,7 +614,7 @@ class ParticipationApplicationFestival(BaseModel):
 
 def create_common_event(sender, instance, **kwargs):
     if instance.events_id:
-        pass
+        return
     instance.events_id = CommonEvent.objects.create().id
 
 
