@@ -109,8 +109,12 @@ class Settings(BaseModel):
     )
     settings_key = models.SlugField(
         max_length=40,
-        verbose_name="Ключ настроек",
+        verbose_name="Ключ настройки",
         unique=True,
+    )
+    description = models.CharField(
+        max_length=60,
+        verbose_name="Описание настройки",
     )
     boolean = models.BooleanField(
         default=False,
