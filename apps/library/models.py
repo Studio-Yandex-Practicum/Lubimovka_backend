@@ -613,9 +613,8 @@ class ParticipationApplicationFestival(BaseModel):
 
 
 def create_common_event(sender, instance, **kwargs):
-    if instance.events_id:
-        return
-    instance.events_id = CommonEvent.objects.create().id
+    if not instance.events_id:
+        instance.events_id = CommonEvent.objects.create().id
 
 
 pre_save.connect(create_common_event, sender=MasterClass)
