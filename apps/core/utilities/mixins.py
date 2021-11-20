@@ -24,4 +24,3 @@ class AdminImagePreview:
                     obj.image.url
                 )
             )
-        pass
