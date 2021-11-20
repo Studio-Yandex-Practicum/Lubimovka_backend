@@ -4,8 +4,8 @@ from apps.library.models import Reading
 
 
 class ReadingEventSerializer(serializers.ModelSerializer):
-    director = serializers.CharField(source="director_full_name")
-    dramatist = serializers.CharField(source="dramatist_full_name")
+    director = serializers.CharField(source="director.full_name")
+    dramatist = serializers.CharField(source="dramatist.full_name")
 
     class Meta:
         model = Reading

@@ -473,14 +473,6 @@ class Reading(BaseModel):
         verbose_name="События",
     )
 
-    @property
-    def director_full_name(self):
-        return f"{self.director.first_name} {self.director.last_name}"
-
-    @property
-    def dramatist_ful_name(self):
-        return f"{self.dramatist.first_name} {self.dramatist.last_name}"
-
     class Meta:
         ordering = ("-created",)
         verbose_name = "Читка"
@@ -511,10 +503,6 @@ class MasterClass(BaseModel):
         related_name="masterclass",
         verbose_name="События",
     )
-
-    @property
-    def host_full_name(self):
-        return f"{self.host.first_name} {self.host.last_name}"
 
     class Meta:
         ordering = ("-created",)
@@ -613,9 +601,8 @@ class ParticipationApplicationFestival(BaseModel):
 
 
 def create_common_event(sender, instance, **kwargs):
-    if instance.events_id:
-        return
-    instance.events_id = CommonEvent.objects.create().id
+    if not instance.events_id:
+        instance.events_id = CommonEvent.objects.create().id
 
 
 pre_save.connect(create_common_event, sender=MasterClass)
