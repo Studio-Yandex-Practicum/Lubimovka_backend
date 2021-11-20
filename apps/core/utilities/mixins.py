@@ -1,22 +1,22 @@
 from django.utils.html import format_html
+from django.contrib import admin
 
 
 class AdminImagePreview:
-
     """
-    Mixin makes preview for uploaded images
-    Add parameters in admin class
+    Mixin makes preview for uploaded images.
+    Need to add parameters in admin class
         list_display = ("image_preview_list_page",)
         readonly_fields = ("image_preview_change_page",)
     """
 
+    @admin.display(description="Превью")
     def image_preview_change_page(self, obj):
         return format_html(
             '<img src="{}" width="600" height="300" />'.format(obj.image.url)
         )
 
-    image_preview_change_page.short_description = "Превью"
-
+    @admin.display(description="Превью")
     def image_preview_list_page(self, obj):
         if obj.image:
             return format_html(
@@ -25,5 +25,3 @@ class AdminImagePreview:
                 )
             )
         pass
-
-    image_preview_list_page.short_description = "Превью"

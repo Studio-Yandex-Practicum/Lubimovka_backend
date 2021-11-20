@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from apps.core.models import Settings
+from apps.core.models import Image, Settings
+from apps.core.utilities.mixins import AdminImagePreview
 
 
 class SettingsAdmin(admin.ModelAdmin):
@@ -20,4 +21,13 @@ class SettingsAdmin(admin.ModelAdmin):
         return "field_type", "settings_key", field_for_setting_value
 
 
+class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
+    list_display = (
+        "id",
+        "image_preview_list_page",
+    )
+    readonly_fields = ("image_preview_change_page",)
+
+
 admin.site.register(Settings, SettingsAdmin)
+admin.site.register(Image, ImageAdmin)
