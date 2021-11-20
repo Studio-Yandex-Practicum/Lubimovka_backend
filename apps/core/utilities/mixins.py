@@ -3,8 +3,8 @@ from django.utils.html import format_html
 
 
 class AdminImagePreview:
-    """
-    Mixin makes preview for uploaded images.
+    """Mixin makes preview for uploaded images.
+
     Need to add parameters in admin class
         list_display = ("image_preview_list_page",)
         readonly_fields = ("image_preview_change_page",)
