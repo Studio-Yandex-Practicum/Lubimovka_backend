@@ -1,6 +1,7 @@
 from django.contrib import admin
 
 from apps.core.models import Person
+from apps.core.utilities.mixins import AdminImagePreview
 from apps.info.models import (
     Festival,
     FestivalTeam,
@@ -11,27 +12,31 @@ from apps.info.models import (
 )
 
 
-class PartnerAdmin(admin.ModelAdmin):
+class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
         "id",
         "name",
         "type",
         "url",
         "image",
+        "image_preview_list_page",
     )
     empty_value_display = "-пусто-"
     ordering = ("type",)
+    readonly_fields = ("image_preview_change_page",)
 
 
-class PersonAdmin(admin.ModelAdmin):
+class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
         "id",
         "first_name",
         "last_name",
         "city",
         "image",
+        "image_preview_list_page",
     )
     empty_value_display = "-пусто-"
+    readonly_fields = ("image_preview_change_page",)
 
 
 class FestivalTeamInline(admin.TabularInline):

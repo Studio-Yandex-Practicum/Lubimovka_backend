@@ -13,9 +13,9 @@ class EventAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super(EventAdmin, self).get_queryset(request)
         qs = qs.select_related(
-            "common_event__masterclasses",
-            "common_event__readings",
-            # "common_event__performances"  # связь еще не создана
+            "common_event__masterclass",
+            "common_event__reading",
+            "common_event__performance",
         )
         return qs
 
