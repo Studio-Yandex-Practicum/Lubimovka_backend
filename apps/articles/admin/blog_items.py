@@ -5,12 +5,15 @@ from apps.content_pages.admin import BaseContentInline
 from apps.core.utilities.mixins import AdminImagePreview
 
 
+class BlogPersonInline(admin.TabularInline):
+    model = BlogItem.persons.through
+    extra = 0
+
+
 class BlogItemContentInline(BaseContentInline):
     model = BlogItemContent
-
     content_type_model = (
         "imagesblock",
-        "link",
         "personsblock",
         "playsblock",
         "quote",
@@ -27,8 +30,10 @@ class BlogItemAdmin(AdminImagePreview, admin.ModelAdmin):
         "image_preview_list_page",
     )
     readonly_fields = ("image_preview_change_page",)
-
-    inlines = (BlogItemContentInline,)
+    inlines = (
+        BlogItemContentInline,
+        BlogPersonInline,
+    )
 
 
 admin.site.register(BlogItem, BlogItemAdmin)
