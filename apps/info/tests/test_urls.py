@@ -10,10 +10,9 @@ from apps.info.tests.conftest import (
     VOLUNTEERS_URL,
 )
 
+pytestmark = pytest.mark.django_db
 
-@pytest.mark.django_db(
-    pytest.mark.django_db,
-)
+
 class TestFestivalAPIUrls:
     def test_festival_urls(self, client, festival):
         urls = (
@@ -28,9 +27,6 @@ class TestFestivalAPIUrls:
             )
 
 
-@pytest.mark.django_db(
-    pytest.mark.django_db,
-)
 class TestAboutFestivalAPIUrls:
     def test_about_festival_urls(self, client):
         urls = (

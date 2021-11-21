@@ -96,8 +96,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
         if not create:
             return
         if extracted:
-            for volunteer in extracted:
-                self.volunteers.add(volunteer)
+            self.volunteers.add(*extracted)
         else:
             volunteers_count = Volunteer.objects.count()
             how_many = min(volunteers_count, random.randint(1, 7))
@@ -109,8 +108,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
         if not create:
             return
         if extracted:
-            for image in extracted:
-                self.images.add(image)
+            self.images.add(*extracted)
         else:
             images_count = Image.objects.count()
             how_many = min(images_count, random.randint(1, 7))
