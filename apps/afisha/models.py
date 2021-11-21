@@ -8,7 +8,7 @@ class CommonEvent(BaseModel):
     Промежуточная модель, связывающая модели Спектакля, Мастер-класса и Читки
     с моделью События (Event).
     Связь реализована через OneToOneFields в моделях Performance, Masterclass
-    и Reading (поле event), а также ForeignKey в моделе Event (поле
+    и Reading (поле events), а также ForeignKey в моделе Event (поле
     common_event).
     Подробнее о данном способе связи - в статье:
     https://lukeplant.me.uk/blog/posts/avoid-django-genericforeignkey/
@@ -21,12 +21,12 @@ class CommonEvent(BaseModel):
 
     @property
     def target_model(self):
-        if getattr(self, "masterclasses", None) is not None:
-            return self.masterclasses
-        if getattr(self, "readings", None) is not None:
-            return self.readings
-        if getattr(self, "performances", None) is not None:
-            return self.performances
+        if getattr(self, "masterclass", None) is not None:
+            return self.masterclass
+        if getattr(self, "reading", None) is not None:
+            return self.reading
+        if getattr(self, "performance", None) is not None:
+            return self.performance
         return None
 
     target_model.fget.short_description = "Спектакль/Мастер-класс/Читка"
