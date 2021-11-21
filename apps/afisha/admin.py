@@ -19,7 +19,14 @@ class EventAdmin(admin.ModelAdmin):
         )
         return qs
 
-    list_display = ("pk", "common_event", "type", "date_time", "paid")
+    list_display = (
+        "pk",
+        "common_event",
+        "type",
+        "date_time",
+        "paid",
+        "pinned_on_main",
+    )
     list_filter = ("type",)
     empty_value_display = "-пусто-"
 

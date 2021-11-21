@@ -3,9 +3,9 @@ from rest_framework import serializers
 from apps.afisha.models import Event
 from apps.library.models import MasterClass, Performance, Reading
 from apps.library.serializers import (
-    MasterClassEventSerializer,
-    PerformanceEventSerializer,
-    ReadingEventSerializer,
+    EventMasterClassSerializer,
+    EventPerformanceSerializer,
+    EventReadingSerializer,
 )
 
 
@@ -15,16 +15,16 @@ class EventSerializer(serializers.ModelSerializer):
 
     def get_event_body(self, obj):
         event_body_serializers = {
-            MasterClass: MasterClassEventSerializer,
-            Performance: PerformanceEventSerializer,
-            Reading: ReadingEventSerializer,
+            MasterClass: EventMasterClassSerializer,
+            Performance: EventPerformanceSerializer,
+            Reading: EventReadingSerializer,
         }
         event_body = obj.common_event.target_model
         return event_body_serializers[type(event_body)](event_body).data
 
     class Meta:
         model = Event
-        fields = [
+        fields = (
             "id",
             "type",
             "event_body",
@@ -32,4 +32,4 @@ class EventSerializer(serializers.ModelSerializer):
             "paid",
             "url",
             "place",
-        ]
+        )

@@ -10,12 +10,13 @@ from apps.library.models import (
     ParticipationApplicationFestival,
     Performance,
     PerformanceMediaReview,
-    PerformancePerson,
     PerformanceReview,
     Play,
     ProgramType,
     Reading,
+    Role,
     SocialNetworkLink,
+    TeamMember,
 )
 
 
@@ -141,40 +142,6 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
     )
 
 
-class ReadingAdmin(admin.ModelAdmin):
-    list_display = (
-        "play",
-        "name",
-        "director",
-        "dramatist",
-    )
-    exclude = ("events",)
-    list_filter = (
-        "director__last_name",
-        "dramatist__last_name",
-    )
-    search_fields = (
-        "play__name",
-        "name",
-        "director__last_name",
-        "dramatist__last_name",
-    )
-
-
-class MasterClassAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "host",
-    )
-    exclude = ("events",)
-    list_filter = ("host__last_name",)
-    search_fields = (
-        "play__name",
-        "name",
-        "host__last_name",
-    )
-
-
 class ProgramTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
     list_filter = ("name",)
@@ -193,8 +160,12 @@ class PerformanceMediaReviewInline(admin.TabularInline):
     max_num = 8
 
 
-class PerformanceTeamInline(admin.TabularInline):
-    model = PerformancePerson
+class TeamMemberInline(admin.TabularInline):
+    model = TeamMember
+    fields = (
+        "person",
+        "role",
+    )
     extra = 1
 
 
@@ -214,8 +185,31 @@ class PerformanceAdmin(admin.ModelAdmin):
     inlines = (
         PerformanceReviewInline,
         PerformanceMediaReviewInline,
-        PerformanceTeamInline,
+        TeamMemberInline,
     )
+
+
+class ReadingAdmin(admin.ModelAdmin):
+    list_display = (
+        "play",
+        "name",
+    )
+    exclude = ("events",)
+    search_fields = (
+        "play__name",
+        "name",
+    )
+    inlines = (TeamMemberInline,)
+
+
+class MasterClassAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    exclude = ("events",)
+    search_fields = (
+        "play__name",
+        "name",
+    )
+    inlines = (TeamMemberInline,)
 
 
 class ParticipationAdmin(admin.ModelAdmin):
@@ -244,6 +238,14 @@ class ParticipationAdmin(admin.ModelAdmin):
     )
 
 
+class TeamMemberAdmin(admin.ModelAdmin):
+    search_fields = ("role",)
+
+
+class RoleAdmin(admin.ModelAdmin):
+    list_filter = ("name",)
+
+
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
@@ -251,10 +253,11 @@ admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
 admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
-
+admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(SocialNetworkLink)
 admin.site.register(OtherPlay)
 admin.site.register(OtherLink)
 admin.site.register(Reading, ReadingAdmin)
 admin.site.register(MasterClass, MasterClassAdmin)
 admin.site.register(ProgramType, ProgramTypeAdmin)
+admin.site.register(Role, RoleAdmin)

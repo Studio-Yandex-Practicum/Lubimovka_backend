@@ -18,6 +18,8 @@ from apps.core.utilities.slugify import slugify
 from apps.info.models import Festival
 from apps.library.validators import year_validator
 
+# from apps.articles.models import Project
+
 
 class ProgramType(BaseModel):
     name = models.CharField(
@@ -317,10 +319,18 @@ class Performance(BaseModel):
     )
     persons = models.ManyToManyField(
         Person,
-        through="PerformancePerson",
+        through="TeamMember",
         related_name="performances",
-        verbose_name="Члены команды",
+        verbose_name="Спектакли",
     )
+    # project = models.ForeignKey(
+    #     Project,
+    #     null=True,
+    #     blank=True,
+    #     on_delete=models.SET_NULL,
+    #     related_name="performances",
+    #     verbose_name="Проект"
+    # )
 
     class Meta:
         ordering = ("-created",)
@@ -329,40 +339,6 @@ class Performance(BaseModel):
 
     def __str__(self):
         return self.name
-
-
-class PerformancePerson(BaseModel):
-    class Roles(models.TextChoices):
-        """Роли"""
-
-        ACTOR = "Actor", _("Актёр")
-        ADAPTER = "Adapter", _("Адаптация текста")
-        DRAMATIST = "Dramatist", _("Драматург")
-        DIRECTOR = "Director", _("Режиссёр")
-        INTERPRETER = "Interpreter", _("Переводчик")
-
-    performance = models.ForeignKey(
-        Performance,
-        related_name="performance_persons",
-        verbose_name="Спектакль",
-        on_delete=models.CASCADE,
-    )
-    person = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT,
-        verbose_name="Член команды",
-        related_name="performance_persons",
-    )
-    role = models.CharField(
-        max_length=200,
-        choices=Roles.choices,
-        verbose_name="Роль в команде спектакля",
-    )
-
-    class Meta:
-        ordering = ("role",)
-        verbose_name = "Член команды"
-        verbose_name_plural = "Члены команды"
 
 
 class PerformanceMediaReview(BaseModel):
@@ -454,17 +430,11 @@ class Reading(BaseModel):
         max_length=500,
         verbose_name="Описание",
     )
-    director = models.ForeignKey(
+    persons = models.ManyToManyField(
         Person,
-        on_delete=models.PROTECT,
-        related_name="director_readings",
-        verbose_name="Режиссер",
-    )
-    dramatist = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT,
-        related_name="dramatist_readings",
-        verbose_name="Драматург",
+        through="TeamMember",
+        related_name="readings",
+        verbose_name="Читки",
     )
     events = models.OneToOneField(
         CommonEvent,
@@ -472,6 +442,14 @@ class Reading(BaseModel):
         related_name="reading",
         verbose_name="События",
     )
+    # project = models.ForeignKey(
+    #     Project,
+    #     null=True,
+    #     blank=True,
+    #     on_delete=models.SET_NULL,
+    #     related_name="readings",
+    #     verbose_name="Проект"
+    # )
 
     class Meta:
         ordering = ("-created",)
@@ -491,11 +469,11 @@ class MasterClass(BaseModel):
         max_length=500,
         verbose_name="Описание",
     )
-    host = models.ForeignKey(
+    persons = models.ManyToManyField(
         Person,
-        on_delete=models.PROTECT,
-        related_name="leading_masterclasses",
-        verbose_name="Ведущий",
+        through="TeamMember",
+        related_name="masterclasses",
+        verbose_name="Мастер-классы",
     )
     events = models.OneToOneField(
         CommonEvent,
@@ -503,6 +481,14 @@ class MasterClass(BaseModel):
         related_name="masterclass",
         verbose_name="События",
     )
+    # project = models.ForeignKey(
+    #     Project,
+    #     null=True,
+    #     blank=True,
+    #     on_delete=models.SET_NULL,
+    #     related_name="masterclasses",
+    #     verbose_name="Проект"
+    # )
 
     class Meta:
         ordering = ("-created",)
@@ -511,6 +497,65 @@ class MasterClass(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class Role(BaseModel):
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Роль",
+    )
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "Роль"
+        verbose_name_plural = "Роли"
+
+    def __str__(self):
+        return self.name
+
+
+class TeamMember(BaseModel):
+    performance = models.ForeignKey(
+        Performance,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="team_members",
+        verbose_name="Спектакль",
+    )
+    reading = models.ForeignKey(
+        Reading,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="team_members",
+        verbose_name="Читка",
+    )
+    masterclass = models.ForeignKey(
+        MasterClass,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="team_members",
+        verbose_name="Мастер-класс",
+    )
+    person = models.ForeignKey(
+        Person,
+        on_delete=models.PROTECT,
+        verbose_name="Член команды",
+        related_name="team_members",
+    )
+    role = models.ForeignKey(
+        Role,
+        on_delete=models.PROTECT,
+        related_name="team_members",
+        verbose_name="Роль",
+    )
+
+    class Meta:
+        ordering = ("role",)
+        verbose_name = "Член команды"
+        verbose_name_plural = "Члены команды"
 
 
 class ParticipationApplicationFestival(BaseModel):

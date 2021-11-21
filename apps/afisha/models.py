@@ -67,6 +67,10 @@ class Event(BaseModel):
         verbose_name="Ссылка",
     )
     place = models.CharField(verbose_name="Место", max_length=200)
+    pinned_on_main = models.BooleanField(
+        verbose_name="Закрепить на главной",
+        default=False,
+    )
 
     def __str__(self):
         return f"{self.common_event} - {self.type}, {self.date_time}"

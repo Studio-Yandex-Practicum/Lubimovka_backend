@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from apps.core.serializers import ImageSerializer
-from apps.library.models import Performance
+from apps.library.models import Performance, TeamMember
 
-from .performanceperson import PerformancePersonSerializer
+from .performanceperson import TeamMemberSerializer
 from .play import PlaySerializer
 
 
@@ -11,8 +11,8 @@ class PerformanceSerializer(serializers.ModelSerializer):
     """Сериализатор Спектакля для отображения на странице Спектакля"""
 
     play = PlaySerializer()
-    persons = PerformancePersonSerializer(
-        source="performance_persons",
+    persons = TeamMemberSerializer(
+        source="team_members",
         many=True,
     )
     images_in_block = ImageSerializer(many=True)
@@ -25,8 +25,24 @@ class PerformanceSerializer(serializers.ModelSerializer):
         model = Performance
 
 
-class PerformanceEventSerializer(serializers.ModelSerializer):
+class EventPerformanceSerializer(serializers.ModelSerializer):
     """Сериализатор Спектакля для отображения на странице Афиши"""
+
+    directors = serializers.SerializerMethodField()
+    dramatists = serializers.SerializerMethodField()
+    image = serializers.ImageField(source="main_image")
+
+    def get_directors(self, obj):
+        directors = TeamMember.objects.filter(
+            performance=obj, role__name="Режиссёр"
+        )
+        return [director.person.full_name for director in directors]
+
+    def get_dramatists(self, obj):
+        dramatists = TeamMember.objects.filter(
+            performance=obj, role__name="Драматург"
+        )
+        return [dramatist.person.full_name for dramatist in dramatists]
 
     class Meta:
         model = Performance
@@ -34,4 +50,7 @@ class PerformanceEventSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
+            "directors",
+            "dramatists",
+            "image",
         )
