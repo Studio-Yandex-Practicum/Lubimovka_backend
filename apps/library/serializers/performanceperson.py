@@ -9,12 +9,10 @@ class TeamMemberSerializer(serializers.ModelSerializer):
 
     name = serializers.ReadOnlyField(source="person.full_name")
     role = serializers.ReadOnlyField(source="role.name")
-    # project = serializers.CharField(source="project.title")
 
     class Meta:
         fields = (
             "role",
             "name",
-            # "project",
         )
         model = TeamMember

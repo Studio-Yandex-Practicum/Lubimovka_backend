@@ -18,8 +18,6 @@ from apps.core.utilities.slugify import slugify
 from apps.info.models import Festival
 from apps.library.validators import year_validator
 
-# from apps.articles.models import Project
-
 
 class ProgramType(BaseModel):
     name = models.CharField(
@@ -323,14 +321,14 @@ class Performance(BaseModel):
         related_name="performances",
         verbose_name="Спектакли",
     )
-    # project = models.ForeignKey(
-    #     Project,
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name="performances",
-    #     verbose_name="Проект"
-    # )
+    project = models.ForeignKey(
+        "articles.Project",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="performances",
+        verbose_name="Проект",
+    )
 
     class Meta:
         ordering = ("-created",)
@@ -442,14 +440,14 @@ class Reading(BaseModel):
         related_name="reading",
         verbose_name="События",
     )
-    # project = models.ForeignKey(
-    #     Project,
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name="readings",
-    #     verbose_name="Проект"
-    # )
+    project = models.ForeignKey(
+        "articles.Project",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="readings",
+        verbose_name="Проект",
+    )
 
     class Meta:
         ordering = ("-created",)
@@ -481,14 +479,14 @@ class MasterClass(BaseModel):
         related_name="masterclass",
         verbose_name="События",
     )
-    # project = models.ForeignKey(
-    #     Project,
-    #     null=True,
-    #     blank=True,
-    #     on_delete=models.SET_NULL,
-    #     related_name="masterclasses",
-    #     verbose_name="Проект"
-    # )
+    project = models.ForeignKey(
+        "articles.Project",
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
+        related_name="masterclasses",
+        verbose_name="Проект",
+    )
 
     class Meta:
         ordering = ("-created",)
@@ -517,7 +515,7 @@ class Role(BaseModel):
 class TeamMember(BaseModel):
     performance = models.ForeignKey(
         Performance,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
         related_name="team_members",
@@ -527,7 +525,7 @@ class TeamMember(BaseModel):
         Reading,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="team_members",
         verbose_name="Читка",
     )
@@ -535,7 +533,7 @@ class TeamMember(BaseModel):
         MasterClass,
         null=True,
         blank=True,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         related_name="team_members",
         verbose_name="Мастер-класс",
     )

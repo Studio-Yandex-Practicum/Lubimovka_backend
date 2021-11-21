@@ -31,6 +31,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
     directors = serializers.SerializerMethodField()
     dramatists = serializers.SerializerMethodField()
     image = serializers.ImageField(source="main_image")
+    project = serializers.SerializerMethodField()
 
     def get_directors(self, obj):
         directors = TeamMember.objects.filter(
@@ -44,6 +45,11 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
         )
         return [dramatist.person.full_name for dramatist in dramatists]
 
+    def get_project(self, obj):
+        if obj.project:
+            return obj.project.title
+        return ""
+
     class Meta:
         model = Performance
         fields = (
@@ -53,4 +59,5 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "directors",
             "dramatists",
             "image",
+            "project",
         )

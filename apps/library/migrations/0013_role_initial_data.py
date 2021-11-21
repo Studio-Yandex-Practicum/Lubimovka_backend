@@ -14,14 +14,14 @@ def create_roles(apps, schema_editor):
         "Ведущий"
     ]
     for role in roles:
-        role_obj, _ = Role.objects.get_or_create(role=role)
+        role_obj, _ = Role.objects.get_or_create(name=role)
         role_obj.save()
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0012_auto_20211121_0017'),
+        ('library', '0012_auto_20211121_2156'),
     ]
 
     operations = [

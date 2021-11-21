@@ -6,7 +6,7 @@ from apps.library.models import Reading, TeamMember
 class EventReadingSerializer(serializers.ModelSerializer):
     directors = serializers.SerializerMethodField()
     dramatists = serializers.SerializerMethodField()
-    # project = serializers.CharField(source="project.title")
+    project = serializers.SerializerMethodField()
 
     def get_directors(self, obj):
         directors = TeamMember.objects.filter(
@@ -20,6 +20,11 @@ class EventReadingSerializer(serializers.ModelSerializer):
         )
         return [dramatist.person.full_name for dramatist in dramatists]
 
+    def get_project(self, obj):
+        if obj.project:
+            return obj.project.title
+        return ""
+
     class Meta:
         model = Reading
         fields = (
@@ -28,5 +33,5 @@ class EventReadingSerializer(serializers.ModelSerializer):
             "description",
             "directors",
             "dramatists",
-            # "projects",
+            "project",
         )

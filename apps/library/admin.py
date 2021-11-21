@@ -239,6 +239,11 @@ class ParticipationAdmin(admin.ModelAdmin):
 
 
 class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "person",
+        "role",
+    )
     search_fields = ("role",)
 
 

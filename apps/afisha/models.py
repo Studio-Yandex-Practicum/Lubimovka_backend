@@ -63,7 +63,6 @@ class Event(BaseModel):
     paid = models.BooleanField(verbose_name="Платное", default=False)
     url = models.URLField(
         max_length=200,
-        blank=True,
         verbose_name="Ссылка",
     )
     place = models.CharField(verbose_name="Место", max_length=200)

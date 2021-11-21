@@ -5,13 +5,18 @@ from apps.library.models import MasterClass, TeamMember
 
 class EventMasterClassSerializer(serializers.ModelSerializer):
     hosts = serializers.SerializerMethodField()
-    # project = serializers.CharField(source="project.title")
+    project = serializers.SerializerMethodField()
 
     def get_hosts(self, obj):
         hosts = TeamMember.objects.filter(
             masterclass=obj, role__name="Ведущий"
         )
         return [host.person.full_name for host in hosts]
+
+    def get_project(self, obj):
+        if obj.project:
+            return obj.project.title
+        return ""
 
     class Meta:
         model = MasterClass
@@ -20,5 +25,5 @@ class EventMasterClassSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "hosts",
-            # "projects",
+            "project",
         )
