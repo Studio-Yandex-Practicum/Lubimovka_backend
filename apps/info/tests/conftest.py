@@ -51,8 +51,9 @@ def volunteer():
 
 
 @pytest.fixture
-def festival():
+def festival(volunteer):
     return FestivalFactory(
+        volunteers=volunteer,
         start_date="2021-07-14",
         end_date="2021-07-15",
     )

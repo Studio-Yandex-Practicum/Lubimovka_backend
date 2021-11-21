@@ -74,7 +74,7 @@ class PersonFactory(factory.django.DjangoModelFactory):
 class ImageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Image
-        django_get_or_create = ["image"]
+        django_get_or_create = ("image",)
 
     image = factory.django.ImageField(
         color=factory.LazyFunction(

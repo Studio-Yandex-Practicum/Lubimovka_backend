@@ -5,6 +5,7 @@ import factory
 from django.core.files.base import ContentFile
 from faker import Faker
 
+from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person
 from apps.info.models import (
     Festival,
@@ -49,6 +50,7 @@ class SponsorFactory(factory.django.DjangoModelFactory):
     position = factory.Faker("job", locale="ru_RU")
 
 
+@restrict_factory({"global": [Person]})
 class VolunteerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Volunteer
@@ -115,15 +117,13 @@ class FestivalFactory(factory.django.DjangoModelFactory):
             images = Image.objects.order_by("?")[:how_many]
             self.images.add(*images)
 
-    plays_count = factory.Faker("random_int", min=1, max=25, step=1)
-    selected_plays_count = factory.Faker("random_int", min=1, max=200, step=1)
+    plays_count = factory.Faker("random_int", min=20, max=200, step=1)
+    selected_plays_count = factory.Faker("random_int", min=1, max=20, step=1)
     selectors_count = factory.Faker("random_int", min=1, max=20, step=1)
     volunteers_count = factory.Faker("random_int", min=1, max=20, step=1)
     events_count = factory.Faker("random_int", min=1, max=20, step=1)
     cities_count = factory.Faker("random_int", min=1, max=20, step=1)
-    video_link = factory.LazyFunction(
-        lambda: f"{fake.word()}.com/{fake.word()}/"
-    )
+    video_link = factory.Faker("url", locale="ru_RU")
     # blog_entries необходимо изменить после
     # корректировки поля модели фестиваля
     blog_entries = factory.LazyFunction(

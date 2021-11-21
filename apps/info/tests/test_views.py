@@ -10,13 +10,15 @@ from apps.info.tests.conftest import (
 )
 
 
+@pytest.mark.django_db(
+    pytest.mark.django_db,
+)
 class TestFestivalAPIViews:
-    @pytest.mark.django_db(transaction=True)
-    def test_get_festival_detail(self, client, festival):
+    def test_get_festival_fields(self, client, festival):
         url = reverse(FESTIVAL_URL_NAME, kwargs={"year": festival.year})
         response = client.get(url)
         data = response.json()
-        for field in [
+        for field in (
             "start_date",
             "end_date",
             "description",
@@ -29,11 +31,16 @@ class TestFestivalAPIViews:
             "cities_count",
             "blog_entries",
             "video_link",
-        ]:
+        ):
             assert data.get(field) == getattr(festival, field), (
                 f"Проверьте, что при GET запросе {url}"
                 f"возвращаются данные объекта. Значение {field} неправильное"
             )
+
+    def test_get_volunteers_and_images_from_festival(self, client, festival):
+        url = reverse(FESTIVAL_URL_NAME, kwargs={"year": festival.year})
+        response = client.get(url)
+        data = response.json()
         for field in [
             "volunteers",
             "images",
@@ -46,7 +53,6 @@ class TestFestivalAPIViews:
                 f"возвращаются данные объекта. Значение {field} неправильное"
             )
 
-    @pytest.mark.django_db(transaction=True)
     def test_get_festival_years(self, client, festival):
         response = client.get(FESTIVAL_YEARS_URL)
         data = response.json()
@@ -57,9 +63,11 @@ class TestFestivalAPIViews:
         )
 
 
+@pytest.mark.django_db(
+    pytest.mark.django_db,
+)
 class TestAboutFestivalAPIViews:
-    @pytest.mark.django_db(transaction=True)
-    def test_get_teams(self, client, teams):
+    def test_teams_count_in_response_matches_count_in_db(self, client, teams):
         response = client.get(TEAMS_URL)
         data = response.json()
         assert len(teams) == len(data), (
@@ -67,7 +75,6 @@ class TestAboutFestivalAPIViews:
             f"возвращаются все объекты"
         )
 
-    @pytest.mark.django_db(transaction=True)
     def test_get_teams_with_filter(self, client, teams):
         filters = [
             FestivalTeam.TeamType.ART_DIRECTION,
@@ -84,8 +91,7 @@ class TestAboutFestivalAPIViews:
                 f" возвращаются только соответствующие объекты"
             )
 
-    @pytest.mark.django_db(transaction=True)
-    def test_get_teams_detail(self, client, team):
+    def test_get_teams_fields(self, client, team):
         response = client.get(TEAMS_URL)
         data = response.json()
         for field in [
@@ -96,6 +102,10 @@ class TestAboutFestivalAPIViews:
                 f"Проверьте, что при GET запросе {TEAMS_URL}"
                 f"возвращаются данные объекта. Значение {field} неправильное"
             )
+
+    def test_get_fields_for_person_in_team(self, client, team):
+        response = client.get(TEAMS_URL)
+        data = response.json()
         for field in [
             "id",
             "first_name",
@@ -110,6 +120,10 @@ class TestAboutFestivalAPIViews:
                 f"Проверьте, что при GET запросе {TEAMS_URL}"
                 f"возвращаются данные объекта. Значение {field} неправильное"
             )
+
+    def test_get_image_for_person_in_team(self, client, team):
+        response = client.get(TEAMS_URL)
+        data = response.json()
         assert (
             data[0].get("person").get("image").endswith(team.person.image.url)
         ), (
