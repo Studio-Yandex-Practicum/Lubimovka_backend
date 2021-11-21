@@ -54,7 +54,7 @@ class Title(BaseModel):
 class Text(BaseModel):
     """Text item for 'content' blocks without any additional fields."""
 
-    text = RichTextField(blank=True, null=True)
+    text = RichTextField()
 
     class Meta:
         verbose_name = "Текст"
