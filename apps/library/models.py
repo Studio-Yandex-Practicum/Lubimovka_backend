@@ -319,7 +319,7 @@ class Performance(BaseModel):
         Person,
         through="TeamMember",
         related_name="performances",
-        verbose_name="Спектакли",
+        verbose_name="Члены команды",
     )
     project = models.ForeignKey(
         "articles.Project",
@@ -432,7 +432,7 @@ class Reading(BaseModel):
         Person,
         through="TeamMember",
         related_name="readings",
-        verbose_name="Читки",
+        verbose_name="Члены команды",
     )
     events = models.OneToOneField(
         CommonEvent,
@@ -471,7 +471,7 @@ class MasterClass(BaseModel):
         Person,
         through="TeamMember",
         related_name="masterclasses",
-        verbose_name="Мастер-классы",
+        verbose_name="Члены команды",
     )
     events = models.OneToOneField(
         CommonEvent,
@@ -540,8 +540,8 @@ class TeamMember(BaseModel):
     person = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
-        verbose_name="Член команды",
         related_name="team_members",
+        verbose_name="Член команды",
     )
     role = models.ForeignKey(
         Role,

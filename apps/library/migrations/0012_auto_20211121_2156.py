@@ -98,16 +98,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='masterclass',
             name='persons',
-            field=models.ManyToManyField(related_name='masterclasses', through='library.TeamMember', to='core.Person', verbose_name='Мастер-классы'),
+            field=models.ManyToManyField(related_name='masterclasses', through='library.TeamMember', to='core.Person', verbose_name='Члены команды'),
         ),
         migrations.AddField(
             model_name='reading',
             name='persons',
-            field=models.ManyToManyField(related_name='readings', through='library.TeamMember', to='core.Person', verbose_name='Читки'),
+            field=models.ManyToManyField(related_name='readings', through='library.TeamMember', to='core.Person', verbose_name='Члены команды'),
         ),
         migrations.AddField(
             model_name='performance',
             name='persons',
-            field=models.ManyToManyField(related_name='performances', through='library.TeamMember', to='core.Person', verbose_name='Спектакли'),
+            field=models.ManyToManyField(related_name='performances', through='library.TeamMember', to='core.Person', verbose_name='Члены команды'),
         ),
     ]
