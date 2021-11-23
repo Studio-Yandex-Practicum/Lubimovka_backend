@@ -2,8 +2,9 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.core.tests.factories import PersonFactory
+from apps.core.tests.factories import ImageFactory, PersonFactory
 from apps.info.tests.factories import (
+    FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
     SponsorFactory,
@@ -57,6 +58,8 @@ class Command(BaseCommand):
             sponsors = SponsorFactory.create_batch(50)
             volunteers = VolunteerFactory.create_batch(50)
             teams = FestivalTeamFactory.create_batch(70)
+            images = ImageFactory.create_batch(5)
+            festivals = FestivalFactory.create_batch(10)
             self.stdout.write(
                 self.style.SUCCESS(
                     f"{len(partners)} партнёров успешно созданы"
@@ -76,6 +79,14 @@ class Command(BaseCommand):
                 self.style.SUCCESS(
                     f"{len(teams)} членов команд успешно созданы"
                 )
+            )
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"{len(festivals)} фестивалей успешно созданы"
+                )
+            )
+            self.stdout.write(
+                self.style.SUCCESS(f"{len(images)} картинки успешно созданы")
             )
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполения БД"))
