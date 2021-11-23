@@ -97,7 +97,7 @@ class Role(BaseModel):
         - play roles
         ..and so on
 
-    Supposed to be used in pair with `Person` model and intermediate (through)
+    Suppose to be used in pair with `Person` model and intermediate (through)
     table.
     """
 
