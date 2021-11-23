@@ -16,17 +16,19 @@ class UserAdmin(DjangoUserAdmin):
         "is_active",
         "role",
     )
-    list_filter = ["email", "username"]
+    list_filter = (
+        "email",
+        "username",
+    )
 
     def get_readonly_fields(self, request, obj=None):
         if not request.user.is_superuser:
-            return ["is_superuser"]
+            return ("is_superuser",)
         return super().get_readonly_fields(request, obj)
 
+    @admin.display(description="Роль")
     def role(self, obj):
         return obj.groups.first()
-
-    role.short_description = "Роль"
 
 
 class GroupAdmin(admin.ModelAdmin):
