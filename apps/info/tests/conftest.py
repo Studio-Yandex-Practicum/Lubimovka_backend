@@ -1,5 +1,3 @@
-import random
-
 import pytest
 from django.urls import reverse
 
@@ -24,16 +22,15 @@ QUESTIONS_URL = reverse("questions")
 @pytest.fixture
 def sponsor():
     return list(
-        SponsorFactory(person=PersonFactory())
-        for _ in range(random.randint(0, 5))
+        SponsorFactory(person=PersonFactory(add_image=True)) for _ in range(5)
     )
 
 
 @pytest.fixture
 def teams():
     return list(
-        FestivalTeamFactory(person=PersonFactory())
-        for _ in range(random.randint(0, 5))
+        FestivalTeamFactory(person=PersonFactory(add_image=True))
+        for _ in range(5)
     )
 
 
@@ -45,13 +42,13 @@ def team():
 @pytest.fixture
 def volunteer():
     return list(
-        VolunteerFactory(person=PersonFactory())
-        for _ in range(random.randint(0, 5))
+        VolunteerFactory(person=PersonFactory(add_image=True))
+        for _ in range(5)
     )
 
 
 @pytest.fixture
-def festival(volunteer):
+def festival():
     return FestivalFactory(
         start_date="2021-07-14",
         end_date="2021-07-15",
