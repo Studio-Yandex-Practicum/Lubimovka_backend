@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.content_pages.models import Image, Link, Quote, Text, Title, Video
-from apps.core.utilities.mixins import AdminImagePreview
+from apps.core.mixins import AdminImagePreview
 
 
 class ImageAdmin(AdminImagePreview, admin.ModelAdmin):

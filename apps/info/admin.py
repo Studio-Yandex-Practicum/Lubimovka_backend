@@ -1,7 +1,7 @@
 from django.contrib import admin
 
+from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person
-from apps.core.utilities.mixins import AdminImagePreview
 from apps.info.models import (
     Festival,
     FestivalTeam,

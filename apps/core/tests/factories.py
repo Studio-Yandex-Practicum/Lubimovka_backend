@@ -6,7 +6,7 @@ from django.core.files.base import ContentFile
 from faker import Faker
 
 from apps.core.models import Image, Person
-from apps.core.utilities.slugify import slugify
+from apps.core.utilities import slugify
 
 fake = Faker(locale="ru_RU")
 
