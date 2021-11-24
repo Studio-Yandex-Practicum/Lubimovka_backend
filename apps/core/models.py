@@ -113,7 +113,9 @@ class Settings(BaseModel):
         unique=True,
     )
     description = models.CharField(
-        max_length=60, verbose_name="Описание настройки", null=True
+        max_length=60,
+        verbose_name="Описание настройки",
+        null=True,
     )
     boolean = models.BooleanField(
         default=False,
