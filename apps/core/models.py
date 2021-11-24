@@ -2,6 +2,8 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.utilities import slugify
+
 
 class BaseModel(models.Model):
     """
@@ -86,6 +88,45 @@ class Person(BaseModel):
         return f"{self.last_name} {self.first_name}"
 
 
+class Role(BaseModel):
+    """Role for `Person`.
+
+    Saves different type of roles:
+        - blog persons roles
+        - performance roles
+        - play roles
+        ..and so on
+
+    Suppose to be used in pair with `Person` model and intermediate (through)
+    table.
+    """
+
+    name = models.CharField(
+        max_length=50,
+        unique=True,
+        verbose_name="Название",
+    )
+    slug = models.SlugField(
+        max_length=60,
+        unique=True,
+        verbose_name="Код-имя латиницей",
+        help_text="Если пустое, то заполняется автоматически",
+    )
+
+    class Meta:
+        verbose_name = "Должность/позиция"
+        verbose_name_plural = "Должности/позиции"
+        ordering = ("name",)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+
+
 class Settings(BaseModel):
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")
@@ -158,21 +199,3 @@ class Settings(BaseModel):
         if Settings.objects.filter(settings_key=settings_key).exists():
             setting = Settings.objects.get(settings_key=settings_key)
             return setting.value
-
-
-class Role(BaseModel):
-    name = models.CharField(
-        max_length=100,
-        verbose_name="Роль",
-    )
-    slug = models.CharField(
-        max_length=100, unique=True, verbose_name="Код роли"
-    )
-
-    class Meta:
-        ordering = ("name",)
-        verbose_name = "Роль"
-        verbose_name_plural = "Роли"
-
-    def __str__(self):
-        return self.name

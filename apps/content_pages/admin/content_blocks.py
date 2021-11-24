@@ -41,6 +41,10 @@ class OrderedPersonInline(OrderedInline):
 
 
 class ImagesBlockAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "title",
+    )
     inlines = [OrderedImageInline]
 
 

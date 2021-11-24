@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from apps.core.models import Role
 from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
@@ -247,10 +246,6 @@ class TeamMemberAdmin(admin.ModelAdmin):
     search_fields = ("role",)
 
 
-class RoleAdmin(admin.ModelAdmin):
-    list_filter = ("name",)
-
-
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
@@ -265,4 +260,3 @@ admin.site.register(OtherLink)
 admin.site.register(Reading, ReadingAdmin)
 admin.site.register(MasterClass, MasterClassAdmin)
 admin.site.register(ProgramType, ProgramTypeAdmin)
-admin.site.register(Role, RoleAdmin)

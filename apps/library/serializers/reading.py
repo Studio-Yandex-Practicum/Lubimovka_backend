@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from apps.core.utilities import team_collector
 from apps.library.models import Reading, TeamMember
+from apps.library.utilities import team_collector
 
 
 class EventReadingSerializer(serializers.ModelSerializer):

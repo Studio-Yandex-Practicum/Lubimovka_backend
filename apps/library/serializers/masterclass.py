@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from apps.core.utilities import team_collector
 from apps.library.models import MasterClass, TeamMember
+from apps.library.utilities import team_collector
 
 
 class EventMasterClassSerializer(serializers.ModelSerializer):

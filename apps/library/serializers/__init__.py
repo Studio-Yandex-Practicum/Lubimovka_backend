@@ -5,7 +5,6 @@ from .author import (
 )
 from .masterclass import EventMasterClassSerializer
 from .performance import EventPerformanceSerializer, PerformanceSerializer
-from .performanceperson import TeamMemberSerializer
 from .play import PlaySerializer
 from .reading import EventReadingSerializer
 
@@ -17,6 +16,5 @@ __all__ = (
     EventPerformanceSerializer,
     PlaySerializer,
     PerformanceSerializer,
-    TeamMemberSerializer,
     EventReadingSerializer,
 )
