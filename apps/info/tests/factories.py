@@ -1,10 +1,12 @@
+import random
 import urllib
 
 import factory
 from django.core.files.base import ContentFile
 from faker import Faker
 
-from apps.core.models import Person
+from apps.core.decorators import restrict_factory
+from apps.core.models import Image, Person
 from apps.info.models import (
     Festival,
     FestivalTeam,
@@ -48,12 +50,13 @@ class SponsorFactory(factory.django.DjangoModelFactory):
     position = factory.Faker("job", locale="ru_RU")
 
 
+@restrict_factory({"global": [Person]})
 class VolunteerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Volunteer
         django_get_or_create = ["person"]
 
-    person = person = factory.Iterator(
+    person = factory.Iterator(
         Person.objects.filter(email__isnull=False).exclude(image__exact="")
     )
     year = factory.Faker("random_int", min=2018, max=2021, step=1)
@@ -87,9 +90,38 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2500, step=1)
-    video_link = factory.LazyFunction(
-        lambda: f"{fake.word()}.com/{fake.word()}/"
-    )
+
+    @factory.post_generation
+    def volunteers(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.volunteers.add(*extracted)
+        else:
+            volunteers_count = Volunteer.objects.count()
+            how_many = min(volunteers_count, random.randint(1, 7))
+            volunteers = Volunteer.objects.order_by("?")[:how_many]
+            self.volunteers.add(*volunteers)
+
+    @factory.post_generation
+    def images(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.images.add(*extracted)
+        else:
+            images_count = Image.objects.count()
+            how_many = min(images_count, random.randint(1, 7))
+            images = Image.objects.order_by("?")[:how_many]
+            self.images.add(*images)
+
+    plays_count = factory.Faker("random_int", min=20, max=200, step=1)
+    selected_plays_count = factory.Faker("random_int", min=1, max=20, step=1)
+    selectors_count = factory.Faker("random_int", min=1, max=20, step=1)
+    volunteers_count = factory.Faker("random_int", min=1, max=20, step=1)
+    events_count = factory.Faker("random_int", min=1, max=20, step=1)
+    cities_count = factory.Faker("random_int", min=1, max=20, step=1)
+    video_link = factory.Faker("url", locale="ru_RU")
     # blog_entries необходимо изменить после
     # корректировки поля модели фестиваля
     blog_entries = factory.LazyFunction(

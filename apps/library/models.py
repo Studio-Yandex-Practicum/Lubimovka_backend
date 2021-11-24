@@ -6,15 +6,16 @@ from django.core.validators import (
 )
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.db.models.signals import pre_save
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Image, Person
-from apps.core.utilities.file import generate_class_name_path
-from apps.core.utilities.slugify import slugify
+from apps.core.utilities import slugify
 from apps.info.models import Festival
+from apps.library.utilities import generate_class_name_path
 from apps.library.validators import year_validator
 
 
@@ -274,11 +275,11 @@ class Performance(BaseModel):
         related_name="performances",
         verbose_name="Пьеса",
     )
-    event = models.OneToOneField(
+    events = models.OneToOneField(
         CommonEvent,
         on_delete=models.PROTECT,
-        related_name="performances",
-        verbose_name="Базовое событие",
+        related_name="performance",
+        verbose_name="События",
     )
     main_image = models.ImageField(
         upload_to="performances/",
@@ -465,11 +466,11 @@ class Reading(BaseModel):
         related_name="dramatist_readings",
         verbose_name="Драматург",
     )
-    event = models.OneToOneField(
+    events = models.OneToOneField(
         CommonEvent,
         on_delete=models.PROTECT,
-        related_name="readings",
-        verbose_name="Заголовок события",
+        related_name="reading",
+        verbose_name="События",
     )
 
     @property
@@ -504,11 +505,11 @@ class MasterClass(BaseModel):
         related_name="leading_masterclasses",
         verbose_name="Ведущий",
     )
-    event = models.OneToOneField(
+    events = models.OneToOneField(
         CommonEvent,
         on_delete=models.PROTECT,
-        related_name="masterclasses",
-        verbose_name="Заголовок события",
+        related_name="masterclass",
+        verbose_name="События",
     )
 
     @property
@@ -609,3 +610,13 @@ class ParticipationApplicationFestival(BaseModel):
         """
         self.file.name = self.generate_filename()
         super().save(*args, **kwargs)
+
+
+def create_common_event(sender, instance, **kwargs):
+    if not instance.events_id:
+        instance.events_id = CommonEvent.objects.create().id
+
+
+pre_save.connect(create_common_event, sender=MasterClass)
+pre_save.connect(create_common_event, sender=Reading)
+pre_save.connect(create_common_event, sender=Performance)

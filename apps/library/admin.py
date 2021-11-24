@@ -148,6 +148,7 @@ class ReadingAdmin(admin.ModelAdmin):
         "director",
         "dramatist",
     )
+    exclude = ("events",)
     list_filter = (
         "director__last_name",
         "dramatist__last_name",
@@ -165,6 +166,7 @@ class MasterClassAdmin(admin.ModelAdmin):
         "name",
         "host",
     )
+    exclude = ("events",)
     list_filter = ("host__last_name",)
     search_fields = (
         "play__name",
@@ -197,6 +199,7 @@ class PerformanceTeamInline(admin.TabularInline):
 
 
 class PerformanceAdmin(admin.ModelAdmin):
+    exclude = ("events",)
     filter_horizontal = (
         "images_in_block",
         "persons",

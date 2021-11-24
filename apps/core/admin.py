@@ -1,7 +1,28 @@
 from django.contrib import admin
 
-from apps.core.models import Image, Settings
-from apps.core.utilities.mixins import AdminImagePreview
+from apps.core.mixins import AdminImagePreview
+from apps.core.models import Image, Role, Settings
+
+
+class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
+    list_display = (
+        "id",
+        "image_preview_list_page",
+    )
+    readonly_fields = ("image_preview_change_page",)
+
+
+class RoleAdmin(admin.ModelAdmin):
+    list_dispay = (
+        "name",
+        "slug",
+    )
+
+    def get_readonly_fields(self, request, obj=None):
+        """Only superusers can edit slug field."""
+        if not request.user.is_superuser:
+            return ("slug",)
+        return super().get_readonly_fields(request, obj)
 
 
 class SettingsAdmin(admin.ModelAdmin):
@@ -43,13 +64,6 @@ class SettingsAdmin(admin.ModelAdmin):
         return False
 
 
-class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
-    list_display = (
-        "id",
-        "image_preview_list_page",
-    )
-    readonly_fields = ("image_preview_change_page",)
-
-
-admin.site.register(Settings, SettingsAdmin)
 admin.site.register(Image, ImageAdmin)
+admin.site.register(Role, RoleAdmin)
+admin.site.register(Settings, SettingsAdmin)
