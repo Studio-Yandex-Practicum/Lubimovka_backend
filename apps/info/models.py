@@ -193,18 +193,6 @@ class Festival(BaseModel):
         unique=True,
         verbose_name="Год фестиваля",
     )
-    teams = models.ManyToManyField(
-        FestivalTeam,
-        related_name="festivalteams",
-        verbose_name="Арт-дирекция и команда",
-        blank=False,
-    )
-    sponsors = models.ManyToManyField(
-        Sponsor,
-        related_name="festivalsponsors",
-        verbose_name="Попечители фестиваля",
-        blank=False,
-    )
     volunteers = models.ManyToManyField(
         Volunteer,
         related_name="volunteers",
