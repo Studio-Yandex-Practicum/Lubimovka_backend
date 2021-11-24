@@ -158,3 +158,21 @@ class Settings(BaseModel):
         if Settings.objects.filter(settings_key=settings_key).exists():
             setting = Settings.objects.get(settings_key=settings_key)
             return setting.value
+
+
+class Role(BaseModel):
+    name = models.CharField(
+        max_length=100,
+        verbose_name="Роль",
+    )
+    slug = models.CharField(
+        max_length=100, unique=True, verbose_name="Код роли"
+    )
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "Роль"
+        verbose_name_plural = "Роли"
+
+    def __str__(self):
+        return self.name

@@ -1,22 +1,17 @@
 from rest_framework import serializers
 
+from apps.core.utilities import team_collector
 from apps.library.models import MasterClass, TeamMember
 
 
 class EventMasterClassSerializer(serializers.ModelSerializer):
-    hosts = serializers.SerializerMethodField()
-    project = serializers.SerializerMethodField()
+    team = serializers.SerializerMethodField()
+    project = serializers.SlugRelatedField(slug_field="title", read_only=True)
 
-    def get_hosts(self, obj):
-        hosts = TeamMember.objects.filter(
-            masterclass=obj, role__name="Ведущий"
+    def get_team(self, obj):
+        return team_collector(
+            TeamMember, {"masterclass": obj, "role__slug": "host"}
         )
-        return [host.person.full_name for host in hosts]
-
-    def get_project(self, obj):
-        if obj.project:
-            return obj.project.title
-        return ""
 
     class Meta:
         model = MasterClass
@@ -24,6 +19,6 @@ class EventMasterClassSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
-            "hosts",
+            "team",
             "project",
         )

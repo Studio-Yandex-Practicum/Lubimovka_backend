@@ -1,9 +1,9 @@
 from rest_framework import serializers
 
 from apps.core.serializers import ImageSerializer
+from apps.core.utilities import team_collector
 from apps.library.models import Performance, TeamMember
 
-from .performanceperson import TeamMemberSerializer
 from .play import PlaySerializer
 
 
@@ -11,16 +11,17 @@ class PerformanceSerializer(serializers.ModelSerializer):
     """Сериализатор Спектакля для отображения на странице Спектакля"""
 
     play = PlaySerializer()
-    persons = TeamMemberSerializer(
-        source="team_members",
-        many=True,
-    )
+    persons = serializers.SerializerMethodField()
     images_in_block = ImageSerializer(many=True)
+
+    def get_persons(self, obj):
+        return team_collector(TeamMember, {"performance": obj})
 
     class Meta:
         exclude = (
             "created",
             "modified",
+            "project",
         )
         model = Performance
 
@@ -28,27 +29,15 @@ class PerformanceSerializer(serializers.ModelSerializer):
 class EventPerformanceSerializer(serializers.ModelSerializer):
     """Сериализатор Спектакля для отображения на странице Афиши"""
 
-    directors = serializers.SerializerMethodField()
-    dramatists = serializers.SerializerMethodField()
+    team = serializers.SerializerMethodField()
     image = serializers.ImageField(source="main_image")
-    project = serializers.SerializerMethodField()
+    project = serializers.SlugRelatedField(slug_field="title", read_only=True)
 
-    def get_directors(self, obj):
-        directors = TeamMember.objects.filter(
-            performance=obj, role__name="Режиссёр"
+    def get_team(self, obj):
+        return team_collector(
+            TeamMember,
+            {"performance": obj, "role__slug__in": ["director", "dramatist"]},
         )
-        return [director.person.full_name for director in directors]
-
-    def get_dramatists(self, obj):
-        dramatists = TeamMember.objects.filter(
-            performance=obj, role__name="Драматург"
-        )
-        return [dramatist.person.full_name for dramatist in dramatists]
-
-    def get_project(self, obj):
-        if obj.project:
-            return obj.project.title
-        return ""
 
     class Meta:
         model = Performance
@@ -56,8 +45,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
-            "directors",
-            "dramatists",
+            "team",
             "image",
             "project",
         )

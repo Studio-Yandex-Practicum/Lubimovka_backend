@@ -497,21 +497,6 @@ class MasterClass(BaseModel):
         return self.name
 
 
-class Role(BaseModel):
-    name = models.CharField(
-        max_length=100,
-        verbose_name="Роль",
-    )
-
-    class Meta:
-        ordering = ("name",)
-        verbose_name = "Роль"
-        verbose_name_plural = "Роли"
-
-    def __str__(self):
-        return self.name
-
-
 class TeamMember(BaseModel):
     performance = models.ForeignKey(
         Performance,
@@ -544,7 +529,7 @@ class TeamMember(BaseModel):
         verbose_name="Член команды",
     )
     role = models.ForeignKey(
-        Role,
+        "core.Role",
         on_delete=models.PROTECT,
         related_name="team_members",
         verbose_name="Роль",

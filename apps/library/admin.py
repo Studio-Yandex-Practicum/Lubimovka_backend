@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from apps.core.models import Role
 from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
@@ -14,7 +15,6 @@ from apps.library.models import (
     Play,
     ProgramType,
     Reading,
-    Role,
     SocialNetworkLink,
     TeamMember,
 )

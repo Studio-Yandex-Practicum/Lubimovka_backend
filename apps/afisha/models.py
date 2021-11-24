@@ -38,14 +38,10 @@ class CommonEvent(BaseModel):
 
 
 class Event(BaseModel):
-    PERFORMANCE = "Спектакль"
-    MASTER_CLASS = "Мастер-класс"
-    READING = "Читка"
-    EVENT_TYPES = [
-        (PERFORMANCE, PERFORMANCE),
-        (MASTER_CLASS, MASTER_CLASS),
-        (READING, READING),
-    ]
+    class EventType(models.TextChoices):
+        PERFORMANCE = "PERFORMANCE", "Спектакль"
+        MASTERCLASS = "MASTERCLASS", "Мастер-класс"
+        READING = "READING", "Читка"
 
     common_event = models.ForeignKey(
         CommonEvent,
@@ -54,10 +50,9 @@ class Event(BaseModel):
         verbose_name="Событие",
     )
     type = models.CharField(
-        verbose_name="Тип события",
-        choices=EVENT_TYPES,
-        default=PERFORMANCE,
+        choices=EventType.choices,
         max_length=50,
+        verbose_name="Тип события",
     )
     date_time = models.DateTimeField(verbose_name="Дата и время")
     paid = models.BooleanField(verbose_name="Платное", default=False)
