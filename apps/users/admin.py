@@ -22,6 +22,7 @@ class UserAdmin(DjangoUserAdmin):
     )
 
     def get_readonly_fields(self, request, obj=None):
+        """Only superusers can edit `is_superuser` field."""
         if not request.user.is_superuser:
             return ("is_superuser",)
         return super().get_readonly_fields(request, obj)
