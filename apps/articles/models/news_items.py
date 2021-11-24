@@ -9,7 +9,7 @@ class NewsItem(AbstractContentPage):
     image = models.ImageField(
         upload_to="images/news/",
         null=True,
-        verbose_name="Заглавная картинка новосте",
+        verbose_name="Заглавная картинка новостей",
     )
     pub_date = models.DateField(
         default=date.today,
