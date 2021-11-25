@@ -6,12 +6,10 @@ from django.core.validators import (
 )
 from django.db import models
 from django.db.models import UniqueConstraint
-from django.db.models.signals import pre_save
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from phonenumber_field.modelfields import PhoneNumberField
 
-from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Image, Person
 from apps.core.utilities import slugify
 from apps.info.models import Festival
@@ -276,7 +274,7 @@ class Performance(BaseModel):
         verbose_name="Пьеса",
     )
     events = models.OneToOneField(
-        CommonEvent,
+        "afisha.CommonEvent",
         on_delete=models.PROTECT,
         related_name="performance",
         verbose_name="События",
@@ -435,7 +433,7 @@ class Reading(BaseModel):
         verbose_name="Члены команды",
     )
     events = models.OneToOneField(
-        CommonEvent,
+        "afisha.CommonEvent",
         on_delete=models.PROTECT,
         related_name="reading",
         verbose_name="События",
@@ -474,7 +472,7 @@ class MasterClass(BaseModel):
         verbose_name="Члены команды",
     )
     events = models.OneToOneField(
-        CommonEvent,
+        "afisha.CommonEvent",
         on_delete=models.PROTECT,
         related_name="masterclass",
         verbose_name="События",
@@ -626,13 +624,3 @@ class ParticipationApplicationFestival(BaseModel):
         """
         self.file.name = self.generate_filename()
         super().save(*args, **kwargs)
-
-
-def create_common_event(sender, instance, **kwargs):
-    if not instance.events_id:
-        instance.events_id = CommonEvent.objects.create().id
-
-
-pre_save.connect(create_common_event, sender=MasterClass)
-pre_save.connect(create_common_event, sender=Reading)
-pre_save.connect(create_common_event, sender=Performance)

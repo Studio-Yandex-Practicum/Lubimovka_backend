@@ -20,5 +20,6 @@ def team_collector(model, filters: dict = None) -> defaultdict:
         )
     )
     team = defaultdict(list)
-    [team[key].append(value) for key, value in qs]
+    for key, value in qs:
+        team[key].append(value)
     return team

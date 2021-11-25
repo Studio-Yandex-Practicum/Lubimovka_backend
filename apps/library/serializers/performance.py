@@ -11,10 +11,10 @@ class PerformanceSerializer(serializers.ModelSerializer):
     """Сериализатор Спектакля для отображения на странице Спектакля"""
 
     play = PlaySerializer()
-    persons = serializers.SerializerMethodField()
+    team = serializers.SerializerMethodField()
     images_in_block = ImageSerializer(many=True)
 
-    def get_persons(self, obj):
+    def get_team(self, obj):
         return team_collector(TeamMember, {"performance": obj})
 
     class Meta:
@@ -22,6 +22,7 @@ class PerformanceSerializer(serializers.ModelSerializer):
             "created",
             "modified",
             "project",
+            "persons",
         )
         model = Performance
 

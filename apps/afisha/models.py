@@ -1,6 +1,9 @@
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models.signals import pre_save
 
 from apps.core.models import BaseModel
+from apps.library.models import MasterClass, Performance, Reading
 
 
 class CommonEvent(BaseModel):
@@ -48,6 +51,10 @@ class Event(BaseModel):
         on_delete=models.CASCADE,
         related_name="body",
         verbose_name="Событие",
+        help_text=(
+            "Создайте спектакль, читку или мастер-класс чтобы получить "
+            "возможность создать соответствующее событие"
+        ),
     )
     type = models.CharField(
         choices=EventType.choices,
@@ -62,9 +69,21 @@ class Event(BaseModel):
     )
     place = models.CharField(verbose_name="Место", max_length=200)
     pinned_on_main = models.BooleanField(
-        verbose_name="Закрепить на главной",
         default=False,
+        verbose_name="Закрепить на главной",
     )
+
+    def clean(self):
+        allowed_event_types = {
+            "PERFORMANCE": Performance,
+            "MASTERCLASS": MasterClass,
+            "READING": Reading,
+        }
+        common_event_type = type(self.common_event.target_model)
+        allowed_type = allowed_event_types[self.type]
+        if common_event_type != allowed_type:
+            raise ValidationError("Указан некорректный тип события.")
+        return super().clean()
 
     def __str__(self):
         return f"{self.common_event} - {self.type}, {self.date_time}"
@@ -73,3 +92,13 @@ class Event(BaseModel):
         ordering = ("-created",)
         verbose_name = "Событие"
         verbose_name_plural = "События"
+
+
+def create_common_event(sender, instance, **kwargs):
+    if not instance.events_id:
+        instance.events_id = CommonEvent.objects.create().id
+
+
+pre_save.connect(create_common_event, sender=MasterClass)
+pre_save.connect(create_common_event, sender=Reading)
+pre_save.connect(create_common_event, sender=Performance)
