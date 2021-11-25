@@ -5,6 +5,7 @@ from apps.core.tests.factories import PersonFactory
 from apps.info.tests.factories import (
     FestivalFactory,
     FestivalTeamFactory,
+    PartnerFactory,
     SponsorFactory,
     VolunteerFactory,
 )
@@ -55,6 +56,16 @@ def volunteers():
 @pytest.fixture
 def volunteer():
     return VolunteerFactory(person=PersonFactory(add_image=True))
+
+
+@pytest.fixture
+def partners():
+    return list(PartnerFactory.create_batch(5))
+
+
+@pytest.fixture
+def partner():
+    return PartnerFactory()
 
 
 @pytest.fixture
