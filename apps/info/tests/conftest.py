@@ -20,10 +20,15 @@ QUESTIONS_URL = reverse("questions")
 
 
 @pytest.fixture
-def sponsor():
+def sponsors():
     return list(
         SponsorFactory(person=PersonFactory(add_image=True)) for _ in range(5)
     )
+
+
+@pytest.fixture
+def sponsor():
+    return SponsorFactory(person=PersonFactory(add_image=True))
 
 
 @pytest.fixture
@@ -40,11 +45,16 @@ def team():
 
 
 @pytest.fixture
-def volunteer():
+def volunteers():
     return list(
         VolunteerFactory(person=PersonFactory(add_image=True))
         for _ in range(5)
     )
+
+
+@pytest.fixture
+def volunteer():
+    return VolunteerFactory(person=PersonFactory(add_image=True))
 
 
 @pytest.fixture

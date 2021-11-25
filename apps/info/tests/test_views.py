@@ -5,8 +5,10 @@ from apps.info.models import FestivalTeam
 from apps.info.tests.conftest import (
     FESTIVAL_URL_NAME,
     FESTIVAL_YEARS_URL,
+    SPONSORS_URL,
     TEAMS_URL,
     TEAMS_URL_FILTER,
+    VOLUNTEERS_URL,
 )
 
 pytestmark = pytest.mark.django_db
@@ -65,15 +67,30 @@ class TestFestivalAPIViews:
 
 
 class TestAboutFestivalAPIViews:
-    def test_teams_count_in_response_matches_count_in_db(self, client, teams):
-        response = client.get(TEAMS_URL)
-        data = response.json()
-        teams_count_in_response = len(data)
-        teams_count_in_db = len(teams)
-        assert teams_count_in_db == teams_count_in_response, (
-            f"Проверьте, что при GET запросе {TEAMS_URL}"
-            f"возвращаются все объекты"
-        )
+    def test_objects_count_in_response_matches_count_in_db(
+        self, client, teams, sponsors, volunteers
+    ):
+        """
+        Checks if objects count in response matches count in db for:
+        - teams
+        - sponsors
+        - volunteers
+        """
+
+        urls_and_objects = {
+            TEAMS_URL: teams,
+            SPONSORS_URL: sponsors,
+            VOLUNTEERS_URL: volunteers,
+        }
+        for url, objects in urls_and_objects.items():
+            response = client.get(url)
+            data = response.json()
+            objects_count_in_response = len(data)
+            objects_count_in_db = len(objects)
+            assert objects_count_in_db == objects_count_in_response, (
+                f"Проверьте, что при GET запросе {url}"
+                f"возвращаются все объекты"
+            )
 
     def test_get_teams_with_filter(self, client, teams):
         filters = (
@@ -97,6 +114,7 @@ class TestAboutFestivalAPIViews:
         response = client.get(TEAMS_URL)
         data = response.json()
         for field in (
+            "id",
             "team",
             "position",
         ):
@@ -107,30 +125,66 @@ class TestAboutFestivalAPIViews:
                 f"возвращаются данные объекта. Значение {field} неправильное"
             )
 
-    def test_get_fields_for_person_in_team(self, client, team):
-        response = client.get(TEAMS_URL)
+    def test_get_sponsors_fields(self, client, sponsor):
+        response = client.get(SPONSORS_URL)
         data = response.json()
         for field in (
             "id",
-            "first_name",
-            "last_name",
-            "middle_name",
-            "city",
-            "email",
+            "position",
         ):
-            team_field_in_response = data[0].get("person").get(field)
-            team_field_in_db = getattr(team.person, field)
+            team_field_in_response = data[0].get(field)
+            team_field_in_db = getattr(sponsor, field)
             assert team_field_in_response == team_field_in_db, (
                 f"Проверьте, что при GET запросе {TEAMS_URL}"
                 f"возвращаются данные объекта. Значение {field} неправильное"
             )
 
-    def test_get_image_for_person_in_team(self, client, team):
-        response = client.get(TEAMS_URL)
-        data = response.json()
-        image_url_in_response = data[0].get("person").get("image")
-        image_url_in_db = team.person.image.url
-        assert image_url_in_response.endswith(image_url_in_db), (
-            f"Проверьте, что при GET запросе {TEAMS_URL}"
-            f'возвращаются данные объекта. Значение "image" неправильное'
-        )
+    def test_get_fields_for_person(self, client, team, sponsor):
+        """
+        Checks fields for person field for:
+        - teams
+        - sponsors
+        """
+
+        urls_and_objects = {
+            TEAMS_URL: team,
+            SPONSORS_URL: sponsor,
+        }
+        for url, object in urls_and_objects.items():
+            response = client.get(url)
+            data = response.json()
+            for field in (
+                "id",
+                "first_name",
+                "last_name",
+                "middle_name",
+                "city",
+                "email",
+            ):
+                object_field_in_response = data[0].get("person").get(field)
+                object_field_in_db = getattr(object.person, field)
+                assert object_field_in_response == object_field_in_db, (
+                    f"Проверьте, что при GET запросе {url} возвращаются "
+                    f"данные объекта. Значение {field} неправильное"
+                )
+
+    def test_get_image_for_person(self, client, team, sponsor):
+        """
+        Checks image field in person for:
+        - teams
+        - sponsors
+        """
+
+        urls_and_objects = {
+            TEAMS_URL: team,
+            SPONSORS_URL: sponsor,
+        }
+        for url, object in urls_and_objects.items():
+            response = client.get(url)
+            data = response.json()
+            image_url_in_response = data[0].get("person").get("image")
+            image_url_in_db = object.person.image.url
+            assert image_url_in_response.endswith(image_url_in_db), (
+                f"Проверьте, что при GET запросе {url}"
+                f'возвращаются данные объекта. Значение "image" неправильное'
+            )

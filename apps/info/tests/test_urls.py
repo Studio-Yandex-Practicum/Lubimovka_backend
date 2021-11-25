@@ -5,6 +5,7 @@ from apps.info.tests.conftest import (
     FESTIVAL_URL_NAME,
     FESTIVAL_YEARS_URL,
     PARTNERS_URL,
+    QUESTIONS_URL,
     SPONSORS_URL,
     TEAMS_URL,
     VOLUNTEERS_URL,
@@ -41,3 +42,17 @@ class TestAboutFestivalAPIUrls:
                 f"Проверьте, что при GET запросе {url} "
                 f"возвращается статус 200"
             )
+
+
+class TestQuestionsAPIUrls:
+    def test_question_url(self, client):
+        data = {
+            "question": "Text",
+            "author_name": "Name",
+            "author_email": "author@mail.ru",
+        }
+        response = client.post(QUESTIONS_URL, data=data)
+        assert response.status_code == 201, (
+            f"Проверьте, что при POST запросе {QUESTIONS_URL} "
+            f"возвращается статус 201"
+        )
