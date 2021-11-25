@@ -2,7 +2,7 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.core.tests.factories import ImageFactory, PersonFactory
+from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
 from apps.info.tests.factories import (
     FestivalFactory,
     FestivalTeamFactory,
@@ -87,6 +87,21 @@ class Command(BaseCommand):
             )
             self.stdout.write(
                 self.style.SUCCESS(f"{len(images)} картинки успешно созданы")
+            )
+            users_editors = []
+            users_admins = []
+            for _ in range(5):
+                users_editors.append(UserFactory.create(add_role_editor=True))
+                users_admins.append(UserFactory.create(add_role_admin=True))
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"{len(users_editors)} редакторов созданы успешно."
+                )
+            )
+            self.stdout.write(
+                self.style.SUCCESS(
+                    f"{len(users_admins)} админов созданы успешно."
+                )
             )
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполения БД"))
