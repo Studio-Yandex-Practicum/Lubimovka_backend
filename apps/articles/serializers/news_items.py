@@ -32,3 +32,9 @@ class NewsItemListSerializer(serializers.ModelSerializer):
             "image",
             "pub_date",
         )
+
+
+class NewsItemsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsItem
+        fields = "__all__"

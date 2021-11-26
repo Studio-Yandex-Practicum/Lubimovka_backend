@@ -56,6 +56,17 @@ class PerformanceSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 
+class PerformancesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Performance
+        fields = (
+            "play",
+            "main_image",
+            "description",
+            "persons",
+        )
+
+
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person

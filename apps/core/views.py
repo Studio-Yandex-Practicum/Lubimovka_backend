@@ -4,18 +4,15 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.articles.models import NewsItem
-from apps.articles.serializers import NewsItemSerializer
-from apps.content_pages.serializers import PerformanceSerializer
+from apps.articles.serializers.news_items import NewsItemsSerializer
+from apps.content_pages.serializers.content_items import PerformancesSerializer
 from apps.core.models import Settings
-from apps.info.models import FestivalTeam, Partner, Place, Sponsor
-from apps.info.serializers import (
-    FestivalTeamsSerializer,
-    PartnerSerializer,
-    PlaceSerializer,
-    SponsorSerializer,
-)
+from apps.info.models import Partner, Place, Sponsor
+from apps.info.serializers import PlaceSerializer
+from apps.info.serializers.partners import PartnersSerializer
+from apps.info.serializers.sponsors import SponsorsSerializer
 from apps.library.models import Performance, Reading
-from apps.library.serializers import ReadingEventSerializer
+from apps.library.serializers.reading import ReadingEventsSerializer
 
 
 def error500(request, *args, **kwargs):
@@ -44,51 +41,56 @@ def error404(request, exception, *args, **kwargs):
 
 class MainView(APIView):
     def get(self, request):
+        global contex
         # Новости
-        news_item = NewsItem.objects.order_by("-created")[:6]
-        news_item_serializer = NewsItemSerializer(news_item, many=True)
+        news_items = NewsItem.objects.order_by("-created")[:6]
+        news_item_serializer = NewsItemsSerializer(news_items, many=True)
         # Спектакли
         performances = Performance.objects.order_by("-created")[:6]
-        performances_serializer = PerformanceSerializer(
+        performances_serializer = PerformancesSerializer(
             performances, many=True
         )
-        # Читки
+        # Читки/Пьесы
         readings = Reading.objects.order_by("-created")[:6]
-        readings_serializer = ReadingEventSerializer(readings, many=True)
+        readings_serializer = ReadingEventsSerializer(readings, many=True)
         # Партнеры
         partners = Partner.objects.all()
-        partners_serializer = PartnerSerializer(partners, many=True)
-        # Команда фестиваля
-        festival_team = FestivalTeam.objects.all()
-        festival_team_serializer = FestivalTeamsSerializer(
-            festival_team, many=True
-        )
+        partners_serializer = PartnersSerializer(partners, many=True)
         # Спонсоры
         sponsors = Sponsor.objects.all()
-        sponsors_team_serializer = SponsorSerializer(sponsors, many=True)
+        sponsors_team_serializer = SponsorsSerializer(sponsors, many=True)
         # Площадки
         places = Place.objects.all()
         places_team_serializer = PlaceSerializer(places, many=True)
 
         # Конфигурации
-        settings = Settings.objects.first()
-
-        if settings.boolean:
-            contex = {
-                "news_item": news_item_serializer.data,
-                "readings": readings_serializer.data,
-                "partners": partners_serializer.data,
-                "festival_team": festival_team_serializer.data,
-                "sponsors": sponsors_team_serializer.data,
-            }
-        else:
-            contex = {
-                "news_item": news_item_serializer.data,
-                "performances": performances_serializer.data,
-                "partners": partners_serializer.data,
-                "festival_team": festival_team_serializer.data,
-                "sponsors": sponsors_team_serializer.data,
-                "places": places_team_serializer.data,
-            }
-
+        settings = Settings.objects.all()
+        count = 1
+        for setting in settings:
+            contex = {}
+            if setting.festival_status:
+                if setting.places:
+                    contex.update(
+                        {f"places_{count}": places_team_serializer.data}
+                    )
+            else:
+                if setting.readings:
+                    contex.update(
+                        {f"readings_{count}": readings_serializer.data}
+                    )
+            if setting.news_item:
+                contex.update(
+                    {f"news_item_{count}": news_item_serializer.data}
+                )
+            if setting.performances:
+                contex.update(
+                    {f"performances_{count}": performances_serializer.data}
+                )
+            if setting.partners:
+                contex.update({f"partners_{count}": partners_serializer.data})
+            if setting.sponsors:
+                contex.update(
+                    {f"sponsors_{count}": sponsors_team_serializer.data}
+                )
+            count += 1
         return Response({"contex": contex})

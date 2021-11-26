@@ -7,3 +7,9 @@ class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
         exclude = ("created", "modified")
+
+
+class PlacesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Place
+        exclude = ("created", "modified")

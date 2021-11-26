@@ -10,3 +10,14 @@ class SponsorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sponsor
         exclude = ("created", "modified")
+
+
+class SponsorsSerializer(serializers.ModelSerializer):
+    person = PersonsSerializer()
+
+    class Meta:
+        model = Sponsor
+        fields = (
+            "person",
+            "position",
+        )

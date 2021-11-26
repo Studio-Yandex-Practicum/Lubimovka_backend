@@ -30,6 +30,12 @@ class SettingsAdmin(admin.ModelAdmin):
         "description",
         "settings_key",
         "get_value",
+        "news_item",
+        "performances",
+        "readings",
+        "places",
+        "partners",
+        "sponsors",
     )
     search_fields = (
         "field_type",
