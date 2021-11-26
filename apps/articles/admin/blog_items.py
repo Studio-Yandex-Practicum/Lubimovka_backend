@@ -16,6 +16,7 @@ class BlogItemContentInline(BaseContentInline):
         "imagesblock",
         "personsblock",
         "playsblock",
+        "preamble",
         "quote",
         "text",
         "title",

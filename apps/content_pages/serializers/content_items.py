@@ -1,6 +1,14 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import Image, Link, Quote, Text, Title, Video
+from apps.content_pages.models import (
+    Image,
+    Link,
+    Preamble,
+    Quote,
+    Text,
+    Title,
+    Video,
+)
 from apps.library.models import Performance, Person, Play
 
 
@@ -13,12 +21,6 @@ class ImageSerializer(serializers.ModelSerializer):
         )
 
 
-class QuoteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Quote
-        fields = ("quote",)
-
-
 class LinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = Link
@@ -27,6 +29,36 @@ class LinkSerializer(serializers.ModelSerializer):
             "description",
             "url",
         )
+
+
+class PerformanceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Performance
+        fields = "__all__"
+
+
+class PersonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Person
+        fields = "__all__"
+
+
+class PlaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Play
+        fields = "__all__"
+
+
+class PreambleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Preamble
+        fields = ("preamble",)
+
+
+class QuoteSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Quote
+        fields = ("quote",)
 
 
 class TextSerializer(serializers.ModelSerializer):
@@ -48,21 +80,3 @@ class VideoSerializer(serializers.ModelSerializer):
             "title",
             "url",
         )
-
-
-class PerformanceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Performance
-        fields = "__all__"
-
-
-class PersonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Person
-        fields = "__all__"
-
-
-class PlaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Play
-        fields = "__all__"
