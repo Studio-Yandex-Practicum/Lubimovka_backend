@@ -7,6 +7,7 @@ from apps.library.views import (
     PerformanceViewSet,
     PlayViewSet,
     SearchResultViewSet,
+    filters,
 )
 
 router = DefaultRouter()
@@ -36,8 +37,8 @@ router.register(
     basename="participation",
 )
 
-
 library_urls = [
+    path("library/filters/", filters, name="filters"),
     path("library/", include(router.urls)),
 ]
 
