@@ -92,7 +92,7 @@ class ImageFactory(factory.django.DjangoModelFactory):
 class UserFactory(factory.django.DjangoModelFactory):
     """
     Creates User objects.
-    In default creates only username.
+    Creates username and default password.
     For other fields, use arguments: add_role_editor, add_role_admin.
     """
 

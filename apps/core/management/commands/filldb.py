@@ -22,6 +22,8 @@ class Command(BaseCommand):
         " - Волонтёры"
         " - Попечители"
         " - Команды фестиваля"
+        " - Пользователи-админы"
+        " - Пользователи-редакторы"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -90,9 +92,19 @@ class Command(BaseCommand):
             )
             users_editors = []
             users_admins = []
+            index = 1
             for _ in range(5):
-                users_editors.append(UserFactory.create(add_role_editor=True))
-                users_admins.append(UserFactory.create(add_role_admin=True))
+                users_editors.append(
+                    UserFactory.create(
+                        username=f"editor_{index}", add_role_editor=True
+                    )
+                )
+                users_admins.append(
+                    UserFactory.create(
+                        username=f"admin_{index}", add_role_admin=True
+                    )
+                )
+                index += 1
             self.stdout.write(
                 self.style.SUCCESS(
                     f"{len(users_editors)} редакторов созданы успешно."
