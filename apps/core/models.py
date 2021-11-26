@@ -182,31 +182,6 @@ class Settings(BaseModel):
         verbose_name="Email",
     )
 
-    news_item = models.BooleanField(
-        default=False,
-        verbose_name="блок Новостей",
-    )
-    performances = models.BooleanField(
-        default=False,
-        verbose_name="блок Спектаклей",
-    )
-    readings = models.BooleanField(
-        default=False,
-        verbose_name="блок Читки/Пьесы",
-    )
-    places = models.BooleanField(
-        default=False,
-        verbose_name="блок Площадок",
-    )
-    partners = models.BooleanField(
-        default=False,
-        verbose_name="блок Партнеров",
-    )
-    sponsors = models.BooleanField(
-        default=False,
-        verbose_name="блок Спонсоров",
-    )
-
     class Meta:
         verbose_name = "Общие настройки"
         verbose_name_plural = "Общие настройки"

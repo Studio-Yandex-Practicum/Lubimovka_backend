@@ -11,7 +11,8 @@ from apps.info.models import Partner, Place, Sponsor
 from apps.info.serializers import PlaceSerializer
 from apps.info.serializers.partners import PartnersSerializer
 from apps.info.serializers.sponsors import SponsorsSerializer
-from apps.library.models import Performance, Reading
+from apps.library.models import Performance, ProgramType, Reading
+from apps.library.serializers.program_type import ProgramTypeSerializer
 from apps.library.serializers.reading import ReadingEventsSerializer
 
 
@@ -62,35 +63,28 @@ class MainView(APIView):
         # Площадки
         places = Place.objects.all()
         places_team_serializer = PlaceSerializer(places, many=True)
+        # Шорт-лист
+        program_type = ProgramType.objects.order_by("-created")[:4]
+        program_type_serializer = ProgramTypeSerializer(
+            program_type, many=True
+        )
 
         # Конфигурации
-        settings = Settings.objects.all()
-        count = 1
-        for setting in settings:
-            contex = {}
-            if setting.festival_status:
-                if setting.places:
-                    contex.update(
-                        {f"places_{count}": places_team_serializer.data}
-                    )
-            else:
-                if setting.readings:
-                    contex.update(
-                        {f"readings_{count}": readings_serializer.data}
-                    )
-            if setting.news_item:
-                contex.update(
-                    {f"news_item_{count}": news_item_serializer.data}
-                )
-            if setting.performances:
-                contex.update(
-                    {f"performances_{count}": performances_serializer.data}
-                )
-            if setting.partners:
-                contex.update({f"partners_{count}": partners_serializer.data})
-            if setting.sponsors:
-                contex.update(
-                    {f"sponsors_{count}": sponsors_team_serializer.data}
-                )
-            count += 1
+        festival_status = Settings.get_setting("festival_status")
+        if festival_status:
+            contex = {
+                "news_item": news_item_serializer.data,
+                "readings": readings_serializer.data,
+                "partners": partners_serializer.data,
+                "sponsors": sponsors_team_serializer.data,
+                "program_type": program_type_serializer.data,
+            }
+        contex = {
+            "news_item": news_item_serializer.data,
+            "readings": readings_serializer.data,
+            "partners": partners_serializer.data,
+            "sponsors": sponsors_team_serializer.data,
+            "places": places_team_serializer.data,
+            "performances": performances_serializer.data,
+        }
         return Response({"contex": contex})
