@@ -1,6 +1,5 @@
-from datetime import date
-
 from django.db import models
+from django.utils import timezone
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 
@@ -11,8 +10,8 @@ class NewsItem(AbstractContentPage):
         null=True,
         verbose_name="Заглавная картинка новосте",
     )
-    pub_date = models.DateField(
-        default=date.today,
+    pub_date = models.DateTimeField(
+        default=timezone.now,
         verbose_name="Дата публикации новости",
     )
 
