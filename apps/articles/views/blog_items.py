@@ -12,9 +12,15 @@ from apps.articles.serializers import (
 
 class BlogItemsViewSet(ReadOnlyModelViewSet):
     queryset = BlogItem.objects.all()
-    filter_backends = [filters.DjangoFilterBackend, OrderingFilter]
+    filter_backends = (
+        filters.DjangoFilterBackend,
+        OrderingFilter,
+    )
     filterset_class = PubDateFilter
-    ordering_fields = ["pub_date__year", "pub_date__month"]
+    ordering_fields = (
+        "pub_date__year",
+        "pub_date__month",
+    )
 
     def get_serializer_class(self):
         if self.action == "list":
