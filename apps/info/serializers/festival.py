@@ -7,3 +7,4 @@ class FestivalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Festival
         exclude = ("created", "modified")
+        depth = 1

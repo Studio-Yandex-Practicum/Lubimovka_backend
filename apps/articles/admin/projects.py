@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.admin import BaseContentInline
-from apps.core.utilities.mixins import AdminImagePreview
+from apps.core.mixins import AdminImagePreview
 
 
 class ProjectContentInline(BaseContentInline):

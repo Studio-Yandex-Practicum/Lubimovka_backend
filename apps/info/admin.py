@@ -1,7 +1,7 @@
 from django.contrib import admin
 
+from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person
-from apps.core.utilities.mixins import AdminImagePreview
 from apps.info.models import (
     Festival,
     FestivalTeam,
@@ -39,20 +39,6 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
-class FestivalTeamInline(admin.TabularInline):
-    model = Festival.teams.through
-    verbose_name = "Команда и Арт-дирекция"
-    verbose_name_plural = "Команда и Арт-дирекция"
-    extra = 1
-
-
-class SponsorInline(admin.TabularInline):
-    model = Festival.sponsors.through
-    verbose_name = "Попечитель"
-    verbose_name_plural = "Попечители"
-    extra = 1
-
-
 class VolunteerInline(admin.TabularInline):
     model = Festival.volunteers.through
     verbose_name = "Волонтёр"
@@ -73,8 +59,6 @@ class FestivalAdmin(admin.ModelAdmin):
         "year",
     )
     inlines = (
-        FestivalTeamInline,
-        SponsorInline,
         VolunteerInline,
         FestivalImagesInline,
     )
