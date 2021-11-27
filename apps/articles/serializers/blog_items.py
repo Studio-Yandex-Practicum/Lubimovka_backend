@@ -65,7 +65,7 @@ class BlogItemDetailedSerializer(
     serializers.ModelSerializer,
 ):
     other_blogs = serializers.SerializerMethodField()
-    roles = serializers.SerializerMethodField()
+    team = serializers.SerializerMethodField()
 
     def get_other_blogs(self, obj):
         """Returns latest four `BlogItem` except the object itself."""
@@ -76,15 +76,35 @@ class BlogItemDetailedSerializer(
         )
         return serializer.data
 
-    def get_roles(self, obj):
-        """Limits roles and blog_persons, returns serialized data.
+    def get_team(self, obj):
+        """Make `team` serialized data based on `roles` and `blog_persons`.
 
-        Do three things:
-            1. Limits `roles` to distinct `roles`
-            2. Limits  `blog_persons` (roles reverse relation) with blog_item's
-            objects only (typically `role.blog_persons` returns all
+        Team serialized data has to look like this:
+        "team": [
+            {
+                "name": "Переводчик",
+                "slug": "translator",
+                "persons": [
+                    {
+                        "id": 6,
+                        "full_name": "Творимир Алексеев"
+                    },
+                    {
+                        "id": 47,
+                        "full_name": "Раиса Авдеева"
+                    }
+            },
+            {
+                ...
+            }
+        ]
+
+        To make it three things have to be done:
+            1. Limit `roles` to distinct `roles`
+            2. Limit (prefetch) `blog_persons` (roles reverse relation) with
+            blog_item's objects only (typically `role.blog_persons` returns all
             blog_persons, not only related to exact blog_item).
-            3. Returns serialized data
+            3. Return serialized data
         """
 
         blog_item = obj
@@ -114,6 +134,6 @@ class BlogItemDetailedSerializer(
             "author_url_title",
             "pub_date",
             "contents",
-            "roles",
+            "team",
             "other_blogs",
         )
