@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
 from apps.content_pages.models import Image, Link, Quote, Text, Title, Video
-from apps.library.models import Performance, Person, Play
+from apps.core.models import Person
+from apps.library.models import Performance, Play
 
 
 class ImageSerializer(serializers.ModelSerializer):
