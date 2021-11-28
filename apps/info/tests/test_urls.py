@@ -1,29 +1,27 @@
 import pytest
 from django.urls import reverse
 
-from apps.info.models import Festival
+from apps.info.tests.conftest import (
+    FESTIVAL_URL_NAME,
+    FESTIVAL_YEARS_URL,
+    PARTNERS_URL,
+    QUESTIONS_URL,
+    SPONSORS_URL,
+    TEAMS_URL,
+    VOLUNTEERS_URL,
+)
 
-YEAR = 2021
-FESTIVAL_URL = reverse("festivals", kwargs={"year": YEAR})
-FESTIVAL_YEARS_URL = reverse("festivals_years")
-
-
-@pytest.fixture
-def festival():
-    return Festival.objects.create(
-        start_date="2021-07-14",
-        end_date="2021-07-15",
-        description="TestTest",
-        year=YEAR,
-        blog_entries="Test",
-        video_link="http://test/",
-    )
+pytestmark = pytest.mark.django_db
 
 
-class TestFestivalAPI:
-    @pytest.mark.django_db
+class TestFestivalAPIUrls:
     def test_festival_urls(self, client, festival):
-        urls = (FESTIVAL_YEARS_URL, FESTIVAL_URL)
+        """Checks status code for festival url"""
+
+        urls = (
+            FESTIVAL_YEARS_URL,
+            reverse(FESTIVAL_URL_NAME, kwargs={"year": festival.year}),
+        )
         for url in urls:
             response = client.get(url)
             assert response.status_code == 200, (
@@ -31,34 +29,41 @@ class TestFestivalAPI:
                 f"возвращается статус 200"
             )
 
-    @pytest.mark.django_db
-    def test_get_festival_detail(self, client, festival):
-        response = client.get(FESTIVAL_URL)
-        data = response.json()
-        for field in [
-            "start_date",
-            "end_date",
-            "description",
-            "year",
-            "blog_entries",
-            "video_link",
-        ]:
-            assert data.get(field) == getattr(festival, field), (
-                f"Проверьте, что при GET запросе {FESTIVAL_URL}"
-                f"возвращаются данные объекта. Значение {field} неправильное"
-            )
 
-    @pytest.mark.django_db
-    def test_get_festival_years(self, client, festival):
-        response = client.get(FESTIVAL_YEARS_URL)
-        data = response.json()
+class TestAboutFestivalAPIUrls:
+    """Checks status code for about festival urls"""
 
-        assert getattr(festival, "year") in data.get("years"), (
-            f"Проверьте, что при GET запросе {FESTIVAL_YEARS_URL} "
-            f"возвращается список годов фестивалей"
+    @pytest.mark.parametrize("url", (TEAMS_URL, SPONSORS_URL, VOLUNTEERS_URL))
+    def test_about_festival_urls(self, client, url):
+        response = client.get(url)
+        assert response.status_code == 200, (
+            f"Проверьте, что при GET запросе {url} " f"возвращается статус 200"
         )
 
 
-@pytest.mark.webtest
-def test_send_http():
-    pass
+class TestPartnersAPIUrls:
+    """Checks status code for partners url"""
+
+    def test_partners_urls(self, client):
+        url = PARTNERS_URL
+        response = client.get(url)
+        assert response.status_code == 200, (
+            f"Проверьте, что при GET запросе {url} " f"возвращается статус 200"
+        )
+
+
+class TestQuestionsAPIUrls:
+    """Checks status code for question url"""
+
+    def test_question_url(self, client):
+        data = {
+            "question": "Text",
+            "author_name": "Name",
+            "author_email": "author@mail.ru",
+        }
+        url = QUESTIONS_URL
+        response = client.post(url, data=data)
+        assert response.status_code == 201, (
+            f"Проверьте, что при POST запросе {url} "
+            f"возвращается статус 201"
+        )

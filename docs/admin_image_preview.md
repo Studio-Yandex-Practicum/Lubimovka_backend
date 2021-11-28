@@ -6,7 +6,7 @@
 
 1. Импортируем миксин
 ```python
-from apps.core.utilities.mixins import AdminImagePreview
+from apps.core.mixins import AdminImagePreview
 ```
 
 2. Применяем параметры в admin.ModelAdmin

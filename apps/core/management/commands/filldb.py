@@ -2,13 +2,20 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.core.tests.factories import PersonFactory
+from apps.core.tests.factories import ImageFactory, PersonFactory
 from apps.info.tests.factories import (
+    FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
     SponsorFactory,
     VolunteerFactory,
 )
+
+
+def notification(command, objects, text):
+    command.stdout.write(
+        command.style.SUCCESS(f"{len(objects)} {text} успешно созданы.")
+    )
 
 
 class Command(BaseCommand):
@@ -37,45 +44,30 @@ class Command(BaseCommand):
                         add_city=True,
                     )
                 )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(persons_base)} базовых персон созданы успешно."
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(persons_with_image)} персон с фото созданы успешно."
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(persons_with_image_email_city)} персон с фото, "
-                    f"городом, email созданы успешно."
-                )
+            notification(self, persons_base, "базовых персон")
+            notification(self, persons_with_image, "персоны с фото")
+            notification(
+                self,
+                persons_with_image_email_city,
+                "персон с фото, городом, email",
             )
             partners = PartnerFactory.create_batch(30)
+            notification(self, partners, "партнёров")
+
             sponsors = SponsorFactory.create_batch(50)
+            notification(self, sponsors, "попечителей")
+
             volunteers = VolunteerFactory.create_batch(50)
+            notification(self, volunteers, "волонтёров")
+
             teams = FestivalTeamFactory.create_batch(70)
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(partners)} партнёров успешно созданы"
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(sponsors)} попечителей успешно созданы"
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(volunteers)} волонтёров успешно созданы"
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(teams)} членов команд успешно созданы"
-                )
-            )
+            notification(self, teams, "членов команд")
+
+            images = ImageFactory.create_batch(5)
+            notification(self, images, "картинки")
+
+            festivals = FestivalFactory.create_batch(10)
+            notification(self, festivals, "фестивалей")
+
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполения БД"))

@@ -13,9 +13,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.afisha.models import CommonEvent
 from apps.core.models import BaseModel, Image, Person
-from apps.core.utilities.file import generate_class_name_path
-from apps.core.utilities.slugify import slugify
+from apps.core.utilities import slugify
 from apps.info.models import Festival
+from apps.library.utilities import generate_class_name_path
 from apps.library.validators import year_validator
 
 
