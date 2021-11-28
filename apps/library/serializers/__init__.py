@@ -15,8 +15,8 @@ __all__ = (
     AuthorSearchSerializer,
     MasterClassEventSerializer,
     PerformanceEventSerializer,
-    PlaySerializer,
     PerformanceSerializer,
     PerformancePersonSerializer,
+    PlaySerializer,
     ReadingEventSerializer,
 )
