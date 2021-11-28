@@ -1,12 +1,11 @@
 from django.contrib import admin
 
 from apps.articles.models import BlogItem, BlogItemContent
-from apps.content_pages.admin import BaseContentInline
-from apps.core.mixins import AdminImagePreview
+from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 
 
 class BlogPersonInline(admin.TabularInline):
-    model = BlogItem.persons.through
+    model = BlogItem.roles.through
     extra = 0
 
 
@@ -23,17 +22,32 @@ class BlogItemContentInline(BaseContentInline):
     )
 
 
-class BlogItemAdmin(AdminImagePreview, admin.ModelAdmin):
-    list_display = (
-        "title",
-        "description",
-        "author_url_title",
-        "image_preview_list_page",
-    )
-    readonly_fields = ("image_preview_change_page",)
+class BlogItemAdmin(BaseContentPageAdmin):
     inlines = (
         BlogPersonInline,
         BlogItemContentInline,
+    )
+
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "title",
+                    (
+                        "author_url_title",
+                        "author_url",
+                    ),
+                    "pub_date",
+                    "description",
+                    (
+                        "image_preview_change_page",
+                        "image",
+                    ),
+                    "is_draft",
+                )
+            },
+        ),
     )
 
 
