@@ -1,11 +1,18 @@
 from rest_framework import serializers
 
-from apps.library.models import Reading
+from apps.library.models import Reading, TeamMember
+from apps.library.utilities import team_collector
 
 
-class ReadingEventSerializer(serializers.ModelSerializer):
-    director = serializers.CharField(source="director_full_name")
-    dramatist = serializers.CharField(source="dramatist_full_name")
+class EventReadingSerializer(serializers.ModelSerializer):
+    team = serializers.SerializerMethodField()
+    project = serializers.SlugRelatedField(slug_field="title", read_only=True)
+
+    def get_team(self, obj):
+        return team_collector(
+            TeamMember,
+            {"reading": obj, "role__slug__in": ["director", "dramatist"]},
+        )
 
     class Meta:
         model = Reading
@@ -13,6 +20,6 @@ class ReadingEventSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
-            "director",
-            "dramatist",
+            "team",
+            "project",
         )

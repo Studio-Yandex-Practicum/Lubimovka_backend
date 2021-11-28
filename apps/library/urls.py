@@ -5,6 +5,7 @@ from apps.library.views import (
     AuthorsReadViewSet,
     ParticipationViewSet,
     PerformanceViewSet,
+    PlayFiltersAPIView,
     PlayViewSet,
     SearchResultViewSet,
 )
@@ -36,9 +37,13 @@ router.register(
     basename="participation",
 )
 
-
 library_urls = [
     path("library/", include(router.urls)),
+    path(
+        "library/playfilters/",
+        PlayFiltersAPIView.as_view(),
+        name="playfilters",
+    ),
 ]
 
 urlpatterns = [

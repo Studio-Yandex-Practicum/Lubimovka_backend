@@ -9,7 +9,8 @@ from apps.content_pages.models import (
     Title,
     Video,
 )
-from apps.library.models import Performance, Person, Play
+from apps.core.models import Person
+from apps.library.models import Performance, Play
 
 
 class ImageSerializer(serializers.ModelSerializer):
