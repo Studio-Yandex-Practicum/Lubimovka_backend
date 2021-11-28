@@ -1,14 +1,50 @@
 from django.db import models
+from django.db.models.constraints import UniqueConstraint
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
+from apps.core.models import BaseModel, Person, Role
+
+
+class BlogPerson(BaseModel):
+    person = models.ForeignKey(
+        Person,
+        on_delete=models.RESTRICT,
+        related_name="blog_persons",
+        verbose_name="Соавтор блога",
+    )
+    blog = models.ForeignKey(
+        "BlogItem",
+        on_delete=models.CASCADE,
+        related_name="blog_persons",
+        verbose_name="Блог",
+    )
+    role = models.ForeignKey(
+        Role,
+        on_delete=models.RESTRICT,
+        related_name="blog_persons",
+        verbose_name="Роль в соавторстве",
+    )
+
+    class Meta:
+        verbose_name = "Соавтор блога"
+        verbose_name_plural = "Соавторы блогов"
+        ordering = ("role",)
+        constraints = (
+            UniqueConstraint(
+                fields=(
+                    "person",
+                    "blog",
+                    "role",
+                ),
+                name="unique_person_role_per_blog",
+            ),
+        )
+
+    def __str__(self):
+        return f"{self.role} - {self.person.full_name}"
 
 
 class BlogItem(AbstractContentPage):
-    image = models.ImageField(
-        upload_to="images/blog/",
-        blank=True,
-        verbose_name="Заглавная картинка записи",
-    )
     author_url = models.URLField(
         verbose_name="Ссылка на автора записи",
     )
@@ -16,13 +52,20 @@ class BlogItem(AbstractContentPage):
         max_length=50,
         verbose_name="Подпись/название ссылки на автора",
     )
-
-    def __str__(self):
-        return f"Запись блога {self.title}"
+    roles = models.ManyToManyField(
+        Role,
+        through=BlogPerson,
+        related_name="blogs",
+        verbose_name="Роли",
+    )
 
     class Meta:
         verbose_name = "Запись блога"
         verbose_name_plural = "Блог"
+        ordering = ("-pub_date",)
+
+    def __str__(self):
+        return f"Запись блога {self.title}"
 
 
 class BlogItemContent(AbstractContent):

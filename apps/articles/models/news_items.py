@@ -1,21 +1,9 @@
-from datetime import date
-
 from django.db import models
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 
 
 class NewsItem(AbstractContentPage):
-    image = models.ImageField(
-        upload_to="images/news/",
-        null=True,
-        verbose_name="Заглавная картинка новосте",
-    )
-    pub_date = models.DateField(
-        default=date.today,
-        verbose_name="Дата публикации новости",
-    )
-
     def __str__(self):
         return f"Новость {self.title}"
 

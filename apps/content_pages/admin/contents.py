@@ -5,6 +5,7 @@ from django.db import models
 from gfklookupwidget.widgets import GfkLookupWidget
 
 from apps.content_pages.models import AbstractContent
+from apps.core.mixins import AdminImagePreview
 
 
 class BaseContentInline(SortableInlineAdminMixin, admin.StackedInline):
@@ -38,3 +39,33 @@ class BaseContentInline(SortableInlineAdminMixin, admin.StackedInline):
                 model__in=self.content_type_model,
             )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class BaseContentPageAdmin(AdminImagePreview, admin.ModelAdmin):
+    """Base admin class for ContentPage objects."""
+
+    list_display = (
+        "title",
+        "description",
+        "pub_date",
+        "image_preview_list_page",
+    )
+    list_filter = ("is_draft",)
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "title",
+                    "pub_date",
+                    "description",
+                    (
+                        "image_preview_change_page",
+                        "image",
+                    ),
+                    "is_draft",
+                )
+            },
+        ),
+    )
+    readonly_fields = ("image_preview_change_page",)
