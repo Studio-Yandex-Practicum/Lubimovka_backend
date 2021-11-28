@@ -1,12 +1,6 @@
 from django.contrib import admin
 
-from apps.afisha.models import CommonEvent, Event
-
-
-class CommonEventAdmin(admin.ModelAdmin):
-    list_display = ("pk", "target_model")
-    list_filter = ("created",)
-    empty_value_display = "-пусто-"
+from apps.afisha.models import Event
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -19,10 +13,16 @@ class EventAdmin(admin.ModelAdmin):
         )
         return qs
 
-    list_display = ("pk", "common_event", "type", "date_time", "paid")
+    list_display = (
+        "pk",
+        "common_event",
+        "type",
+        "date_time",
+        "paid",
+        "pinned_on_main",
+    )
     list_filter = ("type",)
     empty_value_display = "-пусто-"
 
 
 admin.site.register(Event, EventAdmin)
-admin.site.register(CommonEvent, CommonEventAdmin)
