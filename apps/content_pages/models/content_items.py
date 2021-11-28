@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.db import models
 
 from apps.core.models import BaseModel
@@ -53,10 +54,7 @@ class Title(BaseModel):
 class Text(BaseModel):
     """Text item for 'content' blocks without any additional fields."""
 
-    text = models.TextField(
-        max_length=500,
-        verbose_name="Текст",
-    )
+    text = RichTextField()
 
     class Meta:
         verbose_name = "Текст"
