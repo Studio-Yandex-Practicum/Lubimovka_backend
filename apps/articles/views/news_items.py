@@ -3,7 +3,7 @@ from rest_framework import filters as rest_filters
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from apps.articles.filters import PubDateFilter
-from apps.articles.mixins import PubDateSchema
+from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
 from apps.articles.serializers import (
     NewsItemListSerializer,
@@ -11,8 +11,8 @@ from apps.articles.serializers import (
 )
 
 
-class NewsItemsViewSet(PubDateSchema, ReadOnlyModelViewSet):
-    queryset = NewsItem.objects.all()
+class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
+    queryset = NewsItem.ext_objects.published()
     filter_backends = (
         filters.DjangoFilterBackend,
         rest_filters.OrderingFilter,

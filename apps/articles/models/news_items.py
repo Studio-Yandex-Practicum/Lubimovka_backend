@@ -1,20 +1,9 @@
 from django.db import models
-from django.utils import timezone
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 
 
 class NewsItem(AbstractContentPage):
-    image = models.ImageField(
-        upload_to="images/news/",
-        null=True,
-        verbose_name="Заглавная картинка новосте",
-    )
-    pub_date = models.DateTimeField(
-        default=timezone.now,
-        verbose_name="Дата публикации новости",
-    )
-
     def __str__(self):
         return f"Новость {self.title}"
 

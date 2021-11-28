@@ -5,7 +5,9 @@ from drf_spectacular.utils import (
 )
 
 
-class PubDateSchema:
+class PubDateSchemaMixin:
+    """Adds examples how `PubDateFilter` (filter by month and year) works."""
+
     @extend_schema(
         # extra parameters added to the schema
         parameters=[

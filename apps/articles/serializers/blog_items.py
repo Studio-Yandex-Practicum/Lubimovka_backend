@@ -69,7 +69,8 @@ class BlogItemDetailedSerializer(
 
     def get_other_blogs(self, obj):
         """Returns latest four `BlogItem` except the object itself."""
-        latest_four_blogs_qs = BlogItem.objects.exclude(id=obj.id)[:4]
+        published_blogs = BlogItem.ext_objects.published()
+        latest_four_blogs_qs = published_blogs.exclude(id=obj.id)[:4]
         serializer = BlogItemBaseSerializer(
             instance=latest_four_blogs_qs,
             many=True,

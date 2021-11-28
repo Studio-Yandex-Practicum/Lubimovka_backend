@@ -3,7 +3,7 @@ from rest_framework import filters as rest_filters
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from apps.articles.filters import PubDateFilter
-from apps.articles.mixins import PubDateSchema
+from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import BlogItem
 from apps.articles.serializers import (
     BlogItemDetailedSerializer,
@@ -11,8 +11,8 @@ from apps.articles.serializers import (
 )
 
 
-class BlogItemsViewSet(PubDateSchema, ReadOnlyModelViewSet):
-    queryset = BlogItem.objects.all()
+class BlogItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
+    queryset = BlogItem.ext_objects.published()
     filter_backends = (
         filters.DjangoFilterBackend,
         rest_filters.OrderingFilter,

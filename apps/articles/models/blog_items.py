@@ -1,6 +1,5 @@
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
-from django.utils import timezone
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 from apps.core.models import BaseModel, Person, Role
@@ -52,21 +51,6 @@ class BlogItem(AbstractContentPage):
     author_url_title = models.CharField(
         max_length=50,
         verbose_name="Подпись/название ссылки на автора",
-    )
-    image = models.ImageField(
-        upload_to="images/blog/",
-        blank=True,
-        verbose_name="Заглавная картинка записи",
-    )
-    persons = models.ManyToManyField(
-        Person,
-        through=BlogPerson,
-        related_name="blogs",
-        verbose_name="Соавторы",
-    )
-    pub_date = models.DateTimeField(
-        default=timezone.now,
-        verbose_name="Дата публикации записи блога",
     )
     roles = models.ManyToManyField(
         Role,
