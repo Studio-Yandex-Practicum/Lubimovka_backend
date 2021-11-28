@@ -108,4 +108,8 @@ class Migration(migrations.Migration):
             model_name='teammember',
             constraint=models.UniqueConstraint(fields=('person', 'role', 'masterclass'), name='unique_person_role_per_masterclass'),
         ),
+        migrations.AlterModelOptions(
+            name='otherlink',
+            options={'ordering': ('order_number',), 'verbose_name': 'Ссылка на сторонний ресурс', 'verbose_name_plural': 'Ссылки на стороннии ресурсы'},
+        ),
     ]

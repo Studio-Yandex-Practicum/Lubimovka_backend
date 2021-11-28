@@ -19,6 +19,11 @@ class CommonEvent(BaseModel):
     destination models')
     """
 
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "Базовое событие"
+        verbose_name_plural = "Базовые события"
+
     def __str__(self):
         return f"{repr(self.target_model)}"
 
@@ -33,11 +38,6 @@ class CommonEvent(BaseModel):
         return None
 
     target_model.fget.short_description = "Спектакль/Мастер-класс/Читка"
-
-    class Meta:
-        ordering = ("-created",)
-        verbose_name = "Базовое событие"
-        verbose_name_plural = "Базовые события"
 
 
 class Event(BaseModel):
@@ -73,6 +73,14 @@ class Event(BaseModel):
         verbose_name="Закрепить на главной",
     )
 
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "Событие"
+        verbose_name_plural = "События"
+
+    def __str__(self):
+        return f"{self.common_event} - {self.type}, {self.date_time}"
+
     def clean(self):
         allowed_event_types = {
             "PERFORMANCE": Performance,
@@ -84,14 +92,6 @@ class Event(BaseModel):
         if common_event_type != allowed_type:
             raise ValidationError("Указан некорректный тип события.")
         return super().clean()
-
-    def __str__(self):
-        return f"{self.common_event} - {self.type}, {self.date_time}"
-
-    class Meta:
-        ordering = ("-created",)
-        verbose_name = "Событие"
-        verbose_name_plural = "События"
 
 
 def create_common_event(sender, instance, **kwargs):

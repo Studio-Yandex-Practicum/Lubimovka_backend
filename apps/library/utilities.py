@@ -12,6 +12,22 @@ def generate_class_name_path(instance, filename):
 
 
 def team_collector(model, filters: dict = None) -> defaultdict:
+    """
+    Group team members by roles.
+
+    Form dictionary with next structure:
+    {
+        "Драматург": [
+            "Мария Ефимова",
+            "Ефимов Иван"
+        ],
+        "Режиссёр": [
+            "Арефий Лукин"
+        ],
+        ...
+    }
+    Duplication of role, name pairs should be avoided by model's constraints.
+    """
     qs = (
         model.objects.filter(**filters)
         .values_list("role__name")

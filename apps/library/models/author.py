@@ -95,12 +95,15 @@ class SocialNetworkLink(BaseModel):
     class Meta:
         verbose_name = "Ссылка на социальную сеть"
         verbose_name_plural = "Ссылки на социальные сети"
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
-                fields=["author", "name"],
+                fields=(
+                    "author",
+                    "name",
+                ),
                 name="unique_social_network",
-            )
-        ]
+            ),
+        )
 
     def __str__(self):
         return self.name
@@ -131,15 +134,18 @@ class OtherLink(BaseModel):
     )
 
     class Meta:
-        ordering = ["order_number"]
+        ordering = ("order_number",)
         verbose_name = "Ссылка на сторонний ресурс"
         verbose_name_plural = "Ссылки на стороннии ресурсы"
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
-                fields=["author", "name"],
+                fields=(
+                    "author",
+                    "name",
+                ),
                 name="unique_link",
-            )
-        ]
+            ),
+        )
 
     def __str__(self):
         return self.name
@@ -164,12 +170,15 @@ class OtherPlay(BaseModel):
     class Meta:
         verbose_name = "Другая пьеса"
         verbose_name_plural = "Другие пьесы"
-        constraints = [
+        constraints = (
             models.UniqueConstraint(
-                fields=["author", "name"],
+                fields=(
+                    "author",
+                    "name",
+                ),
                 name="unique_other_play",
-            )
-        ]
+            ),
+        )
 
     def __str__(self):
         return self.name

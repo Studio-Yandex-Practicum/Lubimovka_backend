@@ -9,9 +9,7 @@ from apps.library.validators import year_validator
 
 
 class ParticipationApplicationFestival(BaseModel):
-    """
-    Заявки на участие в фестивале
-    """
+    """Заявки на участие в фестивале."""
 
     first_name = models.CharField(
         max_length=50,
@@ -79,17 +77,12 @@ class ParticipationApplicationFestival(BaseModel):
         return f"{self.last_name}-{self.title}"
 
     def generate_filename(self):
-        """
-        Generate new filename as "Last_name-Title" format
-        """
-
+        """Generate new filename as "Last_name-Title" format."""
         filename = f"{self.last_name}_{self.first_name}___{self.title}"
         filename = slugify(filename).replace("-", "_")
         return f"{filename.title()}.{self.file.name.split('.')[1]}"
 
     def save(self, *args, **kwargs):
-        """
-        Save generated filename
-        """
+        """Save generated filename."""
         self.file.name = self.generate_filename()
         super().save(*args, **kwargs)
