@@ -1,5 +1,3 @@
 from .event import EventSerializer
 
-__all__ = [
-    EventSerializer,
-]
+__all__ = (EventSerializer,)

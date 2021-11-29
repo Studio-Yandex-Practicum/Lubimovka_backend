@@ -1,8 +1,8 @@
 from django.db import models
 
 from apps.content_pages.models import AbstractItemWithTitle, Image, Video
-from apps.core.models import BaseModel
-from apps.library.models import Performance, Person, Play
+from apps.core.models import BaseModel, Person
+from apps.library.models import Performance, Play
 
 
 class AbstractOrderedItemBase(BaseModel):

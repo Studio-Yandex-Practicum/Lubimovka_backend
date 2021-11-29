@@ -4,6 +4,7 @@ from .content_items import (
     PerformanceSerializer,
     PersonSerializer,
     PlaySerializer,
+    PreambleSerializer,
     QuoteSerializer,
     TextSerializer,
     TitleSerializer,
@@ -38,6 +39,10 @@ __all__ = (
     PersonSerializer,
     PlaysBlockSerializer,
     PlaySerializer,
+    PreambleSerializer,
+    QuoteSerializer,
+    TextSerializer,
+    TitleSerializer,
     VideosBlockSerializer,
     VideoSerializer,
 )
