@@ -73,8 +73,7 @@ class Command(BaseCommand):
 
             users_editors = []
             users_admins = []
-            index = 1
-            for _ in range(5):
+            for index in range(1, 6):
                 users_editors.append(
                     UserFactory.create(
                         username=f"editor_{index}", add_role_editor=True
@@ -85,7 +84,6 @@ class Command(BaseCommand):
                         username=f"admin_{index}", add_role_admin=True
                     )
                 )
-                index += 1
             notification(self, users_editors, "редакторов")
             notification(self, users_admins, "админов")
 
