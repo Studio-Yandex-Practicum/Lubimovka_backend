@@ -2,7 +2,7 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.core.tests.factories import ImageFactory, PersonFactory
+from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
 from apps.info.tests.factories import (
     FestivalFactory,
     FestivalTeamFactory,
@@ -28,6 +28,8 @@ class Command(BaseCommand):
         " - Волонтёры"
         " - Попечители"
         " - Команды фестиваля"
+        " - Пользователи-админы"
+        " - Пользователи-редакторы"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -68,6 +70,22 @@ class Command(BaseCommand):
 
             festivals = FestivalFactory.create_batch(10)
             notification(self, festivals, "фестивалей")
+
+            users_editors = []
+            users_admins = []
+            for index in range(1, 6):
+                users_editors.append(
+                    UserFactory.create(
+                        username=f"editor_{index}", add_role_editor=True
+                    )
+                )
+                users_admins.append(
+                    UserFactory.create(
+                        username=f"admin_{index}", add_role_admin=True
+                    )
+                )
+            notification(self, users_editors, "редакторов")
+            notification(self, users_admins, "админов")
 
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполения БД"))
