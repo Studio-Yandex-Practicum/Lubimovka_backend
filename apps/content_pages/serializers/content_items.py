@@ -10,7 +10,7 @@ from apps.content_pages.models import (
     Video,
 )
 from apps.core.models import Person
-from apps.library.models import Performance, Play
+from apps.library.models import Performance
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -41,12 +41,6 @@ class PerformanceSerializer(serializers.ModelSerializer):
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
-        fields = "__all__"
-
-
-class PlaySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Play
         fields = "__all__"
 
 
