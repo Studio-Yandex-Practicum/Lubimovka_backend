@@ -23,12 +23,3 @@ class EventReadingSerializer(serializers.ModelSerializer):
             "team",
             "project",
         )
-
-
-class ReadingEventsSerializer(serializers.ModelSerializer):
-    director = serializers.CharField(source="director_full_name")
-    dramatist = serializers.CharField(source="dramatist_full_name")
-
-    class Meta:
-        model = Reading
-        fields = "__all__"

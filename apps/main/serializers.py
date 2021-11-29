@@ -1,27 +1,18 @@
 from rest_framework import serializers
 
 from apps.afisha.models import Event
-from apps.articles.models import BlogItem, NewsItem
+from apps.articles.models import NewsItem
+from apps.articles.serializers import BlogItemBaseSerializer
+from apps.content_pages.serializers import BaseContentPageSerializer
 from apps.info.models import Place
-from apps.library.models import Author, MasterClass, Performance, Play, Reading
+from apps.library.models import MasterClass, Performance, Play, Reading
 from apps.library.serializers import (
-    MasterClassEventSerializer,
-    PerformanceEventSerializer,
-    ReadingEventSerializer,
+    EventMasterClassSerializer,
+    EventPerformanceSerializer,
+    EventReadingSerializer,
 )
+from apps.library.serializers.play import AuthorForPlaySerializer
 from apps.main.models import Banner
-
-
-class MainBlogItemsForMainSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = BlogItem
-        fields = "__all__"
-
-
-class NewsItemsForMainSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = NewsItem
-        fields = "__all__"
 
 
 class EventItemsForMainSerializer(serializers.ModelSerializer):
@@ -30,9 +21,9 @@ class EventItemsForMainSerializer(serializers.ModelSerializer):
 
     def get_event_body(self, obj):
         event_body_serializers = {
-            MasterClass: MasterClassEventSerializer,
-            Performance: PerformanceEventSerializer,
-            Reading: ReadingEventSerializer,
+            MasterClass: EventMasterClassSerializer,
+            Performance: EventPerformanceSerializer,
+            Reading: EventReadingSerializer,
         }
         event_body = obj.common_event.target_model
         return event_body_serializers[type(event_body)](event_body).data
@@ -59,18 +50,9 @@ class BannerSerializer(serializers.ModelSerializer):
         )
 
 
-class AuthorForPlayForMainSerializer(serializers.ModelSerializer):
-
-    name = serializers.ReadOnlyField(source="person.full_name")
-
-    class Meta:
-        model = Author
-        fields = ("name", "id")
-
-
 class PlayForMainSerializer(serializers.ModelSerializer):
 
-    authors = AuthorForPlayForMainSerializer(many=True)
+    authors = AuthorForPlaySerializer(many=True)
 
     class Meta:
         fields = (
@@ -89,3 +71,21 @@ class PlaceForMainSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
         exclude = ("created", "modified")
+
+
+class BlogItemListForMainSerializer(BlogItemBaseSerializer):
+    pass
+
+
+class NewsItemForMainSerializer(
+    BaseContentPageSerializer, serializers.ModelSerializer
+):
+    class Meta:
+        model = NewsItem
+        fields = (
+            "id",
+            "title",
+            "description",
+            "image",
+            "pub_date",
+        )

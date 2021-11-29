@@ -1,27 +1,13 @@
-import datetime
-
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.afisha.models import Event
-from apps.articles.models import BlogItem, NewsItem
 from apps.core.models import Settings
-from apps.info.models import Festival, Place
-from apps.library.models import ProgramType
-from apps.main.models import Banner
-from apps.main.serializers import (
-    BannerSerializer,
-    EventItemsForMainSerializer,
-    MainBlogItemsForMainSerializer,
-    NewsItemsForMainSerializer,
-    PlaceForMainSerializer,
-    PlayForMainSerializer,
-)
+from apps.main.utils import Context
 
 
 class MainView(APIView):
     def get(self, request):
-        context = {}
+        context = Context()
         main_add_blog = Settings.get_setting("main_add_blog")
         main_add_news = Settings.get_setting("main_add_news")
         main_add_affiche = Settings.get_setting("main_add_affiche")
@@ -32,76 +18,48 @@ class MainView(APIView):
         main_add_short_list = Settings.get_setting("main_add_short_list")
         main_add_video_archive = Settings.get_setting("main_add_video_archive")
         main_add_places = Settings.get_setting("main_add_places")
-        # Дневник (блог)
+        # Add diary (blog) to context
         if main_add_blog:
-            blog_items = BlogItem.objects.order_by("-created")[:6]
-            blog_item_serializer = MainBlogItemsForMainSerializer(
-                blog_items, many=True
+            context.add_blog_data()
+            context.add_setting(
+                "blog_title", Settings.get_setting("main_blog_title")
             )
-            context["blog_item"] = blog_item_serializer.data
-            context["blog_title"] = Settings.get_setting("main_blog_title")
-        # Новости
+        # Add news to context
         if main_add_news:
-            news_items = NewsItem.objects.order_by("-pub_date")[:6]
-            news_item_serializer = NewsItemsForMainSerializer(
-                news_items, many=True
+            context.add_news_items()
+            context.add_setting(
+                "news_title", Settings.get_setting("main_news_title")
             )
-            context["news_item"] = news_item_serializer.data
-            context["news_title"] = Settings.get_setting("main_news_title")
-        # Афиша
+        # Add affiche to context
         if main_add_affiche:
-            if main_show_affiche_only_for_today:
-                today = datetime.datetime.now().date()
-                tomorrow = today + datetime.timedelta(days=1)
-                event_items = Event.objects.filter(
-                    date_time__range=(today, tomorrow)
-                )
-                event_item_serializer = EventItemsForMainSerializer(
-                    event_items, many=True
-                )
-            else:
-                event_items = Event.objects.all()[:6]
-                event_item_serializer = EventItemsForMainSerializer(
-                    event_items, many=True
-                )
-            context["event_items"] = event_item_serializer.data
-            context["event_title"] = Settings.get_setting("main_affiche_title")
-        # Баннеры
+            context.add_affiche(main_show_affiche_only_for_today)
+            context.add_setting(
+                "banners_title", Settings.get_setting("main_banner_title")
+            )
+        # Add banner to context
         if main_add_banner:
-            banners_items = Banner.objects.all()
-            banners_item_serializer = BannerSerializer(
-                banners_items, many=True
+            context.add_banner()
+            context.add_setting(
+                "banners_title", Settings.get_setting("main_banner_title")
             )
-            context["banners_item"] = banners_item_serializer.data
-            context["banners_title"] = Settings.get_setting(
-                "main_banner_title"
-            )
-        # Шорт-лист
+        # Add short-list to context
         if main_add_short_list:
-            program = ProgramType.objects.get(name="Шорт-лист")
-            festival = Festival.objects.all().order_by("-year").first()
-            plays_items = program.plays.filter(
-                festival=festival, is_draft=False
-            )[:6]
-            plays_item_serializer = PlayForMainSerializer(
-                plays_items, many=True
+            context.add_short_list()
+            context.add_setting(
+                "short_list_title",
+                Settings.get_setting("main_short_list_title"),
             )
-            context["short_list"] = plays_item_serializer.data
-            context["short_list_title"] = Settings.get_setting(
-                "main_short_list_title"
-            )
-        # Видео архив
+        # Add video-archive to context
         if main_add_video_archive:
-            context["main_video_archive_url"] = Settings.get_setting(
-                "main_video_archive_url"
+            context.add_setting(
+                "main_video_archive_url",
+                Settings.get_setting("main_video_archive_url"),
             )
-            context["main_video_archive_photo"] = Settings.get_setting(
-                "main_video_archive_photo"
+            context.add_setting(
+                "main_video_archive_photo",
+                Settings.get_setting("main_video_archive_photo").url,
             )
-        # Площадки
+        # Add places to context
         if main_add_places:
-            places = Place.objects.all()
-            places_team_serializer = PlaceForMainSerializer(places, many=True)
-            context["places_team_serializer"] = places_team_serializer.data
-
-        return Response({"context": context})
+            context.add_places()
+        return Response({"context": context.context})
