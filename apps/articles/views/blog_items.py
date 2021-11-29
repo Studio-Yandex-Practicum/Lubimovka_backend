@@ -12,6 +12,8 @@ from apps.articles.serializers import (
 
 
 class BlogItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
+    """Returns published Blog items."""
+
     queryset = BlogItem.ext_objects.published()
     filter_backends = (
         filters.DjangoFilterBackend,
