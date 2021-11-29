@@ -7,6 +7,7 @@ def add_short_list_program(apps, schema_editor):
     Program = apps.get_model('library', 'ProgramType')
     Program.objects.create(
         name="Шорт-лист",
+        slug="short-list"
     )
 
 

@@ -10,11 +10,11 @@ class MainView(APIView):
         context = Context()
         main_add_blog = Settings.get_setting("main_add_blog")
         main_add_news = Settings.get_setting("main_add_news")
-        main_add_affiche = Settings.get_setting("main_add_affiche")
-        main_show_affiche_only_for_today = Settings.get_setting(
-            "main_show_affiche_only_for_today"
+        main_add_afisha = Settings.get_setting("main_add_afisha")
+        main_show_afisha_only_for_today = Settings.get_setting(
+            "main_show_afisha_only_for_today"
         )
-        main_add_banner = Settings.get_setting("main_add_banner")
+        main_add_banners = Settings.get_setting("main_add_banners")
         main_add_short_list = Settings.get_setting("main_add_short_list")
         main_add_video_archive = Settings.get_setting("main_add_video_archive")
         main_add_places = Settings.get_setting("main_add_places")
@@ -30,17 +30,17 @@ class MainView(APIView):
             context.add_setting(
                 "news_title", Settings.get_setting("main_news_title")
             )
-        # Add affiche to context
-        if main_add_affiche:
-            context.add_affiche(main_show_affiche_only_for_today)
+        # Add afisha to context
+        if main_add_afisha:
+            context.add_afisha(main_show_afisha_only_for_today)
             context.add_setting(
-                "banners_title", Settings.get_setting("main_banner_title")
+                "main_afisha_title", Settings.get_setting("main_afisha_title")
             )
-        # Add banner to context
-        if main_add_banner:
-            context.add_banner()
+        # Add banners to context
+        if main_add_banners:
+            context.add_banners()
             context.add_setting(
-                "banners_title", Settings.get_setting("main_banner_title")
+                "banners_title", Settings.get_setting("main_banners_title")
             )
         # Add short-list to context
         if main_add_short_list:

@@ -8,19 +8,19 @@ def add_settings(apps, schema_editor):
     Settings = apps.get_model('core', 'Settings')
     Settings.objects.create(
         field_type="BOOLEAN",
-        settings_key="main_add_affiche",
+        settings_key="main_add_afisha",
         boolean=True,
         description="Отображение афиши на главной страницы",
     )
     Settings.objects.create(
         field_type="TEXT",
-        settings_key="main_affiche_title",
+        settings_key="main_afisha_title",
         text="Афиша событий",
         description="Заголовок для афиши на главной страницы",
     )
     Settings.objects.create(
         field_type="BOOLEAN",
-        settings_key="main_show_affiche_only_for_today",
+        settings_key="main_show_afisha_only_for_today",
         boolean=True,
         description="Отображение афиши только на сегодня (в противном случае "
                     "на ближайшие 6 дней)",
@@ -51,13 +51,13 @@ def add_settings(apps, schema_editor):
     )
     Settings.objects.create(
         field_type="BOOLEAN",
-        settings_key="main_add_banner",
+        settings_key="main_add_banners",
         boolean=True,
         description="Отображение банера на главной страницы",
     )
     Settings.objects.create(
         field_type="TEXT",
-        settings_key="main_banner_title",
+        settings_key="main_banners_title",
         text="",
         description="Заголовок для банера на главной страницы",
     )

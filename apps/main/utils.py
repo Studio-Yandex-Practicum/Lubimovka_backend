@@ -34,36 +34,39 @@ class Context:
         news_item_serializer = NewsItemForMainSerializer(news_items, many=True)
         self.context["news_item"] = news_item_serializer.data
 
-    def add_affiche(self, main_show_affiche_only_for_today):
-        if main_show_affiche_only_for_today:
+    def add_afisha(self, main_show_afisha_only_for_today):
+        if main_show_afisha_only_for_today:
             today = datetime.datetime.now().date()
             tomorrow = today + datetime.timedelta(days=1)
             event_items = Event.objects.filter(
-                date_time__range=(today, tomorrow)
+                date_time__range=(today, tomorrow),
+                pinned_on_main=True,
             )
             event_item_serializer = EventItemsForMainSerializer(
                 event_items, many=True
             )
         else:
-            event_items = Event.objects.all()[:6]
+            event_items = Event.objects.filter(pinned_on_main=True)[:6]
             event_item_serializer = EventItemsForMainSerializer(
                 event_items, many=True
             )
-        self.context["event_items"] = event_item_serializer.data
+        self.context["main_afisha_event_items"] = event_item_serializer.data
 
-    def add_banner(self):
+    def add_banners(self):
         banners_items = Banner.objects.all()
         banners_item_serializer = BannerSerializer(banners_items, many=True)
         self.context["banners_item"] = banners_item_serializer.data
 
     def add_short_list(self):
-        program = ProgramType.objects.get(name="Шорт-лист")
+        program = ProgramType.objects.get(slug="short-list")
         festival = Festival.objects.all().order_by("-year").first()
-        plays_items = program.plays.filter(festival=festival, is_draft=False)[
-            :6
-        ]
-        plays_item_serializer = PlayForMainSerializer(plays_items, many=True)
-        self.context["short_list"] = plays_item_serializer.data
+        shot_list_plays = program.plays.filter(
+            festival=festival, is_draft=False
+        )[:6]
+        shot_list_plays_serializer = PlayForMainSerializer(
+            shot_list_plays, many=True
+        )
+        self.context["short_list"] = shot_list_plays_serializer.data
 
     def add_places(self):
         places = Place.objects.all()

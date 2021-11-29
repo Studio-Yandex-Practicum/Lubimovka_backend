@@ -26,7 +26,9 @@ class EventItemsForMainSerializer(serializers.ModelSerializer):
             Reading: EventReadingSerializer,
         }
         event_body = obj.common_event.target_model
-        return event_body_serializers[type(event_body)](event_body).data
+        event_type = type(event_body)
+        serializer = event_body_serializers[event_type]
+        return serializer(event_body).data
 
     class Meta:
         model = Event
