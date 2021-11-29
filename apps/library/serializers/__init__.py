@@ -3,20 +3,18 @@ from .author import (
     AuthorRetrieveSerializer,
     AuthorSearchSerializer,
 )
-from .masterclass import MasterClassEventSerializer
-from .performance import PerformanceEventSerializer, PerformanceSerializer
-from .performanceperson import PerformancePersonSerializer
+from .masterclass import EventMasterClassSerializer
+from .performance import EventPerformanceSerializer, PerformanceSerializer
 from .play import PlaySerializer
-from .reading import ReadingEventSerializer
+from .reading import EventReadingSerializer
 
 __all__ = (
     AuthorListSerializer,
     AuthorRetrieveSerializer,
     AuthorSearchSerializer,
-    MasterClassEventSerializer,
-    PerformanceEventSerializer,
+    EventMasterClassSerializer,
+    EventPerformanceSerializer,
+    EventReadingSerializer,
     PlaySerializer,
     PerformanceSerializer,
-    PerformancePersonSerializer,
-    ReadingEventSerializer,
 )

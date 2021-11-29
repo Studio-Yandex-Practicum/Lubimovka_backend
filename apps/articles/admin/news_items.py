@@ -1,8 +1,7 @@
 from django.contrib import admin
 
 from apps.articles.models import NewsItem, NewsItemContent
-from apps.content_pages.admin import BaseContentInline
-from apps.core.mixins import AdminImagePreview
+from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 
 
 class NewsItemContentInline(BaseContentInline):
@@ -19,14 +18,7 @@ class NewsItemContentInline(BaseContentInline):
     )
 
 
-class NewsItemAdmin(AdminImagePreview, admin.ModelAdmin):
-    list_display = (
-        "title",
-        "description",
-        "pub_date",
-        "image_preview_list_page",
-    )
-    readonly_fields = ("image_preview_change_page",)
+class NewsItemAdmin(BaseContentPageAdmin):
     inlines = (NewsItemContentInline,)
 
 

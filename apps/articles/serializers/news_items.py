@@ -17,8 +17,6 @@ class NewsItemSerializer(
             "image",
             "pub_date",
             "contents",
-            "created",
-            "modified",
         )
 
 
