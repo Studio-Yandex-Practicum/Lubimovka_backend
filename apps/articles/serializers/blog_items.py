@@ -1,4 +1,5 @@
 from django.db.models.query import Prefetch
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.articles.models import BlogItem, BlogPerson
@@ -67,6 +68,7 @@ class BlogItemDetailedSerializer(
     other_blogs = serializers.SerializerMethodField()
     team = serializers.SerializerMethodField()
 
+    @extend_schema_field(BlogItemBaseSerializer(many=True))
     def get_other_blogs(self, obj):
         """Returns latest four `BlogItem` except the object itself."""
         published_blogs = BlogItem.ext_objects.published()
@@ -77,6 +79,7 @@ class BlogItemDetailedSerializer(
         )
         return serializer.data
 
+    @extend_schema_field(RoleSerializer(many=True))
     def get_team(self, obj):
         """Make `team` serialized data based on `roles` and `blog_persons`.
 
