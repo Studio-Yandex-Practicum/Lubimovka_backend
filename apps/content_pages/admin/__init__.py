@@ -11,7 +11,7 @@ from .content_blocks import (
     VideosBlockAdmin,
 )
 from .content_items import Image, Link, Quote, Text, Title, Video
-from .contents import BaseContentInline
+from .contents import BaseContentInline, BaseContentPageAdmin
 
 __all__ = (
     OrderedImageInline,
@@ -31,4 +31,5 @@ __all__ = (
     Text,
     Title,
     BaseContentInline,
+    BaseContentPageAdmin,
 )

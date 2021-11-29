@@ -6,7 +6,7 @@ from django.core.management.base import BaseCommand, CommandError
 fixture = "apps/core/management/commands/fixture/fixture_group_perms.json"
 
 
-class SetUsersPermissionsCommand(BaseCommand):
+class Command(BaseCommand):
     help = (
         "Устанавливает права для групп пользователей Администратор и Редактор"
     )

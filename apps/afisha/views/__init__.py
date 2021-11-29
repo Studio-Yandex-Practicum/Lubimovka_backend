@@ -1,5 +1,3 @@
 from .event import EventsAPIView
 
-__all__ = [
-    EventsAPIView,
-]
+__all__ = (EventsAPIView,)

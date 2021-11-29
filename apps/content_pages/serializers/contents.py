@@ -7,6 +7,7 @@ from apps.content_pages.models import (
     PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
+    Preamble,
     Quote,
     Text,
     Title,
@@ -20,6 +21,7 @@ from apps.content_pages.serializers import (
     PerformancesBlockSerializer,
     PersonsBlockSerializer,
     PlaysBlockSerializer,
+    PreambleSerializer,
     QuoteSerializer,
     TextSerializer,
     TitleSerializer,
@@ -36,6 +38,9 @@ class ContentObjectRelatedField(serializers.RelatedField):
     def to_representation(self, obj):
         """Serialize content objects to a simple representation."""
 
+        # to think: if amount of types of objects increases may be easier to
+        # get serializer_class by name (for example look for
+        # SerializerMethodField sources)
         content_item_serializers = {
             Image: ImageSerializer,
             ImagesBlock: ImagesBlockSerializer,
@@ -43,6 +48,7 @@ class ContentObjectRelatedField(serializers.RelatedField):
             PerformancesBlock: PerformancesBlockSerializer,
             PersonsBlock: PersonsBlockSerializer,
             PlaysBlock: PlaysBlockSerializer,
+            Preamble: PreambleSerializer,
             Quote: QuoteSerializer,
             Text: TextSerializer,
             Title: TitleSerializer,
