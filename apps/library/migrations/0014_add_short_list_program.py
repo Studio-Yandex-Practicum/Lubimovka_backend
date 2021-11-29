@@ -14,7 +14,7 @@ def add_short_list_program(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0012_auto_20211127_0741'),
+        ('library', '0013_programtype_slug'),
     ]
 
     operations = [migrations.RunPython(add_short_list_program)]
