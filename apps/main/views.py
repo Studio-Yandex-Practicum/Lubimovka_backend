@@ -40,7 +40,7 @@ class MainView(APIView):
         if main_add_banners:
             context.add_banners()
             context.add_setting(
-                "banners_title", Settings.get_setting("main_banners_title")
+                "banner_title", Settings.get_setting("main_banners_title")
             )
         # Add short-list to context
         if main_add_short_list:
