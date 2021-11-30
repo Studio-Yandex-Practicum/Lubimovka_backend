@@ -94,6 +94,9 @@ class NewsItemForMainSerializer(
 
 
 class MainSerializer(serializers.Serializer):
+    first_screen_title = serializers.CharField(required=False)
+    first_screen_url_title = serializers.CharField(required=False)
+    first_screen_url = serializers.URLField(required=False)
     blog_title = serializers.CharField(required=False)
     blog_items = BlogItemListForMainSerializer(many=True, required=False)
     news_title = serializers.CharField(required=False)

@@ -97,6 +97,30 @@ def add_settings(apps, schema_editor):
         boolean=True,
         description="Отображение площадок на главной страницы",
     )
+    Settings.objects.create(
+        field_type="BOOLEAN",
+        settings_key="main_add_first_screen",
+        boolean=True,
+        description="Отображение первой страницы",
+    )
+    Settings.objects.create(
+        field_type="TEXT",
+        settings_key="main_first_screen_title",
+        text="Открыт прием пьес на фестиваль 2021 года",
+        description="Заголовок для первой страницы",
+    )
+    Settings.objects.create(
+        field_type="TEXT",
+        settings_key="main_first_screen_url_title",
+        text="Заголовок для ссылки для первой страницы",
+        description="Заголовок для первой страницы",
+    )
+    Settings.objects.create(
+        field_type="URL",
+        settings_key="main_first_screen_url",
+        url="https://lubimovks.url.ru",
+        description="Ссылка для первой страницы страницы",
+    )
 
 
 class Migration(migrations.Migration):

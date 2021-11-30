@@ -21,6 +21,15 @@ class MainView(APIView):
         main_add_short_list = Settings.get_setting("main_add_short_list")
         main_add_video_archive = Settings.get_setting("main_add_video_archive")
         main_add_places = Settings.get_setting("main_add_places")
+        main_add_first_screen = Settings.get_setting("main_add_first_screen")
+        # Add first screen
+        if main_add_first_screen:
+            title = Settings.get_setting("main_first_screen_title")
+            url_title = Settings.get_setting("main_first_screen_url_title")
+            url = Settings.get_setting("main_first_screen_url")
+            main.add_first_screen_data(
+                title=title, url_title=url_title, url=url
+            )
         # Add diary (blog) to context
         if main_add_blog:
             title = Settings.get_setting("main_blog_title")

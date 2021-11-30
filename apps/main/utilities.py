@@ -8,6 +8,11 @@ from apps.main.models import Banner
 
 
 class MainObject:
+    def add_first_screen_data(self, title, url_title, url):
+        self.first_screen_title = title
+        self.first_screen_url_title = url_title
+        self.first_screen_url = url
+
     def add_blog_data(self, title):
         self.blog_items = BlogItem.ext_objects.published()[:6]
         self.blog_title = title
