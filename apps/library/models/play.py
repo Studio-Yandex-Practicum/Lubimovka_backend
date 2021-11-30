@@ -13,6 +13,11 @@ class ProgramType(BaseModel):
         unique=True,
         verbose_name="Название программы",
     )
+    slug = models.SlugField(
+        max_length=40,
+        verbose_name="Slug",
+        unique=True,
+    )
 
     class Meta:
         verbose_name = "Программа"

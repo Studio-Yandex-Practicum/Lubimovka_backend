@@ -74,7 +74,7 @@ class Event(BaseModel):
     )
 
     class Meta:
-        ordering = ("-created",)
+        ordering = ("-date_time",)
         verbose_name = "Событие"
         verbose_name_plural = "События"
 
