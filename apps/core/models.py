@@ -101,6 +101,11 @@ class Role(BaseModel):
     table.
     """
 
+    class RolesType(models.TextChoices):
+        BLOG_PERSONS_ROLES = "blog_persons_roles", _("Роли в блоге")
+        PERFORMANSE_ROLES = "performanse_roles", _("Роли в спектаклях")
+        PLAY_ROLES = "play_roles", _("Роли в пьесах")
+
     name = models.CharField(
         max_length=50,
         unique=True,
@@ -112,11 +117,24 @@ class Role(BaseModel):
         verbose_name="Код-имя латиницей",
         help_text="Если пустое, то заполняется автоматически",
     )
+    type_roles = models.CharField(
+        max_length=20,
+        choices=RolesType.choices,
+        default="blog_persons_roles",
+        verbose_name="Тип роли",
+        help_text="Укажите, где будет использована роль",
+    )
 
     class Meta:
         verbose_name = "Должность/позиция"
         verbose_name_plural = "Должности/позиции"
         ordering = ("name",)
+        constraints = [
+            UniqueConstraint(
+                fields=["name", "type_roles"],
+                name="unique_roles",
+            )
+        ]
 
     def __str__(self):
         return self.name

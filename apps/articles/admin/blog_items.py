@@ -2,11 +2,19 @@ from django.contrib import admin
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
+from apps.core.models import Role
 
 
 class BlogPersonInline(admin.TabularInline):
     model = BlogItem.roles.through
     extra = 0
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "role":
+            kwargs["queryset"] = Role.objects.filter(
+                type_roles="blog_persons_roles"
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class BlogItemContentInline(BaseContentInline):

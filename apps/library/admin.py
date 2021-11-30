@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from apps.core.models import Role
 from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
@@ -173,6 +174,11 @@ class TeamMemberInline(admin.TabularInline):
         "role",
     )
     extra = 1
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "role":
+            kwargs["queryset"] = Role.objects.filter(type_roles="play_roles")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class PerformanceAdmin(admin.ModelAdmin):
