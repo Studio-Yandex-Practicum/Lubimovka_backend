@@ -11,7 +11,6 @@ from apps.content_pages.models import (
     Quote,
     Text,
     Title,
-    Video,
     VideosBlock,
 )
 from apps.content_pages.serializers import (
@@ -26,7 +25,6 @@ from apps.content_pages.serializers import (
     TextSerializer,
     TitleSerializer,
     VideosBlockSerializer,
-    VideoSerializer,
 )
 
 
@@ -52,7 +50,6 @@ class ContentObjectRelatedField(serializers.RelatedField):
             Quote: QuoteSerializer,
             Text: TextSerializer,
             Title: TitleSerializer,
-            Video: VideoSerializer,
             VideosBlock: VideosBlockSerializer,
         }
 
