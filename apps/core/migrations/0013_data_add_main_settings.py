@@ -56,12 +56,6 @@ def add_settings(apps, schema_editor):
         description="Отображение банера на главной страницы",
     )
     Settings.objects.create(
-        field_type="TEXT",
-        settings_key="main_banners_title",
-        text="",
-        description="Заголовок для банера на главной страницы",
-    )
-    Settings.objects.create(
         field_type="BOOLEAN",
         settings_key="main_add_short_list",
         boolean=True,

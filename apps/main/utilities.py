@@ -34,9 +34,8 @@ class MainObject:
         self.event_items = event_items
         self.event_title = title
 
-    def add_banners(self, title):
+    def add_banners(self):
         self.banner_items = Banner.objects.all()
-        self.banner_title = title
 
     def add_short_list(self, title):
         program = ProgramType.objects.get(slug="short-list")

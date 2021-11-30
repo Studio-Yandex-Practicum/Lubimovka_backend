@@ -103,7 +103,6 @@ class MainSerializer(serializers.Serializer):
     news_items = NewsItemForMainSerializer(many=True, required=False)
     event_title = serializers.CharField(required=False)
     event_items = EventItemsForMainSerializer(many=True, required=False)
-    banner_title = serializers.CharField(required=False)
     banner_items = BannerSerializer(many=True, required=False)
     short_list_title = serializers.CharField(required=False)
     short_list_items = PlayForMainSerializer(many=True, required=False)

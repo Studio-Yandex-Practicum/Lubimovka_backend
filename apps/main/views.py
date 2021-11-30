@@ -44,8 +44,7 @@ class MainView(APIView):
             main.add_afisha(main_show_afisha_only_for_today, title=title)
         # Add banners to context
         if main_add_banners:
-            title = Settings.get_setting("main_banners_title")
-            main.add_banners(title=title)
+            main.add_banners()
         # # Add short-list to context
         if main_add_short_list:
             title = Settings.get_setting("main_short_list_title")
