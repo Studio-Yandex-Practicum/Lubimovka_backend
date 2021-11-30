@@ -27,12 +27,12 @@ class Context:
         blog_item_serializer = BlogItemListForMainSerializer(
             blog_items, many=True
         )
-        self.context["blog_item"] = blog_item_serializer.data
+        self.context["blog_items"] = blog_item_serializer.data
 
     def add_news_items(self):
         news_items = NewsItem.ext_objects.published().order_by("-pub_date")[:6]
         news_item_serializer = NewsItemForMainSerializer(news_items, many=True)
-        self.context["news_item"] = news_item_serializer.data
+        self.context["news_items"] = news_item_serializer.data
 
     def add_afisha(self, main_show_afisha_only_for_today):
         if main_show_afisha_only_for_today:
@@ -53,9 +53,9 @@ class Context:
         self.context["main_afisha_event_items"] = event_item_serializer.data
 
     def add_banners(self):
-        banners_items = Banner.objects.all()
-        banners_item_serializer = BannerSerializer(banners_items, many=True)
-        self.context["banners_item"] = banners_item_serializer.data
+        banner_items = Banner.objects.all()
+        banner_item_serializer = BannerSerializer(banner_items, many=True)
+        self.context["banner_items"] = banner_item_serializer.data
 
     def add_short_list(self):
         program = ProgramType.objects.get(slug="short-list")
@@ -71,4 +71,4 @@ class Context:
     def add_places(self):
         places = Place.objects.all()
         places_team_serializer = PlaceForMainSerializer(places, many=True)
-        self.context["places_team_serializer"] = places_team_serializer.data
+        self.context["places"] = places_team_serializer.data

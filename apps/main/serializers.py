@@ -7,11 +7,11 @@ from apps.content_pages.serializers import BaseContentPageSerializer
 from apps.info.models import Place
 from apps.library.models import MasterClass, Performance, Play, Reading
 from apps.library.serializers import (
+    AuthorForPlaySerializer,
     EventMasterClassSerializer,
     EventPerformanceSerializer,
     EventReadingSerializer,
 )
-from apps.library.serializers.play import AuthorForPlaySerializer
 from apps.main.models import Banner
 
 
