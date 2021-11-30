@@ -36,7 +36,6 @@ class SlugRelatedSerializerField(serializers.SlugRelatedField):
 
 
 class VideosBlockSerializer(serializers.ModelSerializer):
-    serializers.SlugRelatedField
 
     items = SlugRelatedSerializerField(
         many=True,
