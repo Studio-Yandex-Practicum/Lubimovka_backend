@@ -19,6 +19,13 @@ from apps.library.models import (
 )
 
 
+class AuthorInline(admin.TabularInline):
+    model = Author.plays.through
+    extra = 1
+    verbose_name = "Автор"
+    verbose_name_plural = "Авторы"
+
+
 class PlayAdmin(admin.ModelAdmin):
     filter_horizontal = ("authors",)
     list_display = (
@@ -28,7 +35,7 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "is_draft",
     )
-
+    inlines = (AuthorInline,)
     list_filter = (
         "authors",
         "city",
