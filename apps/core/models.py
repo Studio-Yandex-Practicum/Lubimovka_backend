@@ -153,8 +153,8 @@ class Settings(BaseModel):
         verbose_name="Ключ настройки",
         unique=True,
     )
-    description = models.CharField(
-        max_length=60,
+    description = models.TextField(
+        max_length=250,
         verbose_name="Описание настройки",
         null=True,
     )
@@ -162,8 +162,8 @@ class Settings(BaseModel):
         default=False,
         verbose_name="Да или Нет",
     )
-    text = models.CharField(
-        max_length=100,
+    text = models.TextField(
+        max_length=500,
         blank=True,
         verbose_name="Текст",
     )
