@@ -91,3 +91,19 @@ class NewsItemForMainSerializer(
             "image",
             "pub_date",
         )
+
+
+class MainSerializer(serializers.Serializer):
+    blog_title = serializers.CharField(required=False)
+    blog_items = BlogItemListForMainSerializer(many=True, required=False)
+    news_title = serializers.CharField(required=False)
+    news_items = NewsItemForMainSerializer(many=True, required=False)
+    event_title = serializers.CharField(required=False)
+    event_items = EventItemsForMainSerializer(many=True, required=False)
+    banner_title = serializers.CharField(required=False)
+    banner_items = BannerSerializer(many=True, required=False)
+    short_list_title = serializers.CharField(required=False)
+    short_list_items = PlayForMainSerializer(many=True, required=False)
+    place_items = PlaceForMainSerializer(many=True, required=False)
+    video_archive_url = serializers.URLField(required=False)
+    video_archive_photo = serializers.ImageField(required=False)
