@@ -31,4 +31,4 @@ class Banner(BaseModel):
 
     def clean(self):
         if Banner.objects.count() >= 3 and not self.id:
-            raise ValidationError("Can not create more than 3 banners")
+            raise ValidationError("Нельзя создать более 3-х банеров")
