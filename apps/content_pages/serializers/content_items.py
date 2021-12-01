@@ -35,13 +35,19 @@ class LinkSerializer(serializers.ModelSerializer):
 class PerformanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Performance
-        fields = "__all__"
+        exclude = (
+            "created",
+            "modified",
+        )
 
 
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
-        fields = "__all__"
+        exclude = (
+            "created",
+            "modified",
+        )
 
 
 class PreambleSerializer(serializers.ModelSerializer):
