@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.afisha.serializers import EventSerializer
 from apps.articles.serializers import (
     BlogItemListSerializer,
-    NewsItemSerializer,
+    NewsItemListSerializer,
 )
 from apps.info.serializers.place import PlaceSerializer
 from apps.library.serializers import PlaySerializer
@@ -26,7 +26,7 @@ class MainSerializer(serializers.Serializer):
     blog_title = serializers.CharField(required=False)
     blog_items = BlogItemListSerializer(many=True, required=False)
     news_title = serializers.CharField(required=False)
-    news_items = NewsItemSerializer(many=True, required=False)
+    news_items = NewsItemListSerializer(many=True, required=False)
     event_title = serializers.CharField(required=False)
     event_items = EventSerializer(many=True, required=False)
     banner_items = BannerSerializer(many=True, required=False)
