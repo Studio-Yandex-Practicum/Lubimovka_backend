@@ -173,6 +173,19 @@ class Settings(BaseModel):
         SettingFieldType.EMAIL: "email",
     }
 
+    GROUP_CHOICES = (
+        ("MAIL", "Почта"),
+        ("MAIN", "Главная"),
+        ("FIRST_SCREEN", "Первая страница"),
+        ("GENERAL", "Общие"),
+    )
+
+    settings_group = models.CharField(
+        choices=GROUP_CHOICES,
+        default="MAIL",
+        max_length=50,
+        verbose_name="Группа настроек",
+    )
     field_type = models.CharField(
         choices=SettingFieldType.choices,
         max_length=40,
@@ -213,6 +226,7 @@ class Settings(BaseModel):
     )
 
     class Meta:
+        ordering = ("settings_group",)
         verbose_name = "Общие настройки"
         verbose_name_plural = "Общие настройки"
 
@@ -231,3 +245,31 @@ class Settings(BaseModel):
         if Settings.objects.filter(settings_key=settings_key).exists():
             setting = Settings.objects.get(settings_key=settings_key)
             return setting.value
+
+
+class SettingsMail(Settings):
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки почты"
+        verbose_name_plural = "Настройки почты"
+
+
+class SettingsGeneral(Settings):
+    class Meta:
+        proxy = True
+        verbose_name = "Общие настройки"
+        verbose_name_plural = "Общие настройки"
+
+
+class SettingsMain(Settings):
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки главной страницы"
+        verbose_name_plural = "Настройки главной страницы"
+
+
+class SettingsFirstScreen(Settings):
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки первой страницы"
+        verbose_name_plural = "Настройки первой страницы"
