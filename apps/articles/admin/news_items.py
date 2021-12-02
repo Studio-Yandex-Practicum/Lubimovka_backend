@@ -9,9 +9,9 @@ class NewsItemContentInline(BaseContentInline):
 
     content_type_model = (
         "imagesblock",
-        "link",
         "personsblock",
         "playsblock",
+        "preamble",
         "quote",
         "text",
         "title",

@@ -3,14 +3,19 @@ from .blog_items import (
     BlogItemDetailedSerializer,
     BlogItemListSerializer,
 )
-from .news_items import NewsItemListSerializer, NewsItemSerializer
+from .news_items import (
+    NewsItemBaseSerializer,
+    NewsItemDetailedSerializer,
+    NewsItemListSerializer,
+)
 from .projects import ProjectListSerializer, ProjectSerializer
 
 __all__ = (
-    BlogItemListSerializer,
     BlogItemBaseSerializer,
     BlogItemDetailedSerializer,
-    NewsItemSerializer,
+    BlogItemListSerializer,
+    NewsItemBaseSerializer,
+    NewsItemDetailedSerializer,
     NewsItemListSerializer,
     ProjectSerializer,
     ProjectListSerializer,
