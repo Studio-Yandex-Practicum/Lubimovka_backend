@@ -3,7 +3,9 @@ from django.contrib.contenttypes.models import ContentType
 from faker import Faker
 
 from apps.articles.models import BlogItem, BlogItemContent
-from apps.content_pages.tests.factories import (
+from apps.content_pages.models.content_blocks import PersonsBlock
+from apps.content_pages.tests.factories import (  # PersonsBlockFactory,
+    PersonInBlockFactory,
     PreambleFactory,
     QuoteFactory,
     TextFactory,
@@ -20,8 +22,17 @@ class BlogItemContentFactory(factory.django.DjangoModelFactory):
     )
 
     class Meta:
-        exclude = ["item"]
+        exclude = ("item",)
         abstract = True
+
+
+class BlogPersonBlockContentFactory(BlogItemContentFactory):
+    item = PersonsBlock()
+    item.save()
+    item.items.add(PersonInBlockFactory())
+
+    class Meta:
+        model = BlogItemContent
 
 
 class BlogPreambleContentFactory(BlogItemContentFactory):
@@ -73,3 +84,6 @@ class BlogFactory(factory.django.DjangoModelFactory):
     content1 = factory.RelatedFactory(BlogTextContentFactory, "content_page")
     content2 = factory.RelatedFactory(BlogTitleContentFactory, "content_page")
     content3 = factory.RelatedFactory(BlogQuoteContentFactory, "content_page")
+    content4 = factory.RelatedFactory(
+        BlogPersonBlockContentFactory, "content_page"
+    )

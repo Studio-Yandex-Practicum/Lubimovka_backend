@@ -1,12 +1,17 @@
 import factory
 from faker import Faker
 
+from apps.content_pages.models.content_blocks import (
+    OrderedPerson,
+    PersonsBlock,
+)
 from apps.content_pages.models.content_items import (
     Preamble,
     Quote,
     Text,
     Title,
 )
+from apps.core.tests.factories import PersonFactory
 
 fake = Faker(locale="ru_RU")
 
@@ -50,3 +55,32 @@ class QuoteFactory(factory.django.DjangoModelFactory):
         model = Quote
 
     quote = factory.Faker("text", locale="ru_RU")
+
+
+class PersonsBlockFactory(factory.django.DjangoModelFactory):
+    """Creates content block Person for blog, news or projects."""
+
+    class Meta:
+        model = PersonsBlock
+
+    title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
+
+
+class OrderedPersonFactory(factory.django.DjangoModelFactory):
+    """Auxilliary factory for block Persons."""
+
+    class Meta:
+        model = OrderedPerson
+
+    item = factory.SubFactory(PersonFactory)
+    block = factory.SubFactory(PersonsBlockFactory)
+    order = factory.Sequence(lambda n: n)
+
+
+class PersonInBlockFactory(PersonFactory):
+
+    person_in_block = factory.RelatedFactory(
+        OrderedPersonFactory,
+        factory_related_name="item",
+        block__title="block1",
+    )
