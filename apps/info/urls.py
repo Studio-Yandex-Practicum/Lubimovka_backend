@@ -4,6 +4,7 @@ from apps.info.views import (
     FestivalTeamsViewSet,
     FestivalViewSet,
     PartnersViewSet,
+    PressReleaseAPIView,
     QuestionCreateAPI,
     SponsorViewSet,
     VolunteersViewSet,
@@ -58,6 +59,11 @@ info_urls = [
         "questions/",
         QuestionCreateAPI.as_view(),
         name="questions",
+    ),
+    path(
+        "press-releases/",
+        PressReleaseAPIView.as_view(),
+        name="press-release",
     ),
 ]
 

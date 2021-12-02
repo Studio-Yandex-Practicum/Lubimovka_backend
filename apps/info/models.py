@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
@@ -271,3 +272,25 @@ class Question(BaseModel):
 
     def __str__(self):
         return f"{self.name} {self.question}"
+
+
+class PressRelease(BaseModel):
+    title = models.CharField(
+        max_length=500, unique=True, verbose_name="Заголовок"
+    )
+    text = RichTextField(verbose_name="Текст")
+    year = models.PositiveSmallIntegerField(
+        validators=(
+            MinValueValidator(1990),
+            MaxValueValidator(timezone.now().year),
+        ),
+        verbose_name="Год пресс-релиза",
+    )
+
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "Пресс-релиз"
+        verbose_name_plural = "Пресс-релизы"
+
+    def __str__(self):
+        return f"{self.year} - {self.title[:10]}"
