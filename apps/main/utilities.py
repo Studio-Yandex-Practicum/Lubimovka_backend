@@ -64,7 +64,7 @@ class MainObject:
             festival = Festival.objects.all().order_by("-year").first()
             shot_list_plays = program.plays.filter(
                 festival=festival, is_draft=False
-            )[:6]
+            )[:4]
             self.short_list_items = shot_list_plays
             self.short_list_title = Settings.get_setting(
                 "main_short_list_title"
