@@ -11,9 +11,9 @@ from apps.content_pages.serializers import (
     ImageSerializer,
     PerformanceSerializer,
     PersonSerializer,
-    PlaySerializer,
     VideoSerializer,
 )
+from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
 
 
 class SlugRelatedSerializerField(serializers.SlugRelatedField):
@@ -36,7 +36,6 @@ class SlugRelatedSerializerField(serializers.SlugRelatedField):
 
 
 class VideosBlockSerializer(serializers.ModelSerializer):
-    serializers.SlugRelatedField
 
     items = SlugRelatedSerializerField(
         many=True,
@@ -111,7 +110,7 @@ class PlaysBlockSerializer(serializers.ModelSerializer):
         read_only=True,
         source="ordered_plays",
         slug_field="item",
-        serializer_class=PlaySerializer,
+        serializer_class=LibraryPlaySerializer,
     )
 
     class Meta:

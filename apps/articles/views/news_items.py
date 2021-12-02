@@ -6,12 +6,14 @@ from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
 from apps.articles.serializers import (
+    NewsItemDetailedSerializer,
     NewsItemListSerializer,
-    NewsItemSerializer,
 )
 
 
 class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
+    """Returns published News items."""
+
     queryset = NewsItem.ext_objects.published()
     filter_backends = (
         filters.DjangoFilterBackend,
@@ -26,7 +28,7 @@ class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
     def get_serializer_class(self):
         if self.action == "list":
             return NewsItemListSerializer
-        return NewsItemSerializer
+        return NewsItemDetailedSerializer
 
     class Meta:
         model = NewsItem

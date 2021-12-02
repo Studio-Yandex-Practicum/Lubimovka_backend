@@ -13,6 +13,7 @@ class Project(AbstractContentPage):
         return f"Проект {self.title}"
 
     class Meta:
+        ordering = ("-pub_date",)
         verbose_name = "Проект"
         verbose_name_plural = "Проекты"
 

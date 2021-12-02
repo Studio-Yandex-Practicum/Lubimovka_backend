@@ -60,9 +60,9 @@ class BlogItem(AbstractContentPage):
     )
 
     class Meta:
+        ordering = ("-pub_date",)
         verbose_name = "Запись блога"
         verbose_name_plural = "Блог"
-        ordering = ("-pub_date",)
 
     def __str__(self):
         return f"Запись блога {self.title}"

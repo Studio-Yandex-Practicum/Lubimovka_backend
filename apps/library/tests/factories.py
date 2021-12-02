@@ -90,7 +90,8 @@ class ProgramFactory(factory.django.DjangoModelFactory):
         model = ProgramType
         django_get_or_create = ["name"]
 
-    name = factory.LazyFunction(lambda: fake.word().capitalize())
+    name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
+    slug = factory.Faker("word", locale="en_US")
 
 
 @restrict_factory({"global": [Festival, ProgramType]})
