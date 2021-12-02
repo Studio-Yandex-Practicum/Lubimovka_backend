@@ -3,14 +3,14 @@ from django.contrib.contenttypes.models import ContentType
 from faker import Faker
 
 from apps.articles.models import BlogItem, BlogItemContent
-from apps.content_pages.models.content_blocks import PersonsBlock
-from apps.content_pages.tests.factories import (  # PersonsBlockFactory,
-    PersonInBlockFactory,
+from apps.content_pages.tests.factories import (
+    PersonsBlockFactory,
     PreambleFactory,
     QuoteFactory,
     TextFactory,
     TitleFactory,
 )
+from apps.core.tests.factories import PersonFactory
 
 fake = Faker(locale="ru_RU")
 
@@ -27,9 +27,8 @@ class BlogItemContentFactory(factory.django.DjangoModelFactory):
 
 
 class BlogPersonBlockContentFactory(BlogItemContentFactory):
-    item = PersonsBlock()
-    item.save()
-    item.items.add(PersonInBlockFactory())
+    item = factory.SubFactory(PersonsBlockFactory)
+    order = 4
 
     class Meta:
         model = BlogItemContent
@@ -87,3 +86,13 @@ class BlogFactory(factory.django.DjangoModelFactory):
     content4 = factory.RelatedFactory(
         BlogPersonBlockContentFactory, "content_page"
     )
+
+    @factory.post_generation
+    def add_person_to_block(self, created, extracted, **kwargs):
+        if not created:
+            return
+        if extracted:
+            person_block = self.contents.get(order=4)
+            for _ in range(3):
+                person = PersonFactory.create()
+                person_block.item.items.add(person)

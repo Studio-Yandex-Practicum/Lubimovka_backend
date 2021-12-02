@@ -18,7 +18,9 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:
-            blogs = BlogFactory.create_batch(5)
+            blogs = []
+            for _ in range(5):
+                blogs.append(BlogFactory.create(add_person_to_block=True))
             notification(self, blogs, "блогов")
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполения БД"))
