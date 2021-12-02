@@ -87,6 +87,8 @@ class Event(BaseModel):
             "MASTERCLASS": MasterClass,
             "READING": Reading,
         }
+        if not self.type or not self.common_event:
+            return super().clean()
         common_event_type = type(self.common_event.target_model)
         allowed_type = allowed_event_types[self.type]
         if common_event_type != allowed_type:
