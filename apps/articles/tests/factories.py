@@ -4,13 +4,13 @@ from faker import Faker
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.tests.factories import (
+    OrderedPersonFactory,
     PersonsBlockFactory,
     PreambleFactory,
     QuoteFactory,
     TextFactory,
     TitleFactory,
 )
-from apps.core.tests.factories import PersonFactory
 
 fake = Faker(locale="ru_RU")
 
@@ -93,6 +93,9 @@ class BlogFactory(factory.django.DjangoModelFactory):
             return
         if extracted:
             person_block = self.contents.get(order=4)
-            for _ in range(3):
-                person = PersonFactory.create()
+            for index in range(3):
+                ordered_person = OrderedPersonFactory.create(
+                    block=person_block.item, order=index
+                )
+                person = ordered_person.item
                 person_block.item.items.add(person)
