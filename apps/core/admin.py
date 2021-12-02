@@ -1,7 +1,15 @@
 from django.contrib import admin
 
 from apps.core.mixins import AdminImagePreview
-from apps.core.models import Image, Role, Settings
+from apps.core.models import (
+    Image,
+    Role,
+    Settings,
+    SettingsFirstScreen,
+    SettingsGeneral,
+    SettingsMail,
+    SettingsMain,
+)
 
 
 class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
@@ -30,6 +38,7 @@ class SettingsAdmin(admin.ModelAdmin):
         "description",
         "settings_key",
         "get_value",
+        "settings_group",
     )
     search_fields = (
         "field_type",
@@ -47,6 +56,7 @@ class SettingsAdmin(admin.ModelAdmin):
             "description",
             "settings_key",
             "field_type",
+            "settings_group",
             field_for_setting_value,
         )
 
@@ -64,6 +74,31 @@ class SettingsAdmin(admin.ModelAdmin):
         return False
 
 
+class SettingsMailAdmin(SettingsAdmin):
+    def get_queryset(self, request):
+        return SettingsMail.objects.filter(settings_group="MAIL").all()
+
+
+class SettingsGeneralAdmin(SettingsAdmin):
+    def get_queryset(self, request):
+        return SettingsGeneral.objects.filter(settings_group="GENERAL").all()
+
+
+class SettingsMainAdmin(SettingsAdmin):
+    def get_queryset(self, request):
+        return SettingsMain.objects.filter(settings_group="MAIN").all()
+
+
+class SettingsFirstScreenAdmin(SettingsAdmin):
+    def get_queryset(self, request):
+        return SettingsFirstScreen.objects.filter(
+            settings_group="FIRST_SCREEN"
+        ).all()
+
+
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Role, RoleAdmin)
-admin.site.register(Settings, SettingsAdmin)
+admin.site.register(SettingsMail, SettingsMailAdmin)
+admin.site.register(SettingsGeneral, SettingsGeneralAdmin)
+admin.site.register(SettingsMain, SettingsMainAdmin)
+admin.site.register(SettingsFirstScreen, SettingsFirstScreenAdmin)
