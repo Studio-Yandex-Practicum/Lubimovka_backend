@@ -27,6 +27,8 @@ class MainAfishaSerializer(serializers.Serializer):
     """
 
     title = serializers.CharField()
+    description = serializers.CharField()
+    button_label = serializers.CharField()
     items = EventSerializer(many=True)
 
 
