@@ -1,16 +1,21 @@
 from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
 from apps.info.views import (
     FestivalTeamsViewSet,
     FestivalViewSet,
     PartnersViewSet,
-    PressReleaseAPIView,
+    PressReleaseViewSet,
     QuestionCreateAPI,
     SponsorViewSet,
     VolunteersViewSet,
     festivals_years,
 )
 from apps.static_pages.views import StaticPagesView
+
+router = DefaultRouter()
+router.register("", PressReleaseViewSet, basename="press_releas")
+
 
 about_festival_urls = [
     path(
@@ -60,11 +65,7 @@ info_urls = [
         QuestionCreateAPI.as_view(),
         name="questions",
     ),
-    path(
-        "press-releases/",
-        PressReleaseAPIView.as_view(),
-        name="press-release",
-    ),
+    path("press-releases/", include(router.urls)),
 ]
 
 app_prefix = [

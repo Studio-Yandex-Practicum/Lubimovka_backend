@@ -1,7 +1,7 @@
 from .festival import FestivalViewSet, festivals_years
 from .festivalteams import FestivalTeamsViewSet
 from .partners import PartnersViewSet
-from .press_release import PressReleaseAPIView
+from .press_release import PressReleaseViewSet
 from .question import QuestionCreateAPI
 from .sponsors import SponsorViewSet
 from .volunteers import VolunteersViewSet
@@ -14,5 +14,5 @@ __all__ = (
     "VolunteersViewSet",
     "FestivalViewSet",
     "festivals_years",
-    "PressReleaseAPIView",
+    "PressReleaseViewSet",
 )

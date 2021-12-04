@@ -11,3 +11,15 @@ class PressReleaseSerializer(serializers.ModelSerializer):
             "title",
             "text",
         )
+
+
+class ImageYearPressReleaseSerializer(serializers.Serializer):
+    image = serializers.ImageField(default=None)
+    years = serializers.ListField(
+        child=serializers.IntegerField(),
+        allow_empty=True,
+    )
+    press_releases = PressReleaseSerializer(
+        default=None,
+        many=True,
+    )

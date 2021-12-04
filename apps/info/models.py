@@ -1,4 +1,6 @@
 from ckeditor.fields import RichTextField
+from django.contrib.postgres.aggregates.general import ArrayAgg
+from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
@@ -7,6 +9,7 @@ from django.core.validators import (
 )
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.db.models.expressions import Value
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -274,17 +277,54 @@ class Question(BaseModel):
         return f"{self.name} {self.question}"
 
 
+class ImageYearPressReleaseQuerySet(models.QuerySet):
+    def with_years(self, year=None):
+        subquery = Festival.objects.aggregate(years=ArrayAgg("year"))
+        queryset = self
+        if year:
+            queryset = queryset.filter(festival__year=year)
+        queryset = queryset.annotate(
+            years=Value(
+                subquery["years"],
+                output_field=ArrayField(
+                    base_field=models.IntegerField(blank=True)
+                ),
+            )
+        )
+        return queryset
+
+
+class ImageYearPressRelease(BaseModel):
+    festival = models.OneToOneField(
+        Festival,
+        on_delete=models.CASCADE,
+        related_name="for_press",
+        verbose_name="Фестиваль",
+    )
+    image = models.ImageField(verbose_name="Изображение для ")
+
+    objects = models.Manager()
+    ext_objects = ImageYearPressReleaseQuerySet.as_manager()
+
+    class Meta:
+        ordering = ("festival__year",)
+        verbose_name = "Изображение для страницы пресс-релиза"
+        verbose_name_plural = "Изображения для страниц пресс-релизов"
+
+    def __str__(self):
+        return repr(self.festival)
+
+
 class PressRelease(BaseModel):
     title = models.CharField(
         max_length=500, unique=True, verbose_name="Заголовок"
     )
     text = RichTextField(verbose_name="Текст")
-    year = models.PositiveSmallIntegerField(
-        validators=(
-            MinValueValidator(1990),
-            MaxValueValidator(timezone.now().year),
-        ),
-        verbose_name="Год пресс-релиза",
+    festival_through = models.ForeignKey(
+        ImageYearPressRelease,
+        on_delete=models.CASCADE,
+        related_name="press_releases",
+        verbose_name="Связан с фестивалем",
     )
 
     class Meta:
@@ -293,4 +333,4 @@ class PressRelease(BaseModel):
         verbose_name_plural = "Пресс-релизы"
 
     def __str__(self):
-        return f"{self.year} - {self.title[:10]}"
+        return f"{self.festival_through} - {self.title[:10]}"

@@ -5,6 +5,7 @@ from apps.core.models import Person
 from apps.info.models import (
     Festival,
     FestivalTeam,
+    ImageYearPressRelease,
     Partner,
     Place,
     PressRelease,
@@ -84,18 +85,33 @@ class PlaceAdmin(admin.ModelAdmin):
     search_fields = ("name", "address")
 
 
+class ImageYearPressReleaseAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "festival",
+    )
+    list_filter = ("festival",)
+
+
+# class ImageYearPressReleaseInline(admin.StackedInline):
+#     model = ImageYearPressRelease
+#     extra = 1
+
+
 class PressRealeaseAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "title",
-        "year",
     )
-
-    list_filter = ("year",)
+    # inlines = (
+    #     ImageYearPressReleaseInline,
+    # )
+    list_filter = ("title",)
     search_fields = ("title",)
 
 
 admin.site.register(Festival, FestivalAdmin)
+admin.site.register(ImageYearPressRelease, ImageYearPressReleaseAdmin)
 admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)
