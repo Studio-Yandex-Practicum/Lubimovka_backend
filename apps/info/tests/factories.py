@@ -89,7 +89,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     start_date = factory.Faker("past_date")
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
-    year = factory.Faker("random_int", min=1990, max=2500, step=1)
+    year = factory.Faker("random_int", min=1980, max=2021, step=1)
 
     @factory.post_generation
     def volunteers(self, create, extracted, **kwargs):
