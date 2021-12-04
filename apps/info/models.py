@@ -279,6 +279,7 @@ class Question(BaseModel):
 
 class ImageYearPressReleaseQuerySet(models.QuerySet):
     def with_years(self, year=None):
+        """Annotates objects with 'years' field."""
         subquery = Festival.objects.aggregate(years=ArrayAgg("year"))
         queryset = self
         if year:
@@ -295,6 +296,12 @@ class ImageYearPressReleaseQuerySet(models.QuerySet):
 
 
 class ImageYearPressRelease(BaseModel):
+    """
+    Intermediat model between PressRelease and Festival.
+
+    Use for get image and years fields for press-release page.
+    """
+
     festival = models.OneToOneField(
         Festival,
         on_delete=models.CASCADE,
@@ -333,4 +340,4 @@ class PressRelease(BaseModel):
         verbose_name_plural = "Пресс-релизы"
 
     def __str__(self):
-        return f"{self.festival_through} - {self.title[:10]}"
+        return f"{self.festival_through} - {self.title[:30]}"

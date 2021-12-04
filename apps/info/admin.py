@@ -93,19 +93,11 @@ class ImageYearPressReleaseAdmin(admin.ModelAdmin):
     list_filter = ("festival",)
 
 
-# class ImageYearPressReleaseInline(admin.StackedInline):
-#     model = ImageYearPressRelease
-#     extra = 1
-
-
 class PressRealeaseAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "title",
     )
-    # inlines = (
-    #     ImageYearPressReleaseInline,
-    # )
     list_filter = ("title",)
     search_fields = ("title",)
 
