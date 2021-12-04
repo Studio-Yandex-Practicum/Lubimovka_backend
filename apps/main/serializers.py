@@ -1,46 +1,13 @@
 from rest_framework import serializers
 
-from apps.afisha.models import Event
-from apps.articles.models import NewsItem
-from apps.articles.serializers import BlogItemBaseSerializer
-from apps.content_pages.serializers import BaseContentPageSerializer
-from apps.info.models import Place
-from apps.library.models import MasterClass, Performance, Play, Reading
-from apps.library.serializers import (
-    AuthorForPlaySerializer,
-    EventMasterClassSerializer,
-    EventPerformanceSerializer,
-    EventReadingSerializer,
+from apps.afisha.serializers import EventSerializer
+from apps.articles.serializers import (
+    BlogItemListSerializer,
+    NewsItemListSerializer,
 )
+from apps.info.serializers.place import PlaceSerializer
+from apps.library.serializers import PlaySerializer
 from apps.main.models import Banner
-
-
-class EventItemsForMainSerializer(serializers.ModelSerializer):
-    event_body = serializers.SerializerMethodField()
-    date_time = serializers.DateTimeField(format="%Y-%m-%dT%H:%M")
-
-    def get_event_body(self, obj):
-        event_body_serializers = {
-            MasterClass: EventMasterClassSerializer,
-            Performance: EventPerformanceSerializer,
-            Reading: EventReadingSerializer,
-        }
-        event_body = obj.common_event.target_model
-        event_type = type(event_body)
-        serializer = event_body_serializers[event_type]
-        return serializer(event_body).data
-
-    class Meta:
-        model = Event
-        fields = [
-            "id",
-            "type",
-            "event_body",
-            "date_time",
-            "paid",
-            "url",
-            "place",
-        ]
 
 
 class BannerSerializer(serializers.ModelSerializer):
@@ -52,60 +19,90 @@ class BannerSerializer(serializers.ModelSerializer):
         )
 
 
-class PlayForMainSerializer(serializers.ModelSerializer):
+class MainAfishaSerializer(serializers.Serializer):
+    """Returns title and items for `afisha` block on main page.
 
-    authors = AuthorForPlaySerializer(many=True)
+    items: depending on the settings, it returns events for today or for 6
+    days.
+    """
 
-    class Meta:
-        fields = (
-            "id",
-            "name",
-            "authors",
-            "city",
-            "year",
-            "url_download",
-            "url_reading",
-        )
-        model = Play
+    title = serializers.CharField()
+    description = serializers.CharField()
+    button_label = serializers.CharField()
+    items = EventSerializer(many=True)
 
 
-class PlaceForMainSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Place
-        exclude = ("created", "modified")
+class MainBannersSerializer(serializers.Serializer):
+    """Returns items for `banners` block on main page.
+
+    items: returns all `Banner` items. It's impossible to have more than three
+    banners.
+    """
+
+    items = BannerSerializer(many=True)
 
 
-class BlogItemListForMainSerializer(BlogItemBaseSerializer):
-    pass
+class MainBlogSerializer(serializers.Serializer):
+    """Returns title and items for `blog` block on main page.
+
+    items: returns 6 last published `NewsItem` objects.
+    """
+
+    title = serializers.CharField()
+    items = BlogItemListSerializer(many=True)
 
 
-class NewsItemForMainSerializer(
-    BaseContentPageSerializer, serializers.ModelSerializer
-):
-    class Meta:
-        model = NewsItem
-        fields = (
-            "id",
-            "title",
-            "description",
-            "image",
-            "pub_date",
-        )
+class MainFirstScreenSerializer(serializers.Serializer):
+    """Returns attributes for `first_screen` block on main page."""
+
+    title = serializers.CharField()
+    url_title = serializers.CharField()
+    url = serializers.URLField()
+
+
+class MainNewsSerializer(serializers.Serializer):
+    """Returns title and items for `news` block on main page.
+
+    items: returns 6 last published `BlogItem` objects.
+    """
+
+    title = serializers.CharField()
+    items = NewsItemListSerializer(many=True)
+
+
+class MainPlacesSerializer(serializers.Serializer):
+    """Returns items for `places` block on main page.
+
+    items: returns all `Place` items.
+    """
+
+    items = PlaceSerializer(many=True)
+
+
+class MainShortListSerializer(serializers.Serializer):
+    """Returns title and items for `short_list` block on main page.
+
+    items: returns 4 last `Play` objects that have program="short_list" from
+    the last festival.
+    """
+
+    title = serializers.CharField()
+    items = PlaySerializer(many=True)
+
+
+class MainVideoArchiveSerializer(serializers.Serializer):
+    """Returns attributes for `video_archive` block on main page."""
+
+    url = serializers.URLField()
+    photo = serializers.ImageField()
 
 
 class MainSerializer(serializers.Serializer):
-    first_screen_title = serializers.CharField(required=False)
-    first_screen_url_title = serializers.CharField(required=False)
-    first_screen_url = serializers.URLField(required=False)
-    blog_title = serializers.CharField(required=False)
-    blog_items = BlogItemListForMainSerializer(many=True, required=False)
-    news_title = serializers.CharField(required=False)
-    news_items = NewsItemForMainSerializer(many=True, required=False)
-    event_title = serializers.CharField(required=False)
-    event_items = EventItemsForMainSerializer(many=True, required=False)
-    banner_items = BannerSerializer(many=True, required=False)
-    short_list_title = serializers.CharField(required=False)
-    short_list_items = PlayForMainSerializer(many=True, required=False)
-    place_items = PlaceForMainSerializer(many=True, required=False)
-    video_archive_url = serializers.URLField(required=False)
-    video_archive_photo = serializers.ImageField(required=False)
+    first_screen = MainFirstScreenSerializer(required=False)
+    blog = MainBlogSerializer(required=False)
+    news = MainNewsSerializer(required=False)
+    afisha = MainAfishaSerializer(required=False)
+    banners = MainBannersSerializer(required=False)
+    short_list = MainShortListSerializer(required=False)
+    places = MainPlacesSerializer(required=False)
+    video_archive = MainVideoArchiveSerializer(required=False)
