@@ -49,6 +49,7 @@ class SettingsAdmin(admin.ModelAdmin):
         "description",
         "settings_key",
         "get_value",
+        "settings_group",
     )
     search_fields = (
         "field_type",
