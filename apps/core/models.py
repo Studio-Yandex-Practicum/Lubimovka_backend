@@ -128,6 +128,12 @@ class Role(BaseModel):
 
 
 class Settings(BaseModel):
+    class SettingGroup(models.TextChoices):
+        EMAIL = "EMAIL", _("Почта")
+        MAIN = "MAIN", _("Главная")
+        FIRST_SCREEN = "FIRST_SCREEN", _("Первая страница")
+        GENERAL = "GENERAL", _("Общие")
+
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")
         TEXT = "TEXT", _("Текст")
@@ -143,16 +149,9 @@ class Settings(BaseModel):
         SettingFieldType.EMAIL: "email",
     }
 
-    GROUP_CHOICES = (
-        ("MAIL", "Почта"),
-        ("MAIN", "Главная"),
-        ("FIRST_SCREEN", "Первая страница"),
-        ("GENERAL", "Общие"),
-    )
-
-    settings_group = models.CharField(
-        choices=GROUP_CHOICES,
-        default="MAIL",
+    group = models.CharField(
+        choices=SettingGroup.choices,
+        default="GENERAL",
         max_length=50,
         verbose_name="Группа настроек",
     )
@@ -196,7 +195,7 @@ class Settings(BaseModel):
     )
 
     class Meta:
-        ordering = ("settings_group",)
+        ordering = ("group", "settings_key")
         verbose_name = "Общие настройки"
         verbose_name_plural = "Общие настройки"
 
@@ -217,7 +216,15 @@ class Settings(BaseModel):
             return setting.value
 
 
-class SettingsMail(Settings):
+class SettingsGroupManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(group=self.model.name_group)
+
+
+class SettingsEmail(Settings):
+    object = SettingsGroupManager()
+    name_group = "EMAIL"
+
     class Meta:
         proxy = True
         verbose_name = "Настройки почты"
@@ -225,6 +232,9 @@ class SettingsMail(Settings):
 
 
 class SettingsGeneral(Settings):
+    object = SettingsGroupManager()
+    name_group = "GENERAL"
+
     class Meta:
         proxy = True
         verbose_name = "Общие настройки"
@@ -232,6 +242,9 @@ class SettingsGeneral(Settings):
 
 
 class SettingsMain(Settings):
+    object = SettingsGroupManager()
+    name_group = "MAIN"
+
     class Meta:
         proxy = True
         verbose_name = "Настройки главной страницы"
@@ -239,6 +252,9 @@ class SettingsMain(Settings):
 
 
 class SettingsFirstScreen(Settings):
+    object = SettingsGroupManager()
+    name_group = "FIRST_SCREEN"
+
     class Meta:
         proxy = True
         verbose_name = "Настройки первой страницы"
