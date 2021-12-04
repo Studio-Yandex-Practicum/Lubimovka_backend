@@ -5,9 +5,9 @@ from apps.core.models import (
     Image,
     Role,
     Settings,
+    SettingsEmail,
     SettingsFirstScreen,
     SettingsGeneral,
-    SettingsMail,
     SettingsMain,
 )
 
@@ -38,7 +38,7 @@ class SettingsAdmin(admin.ModelAdmin):
         "description",
         "settings_key",
         "get_value",
-        "settings_group",
+        "group",
     )
     search_fields = (
         "field_type",
@@ -56,7 +56,7 @@ class SettingsAdmin(admin.ModelAdmin):
             "description",
             "settings_key",
             "field_type",
-            "settings_group",
+            "group",
             field_for_setting_value,
         )
 
@@ -75,30 +75,24 @@ class SettingsAdmin(admin.ModelAdmin):
 
 
 class SettingsMailAdmin(SettingsAdmin):
-    def get_queryset(self, request):
-        return SettingsMail.objects.filter(settings_group="MAIL").all()
+    pass
 
 
 class SettingsGeneralAdmin(SettingsAdmin):
-    def get_queryset(self, request):
-        return SettingsGeneral.objects.filter(settings_group="GENERAL").all()
+    pass
 
 
 class SettingsMainAdmin(SettingsAdmin):
-    def get_queryset(self, request):
-        return SettingsMain.objects.filter(settings_group="MAIN").all()
+    pass
 
 
 class SettingsFirstScreenAdmin(SettingsAdmin):
-    def get_queryset(self, request):
-        return SettingsFirstScreen.objects.filter(
-            settings_group="FIRST_SCREEN"
-        ).all()
+    pass
 
 
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Role, RoleAdmin)
-admin.site.register(SettingsMail, SettingsMailAdmin)
+admin.site.register(SettingsEmail, SettingsMailAdmin)
 admin.site.register(SettingsGeneral, SettingsGeneralAdmin)
 admin.site.register(SettingsMain, SettingsMainAdmin)
 admin.site.register(SettingsFirstScreen, SettingsFirstScreenAdmin)
