@@ -19,6 +19,18 @@ def add_settings(apps, schema_editor):
         description="Заголовок для афиши на главной страницы",
     )
     Settings.objects.create(
+        field_type="TEXT",
+        settings_key="main_afisha_description",
+        text="",
+        description="На все читки и мастер-классы фестиваля вход свободный по предварительной регистрации.",
+    )
+    Settings.objects.create(
+        field_type="TEXT",
+        settings_key="main_afisha_button_label",
+        text="Полная афиша",
+        description="Ярлык ссылки на странице афиши",
+    )
+    Settings.objects.create(
         field_type="BOOLEAN",
         settings_key="main_show_afisha_only_for_today",
         boolean=True,
