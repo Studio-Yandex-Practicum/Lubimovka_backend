@@ -15,7 +15,6 @@ class ProjectContentInline(BaseContentInline):
         "personsblock",
         "playsblock",
         "text",
-        "video",
         "videosblock",
     )
 

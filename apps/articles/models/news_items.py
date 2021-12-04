@@ -8,6 +8,7 @@ class NewsItem(AbstractContentPage):
         return f"Новость {self.title}"
 
     class Meta:
+        ordering = ("-pub_date",)
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
 
