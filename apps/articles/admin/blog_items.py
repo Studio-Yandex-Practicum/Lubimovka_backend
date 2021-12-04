@@ -12,7 +12,7 @@ class BlogPersonInline(admin.TabularInline):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "role":
             kwargs["queryset"] = Role.objects.filter(
-                type_roles="blog_persons_roles"
+                type_roles__role_type="blog_persons_roles"
             )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 

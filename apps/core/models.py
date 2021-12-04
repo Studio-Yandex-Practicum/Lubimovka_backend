@@ -95,16 +95,12 @@ class Role(BaseModel):
         - blog persons roles
         - performance roles
         - play roles
-        ..and so on
+        - master class roles
+        - reading roles
 
     Suppose to be used in pair with `Person` model and intermediate (through)
     table.
     """
-
-    class RolesType(models.TextChoices):
-        BLOG_PERSONS_ROLES = "blog_persons_roles", _("Роли в блоге")
-        PERFORMANSE_ROLES = "performanse_roles", _("Роли в спектаклях")
-        PLAY_ROLES = "play_roles", _("Роли в пьесах")
 
     name = models.CharField(
         max_length=50,
@@ -117,24 +113,16 @@ class Role(BaseModel):
         verbose_name="Код-имя латиницей",
         help_text="Если пустое, то заполняется автоматически",
     )
-    type_roles = models.CharField(
-        max_length=20,
-        choices=RolesType.choices,
-        default="blog_persons_roles",
-        verbose_name="Тип роли",
-        help_text="Укажите, где будет использована роль",
+    type_roles = models.ManyToManyField(
+        "RoleType",
+        related_name="type_roles",
+        verbose_name="Типы ролей",
     )
 
     class Meta:
         verbose_name = "Должность/позиция"
         verbose_name_plural = "Должности/позиции"
         ordering = ("name",)
-        constraints = [
-            UniqueConstraint(
-                fields=["name", "type_roles"],
-                name="unique_roles",
-            )
-        ]
 
     def __str__(self):
         return self.name
@@ -143,6 +131,29 @@ class Role(BaseModel):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
+
+
+class RoleType(models.Model):
+
+    CHOICES = (
+        ("blog_persons_role", "Роль в блоге"),
+        ("performanse_role", "Роль в спектаклях"),
+        ("play_role", "Роль в пьесах"),
+        ("master_class_role", "Роль в мастер классах"),
+        ("reading_role", "Роль в читках"),
+    )
+
+    role_type = models.CharField(
+        max_length=20,
+        choices=CHOICES,
+        default="blog_persons_role",
+        unique=True,
+        verbose_name="Тип роли",
+        help_text="Укажите, где будет использована роль",
+    )
+
+    def __str__(self):
+        return dict(self.CHOICES)[self.role_type]
 
 
 class Settings(BaseModel):
