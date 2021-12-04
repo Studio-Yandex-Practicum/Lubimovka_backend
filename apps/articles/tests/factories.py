@@ -2,21 +2,32 @@ import factory
 from django.contrib.contenttypes.models import ContentType
 from faker import Faker
 
-from apps.articles.models import BlogItem, BlogItemContent
+from apps.articles.models import BlogItem, BlogItemContent, BlogPerson
 from apps.content_pages.tests.factories import (
     ImagesBlockFactory,
     OrderedImageFactory,
     OrderedPersonFactory,
     OrderedPlayFactory,
     PersonsBlockFactory,
-    PlayBlockFactory,
+    PlaysBlockFactory,
     PreambleFactory,
     QuoteFactory,
     TextFactory,
     TitleFactory,
 )
+from apps.core.tests.factories import PersonFactory, RoleFactory
 
 fake = Faker(locale="ru_RU")
+
+
+class BlogPersonFactory(factory.django.DjangoModelFactory):
+    """Creates co-author for Blog."""
+
+    class Meta:
+        model = BlogPerson
+
+    person = factory.SubFactory(PersonFactory)
+    role = factory.SubFactory(RoleFactory)
 
 
 class ItemContentFactory(factory.django.DjangoModelFactory):
@@ -33,7 +44,7 @@ class ItemContentFactory(factory.django.DjangoModelFactory):
 
 
 class ImageContentFactory(ItemContentFactory):
-    """."""
+    """Creates empty block with Images content."""
 
     item = factory.SubFactory(ImagesBlockFactory)
     order = 5
@@ -43,7 +54,7 @@ class ImageContentFactory(ItemContentFactory):
 
 
 class PersonContentFactory(ItemContentFactory):
-    """."""
+    """Creates empty block with Persons content."""
 
     item = factory.SubFactory(PersonsBlockFactory)
     order = 4
@@ -53,7 +64,9 @@ class PersonContentFactory(ItemContentFactory):
 
 
 class PlayContentFactory(ItemContentFactory):
-    item = factory.SubFactory(PlayBlockFactory)
+    """Creates empty block with Plays content."""
+
+    item = factory.SubFactory(PlaysBlockFactory)
     order = 6
 
     class Meta:
@@ -61,6 +74,8 @@ class PlayContentFactory(ItemContentFactory):
 
 
 class PreambleContentFactory(ItemContentFactory):
+    """Creates item Preamble."""
+
     item = factory.SubFactory(PreambleFactory)
 
     class Meta:
@@ -88,22 +103,8 @@ class QuoteContentFactory(ItemContentFactory):
         model = BlogItemContent
 
 
-content_factories = (
-    ImageContentFactory,
-    PersonContentFactory,
-    PlayContentFactory,
-    PreambleContentFactory,
-    TextContentFactory,
-    TitleContentFactory,
-    QuoteContentFactory,
-)
-
-
-class BlogFactory(factory.django.DjangoModelFactory):
-    """Creates BlogPage with content."""
-
-    class Meta:
-        model = BlogItem
+class PageFactory(factory.django.DjangoModelFactory):
+    """Abstract Factory for Page."""
 
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
     description = factory.Faker(
@@ -112,8 +113,6 @@ class BlogFactory(factory.django.DjangoModelFactory):
         nb_sentences=5,
         variable_nb_sentences=False,
     )
-    author_url_title = factory.Faker("name", locale="ru_RU")
-    author_url = factory.Faker("url")
     content = factory.RelatedFactory(PreambleContentFactory, "content_page")
     content1 = factory.RelatedFactory(TextContentFactory, "content_page")
     content2 = factory.RelatedFactory(TitleContentFactory, "content_page")
@@ -166,9 +165,18 @@ class BlogFactory(factory.django.DjangoModelFactory):
     def complex_create(cls):
         """Create Blog object with fully populated fields."""
         return cls.create(
-            add_achievement=True,
-            add_social_network_link=True,
-            add_other_link=True,
-            add_other_play=True,
-            add_play=True,
+            add_person_to_block=True,
+            add_image_to_block=True,
+            add_plays_to_block=True,
         )
+
+
+class BlogFactory(PageFactory):
+    """Creates BlogPage with content."""
+
+    class Meta:
+        model = BlogItem
+
+    co_author = factory.RelatedFactory(BlogPersonFactory, "blog")
+    author_url_title = factory.Faker("name", locale="ru_RU")
+    author_url = factory.Faker("url")

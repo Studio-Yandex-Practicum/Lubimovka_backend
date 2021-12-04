@@ -1,24 +1,42 @@
+import random
+
 import factory
 from faker import Faker
 
-from apps.content_pages.models.content_blocks import (
+from apps.content_pages.models import (
+    Image,
     ImagesBlock,
     OrderedImage,
     OrderedPerson,
     OrderedPlay,
     PersonsBlock,
     PlaysBlock,
-)
-from apps.content_pages.models.content_items import (
     Preamble,
     Quote,
     Text,
     Title,
 )
-from apps.core.tests.factories import ImageFactory, PersonFactory
+from apps.core.tests.factories import PersonFactory
 from apps.library.tests.factories import PlayFactory
 
 fake = Faker(locale="ru_RU")
+
+
+class ImageConFactory(factory.django.DjangoModelFactory):
+    """Creates image for content block."""
+
+    class Meta:
+        model = Image
+        django_get_or_create = ("image",)
+
+    image = factory.django.ImageField(
+        color=factory.LazyFunction(
+            lambda: random.choice(["blue", "yellow", "green", "orange"])
+        ),
+        width=factory.LazyFunction(lambda: random.randint(10, 1000)),
+        height=factory.SelfAttribute("width"),
+    )
+    title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
 
 
 class PreambleFactory(factory.django.DjangoModelFactory):
@@ -97,12 +115,12 @@ class OrderedImageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OrderedImage
 
-    item = factory.SubFactory(ImageFactory)
+    item = factory.SubFactory(ImageConFactory)
     block = factory.SubFactory(ImagesBlockFactory)
     order = factory.Sequence(lambda n: n)
 
 
-class PlayBlockFactory(factory.django.DjangoModelFactory):
+class PlaysBlockFactory(factory.django.DjangoModelFactory):
     """Creates content block Play for blog, news or projects."""
 
     class Meta:
@@ -118,5 +136,5 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
         model = OrderedPlay
 
     item = factory.SubFactory(PlayFactory)
-    block = factory.SubFactory(PlayBlockFactory)
+    block = factory.SubFactory(PlaysBlockFactory)
     order = factory.Sequence(lambda n: n)

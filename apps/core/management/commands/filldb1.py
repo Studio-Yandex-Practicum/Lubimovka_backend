@@ -24,7 +24,9 @@ class Command(BaseCommand):
             for _ in range(5):
                 blogs.append(
                     BlogFactory.create(
-                        add_person_to_block=True, add_plays_to_block=True
+                        add_person_to_block=True,
+                        add_plays_to_block=True,
+                        add_image_to_block=True,
                     )
                 )
             notification(self, blogs, "блогов")
