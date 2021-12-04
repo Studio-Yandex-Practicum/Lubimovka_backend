@@ -45,7 +45,7 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "markdownx",
     "drf_multiple_model",
-    "ckeditor"
+    "ckeditor",
 ]
 LOCAL_APPS = [
     "apps.users",
@@ -148,8 +148,6 @@ USE_TZ = True
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(ROOT_DIR / "staticfiles")
-# https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = ("static",)
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
