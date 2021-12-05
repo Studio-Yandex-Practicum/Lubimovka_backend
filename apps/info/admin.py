@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person
@@ -14,13 +15,12 @@ from apps.info.models import (
 
 class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
-        "id",
         "name",
         "type",
-        "url",
-        "image",
+        "show_partner_url",
         "image_preview_list_page",
     )
+    list_filter = ("type",)
     fieldsets = (
         (
             None,
@@ -46,6 +46,14 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
     empty_value_display = "-пусто-"
     ordering = ("type",)
     readonly_fields = ("image_preview_change_page",)
+
+    def show_partner_url(self, obj):
+        """
+        Makes the link to the partner's website clickable
+        """
+        return format_html("<a href='{url}'>{url}</a>", url=obj.url)
+
+    show_partner_url.short_description = "Ссылка на сайт"
 
     class Media:
         js = ("admin/js/partnerisfooter.js",)
