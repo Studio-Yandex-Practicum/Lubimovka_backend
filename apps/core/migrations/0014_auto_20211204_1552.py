@@ -12,7 +12,7 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='SettingsEmail',
+            name='SettingEmail',
             fields=[
             ],
             options={
@@ -22,13 +22,13 @@ class Migration(migrations.Migration):
                 'indexes': [],
                 'constraints': [],
             },
-            bases=('core.settings',),
+            bases=('core.setting',),
             managers=[
                 ('object', django.db.models.manager.Manager()),
             ],
         ),
         migrations.CreateModel(
-            name='SettingsFirstScreen',
+            name='SettingFirstScreen',
             fields=[
             ],
             options={
@@ -38,13 +38,13 @@ class Migration(migrations.Migration):
                 'indexes': [],
                 'constraints': [],
             },
-            bases=('core.settings',),
+            bases=('core.setting',),
             managers=[
                 ('object', django.db.models.manager.Manager()),
             ],
         ),
         migrations.CreateModel(
-            name='SettingsGeneral',
+            name='SettingGeneral',
             fields=[
             ],
             options={
@@ -54,13 +54,13 @@ class Migration(migrations.Migration):
                 'indexes': [],
                 'constraints': [],
             },
-            bases=('core.settings',),
+            bases=('core.setting',),
             managers=[
                 ('object', django.db.models.manager.Manager()),
             ],
         ),
         migrations.CreateModel(
-            name='SettingsMain',
+            name='SettingMain',
             fields=[
             ],
             options={
@@ -70,17 +70,17 @@ class Migration(migrations.Migration):
                 'indexes': [],
                 'constraints': [],
             },
-            bases=('core.settings',),
+            bases=('core.setting',),
             managers=[
                 ('object', django.db.models.manager.Manager()),
             ],
         ),
         migrations.AlterModelOptions(
-            name='settings',
+            name='setting',
             options={'ordering': ('group', 'settings_key'), 'verbose_name': 'Общие настройки', 'verbose_name_plural': 'Общие настройки'},
         ),
         migrations.AddField(
-            model_name='settings',
+            model_name='setting',
             name='group',
             field=models.CharField(choices=[('EMAIL', 'Почта'), ('MAIN', 'Главная'), ('FIRST_SCREEN', 'Первая страница'), ('GENERAL', 'Общие')], default='GENERAL', max_length=50, verbose_name='Группа настроек'),
         ),
