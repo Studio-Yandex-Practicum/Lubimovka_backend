@@ -11,12 +11,12 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.AlterField(
-            model_name='settings',
+            model_name='setting',
             name='description',
             field=models.TextField(max_length=250, null=True, verbose_name='Описание настройки'),
         ),
         migrations.AlterField(
-            model_name='settings',
+            model_name='setting',
             name='text',
             field=models.TextField(blank=True, max_length=500, verbose_name='Текст'),
         ),

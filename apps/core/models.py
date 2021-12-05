@@ -127,7 +127,7 @@ class Role(BaseModel):
         return super().save(*args, **kwargs)
 
 
-class Settings(BaseModel):
+class Setting(BaseModel):
     class SettingGroup(models.TextChoices):
         EMAIL = "EMAIL", _("Почта")
         MAIN = "MAIN", _("Главная")
@@ -211,19 +211,19 @@ class Settings(BaseModel):
 
     @classmethod
     def get_setting(cls, settings_key):
-        if Settings.objects.filter(settings_key=settings_key).exists():
-            setting = Settings.objects.get(settings_key=settings_key)
+        if Setting.objects.filter(settings_key=settings_key).exists():
+            setting = Setting.objects.get(settings_key=settings_key)
             return setting.value
 
 
-class SettingsGroupManager(models.Manager):
+class SettingGroupManager(models.Manager):
     def get_queryset(self):
-        return super().get_queryset().filter(group=self.model.name_group)
+        return super().get_queryset().filter(group=self.model.group_name)
 
 
-class SettingsEmail(Settings):
-    object = SettingsGroupManager()
-    name_group = "EMAIL"
+class SettingEmail(Setting):
+    objects = SettingGroupManager()
+    group_name = "EMAIL"
 
     class Meta:
         proxy = True
@@ -231,9 +231,9 @@ class SettingsEmail(Settings):
         verbose_name_plural = "Настройки почты"
 
 
-class SettingsGeneral(Settings):
-    object = SettingsGroupManager()
-    name_group = "GENERAL"
+class SettingGeneral(Setting):
+    objects = SettingGroupManager()
+    group_name = "GENERAL"
 
     class Meta:
         proxy = True
@@ -241,9 +241,9 @@ class SettingsGeneral(Settings):
         verbose_name_plural = "Общие настройки"
 
 
-class SettingsMain(Settings):
-    object = SettingsGroupManager()
-    name_group = "MAIN"
+class SettingMain(Setting):
+    objects = SettingGroupManager()
+    group_name = "MAIN"
 
     class Meta:
         proxy = True
@@ -251,9 +251,9 @@ class SettingsMain(Settings):
         verbose_name_plural = "Настройки главной страницы"
 
 
-class SettingsFirstScreen(Settings):
-    object = SettingsGroupManager()
-    name_group = "FIRST_SCREEN"
+class SettingFirstScreen(Setting):
+    objects = SettingGroupManager()
+    group_name = "FIRST_SCREEN"
 
     class Meta:
         proxy = True
