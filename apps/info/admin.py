@@ -21,9 +21,34 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
         "image",
         "image_preview_list_page",
     )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "name",
+                    "type",
+                    "url",
+                    "image",
+                    "image_preview_change_page",
+                ),
+                "classes": ("predefined",),
+            },
+        ),
+        (
+            None,
+            {
+                "fields": ("in_footer",),
+                "classes": ("included",),
+            },
+        ),
+    )
     empty_value_display = "-пусто-"
     ordering = ("type",)
     readonly_fields = ("image_preview_change_page",)
+
+    class Media:
+        js = ("admin/js/partnerisfooter.js",)
 
 
 class PersonAdmin(AdminImagePreview, admin.ModelAdmin):

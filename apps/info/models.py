@@ -36,6 +36,13 @@ class Partner(BaseModel):
         verbose_name="Логотип",
         help_text="Загрузите логотип партнёра",
     )
+    in_footer = models.BooleanField(
+        default=False,
+        verbose_name="Отображение внизу страницы",
+        help_text=(
+            "Поставьте галочку, чтобы показать партнёра внизу страницы"
+        ),
+    )
 
     class Meta:
         verbose_name = "Партнер"
