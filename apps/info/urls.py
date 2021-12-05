@@ -3,6 +3,7 @@ from django.urls import include, path
 from apps.info.views import (
     FestivalTeamsViewSet,
     FestivalViewSet,
+    PartnersInFooterViewSet,
     PartnersViewSet,
     QuestionCreateAPI,
     SponsorViewSet,
@@ -53,6 +54,11 @@ info_urls = [
         "partners/",
         PartnersViewSet.as_view(),
         name="partners",
+    ),
+    path(
+        "partners/in-footer/",
+        PartnersInFooterViewSet.as_view(),
+        name="partners-in-footer",
     ),
     path(
         "questions/",

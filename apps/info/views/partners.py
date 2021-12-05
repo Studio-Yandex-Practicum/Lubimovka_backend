@@ -9,3 +9,12 @@ class PartnersViewSet(ListAPIView):
     serializer_class = PartnerSerializer
     filterset_fields = ("type",)
     pagination_class = None
+
+
+class PartnersInFooterViewSet(ListAPIView):
+    queryset = Partner.objects.filter(
+        type="general",
+        in_footer=True,
+    )
+    serializer_class = PartnerSerializer
+    pagination_class = None
