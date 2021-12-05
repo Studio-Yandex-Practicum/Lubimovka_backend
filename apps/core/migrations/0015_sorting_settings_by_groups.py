@@ -1,32 +1,32 @@
 from django.db import migrations
 
 
-def sort_by_groupe(apps, schema_editor):
-    Settings = apps.get_model('core', 'Settings')
+def sort_by_group(apps, schema_editor):
+    Setting = apps.get_model('core', 'Setting')
     group = {
         "EMAIL": "mail",
         "MAIN": "main",
         "FIRST_SCREEN": "first_screen",
         "GENERAL": "GENERAL"
     }
-    settings_first_screen = Settings.objects.filter(
+    setting_first_screen = Setting.objects.filter(
         settings_key__icontains=group['FIRST_SCREEN']
     ).all()
-    for setting in settings_first_screen:
+    for setting in setting_first_screen:
         setting.group = 'FIRST_SCREEN'
         setting.save()
-    settings_main = Settings.objects.filter(
+    setting_main = Setting.objects.filter(
         settings_key__icontains=group['MAIN'],
         group='GENERAL'
     ).all()
-    for setting in settings_main:
+    for setting in setting_main:
         setting.group = 'MAIN'
         setting.save()
-    settings_email = Settings.objects.filter(
+    setting_email = Setting.objects.filter(
         settings_key__icontains=group['EMAIL'],
         group="GENERAL"
     ).all()
-    for setting in settings_email:
+    for setting in setting_email:
         setting.group = 'EMAIL'
         setting.save()
 
@@ -38,5 +38,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(sort_by_groupe),
+        migrations.RunPython(sort_by_group),
     ]
