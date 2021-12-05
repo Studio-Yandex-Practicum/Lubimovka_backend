@@ -176,8 +176,20 @@ class TeamMemberInline(admin.TabularInline):
     extra = 1
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """
+        Generates role types for the model where inline is used
+        """
+        LIMIT_ROLES = {
+            Performance: "performanse_role",
+            Play: "play_role",
+            MasterClass: "master_class_role",
+            Reading: "reading_role",
+        }
         if db_field.name == "role":
-            kwargs["queryset"] = Role.objects.filter(type_roles="play_roles")
+            if self.parent_model in LIMIT_ROLES.keys():
+                kwargs["queryset"] = Role.objects.filter(
+                    type_roles__role_type=LIMIT_ROLES[self.parent_model]
+                )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
