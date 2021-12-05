@@ -2,6 +2,8 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
+from apps.articles.tests.factories import BlogFactory
+from apps.content_pages.tests.factories import ImageForContentFactory
 from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
 from apps.info.tests.factories import (
     FestivalFactory,
@@ -10,6 +12,7 @@ from apps.info.tests.factories import (
     SponsorFactory,
     VolunteerFactory,
 )
+from apps.library.tests.factories import PlayFactory, ProgramFactory
 
 
 def notification(command, objects, text):
@@ -30,6 +33,10 @@ class Command(BaseCommand):
         " - Команды фестиваля"
         " - Пользователи-админы"
         " - Пользователи-редакторы"
+        " - Изображения для контента"
+        " - Программы"
+        " - Пьесы"
+        " - Блоги"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -86,6 +93,15 @@ class Command(BaseCommand):
                 )
             notification(self, users_editors, "редакторов")
             notification(self, users_admins, "админов")
-
+            images_content = ImageForContentFactory.create_batch(5)
+            notification(self, images_content, "изображений для контента")
+            programs = ProgramFactory.create_batch(3)
+            notification(self, programs, "программ")
+            plays = PlayFactory.create_batch(10)
+            notification(self, plays, "пьес")
+            blogs = []
+            for _ in range(5):
+                blogs.append(BlogFactory.complex_create())
+            notification(self, blogs, "блогов")
         except CommandError:
-            self.stdout.write(self.style.ERROR("Ошибка наполения БД"))
+            self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))

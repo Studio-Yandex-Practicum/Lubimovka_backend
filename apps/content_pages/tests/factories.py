@@ -16,13 +16,13 @@ from apps.content_pages.models import (
     Text,
     Title,
 )
-from apps.core.tests.factories import PersonFactory
-from apps.library.tests.factories import PlayFactory
+from apps.core.models import Person
+from apps.library.models import Play
 
 fake = Faker(locale="ru_RU")
 
 
-class ImageConFactory(factory.django.DjangoModelFactory):
+class ImageForContentFactory(factory.django.DjangoModelFactory):
     """Creates image for content block."""
 
     class Meta:
@@ -95,7 +95,7 @@ class OrderedPersonFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OrderedPerson
 
-    item = factory.SubFactory(PersonFactory)
+    item = factory.Iterator(Person.objects.all())
     block = factory.SubFactory(PersonsBlockFactory)
     order = factory.Sequence(lambda n: n)
 
@@ -115,7 +115,7 @@ class OrderedImageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OrderedImage
 
-    item = factory.SubFactory(ImageConFactory)
+    item = factory.Iterator(Image.objects.all())
     block = factory.SubFactory(ImagesBlockFactory)
     order = factory.Sequence(lambda n: n)
 
@@ -135,6 +135,6 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OrderedPlay
 
-    item = factory.SubFactory(PlayFactory)
+    item = factory.Iterator(Play.objects.all())
     block = factory.SubFactory(PlaysBlockFactory)
     order = factory.Sequence(lambda n: n)

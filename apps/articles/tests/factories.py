@@ -1,3 +1,5 @@
+import random
+
 import factory
 from django.contrib.contenttypes.models import ContentType
 from faker import Faker
@@ -15,7 +17,7 @@ from apps.content_pages.tests.factories import (
     TextFactory,
     TitleFactory,
 )
-from apps.core.tests.factories import PersonFactory, RoleFactory
+from apps.core.models import Person, Role
 
 fake = Faker(locale="ru_RU")
 
@@ -26,17 +28,18 @@ class BlogPersonFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = BlogPerson
 
-    person = factory.SubFactory(PersonFactory)
-    role = factory.SubFactory(RoleFactory)
+    person = factory.Iterator(Person.objects.all())
+    role = factory.Iterator(Role.objects.all())
 
 
 class ItemContentFactory(factory.django.DjangoModelFactory):
-    """Base factory model for blocks."""
+    """Base model for blocks."""
 
-    object_id = factory.SelfAttribute("item.id")
     content_type = factory.LazyAttribute(
         lambda o: ContentType.objects.get_for_model(o.item)
     )
+    object_id = factory.SelfAttribute("item.id")
+    order = factory.Sequence(lambda n: n)
 
     class Meta:
         exclude = ("item",)
@@ -47,7 +50,6 @@ class ImageContentFactory(ItemContentFactory):
     """Creates empty block with Images content."""
 
     item = factory.SubFactory(ImagesBlockFactory)
-    order = 5
 
     class Meta:
         model = BlogItemContent
@@ -57,7 +59,6 @@ class PersonContentFactory(ItemContentFactory):
     """Creates empty block with Persons content."""
 
     item = factory.SubFactory(PersonsBlockFactory)
-    order = 4
 
     class Meta:
         model = BlogItemContent
@@ -67,14 +68,13 @@ class PlayContentFactory(ItemContentFactory):
     """Creates empty block with Plays content."""
 
     item = factory.SubFactory(PlaysBlockFactory)
-    order = 6
 
     class Meta:
         model = BlogItemContent
 
 
 class PreambleContentFactory(ItemContentFactory):
-    """Creates item Preamble."""
+    """Creates content item Preamble."""
 
     item = factory.SubFactory(PreambleFactory)
 
@@ -83,6 +83,8 @@ class PreambleContentFactory(ItemContentFactory):
 
 
 class TextContentFactory(ItemContentFactory):
+    """Creates content item Text."""
+
     item = factory.SubFactory(TextFactory)
 
     class Meta:
@@ -90,6 +92,8 @@ class TextContentFactory(ItemContentFactory):
 
 
 class TitleContentFactory(ItemContentFactory):
+    """Creates content item Title."""
+
     item = factory.SubFactory(TitleFactory)
 
     class Meta:
@@ -97,36 +101,51 @@ class TitleContentFactory(ItemContentFactory):
 
 
 class QuoteContentFactory(ItemContentFactory):
+    """Creates content item Quote."""
+
     item = factory.SubFactory(QuoteFactory)
 
     class Meta:
         model = BlogItemContent
 
 
-class PageFactory(factory.django.DjangoModelFactory):
-    """Abstract Factory for Page."""
+class BlogFactory(factory.django.DjangoModelFactory):
+    """Creates Blog Page."""
 
-    title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
+    class Meta:
+        model = BlogItem
+
+    author_url = factory.Faker("url")
+    author_url_title = factory.Faker("name", locale="ru_RU")
+    co_author = factory.RelatedFactory(BlogPersonFactory, "blog")
     description = factory.Faker(
         "paragraph",
         locale="ru_RU",
         nb_sentences=5,
         variable_nb_sentences=False,
     )
-    content = factory.RelatedFactory(PreambleContentFactory, "content_page")
-    content1 = factory.RelatedFactory(TextContentFactory, "content_page")
-    content2 = factory.RelatedFactory(TitleContentFactory, "content_page")
-    content3 = factory.RelatedFactory(QuoteContentFactory, "content_page")
-    content4 = factory.RelatedFactory(PersonContentFactory, "content_page")
-    content5 = factory.RelatedFactory(ImageContentFactory, "content_page")
-    content6 = factory.RelatedFactory(PlayContentFactory, "content_page")
+    is_draft = factory.LazyFunction(lambda: random.choice([True, False]))
+    pub_date = factory.Faker("date_time")
+    title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
 
     @factory.post_generation
-    def add_person_to_block(self, created, extracted, **kwargs):
+    def add_content_items(self, created, extracted, **kwargs):
+        """Add content items for Blog."""
         if not created:
             return
         if extracted:
-            person_block = self.contents.get(order=4)
+            PreambleContentFactory.create(content_page=self)
+            TextContentFactory.create(content_page=self)
+            TitleContentFactory.create(content_page=self)
+            QuoteContentFactory.create(content_page=self)
+
+    @factory.post_generation
+    def add_block_person(self, created, extracted, **kwargs):
+        """Add content block with Persons."""
+        if not created:
+            return
+        if extracted:
+            person_block = PersonContentFactory.create(content_page=self)
             for index in range(3):
                 ordered_person = OrderedPersonFactory.create(
                     block=person_block.item, order=index
@@ -135,11 +154,12 @@ class PageFactory(factory.django.DjangoModelFactory):
                 person_block.item.items.add(person)
 
     @factory.post_generation
-    def add_image_to_block(self, created, extracted, **kwargs):
+    def add_block_image(self, created, extracted, **kwargs):
+        """Add content block with Images."""
         if not created:
             return
         if extracted:
-            image_block = self.contents.get(order=5)
+            image_block = ImageContentFactory.create(content_page=self)
             for index in range(3):
                 ordered_image = OrderedImageFactory.create(
                     block=image_block.item, order=index
@@ -148,12 +168,12 @@ class PageFactory(factory.django.DjangoModelFactory):
                 image_block.item.items.add(image)
 
     @factory.post_generation
-    def add_plays_to_block(self, created, extracted, **kwargs):
-        """Add Plays to Block."""
+    def add_block_play(self, created, extracted, **kwargs):
+        """Add content block with Plays."""
         if not created:
             return
         if extracted:
-            play_block = self.contents.get(order=6)
+            play_block = PlayContentFactory.create(content_page=self)
             for index in range(3):
                 ordered_play = OrderedPlayFactory.create(
                     block=play_block.item, order=index
@@ -163,20 +183,10 @@ class PageFactory(factory.django.DjangoModelFactory):
 
     @classmethod
     def complex_create(cls):
-        """Create Blog object with fully populated fields."""
+        """Creates Blog with fully populated content."""
         return cls.create(
-            add_person_to_block=True,
-            add_image_to_block=True,
-            add_plays_to_block=True,
+            add_content_items=True,
+            add_block_play=True,
+            add_block_image=True,
+            add_block_person=True,
         )
-
-
-class BlogFactory(PageFactory):
-    """Creates BlogPage with content."""
-
-    class Meta:
-        model = BlogItem
-
-    co_author = factory.RelatedFactory(BlogPersonFactory, "blog")
-    author_url_title = factory.Faker("name", locale="ru_RU")
-    author_url = factory.Faker("url")
