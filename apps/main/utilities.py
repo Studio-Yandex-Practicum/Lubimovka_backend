@@ -57,8 +57,12 @@ class MainObject:
             else:
                 items = Event.objects.filter(pinned_on_main=True)[:6]
             title = Settings.get_setting("main_afisha_title")
+            description = Settings.get_setting("main_afisha_description")
+            button_label = Settings.get_setting("main_afisha_button_label")
             self.afisha = {
                 "title": title,
+                "description": description,
+                "button_label": button_label,
                 "items": items,
             }
 
