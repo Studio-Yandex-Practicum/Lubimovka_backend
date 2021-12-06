@@ -1,8 +1,8 @@
 from .content_blocks import (
+    ExtendedPersonInline,
     ImagesBlockAdmin,
     OrderedImageInline,
     OrderedPerformanceInline,
-    OrderedPersonInline,
     OrderedPlayInline,
     OrderedVideoInline,
     PerformancesBlockAdmin,
@@ -14,11 +14,11 @@ from .content_items import Image, Link, Quote, Text, Title, Video
 from .contents import BaseContentInline, BaseContentPageAdmin
 
 __all__ = (
+    ExtendedPersonInline,
     OrderedImageInline,
     OrderedVideoInline,
     OrderedPerformanceInline,
     OrderedPlayInline,
-    OrderedPersonInline,
     ImagesBlockAdmin,
     VideosBlockAdmin,
     PerformancesBlockAdmin,
