@@ -1,6 +1,7 @@
 import random
 
 import factory
+import pytz
 from django.contrib.contenttypes.models import ContentType
 from faker import Faker
 
@@ -125,19 +126,44 @@ class BlogFactory(factory.django.DjangoModelFactory):
         variable_nb_sentences=False,
     )
     is_draft = factory.LazyFunction(lambda: random.choice([True, False]))
-    pub_date = factory.Faker("date_time")
+    pub_date = fake.date_time().replace(tzinfo=pytz.UTC)
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
 
     @factory.post_generation
-    def add_content_items(self, created, extracted, **kwargs):
-        """Add content items for Blog."""
+    def add_item_preamble(self, created, extracted, **kwargs):
+        """Add Preamble item for Blog."""
         if not created:
             return
         if extracted:
-            PreambleContentFactory.create(content_page=self)
-            TextContentFactory.create(content_page=self)
-            TitleContentFactory.create(content_page=self)
-            QuoteContentFactory.create(content_page=self)
+            for _ in range(extracted):
+                PreambleContentFactory.create(content_page=self)
+
+    @factory.post_generation
+    def add_item_text(self, created, extracted, **kwargs):
+        """Add Text item for Blog."""
+        if not created:
+            return
+        if extracted:
+            for _ in range(extracted):
+                TextContentFactory.create(content_page=self)
+
+    @factory.post_generation
+    def add_item_title(self, created, extracted, **kwargs):
+        """Add Title item for Blog."""
+        if not created:
+            return
+        if extracted:
+            for _ in range(extracted):
+                TitleContentFactory.create(content_page=self)
+
+    @factory.post_generation
+    def add_item_quote(self, created, extracted, **kwargs):
+        """Add Quote item for Blog."""
+        if not created:
+            return
+        if extracted:
+            for _ in range(extracted):
+                QuoteContentFactory.create(content_page=self)
 
     @factory.post_generation
     def add_block_person(self, created, extracted, **kwargs):
@@ -145,13 +171,14 @@ class BlogFactory(factory.django.DjangoModelFactory):
         if not created:
             return
         if extracted:
-            person_block = PersonContentFactory.create(content_page=self)
-            for index in range(3):
-                ordered_person = OrderedPersonFactory.create(
-                    block=person_block.item, order=index
-                )
-                person = ordered_person.item
-                person_block.item.items.add(person)
+            for _ in range(extracted):
+                person_block = PersonContentFactory.create(content_page=self)
+                for index in range(3):
+                    ordered_person = OrderedPersonFactory.create(
+                        block=person_block.item, order=index
+                    )
+                    person = ordered_person.item
+                    person_block.item.items.add(person)
 
     @factory.post_generation
     def add_block_image(self, created, extracted, **kwargs):
@@ -159,13 +186,14 @@ class BlogFactory(factory.django.DjangoModelFactory):
         if not created:
             return
         if extracted:
-            image_block = ImageContentFactory.create(content_page=self)
-            for index in range(3):
-                ordered_image = OrderedImageFactory.create(
-                    block=image_block.item, order=index
-                )
-                image = ordered_image.item
-                image_block.item.items.add(image)
+            for _ in range(extracted):
+                image_block = ImageContentFactory.create(content_page=self)
+                for index in range(3):
+                    ordered_image = OrderedImageFactory.create(
+                        block=image_block.item, order=index
+                    )
+                    image = ordered_image.item
+                    image_block.item.items.add(image)
 
     @factory.post_generation
     def add_block_play(self, created, extracted, **kwargs):
@@ -173,20 +201,24 @@ class BlogFactory(factory.django.DjangoModelFactory):
         if not created:
             return
         if extracted:
-            play_block = PlayContentFactory.create(content_page=self)
-            for index in range(3):
-                ordered_play = OrderedPlayFactory.create(
-                    block=play_block.item, order=index
-                )
-                play = ordered_play.item
-                play_block.item.items.add(play)
+            for _ in range(extracted):
+                play_block = PlayContentFactory.create(content_page=self)
+                for index in range(3):
+                    ordered_play = OrderedPlayFactory.create(
+                        block=play_block.item, order=index
+                    )
+                    play = ordered_play.item
+                    play_block.item.items.add(play)
 
     @classmethod
     def complex_create(cls):
         """Creates Blog with fully populated content."""
         return cls.create(
-            add_content_items=True,
-            add_block_play=True,
-            add_block_image=True,
-            add_block_person=True,
+            add_item_preamble=1,
+            add_item_text=1,
+            add_item_title=1,
+            add_item_quote=1,
+            add_block_play=1,
+            add_block_image=1,
+            add_block_person=1,
         )
