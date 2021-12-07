@@ -11,7 +11,7 @@ from apps.info.tests.factories import (
 )
 
 FESTIVAL_URL_NAME = "festivals"
-FESTIVAL_YEARS_URL = reverse("festivals_years")
+FESTIVAL_YEARS_URL = reverse("festivals-years")
 TEAMS_URL = reverse("festival-teams")
 TEAMS_URL_FILTER = TEAMS_URL + "?team="
 SPONSORS_URL = reverse("sponsors")
