@@ -6,6 +6,7 @@ from .author import (
 from .masterclass import EventMasterClassSerializer
 from .performance import EventPerformanceSerializer, PerformanceSerializer
 from .play import AuthorForPlaySerializer, PlaySerializer
+from .playfilters import PlayFiltersSerializer
 from .reading import EventReadingSerializer
 
 __all__ = (
@@ -17,5 +18,6 @@ __all__ = (
     EventPerformanceSerializer,
     EventReadingSerializer,
     PlaySerializer,
+    PlayFiltersSerializer,
     PerformanceSerializer,
 )
