@@ -4,7 +4,7 @@ from apps.info.models import FestivalTeam
 from apps.info.serializers import FestivalTeamsSerializer
 
 
-class FestivalTeamsViewSet(ListAPIView):
+class FestivalTeamsAPIView(ListAPIView):
     queryset = FestivalTeam.objects.all()
     serializer_class = FestivalTeamsSerializer
     filterset_fields = ("team",)

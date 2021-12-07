@@ -4,7 +4,7 @@ from apps.info.models import Volunteer
 from apps.info.serializers import VolunteersSerializer
 
 
-class VolunteersViewSet(ListAPIView):
+class VolunteersAPIView(ListAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteersSerializer
     filterset_fields = ("year",)
