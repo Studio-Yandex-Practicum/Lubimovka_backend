@@ -31,7 +31,7 @@ class NewsItemDetailedSerializer(
 
     @extend_schema_field(NewsItemBaseSerializer(many=True))
     def get_other_news(self, obj):
-        """Returns latest four `NewsItem` except the object itself."""
+        """Return latest four `NewsItem` except the object itself."""
         serialized_data = get_latest_four_published_items_data(
             serializer_class=NewsItemListSerializer,
             object=obj,

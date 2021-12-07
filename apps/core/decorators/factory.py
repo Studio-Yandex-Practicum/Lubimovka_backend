@@ -4,17 +4,14 @@ from typing import Any
 def check_restriction(models: list[Any], factory_info: str):
     model_names = [model.__qualname__ for model in models]
     required_instances = ", ".join(model_names)
-    error_msg = (
-        f"You should create at least one {required_instances} "
-        f"before use {factory_info}"
-    )
+    error_msg = f"You should create at least one {required_instances} " f"before use {factory_info}"
     for model in models:
         assert model.objects.first(), error_msg
 
 
 def restrict_factory(restrictions: dict[str, list[Any]]):
     """
-    Checks if instances of required models exist before use the factory.
+    Check if instances of required models exist before use the factory.
 
     How to use:
     The decorator takes a dictionary as a parameter.
@@ -30,7 +27,6 @@ def restrict_factory(restrictions: dict[str, list[Any]]):
     for the entire factory to work correctly.
 
     Example:
-
     @restrict_factory({"add_play": [Festival, ProgramType]})
     class AuthorFactory(factory.django.DjangoModelFactory):
         @factory.post_generation
@@ -61,9 +57,7 @@ def restrict_factory(restrictions: dict[str, list[Any]]):
                 for keyword_variable in method_keyword_variables:
                     if keyword_variable in restrictions:
                         models = restrictions[keyword_variable]
-                        factory_info = (
-                            factory_name + f" with {keyword_variable}=True"
-                        )
+                        factory_info = factory_name + f" with {keyword_variable}=True"
                         check_restriction(models, factory_info)
                 return super().create(**kwargs)
 

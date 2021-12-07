@@ -8,8 +8,8 @@ from apps.library.models import MasterClass, Performance, Reading
 
 class CommonEvent(BaseModel):
     """
-    Промежуточная модель, связывающая модели Спектакля, Мастер-класса и Читки
-    с моделью События (Event).
+    Промежуточная модель, связывающая модели Спектакля, Мастер-класса и Читки с моделью События (Event).
+
     Связь реализована через OneToOneFields в моделях Performance, Masterclass
     и Reading (поле events), а также ForeignKey в моделе Event (поле
     common_event).
@@ -52,8 +52,7 @@ class Event(BaseModel):
         related_name="body",
         verbose_name="Событие",
         help_text=(
-            "Создайте спектакль, читку или мастер-класс чтобы получить "
-            "возможность создать соответствующее событие"
+            "Создайте спектакль, читку или мастер-класс чтобы получить " "возможность создать соответствующее событие"
         ),
     )
     type = models.CharField(

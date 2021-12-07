@@ -1,31 +1,15 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import (
-    ImagesBlock,
-    PerformancesBlock,
-    PersonsBlock,
-    PlaysBlock,
-    VideosBlock,
-)
-from apps.content_pages.serializers import (
-    ImageSerializer,
-    PerformanceSerializer,
-    PersonSerializer,
-    VideoSerializer,
-)
+from apps.content_pages.models import ImagesBlock, PerformancesBlock, PersonsBlock, PlaysBlock, VideosBlock
+from apps.content_pages.serializers import ImageSerializer, PerformanceSerializer, PersonSerializer, VideoSerializer
 from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
 
 
 class SlugRelatedSerializerField(serializers.SlugRelatedField):
-    """
-    The field works exactly as SlugRelatedField but returns full object
-    serialized with 'serializer_class'.
-    """
+    """The field works exactly as SlugRelatedField but returns full object serialized with 'serializer_class'."""
 
     def __init__(self, serializer_class=None, **kwargs):
-        assert (
-            serializer_class is not None
-        ), "The 'serializer_class' argument is required."
+        assert serializer_class is not None, "The 'serializer_class' argument is required."
         self.serializer_class = serializer_class
         super().__init__(**kwargs)
 

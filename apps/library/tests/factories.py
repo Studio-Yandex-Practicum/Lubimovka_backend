@@ -6,15 +6,7 @@ from faker import Faker
 from apps.core.decorators import restrict_factory
 from apps.core.tests.factories import PersonFactory
 from apps.info.models import Festival
-from apps.library.models import (
-    Achievement,
-    Author,
-    OtherLink,
-    OtherPlay,
-    Play,
-    ProgramType,
-    SocialNetworkLink,
-)
+from apps.library.models import Achievement, Author, OtherLink, OtherPlay, Play, ProgramType, SocialNetworkLink
 
 fake = Faker("ru_RU")
 
@@ -30,6 +22,7 @@ class AchievementFactory(factory.django.DjangoModelFactory):
 class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
     """
     Create SocialNetworkLink object.
+
     You should create at least one Author before use this factory.
     """
 
@@ -37,9 +30,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
         model = SocialNetworkLink
 
     author = factory.Iterator(Author.objects.all())
-    name = factory.LazyFunction(
-        lambda: choice(SocialNetworkLink.SocialNetwork.choices)[0]
-    )
+    name = factory.LazyFunction(lambda: choice(SocialNetworkLink.SocialNetwork.choices)[0])
     link = factory.Faker("url")
 
 
@@ -47,6 +38,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
 class OtherLinkFactory(factory.django.DjangoModelFactory):
     """
     Create OtherLink object.
+
     You should create at least one Author before use this factory.
     """
 
@@ -64,6 +56,7 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
 class OtherPlayFactory(factory.django.DjangoModelFactory):
     """
     Create OtherPlay object.
+
     You should create at least one Author before use this factory.
     """
 
@@ -87,6 +80,7 @@ class ProgramFactory(factory.django.DjangoModelFactory):
 class PlayFactory(factory.django.DjangoModelFactory):
     """
     Create Play object.
+
     You should create at least one Festival and Program
     before use this factory.
     """
@@ -107,6 +101,7 @@ class PlayFactory(factory.django.DjangoModelFactory):
 class AuthorFactory(factory.django.DjangoModelFactory):
     """
     Creates Author objects.
+
     By default creates next fields:
         - person with full name, email, city and image;
         - quote;
@@ -123,17 +118,16 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Author
 
-    person = factory.SubFactory(
-        PersonFactory, add_email=True, add_city=True, add_image=True
-    )
+    person = factory.SubFactory(PersonFactory, add_email=True, add_city=True, add_image=True)
     quote = factory.Faker("sentence", nb_words=8, locale="ru_RU")
     biography = factory.Faker("text", locale="ru_RU")
 
     @factory.post_generation
     def add_achievement(self, created, extracted, **kwargs):
         """
-        Create a Achievement object and add it
-        to achievements field for Author.
+        Create a Achievement object.
+
+        Add it to achievements field for Author.
         To use "add_achievement=True"
         """
         if not created:
@@ -145,8 +139,9 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_social_network_link(self, created, extracted, **kwargs):
         """
-        Create a SocialNetworkLink object and add it
-        to social_networks field for Author.
+        Create a SocialNetworkLink object.
+
+        Add it to social_networks field for Author.
         To use "add_social_network_link=True"
         """
         if not created:
@@ -157,8 +152,9 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_other_link(self, created, extracted, **kwargs):
         """
-        Create an OtherLink object and add it
-        to other_links field for Author.
+        Create an OtherLink object.
+
+        Add it to other_links field for Author.
         To use "add_other_link=True"
         """
         if not created:
@@ -169,8 +165,9 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_other_play(self, created, extracted, **kwargs):
         """
-        Create an OtherPlayLink object and add it
-        to other_plays_links field for Author.
+        Create an OtherPlayLink object.
+
+        Add it to other_plays_links field for Author.
         To use "add_other_play=True"
         """
         if not created:
@@ -181,7 +178,9 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_play(self, created, extracted, **kwargs):
         """
-        Create a Play object and add it to other_plays_links field for Author.
+        Create a Play object.
+
+        Add it to other_plays_links field for Author.
         You should create at least one Festival and Program
         before use this method.
         To use "add_play=True"
@@ -196,6 +195,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     def complex_create(cls):
         """
         Create Author object with fully populated fields.
+
         You should create at least one Festival and Program
         before use this method.
         """
