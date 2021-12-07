@@ -176,9 +176,7 @@ class TeamMemberInline(admin.TabularInline):
     extra = 1
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        """
-        Restricts role types for the model where inline is used
-        """
+        """Restricts role types for the model where inline is used."""
         LIMIT_ROLES = {
             Performance: "performanse_role",
             Play: "play_role",

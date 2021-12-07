@@ -32,21 +32,15 @@ class RoleAdmin(admin.ModelAdmin):
 
 class RoleTypeAdmin(admin.ModelAdmin):
     def has_add_permission(self, request, obj=None):
-        """
-        removes the save and add new button
-        """
+        """Removes the save and add new button."""
         return False
 
     def has_delete_permission(self, request, obj=None):
-        """
-        removes the delete button
-        """
+        """Removes the delete button."""
         return False
 
     def get_model_perms(self, request):
-        """
-        Return empty perms dict thus hiding the model from admin index.
-        """
+        """Return empty perms dict thus hiding the model from admin index."""
         return {}
 
 

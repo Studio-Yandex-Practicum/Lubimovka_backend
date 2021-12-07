@@ -6,8 +6,7 @@ from apps.core.utilities import slugify
 
 
 class BaseModel(models.Model):
-    """
-    An abstract base class model that provides self-updating ``created`` and
+    """An abstract base class model that provides self-updating ``created`` and
     ``modified`` fields.
     """
 
@@ -134,26 +133,28 @@ class Role(BaseModel):
 
 
 class RoleType(models.Model):
-
-    CHOICES = (
-        ("blog_persons_role", "Роль в блоге"),
-        ("performanse_role", "Роль в спектаклях"),
-        ("play_role", "Роль в пьесах"),
-        ("master_class_role", "Роль в мастер классах"),
-        ("reading_role", "Роль в читках"),
-    )
+    class SelectRoleType(models.TextChoices):
+        BLOG_PERSONS_ROLE = "blog_persons_role", _("Роль в блоге")
+        PERFORMANCE_ROLE = "performanse_role", _("Роль в спектаклях")
+        PLAY_ROLE = "play_role", _("Роль в пьесах")
+        MASTER_CLASS_ROLE = "master_class_role", _("Роль в мастер классах")
+        READING_ROLE = "reading_role", _("Роль в читках")
 
     role_type = models.CharField(
         max_length=20,
-        choices=CHOICES,
+        choices=SelectRoleType.choices,
         default="blog_persons_role",
         unique=True,
         verbose_name="Тип роли",
         help_text="Укажите, где будет использована роль",
     )
 
+    class Meta:
+        verbose_name = "Тип роли"
+        verbose_name_plural = "Типы ролей"
+
     def __str__(self):
-        return dict(self.CHOICES)[self.role_type]
+        return str(dict(self.SelectRoleType.choices)[self.role_type])
 
 
 class Settings(BaseModel):

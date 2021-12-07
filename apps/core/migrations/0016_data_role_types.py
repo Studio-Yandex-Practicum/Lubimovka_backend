@@ -30,7 +30,7 @@ def create_role_types(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0016_auto_20211204_2203"),
+        ("core", "0015_auto_20211207_2057"),
     ]
 
     operations = [migrations.RunPython(create_role_types)]
