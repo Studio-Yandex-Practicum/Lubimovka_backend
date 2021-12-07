@@ -1,5 +1,3 @@
-import random
-
 import factory
 from faker import Faker
 
@@ -29,14 +27,8 @@ class ImageForContentFactory(factory.django.DjangoModelFactory):
         model = Image
         django_get_or_create = ("image",)
 
-    image = factory.django.ImageField(
-        color=factory.LazyFunction(
-            lambda: random.choice(["blue", "yellow", "green", "orange"])
-        ),
-        width=factory.LazyFunction(lambda: random.randint(10, 1000)),
-        height=factory.SelfAttribute("width"),
-    )
-    title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
+    image = factory.django.ImageField(color=factory.Faker("color"))
+    title = factory.Faker("sentence", locale="ru_RU")
 
 
 class PreambleFactory(factory.django.DjangoModelFactory):
@@ -80,6 +72,16 @@ class QuoteFactory(factory.django.DjangoModelFactory):
     quote = factory.Faker("text", locale="ru_RU")
 
 
+class OrderedPersonFactory(factory.django.DjangoModelFactory):
+    """Create Person with order for block."""
+
+    class Meta:
+        model = OrderedPerson
+
+    item = factory.Iterator(Person.objects.all())
+    order = factory.Sequence(lambda n: (n % 3 + 1))
+
+
 class PersonsBlockFactory(factory.django.DjangoModelFactory):
     """Creates content block Person for blog, news or projects."""
 
@@ -88,16 +90,21 @@ class PersonsBlockFactory(factory.django.DjangoModelFactory):
 
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
 
+    @factory.post_generation
+    def add_person(self, created, extracted, **kwargs):
+        if not created:
+            return
+        OrderedPersonFactory.create_batch(3, block=self)
 
-class OrderedPersonFactory(factory.django.DjangoModelFactory):
-    """Create Person with order for block."""
+
+class OrderedImageFactory(factory.django.DjangoModelFactory):
+    """Create Image with order for block."""
 
     class Meta:
-        model = OrderedPerson
+        model = OrderedImage
 
-    item = factory.Iterator(Person.objects.all())
-    block = factory.SubFactory(PersonsBlockFactory)
-    order = factory.Sequence(lambda n: n)
+    item = factory.Iterator(Image.objects.all())
+    order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
 class ImagesBlockFactory(factory.django.DjangoModelFactory):
@@ -108,16 +115,21 @@ class ImagesBlockFactory(factory.django.DjangoModelFactory):
 
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
 
+    @factory.post_generation
+    def add_image(self, created, extracted, **kwargs):
+        if not created:
+            return
+        OrderedImageFactory.create_batch(3, block=self)
 
-class OrderedImageFactory(factory.django.DjangoModelFactory):
-    """Create Image with order for block."""
+
+class OrderedPlayFactory(factory.django.DjangoModelFactory):
+    """Creates Play with order for block."""
 
     class Meta:
-        model = OrderedImage
+        model = OrderedPlay
 
-    item = factory.Iterator(Image.objects.all())
-    block = factory.SubFactory(ImagesBlockFactory)
-    order = factory.Sequence(lambda n: n)
+    item = factory.Iterator(Play.objects.all())
+    order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
 class PlaysBlockFactory(factory.django.DjangoModelFactory):
@@ -128,13 +140,8 @@ class PlaysBlockFactory(factory.django.DjangoModelFactory):
 
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
 
-
-class OrderedPlayFactory(factory.django.DjangoModelFactory):
-    """Creates Play with order for block."""
-
-    class Meta:
-        model = OrderedPlay
-
-    item = factory.Iterator(Play.objects.all())
-    block = factory.SubFactory(PlaysBlockFactory)
-    order = factory.Sequence(lambda n: n)
+    @factory.post_generation
+    def add_play(self, created, extracted, **kwargs):
+        if not created:
+            return
+        OrderedPlayFactory.create_batch(3, block=self)
