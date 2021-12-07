@@ -36,17 +36,18 @@ class Partner(BaseModel):
         verbose_name="Логотип",
         help_text="Загрузите логотип партнёра",
     )
-    in_footer = models.BooleanField(
+    in_footer_partner = models.BooleanField(
         default=False,
         verbose_name="Отображение внизу страницы",
         help_text=(
-            "Поставьте галочку, чтобы показать партнёра внизу страницы"
+            "Поставьте галочку, чтобы показать логотип партнёра внизу страницы"
         ),
     )
 
     class Meta:
         verbose_name = "Партнер"
         verbose_name_plural = "Партнеры"
+        ordering = ("type",)
 
     def __str__(self):
         return f"{self.name} - {self.type}"

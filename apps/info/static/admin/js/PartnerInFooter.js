@@ -1,3 +1,4 @@
+// The script that displays the field ```in_footer_partner``` if the general partner is selected.
 jQuery(document).ready(function ($) {
     (function ($) {
         $(function () {

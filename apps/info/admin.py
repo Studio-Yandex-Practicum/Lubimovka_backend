@@ -14,10 +14,20 @@ from apps.info.models import (
 
 
 class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
+    """A JS script is used here.
+
+    In fieldsets are used two classes: `predefined` and `included`.
+    These classes are not in the documentation. They are set by the developer
+    for the script to work.
+
+    `predefined` - if partners are festival or info.
+    `included` - if partner is general.
+    """
+
     list_display = (
         "name",
         "type",
-        "show_partner_url",
+        "get_partner_url",
         "image_preview_list_page",
     )
     list_filter = ("type",)
@@ -38,25 +48,25 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
         (
             None,
             {
-                "fields": ("in_footer",),
+                "fields": ("in_footer_partner",),
                 "classes": ("included",),
             },
         ),
     )
     empty_value_display = "-пусто-"
-    ordering = ("type",)
     readonly_fields = ("image_preview_change_page",)
 
-    def show_partner_url(self, obj):
-        """
-        Makes the link to the partner's website clickable
-        """
+    @admin.display(description="Ссылка на сайт")
+    def get_partner_url(self, obj):
+        """Makes the link to the partner's website clickable."""
         return format_html("<a href='{url}'>{url}</a>", url=obj.url)
 
-    show_partner_url.short_description = "Ссылка на сайт"
-
     class Media:
-        js = ("admin/js/partnerisfooter.js",)
+        """Adds a script that displays the field ```in_footer_partner```
+        if the general partner is selected.
+        """
+
+        js = ("admin/js/PartnerInFooter.js",)
 
 
 class PersonAdmin(AdminImagePreview, admin.ModelAdmin):

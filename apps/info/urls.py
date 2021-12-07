@@ -55,11 +55,6 @@ info_urls = [
         name="partners",
     ),
     path(
-        "partners/in-footer/",
-        # PartnersInFooterViewSet.as_view(),
-        name="partners-in-footer",
-    ),
-    path(
         "questions/",
         QuestionCreateAPIView.as_view(),
         name="questions",

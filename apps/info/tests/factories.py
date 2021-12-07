@@ -29,6 +29,7 @@ class PartnerFactory(factory.django.DjangoModelFactory):
         getter=lambda choice: choice[0],
     )
     url = factory.Faker("url", locale="ru_RU")
+    in_footer_partner = False
 
     @factory.post_generation
     def image(self, created, extracted, **kwargs):
@@ -37,15 +38,6 @@ class PartnerFactory(factory.django.DjangoModelFactory):
 
         image = urllib.request.urlopen("https://placeimg.com/200/100").read()
         self.image.save(self.name + ".jpg", ContentFile(image), save=False)
-
-    @factory.post_generation
-    def in_footer(self, created, extracted, **kwargs):
-        if not created:
-            return
-
-        if extracted:
-            if self.type == "general":
-                self.in_footer = True
 
 
 class SponsorFactory(factory.django.DjangoModelFactory):
