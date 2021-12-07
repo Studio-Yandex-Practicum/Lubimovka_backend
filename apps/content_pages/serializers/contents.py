@@ -31,7 +31,7 @@ from apps.content_pages.serializers import (
     VideosBlockSerializer,
 )
 
-CONTENT_OBJECTS_SERIALIZER_PAIRS = {
+CONTENT_OBJECT_SERIALIZER_PAIRS = {
     Image: ImageSerializer,
     ImagesBlock: ImagesBlockSerializer,
     Link: LinkSerializer,
@@ -49,7 +49,7 @@ CONTENT_OBJECTS_SERIALIZER_PAIRS = {
 @extend_schema_field(
     PolymorphicProxySerializer(
         component_name="Content object",
-        serializers=CONTENT_OBJECTS_SERIALIZER_PAIRS.values(),
+        serializers=CONTENT_OBJECT_SERIALIZER_PAIRS.values(),
         resource_type_field_name=None,
     )
 )
@@ -64,7 +64,7 @@ class ContentObjectRelatedField(serializers.RelatedField):
         # to think: if amount of types of objects increases may be easier to
         # get serializer_class by name (for example look for
         # SerializerMethodField sources)
-        content_item_serializers = CONTENT_OBJECTS_SERIALIZER_PAIRS
+        content_item_serializers = CONTENT_OBJECT_SERIALIZER_PAIRS
 
         content_item_class = obj._meta.model
         serializer = content_item_serializers.get(content_item_class, None)

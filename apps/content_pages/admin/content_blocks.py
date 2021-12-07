@@ -21,22 +21,6 @@ class ContentPersonRoleInline(admin.TabularInline):
     extra = 0
 
 
-class ExtendedPersonAdmin(admin.ModelAdmin):
-    list_display = (
-        "block",
-        "person",
-    )
-    list_filter = (
-        ("block", admin.RelatedOnlyFieldListFilter),
-        ("person", admin.RelatedOnlyFieldListFilter),
-    )
-    search_fields = (
-        "block",
-        "person",
-    )
-    inlines = (ContentPersonRoleInline,)
-
-
 class OrderedInline(SortableInlineAdminMixin, admin.TabularInline):
     min_num = 1
     extra = 0
@@ -62,6 +46,24 @@ class ExtendedPersonInline(OrderedInline):
     model = ExtendedPerson
 
 
+@admin.register(ExtendedPerson)
+class ExtendedPersonAdmin(admin.ModelAdmin):
+    list_display = (
+        "block",
+        "person",
+    )
+    list_filter = (
+        ("block", admin.RelatedOnlyFieldListFilter),
+        ("person", admin.RelatedOnlyFieldListFilter),
+    )
+    search_fields = (
+        "block",
+        "person",
+    )
+    inlines = (ContentPersonRoleInline,)
+
+
+@admin.register(ImagesBlock)
 class ImagesBlockAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -70,25 +72,21 @@ class ImagesBlockAdmin(admin.ModelAdmin):
     inlines = (OrderedImageInline,)
 
 
+@admin.register(PersonsBlock)
 class PersonsBlockAdmin(admin.ModelAdmin):
     inlines = (ExtendedPersonInline,)
 
 
+@admin.register(PerformancesBlock)
 class PerformancesBlockAdmin(admin.ModelAdmin):
     inlines = (OrderedPerformanceInline,)
 
 
+@admin.register(PlaysBlock)
 class PlaysBlockAdmin(admin.ModelAdmin):
     inlines = (OrderedPlayInline,)
 
 
+@admin.register(VideosBlock)
 class VideosBlockAdmin(admin.ModelAdmin):
     inlines = (OrderedVideoInline,)
-
-
-admin.site.register(ExtendedPerson, ExtendedPersonAdmin)
-admin.site.register(ImagesBlock, ImagesBlockAdmin)
-admin.site.register(VideosBlock, VideosBlockAdmin)
-admin.site.register(PerformancesBlock, PerformancesBlockAdmin)
-admin.site.register(PlaysBlock, PlaysBlockAdmin)
-admin.site.register(PersonsBlock, PersonsBlockAdmin)
