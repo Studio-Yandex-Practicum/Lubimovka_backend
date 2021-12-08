@@ -92,8 +92,8 @@ class Command(BaseCommand):
             notification(self, users_editors, "редакторов")
             notification(self, users_admins, "админов")
             blogs = []
-            for _ in range(5):
-                blogs.append(BlogFactory.complex_create())
+            blog_items = BlogFactory.complex_create(5)
+            blogs.extend(blog_items)
             notification(self, blogs, "блогов")
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))

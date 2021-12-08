@@ -1,5 +1,4 @@
 import factory
-from faker import Faker
 
 from apps.content_pages.models import (
     Image,
@@ -16,8 +15,6 @@ from apps.content_pages.models import (
 )
 from apps.core.models import Person
 from apps.library.models import Play
-
-fake = Faker(locale="ru_RU")
 
 
 class ImageForContentFactory(factory.django.DjangoModelFactory):
@@ -73,7 +70,10 @@ class QuoteFactory(factory.django.DjangoModelFactory):
 
 
 class OrderedPersonFactory(factory.django.DjangoModelFactory):
-    """Create Person with order for block."""
+    """
+    Create Person with order for block.
+    You should create at least one Person before
+    using factory."""
 
     class Meta:
         model = OrderedPerson
