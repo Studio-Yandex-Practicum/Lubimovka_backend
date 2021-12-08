@@ -127,7 +127,13 @@ class Role(BaseModel):
         return super().save(*args, **kwargs)
 
 
-class Settings(BaseModel):
+class Setting(BaseModel):
+    class SettingGroup(models.TextChoices):
+        EMAIL = "EMAIL", _("Почта")
+        MAIN = "MAIN", _("Главная")
+        FIRST_SCREEN = "FIRST_SCREEN", _("Первая страница")
+        GENERAL = "GENERAL", _("Общие")
+
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")
         TEXT = "TEXT", _("Текст")
@@ -143,6 +149,12 @@ class Settings(BaseModel):
         SettingFieldType.EMAIL: "email",
     }
 
+    group = models.CharField(
+        choices=SettingGroup.choices,
+        default="GENERAL",
+        max_length=50,
+        verbose_name="Группа настроек",
+    )
     field_type = models.CharField(
         choices=SettingFieldType.choices,
         max_length=40,
@@ -183,6 +195,7 @@ class Settings(BaseModel):
     )
 
     class Meta:
+        ordering = ("group", "settings_key")
         verbose_name = "Общие настройки"
         verbose_name_plural = "Общие настройки"
 
@@ -198,6 +211,51 @@ class Settings(BaseModel):
 
     @classmethod
     def get_setting(cls, settings_key):
-        if Settings.objects.filter(settings_key=settings_key).exists():
-            setting = Settings.objects.get(settings_key=settings_key)
+        if Setting.objects.filter(settings_key=settings_key).exists():
+            setting = Setting.objects.get(settings_key=settings_key)
             return setting.value
+
+
+class SettingGroupManager(models.Manager):
+    def get_queryset(self):
+        return super().get_queryset().filter(group=self.model.group_name)
+
+
+class SettingEmail(Setting):
+    objects = SettingGroupManager()
+    group_name = "EMAIL"
+
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки почты"
+        verbose_name_plural = "Настройки почты"
+
+
+class SettingGeneral(Setting):
+    objects = SettingGroupManager()
+    group_name = "GENERAL"
+
+    class Meta:
+        proxy = True
+        verbose_name = "Общие настройки"
+        verbose_name_plural = "Общие настройки"
+
+
+class SettingMain(Setting):
+    objects = SettingGroupManager()
+    group_name = "MAIN"
+
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки главной страницы"
+        verbose_name_plural = "Настройки главной страницы"
+
+
+class SettingFirstScreen(Setting):
+    objects = SettingGroupManager()
+    group_name = "FIRST_SCREEN"
+
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки первой страницы"
+        verbose_name_plural = "Настройки первой страницы"

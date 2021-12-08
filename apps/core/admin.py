@@ -1,9 +1,18 @@
 from django.contrib import admin
 
 from apps.core.mixins import AdminImagePreview
-from apps.core.models import Image, Role, Settings
+from apps.core.models import (
+    Image,
+    Role,
+    Setting,
+    SettingEmail,
+    SettingFirstScreen,
+    SettingGeneral,
+    SettingMain,
+)
 
 
+@admin.register(Image)
 class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
         "id",
@@ -12,8 +21,9 @@ class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
+@admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
-    list_dispay = (
+    list_display = (
         "name",
         "slug",
     )
@@ -25,11 +35,13 @@ class RoleAdmin(admin.ModelAdmin):
         return super().get_readonly_fields(request, obj)
 
 
-class SettingsAdmin(admin.ModelAdmin):
+@admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen)
+class SettingAdmin(admin.ModelAdmin):
     list_display = (
         "description",
         "settings_key",
         "get_value",
+        "group",
     )
     search_fields = (
         "field_type",
@@ -42,11 +54,12 @@ class SettingsAdmin(admin.ModelAdmin):
     )
 
     def get_fields(self, request, obj=None):
-        field_for_setting_value = Settings.TYPES_AND_FIELDS[obj.field_type]
+        field_for_setting_value = Setting.TYPES_AND_FIELDS[obj.field_type]
         return (
             "description",
             "settings_key",
             "field_type",
+            "group",
             field_for_setting_value,
         )
 
@@ -62,8 +75,3 @@ class SettingsAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         """Removes the delete button."""
         return False
-
-
-admin.site.register(Image, ImageAdmin)
-admin.site.register(Role, RoleAdmin)
-admin.site.register(Settings, SettingsAdmin)
