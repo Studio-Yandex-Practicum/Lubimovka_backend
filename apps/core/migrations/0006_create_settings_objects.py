@@ -3,30 +3,30 @@
 from django.db import migrations
 
 
-def add_setting(apps, schema_editor):
+def add_settings(apps, schema_editor):
 
-    Setting = apps.get_model('core', 'Setting')
-    Setting.objects.create(
+    Settings = apps.get_model('core', 'Settings')
+    Settings.objects.create(
         field_type="BOOLEAN",
         settings_key="festival_status",
         boolean=True,
     )
-    Setting.objects.create(
+    Settings.objects.create(
         field_type="TEXT",
         settings_key="site_color",
         text="green",
     )
-    Setting.objects.create(
+    Settings.objects.create(
         field_type="EMAIL",
         settings_key="mail_send_to",
         email="testtest@testtest.test",
     )
-    Setting.objects.create(
+    Settings.objects.create(
         field_type="BOOLEAN",
         settings_key="form_to_submit_a_play",
         boolean=True,
     )
-    Setting.objects.create(
+    Settings.objects.create(
         field_type="TEXT",
         settings_key="email_subject_for_question",
         text="Вопрос Любимовке",
@@ -40,5 +40,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_setting),
+        migrations.RunPython(add_settings),
     ]

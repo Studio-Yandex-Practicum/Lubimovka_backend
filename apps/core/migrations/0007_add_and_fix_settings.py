@@ -3,8 +3,8 @@
 from django.db import migrations
 
 
-def add_setting(apps, schema_editor):
-    Setting = apps.get_model('core', 'Setting')
+def add_settings(apps, schema_editor):
+    Settings = apps.get_model('core', 'Settings')
     values = [
         "Festival_status",
         "Site_color",
@@ -12,14 +12,14 @@ def add_setting(apps, schema_editor):
         "Form_to_submit_a_play"
     ]
     for value in values:
-        if Setting.objects.filter(
+        if Settings.objects.filter(
             settings_key=value,
         ).exists():
-            setting = Setting.objects.get(settings_key=value,)
+            setting = Settings.objects.get(settings_key=value,)
             setting.settings_key = value.lower()
             setting.save()
 
-    Setting.objects.get_or_create(
+    Settings.objects.get_or_create(
         field_type="TEXT",
         settings_key="email_subject_for_question",
         text="Вопрос Любимовке",
@@ -33,5 +33,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(add_setting),
+        migrations.RunPython(add_settings),
     ]

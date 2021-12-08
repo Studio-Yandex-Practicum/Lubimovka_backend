@@ -4,7 +4,7 @@ from django.db import migrations
 
 
 def add_description(apps, schema_editor):
-    Setting = apps.get_model('core', 'Setting')
+    Settings = apps.get_model('core', 'Settings')
     description_values = {
         "festival_status": "Статус фестиваля",
         "site_color": "Цвет сайта",
@@ -13,10 +13,10 @@ def add_description(apps, schema_editor):
         "email_subject_for_question": "Тема письма для вопроса"
     }
     for key, value in description_values.items():
-        if Setting.objects.filter(
+        if Settings.objects.filter(
             settings_key=key,
         ).exists():
-            setting = Setting.objects.get(settings_key=key,)
+            setting = Settings.objects.get(settings_key=key,)
             setting.description = value
             setting.save()
 
