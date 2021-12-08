@@ -29,6 +29,7 @@ class PartnerFactory(factory.django.DjangoModelFactory):
         getter=lambda choice: choice[0],
     )
     url = factory.Faker("url", locale="ru_RU")
+    in_footer_partner = False
 
     @factory.post_generation
     def image(self, created, extracted, **kwargs):
