@@ -73,7 +73,9 @@ class OrderedPersonFactory(factory.django.DjangoModelFactory):
     """
     Create Person with order for block.
     You should create at least one Person before
-    using factory."""
+    using factory. Order in factory assume that there are not
+    more than 3 ordered persons in a block.
+    """
 
     class Meta:
         model = OrderedPerson
@@ -83,7 +85,10 @@ class OrderedPersonFactory(factory.django.DjangoModelFactory):
 
 
 class PersonsBlockFactory(factory.django.DjangoModelFactory):
-    """Creates content block Person for blog, news or projects."""
+    """
+    Creates content block Person for blog, news or projects.
+    Block creates with 3 ordered persons.
+    """
 
     class Meta:
         model = PersonsBlock
@@ -98,7 +103,10 @@ class PersonsBlockFactory(factory.django.DjangoModelFactory):
 
 
 class OrderedImageFactory(factory.django.DjangoModelFactory):
-    """Create Image with order for block."""
+    """
+    Create Image with order for block. Order in factory assume
+    that there are not more than 3 ordered images in a block.
+    """
 
     class Meta:
         model = OrderedImage
@@ -108,7 +116,10 @@ class OrderedImageFactory(factory.django.DjangoModelFactory):
 
 
 class ImagesBlockFactory(factory.django.DjangoModelFactory):
-    """Creates content block Image for blog, news or projects."""
+    """
+    Creates content block Image for blog, news or projects.
+    Block creates with 3 ordered images.
+    """
 
     class Meta:
         model = ImagesBlock
@@ -123,7 +134,10 @@ class ImagesBlockFactory(factory.django.DjangoModelFactory):
 
 
 class OrderedPlayFactory(factory.django.DjangoModelFactory):
-    """Creates Play with order for block."""
+    """
+    Creates Play with order for block. Order in factory assume
+    that there are not more than 3 ordered person in a block.
+    """
 
     class Meta:
         model = OrderedPlay
@@ -133,7 +147,10 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
 
 
 class PlaysBlockFactory(factory.django.DjangoModelFactory):
-    """Creates content block Play for blog, news or projects."""
+    """
+    Creates content block Play for blog, news or projects.
+    Block creates with 3 ordered plays.
+    """
 
     class Meta:
         model = PlaysBlock
