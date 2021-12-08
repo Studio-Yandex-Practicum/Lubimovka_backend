@@ -53,7 +53,8 @@ def create_roles(apps, schema_editor):
     ]
     for role in roles:
         role_obj = Role.objects.get(name=role["name"])
-        role_obj.types.add(RoleType.objects.get(role_type=role["types"]))
+        type_of_role = RoleType.objects.get(role_type=role["types"])
+        role_obj.types.add(type_of_role)
         role_obj.save()
 
 
