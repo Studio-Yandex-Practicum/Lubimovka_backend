@@ -45,7 +45,7 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "markdownx",
     "drf_multiple_model",
-    "ckeditor"
+    "ckeditor",
 ]
 LOCAL_APPS = [
     "apps.users",
