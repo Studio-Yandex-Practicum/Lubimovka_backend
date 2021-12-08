@@ -32,11 +32,11 @@ class RoleAdmin(admin.ModelAdmin):
 
 class RoleTypeAdmin(admin.ModelAdmin):
     def has_add_permission(self, request, obj=None):
-        """Removes the save and add new button."""
+        """Remove the save and add new button."""
         return False
 
     def has_delete_permission(self, request, obj=None):
-        """Removes the delete button."""
+        """Remove the delete button."""
         return False
 
     def get_model_perms(self, request):

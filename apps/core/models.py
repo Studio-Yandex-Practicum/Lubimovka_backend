@@ -112,7 +112,7 @@ class Role(BaseModel):
         verbose_name="Код-имя латиницей",
         help_text="Если пустое, то заполняется автоматически",
     )
-    type_roles = models.ManyToManyField(
+    types = models.ManyToManyField(
         "RoleType",
         related_name="type_roles",
         verbose_name="Типы ролей",
