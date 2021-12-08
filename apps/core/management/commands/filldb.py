@@ -57,7 +57,9 @@ class Command(BaseCommand):
             notification(self, partners, "партнёров")
 
             in_footer_partners = PartnerFactory.create_batch(
-                5, type="general", in_footer_partner=True
+                5,
+                type="general",
+                in_footer_partner=True,
             )
             notification(self, in_footer_partners, "партнёров в футере")
 

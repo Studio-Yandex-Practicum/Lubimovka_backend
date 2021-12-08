@@ -14,11 +14,12 @@ from apps.info.models import (
 
 
 class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
-    """A JS script is used here.
+    """Class for registration Partner model in admin panel and expanded
+    with JS script.
 
-    In fieldsets are used two classes: `predefined` and `included`.
-    These classes are not in the documentation. They are set by the developer
-    for the script to work.
+    There are used two classes in fieldsets: `predefined` and `included`.
+    These classes are not in the documentation and this names are invented
+    by developer for the script to work.
 
     `predefined` - if partners are festival or info.
     `included` - if partner is general.
