@@ -34,7 +34,7 @@ def sort_by_group(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0014_auto_20211204_1552'),
+        ('core', '0015_auto_20211208_1147'),
     ]
 
     operations = [
