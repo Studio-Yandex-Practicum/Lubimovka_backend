@@ -32,7 +32,9 @@ DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TEMPLATE_CONTEXT": True,
 }
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-INTERNAL_IPS = ["*"]
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
 
 # django-extensions
 # ------------------------------------------------------------------------------

@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.db import models
+from django.forms.widgets import CheckboxSelectMultiple
 
 from apps.core.mixins import AdminImagePreview
-from apps.core.models import Image, Role, Settings
+from apps.core.models import Image, Role, RoleType, Settings
 
 
 class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
@@ -17,12 +19,29 @@ class RoleAdmin(admin.ModelAdmin):
         "name",
         "slug",
     )
+    formfield_overrides = {
+        models.ManyToManyField: {"widget": CheckboxSelectMultiple},
+    }
 
     def get_readonly_fields(self, request, obj=None):
         """Only superusers can edit slug field."""
         if not request.user.is_superuser:
             return ("slug",)
         return super().get_readonly_fields(request, obj)
+
+
+class RoleTypeAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request, obj=None):
+        """Remove the save and add new button."""
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        """Remove the delete button."""
+        return False
+
+    def get_model_perms(self, request):
+        """Return empty perms dict thus hiding the model from admin index."""
+        return {}
 
 
 class SettingsAdmin(admin.ModelAdmin):
@@ -66,4 +85,5 @@ class SettingsAdmin(admin.ModelAdmin):
 
 admin.site.register(Image, ImageAdmin)
 admin.site.register(Role, RoleAdmin)
+admin.site.register(RoleType, RoleTypeAdmin)
 admin.site.register(Settings, SettingsAdmin)
