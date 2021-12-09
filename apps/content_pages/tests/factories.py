@@ -13,6 +13,7 @@ from apps.content_pages.models import (
     Text,
     Title,
 )
+from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.library.models import Play
 
@@ -69,6 +70,7 @@ class QuoteFactory(factory.django.DjangoModelFactory):
     quote = factory.Faker("text", locale="ru_RU")
 
 
+@restrict_factory({"global": (Person,)})
 class OrderedPersonFactory(factory.django.DjangoModelFactory):
     """
     Create Person with order for block.
@@ -102,6 +104,7 @@ class PersonsBlockFactory(factory.django.DjangoModelFactory):
         OrderedPersonFactory.create_batch(3, block=self)
 
 
+@restrict_factory({"global": (Image,)})
 class OrderedImageFactory(factory.django.DjangoModelFactory):
     """
     Create Image with order for block. Order in factory assume
@@ -133,6 +136,7 @@ class ImagesBlockFactory(factory.django.DjangoModelFactory):
         OrderedImageFactory.create_batch(3, block=self)
 
 
+@restrict_factory({"global": (Play,)})
 class OrderedPlayFactory(factory.django.DjangoModelFactory):
     """
     Creates Play with order for block. Order in factory assume

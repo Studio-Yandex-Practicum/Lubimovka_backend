@@ -63,9 +63,9 @@ class BlogItemContentFactory(factory.django.DjangoModelFactory):
 
 @restrict_factory(
     {
-        "add_several_imagesblock": [Image],
-        "add_several_playsblock": [Play],
-        "add_several_personsblock": [Person],
+        "add_several_imagesblock": (Image,),
+        "add_several_playsblock": (Play,),
+        "add_several_personsblock": (Person,),
     }
 )
 class BlogFactory(factory.django.DjangoModelFactory):
@@ -92,9 +92,7 @@ class BlogFactory(factory.django.DjangoModelFactory):
         variable_nb_sentences=False,
     )
     is_draft = factory.Faker("boolean", chance_of_getting_true=25)
-    pub_date = factory.Faker(
-        "date_time", tzinfo=timezone.get_current_timezone()
-    )
+    pub_date = factory.Faker("date_time", tzinfo=timezone.utc)
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
 
     @factory.post_generation
