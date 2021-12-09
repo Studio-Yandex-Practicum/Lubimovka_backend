@@ -7,6 +7,7 @@ from .sponsors import SponsorViewSet
 from .volunteers import VolunteersViewSet
 
 __all__ = (
+    "PressReleaseViewSet",
     "QuestionCreateAPI",
     "PartnersViewSet",
     "SponsorViewSet",
@@ -14,5 +15,4 @@ __all__ = (
     "VolunteersViewSet",
     "FestivalViewSet",
     "festivals_years",
-    "PressReleaseViewSet",
 )

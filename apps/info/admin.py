@@ -5,7 +5,6 @@ from apps.core.models import Person
 from apps.info.models import (
     Festival,
     FestivalTeam,
-    ImageYearPressRelease,
     Partner,
     Place,
     PressRelease,
@@ -85,7 +84,7 @@ class PlaceAdmin(admin.ModelAdmin):
     search_fields = ("name", "address")
 
 
-class ImageYearPressReleaseAdmin(admin.ModelAdmin):
+class PressReleaseAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "festival",
@@ -103,11 +102,10 @@ class PressRealeaseAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Festival, FestivalAdmin)
-admin.site.register(ImageYearPressRelease, ImageYearPressReleaseAdmin)
+admin.site.register(PressRelease, PressReleaseAdmin)
 admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)
-admin.site.register(PressRelease, PressRealeaseAdmin)
 admin.site.register(FestivalTeam)
 admin.site.register(Volunteer)
 admin.site.register(Sponsor)

@@ -14,7 +14,7 @@ from apps.info.views import (
 from apps.static_pages.views import StaticPagesView
 
 router = DefaultRouter()
-router.register("", PressReleaseViewSet, basename="press_releas")
+router.register("", PressReleaseViewSet, basename="press_release")
 
 
 about_festival_urls = [

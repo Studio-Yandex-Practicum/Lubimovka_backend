@@ -7,6 +7,7 @@ from apps.info.tests.factories import (
     FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
+    PressReleaseFactory,
     SponsorFactory,
     VolunteerFactory,
 )
@@ -70,6 +71,9 @@ class Command(BaseCommand):
 
             festivals = FestivalFactory.create_batch(10)
             notification(self, festivals, "фестивалей")
+
+            press_releases = PressReleaseFactory.create_batch(10)
+            notification(self, press_releases, "пресс-релизов")
 
             users_editors = []
             users_admins = []
