@@ -6,8 +6,7 @@ from apps.core.utilities import slugify
 
 
 class BaseModel(models.Model):
-    """
-    An abstract base class model that provides self-updating ``created`` and
+    """An abstract base class model that provides self-updating ``created`` and
     ``modified`` fields.
     """
 
@@ -95,7 +94,8 @@ class Role(BaseModel):
         - blog persons roles
         - performance roles
         - play roles
-        ..and so on
+        - master class roles
+        - reading roles
 
     Suppose to be used in pair with `Person` model and intermediate (through)
     table.
@@ -112,6 +112,11 @@ class Role(BaseModel):
         verbose_name="Код-имя латиницей",
         help_text="Если пустое, то заполняется автоматически",
     )
+    types = models.ManyToManyField(
+        "RoleType",
+        related_name="type_roles",
+        verbose_name="Типы ролей",
+    )
 
     class Meta:
         verbose_name = "Должность/позиция"
@@ -125,6 +130,31 @@ class Role(BaseModel):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
+
+
+class RoleType(models.Model):
+    class SelectRoleType(models.TextChoices):
+        BLOG_PERSONS_ROLE = "blog_persons_role", _("Роль в блоге")
+        PERFORMANCE_ROLE = "performanse_role", _("Роль в спектаклях")
+        PLAY_ROLE = "play_role", _("Роль в пьесах")
+        MASTER_CLASS_ROLE = "master_class_role", _("Роль в мастер классах")
+        READING_ROLE = "reading_role", _("Роль в читках")
+
+    role_type = models.CharField(
+        max_length=20,
+        choices=SelectRoleType.choices,
+        default="blog_persons_role",
+        unique=True,
+        verbose_name="Тип роли",
+        help_text="Укажите, где будет использована роль",
+    )
+
+    class Meta:
+        verbose_name = "Тип роли"
+        verbose_name_plural = "Типы ролей"
+
+    def __str__(self):
+        return str(dict(self.SelectRoleType.choices)[self.role_type])
 
 
 class Settings(BaseModel):

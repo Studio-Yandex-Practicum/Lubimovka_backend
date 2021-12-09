@@ -8,9 +8,9 @@ from apps.content_pages.models import (
     VideosBlock,
 )
 from apps.content_pages.serializers import (
+    ExtendedPersonSerializer,
     ImageSerializer,
     PerformanceSerializer,
-    PersonSerializer,
     VideoSerializer,
 )
 from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
@@ -88,12 +88,10 @@ class PerformancesBlockSerializer(serializers.ModelSerializer):
 
 
 class PersonsBlockSerializer(serializers.ModelSerializer):
-    items = SlugRelatedSerializerField(
+    items = ExtendedPersonSerializer(
+        source="extended_persons",
         many=True,
         read_only=True,
-        source="ordered_persons",
-        slug_field="item",
-        serializer_class=PersonSerializer,
     )
 
     class Meta:
