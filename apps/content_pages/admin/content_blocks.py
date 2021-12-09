@@ -49,8 +49,8 @@ class ExtendedPersonInline(OrderedInline):
 @admin.register(ExtendedPerson)
 class ExtendedPersonAdmin(admin.ModelAdmin):
     list_display = (
-        "block",
         "person",
+        "block",
     )
     list_filter = (
         ("block", admin.RelatedOnlyFieldListFilter),

@@ -14,9 +14,9 @@ class ImageSerializer(serializers.ModelSerializer):
 class RoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
-        exclude = (
-            "created",
-            "modified",
+        fields = (
+            "name",
+            "slug",
         )
 
 
