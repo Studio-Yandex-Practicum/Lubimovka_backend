@@ -30,6 +30,7 @@ class PartnerFactory(factory.django.DjangoModelFactory):
         getter=lambda choice: choice[0],
     )
     url = factory.Faker("url", locale="ru_RU")
+    in_footer_partner = False
 
     @factory.post_generation
     def image(self, created, extracted, **kwargs):
@@ -90,7 +91,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     start_date = factory.Faker("past_date")
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
-    year = factory.Faker("random_int", min=1990, max=2500, step=1)
+    year = factory.Faker("random_int", min=1980, max=2021, step=1)
 
     @factory.post_generation
     def volunteers(self, create, extracted, **kwargs):
