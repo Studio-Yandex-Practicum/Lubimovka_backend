@@ -40,7 +40,9 @@ class BlogPersonFactory(factory.django.DjangoModelFactory):
         model = BlogPerson
 
     person = factory.Iterator(Person.objects.all())
-    role = factory.Iterator(Role.objects.all())
+    role = factory.Iterator(
+        Role.objects.filter(types__role_type="blog_persons_role")
+    )
 
 
 class BlogItemContentFactory(factory.django.DjangoModelFactory):

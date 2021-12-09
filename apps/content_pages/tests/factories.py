@@ -1,10 +1,11 @@
 import factory
 
 from apps.content_pages.models import (
+    ContentPersonRole,
+    ExtendedPerson,
     Image,
     ImagesBlock,
     OrderedImage,
-    OrderedPerson,
     OrderedPlay,
     PersonsBlock,
     PlaysBlock,
@@ -14,7 +15,7 @@ from apps.content_pages.models import (
     Title,
 )
 from apps.core.decorators import restrict_factory
-from apps.core.models import Person
+from apps.core.models import Person, Role
 from apps.library.models import Play
 
 
@@ -70,20 +71,40 @@ class QuoteFactory(factory.django.DjangoModelFactory):
     quote = factory.Faker("text", locale="ru_RU")
 
 
-@restrict_factory({"global": (Person,)})
-class OrderedPersonFactory(factory.django.DjangoModelFactory):
+@restrict_factory({"global": (Role,)})
+class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
     """
-    Create Person with order for block.
-    You should create at least one Person before
+    Creates 'through' object with attrs ExtendedPerson and Role.
+    For using in ExtendedPersonFactory.
+    """
+
+    class Meta:
+        model = ContentPersonRole
+
+    role = factory.Iterator(Role.objects.all())
+
+
+@restrict_factory({"global": (Person,)})
+class ExtendedPersonFactory(factory.django.DjangoModelFactory):
+    """
+    Create Person with order and role for block.
+    You should create at least one Person and Role before
     using factory. Order in factory assume that there are not
     more than 3 ordered persons in a block.
     """
 
     class Meta:
-        model = OrderedPerson
+        model = ExtendedPerson
 
-    item = factory.Iterator(Person.objects.all())
     order = factory.Sequence(lambda n: (n % 3 + 1))
+    person = factory.Iterator(Person.objects.all())
+
+    @factory.post_generation
+    def add_roles(self, created, extracted, **kwargs):
+        """Add two roles to Person."""
+        if not created:
+            return
+        ContentPersonRoleFactory.create_batch(2, extended_person=self)
 
 
 class PersonsBlockFactory(factory.django.DjangoModelFactory):
@@ -101,7 +122,7 @@ class PersonsBlockFactory(factory.django.DjangoModelFactory):
     def add_person(self, created, extracted, **kwargs):
         if not created:
             return
-        OrderedPersonFactory.create_batch(3, block=self)
+        ExtendedPersonFactory.create_batch(3, block=self)
 
 
 @restrict_factory({"global": (Image,)})
