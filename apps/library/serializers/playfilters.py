@@ -1,16 +1,9 @@
 from rest_framework import serializers
 
-from apps.info.models import Festival
 from apps.library.models import ProgramType
 
 
-class YearsLibraryFilterSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Festival
-        fields = ("year",)
-
-
-class ProgramLibraryFilterSerializer(serializers.ModelSerializer):
+class ProgramTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProgramType
         fields = (
@@ -20,5 +13,5 @@ class ProgramLibraryFilterSerializer(serializers.ModelSerializer):
 
 
 class PlayFiltersSerializer(serializers.Serializer):
-    years = YearsLibraryFilterSerializer(many=True)
-    programs = ProgramLibraryFilterSerializer(many=True)
+    years = serializers.ListField(child=serializers.IntegerField())
+    programs = ProgramTypeSerializer(many=True)

@@ -11,9 +11,12 @@ from apps.library.serializers.playfilters import PlayFiltersSerializer
 class PlayFiltersAPIView(APIView):
     @extend_schema(responses=PlayFiltersSerializer)
     def get(self, request):
-        years = Festival.objects.all()
+        years_values_list = Festival.objects.values_list("year", flat=True)
         programs = ProgramType.objects.all()
-        filter_instance = {"programs": programs, "years": years}
+        filter_instance = {
+            "programs": programs,
+            "years": years_values_list,
+        }
         serialized_data = PlayFiltersSerializer(instance=filter_instance).data
         return Response(
             serialized_data,
