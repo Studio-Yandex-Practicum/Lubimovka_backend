@@ -17,7 +17,13 @@ UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION = (
     "title",
     "year",
 )
-ALLOWED_FORMATS_FILE_FOR_PARTICIPATION = ("doc", "docx", "txt", "odt", "pdf")
+ALLOWED_FORMATS_FILE_FOR_PARTICIPATION = (
+    "doc",  #
+    "docx",
+    "txt",
+    "odt",
+    "pdf",
+)
 
 
 class ParticipationApplicationFestival(BaseModel):
