@@ -8,6 +8,7 @@ from apps.info.models import (
     FestivalTeam,
     Partner,
     Place,
+    PressRelease,
     Sponsor,
     Volunteer,
 )
@@ -127,7 +128,25 @@ class PlaceAdmin(admin.ModelAdmin):
     search_fields = ("name", "address")
 
 
+class PressReleaseAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "festival",
+    )
+    list_filter = ("festival",)
+
+
+class PressRealeaseAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "title",
+    )
+    list_filter = ("title",)
+    search_fields = ("title",)
+
+
 admin.site.register(Festival, FestivalAdmin)
+admin.site.register(PressRelease, PressReleaseAdmin)
 admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)

@@ -11,6 +11,7 @@ from apps.info.models import (
     Festival,
     FestivalTeam,
     Partner,
+    PressRelease,
     Sponsor,
     Volunteer,
 )
@@ -128,3 +129,15 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     blog_entries = factory.LazyFunction(
         lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"])
     )
+    press_release_image = factory.django.ImageField(color="blue")
+
+
+@restrict_factory({"global": [Festival]})
+class PressReleaseFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = PressRelease
+        django_get_or_create = ("festival",)
+
+    festival = factory.Iterator(Festival.objects.all())
+    title = factory.Faker("sentence", locale="ru_RU")
+    text = factory.Faker("text", locale="ru_RU")
