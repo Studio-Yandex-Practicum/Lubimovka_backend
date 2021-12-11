@@ -157,7 +157,7 @@ class RoleType(models.Model):
         return str(dict(self.SelectRoleType.choices)[self.role_type])
 
 
-class Settings(BaseModel):
+class Setting(BaseModel):
     class SettingGroup(models.TextChoices):
         EMAIL = "EMAIL", _("Почта")
         MAIN = "MAIN", _("Главная")
@@ -241,51 +241,6 @@ class Settings(BaseModel):
 
     @classmethod
     def get_setting(cls, settings_key):
-        if Settings.objects.filter(settings_key=settings_key).exists():
-            setting = Settings.objects.get(settings_key=settings_key)
+        if Setting.objects.filter(settings_key=settings_key).exists():
+            setting = Setting.objects.get(settings_key=settings_key)
             return setting.value
-
-
-class SettingsGroupManager(models.Manager):
-    def get_queryset(self):
-        return super().get_queryset().filter(group=self.model.name_group)
-
-
-class SettingsEmail(Settings):
-    object = SettingsGroupManager()
-    name_group = "EMAIL"
-
-    class Meta:
-        proxy = True
-        verbose_name = "Настройки почты"
-        verbose_name_plural = "Настройки почты"
-
-
-class SettingsGeneral(Settings):
-    object = SettingsGroupManager()
-    name_group = "GENERAL"
-
-    class Meta:
-        proxy = True
-        verbose_name = "Общие настройки"
-        verbose_name_plural = "Общие настройки"
-
-
-class SettingsMain(Settings):
-    object = SettingsGroupManager()
-    name_group = "MAIN"
-
-    class Meta:
-        proxy = True
-        verbose_name = "Настройки главной страницы"
-        verbose_name_plural = "Настройки главной страницы"
-
-
-class SettingsFirstScreen(Settings):
-    object = SettingsGroupManager()
-    name_group = "FIRST_SCREEN"
-
-    class Meta:
-        proxy = True
-        verbose_name = "Настройки первой страницы"
-        verbose_name_plural = "Настройки первой страницы"
