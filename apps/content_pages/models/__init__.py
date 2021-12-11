@@ -14,10 +14,11 @@ from .contents import AbstractContent, AbstractContentPage
 # isort: split
 
 from .content_blocks import (
+    ContentPersonRole,
+    ExtendedPerson,
     ImagesBlock,
     OrderedImage,
     OrderedPerformance,
-    OrderedPerson,
     OrderedPlay,
     OrderedVideo,
     PerformancesBlock,
@@ -30,6 +31,8 @@ __all__ = (
     AbstractItemWithTitle,
     AbstractContent,
     AbstractContentPage,
+    ContentPersonRole,
+    ExtendedPerson,
     Preamble,
     Quote,
     Image,
@@ -37,7 +40,6 @@ __all__ = (
     Link,
     OrderedImage,
     OrderedPerformance,
-    OrderedPerson,
     OrderedPlay,
     OrderedVideo,
     PerformancesBlock,
