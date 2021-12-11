@@ -17,7 +17,7 @@ class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
 
 @admin.register(Role)
 class RoleAdmin(admin.ModelAdmin):
-    list_dispay = (
+    list_display = (
         "name",
         "slug",
     )
