@@ -2,9 +2,9 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.articles.tests.blog_factory import BlogFactory
-from apps.articles.tests.news_factory import NewsFactory
-from apps.articles.tests.project_factory import ProjectFactory
+from apps.articles.tests.factories.blog_factory import BlogFactory
+from apps.articles.tests.factories.news_factory import NewsFactory
+from apps.articles.tests.factories.project_factory import ProjectFactory
 
 
 def notification(command, objects, text):
@@ -23,17 +23,11 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:
-            blogs = []
             blog_items = BlogFactory.complex_create(5)
-            blogs.extend(blog_items)
-            notification(self, blogs, "блогов")
-            news = []
+            notification(self, blog_items, "блогов")
             news_items = NewsFactory.complex_create(5)
-            news.extend(news_items)
-            notification(self, news, "новостей")
-            projects = []
+            notification(self, news_items, "новостей")
             projects_item = ProjectFactory.complex_create(5)
-            projects.extend(projects_item)
-            notification(self, projects, "проектов")
+            notification(self, projects_item, "проектов")
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))
