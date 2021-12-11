@@ -2,8 +2,7 @@ import os  # noqa
 
 from .base import *  # noqa
 
-# env_file = os.path.join(ROOT_DIR, ".env") # noqa
-# environ.Env.read_env(env_file) # noqa
+environ.Env.read_env()
 
 
 # GENERAL
@@ -41,16 +40,6 @@ INTERNAL_IPS = [
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
 INSTALLED_APPS += ["django_extensions"]  # noqa: F405
 
-# EMAIL
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env(
-    "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.console.EmailBackend",
-)
-
-# Your stuff...
-# ------------------------------------------------------------------------------
 
 # Use PostgreSQL
 # ------------------------------------------------------------------------------

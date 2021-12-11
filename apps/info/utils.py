@@ -1,7 +1,10 @@
+from django.conf import settings
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 
-from apps.core.models import Settings
+EMAIL_SUBJECT_PREFIX = settings.EMAIL_SUBJECT_PREFIX
+SEND_FROM_QUESTION_EMAIL = settings.SEND_FROM_QUESTION_EMAIL
+SEND_TO_QUESTION_EMAIL = settings.SEND_TO_QUESTION_EMAIL
 
 
 def send_question(serializer):
@@ -14,11 +17,10 @@ def send_question(serializer):
         },
     )
     message = EmailMessage(
-        Settings.get_setting("email_subject_for_question"),
-        html_message,
-        to=[
-            Settings.get_setting("mail_send_to"),
-        ],
+        subject=EMAIL_SUBJECT_PREFIX,
+        from_email=SEND_FROM_QUESTION_EMAIL,
+        body=html_message,
+        to=(SEND_TO_QUESTION_EMAIL,),
     )
     message.content_subtype = "html"
     message.send()

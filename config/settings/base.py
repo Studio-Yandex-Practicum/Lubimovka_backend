@@ -8,6 +8,7 @@ import environ
 
 env = environ.Env()
 
+
 # Root folder of the project
 # ------------------------------------------------------------------------------
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -46,6 +47,7 @@ THIRD_PARTY_APPS = [
     "markdownx",
     "drf_multiple_model",
     "ckeditor",
+    "anymail",
 ]
 LOCAL_APPS = [
     "apps.users",
@@ -188,11 +190,41 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.smtp.EmailBackend",
+    default="django.core.mail.backends.console.EmailBackend",
+)
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#server-email
+SERVER_EMAIL = env(
+    "SERVER_EMAIL",
+    default="service@lyubimovka.ru",
+)
+DEFAULT_FROM_EMAIL = env(
+    "DEFAULT_FROM_EMAIL",
+    default="lyubimovka@lyubimovka.ru",
+)
+# This emails are use in info app for questions
+SEND_FROM_QUESTION_EMAIL = env(
+    "SEND_FROM_QUESTION_EMAIL",
+    default="questions@lyubimovka.ru",
+)
+SEND_TO_QUESTION_EMAIL = env(
+    "SEND_TO_QUESTION_EMAIL",
+    default="admin@lyubimovka.ru",
+)
+# https://docs.djangoproject.com/en/dev/ref/settings/#email-subject-prefix
+EMAIL_SUBJECT_PREFIX = env(
+    "EMAIL_SUBJECT_PREFIX",
+    default="[lyubimovka]",
 )
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
+
+# https://anymail.readthedocs.io/en/stable/esps/mailjet/#settings
+ANYMAIL = {
+    "MAILJET_API_KEY": env("MAILJET_API_KEY", default=None),
+    "MAILJET_SECRET_KEY": env("MAILJET_SECRET_KEY", default=None),
+}
 
 # See markdownx docs https://neutronx.github.io/django-markdownx/
 MARKDOWNX_MARKDOWN_EXTENSIONS = ("markdown.extensions.extra",)
