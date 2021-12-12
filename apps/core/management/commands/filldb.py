@@ -7,6 +7,7 @@ from apps.info.tests.factories import (
     FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
+    PressReleaseFactory,
     SponsorFactory,
     VolunteerFactory,
 )
@@ -30,6 +31,9 @@ class Command(BaseCommand):
         " - Команды фестиваля"
         " - Пользователи-админы"
         " - Пользователи-редакторы"
+        " - Изображения для контента"
+        " - Программы"
+        " - Пьесы"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -56,6 +60,13 @@ class Command(BaseCommand):
             partners = PartnerFactory.create_batch(30)
             notification(self, partners, "партнёров")
 
+            in_footer_partners = PartnerFactory.create_batch(
+                5,
+                type="general",
+                in_footer_partner=True,
+            )
+            notification(self, in_footer_partners, "партнёров в футере")
+
             sponsors = SponsorFactory.create_batch(50)
             notification(self, sponsors, "попечителей")
 
@@ -70,6 +81,9 @@ class Command(BaseCommand):
 
             festivals = FestivalFactory.create_batch(10)
             notification(self, festivals, "фестивалей")
+
+            press_releases = PressReleaseFactory.create_batch(10)
+            notification(self, press_releases, "пресс-релизов")
 
             users_editors = []
             users_admins = []
@@ -86,6 +100,5 @@ class Command(BaseCommand):
                 )
             notification(self, users_editors, "редакторов")
             notification(self, users_admins, "админов")
-
         except CommandError:
-            self.stdout.write(self.style.ERROR("Ошибка наполения БД"))
+            self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))
