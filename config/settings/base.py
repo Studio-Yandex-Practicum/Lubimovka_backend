@@ -8,6 +8,7 @@ import environ
 
 env = environ.Env()
 
+
 # Root folder of the project
 # ------------------------------------------------------------------------------
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -46,6 +47,7 @@ THIRD_PARTY_APPS = [
     "markdownx",
     "drf_multiple_model",
     "ckeditor",
+    "anymail",
 ]
 LOCAL_APPS = [
     "apps.users",
@@ -188,7 +190,7 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.smtp.EmailBackend",
+    default="django.core.mail.backends.console.EmailBackend",
 )
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
