@@ -15,6 +15,7 @@ from apps.library.tests.factories import (
     MasterClassFactory,
     ParticipationApplicationFestivalFactory,
     PerformanceFactory,
+    PlayFactory,
     ProgramFactory,
     ReadingFactory,
 )
@@ -40,14 +41,8 @@ class Command(BaseCommand):
         " - Пользователи-редакторы"
         " - Программы"
         " - Авторы"
-        " - Ссылки на сторонние ресурсы"
         " - Пьесы"
-        " - Достижения"
-        " - Ссылки на социальные сети"
-        " - Другие пьесы"
         " - Спектакли"
-        " - Отзывы на спектакли"
-        " - Медиа отзывы на спектакли"
         " - Мастер-классы"
         " - Читки"
         " - Члены команды читок, спектаклей и мастер-классов"
@@ -92,13 +87,8 @@ class Command(BaseCommand):
             festivals = FestivalFactory.create_batch(10)
             notification(self, festivals, "фестивалей")
 
-            programtypes = ProgramFactory.create_batch(3)
-            notification(self, programtypes, "программ")
-
             users_editors = []
             users_admins = []
-            authors = []
-            perfomances = []
             for index in range(1, 6):
                 users_editors.append(
                     UserFactory.create(
@@ -110,26 +100,24 @@ class Command(BaseCommand):
                         username=f"admin_{index}", add_role_admin=True
                     )
                 )
-                authors.append(AuthorFactory.complex_create())
-                perfomances.append(PerformanceFactory.complex_create())
-
             notification(self, users_editors, "редакторов")
             notification(self, users_admins, "админов")
-            notification(
-                self,
-                authors,
-                "{}, {}, {}, {}, {}, {}".format(
-                    "авторов",
-                    "пьес",
-                    "достижений",
-                    "ссылок на социальные сети",
-                    "ссылок на сторонние ресурсы",
-                    "других пьес",
-                ),
-            )
-            notification(
-                self, perfomances, "спектаклей, отзывов и медиа отзывов"
-            )
+
+            # <Library factories>
+
+            programtypes = ProgramFactory.create_batch(3)
+            notification(self, programtypes, "программ")
+
+            plays = PlayFactory.create_batch(10)
+            notification(self, plays, "пьес")
+
+            perfomances = [
+                PerformanceFactory.complex_create() for _ in range(6)
+            ]
+            notification(self, perfomances, "спектаклей")
+
+            authors = [AuthorFactory.complex_create() for _ in range(15)]
+            notification(self, authors, "авторов")
 
             masterclasses = MasterClassFactory.create_batch(10)
             notification(self, masterclasses, "мастер-классов")
