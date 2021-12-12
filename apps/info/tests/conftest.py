@@ -22,9 +22,7 @@ QUESTIONS_URL = reverse("questions")
 
 @pytest.fixture
 def sponsors():
-    return list(
-        SponsorFactory(person=PersonFactory(add_image=True)) for _ in range(5)
-    )
+    return list(SponsorFactory(person=PersonFactory(add_image=True)) for _ in range(5))
 
 
 @pytest.fixture
@@ -34,10 +32,7 @@ def sponsor():
 
 @pytest.fixture
 def teams():
-    return list(
-        FestivalTeamFactory(person=PersonFactory(add_image=True))
-        for _ in range(5)
-    )
+    return list(FestivalTeamFactory(person=PersonFactory(add_image=True)) for _ in range(5))
 
 
 @pytest.fixture
@@ -47,10 +42,7 @@ def team():
 
 @pytest.fixture
 def volunteers():
-    return list(
-        VolunteerFactory(person=PersonFactory(add_image=True))
-        for _ in range(5)
-    )
+    return list(VolunteerFactory(person=PersonFactory(add_image=True)) for _ in range(5))
 
 
 @pytest.fixture

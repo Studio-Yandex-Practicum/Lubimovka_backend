@@ -1,8 +1,4 @@
-from drf_spectacular.utils import (
-    OpenApiExample,
-    OpenApiParameter,
-    extend_schema,
-)
+from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 
 
 class PubDateSchemaMixin:
@@ -20,8 +16,7 @@ class PubDateSchemaMixin:
                     OpenApiExample(
                         "Example 1",
                         summary="Ноябрь",
-                        description="Для фильтрации по месяцу нужно "
-                        "указать номер месяца от 1 до 12",
+                        description="Для фильтрации по месяцу нужно " "указать номер месяца от 1 до 12",
                         value="11",
                     ),
                 ],

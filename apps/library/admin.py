@@ -185,9 +185,7 @@ class TeamMemberInline(admin.TabularInline):
         }
         if db_field.name == "role":
             if self.parent_model in LIMIT_ROLES.keys():
-                kwargs["queryset"] = Role.objects.filter(
-                    types__role_type=LIMIT_ROLES[self.parent_model]
-                )
+                kwargs["queryset"] = Role.objects.filter(types__role_type=LIMIT_ROLES[self.parent_model])
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 

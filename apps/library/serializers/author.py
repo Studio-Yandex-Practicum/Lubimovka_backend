@@ -35,19 +35,11 @@ class SocialNetworkSerializer(serializers.ModelSerializer):
 
 
 class AuthorRetrieveSerializer(serializers.ModelSerializer):
-    name = serializers.SlugRelatedField(
-        source="person", slug_field="full_name", read_only=True
-    )
-    city = serializers.SlugRelatedField(
-        source="person", slug_field="city", read_only=True
-    )
-    achievements = serializers.SlugRelatedField(
-        slug_field="tag", read_only=True, many=True
-    )
+    name = serializers.SlugRelatedField(source="person", slug_field="full_name", read_only=True)
+    city = serializers.SlugRelatedField(source="person", slug_field="city", read_only=True)
+    achievements = serializers.SlugRelatedField(slug_field="tag", read_only=True, many=True)
     social_networks = SocialNetworkSerializer(many=True)
-    email = serializers.SlugRelatedField(
-        source="person", slug_field="email", read_only=True
-    )
+    email = serializers.SlugRelatedField(source="person", slug_field="email", read_only=True)
     other_links = OtherLinkSerializer(many=True)
     plays = PlaySerializer(many=True)
     other_plays = OtherPlayLinksSerializer(many=True)
@@ -72,9 +64,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
 
 
 class AuthorListSerializer(serializers.ModelSerializer):
-    name = serializers.SlugRelatedField(
-        source="person", slug_field="reversed_full_name", read_only=True
-    )
+    name = serializers.SlugRelatedField(source="person", slug_field="reversed_full_name", read_only=True)
 
     class Meta:
         model = Author
