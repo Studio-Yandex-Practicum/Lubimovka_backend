@@ -59,6 +59,6 @@ DATABASES = {
         "USER": env("POSTGRES_USER", default="lyubimovka"),
         "PASSWORD": env("POSTGRES_PASSWORD", default="pg_password"),
         "HOST": env("POSTGRES_HOST", default="localhost"),
-        "PORT": env("POSTGRES_PORT", default="5432"),
+        "PORT": env("POSTGRES_PORT", default="5431"),
     }
 }

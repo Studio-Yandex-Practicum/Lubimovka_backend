@@ -16,10 +16,11 @@ class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
 
     def get_querylist(self):
         """
-        Возвращает переменную querylist, являющуюся списком/кортежем словарей,
-        содержащих, как минимум ключи `queryset` и `serializer_class`
-        Переопределение метода get_queryList позволяет вам делать, например,
-        добавление поисковых запросов используя url kwargs и т.п.
+        Возвращает переменную querylist.
+
+        querylist является списком/кортежем словарей,
+        содержащих, как минимум ключи `queryset` и `serializer_class`. Подробнее смотри документацию пакета.
+        См. https://django-rest-multiple-models.readthedocs.io/en/latest/filtering.html#override-get-querylist.
         """
         q = self.request.query_params.get("q", "")
         if q:

@@ -157,7 +157,7 @@ class Settings(BaseModel):
     description = models.TextField(
         max_length=250,
         verbose_name="Описание настройки",
-        null=True,
+        blank=True,
     )
     boolean = models.BooleanField(
         default=False,
