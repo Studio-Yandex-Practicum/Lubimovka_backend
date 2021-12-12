@@ -39,3 +39,19 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 DJANGO_SUPERUSER_USERNAME = env("DJANGO_SUPERUSER_USERNAME")
 DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL")
 DJANGO_SUPERUSER_PASSWORD = env("DJANGO_SUPERUSER_PASSWORD")
+
+# https://anymail.readthedocs.io/en/stable/esps/mailjet/#settings
+ANYMAIL = {
+    "MAILJET_API_KEY": env("MAILJET_API_KEY", default=None),
+    "MAILJET_SECRET_KEY": env("MAILJET_SECRET_KEY", default=None),
+}
+
+# https://anymail.readthedocs.io/en/stable/installation/?highlight=SERVER_EMAIL#configuring-django-s-email-backend
+SERVER_EMAIL = env(
+    "SERVER_EMAIL",
+    default="service@lyubimovka.ru",
+)
+DEFAULT_FROM_EMAIL = env(
+    "DEFAULT_FROM_EMAIL",
+    default="lyubimovka@lyubimovka.ru",
+)

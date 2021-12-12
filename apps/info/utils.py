@@ -1,11 +1,6 @@
-from django.conf import settings
 from django.core.mail import EmailMessage
 
-from apps.core.models import Settings
-
-EMAIL_SUBJECT_PREFIX = settings.EMAIL_SUBJECT_PREFIX
-SEND_FROM_QUESTION_EMAIL = settings.SEND_FROM_QUESTION_EMAIL
-SEND_TO_QUESTION_EMAIL = settings.SEND_TO_QUESTION_EMAIL
+from apps.core.models import Setting
 
 
 def send_question(serializer):
@@ -16,12 +11,12 @@ def send_question(serializer):
     """
 
     message = EmailMessage(
-        subject=Settings.get_setting("email_subject_for_question"),
-        from_email=Settings.get_setting("email_send_from"),
-        to=Settings.get_setting("mail_send_to"),
+        subject=Setting.get_setting("email_subject_for_question"),
+        from_email=Setting.get_setting("email_send_from"),
+        to=(Setting.get_setting("email_send_to"),),
     )
 
-    message.template_id = (Settings.get_setting("email_subject_for_question"),)
+    message.template_id = Setting.get_setting("email_question_template_id")
     message.merge_global_data = {
         "question": serializer.validated_data["question"],
         "author_name": serializer.validated_data["author_name"],
