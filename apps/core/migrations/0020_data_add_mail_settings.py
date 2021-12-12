@@ -3,25 +3,25 @@ from django.db import migrations
 
 def add_settings(apps, schema_editor):
 
-    Settings = apps.get_model("core", "Setting")
+    Setting = apps.get_model("core", "Setting")
 
-    Settings.objects.filter(settings_key="mail_send_to").delete()
+    Setting.objects.filter(settings_key="mail_send_to").delete()
 
-    Settings.objects.create(
+    Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_question_template_id",
         text="3420599",
         description="Id шаблона письма с вопросом",
     )
-    Settings.objects.create(
+    Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_send_from",
         text="questions@lyubimovka.ru",
         description="Почта для отправки вопроса",
     )
-    Settings.objects.create(
+    Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_send_to",
