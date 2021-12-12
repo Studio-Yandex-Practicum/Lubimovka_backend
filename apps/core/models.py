@@ -157,7 +157,13 @@ class RoleType(models.Model):
         return str(dict(self.SelectRoleType.choices)[self.role_type])
 
 
-class Settings(BaseModel):
+class Setting(BaseModel):
+    class SettingGroup(models.TextChoices):
+        EMAIL = "EMAIL", _("Почта")
+        MAIN = "MAIN", _("Главная")
+        FIRST_SCREEN = "FIRST_SCREEN", _("Первая страница")
+        GENERAL = "GENERAL", _("Общие")
+
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")
         TEXT = "TEXT", _("Текст")
@@ -173,6 +179,12 @@ class Settings(BaseModel):
         SettingFieldType.EMAIL: "email",
     }
 
+    group = models.CharField(
+        choices=SettingGroup.choices,
+        default="GENERAL",
+        max_length=50,
+        verbose_name="Группа настроек",
+    )
     field_type = models.CharField(
         choices=SettingFieldType.choices,
         max_length=40,
@@ -213,6 +225,7 @@ class Settings(BaseModel):
     )
 
     class Meta:
+        ordering = ("group", "settings_key")
         verbose_name = "Общие настройки"
         verbose_name_plural = "Общие настройки"
 
@@ -228,6 +241,6 @@ class Settings(BaseModel):
 
     @classmethod
     def get_setting(cls, settings_key):
-        if Settings.objects.filter(settings_key=settings_key).exists():
-            setting = Settings.objects.get(settings_key=settings_key)
+        if Setting.objects.filter(settings_key=settings_key).exists():
+            setting = Setting.objects.get(settings_key=settings_key)
             return setting.value
