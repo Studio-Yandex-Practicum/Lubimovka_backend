@@ -46,3 +46,28 @@
     ```
 2. У модели всегда должен присутствовать метод `__str__`
 3. У каждой модели должно быть `verbose_name` и `verbose_name_plural`
+
+
+### Правила для регистрации моделей в админке
+1. Для регистрации моделей в админке используем декоратор ([документация](https://docs.djangoproject.com/en/3.2/ref/contrib/admin/#the-register-decorator)) \
+    T.e **так плохо**
+    ```python
+    from django.contrib import admin
+    from .models import Author
+
+
+    class AuthorAdmin(admin.ModelAdmin):
+        pass
+
+    admin.site.register(Author, AuthorAdmin)
+    ```
+    Так **хорошо**
+    ```python
+    from django.contrib import admin
+    from .models import Author
+
+
+    @admin.register(Author)
+    class AuthorAdmin(admin.ModelAdmin):
+        pass
+    ```

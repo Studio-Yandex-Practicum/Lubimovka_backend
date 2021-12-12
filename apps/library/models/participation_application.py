@@ -7,6 +7,24 @@ from apps.core.utilities import slugify
 from apps.library.utilities import generate_class_name_path
 from apps.library.validators import year_validator
 
+UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION = (
+    "first_name",
+    "last_name",
+    "birthday",
+    "city",
+    "phone_number",
+    "email",
+    "title",
+    "year",
+)
+ALLOWED_FORMATS_FILE_FOR_PARTICIPATION = (
+    "doc",  #
+    "docx",
+    "txt",
+    "odt",
+    "pdf",
+)
+
 
 class ParticipationApplicationFestival(BaseModel):
     """Заявки на участие в фестивале."""
@@ -26,7 +44,9 @@ class ParticipationApplicationFestival(BaseModel):
         max_length=50,
         verbose_name="Город проживания",
     )
-    phone_number = PhoneNumberField()
+    phone_number = PhoneNumberField(
+        help_text="Номер телефона указывается в формате +7"
+    )
     email = models.EmailField(
         max_length=100,
         verbose_name="Электронная почта",
@@ -41,10 +61,12 @@ class ParticipationApplicationFestival(BaseModel):
     )
     file = models.FileField(
         validators=(
-            FileExtensionValidator(["doc", "docx", "txt", "odt", "pdf"]),
+            FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PARTICIPATION),
         ),
         verbose_name="Файл",
         upload_to=generate_class_name_path,
+        help_text=f"Файл в одно из форматов "
+        f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
     )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
@@ -59,16 +81,7 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name = "Заявление на участие"
         constraints = (
             models.UniqueConstraint(
-                fields=(
-                    "first_name",
-                    "last_name",
-                    "birthday",
-                    "city",
-                    "phone_number",
-                    "email",
-                    "title",
-                    "year",
-                ),
+                fields=UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION,
                 name="unique_application",
             ),
         )

@@ -21,6 +21,7 @@ class BlogPerson(BaseModel):
     role = models.ForeignKey(
         Role,
         on_delete=models.RESTRICT,
+        limit_choices_to={"types__role_type": "blog_persons_role"},
         related_name="blog_persons",
         verbose_name="Роль в соавторстве",
     )

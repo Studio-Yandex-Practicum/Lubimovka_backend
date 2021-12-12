@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
 from django.core.validators import (
     MaxValueValidator,
@@ -36,10 +37,18 @@ class Partner(BaseModel):
         verbose_name="Логотип",
         help_text="Загрузите логотип партнёра",
     )
+    in_footer_partner = models.BooleanField(
+        default=False,
+        verbose_name="Отображение внизу страницы",
+        help_text=(
+            "Поставьте галочку, чтобы показать логотип партнёра внизу страницы"
+        ),
+    )
 
     class Meta:
         verbose_name = "Партнер"
         verbose_name_plural = "Партнеры"
+        ordering = ("type",)
 
     def __str__(self):
         return f"{self.name} - {self.type}"
@@ -236,6 +245,9 @@ class Festival(BaseModel):
         max_length=10,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
     )  # При изменении - скорректировать фабрику в части создания данного поля
+    press_release_image = models.ImageField(
+        verbose_name="Изображение для страницы пресс-релизов"
+    )
 
     class Meta:
         verbose_name = "Фестиваль"
@@ -271,3 +283,24 @@ class Question(BaseModel):
 
     def __str__(self):
         return f"{self.name} {self.question}"
+
+
+class PressRelease(BaseModel):
+    title = models.CharField(
+        max_length=500, unique=True, verbose_name="Заголовок"
+    )
+    text = RichTextField(verbose_name="Текст")
+    festival = models.OneToOneField(
+        Festival,
+        on_delete=models.CASCADE,
+        related_name="press_releases",
+        verbose_name="Фестиваль",
+    )
+
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "Пресс-релиз"
+        verbose_name_plural = "Пресс-релизы"
+
+    def __str__(self):
+        return f"Пресс-релиз {self.festival.year} года"

@@ -1,30 +1,36 @@
 from django.urls import include, path
+from rest_framework.routers import DefaultRouter
 
 from apps.info.views import (
-    FestivalTeamsViewSet,
-    FestivalViewSet,
-    PartnersViewSet,
-    QuestionCreateAPI,
-    SponsorViewSet,
-    VolunteersViewSet,
-    festivals_years,
+    FestivalAPIView,
+    FestivalTeamsAPIView,
+    FestivalYearsAPIView,
+    PartnersAPIView,
+    PressReleaseViewSet,
+    QuestionCreateAPIView,
+    SponsorsAPIView,
+    VolunteersAPIView,
 )
 from apps.static_pages.views import StaticPagesView
+
+router = DefaultRouter()
+router.register("", PressReleaseViewSet, basename="press_release")
+
 
 about_festival_urls = [
     path(
         "team/",
-        FestivalTeamsViewSet.as_view(),
+        FestivalTeamsAPIView.as_view(),
         name="festival-teams",
     ),
     path(
         "sponsors/",
-        SponsorViewSet.as_view(),
+        SponsorsAPIView.as_view(),
         name="sponsors",
     ),
     path(
         "volunteers/",
-        VolunteersViewSet.as_view(),
+        VolunteersAPIView.as_view(),
         name="volunteers",
     ),
     path(
@@ -37,12 +43,12 @@ about_festival_urls = [
 info_urls = [
     path(
         "festivals/years/",
-        festivals_years,
-        name="festivals_years",
+        FestivalYearsAPIView.as_view(),
+        name="festivals-years",
     ),
     path(
         "festivals/<int:year>/",
-        FestivalViewSet.as_view(),
+        FestivalAPIView.as_view(),
         name="festivals",
     ),
     path(
@@ -51,14 +57,15 @@ info_urls = [
     ),
     path(
         "partners/",
-        PartnersViewSet.as_view(),
+        PartnersAPIView.as_view(),
         name="partners",
     ),
     path(
         "questions/",
-        QuestionCreateAPI.as_view(),
+        QuestionCreateAPIView.as_view(),
         name="questions",
     ),
+    path("press-releases/", include(router.urls)),
 ]
 
 app_prefix = [

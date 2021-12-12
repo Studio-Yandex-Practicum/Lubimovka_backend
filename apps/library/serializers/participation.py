@@ -1,10 +1,19 @@
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from apps.library.models import ParticipationApplicationFestival
+from apps.library.models.participation_application import (
+    UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION,
+)
 
 
 class ParticipationSerializer(serializers.ModelSerializer):
+    year = serializers.IntegerField(
+        min_value=1900,
+        max_value=timezone.now().year,
+    )
+
     class Meta:
         model = ParticipationApplicationFestival
         exclude = [
@@ -13,15 +22,6 @@ class ParticipationSerializer(serializers.ModelSerializer):
         validators = [
             UniqueTogetherValidator(
                 queryset=ParticipationApplicationFestival.objects.all(),
-                fields=[
-                    "first_name",
-                    "last_name",
-                    "birthday",
-                    "city",
-                    "phone_number",
-                    "email",
-                    "title",
-                    "year",
-                ],
+                fields=UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION,
             )
         ]

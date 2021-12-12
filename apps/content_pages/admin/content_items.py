@@ -12,6 +12,7 @@ from apps.content_pages.models import (
 from apps.core.mixins import AdminImagePreview
 
 
+@admin.register(Image)
 class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
         "id",
@@ -20,7 +21,6 @@ class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
-admin.site.register(Image, ImageAdmin)
 admin.site.register(Preamble)
 admin.site.register(Link)
 admin.site.register(Quote)

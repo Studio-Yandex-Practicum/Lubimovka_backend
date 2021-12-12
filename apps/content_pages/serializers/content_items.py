@@ -9,8 +9,46 @@ from apps.content_pages.models import (
     Title,
     Video,
 )
-from apps.core.models import Person
+from apps.core.serializers import RoleSerializer
 from apps.library.models import Performance
+
+
+class ExtendedPersonSerializer(serializers.Serializer):
+    id = serializers.SlugRelatedField(
+        source="person",
+        slug_field="id",
+        read_only=True,
+    )
+    first_name = serializers.SlugRelatedField(
+        source="person",
+        slug_field="first_name",
+        read_only=True,
+    )
+    last_name = serializers.SlugRelatedField(
+        source="person",
+        slug_field="last_name",
+        read_only=True,
+    )
+    middle_name = serializers.SlugRelatedField(
+        source="person",
+        slug_field="middle_name",
+        read_only=True,
+    )
+    city = serializers.SlugRelatedField(
+        source="person",
+        slug_field="city",
+        read_only=True,
+    )
+    email = serializers.SlugRelatedField(
+        source="person",
+        slug_field="email",
+        read_only=True,
+    )
+    image = serializers.ImageField(
+        source="person.image",
+        read_only=True,
+    )
+    roles = RoleSerializer(many=True)
 
 
 class ImageSerializer(serializers.ModelSerializer):
@@ -35,15 +73,6 @@ class LinkSerializer(serializers.ModelSerializer):
 class PerformanceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Performance
-        exclude = (
-            "created",
-            "modified",
-        )
-
-
-class PersonSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Person
         exclude = (
             "created",
             "modified",
