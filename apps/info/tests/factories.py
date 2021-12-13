@@ -7,14 +7,7 @@ from faker import Faker
 
 from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person
-from apps.info.models import (
-    Festival,
-    FestivalTeam,
-    Partner,
-    PressRelease,
-    Sponsor,
-    Volunteer,
-)
+from apps.info.models import Festival, FestivalTeam, Partner, PressRelease, Sponsor, Volunteer
 
 fake = Faker(locale="en_US")
 
@@ -46,9 +39,7 @@ class SponsorFactory(factory.django.DjangoModelFactory):
         model = Sponsor
         django_get_or_create = ["person"]
 
-    person = factory.Iterator(
-        Person.objects.filter(city__exact="").exclude(image__exact="")
-    )
+    person = factory.Iterator(Person.objects.filter(city__exact="").exclude(image__exact=""))
     position = factory.Faker("job", locale="ru_RU")
 
 
@@ -58,9 +49,7 @@ class VolunteerFactory(factory.django.DjangoModelFactory):
         model = Volunteer
         django_get_or_create = ["person"]
 
-    person = factory.Iterator(
-        Person.objects.filter(email__isnull=False).exclude(image__exact="")
-    )
+    person = factory.Iterator(Person.objects.filter(email__isnull=False).exclude(image__exact=""))
     year = factory.Faker("random_int", min=2018, max=2021, step=1)
     review_title = factory.Faker("text", max_nb_chars=50, locale="ru_RU")
     review_text = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
@@ -71,11 +60,7 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
         model = FestivalTeam
         django_get_or_create = ["person", "team"]
 
-    person = factory.Iterator(
-        Person.objects.filter(city__isnull=False, email__isnull=False).exclude(
-            image__exact=""
-        )
-    )
+    person = factory.Iterator(Person.objects.filter(city__isnull=False, email__isnull=False).exclude(image__exact=""))
     team = factory.Iterator(
         FestivalTeam.TeamType.choices,
         getter=lambda choice: choice[0],
@@ -126,9 +111,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     video_link = factory.Faker("url", locale="ru_RU")
     # blog_entries необходимо изменить после
     # корректировки поля модели фестиваля
-    blog_entries = factory.LazyFunction(
-        lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"])
-    )
+    blog_entries = factory.LazyFunction(lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"]))
     press_release_image = factory.django.ImageField(color="blue")
 
 

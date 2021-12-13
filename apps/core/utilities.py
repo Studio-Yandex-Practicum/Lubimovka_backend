@@ -4,6 +4,4 @@ from apps.core.constants import ALPHABET
 
 
 def slugify(name):
-    return django_slugify(
-        "".join(ALPHABET.get(char, char) for char in name.lower())
-    )
+    return django_slugify("".join(ALPHABET.get(char, char) for char in name.lower()))

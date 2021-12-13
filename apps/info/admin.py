@@ -3,20 +3,11 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person
-from apps.info.models import (
-    Festival,
-    FestivalTeam,
-    Partner,
-    Place,
-    PressRelease,
-    Sponsor,
-    Volunteer,
-)
+from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
 
 
 class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
-    """Class for registration Partner model in admin panel and expanded
-    with JS script.
+    """Class for registration Partner model in admin panel and expanded with JS script.
 
     There are used two classes in fieldsets: `predefined` and `included`.
     These classes are not in the documentation and this names are invented
@@ -60,13 +51,11 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
 
     @admin.display(description="Ссылка на сайт")
     def get_partner_url(self, obj):
-        """Makes the link to the partner's website clickable."""
+        """Make the link to the partner's website clickable."""
         return format_html("<a href='{url}'>{url}</a>", url=obj.url)
 
     class Media:
-        """Adds a script that displays the field ```in_footer_partner```
-        if the general partner is selected.
-        """
+        """Adds a script that displays the field ```in_footer_partner``` if the general partner is selected."""
 
         js = ("admin/js/PartnerInFooter.js",)
 

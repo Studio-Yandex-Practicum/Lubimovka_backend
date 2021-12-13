@@ -71,7 +71,7 @@ class BlogItemDetailedSerializer(
 
     @extend_schema_field(BlogItemBaseSerializer(many=True))
     def get_other_blogs(self, obj):
-        """Returns latest four `BlogItem` except the object itself."""
+        """Return latest four `BlogItem` except the object itself."""
         serialized_data = get_latest_four_published_items_data(
             serializer_class=BlogItemListSerializer,
             object=obj,
@@ -109,7 +109,6 @@ class BlogItemDetailedSerializer(
             blog_persons, not only related to exact blog_item).
             3. Return serialized data
         """
-
         blog_item = obj
         blog_roles = blog_item.roles.distinct()
         blog_persons = blog_item.blog_persons.all()

@@ -4,7 +4,7 @@ from apps.core.models import Image, Person, Role
 
 
 class ImageSerializer(serializers.ModelSerializer):
-    """Сериализатор Изображения"""
+    """Сериализатор Изображения."""
 
     class Meta:
         model = Image

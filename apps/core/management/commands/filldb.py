@@ -23,9 +23,7 @@ from apps.library.tests.factories import (
 
 
 def notification(command, objects, text):
-    command.stdout.write(
-        command.style.SUCCESS(f"{len(objects)} {text} успешно создано.")
-    )
+    command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создано."))
 
 
 class Command(BaseCommand):
@@ -102,16 +100,8 @@ class Command(BaseCommand):
             users_editors = []
             users_admins = []
             for index in range(1, 6):
-                users_editors.append(
-                    UserFactory.create(
-                        username=f"editor_{index}", add_role_editor=True
-                    )
-                )
-                users_admins.append(
-                    UserFactory.create(
-                        username=f"admin_{index}", add_role_admin=True
-                    )
-                )
+                users_editors.append(UserFactory.create(username=f"editor_{index}", add_role_editor=True))
+                users_admins.append(UserFactory.create(username=f"admin_{index}", add_role_admin=True))
             notification(self, users_editors, "редакторов")
             notification(self, users_admins, "админов")
 
@@ -123,9 +113,7 @@ class Command(BaseCommand):
             plays = PlayFactory.create_batch(10)
             notification(self, plays, "пьес")
 
-            perfomances = [
-                PerformanceFactory.complex_create() for _ in range(6)
-            ]
+            perfomances = [PerformanceFactory.complex_create() for _ in range(6)]
             notification(self, perfomances, "спектаклей")
 
             authors = [AuthorFactory.complex_create() for _ in range(15)]
@@ -137,9 +125,7 @@ class Command(BaseCommand):
             readings = ReadingFactory.create_batch(10)
             notification(self, readings, "читок")
 
-            participations = (
-                ParticipationApplicationFestivalFactory.create_batch(5)
-            )
+            participations = ParticipationApplicationFestivalFactory.create_batch(5)
             notification(self, participations, "заявок на участие в фестивале")
 
         except CommandError:

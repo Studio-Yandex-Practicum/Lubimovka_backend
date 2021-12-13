@@ -6,8 +6,10 @@ from apps.core.utilities import slugify
 
 
 class BaseModel(models.Model):
-    """An abstract base class model that provides self-updating ``created`` and
-    ``modified`` fields.
+    """
+    An abstract base class model.
+
+    It provides self-updating ``created`` and ``modified`` fields.
     """
 
     created = models.DateTimeField(auto_now_add=True)
@@ -198,7 +200,7 @@ class Setting(BaseModel):
     description = models.TextField(
         max_length=250,
         verbose_name="Описание настройки",
-        null=True,
+        blank=True,
     )
     boolean = models.BooleanField(
         default=False,
