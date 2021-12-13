@@ -5,7 +5,7 @@ from apps.library.models import Play
 from apps.library.serializers import PlaySerializer
 
 
-class PlayAPIView(mixins.ListModelMixin, viewsets.GenericViewSet):
+class PlayViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Play.objects.all()
     serializer_class = PlaySerializer
     filterset_class = PlayFilter

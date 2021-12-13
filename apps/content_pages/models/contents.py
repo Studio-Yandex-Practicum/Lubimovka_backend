@@ -1,7 +1,10 @@
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils import timezone
 
+from apps.content_pages.querysets import ContenPageQuerySet
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel
 
 
@@ -11,18 +14,39 @@ class AbstractContentPage(BaseModel):
     Для создания полноценной модели с конструктором создайте две новые модели
     унаследовав их от 'AbstractContentPage' и 'AbstractContent'.
 
-    Модель обладает обычными полями (title, description). К ней подключается
-    блок с конструктором.
+    Модель обладает обычными полями (title, description, image, is_draft,
+    pub_date). К ней подключается блок с конструктором.
+
+    Дополнена расширенным manager (`ext_objects`) для более простого
+    доступа к часто используемым данным (пример: получить только опубликованные
+    записи)
     """
 
-    title = models.CharField(
-        max_length=200,
-        verbose_name="Заголовок страницы",
-    )
     description = models.TextField(
         max_length=500,
-        verbose_name="Описание страницы",
+        verbose_name="Описание",
     )
+    image = models.ImageField(
+        upload_to=path_by_app_label_and_class_name,
+        blank=True,
+        verbose_name="Заглавная картинка",
+    )
+    is_draft = models.BooleanField(
+        default=True,
+        verbose_name="Черновик",
+        help_text="Поставьте отметку если это черновик",
+    )
+    pub_date = models.DateTimeField(
+        default=timezone.now,
+        verbose_name="Дата публикации",
+    )
+    title = models.CharField(
+        max_length=200,
+        verbose_name="Заголовок",
+    )
+
+    objects = models.Manager()
+    ext_objects = ContenPageQuerySet.as_manager()
 
     class Meta:
         abstract = True

@@ -1,10 +1,11 @@
+from ckeditor.fields import RichTextField
 from django.db import models
 
 from apps.core.models import BaseModel
 
 
 class AbstractItemWithTitle(BaseModel):
-    """Base abstract model for 1-item 'content' block."""
+    """Base abstract model for 1-item `content` block."""
 
     title = models.CharField(
         max_length=250,
@@ -18,8 +19,51 @@ class AbstractItemWithTitle(BaseModel):
         return self.title
 
 
+class Image(AbstractItemWithTitle):
+    """Image with title for `content` blocks."""
+
+    image = models.ImageField(
+        upload_to="content_images",
+        verbose_name="Изображение",
+    )
+
+    class Meta:
+        verbose_name = "Изображение"
+        verbose_name_plural = "Изображения"
+
+
+class Link(AbstractItemWithTitle):
+    """Link with title for `content` blocks."""
+
+    description = models.TextField(
+        max_length=250,
+        verbose_name="Описание ссылки",
+    )
+    url = models.URLField()
+
+    class Meta:
+        verbose_name = "Ссылка с описанием"
+        verbose_name_plural = "Ссылки с описанием"
+
+
+class Preamble(BaseModel):
+    """Preamble item for `content` blocks."""
+
+    preamble = models.TextField(
+        max_length=500,
+        verbose_name="Преамбула",
+    )
+
+    class Meta:
+        verbose_name = "Преамбула"
+        verbose_name_plural = "Преамбулы"
+
+    def __str__(self):
+        return self.preamble
+
+
 class Quote(BaseModel):
-    """Quote item cor "content" blocks without any additional fields."""
+    """Quote item for `content` blocks."""
 
     quote = models.TextField(
         max_length=500,
@@ -34,8 +78,21 @@ class Quote(BaseModel):
         return self.quote
 
 
+class Text(BaseModel):
+    """Text item for `content` blocks."""
+
+    text = RichTextField()
+
+    class Meta:
+        verbose_name = "Текст"
+        verbose_name_plural = "Тексты"
+
+    def __str__(self):
+        return self.text
+
+
 class Title(BaseModel):
-    """Text item for 'content' blocks without any additional fields."""
+    """Text item for `content` blocks."""
 
     title = models.CharField(
         max_length=250,
@@ -50,51 +107,8 @@ class Title(BaseModel):
         return self.title
 
 
-class Text(BaseModel):
-    """Text item for 'content' blocks without any additional fields."""
-
-    text = models.TextField(
-        max_length=500,
-        verbose_name="Текст",
-    )
-
-    class Meta:
-        verbose_name = "Текст"
-        verbose_name_plural = "Тексты"
-
-    def __str__(self):
-        return self.text
-
-
-class Image(AbstractItemWithTitle):
-    """Image with title for 'content' blocks."""
-
-    image = models.ImageField(
-        upload_to="content_images",
-        verbose_name="Изображение",
-    )
-
-    class Meta:
-        verbose_name = "Изображение"
-        verbose_name_plural = "Изображения"
-
-
-class Link(AbstractItemWithTitle):
-    """Link with title for 'content' blocks."""
-
-    description = models.TextField(
-        max_length=250,
-        verbose_name="Описание ссылки",
-    )
-    url = models.URLField()
-
-    class Meta:
-        verbose_name = "Ссылка с описанием"
-        verbose_name_plural = "Ссылки с описанием"
-
-
 class Video(AbstractItemWithTitle):
-    """Video with title for 'content' blocks."""
+    """Video with title for `content` blocks."""
 
     description = models.TextField(
         max_length=500,

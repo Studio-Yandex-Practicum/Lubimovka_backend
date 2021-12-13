@@ -3,14 +3,25 @@ from django_filters import rest_framework as filters
 from apps.library.models import Play
 
 
+class NumberInFilter(filters.BaseInFilter, filters.NumberFilter):
+    pass
+
+
 class PlayFilter(filters.FilterSet):
-    program = filters.AllValuesMultipleFilter(
-        field_name="program__name",
+    program = NumberInFilter(
+        field_name="program__pk",
+        label="Программа",
+        lookup_expr="in",
     )
-    festival = filters.AllValuesMultipleFilter(
+    festival = NumberInFilter(
         field_name="festival__year",
+        label="Год фестиваля",
+        lookup_expr="in",
     )
 
     class Meta:
         model = Play
-        fields = ["program", "festival"]
+        fields = (
+            "program",
+            "festival",
+        )

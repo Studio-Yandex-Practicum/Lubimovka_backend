@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from apps.core.models import Role
 from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
@@ -10,13 +11,20 @@ from apps.library.models import (
     ParticipationApplicationFestival,
     Performance,
     PerformanceMediaReview,
-    PerformancePerson,
     PerformanceReview,
     Play,
     ProgramType,
     Reading,
     SocialNetworkLink,
+    TeamMember,
 )
+
+
+class AuthorInline(admin.TabularInline):
+    model = Author.plays.through
+    extra = 1
+    verbose_name = "Автор"
+    verbose_name_plural = "Авторы"
 
 
 class PlayAdmin(admin.ModelAdmin):
@@ -28,7 +36,7 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "is_draft",
     )
-
+    inlines = (AuthorInline,)
     list_filter = (
         "authors",
         "city",
@@ -141,38 +149,6 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
     )
 
 
-class ReadingAdmin(admin.ModelAdmin):
-    list_display = (
-        "play",
-        "name",
-        "director",
-        "dramatist",
-    )
-    list_filter = (
-        "director__last_name",
-        "dramatist__last_name",
-    )
-    search_fields = (
-        "play__name",
-        "name",
-        "director__last_name",
-        "dramatist__last_name",
-    )
-
-
-class MasterClassAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "host",
-    )
-    list_filter = ("host__last_name",)
-    search_fields = (
-        "play__name",
-        "name",
-        "host__last_name",
-    )
-
-
 class ProgramTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
     list_filter = ("name",)
@@ -191,12 +167,30 @@ class PerformanceMediaReviewInline(admin.TabularInline):
     max_num = 8
 
 
-class PerformanceTeamInline(admin.TabularInline):
-    model = PerformancePerson
+class TeamMemberInline(admin.TabularInline):
+    model = TeamMember
+    fields = (
+        "person",
+        "role",
+    )
     extra = 1
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """Restricts role types for the model where inline is used."""
+        LIMIT_ROLES = {
+            Performance: "performanse_role",
+            Play: "play_role",
+            MasterClass: "master_class_role",
+            Reading: "reading_role",
+        }
+        if db_field.name == "role":
+            if self.parent_model in LIMIT_ROLES.keys():
+                kwargs["queryset"] = Role.objects.filter(types__role_type=LIMIT_ROLES[self.parent_model])
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class PerformanceAdmin(admin.ModelAdmin):
+    exclude = ("events",)
     filter_horizontal = (
         "images_in_block",
         "persons",
@@ -211,8 +205,31 @@ class PerformanceAdmin(admin.ModelAdmin):
     inlines = (
         PerformanceReviewInline,
         PerformanceMediaReviewInline,
-        PerformanceTeamInline,
+        TeamMemberInline,
     )
+
+
+class ReadingAdmin(admin.ModelAdmin):
+    list_display = (
+        "play",
+        "name",
+    )
+    exclude = ("events",)
+    search_fields = (
+        "play__name",
+        "name",
+    )
+    inlines = (TeamMemberInline,)
+
+
+class MasterClassAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    exclude = ("events",)
+    search_fields = (
+        "play__name",
+        "name",
+    )
+    inlines = (TeamMemberInline,)
 
 
 class ParticipationAdmin(admin.ModelAdmin):
@@ -241,6 +258,15 @@ class ParticipationAdmin(admin.ModelAdmin):
     )
 
 
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "person",
+        "role",
+    )
+    search_fields = ("role",)
+
+
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
@@ -248,7 +274,7 @@ admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
 admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
-
+admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(SocialNetworkLink)
 admin.site.register(OtherPlay)
 admin.site.register(OtherLink)

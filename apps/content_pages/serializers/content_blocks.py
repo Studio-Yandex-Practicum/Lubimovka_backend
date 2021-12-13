@@ -1,31 +1,20 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import (
-    ImagesBlock,
-    PerformancesBlock,
-    PersonsBlock,
-    PlaysBlock,
-    VideosBlock,
-)
+from apps.content_pages.models import ImagesBlock, PerformancesBlock, PersonsBlock, PlaysBlock, VideosBlock
 from apps.content_pages.serializers import (
+    ExtendedPersonSerializer,
     ImageSerializer,
     PerformanceSerializer,
-    PersonSerializer,
-    PlaySerializer,
     VideoSerializer,
 )
+from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
 
 
 class SlugRelatedSerializerField(serializers.SlugRelatedField):
-    """
-    The field works exactly as SlugRelatedField but returns full object
-    serialized with 'serializer_class'.
-    """
+    """The field works exactly as SlugRelatedField but returns full object serialized with 'serializer_class'."""
 
     def __init__(self, serializer_class=None, **kwargs):
-        assert (
-            serializer_class is not None
-        ), "The 'serializer_class' argument is required."
+        assert serializer_class is not None, "The 'serializer_class' argument is required."
         self.serializer_class = serializer_class
         super().__init__(**kwargs)
 
@@ -36,7 +25,6 @@ class SlugRelatedSerializerField(serializers.SlugRelatedField):
 
 
 class VideosBlockSerializer(serializers.ModelSerializer):
-    serializers.SlugRelatedField
 
     items = SlugRelatedSerializerField(
         many=True,
@@ -89,12 +77,10 @@ class PerformancesBlockSerializer(serializers.ModelSerializer):
 
 
 class PersonsBlockSerializer(serializers.ModelSerializer):
-    items = SlugRelatedSerializerField(
+    items = ExtendedPersonSerializer(
+        source="extended_persons",
         many=True,
         read_only=True,
-        source="ordered_persons",
-        slug_field="item",
-        serializer_class=PersonSerializer,
     )
 
     class Meta:
@@ -111,7 +97,7 @@ class PlaysBlockSerializer(serializers.ModelSerializer):
         read_only=True,
         source="ordered_plays",
         slug_field="item",
-        serializer_class=PlaySerializer,
+        serializer_class=LibraryPlaySerializer,
     )
 
     class Meta:

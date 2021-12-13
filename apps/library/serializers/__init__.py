@@ -1,22 +1,23 @@
 from .author import (
-    AuthorForSearchSerializer,
     AuthorListSerializer,
     AuthorRetrieveSerializer,
+    AuthorSearchSerializer,
 )
-from .masterclass import MasterClassEventSerializer
-from .performance import PerformanceEventSerializer, PerformanceSerializer
-from .performanceperson import PerformancePersonSerializer
-from .play import PlaySerializer
-from .reading import ReadingEventSerializer
+from .masterclass import EventMasterClassSerializer
+from .performance import EventPerformanceSerializer, PerformanceSerializer
+from .play import AuthorForPlaySerializer, PlaySerializer
+from .playfilters import PlayFiltersSerializer
+from .reading import EventReadingSerializer
 
 __all__ = (
     AuthorListSerializer,
     AuthorRetrieveSerializer,
-    AuthorForSearchSerializer,
-    MasterClassEventSerializer,
-    PerformanceEventSerializer,
+    AuthorSearchSerializer,
+    AuthorForPlaySerializer,
+    EventMasterClassSerializer,
+    EventPerformanceSerializer,
+    EventReadingSerializer,
     PlaySerializer,
+    PlayFiltersSerializer,
     PerformanceSerializer,
-    PerformancePersonSerializer,
-    ReadingEventSerializer,
 )

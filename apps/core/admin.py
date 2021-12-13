@@ -1,24 +1,47 @@
 from django.contrib import admin
+from django.db import models
+from django.forms.widgets import CheckboxSelectMultiple
 
-from apps.core.models import Image, Settings
+from apps.core.mixins import AdminImagePreview
+from apps.core.models import Image, Role, RoleType
 
 
-class SettingsAdmin(admin.ModelAdmin):
+@admin.register(Image)
+class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
-        "settings_key",
-        "field_type",
+        "id",
+        "image_preview_list_page",
     )
-    search_fields = ("field_type", "settings_key")
+    readonly_fields = ("image_preview_change_page",)
+
+
+@admin.register(Role)
+class RoleAdmin(admin.ModelAdmin):
+    list_display = (
+        "name",
+        "slug",
+    )
+    formfield_overrides = {
+        models.ManyToManyField: {"widget": CheckboxSelectMultiple},
+    }
 
     def get_readonly_fields(self, request, obj=None):
-        if request.user.is_superuser:
-            return super().get_readonly_fields(request, obj)
-        return "field_type", "settings_key"
-
-    def get_fields(self, request, obj=None):
-        field_for_setting_value = Settings.TYPES_AND_FIELDS[obj.field_type]
-        return "field_type", "settings_key", field_for_setting_value
+        """Only superusers can edit slug field."""
+        if not request.user.is_superuser:
+            return ("slug",)
+        return super().get_readonly_fields(request, obj)
 
 
-admin.site.register(Settings, SettingsAdmin)
-admin.site.register(Image)
+@admin.register(RoleType)
+class RoleTypeAdmin(admin.ModelAdmin):
+    def has_add_permission(self, request, obj=None):
+        """Remove the save and add new button."""
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        """Remove the delete button."""
+        return False
+
+    def get_model_perms(self, request):
+        """Return empty perms dict thus hiding the model from admin index."""
+        return {}

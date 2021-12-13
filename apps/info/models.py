@@ -1,9 +1,6 @@
+from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
-from django.core.validators import (
-    MaxValueValidator,
-    MinLengthValidator,
-    MinValueValidator,
-)
+from django.core.validators import MaxValueValidator, MinLengthValidator, MinValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils import timezone
@@ -36,10 +33,16 @@ class Partner(BaseModel):
         verbose_name="Логотип",
         help_text="Загрузите логотип партнёра",
     )
+    in_footer_partner = models.BooleanField(
+        default=False,
+        verbose_name="Отображение внизу страницы",
+        help_text=("Поставьте галочку, чтобы показать логотип партнёра внизу страницы"),
+    )
 
     class Meta:
         verbose_name = "Партнер"
         verbose_name_plural = "Партнеры"
+        ordering = ("type",)
 
     def __str__(self):
         return f"{self.name} - {self.type}"
@@ -76,10 +79,7 @@ class FestivalTeam(BaseModel):
         ]
 
     def __str__(self):
-        return (
-            f"{self.person.first_name} {self.person.last_name} - "
-            f"{self.team}"
-        )
+        return f"{self.person.first_name} {self.person.last_name} - " f"{self.team}"
 
     def clean(self):
         if not self.person.email:
@@ -124,7 +124,12 @@ class Volunteer(BaseModel):
         validators=[MinValueValidator(1990), MaxValueValidator(2500)],
         verbose_name="Год участия в фестивале",
     )
-    review = models.TextField(
+    review_title = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name="Заголовок отзыва",
+    )
+    review_text = models.TextField(
         verbose_name="Текст отзыва",
     )
 
@@ -139,10 +144,7 @@ class Volunteer(BaseModel):
         ]
 
     def __str__(self):
-        return (
-            f"{self.person.first_name} {self.person.last_name} - волонтёр "
-            f"фестиваля {self.year} года"
-        )
+        return f"{self.person.first_name} {self.person.last_name} - волонтёр " f"фестиваля {self.year} года"
 
     def clean(self):
         if not self.person.email:
@@ -162,9 +164,7 @@ class Place(BaseModel):
         verbose_name = "Площадка"
         verbose_name_plural = "Площадки"
         constraints = [
-            models.UniqueConstraint(
-                fields=["name", "city"], name="unique_place"
-            ),
+            models.UniqueConstraint(fields=["name", "city"], name="unique_place"),
         ]
 
     def __str__(self):
@@ -187,18 +187,6 @@ class Festival(BaseModel):
         validators=[MinValueValidator(1990), MaxValueValidator(2500)],
         unique=True,
         verbose_name="Год фестиваля",
-    )
-    teams = models.ManyToManyField(
-        FestivalTeam,
-        related_name="festivalteams",
-        verbose_name="Арт-дирекция и команда",
-        blank=False,
-    )
-    sponsors = models.ManyToManyField(
-        Sponsor,
-        related_name="festivalsponsors",
-        verbose_name="Попечители фестиваля",
-        blank=False,
     )
     volunteers = models.ManyToManyField(
         Volunteer,
@@ -243,6 +231,7 @@ class Festival(BaseModel):
         max_length=10,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
     )  # При изменении - скорректировать фабрику в части создания данного поля
+    press_release_image = models.ImageField(verbose_name="Изображение для страницы пресс-релизов")
 
     class Meta:
         verbose_name = "Фестиваль"
@@ -256,11 +245,7 @@ class Festival(BaseModel):
 class Question(BaseModel):
     question = models.TextField(
         max_length=500,
-        validators=[
-            MinLengthValidator(
-                2, "Вопрос должен состоять более чем из 2 символов"
-            )
-        ],
+        validators=[MinLengthValidator(2, "Вопрос должен состоять более чем из 2 символов")],
         verbose_name="Текст вопроса",
     )
     author_name = models.CharField(
@@ -278,3 +263,22 @@ class Question(BaseModel):
 
     def __str__(self):
         return f"{self.name} {self.question}"
+
+
+class PressRelease(BaseModel):
+    title = models.CharField(max_length=500, unique=True, verbose_name="Заголовок")
+    text = RichTextField(verbose_name="Текст")
+    festival = models.OneToOneField(
+        Festival,
+        on_delete=models.CASCADE,
+        related_name="press_releases",
+        verbose_name="Фестиваль",
+    )
+
+    class Meta:
+        ordering = ("-created",)
+        verbose_name = "Пресс-релиз"
+        verbose_name_plural = "Пресс-релизы"
+
+    def __str__(self):
+        return f"Пресс-релиз {self.festival.year} года"

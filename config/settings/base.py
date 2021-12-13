@@ -1,12 +1,11 @@
-"""
-Base settings to build other settings files upon.
-"""
+"""Base settings to build other settings files upon."""
 import os
 from pathlib import Path
 
 import environ
 
 env = environ.Env()
+
 
 # Root folder of the project
 # ------------------------------------------------------------------------------
@@ -45,6 +44,8 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "markdownx",
     "drf_multiple_model",
+    "ckeditor",
+    "anymail",
 ]
 LOCAL_APPS = [
     "apps.users",
@@ -187,7 +188,7 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.smtp.EmailBackend",
+    default="django.core.mail.backends.console.EmailBackend",
 )
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout

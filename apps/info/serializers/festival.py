@@ -7,3 +7,8 @@ class FestivalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Festival
         exclude = ("created", "modified")
+        depth = 1
+
+
+class YearsSerializer(serializers.Serializer):
+    years = serializers.ListField(child=serializers.IntegerField())

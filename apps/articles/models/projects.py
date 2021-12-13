@@ -5,14 +5,15 @@ from apps.content_pages.models import AbstractContent, AbstractContentPage
 
 class Project(AbstractContentPage):
     image = models.ImageField(
-        upload_to="images/projects/",
-        verbose_name="Заглавная картинка проекта",
+        upload_to="images/articles/projects/",
+        verbose_name="Заглавная картинка",
     )
 
     def __str__(self):
         return f"Проект {self.title}"
 
     class Meta:
+        ordering = ("-pub_date",)
         verbose_name = "Проект"
         verbose_name_plural = "Проекты"
 

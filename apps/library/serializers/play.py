@@ -4,17 +4,17 @@ from apps.library.models import Author, Play
 
 
 class AuthorForPlaySerializer(serializers.ModelSerializer):
-    """Сериализатор полного имени Автора"""
+    """Сериализатор полного имени Автора."""
 
     name = serializers.ReadOnlyField(source="person.full_name")
 
     class Meta:
         model = Author
-        fields = ("name",)
+        fields = ("name", "id")
 
 
 class PlaySerializer(serializers.ModelSerializer):
-    """Сериализатор Пьесы"""
+    """Сериализатор Пьесы."""
 
     authors = AuthorForPlaySerializer(many=True)
 

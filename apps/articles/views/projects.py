@@ -5,7 +5,9 @@ from apps.articles.serializers import ProjectListSerializer, ProjectSerializer
 
 
 class ProjectsViewSet(ReadOnlyModelViewSet):
-    queryset = Project.objects.all()
+    """Returns published News items."""
+
+    queryset = Project.ext_objects.published()
 
     def get_serializer_class(self):
         if self.action == "list":

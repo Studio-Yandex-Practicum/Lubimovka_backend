@@ -2,11 +2,14 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.utilities import slugify
+
 
 class BaseModel(models.Model):
     """
-    An abstract base class model that provides self-updating ``created`` and
-    ``modified`` fields.
+    An abstract base class model.
+
+    It provides self-updating ``created`` and ``modified`` fields.
     """
 
     created = models.DateTimeField(auto_now_add=True)
@@ -86,7 +89,83 @@ class Person(BaseModel):
         return f"{self.last_name} {self.first_name}"
 
 
-class Settings(BaseModel):
+class Role(BaseModel):
+    """Role for `Person`.
+
+    Saves different type of roles:
+        - blog persons roles
+        - performance roles
+        - play roles
+        - master class roles
+        - reading roles
+
+    Suppose to be used in pair with `Person` model and intermediate (through)
+    table.
+    """
+
+    name = models.CharField(
+        max_length=50,
+        unique=True,
+        verbose_name="Название",
+    )
+    slug = models.SlugField(
+        max_length=60,
+        unique=True,
+        verbose_name="Код-имя латиницей",
+        help_text="Если пустое, то заполняется автоматически",
+    )
+    types = models.ManyToManyField(
+        "RoleType",
+        related_name="type_roles",
+        verbose_name="Типы ролей",
+    )
+
+    class Meta:
+        verbose_name = "Должность/позиция"
+        verbose_name_plural = "Должности/позиции"
+        ordering = ("name",)
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+
+
+class RoleType(models.Model):
+    class SelectRoleType(models.TextChoices):
+        BLOG_PERSONS_ROLE = "blog_persons_role", _("Роль в блоге")
+        PERFORMANCE_ROLE = "performanse_role", _("Роль в спектаклях")
+        PLAY_ROLE = "play_role", _("Роль в пьесах")
+        MASTER_CLASS_ROLE = "master_class_role", _("Роль в мастер классах")
+        READING_ROLE = "reading_role", _("Роль в читках")
+
+    role_type = models.CharField(
+        max_length=20,
+        choices=SelectRoleType.choices,
+        default="blog_persons_role",
+        unique=True,
+        verbose_name="Тип роли",
+        help_text="Укажите, где будет использована роль",
+    )
+
+    class Meta:
+        verbose_name = "Тип роли"
+        verbose_name_plural = "Типы ролей"
+
+    def __str__(self):
+        return str(dict(self.SelectRoleType.choices)[self.role_type])
+
+
+class Setting(BaseModel):
+    class SettingGroup(models.TextChoices):
+        EMAIL = "EMAIL", _("Почта")
+        MAIN = "MAIN", _("Главная")
+        FIRST_SCREEN = "FIRST_SCREEN", _("Первая страница")
+        GENERAL = "GENERAL", _("Общие")
+
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")
         TEXT = "TEXT", _("Текст")
@@ -102,6 +181,12 @@ class Settings(BaseModel):
         SettingFieldType.EMAIL: "email",
     }
 
+    group = models.CharField(
+        choices=SettingGroup.choices,
+        default="GENERAL",
+        max_length=50,
+        verbose_name="Группа настроек",
+    )
     field_type = models.CharField(
         choices=SettingFieldType.choices,
         max_length=40,
@@ -109,15 +194,20 @@ class Settings(BaseModel):
     )
     settings_key = models.SlugField(
         max_length=40,
-        verbose_name="Ключ настроек",
+        verbose_name="Ключ настройки",
         unique=True,
+    )
+    description = models.TextField(
+        max_length=250,
+        verbose_name="Описание настройки",
+        blank=True,
     )
     boolean = models.BooleanField(
         default=False,
         verbose_name="Да или Нет",
     )
-    text = models.CharField(
-        max_length=100,
+    text = models.TextField(
+        max_length=500,
         blank=True,
         verbose_name="Текст",
     )
@@ -137,6 +227,7 @@ class Settings(BaseModel):
     )
 
     class Meta:
+        ordering = ("group", "settings_key")
         verbose_name = "Общие настройки"
         verbose_name_plural = "Общие настройки"
 
@@ -152,6 +243,6 @@ class Settings(BaseModel):
 
     @classmethod
     def get_setting(cls, settings_key):
-        if Settings.objects.filter(settings_key=settings_key).exists():
-            setting = Settings.objects.get(settings_key=settings_key)
+        if Setting.objects.filter(settings_key=settings_key).exists():
+            setting = Setting.objects.get(settings_key=settings_key)
             return setting.value

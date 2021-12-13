@@ -2,13 +2,19 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.core.tests.factories import PersonFactory
+from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
 from apps.info.tests.factories import (
+    FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
+    PressReleaseFactory,
     SponsorFactory,
     VolunteerFactory,
 )
+
+
+def notification(command, objects, text):
+    command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно созданы."))
 
 
 class Command(BaseCommand):
@@ -21,6 +27,11 @@ class Command(BaseCommand):
         " - Волонтёры"
         " - Попечители"
         " - Команды фестиваля"
+        " - Пользователи-админы"
+        " - Пользователи-редакторы"
+        " - Изображения для контента"
+        " - Программы"
+        " - Пьесы"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -37,45 +48,47 @@ class Command(BaseCommand):
                         add_city=True,
                     )
                 )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(persons_base)} базовых персон созданы успешно."
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(persons_with_image)} персон с фото созданы успешно."
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(persons_with_image_email_city)} персон с фото, "
-                    f"городом, email созданы успешно."
-                )
+            notification(self, persons_base, "базовых персон")
+            notification(self, persons_with_image, "персоны с фото")
+            notification(
+                self,
+                persons_with_image_email_city,
+                "персон с фото, городом, email",
             )
             partners = PartnerFactory.create_batch(30)
+            notification(self, partners, "партнёров")
+
+            in_footer_partners = PartnerFactory.create_batch(
+                5,
+                type="general",
+                in_footer_partner=True,
+            )
+            notification(self, in_footer_partners, "партнёров в футере")
+
             sponsors = SponsorFactory.create_batch(50)
+            notification(self, sponsors, "попечителей")
+
             volunteers = VolunteerFactory.create_batch(50)
+            notification(self, volunteers, "волонтёров")
+
             teams = FestivalTeamFactory.create_batch(70)
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(partners)} партнёров успешно созданы"
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(sponsors)} попечителей успешно созданы"
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(volunteers)} волонтёров успешно созданы"
-                )
-            )
-            self.stdout.write(
-                self.style.SUCCESS(
-                    f"{len(teams)} членов команд успешно созданы"
-                )
-            )
+            notification(self, teams, "членов команд")
+
+            images = ImageFactory.create_batch(5)
+            notification(self, images, "картинки")
+
+            festivals = FestivalFactory.create_batch(10)
+            notification(self, festivals, "фестивалей")
+
+            press_releases = PressReleaseFactory.create_batch(10)
+            notification(self, press_releases, "пресс-релизов")
+
+            users_editors = []
+            users_admins = []
+            for index in range(1, 6):
+                users_editors.append(UserFactory.create(username=f"editor_{index}", add_role_editor=True))
+                users_admins.append(UserFactory.create(username=f"admin_{index}", add_role_admin=True))
+            notification(self, users_editors, "редакторов")
+            notification(self, users_admins, "админов")
         except CommandError:
-            self.stdout.write(self.style.ERROR("Ошибка наполения БД"))
+            self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))

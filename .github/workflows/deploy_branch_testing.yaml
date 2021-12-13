@@ -115,26 +115,23 @@ jobs:
             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-test
             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-test
             echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS_TEST }} >> .env-test
-            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-test
-            echo DJANGO_DEFAULT_FROM_EMAIL=${{ secrets.DJANGO_DEFAULT_FROM_EMAIL }} >> .env-test
-            echo DJANGO_SERVER_EMAIL=${{ secrets.DJANGO_SERVER_EMAIL }} >> .env-test
-            echo DJANGO_EMAIL_SUBJECT_PREFIX=${{ secrets.DJANGO_EMAIL_SUBJECT_PREFIX }} >> .env-test
 
             echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-test
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-test
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-test
 
-            echo EMAIL_HOST=${{ secrets.EMAIL_HOST }} >> .env-test
-            echo EMAIL_HOST_USER=${{ secrets.EMAIL_HOST_USER }} >> .env-test
-            echo EMAIL_HOST_PASSWORD=${{ secrets.EMAIL_HOST_PASSWORD }} >> .env-test
-            echo EMAIL_PORT=${{ secrets.EMAIL_PORT }} >> .env-test
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-dev
+            echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-dev
+            echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-dev
+            echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-dev
+            echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-dev
 
             # Pull docker image from github packages with tag
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
             # re-run docker containers and remove database volumes
             docker-compose -f test_branch_deploy.yaml down
-            docker volume rm lubimovka_backend_postgres_data_test
+            docker volume rm infra_deploy_postgres_data_test
             docker-compose -f test_branch_deploy.yaml up -d
   send_message:
     name: Send message in telegram group
@@ -153,7 +150,7 @@ jobs:
                   Тестирует - ${{ github.event.inputs.name }}
 
                   Сcылка на документацию в Swagger:
-                  https://testing.prostringer.ru/api/v1/schema/swagger-ui/
+                  https://test-lubimovka.kiryanov.ru/api/v1/schema/swagger-ui/
 
                   Панель администратора:
-                  https://testing.prostringer.ru/admin/
+                  https://test-lubimovka.kiryanov.ru/admin/

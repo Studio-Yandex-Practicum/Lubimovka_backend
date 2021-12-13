@@ -3,26 +3,27 @@ from rest_framework.routers import DefaultRouter
 
 from apps.library.views import (
     AuthorsReadViewSet,
-    ParticipationAPIView,
-    PerformanceAPIView,
-    PlayAPIView,
-    SearchResultAPIViewSet,
+    ParticipationViewSet,
+    PerformanceViewSet,
+    PlayFiltersAPIView,
+    PlayViewSet,
+    SearchResultViewSet,
 )
 
 router = DefaultRouter()
 router.register(
     "performances",
-    PerformanceAPIView,
+    PerformanceViewSet,
     basename="performances",
 )
 router.register(
     "plays",
-    PlayAPIView,
+    PlayViewSet,
     basename="plays",
 )
 router.register(
     "search",
-    SearchResultAPIViewSet,
+    SearchResultViewSet,
     basename="search",
 )
 router.register(
@@ -30,19 +31,19 @@ router.register(
     AuthorsReadViewSet,
     basename="authors",
 )
-
-
-paths = [
-    path(
-        "participation",
-        ParticipationAPIView.as_view(),
-        name="participation",
-    ),
-]
+router.register(
+    "participation",
+    ParticipationViewSet,
+    basename="participation",
+)
 
 library_urls = [
     path("library/", include(router.urls)),
-    path("library/", include(paths)),
+    path(
+        "library/playfilters/",
+        PlayFiltersAPIView.as_view(),
+        name="playfilters",
+    ),
 ]
 
 urlpatterns = [

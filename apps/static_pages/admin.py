@@ -12,15 +12,11 @@ class StaticPagesModelAdmin(admin.ModelAdmin):
     exclude = ("title", "static_page_url")
 
     def has_add_permission(self, request, obj=None):
-        """
-        removes the save and add new button
-        """
+        """Remove the save and add new button."""
         return False
 
     def has_delete_permission(self, request, obj=None):
-        """
-        removes the delete button
-        """
+        """Remove the delete button."""
         return False
 
 

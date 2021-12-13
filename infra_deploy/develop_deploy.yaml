@@ -49,7 +49,8 @@ services:
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
-      - SUBDOMAINS=develop,testing
+      - SUBDOMAINS=lubimovka,test-lubimovka
+      - CERTPROVIDER=zerossl
       - ONLY_SUBDOMAINS=true
     env_file:
       - .env-dev
@@ -57,7 +58,7 @@ services:
       - swag_network
     volumes:
       - ./swag_config/:/config/
-      - ./swag-nginx.conf:/config/nginx/site-confs/default
+      - ./swag/swag_nginx.conf:/config/nginx/site-confs/default
       - static_value:/config/static/
       - media_value:/config/media/
       - static_value_test:/config/test/static/

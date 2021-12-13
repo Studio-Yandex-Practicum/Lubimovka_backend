@@ -1,3 +1,4 @@
+from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_field
 from rest_framework import serializers
 
 from apps.content_pages.models import (
@@ -7,10 +8,10 @@ from apps.content_pages.models import (
     PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
+    Preamble,
     Quote,
     Text,
     Title,
-    Video,
     VideosBlock,
 )
 from apps.content_pages.serializers import (
@@ -20,35 +21,44 @@ from apps.content_pages.serializers import (
     PerformancesBlockSerializer,
     PersonsBlockSerializer,
     PlaysBlockSerializer,
+    PreambleSerializer,
     QuoteSerializer,
     TextSerializer,
     TitleSerializer,
     VideosBlockSerializer,
-    VideoSerializer,
 )
 
+CONTENT_OBJECT_SERIALIZER_PAIRS = {
+    Image: ImageSerializer,
+    ImagesBlock: ImagesBlockSerializer,
+    Link: LinkSerializer,
+    PerformancesBlock: PerformancesBlockSerializer,
+    PersonsBlock: PersonsBlockSerializer,
+    PlaysBlock: PlaysBlockSerializer,
+    Preamble: PreambleSerializer,
+    Quote: QuoteSerializer,
+    Text: TextSerializer,
+    Title: TitleSerializer,
+    VideosBlock: VideosBlockSerializer,
+}
 
+
+@extend_schema_field(
+    PolymorphicProxySerializer(
+        component_name="Content object",
+        serializers=CONTENT_OBJECT_SERIALIZER_PAIRS.values(),
+        resource_type_field_name=None,
+    )
+)
 class ContentObjectRelatedField(serializers.RelatedField):
-    """
-    Custom related field to use for the "content_object" generic relationship.
-    """
+    """Custom related field to use for the "content_object" generic relationship."""
 
     def to_representation(self, obj):
         """Serialize content objects to a simple representation."""
-
-        content_item_serializers = {
-            Image: ImageSerializer,
-            ImagesBlock: ImagesBlockSerializer,
-            Link: LinkSerializer,
-            PerformancesBlock: PerformancesBlockSerializer,
-            PersonsBlock: PersonsBlockSerializer,
-            PlaysBlock: PlaysBlockSerializer,
-            Quote: QuoteSerializer,
-            Text: TextSerializer,
-            Title: TitleSerializer,
-            Video: VideoSerializer,
-            VideosBlock: VideosBlockSerializer,
-        }
+        # to think: if amount of types of objects increases may be easier to
+        # get serializer_class by name (for example look for
+        # SerializerMethodField sources)
+        content_item_serializers = CONTENT_OBJECT_SERIALIZER_PAIRS
 
         content_item_class = obj._meta.model
         serializer = content_item_serializers.get(content_item_class, None)
@@ -61,7 +71,7 @@ class ContentObjectRelatedField(serializers.RelatedField):
 
 
 class BaseContentSerializer(serializers.Serializer):
-    """Content (Item/Block) Serializer
+    """Content (Item/Block) Serializer.
 
     1. "content_type" returns type of content item
     2. "content_item" recognized type of item and serialize it

@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.articles.models import Project, ProjectContent
-from apps.content_pages.admin import BaseContentInline
+from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 
 
 class ProjectContentInline(BaseContentInline):
@@ -15,16 +15,11 @@ class ProjectContentInline(BaseContentInline):
         "personsblock",
         "playsblock",
         "text",
-        "video",
         "videosblock",
     )
 
 
-class ProjectAdmin(admin.ModelAdmin):
-    list_display = (
-        "title",
-        "description",
-    )
+class ProjectAdmin(BaseContentPageAdmin):
     inlines = (ProjectContentInline,)
 
 

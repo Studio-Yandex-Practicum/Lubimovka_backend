@@ -1,9 +1,9 @@
 from .content_items import (
+    ExtendedPersonSerializer,
     ImageSerializer,
     LinkSerializer,
     PerformanceSerializer,
-    PersonSerializer,
-    PlaySerializer,
+    PreambleSerializer,
     QuoteSerializer,
     TextSerializer,
     TitleSerializer,
@@ -27,6 +27,7 @@ from .content_blocks import (
 from .contents import BaseContentPageSerializer, BaseContentSerializer
 
 __all__ = (
+    ExtendedPersonSerializer,
     BaseContentPageSerializer,
     BaseContentSerializer,
     ImagesBlockSerializer,
@@ -35,9 +36,11 @@ __all__ = (
     PerformancesBlockSerializer,
     PerformanceSerializer,
     PersonsBlockSerializer,
-    PersonSerializer,
     PlaysBlockSerializer,
-    PlaySerializer,
+    PreambleSerializer,
+    QuoteSerializer,
+    TextSerializer,
+    TitleSerializer,
     VideosBlockSerializer,
     VideoSerializer,
 )

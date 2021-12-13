@@ -1,11 +1,21 @@
-from .blog_items import BlogItemListSerializer, BlogItemSerializer
-from .news_items import NewsItemListSerializer, NewsItemSerializer
+from .blog_items import (
+    BlogItemBaseSerializer,
+    BlogItemDetailedSerializer,
+    BlogItemListSerializer,
+)
+from .news_items import (
+    NewsItemBaseSerializer,
+    NewsItemDetailedSerializer,
+    NewsItemListSerializer,
+)
 from .projects import ProjectListSerializer, ProjectSerializer
 
 __all__ = (
-    BlogItemSerializer,
+    BlogItemBaseSerializer,
+    BlogItemDetailedSerializer,
     BlogItemListSerializer,
-    NewsItemSerializer,
+    NewsItemBaseSerializer,
+    NewsItemDetailedSerializer,
     NewsItemListSerializer,
     ProjectSerializer,
     ProjectListSerializer,

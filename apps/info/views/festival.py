@@ -1,22 +1,30 @@
-from django.http import JsonResponse
-from rest_framework import status
-from rest_framework.decorators import api_view
+from drf_spectacular.utils import extend_schema
 from rest_framework.generics import RetrieveAPIView
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from apps.info.models import Festival
-from apps.info.serializers import FestivalSerializer
+from apps.info.serializers import FestivalSerializer, YearsSerializer
 
 
-class FestivalViewSet(RetrieveAPIView):
+class FestivalAPIView(RetrieveAPIView):
+    """Returns a festival info and statistics.
+
+    URL detailed lookup suffix is `year`.
+    """
+
     queryset = Festival.objects.all()
     serializer_class = FestivalSerializer
     lookup_field = "year"
     pagination_class = None
 
 
-@api_view(["GET"])
-def festivals_years(request):
-    data = list(
-        festival["year"] for festival in Festival.objects.values("year")
-    )
-    return JsonResponse({"years": data}, status=status.HTTP_200_OK)
+class FestivalYearsAPIView(APIView):
+    """Returns a list of the years in which the festival took place."""
+
+    @extend_schema(responses=YearsSerializer)
+    def get(self, request):
+        years_values_list = Festival.objects.values_list("year", flat=True)
+        years_instance = {"years": years_values_list}
+        years_serializer = YearsSerializer(instance=years_instance)
+        return Response(years_serializer.data)
