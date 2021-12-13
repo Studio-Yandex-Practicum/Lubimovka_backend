@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: deploy_vps
-      url: https://github.com
+      url: ${{ secrets.SWAGGER_URL }}
     # needs: build-and-push-image-to-github-packages
     steps:
       # -
@@ -104,9 +104,8 @@ jobs:
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
             cd ${{ github.event.repository.name }}
-            touch test
             # git pull
-            # cd infra_deploy
+            cd infra_deploy
             chmod +x check_env_script.sh
             ./check_env_script.sh test
 
@@ -160,7 +159,6 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: success_message
-      url: https://github.com
     needs: deploy
     steps:
       - name: check repository
