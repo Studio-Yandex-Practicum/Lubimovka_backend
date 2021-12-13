@@ -81,7 +81,9 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: deploy_vps
-      url: ${{ steps.execute.outputs.site_url }}
+      # К сожалению мне не удалось спрятать url в секреты. Вот что пишут доки:
+      # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#example-using-environment-name-and-url
+      url: https://lubimovka.kiryanov.ru/
     # needs: build-and-push-image-to-github-packages
     steps:
       # -
@@ -109,10 +111,6 @@ jobs:
             cd infra_deploy
             chmod +x check_env_script.sh
             ./check_env_script.sh test
-
-            echo URL=${{ secrets.URL }} >> test
-            source test
-            echo "::set-output name=site_url::$URL"
 
             # Github package name: writing in .env to read in docker-compose script
             # ./check_env_script.sh .github_image
