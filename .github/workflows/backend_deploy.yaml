@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: deploy_vps
-      url: ${{ secrets.URL }}
+      url: ${{ steps.execute.outputs.site_url }}
     # needs: build-and-push-image-to-github-packages
     steps:
       # -
@@ -96,6 +96,7 @@ jobs:
       #     echo IMAGE_TAG=$IMAGE_TAG >> $GITHUB_ENV
       -
         name: executing remote ssh commands to deploy
+        id: execute
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}
@@ -108,6 +109,8 @@ jobs:
             cd infra_deploy
             chmod +x check_env_script.sh
             ./check_env_script.sh test
+
+            echo "::set-output name=site_url::${{ secrets.URL}}"
 
             # Github package name: writing in .env to read in docker-compose script
             # ./check_env_script.sh .github_image
