@@ -23,15 +23,14 @@ def add_content_item_to_blog(blog, created, count, factory):
     if not created:
         return
     if count:
-        BlogItemContentFactory.create_batch(
-            count, item=factory, content_page=blog
-        )
+        BlogItemContentFactory.create_batch(count, item=factory, content_page=blog)
 
 
 @restrict_factory({"global": [Person, Role]})
 class BlogPersonFactory(factory.django.DjangoModelFactory):
     """
     Creates co-author for Blog.
+
     You should create at least one Person and Role
     before use this factory.
     """
@@ -40,15 +39,14 @@ class BlogPersonFactory(factory.django.DjangoModelFactory):
         model = BlogPerson
 
     person = factory.Iterator(Person.objects.all())
-    role = factory.Iterator(
-        Role.objects.filter(types__role_type="blog_persons_role")
-    )
+    role = factory.Iterator(Role.objects.filter(types__role_type="blog_persons_role"))
 
 
 class BlogItemContentFactory(factory.django.DjangoModelFactory):
     """
-    Base model for content items and blocks for Blog. When add content
-    to Blog (via add_content_item_to_blog - see above) you should add
+    Base model for content items and blocks for Blog.
+
+    When add content to Blog (via add_content_item_to_blog - see above) you should add
     item=factory.SubFactory(BLOCK_OR_ITEM_FACTORY_YOU_NEED), content_page=BLOG
     and count=INT.
     """
@@ -56,9 +54,7 @@ class BlogItemContentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = BlogItemContent
 
-    content_type = factory.LazyAttribute(
-        lambda obj: ContentType.objects.get_for_model(obj.item)
-    )
+    content_type = factory.LazyAttribute(lambda obj: ContentType.objects.get_for_model(obj.item))
     object_id = factory.SelfAttribute("item.id")
     order = factory.Sequence(lambda n: n)
 
@@ -73,6 +69,7 @@ class BlogItemContentFactory(factory.django.DjangoModelFactory):
 class BlogFactory(factory.django.DjangoModelFactory):
     """
     Creates Blog Page.
+
     You can customize Blog's content by adding method and count when
     create (e.g. 'BlogFactory.create(add_several_preamble=5,
     add_several_personsblock=3)). Content item/block will not be

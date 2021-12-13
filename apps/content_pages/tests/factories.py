@@ -75,6 +75,7 @@ class QuoteFactory(factory.django.DjangoModelFactory):
 class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
     """
     Creates 'through' object with attrs ExtendedPerson and Role.
+
     For using in ExtendedPersonFactory.
     """
 
@@ -88,6 +89,7 @@ class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
 class ExtendedPersonFactory(factory.django.DjangoModelFactory):
     """
     Create Person with order and role for block.
+
     You should create at least one Person and Role before
     using factory. Order in factory assume that there are not
     more than 3 ordered persons in a block.
@@ -110,6 +112,7 @@ class ExtendedPersonFactory(factory.django.DjangoModelFactory):
 class PersonsBlockFactory(factory.django.DjangoModelFactory):
     """
     Creates content block Person for blog, news or projects.
+
     Block creates with 3 ordered persons.
     """
 
@@ -128,8 +131,9 @@ class PersonsBlockFactory(factory.django.DjangoModelFactory):
 @restrict_factory({"global": (Image,)})
 class OrderedImageFactory(factory.django.DjangoModelFactory):
     """
-    Create Image with order for block. Order in factory assume
-    that there are not more than 3 ordered images in a block.
+    Create Image with order for block.
+
+    Order in factory assume that there are not more than 3 ordered images in a block.
     """
 
     class Meta:
@@ -142,6 +146,7 @@ class OrderedImageFactory(factory.django.DjangoModelFactory):
 class ImagesBlockFactory(factory.django.DjangoModelFactory):
     """
     Creates content block Image for blog, news or projects.
+
     Block creates with 3 ordered images.
     """
 
@@ -160,8 +165,9 @@ class ImagesBlockFactory(factory.django.DjangoModelFactory):
 @restrict_factory({"global": (Play,)})
 class OrderedPlayFactory(factory.django.DjangoModelFactory):
     """
-    Creates Play with order for block. Order in factory assume
-    that there are not more than 3 ordered person in a block.
+    Creates Play with order for block.
+
+    Order in factory assume that there are not more than 3 ordered person in a block.
     """
 
     class Meta:
@@ -174,6 +180,7 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
 class PlaysBlockFactory(factory.django.DjangoModelFactory):
     """
     Creates content block Play for blog, news or projects.
+
     Block creates with 3 ordered plays.
     """
 

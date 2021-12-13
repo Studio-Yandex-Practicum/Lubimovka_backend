@@ -14,9 +14,7 @@ from apps.info.tests.factories import (
 
 
 def notification(command, objects, text):
-    command.stdout.write(
-        command.style.SUCCESS(f"{len(objects)} {text} успешно созданы.")
-    )
+    command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно созданы."))
 
 
 class Command(BaseCommand):
@@ -88,16 +86,8 @@ class Command(BaseCommand):
             users_editors = []
             users_admins = []
             for index in range(1, 6):
-                users_editors.append(
-                    UserFactory.create(
-                        username=f"editor_{index}", add_role_editor=True
-                    )
-                )
-                users_admins.append(
-                    UserFactory.create(
-                        username=f"admin_{index}", add_role_admin=True
-                    )
-                )
+                users_editors.append(UserFactory.create(username=f"editor_{index}", add_role_editor=True))
+                users_admins.append(UserFactory.create(username=f"admin_{index}", add_role_admin=True))
             notification(self, users_editors, "редакторов")
             notification(self, users_admins, "админов")
         except CommandError:

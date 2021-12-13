@@ -8,18 +8,11 @@ from apps.articles.tests.factories.project_factory import ProjectFactory
 
 
 def notification(command, objects, text):
-    command.stdout.write(
-        command.style.SUCCESS(f"{len(objects)} {text} успешно созданы.")
-    )
+    command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно созданы."))
 
 
 class Command(BaseCommand):
-    help = (
-        "Заполняет базу данных тестовыми данными и сейчас доступны:"
-        " - Блоги"
-        " - Новости"
-        " - Проекты"
-    )
+    help = "Заполняет базу данных тестовыми данными и сейчас доступны: Блоги, Новости, Проекты"
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:

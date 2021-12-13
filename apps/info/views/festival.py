@@ -10,7 +10,8 @@ from apps.info.serializers import FestivalSerializer, YearsSerializer
 class FestivalAPIView(RetrieveAPIView):
     """Returns a festival info and statistics.
 
-    URL detailed lookup suffix is `year`."""
+    URL detailed lookup suffix is `year`.
+    """
 
     queryset = Festival.objects.all()
     serializer_class = FestivalSerializer

@@ -8,7 +8,7 @@ from .play import PlaySerializer
 
 
 class PerformanceSerializer(serializers.ModelSerializer):
-    """Сериализатор Спектакля для отображения на странице Спектакля"""
+    """Сериализатор Спектакля для отображения на странице Спектакля."""
 
     play = PlaySerializer()
     team = serializers.SerializerMethodField()
@@ -28,7 +28,7 @@ class PerformanceSerializer(serializers.ModelSerializer):
 
 
 class EventPerformanceSerializer(serializers.ModelSerializer):
-    """Сериализатор Спектакля для отображения на странице Афиши"""
+    """Сериализатор Спектакля для отображения на странице Афиши."""
 
     team = serializers.SerializerMethodField()
     image = serializers.ImageField(source="main_image")

@@ -7,9 +7,7 @@ def get_latest_four_published_items_data(
     serializer_class: serializers.Serializer,
     object: AbstractContentPage,
 ) -> dict():
-    """
-    Returns four latest `model` items serialized data except `object` itself.
-    """
+    """Return four latest `model` items serialized data except `object` itself."""
     model_class = object.__class__
 
     published_items = model_class.ext_objects.published()

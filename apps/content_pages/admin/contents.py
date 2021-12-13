@@ -30,10 +30,7 @@ class BaseContentInline(SortableInlineAdminMixin, admin.StackedInline):
     }
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        """
-        Limits avaliable models to choose while creating ContentPage object.
-        """
-
+        """Limits avaliable models to choose while creating ContentPage object."""
         if db_field.name == "content_type":
             kwargs["queryset"] = ContentType.objects.filter(
                 model__in=self.content_type_model,

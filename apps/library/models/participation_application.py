@@ -44,9 +44,7 @@ class ParticipationApplicationFestival(BaseModel):
         max_length=50,
         verbose_name="Город проживания",
     )
-    phone_number = PhoneNumberField(
-        help_text="Номер телефона указывается в формате +7"
-    )
+    phone_number = PhoneNumberField(help_text="Номер телефона указывается в формате +7")
     email = models.EmailField(
         max_length=100,
         verbose_name="Электронная почта",
@@ -60,13 +58,10 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name="Год написания",
     )
     file = models.FileField(
-        validators=(
-            FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PARTICIPATION),
-        ),
+        validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PARTICIPATION),),
         verbose_name="Файл",
         upload_to=generate_class_name_path,
-        help_text=f"Файл в одно из форматов "
-        f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
+        help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
     )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
