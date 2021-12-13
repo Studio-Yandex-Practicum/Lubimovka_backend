@@ -110,7 +110,7 @@ jobs:
             chmod +x check_env_script.sh
             ./check_env_script.sh test
 
-            echo "::set-output name=site_url::${{ secrets.URL}}"
+            echo "::set-output name=site_url::${{ secrets.URL }}"
 
             # Github package name: writing in .env to read in docker-compose script
             # ./check_env_script.sh .github_image
