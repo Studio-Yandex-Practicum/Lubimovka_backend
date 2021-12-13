@@ -7,12 +7,7 @@ from faker import Faker
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.tests.factories import ImageFactory
-from apps.library.models import (
-    Performance,
-    PerformanceMediaReview,
-    PerformanceReview,
-    Play,
-)
+from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview, Play
 
 from .team_member import TeamMemberFactory
 
@@ -44,16 +39,12 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     name = factory.LazyFunction(lambda: fake.word().capitalize())
     play = factory.Iterator(Play.objects.all())
     main_image = factory.django.ImageField(
-        color=factory.LazyFunction(
-            lambda: random.choice(["blue", "yellow", "green", "orange"])
-        ),
+        color=factory.LazyFunction(lambda: random.choice(["blue", "yellow", "green", "orange"])),
         width=factory.LazyFunction(lambda: random.randint(10, 1000)),
         height=factory.SelfAttribute("width"),
     )
     bottom_image = factory.django.ImageField(
-        color=factory.LazyFunction(
-            lambda: random.choice(["blue", "yellow", "green", "orange"])
-        ),
+        color=factory.LazyFunction(lambda: random.choice(["blue", "yellow", "green", "orange"])),
         width=factory.LazyFunction(lambda: random.randint(10, 1000)),
         height=factory.SelfAttribute("width"),
     )
@@ -110,6 +101,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def add_media_review(self, created, extracted, **kwargs):
+
         """
         Create PerformanceMediaReview object and add
         to media_reviews field for Performance.
@@ -160,22 +152,16 @@ class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = PerformanceMediaReview
 
-    media_name = factory.LazyFunction(
-        lambda: fake.sentence(nb_words=random.choice([1, 2, 3])).capitalize()
-    )
+    media_name = factory.LazyFunction(lambda: fake.sentence(nb_words=random.choice([1, 2, 3])).capitalize())
     text = factory.Faker("text", locale="ru_RU")
     image = factory.django.ImageField(
-        color=factory.LazyFunction(
-            lambda: random.choice(["blue", "yellow", "green", "orange"])
-        ),
+        color=factory.LazyFunction(lambda: random.choice(["blue", "yellow", "green", "orange"])),
         width=factory.LazyFunction(lambda: random.randint(10, 1000)),
         height=factory.SelfAttribute("width"),
     )
     performance = factory.Iterator(Performance.objects.all())
     url = factory.Faker("url")
-    pub_date = factory.LazyFunction(
-        lambda: fake.past_datetime(tzinfo=pytz.UTC)
-    )
+    pub_date = factory.LazyFunction(lambda: fake.past_datetime(tzinfo=pytz.UTC))
 
 
 @restrict_factory({"global": [Performance]})
@@ -193,6 +179,4 @@ class PerformanceReviewFactory(factory.django.DjangoModelFactory):
     text = factory.Faker("text", locale="ru_RU")
     performance = factory.Iterator(Performance.objects.all())
     url = factory.Faker("url")
-    pub_date = factory.LazyFunction(
-        lambda: fake.past_datetime(tzinfo=pytz.UTC)
-    )
+    pub_date = factory.LazyFunction(lambda: fake.past_datetime(tzinfo=pytz.UTC))
