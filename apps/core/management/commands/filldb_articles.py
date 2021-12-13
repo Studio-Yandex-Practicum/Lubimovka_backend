@@ -12,7 +12,7 @@ def notification(command, objects, text):
 
 
 class Command(BaseCommand):
-    help = "Заполняет базу данных тестовыми данными и сейчас доступны:" " - Блоги" " - Новости" " - Проекты"
+    help = "Заполняет базу данных тестовыми данными и сейчас доступны: Блоги, Новости, Проекты"
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:

@@ -23,7 +23,7 @@ class TestFestivalAPIUrls:
         )
         for url in urls:
             response = client.get(url)
-            assert response.status_code == 200, f"Проверьте, что при GET запросе {url} " f"возвращается статус 200"
+            assert response.status_code == 200, f"Проверьте, что при GET запросе {url} возвращается статус 200"
 
 
 class TestAboutFestivalAPIUrls:
@@ -32,7 +32,7 @@ class TestAboutFestivalAPIUrls:
     @pytest.mark.parametrize("url", (TEAMS_URL, SPONSORS_URL, VOLUNTEERS_URL))
     def test_about_festival_urls(self, client, url):
         response = client.get(url)
-        assert response.status_code == 200, f"Проверьте, что при GET запросе {url} " f"возвращается статус 200"
+        assert response.status_code == 200, f"Проверьте, что при GET запросе {url} возвращается статус 200"
 
 
 class TestPartnersAPIUrls:
@@ -41,7 +41,7 @@ class TestPartnersAPIUrls:
     def test_partners_urls(self, client):
         url = PARTNERS_URL
         response = client.get(url)
-        assert response.status_code == 200, f"Проверьте, что при GET запросе {url} " f"возвращается статус 200"
+        assert response.status_code == 200, f"Проверьте, что при GET запросе {url} возвращается статус 200"
 
 
 class TestQuestionsAPIUrls:
@@ -55,4 +55,4 @@ class TestQuestionsAPIUrls:
         }
         url = QUESTIONS_URL
         response = client.post(url, data=data)
-        assert response.status_code == 201, f"Проверьте, что при POST запросе {url} " f"возвращается статус 201"
+        assert response.status_code == 201, f"Проверьте, что при POST запросе {url} возвращается статус 201"

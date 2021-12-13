@@ -8,7 +8,7 @@ class User(AbstractUser):
 
     def __str__(self):
 
-        return f"{self.username} " f"({self.groups.first() if self.groups.first() else '-'})"
+        return f"{self.username} ({self.groups.first() if self.groups.first() else '-'})"
 
     @property
     def is_admin(self):

@@ -4,7 +4,7 @@ from typing import Any
 def check_restriction(models: list[Any], factory_info: str):
     model_names = [model.__qualname__ for model in models]
     required_instances = ", ".join(model_names)
-    error_msg = f"You should create at least one {required_instances} " f"before use {factory_info}"
+    error_msg = f"You should create at least one {required_instances} before use {factory_info}"
     for model in models:
         assert model.objects.first(), error_msg
 
