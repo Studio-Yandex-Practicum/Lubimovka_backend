@@ -15,7 +15,6 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: lubimovka_backend
-  SITE_URL: ${{ secrets.URL }}
 
 defaults:
   run:
@@ -82,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: deploy_vps
-      url: $SITE_URL
+      url: ${{ secrets.URL }}
     # needs: build-and-push-image-to-github-packages
     steps:
       # -
