@@ -14,6 +14,7 @@ fake = Faker("ru_RU")
 class ReadingFactory(factory.django.DjangoModelFactory):
     """
     Create Reading object.
+
     You should create at least one Play and Person and Role
     before use this factory.
     By default adds two team_members: dramatist and director
@@ -40,6 +41,7 @@ class ReadingFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def add_team_members(self, created, extracted, **kwargs):
+        """Add other team_members for created Reading object."""
         if not created:
             return
         if extracted:

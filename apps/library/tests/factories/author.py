@@ -9,6 +9,8 @@ fake = Faker("ru_RU")
 
 
 class AchievementFactory(factory.django.DjangoModelFactory):
+    """Create Achievement object."""
+
     class Meta:
         model = Achievement
 
@@ -68,7 +70,7 @@ class OtherPlayFactory(factory.django.DjangoModelFactory):
 @restrict_factory({"global": [Play]})
 class AuthorFactory(factory.django.DjangoModelFactory):
     """
-    Creates Author objects.
+    Create Author object.
 
     By default creates next fields:
         - person with full name, email, city and image;
@@ -93,7 +95,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_achievement(self, created, extracted, **kwargs):
         """
-        Create a Achievement object.
+        Create an Achievement object.
 
         Add it to achievements field for Author.
         To use "add_achievement=True"
@@ -147,6 +149,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     def plays(self, created, extracted, **kwargs):
         """
         Add a Play objects to plays field for Author.
+
         To add concrete plays use
         AuthorFactory.create(plays=(play1, play2, ...)).
         To add given number of Play objects use

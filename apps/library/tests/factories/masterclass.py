@@ -14,6 +14,7 @@ fake = Faker("ru_RU")
 class MasterClassFactory(factory.django.DjangoModelFactory):
     """
     Create MasterClass object.
+
     You should create at least one Person and Role
     before use this factory.
     """

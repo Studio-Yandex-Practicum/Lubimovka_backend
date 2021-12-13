@@ -13,6 +13,7 @@ fake = Faker("ru_RU")
 class TeamMemberFactory(factory.django.DjangoModelFactory):
     """
     Create TeamMember object.
+
     You should create at least one Person and Role
     before use this factory.
     This factory can be used only inside Reading, Performance

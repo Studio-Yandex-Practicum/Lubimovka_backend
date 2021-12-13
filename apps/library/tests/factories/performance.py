@@ -18,6 +18,7 @@ fake = Faker("ru_RU")
 class PerformanceFactory(factory.django.DjangoModelFactory):
     """
     Create Performance object.
+
     You should create at least one Play, one Person and one Role
     before use this factory.
     By default creates next fields:
@@ -65,7 +66,8 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_video(self, created, extracted, **kwargs):
         """
-        Add video field for Performance
+        Add video field for Performance.
+
         To use "add_video=True"
         """
         if not created:
@@ -78,6 +80,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
         """
         Create random amount of Image objects and add them
         to images_in_block field for Performance.
+
         To use "add_images_in_block=True"
         """
         if not created:
@@ -92,6 +95,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
         """
         Create PerformanceReview object and add
         to reviews field for Performance.
+
         To use "add_review=True"
         """
         if not created:
@@ -101,10 +105,10 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def add_media_review(self, created, extracted, **kwargs):
-
         """
         Create PerformanceMediaReview object and add
         to media_reviews field for Performance.
+
         To use "add_media_review=True"
         """
         if not created:
@@ -114,6 +118,11 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def add_team_members(self, created, extracted, **kwargs):
+        """
+        Add other team_members
+
+        To use add_team_members=(text_adaptation, actor, ...)
+        """
         if not created:
             return
         if extracted:
@@ -130,6 +139,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     def complex_create(cls):
         """
         Create Performance object with fully populated fields.
+
         You should create at least one Play and Project
         before use this method.
         """
@@ -145,6 +155,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
 class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
     """
     Create PerformanceMediaReview object.
+
     You should create at least one Performance
     before use this factory.
     """
@@ -168,6 +179,7 @@ class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
 class PerformanceReviewFactory(factory.django.DjangoModelFactory):
     """
     Create PerformanceReview object.
+
     You should create at least one Performance
     before use this factory.
     """
