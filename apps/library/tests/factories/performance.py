@@ -78,9 +78,9 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_images_in_block(self, created, extracted, **kwargs):
         """
-        Create random amount of Image objects and add them
-        to images_in_block field for Performance.
+        Create random amount of Image objects.
 
+        And add them to images_in_block field for Performance.
         To use "add_images_in_block=True"
         """
         if not created:
@@ -93,9 +93,9 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_review(self, created, extracted, **kwargs):
         """
-        Create PerformanceReview object and add
-        to reviews field for Performance.
+        Create PerformanceReview object.
 
+        And add to reviews field for Performance.
         To use "add_review=True"
         """
         if not created:
@@ -106,9 +106,9 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_media_review(self, created, extracted, **kwargs):
         """
-        Create PerformanceMediaReview object and add
-        to media_reviews field for Performance.
+        Create PerformanceMediaReview object.
 
+        And add to media_reviews field for Performance.
         To use "add_media_review=True"
         """
         if not created:
@@ -119,7 +119,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_team_members(self, created, extracted, **kwargs):
         """
-        Add other team_members
+        Add other team_members.
 
         To use add_team_members=(text_adaptation, actor, ...)
         """
