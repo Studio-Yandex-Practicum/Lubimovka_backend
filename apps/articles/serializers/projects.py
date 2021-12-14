@@ -11,6 +11,7 @@ class ProjectSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
             "id",
             "title",
             "intro",
+            "description",
             "image",
             "contents",
             "created",
@@ -24,6 +25,6 @@ class ProjectListSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "title",
-            "description",
+            "intro",
             "image",
         )

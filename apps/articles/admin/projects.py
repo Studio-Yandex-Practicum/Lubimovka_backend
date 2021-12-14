@@ -18,6 +18,25 @@ class ProjectContentInline(BaseContentInline):
         "videosblock",
     )
 
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "title",
+                    "intro",
+                    "pub_date",
+                    "description",
+                    (
+                        "image_preview_change_page",
+                        "image",
+                    ),
+                    "is_draft",
+                )
+            },
+        ),
+    )
+
 
 class ProjectAdmin(BaseContentPageAdmin):
     inlines = (ProjectContentInline,)
