@@ -4,16 +4,13 @@ from apps.articles.models import Project
 from apps.content_pages.serializers import BaseContentPageSerializer
 
 
-class ProjectSerializer(
-    BaseContentPageSerializer,
-    serializers.ModelSerializer,
-):
+class ProjectSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
             "id",
             "title",
-            "description",
+            "intro",
             "image",
             "contents",
             "created",
