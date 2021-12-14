@@ -1,9 +1,10 @@
 name: Python safety check
 
-pull_request:
-  branches:
-    - develop
-    - master
+on:
+  pull_request:
+    branches:
+      - develop
+      - master
 
 env:
   DEP_PATH: requirements/prod.txt
