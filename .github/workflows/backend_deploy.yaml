@@ -98,7 +98,6 @@ jobs:
       #     echo IMAGE_TAG=$IMAGE_TAG >> $GITHUB_ENV
       -
         name: executing remote ssh commands to deploy
-        id: execute
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.HOST }}

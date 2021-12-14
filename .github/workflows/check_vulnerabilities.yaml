@@ -1,0 +1,19 @@
+name: Python safety check
+
+pull_request:
+  branches:
+    - develop
+    - master
+
+jobs:
+
+  DEP_PATH: requirements/prod.txt
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out master
+        uses: actions/checkout@master
+
+      - name: Security vulnerabilities scan
+        uses: aufdenpunkt/python-safety-check@master
