@@ -5,10 +5,10 @@ pull_request:
     - develop
     - master
 
-jobs:
-
+env:
   DEP_PATH: requirements/prod.txt
 
+jobs:
   build:
     runs-on: ubuntu-latest
     steps:
