@@ -18,6 +18,8 @@ class ProjectContentInline(BaseContentInline):
         "videosblock",
     )
 
+
+class ProjectAdmin(BaseContentPageAdmin):
     fieldsets = (
         (
             None,
@@ -37,8 +39,6 @@ class ProjectContentInline(BaseContentInline):
         ),
     )
 
-
-class ProjectAdmin(BaseContentPageAdmin):
     inlines = (ProjectContentInline,)
 
 
