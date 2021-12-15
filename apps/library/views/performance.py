@@ -18,11 +18,10 @@ class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         detail=True,
         methods=["GET"],
         url_path="media-review",
-        # url_name="media-review",
         serializer_class=PerformanceMediaReviewSerializer,
     )
     def get_media_review(self, request, pk):
-        """Get all performance media review"""
+        """Get all performance media reviews"""
         query = PerformanceMediaReview.objects.filter(performance=pk)
         serializer = self.serializer_class(query, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -31,11 +30,10 @@ class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
         detail=True,
         methods=["GET"],
         url_path="review",
-        # url_name="media-review",
         serializer_class=PerformanceReviewSerializer,
     )
     def get_review(self, request, pk):
-        """Get all performance review"""
+        """Get all performance reviews"""
         query = PerformanceReview.objects.filter(performance=pk)
         serializer = self.serializer_class(query, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
