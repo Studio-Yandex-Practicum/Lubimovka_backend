@@ -2,6 +2,7 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
+from apps.content_pages.tests.factories import ImageForContentFactory
 from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
 from apps.info.tests.factories import (
     FestivalFactory,
@@ -33,9 +34,14 @@ class Command(BaseCommand):
         " - Персоны с фотографией"
         " - Персоны с фотографией, городом проживания и email"
         " - Партнёры"
-        " - Волонтёры"
+        " - Партнёры для футера"
         " - Попечители"
+        " - Волонтёры"
         " - Команды фестиваля"
+        " - Картинки"
+        " - Фестивали"
+        " - Пресс-релизы"
+        " - Изображения для новостей/блогов/проектов"
         " - Пользователи-админы"
         " - Пользователи-редакторы"
         " - Программы"
@@ -44,8 +50,6 @@ class Command(BaseCommand):
         " - Спектакли"
         " - Мастер-классы"
         " - Читки"
-        " - Члены команды читок, спектаклей и мастер-классов"
-        " - Изображения для контента"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -96,6 +100,9 @@ class Command(BaseCommand):
 
             press_releases = PressReleaseFactory.create_batch(10)
             notification(self, press_releases, "пресс-релизов")
+
+            images_for_content = ImageForContentFactory.create_batch(10)
+            notification(self, images_for_content, "контент-изображений")
 
             users_editors = []
             users_admins = []

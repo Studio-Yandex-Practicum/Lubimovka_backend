@@ -8,6 +8,11 @@ class Project(AbstractContentPage):
         upload_to="images/articles/projects/",
         verbose_name="Заглавная картинка",
     )
+    intro = models.TextField(
+        max_length=200,
+        verbose_name="Интро к проекту",
+        help_text="Короткое интро к проекту. Показывается в списке проектов с заголовком.",
+    )
 
     def __str__(self):
         return f"Проект {self.title}"
