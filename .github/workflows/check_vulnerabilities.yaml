@@ -17,19 +17,8 @@ jobs:
     steps:
       - name: Check out master
         uses: actions/checkout@master
-        if: github.ref == 'refs/heads/master'
-        env:
-          DEP_PATH: requirements/prod.txt
-        # if: github.ref == 'refs/heads/develop'
+        # if: github.ref == 'refs/heads/master'
         # env:
-        #   DEP_PATH: requirements/dev.txt
-      # - name: Get requirements for branch
-      #   if: github.ref == 'refs/heads/master'
-      #   env:
-      #     DEP_PATH: requirements/prod.txt
-      # - name: Get requirements for branch dev
-      #   if: github.ref == 'refs/heads/develop'
-      #   env:
-      #     DEP_PATH: requirements/dev.txt
+        #   DEP_PATH: requirements/prod.txt
       - name: Security vulnerabilities scan
         uses: aufdenpunkt/python-safety-check@master
