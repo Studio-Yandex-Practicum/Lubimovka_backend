@@ -51,9 +51,7 @@ class PressReleaseViewSet(mixins.ListModelMixin, GenericViewSet):
         )
         press_release_year = press_release.festival.year
         response = HttpResponse(content_type="application/pdf")
-        response[
-            "Content-Disposition"
-        ] = f"attachment; filename='press-release_{press_release_year}.pdf'"
+        response["Content-Disposition"] = f"attachment; filename='press-release_{press_release_year}.pdf'"
         template = get_template("press_release.html")
         content = template.render({"press_release": press_release})
         pisa_status = pisa.CreatePDF(
@@ -62,7 +60,5 @@ class PressReleaseViewSet(mixins.ListModelMixin, GenericViewSet):
             encoding="UTF-8",
         )
         if pisa_status.err:
-            return HttpResponse(
-                "Пожалуйста, попробуйте повторить попытку позже"
-            )
+            return HttpResponse("Пожалуйста, попробуйте повторить попытку позже")
         return response
