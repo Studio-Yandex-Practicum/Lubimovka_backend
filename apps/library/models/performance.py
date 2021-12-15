@@ -71,6 +71,16 @@ class Performance(BaseModel):
         related_name="performances",
         verbose_name="Проект",
     )
+    date = models.DateTimeField(
+        verbose_name="Дата",
+    )
+    duration = models.DurationField(
+        default="01:35:00",
+        verbose_name="Продолжительность",
+    )
+    tickets_link = models.URLField(
+        verbose_name="Ссылка на покупку билетов",
+    )
 
     class Meta:
         ordering = ("-created",)

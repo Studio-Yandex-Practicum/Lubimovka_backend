@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.core.serializers import ImageSerializer
-from apps.library.models import Performance, TeamMember
+from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview, TeamMember
 from apps.library.utilities import team_collector
 
 from .play import PlaySerializer
@@ -49,4 +49,24 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "team",
             "image",
             "project",
+        )
+
+
+class PerformanceMediaReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PerformanceMediaReview
+        exclude = (
+            "created",
+            "modified",
+            "performance",
+        )
+
+
+class PerformanceReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PerformanceReview
+        exclude = (
+            "created",
+            "modified",
+            "performance",
         )
