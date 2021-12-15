@@ -2,6 +2,7 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
+from apps.content_pages.tests.factories import ImageForContentFactory
 from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
 from apps.info.tests.factories import (
     FestivalFactory,
@@ -11,12 +12,19 @@ from apps.info.tests.factories import (
     SponsorFactory,
     VolunteerFactory,
 )
+from apps.library.tests.factories import (
+    AuthorFactory,
+    MasterClassFactory,
+    ParticipationApplicationFestivalFactory,
+    PerformanceFactory,
+    PlayFactory,
+    ProgramFactory,
+    ReadingFactory,
+)
 
 
 def notification(command, objects, text):
-    command.stdout.write(
-        command.style.SUCCESS(f"{len(objects)} {text} успешно созданы.")
-    )
+    command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создано."))
 
 
 class Command(BaseCommand):
@@ -26,14 +34,22 @@ class Command(BaseCommand):
         " - Персоны с фотографией"
         " - Персоны с фотографией, городом проживания и email"
         " - Партнёры"
-        " - Волонтёры"
+        " - Партнёры для футера"
         " - Попечители"
+        " - Волонтёры"
         " - Команды фестиваля"
+        " - Картинки"
+        " - Фестивали"
+        " - Пресс-релизы"
+        " - Изображения для новостей/блогов/проектов"
         " - Пользователи-админы"
         " - Пользователи-редакторы"
-        " - Изображения для контента"
         " - Программы"
+        " - Авторы"
         " - Пьесы"
+        " - Спектакли"
+        " - Мастер-классы"
+        " - Читки"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -85,20 +101,39 @@ class Command(BaseCommand):
             press_releases = PressReleaseFactory.create_batch(10)
             notification(self, press_releases, "пресс-релизов")
 
+            images_for_content = ImageForContentFactory.create_batch(10)
+            notification(self, images_for_content, "контент-изображений")
+
             users_editors = []
             users_admins = []
             for index in range(1, 6):
-                users_editors.append(
-                    UserFactory.create(
-                        username=f"editor_{index}", add_role_editor=True
-                    )
-                )
-                users_admins.append(
-                    UserFactory.create(
-                        username=f"admin_{index}", add_role_admin=True
-                    )
-                )
+                users_editors.append(UserFactory.create(username=f"editor_{index}", add_role_editor=True))
+                users_admins.append(UserFactory.create(username=f"admin_{index}", add_role_admin=True))
             notification(self, users_editors, "редакторов")
             notification(self, users_admins, "админов")
+
+            # <Library factories>
+
+            programtypes = ProgramFactory.create_batch(3)
+            notification(self, programtypes, "программ")
+
+            plays = PlayFactory.create_batch(10)
+            notification(self, plays, "пьес")
+
+            perfomances = [PerformanceFactory.complex_create() for _ in range(6)]
+            notification(self, perfomances, "спектаклей")
+
+            authors = [AuthorFactory.complex_create() for _ in range(15)]
+            notification(self, authors, "авторов")
+
+            masterclasses = MasterClassFactory.create_batch(10)
+            notification(self, masterclasses, "мастер-классов")
+
+            readings = ReadingFactory.create_batch(10)
+            notification(self, readings, "читок")
+
+            participations = ParticipationApplicationFestivalFactory.create_batch(5)
+            notification(self, participations, "заявок на участие в фестивале")
+
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))

@@ -44,9 +44,7 @@ class MainObject:
     def add_afisha(self):
         main_add_afisha = Setting.get_setting("main_add_afisha")
         if main_add_afisha:
-            main_show_afisha_only_for_today = Setting.get_setting(
-                "main_show_afisha_only_for_today"
-            )
+            main_show_afisha_only_for_today = Setting.get_setting("main_show_afisha_only_for_today")
             if main_show_afisha_only_for_today:
                 today = date.today()
                 tomorrow = today + timedelta(days=1)

@@ -9,9 +9,7 @@ class EventMasterClassSerializer(serializers.ModelSerializer):
     project = serializers.SlugRelatedField(slug_field="title", read_only=True)
 
     def get_team(self, obj):
-        return team_collector(
-            TeamMember, {"masterclass": obj, "role__slug": "host"}
-        )
+        return team_collector(TeamMember, {"masterclass": obj, "role__slug": "host"})
 
     class Meta:
         model = MasterClass

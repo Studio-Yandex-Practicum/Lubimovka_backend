@@ -16,9 +16,7 @@ class UserAdminForm(forms.ModelForm):
 
 
 class GroupAdminForm(forms.ModelForm):
-    """
-    Extra field "Users" for groups
-    """
+    """Extra field "Users" for groups."""
 
     class Meta:
         model = Group
@@ -36,13 +34,8 @@ class GroupAdminForm(forms.ModelForm):
             self.fields["users"].initial = self.instance.user_set.all()
 
     def save_m2m(self):
-        """
-        Add the users to the Group and remove past relations.
-        """
-
-        self.instance.user_set.through.objects.filter(
-            user__in=self.cleaned_data["users"]
-        ).delete()
+        """Add the users to the Group and remove past relations."""
+        self.instance.user_set.through.objects.filter(user__in=self.cleaned_data["users"]).delete()
 
         self.instance.user_set.set(self.cleaned_data["users"])
 

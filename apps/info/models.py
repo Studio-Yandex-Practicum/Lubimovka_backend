@@ -1,10 +1,6 @@
 from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
-from django.core.validators import (
-    MaxValueValidator,
-    MinLengthValidator,
-    MinValueValidator,
-)
+from django.core.validators import MaxValueValidator, MinLengthValidator, MinValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils import timezone
@@ -40,9 +36,7 @@ class Partner(BaseModel):
     in_footer_partner = models.BooleanField(
         default=False,
         verbose_name="Отображение внизу страницы",
-        help_text=(
-            "Поставьте галочку, чтобы показать логотип партнёра внизу страницы"
-        ),
+        help_text=("Поставьте галочку, чтобы показать логотип партнёра внизу страницы"),
     )
 
     class Meta:
@@ -85,10 +79,7 @@ class FestivalTeam(BaseModel):
         ]
 
     def __str__(self):
-        return (
-            f"{self.person.first_name} {self.person.last_name} - "
-            f"{self.team}"
-        )
+        return f"{self.person.first_name} {self.person.last_name} - " f"{self.team}"
 
     def clean(self):
         if not self.person.email:
@@ -153,10 +144,7 @@ class Volunteer(BaseModel):
         ]
 
     def __str__(self):
-        return (
-            f"{self.person.first_name} {self.person.last_name} - волонтёр "
-            f"фестиваля {self.year} года"
-        )
+        return f"{self.person.first_name} {self.person.last_name} - волонтёр " f"фестиваля {self.year} года"
 
     def clean(self):
         if not self.person.email:
@@ -176,9 +164,7 @@ class Place(BaseModel):
         verbose_name = "Площадка"
         verbose_name_plural = "Площадки"
         constraints = [
-            models.UniqueConstraint(
-                fields=["name", "city"], name="unique_place"
-            ),
+            models.UniqueConstraint(fields=["name", "city"], name="unique_place"),
         ]
 
     def __str__(self):
@@ -245,9 +231,7 @@ class Festival(BaseModel):
         max_length=10,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
     )  # При изменении - скорректировать фабрику в части создания данного поля
-    press_release_image = models.ImageField(
-        verbose_name="Изображение для страницы пресс-релизов"
-    )
+    press_release_image = models.ImageField(verbose_name="Изображение для страницы пресс-релизов")
 
     class Meta:
         verbose_name = "Фестиваль"
@@ -261,11 +245,7 @@ class Festival(BaseModel):
 class Question(BaseModel):
     question = models.TextField(
         max_length=500,
-        validators=[
-            MinLengthValidator(
-                2, "Вопрос должен состоять более чем из 2 символов"
-            )
-        ],
+        validators=[MinLengthValidator(2, "Вопрос должен состоять более чем из 2 символов")],
         verbose_name="Текст вопроса",
     )
     author_name = models.CharField(
@@ -286,9 +266,7 @@ class Question(BaseModel):
 
 
 class PressRelease(BaseModel):
-    title = models.CharField(
-        max_length=500, unique=True, verbose_name="Заголовок"
-    )
+    title = models.CharField(max_length=500, unique=True, verbose_name="Заголовок")
     text = RichTextField(verbose_name="Текст")
     festival = models.OneToOneField(
         Festival,

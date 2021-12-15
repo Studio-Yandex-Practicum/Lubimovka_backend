@@ -23,15 +23,14 @@ def add_content_item_to_news(news, created, count, factory):
     if not created:
         return
     if count:
-        NewsItemContentFactory.create_batch(
-            count, item=factory, content_page=news
-        )
+        NewsItemContentFactory.create_batch(count, item=factory, content_page=news)
 
 
 class NewsItemContentFactory(factory.django.DjangoModelFactory):
     """
-    Base model for content items and blocks for News. When add content
-    to News (via add_content_item_to_news - see above) you should add
+    Base model for content items and blocks for News.
+
+    When add content to News (via add_content_item_to_news - see above) you should add
     item=factory.SubFactory(BLOCK_OR_ITEM_FACTORY_YOU_NEED), content_page=NEWS
     and count=INT.
     """
@@ -39,9 +38,7 @@ class NewsItemContentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = NewsItemContent
 
-    content_type = factory.LazyAttribute(
-        lambda obj: ContentType.objects.get_for_model(obj.item)
-    )
+    content_type = factory.LazyAttribute(lambda obj: ContentType.objects.get_for_model(obj.item))
     object_id = factory.SelfAttribute("item.id")
     order = factory.Sequence(lambda n: n)
 
@@ -56,6 +53,7 @@ class NewsItemContentFactory(factory.django.DjangoModelFactory):
 class NewsFactory(factory.django.DjangoModelFactory):
     """
     Creates News Page.
+
     You can customize News content by adding method and count when
     create (e.g. 'NewsFactory.create(add_several_preamble=5,
     add_several_personsblock=3)). Content item/block will not be

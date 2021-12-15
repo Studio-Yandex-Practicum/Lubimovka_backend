@@ -31,9 +31,7 @@ def team_collector(model, filters: dict = None) -> defaultdict:
     qs = (
         model.objects.filter(**filters)
         .values_list("role__name")
-        .annotate(
-            name=Concat("person__first_name", Value(" "), "person__last_name")
-        )
+        .annotate(name=Concat("person__first_name", Value(" "), "person__last_name"))
     )
     team = defaultdict(list)
     for key, value in qs:

@@ -1,7 +1,4 @@
-from drf_spectacular.utils import (
-    PolymorphicProxySerializer,
-    extend_schema_field,
-)
+from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_field
 from rest_framework import serializers
 
 from apps.content_pages.models import (
@@ -54,13 +51,10 @@ CONTENT_OBJECT_SERIALIZER_PAIRS = {
     )
 )
 class ContentObjectRelatedField(serializers.RelatedField):
-    """
-    Custom related field to use for the "content_object" generic relationship.
-    """
+    """Custom related field to use for the "content_object" generic relationship."""
 
     def to_representation(self, obj):
         """Serialize content objects to a simple representation."""
-
         # to think: if amount of types of objects increases may be easier to
         # get serializer_class by name (for example look for
         # SerializerMethodField sources)
@@ -77,7 +71,7 @@ class ContentObjectRelatedField(serializers.RelatedField):
 
 
 class BaseContentSerializer(serializers.Serializer):
-    """Content (Item/Block) Serializer
+    """Content (Item/Block) Serializer.
 
     1. "content_type" returns type of content item
     2. "content_item" recognized type of item and serialize it

@@ -1,13 +1,7 @@
 from django.contrib import admin
 
 from apps.core.models import Setting
-from apps.main.models import (
-    Banner,
-    SettingEmail,
-    SettingFirstScreen,
-    SettingGeneral,
-    SettingMain,
-)
+from apps.main.models import Banner, SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
 
 
 @admin.register(Banner)
@@ -54,9 +48,9 @@ class SettingAdmin(admin.ModelAdmin):
         return obj.value
 
     def has_add_permission(self, request, obj=None):
-        """Removes the save and add new button."""
+        """Remove the save and add new button."""
         return False
 
     def has_delete_permission(self, request, obj=None):
-        """Removes the delete button."""
+        """Remove the delete button."""
         return False

@@ -8,6 +8,7 @@ from apps.library.serializers import AuthorSearchSerializer, PlaySerializer
 class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
     """
     Поиск авторов по имени и фамилии и пьес по названию.
+
     При пустом поисковом запросе отдаются пустые массивы.
     """
 
@@ -15,17 +16,17 @@ class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
 
     def get_querylist(self):
         """
-        Возвращает переменную querylist, являющуюся списком/кортежем словарей,
-        содержащих, как минимум ключи `queryset` и `serializer_class`
-        Переопределние метода get_queryList позволяет вам делать, например,
-        добавление поисковых запросов используя url kwargs и т.п.
+        Возвращает переменную querylist.
+
+        querylist является списком/кортежем словарей,
+        содержащих, как минимум ключи `queryset` и `serializer_class`. Подробнее смотри документацию пакета.
+        См. https://django-rest-multiple-models.readthedocs.io/en/latest/filtering.html#override-get-querylist.
         """
         q = self.request.query_params.get("q", "")
         if q:
             plays_queryset = Play.objects.filter(name__icontains=q)
             authors_queryset = Author.objects.filter(
-                Q(person__first_name__icontains=q)
-                | Q(person__last_name__icontains=q)
+                Q(person__first_name__icontains=q) | Q(person__last_name__icontains=q)
             )
         else:
             plays_queryset = Play.objects.none()

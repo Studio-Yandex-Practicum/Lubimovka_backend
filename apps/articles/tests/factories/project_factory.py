@@ -8,8 +8,6 @@ from apps.content_pages.tests.factories import (
     ImagesBlockFactory,
     PersonsBlockFactory,
     PlaysBlockFactory,
-    PreambleFactory,
-    QuoteFactory,
     TextFactory,
     TitleFactory,
 )
@@ -23,15 +21,14 @@ def add_content_item_to_project(project, created, count, factory):
     if not created:
         return
     if count:
-        ProjectContentFactory.create_batch(
-            count, item=factory, content_page=project
-        )
+        ProjectContentFactory.create_batch(count, item=factory, content_page=project)
 
 
 class ProjectContentFactory(factory.django.DjangoModelFactory):
     """
-    Base model for content items and blocks for Project. When add content
-    to Project (via add_content_item_to_project - see above) you should add
+    Base model for content items and blocks for Project.
+
+    When add content to Project (via add_content_item_to_project - see above) you should add
     item=factory.SubFactory(BLOCK_OR_ITEM_FACTORY_YOU_NEED),
     content_page=PROJECT and count=INT.
     """
@@ -39,9 +36,7 @@ class ProjectContentFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ProjectContent
 
-    content_type = factory.LazyAttribute(
-        lambda obj: ContentType.objects.get_for_model(obj.item)
-    )
+    content_type = factory.LazyAttribute(lambda obj: ContentType.objects.get_for_model(obj.item))
     object_id = factory.SelfAttribute("item.id")
     order = factory.Sequence(lambda n: n)
 
@@ -56,6 +51,7 @@ class ProjectContentFactory(factory.django.DjangoModelFactory):
 class ProjectFactory(factory.django.DjangoModelFactory):
     """
     Creates Project Page.
+
     You can customize Project's content by adding method and count when
     create (e.g. 'ProjectFactory.create(add_several_preamble=5,
     add_several_personsblock=3)). Content item/block will not be
@@ -67,22 +63,12 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Project
 
-    description = factory.Faker(
-        "paragraph",
-        locale="ru_RU",
-        nb_sentences=5,
-        variable_nb_sentences=False,
-    )
+    description = factory.Faker("paragraph", locale="ru_RU", nb_sentences=5, variable_nb_sentences=False)
     image = factory.django.ImageField(color=factory.Faker("color"))
+    intro = factory.Faker("sentence", locale="ru_RU", nb_words=12)
     is_draft = factory.Faker("boolean", chance_of_getting_true=25)
     pub_date = factory.Faker("date_time", tzinfo=timezone.utc)
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
-
-    @factory.post_generation
-    def add_several_preamble(self, created, count, **kwargs):
-        """Add specified count of Preamble item to Project."""
-        subfactory = factory.SubFactory(PreambleFactory)
-        add_content_item_to_project(self, created, count, subfactory)
 
     @factory.post_generation
     def add_several_text(self, created, count, **kwargs):
@@ -94,12 +80,6 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     def add_several_title(self, created, count, **kwargs):
         """Add specified count of Title item to Project."""
         subfactory = factory.SubFactory(TitleFactory)
-        add_content_item_to_project(self, created, count, subfactory)
-
-    @factory.post_generation
-    def add_several_quote(self, created, count, **kwargs):
-        """Add specified count of Quote item to Project."""
-        subfactory = factory.SubFactory(QuoteFactory)
         add_content_item_to_project(self, created, count, subfactory)
 
     @factory.post_generation
@@ -125,10 +105,8 @@ class ProjectFactory(factory.django.DjangoModelFactory):
         """Create specified count of Project with fully populated content."""
         return cls.create_batch(
             count,
-            add_several_preamble=1,
             add_several_text=1,
             add_several_title=1,
-            add_several_quote=1,
             add_several_playsblock=1,
             add_several_imagesblock=1,
             add_several_personsblock=1,
