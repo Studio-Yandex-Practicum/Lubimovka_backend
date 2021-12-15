@@ -7,6 +7,7 @@ on:
       - master
 
 env:
+  if: github.ref == 'refs/heads/develop'
   DEP_PATH: requirements/prod.txt
 
 jobs:
