@@ -17,7 +17,8 @@ jobs:
     steps:
       - name: Check out master
         uses: actions/checkout@master
+      - name: FF
         if: github.ref == 'refs/heads/master'
-        run: echo $DEP_PATH="requirements/prod.txt"
+        run: echo "DEP_PATH=requirements/prod.txt >> $GITHUB_ENV
       - name: Security vulnerabilities scan
         uses: aufdenpunkt/python-safety-check@master
