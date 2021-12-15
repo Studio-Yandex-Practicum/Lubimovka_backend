@@ -8,7 +8,7 @@ on:
 
 env:
   if: github.ref == 'refs/heads/develop'
-  DEP_PATH: requirements/prod.txt
+  DEP_PATH: requirements/dev.txt
 
 jobs:
   build:
