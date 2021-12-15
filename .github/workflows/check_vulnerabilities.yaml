@@ -7,8 +7,8 @@ on:
       - master
 
 env:
-#   DEVELOP: requirements/dev.txt
-#   PRODUCTION: requirements/prod.txt
+  # DEVELOP: requirements/dev.txt
+  # PRODUCTION: requirements/prod.txt
   DEP_PATH: requirements/dev.txt
 
 jobs:
@@ -17,8 +17,7 @@ jobs:
     steps:
       - name: Check out master
         uses: actions/checkout@master
-        # if: github.ref == 'refs/heads/master'
-        # env:
-        #   DEP_PATH: requirements/prod.txt
+        if: github.ref == 'refs/heads/master'
+        run: echo $DEP_PATH="requirements/prod.txt"
       - name: Security vulnerabilities scan
         uses: aufdenpunkt/python-safety-check@master
