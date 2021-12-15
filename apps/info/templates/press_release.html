@@ -1,0 +1,33 @@
+{% load static %}
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <style type="text/css">
+
+        @font-face {
+            font-family: "NeueMachinaRegular";
+            src: url('staticfiles/fonts/NeueMachinaRegular/PPNeueMachina-Regular.ttf');
+        }
+
+        .title {
+            font-family: "NeueMachinaRegular";
+            font-size: 20px;
+        }
+
+        .text {
+            font-family: "NeueMachinaRegular";
+            font-size: 14px;
+        }
+        h2 { text-align: center }
+    </style>
+</head>
+
+<body>
+    <div class="title"><h2>{{ press_release.title | safe }}</h2></div>
+    <div class="text">{{ press_release.text | safe }}</div>
+
+</body>
+
+</html>
