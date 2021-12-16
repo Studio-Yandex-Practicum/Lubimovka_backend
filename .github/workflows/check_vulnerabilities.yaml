@@ -7,9 +7,8 @@ on:
       - master
 
 env:
-  # DEVELOP: requirements/dev.txt
-  # PRODUCTION: requirements/prod.txt
-  DEP_PATH: requirements/dev.txt
+  DEVELOP: requirements/dev.txt
+  PRODUCTION: requirements/prod.txt
 
 jobs:
   build:
@@ -17,9 +16,11 @@ jobs:
     steps:
       - name: Check out master
         uses: actions/checkout@master
-      - name: FF
+      - name: Requiremets path to production branch
         if: ${{ github.base_ref == 'master' }}
-        run: |
-          echo "DEP_PATH=requirements/prod.txt" >> $GITHUB_ENV
+        run: echo "DEP_PATH=$PRODUCTION" >> $GITHUB_ENV
+      - name: Requiremets path to production branch
+        if: ${{ github.base_ref == 'develop' }}
+        run: echo "DEP_PATH=$DEVELOP" >> $GITHUB_ENV
       - name: Security vulnerabilities scan
         uses: aufdenpunkt/python-safety-check@master
