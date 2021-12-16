@@ -20,6 +20,6 @@ jobs:
       - name: FF
         if: ${{ github.base_ref == 'master' }}
         run: |
-          echo "DEP_PATH=requirements/prod.txt >> $GITHUB_ENV
+          echo "DEP_PATH=requirements/prod.txt" >> $GITHUB_ENV
       - name: Security vulnerabilities scan
         uses: aufdenpunkt/python-safety-check@master
