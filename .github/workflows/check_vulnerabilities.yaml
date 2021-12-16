@@ -17,6 +17,7 @@ jobs:
     steps:
       - name: Check out master
         uses: actions/checkout@master
+      - name: Print
         run: |
           echo ${{ github.ref }}
           echo ${{ github.ref_name }}
