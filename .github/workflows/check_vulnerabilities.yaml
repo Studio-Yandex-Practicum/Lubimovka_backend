@@ -9,6 +9,7 @@ on:
 env:
   DEVELOP: requirements/dev.txt
   PRODUCTION: requirements/prod.txt
+  DEP_PATH: None
 
 
 jobs:
