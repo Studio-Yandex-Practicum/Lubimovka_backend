@@ -7,7 +7,10 @@ on:
       - master
 
 env:
-  DEP_PATH: requirements/prod.txt
+  DEVELOP: requirements/dev.txt
+  PRODUCTION: requirements/prod.txt
+  # https://github.com/aufdenpunkt/python-safety-check#env-variables
+  DEP_PATH: None
 
 jobs:
   build:
@@ -15,6 +18,13 @@ jobs:
     steps:
       - name: Check out master
         uses: actions/checkout@master
+
+      - name: Requiremets path to production branch
+        if: ${{ github.base_ref == 'master' }}
+        run: echo "DEP_PATH=$PRODUCTION" >> $GITHUB_ENV
+      - name: Requiremets path to develop branch
+        if: ${{ github.base_ref == 'develop' }}
+        run: echo "DEP_PATH=$DEVELOP" >> $GITHUB_ENV
 
       - name: Security vulnerabilities scan
         uses: aufdenpunkt/python-safety-check@master
