@@ -15,16 +15,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out master
-        uses: actions/checkout@master
+      # - name: Check out master
+      #   uses: actions/checkout@master
       - name: Print
         run: |
-          echo ${{ github.ref }}
-          echo ${{ github.ref_name }}
-          echo ${{ github.ref.name }}
-      - name: FF
-        if: ${{ github.ref == 'refs/heads/master' }}
-        run: |
-          echo "DEP_PATH=requirements/prod.txt >> $GITHUB_ENV
-      - name: Security vulnerabilities scan
-        uses: aufdenpunkt/python-safety-check@master
+          echo ${{ github.base_ref }}
+          echo ${{ github.base_ref_name }}
+          echo ${{ github.base_ref.name }}
+      # - name: FF
+      #   if: ${{ github.ref == 'refs/heads/master' }}
+      #   run: |
+      #     echo "DEP_PATH=requirements/prod.txt >> $GITHUB_ENV
+      # - name: Security vulnerabilities scan
+      #   uses: aufdenpunkt/python-safety-check@master
