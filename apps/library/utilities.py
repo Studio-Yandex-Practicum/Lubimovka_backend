@@ -40,6 +40,7 @@ def team_collector(model, filters: dict = None) -> defaultdict:
 
 
 def team_collector_with_plural_slug(model, filters: dict = None) -> defaultdict:
+
     """
     Group team members by roles.
     Make plural slug for Role.
