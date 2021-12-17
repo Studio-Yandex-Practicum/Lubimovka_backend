@@ -169,25 +169,6 @@ class OrderedVideoFactory(factory.django.DjangoModelFactory):
     order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
-class PersonsBlockFactory(factory.django.DjangoModelFactory):
-    """
-    Creates content block Person for blog, news or projects.
-
-    Block creates with 3 ordered persons.
-    """
-
-    class Meta:
-        model = PersonsBlock
-
-    title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
-
-    @factory.post_generation
-    def add_person(self, created, extracted, **kwargs):
-        if not created:
-            return
-        ExtendedPersonFactory.create_batch(3, block=self)
-
-
 class PerformancesBlockFactory(factory.django.DjangoModelFactory):
     """
     Creates content block Performance for projects.
@@ -205,6 +186,25 @@ class PerformancesBlockFactory(factory.django.DjangoModelFactory):
         if not created:
             return
         OrderedPerformanceFactory.create_batch(3, block=self)
+
+
+class PersonsBlockFactory(factory.django.DjangoModelFactory):
+    """
+    Creates content block Person for blog, news or projects.
+
+    Block creates with 3 ordered persons.
+    """
+
+    class Meta:
+        model = PersonsBlock
+
+    title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
+
+    @factory.post_generation
+    def add_person(self, created, extracted, **kwargs):
+        if not created:
+            return
+        ExtendedPersonFactory.create_batch(3, block=self)
 
 
 class PlaysBlockFactory(factory.django.DjangoModelFactory):
