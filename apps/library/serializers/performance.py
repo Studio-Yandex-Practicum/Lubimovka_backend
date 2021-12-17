@@ -1,10 +1,9 @@
-from django.db.models.query import Prefetch
 from rest_framework import serializers
 
 from apps.core.models import Role
 from apps.core.serializers import ImageSerializer
 from apps.library.models import Performance, TeamMember
-from apps.library.utilities import team_collector
+from apps.library.utilities import team_collector_with_plural_slug
 
 from .play import PlaySerializer
 
@@ -53,7 +52,7 @@ class PerformanceSerializer(serializers.ModelSerializer):
     images_in_block = ImageSerializer(many=True)
 
     def get_team(self, obj):
-        return team_collector(TeamMember, {"performance": obj})
+        return team_collector_with_plural_slug(TeamMember, {"performance": obj})
 
     class Meta:
         exclude = (
@@ -73,26 +72,10 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
     project = serializers.SlugRelatedField(slug_field="title", read_only=True)
 
     def get_team(self, obj):
-        performance = obj
-        performance_roles = Role.objects.filter(
-            team_members__performance=performance, slug__in=("director", "dramatist")
-        ).distinct()
-        performance_team = performance.team_members.all()
-        performance_roles_with_limited_persons = performance_roles.prefetch_related(
-            Prefetch(
-                "team_members",
-                queryset=performance_team,
-            ),
+        return team_collector_with_plural_slug(
+            TeamMember,
+            {"performance": obj, "role__slug__in": ["director", "dramatist"]},
         )
-        serializer = RoleSerializer(
-            instance=performance_roles_with_limited_persons,
-            many=True,
-        )
-        return serializer.data
-        # return team_collector(
-        # TeamMember,
-        # {"performance": obj, "role__slug__in": ["director", "dramatist"]},
-        # )
 
     class Meta:
         model = Performance
