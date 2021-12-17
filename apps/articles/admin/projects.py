@@ -20,6 +20,25 @@ class ProjectContentInline(BaseContentInline):
 
 
 class ProjectAdmin(BaseContentPageAdmin):
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "title",
+                    "intro",
+                    "pub_date",
+                    "description",
+                    (
+                        "image_preview_change_page",
+                        "image",
+                    ),
+                    "is_draft",
+                )
+            },
+        ),
+    )
+
     inlines = (ProjectContentInline,)
 
 

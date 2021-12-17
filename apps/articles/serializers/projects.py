@@ -4,15 +4,13 @@ from apps.articles.models import Project
 from apps.content_pages.serializers import BaseContentPageSerializer
 
 
-class ProjectSerializer(
-    BaseContentPageSerializer,
-    serializers.ModelSerializer,
-):
+class ProjectSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
     class Meta:
         model = Project
         fields = (
             "id",
             "title",
+            "intro",
             "description",
             "image",
             "contents",
@@ -27,6 +25,6 @@ class ProjectListSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "title",
-            "description",
+            "intro",
             "image",
         )
