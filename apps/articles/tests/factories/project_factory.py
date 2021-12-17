@@ -28,10 +28,10 @@ def add_content_item_to_project(project, created, count, factory):
 
 
 class ProjectContentFactory(factory.django.DjangoModelFactory):
-    """
-    Base model for content items and blocks for Project. When add content
-    to Project (via add_content_item_to_project - see above) you should add
-    item=factory.SubFactory(BLOCK_OR_ITEM_FACTORY_YOU_NEED),
+    """Base model for content items and blocks for Project.
+
+    When add content to Project (via add_content_item_to_project - see above)
+    you should add item=factory.SubFactory(BLOCK_OR_ITEM_FACTORY_YOU_NEED),
     content_page=PROJECT and count=INT.
     """
 
@@ -51,8 +51,8 @@ class ProjectContentFactory(factory.django.DjangoModelFactory):
     }
 )
 class ProjectFactory(factory.django.DjangoModelFactory):
-    """
-    Creates Project Page.
+    """Creates Project Page.
+
     You can customize Project's content by adding method and count when
     create (e.g. 'ProjectFactory.create(add_several_preamble=5,
     add_several_personsblock=3)). Content item/block will not be
