@@ -7,8 +7,10 @@ from apps.content_pages.models import (
     ImagesBlock,
     Link,
     OrderedImage,
+    OrderedPerformance,
     OrderedPlay,
     OrderedVideo,
+    PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
     Preamble,
@@ -20,7 +22,7 @@ from apps.content_pages.models import (
 )
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
-from apps.library.models import Play
+from apps.library.models import Performance, Play
 
 
 @restrict_factory({"global": (Role,)})
@@ -122,6 +124,21 @@ class OrderedImageFactory(factory.django.DjangoModelFactory):
     order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
+@restrict_factory({"global": (Performance,)})
+class OrderedPerformanceFactory(factory.django.DjangoModelFactory):
+    """
+    Creates Performance with order for block.
+
+    Order in factory assume that there are not more than 3 ordered performances in a block.
+    """
+
+    class Meta:
+        model = OrderedPerformance
+
+    item = factory.Iterator(Performance.objects.all())
+    order = factory.Sequence(lambda n: (n % 3 + 1))
+
+
 @restrict_factory({"global": (Play,)})
 class OrderedPlayFactory(factory.django.DjangoModelFactory):
     """
@@ -169,6 +186,25 @@ class PersonsBlockFactory(factory.django.DjangoModelFactory):
         if not created:
             return
         ExtendedPersonFactory.create_batch(3, block=self)
+
+
+class PerformancesBlockFactory(factory.django.DjangoModelFactory):
+    """
+    Creates content block Performance for projects.
+
+    Block creates with 3 ordered performances.
+    """
+
+    class Meta:
+        model = PerformancesBlock
+
+    title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
+
+    @factory.post_generation
+    def add_performance(self, created, extracted, **kwargs):
+        if not created:
+            return
+        OrderedPerformanceFactory.create_batch(3, block=self)
 
 
 class PlaysBlockFactory(factory.django.DjangoModelFactory):

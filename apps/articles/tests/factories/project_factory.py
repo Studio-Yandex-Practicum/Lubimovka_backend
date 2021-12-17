@@ -8,6 +8,7 @@ from apps.content_pages.tests.factories import (
     ImageForContentFactory,
     ImagesBlockFactory,
     LinkFactory,
+    PerformancesBlockFactory,
     PersonsBlockFactory,
     PlaysBlockFactory,
     TextFactory,
@@ -70,6 +71,7 @@ class ProjectFactory(factory.django.DjangoModelFactory):
         variable_nb_sentences=False,
     )
     image = factory.django.ImageField(color=factory.Faker("color"))
+    intro = factory.Faker("text", locale="ru_RU", max_nb_chars=200)
     is_draft = factory.Faker("boolean", chance_of_getting_true=25)
     pub_date = factory.Faker("date_time", tzinfo=timezone.utc)
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
@@ -116,6 +118,12 @@ class ProjectFactory(factory.django.DjangoModelFactory):
         subfactory = factory.SubFactory(VideosBlockFactory)
         add_content_item_to_project(self, created, count, subfactory)
 
+    @factory.post_generation
+    def add_several_performancesblock(self, created, count, **kwargs):
+        """Add specified count of content block with Performances to Project."""
+        subfactory = factory.SubFactory(PerformancesBlockFactory)
+        add_content_item_to_project(self, created, count, subfactory)
+
     @classmethod
     def complex_create(cls, count):
         """Create specified count of Project with fully populated content."""
@@ -128,4 +136,5 @@ class ProjectFactory(factory.django.DjangoModelFactory):
             add_several_imagesblock=1,
             add_several_personsblock=1,
             add_several_videosblock=1,
+            add_several_performancesblock=1,
         )
