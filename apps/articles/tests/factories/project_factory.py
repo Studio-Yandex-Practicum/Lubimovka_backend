@@ -71,7 +71,7 @@ class ProjectFactory(factory.django.DjangoModelFactory):
         variable_nb_sentences=False,
     )
     image = factory.django.ImageField(color=factory.Faker("color"))
-    intro = factory.Faker("text", locale="ru_RU", max_nb_chars=200)
+    intro = factory.Faker("sentence", locale="ru_RU", nb_words=12)
     is_draft = factory.Faker("boolean", chance_of_getting_true=25)
     pub_date = factory.Faker("date_time", tzinfo=timezone.utc)
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
