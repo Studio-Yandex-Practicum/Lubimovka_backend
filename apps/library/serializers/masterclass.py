@@ -6,7 +6,7 @@ from apps.library.utilities import team_collector
 
 class EventMasterClassSerializer(serializers.ModelSerializer):
     team = serializers.SerializerMethodField()
-    project = serializers.SlugRelatedField(slug_field="title", read_only=True)
+    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     def get_team(self, obj):
         return team_collector(TeamMember, {"masterclass": obj, "role__slug": "host"})
@@ -18,5 +18,5 @@ class EventMasterClassSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "team",
-            "project",
+            "project_title",
         )
