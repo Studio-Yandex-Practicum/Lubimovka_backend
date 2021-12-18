@@ -1,5 +1,7 @@
-[![codestyle PEP8 and tests](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml)
-[![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/backend_deploy.yaml)
+[![codestyle PEP8 and tests](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml)
+[![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml)
+[![python safety](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/check_vulnerabilities.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/check_vulnerabilities.yaml)
+
 # Бэкенд "Любимовка"
 
 ## Что сделано и чем отличается от структуры по умолчанию
