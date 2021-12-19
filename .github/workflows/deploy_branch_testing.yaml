@@ -115,26 +115,26 @@ jobs:
             export TEST_SUBDOMAIN
 
             # PostgreSQL variables: reading and writing Github secrets in .env-test
-            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST_TEST }} >> .env-test
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-test
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-test
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB_TEST }} >> .env-test
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env-test
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env-test
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-test
 
             # Django variables: reading and writing Github secrets in .env-test
             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-test
             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-test
-            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS_TEST }} >> .env-test
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-test
 
             echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-test
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-test
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-test
 
-            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-dev
-            echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-dev
-            echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-dev
-            echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-dev
-            echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-dev
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-test
+            echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-test
+            echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-test
+            echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-test
+            echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-test
 
             # Pull docker image from github packages with tag
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
@@ -154,7 +154,7 @@ jobs:
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
                   Новая ветка в тестировании:
-                  ${{ secrets.HUB_URL }}${{ github.repository }}/tree/${{ github.ref_name }}
+                  ${{ secrets.HUB_URL }}/${{ github.repository }}/tree/${{ github.ref_name }}
 
                   Тестирует - ${{ github.event.inputs.name }}
 
