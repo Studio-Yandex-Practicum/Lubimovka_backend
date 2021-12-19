@@ -1,15 +1,14 @@
 from django.contrib.postgres.aggregates.general import ArrayAgg
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.template.loader import get_template
 from rest_framework import mixins, status
 from rest_framework.decorators import action
 from rest_framework.viewsets import GenericViewSet
-from xhtml2pdf import pisa
 
 from apps.info.filters import YearPressReleaseFilterSet
 from apps.info.models import Festival, PressRelease
 from apps.info.serializers.press_release import PressReleaseSerializer
+from apps.info.utils import get_pdf_response
 
 
 class PressReleaseViewSet(mixins.ListModelMixin, GenericViewSet):
@@ -44,21 +43,10 @@ class PressReleaseViewSet(mixins.ListModelMixin, GenericViewSet):
         url_name="download_press_release",
         pagination_class=None,
     )
-    def download_press_release(self, request, **kwargs):
+    def download_press_release(self, request, id):
         press_release = get_object_or_404(
             PressRelease.objects.select_related("festival"),
-            id=kwargs["id"],
+            id=id,
         )
-        press_release_year = press_release.festival.year
-        response = HttpResponse(content_type="application/pdf")
-        response["Content-Disposition"] = f"attachment; filename='press-release_{press_release_year}.pdf'"
-        template = get_template("press_release.html")
-        content = template.render({"press_release": press_release})
-        pisa_status = pisa.CreatePDF(
-            content,
-            dest=response,
-            encoding="UTF-8",
-        )
-        if pisa_status.err:
-            return HttpResponse("Пожалуйста, попробуйте повторить попытку позже")
-        return response
+        path_to_font = "staticfiles/fonts/NeueMachinaRegular/PPNeueMachina-Regular.ttf"
+        return get_pdf_response(press_release, path_to_font)
