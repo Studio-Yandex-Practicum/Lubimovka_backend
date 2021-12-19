@@ -32,7 +32,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
 
     team = serializers.SerializerMethodField()
     image = serializers.ImageField(source="main_image")
-    project = serializers.SlugRelatedField(slug_field="title", read_only=True)
+    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     def get_team(self, obj):
         return team_collector_with_plural_slug(
@@ -48,5 +48,5 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "description",
             "team",
             "image",
-            "project",
+            "project_title",
         )
