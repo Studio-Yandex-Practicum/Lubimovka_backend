@@ -3,15 +3,14 @@ version: '3.8'
 services:
   swag:
     image: ghcr.io/linuxserver/swag
-    container_name: swag
+    container_name: swag_deploy
     cap_add:
       - NET_ADMIN
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
-      - SUBDOMAINS=lubimovka,test-lubimovka
+      - SUBDOMAINS=${DEV_SUBDOMAIN},${TEST_SUBDOMAIN}
       - CERTPROVIDER=zerossl
-      - ONLY_SUBDOMAINS=true
     env_file:
       - .env-dev
     networks:
@@ -30,10 +29,19 @@ services:
 
 networks:
   swag_network:
+    name: swag_network
     external: true
 
 volumes:
   static_value:
+    name: static_value
+    external: true
   media_value:
+    name: media_value
+    external: true
   static_value_test:
+    name: static_value_test
+    external: true
   media_value_test:
+    name: media_value_test
+    external: true

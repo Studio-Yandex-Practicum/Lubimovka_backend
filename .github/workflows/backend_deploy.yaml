@@ -1,190 +1,187 @@
-# name: develop backend build and deploy
+name: develop backend build and deploy
 
-# concurrency:
-#   group: deploy_vps
-#   cancel-in-progress: true
+concurrency:
+  group: develop_deploy
+  cancel-in-progress: true
 
-# on:
-#   # push:
-#   #   branches:
-#   #     - develop
-#   push:
-#     branches:
-#       - '**'
+on:
+  push:
+    branches:
+      - develop
 
-# env:
-#   REGISTRY: ghcr.io
-#   IMAGE_NAME: lubimovka_backend
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: lubimovka_backend
 
-# defaults:
-#   run:
-#     working-directory: .
+defaults:
+  run:
+    working-directory: .
 
-# jobs:
-#   # tests:
-#   #   name: Run tests
-#   #   runs-on: ubuntu-latest
-#   #   steps:
-#   #   -
-#   #     name: Check out the repo
-#   #     uses: actions/checkout@v2
-#   #   -
-#   #     name: Set up Python
-#   #     uses: actions/setup-python@v2
-#   #     with:
-#   #       python-version: 3.9
-#   #   -
-#   #     name: Install dependencies
-#   #     run: |
-#   #       python -m pip install --upgrade pip
-#   #       pip install -r requirements/dev.txt
-#   #   -
-#   #     name: Test with pytest
-#   #     run: pytest
+jobs:
+  tests:
+    name: Run tests
+    runs-on: ubuntu-latest
+    steps:
+    -
+      name: Check out the repo
+      uses: actions/checkout@v2
+    -
+      name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+    -
+      name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements/dev.txt
+    -
+      name: Test with pytest
+      run: pytest
 
-#   build-and-push-image-to-github-packages:
-#     name: Push Docker image to GitHub Packages
-#     runs-on: ubuntu-latest
-#     # needs: tests
-#     permissions:
-#       contents: read
-#       packages: write
-#     steps:
-#       - uses: actions/checkout@v2
-#       - name: Build image
-#         run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
-#       - name: Log in to registry
-#         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-#       - name: Push image
-#         run: |
-#           IMAGE_ID=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
+  build-and-push-image-to-github-packages:
+    name: Push Docker image to GitHub Packages
+    runs-on: ubuntu-latest
+    needs: tests
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build image
+        run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push image
+        run: |
+          IMAGE_ID=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
 
-#           # Change all uppercase to lowercase
-#           IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
+          # Change all uppercase to lowercase
+          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
 
-#           # Strip git ref prefix from version
-#           VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          # Strip git ref prefix from version
+          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
 
-#           # Strip "v" prefix from tag name
-#           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
+          # Strip "v" prefix from tag name
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
 
-#           # Use Docker `latest` tag convention
-#           [ "$VERSION" == "master" ] && VERSION=latest
-#           echo IMAGE_ID=$IMAGE_ID
-#           echo VERSION=$VERSION
+          # Use Docker `latest` tag convention
+          [ "$VERSION" == "master" ] && VERSION=latest
+          echo IMAGE_ID=$IMAGE_ID
+          echo VERSION=$VERSION
 
-#           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
-#           docker push $IMAGE_ID:$VERSION
+          docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
+          docker push $IMAGE_ID:$VERSION
 
-#   deploy:
-#     name: Deploy changes on server
-#     runs-on: ubuntu-latest
-#     environment:
-#       name: deploy_vps
-#       # К сожалению мне не удалось спрятать url в секреты. Вот что пишут доки:
-#       # https://docs.github.com/en/actions/learn-github-actions/workflow-syntax-for-github-actions#example-using-environment-name-and-url
-#       url: https://lubimovka.kiryanov.ru/
-#     needs: build-and-push-image-to-github-packages
-#     steps:
-#       -
-#         name: Getting docker image name and tag, write in environment
-#         run: |
-#           IMAGE=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
-#           IMAGE=$(echo $IMAGE | tr '[A-Z]' '[a-z]')
-#           IMAGE_TAG=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-#           [[ "${{ github.ref }}" == "refs/tags/"* ]] && IMAGE_TAG=$(echo $IMAGE_TAG | sed -e 's/^v//')
+  deploy:
+    name: Deploy changes on server
+    runs-on: ubuntu-latest
+    environment:
+      name: develop_deploy
+    needs: build-and-push-image-to-github-packages
+    steps:
+      -
+        name: Getting docker image name and tag, write in environment
+        run: |
+          IMAGE=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
+          IMAGE=$(echo $IMAGE | tr '[A-Z]' '[a-z]')
+          IMAGE_TAG=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
+          [[ "${{ github.ref }}" == "refs/tags/"* ]] && IMAGE_TAG=$(echo $IMAGE_TAG | sed -e 's/^v//')
 
-#           echo IMAGE=$IMAGE >> $GITHUB_ENV
-#           echo IMAGE_TAG=$IMAGE_TAG >> $GITHUB_ENV
-#       -
-#         name: executing remote ssh commands to deploy
-#         uses: appleboy/ssh-action@master
-#         with:
-#           host: ${{ secrets.HOST }}
-#           username: ${{ secrets.USERNAME }}
-#           key: ${{ secrets.SSH_PRIVATE_KEY }}
-#           passphrase: ${{ secrets.PASSPHRASE }}
-#           script: |
-#             cd ${{ github.event.repository.name }}
-#             git pull origin feature/CI/CD_optimization
-#             cd infra_deploy
-#             chmod +x check_env_script.sh
-#             ./check_env_script.sh .env-dev
+          echo IMAGE=$IMAGE >> $GITHUB_ENV
+          echo IMAGE_TAG=$IMAGE_TAG >> $GITHUB_ENV
+      -
+        name: executing remote ssh commands to deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.PASSPHRASE }}
+          script: |
+            cd ${{ github.event.repository.name }}
+            git pull
+            cd infra_deploy
 
-#             # Github package name: writing in .env to read in docker-compose script
-#             ./check_env_script.sh .github_image
-#             echo "IMAGE=${{ env.IMAGE }}" >> .github_image
-#             echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .github_image
-#             source .github_image
-#             export IMAGE
-#             export IMAGE_TAG
+            chmod +x check_env_script.sh
+            chmod +x docker_check.sh
 
-#             # PostgreSQL variables: reading and writing Github secrets in .env-dev
-#             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
-#             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-dev
-#             echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env-dev
-#             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env-dev
-#             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-dev
+            # Github package name: writing in .env to read in docker-compose script and nginx scripts
+            ./check_env_script.sh .github_vars
+            echo "IMAGE=${{ env.IMAGE }}" >> .github_vars
+            echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .github_vars
+            echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .github_vars
+            echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .github_vars
+            source .github_vars
+            export IMAGE
+            export IMAGE_TAG
+            export DEV_SUBDOMAIN
+            export TEST_SUBDOMAIN
 
-#             # Django variables: reading and writing Github secrets in .env-dev
-#             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-dev
-#             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-dev
-#             echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-dev
+            # PostgreSQL variables: reading and writing Github secrets in .env-dev
+            ./check_env_script.sh .env-dev
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-dev
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env-dev
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env-dev
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-dev
 
-#             echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-dev
-#             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-dev
-#             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-dev
+            # Django variables: reading and writing Github secrets in .env-dev
+            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-dev
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-dev
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-dev
 
-#             echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-dev
-#             echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-dev
-#             echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-dev
-#             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-dev
-#             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-dev
+            echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-dev
+            echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-dev
+            echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-dev
 
-#             # Swag-nginx variables: reading and writing Github secrets in .env-dev
-#             echo PUID=$(id -u) >> .env-dev
-#             echo PGID=$(id -g) >> .env-dev
-#             echo URL=${{ secrets.SITE_URL }} >> .env-dev
-#             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-dev
+            echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-dev
+            echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-dev
+            echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-dev
+            echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-dev
 
-#             # Pull docker image from github packages with tag
-#             # docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+            # Swag-nginx variables: reading and writing Github secrets in .env-dev
+            echo PUID=$(id -u) >> .env-dev
+            echo PGID=$(id -g) >> .env-dev
+            echo URL=${{ secrets.SITE_URL }} >> .env-dev
+            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
-#             # re-run docker containers
-#             # docker-compose -f test_branch_deploy.yaml down
-#             # docker-compose -f develop_deploy.yaml down
-#             # docker-compose -f develop_deploy.yaml up -d
-#             # docker-compose -f test_branch_deploy.yaml up -d
+            # Pull docker image from github packages with tag
+            # docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
-#   send_message:
-#     name: Send message in telegram group
-#     runs-on: ubuntu-latest
-#     environment:
-#       name: success_message
-#     needs: deploy
-#     steps:
-#       - name: check repository
-#         uses: actions/checkout@v1
-#       # - name: find the PR associated with this push, if there is one
-#       #   uses: jwalton/gh-find-current-pr@v1
-#       #   id: findPr
-#       #   with:
-#       #     state: closed
-#       # - run: echo "PR=${PR}" >> $GITHUB_ENV
-#       #   if: success() && steps.findPr.outputs.number
-#       #   env:
-#       #     PR: ${{ steps.findPr.outputs.pr }}
-#       - name: send message
-#         uses: appleboy/telegram-action@master
-#         with:
-#           to: ${{ secrets.TELEGRAM_ID }}
-#           token: ${{ secrets.TELEGRAM_TOKEN }}
-#           message: |
-#                   Тестирование
-#                   ${{ secrets.HUB_URL }}/${{ github.repository }}/tree/${{ github.ref_name }}
+            # re-run docker containers
+            ./docker_check.sh develop_deploy.yaml develop
 
-#                   Сcылка на документацию в Swagger:
-#                   ${{ secrets.SWAGGER_URL }}
+  send_message:
+    name: Send message in telegram group
+    runs-on: ubuntu-latest
+    needs: deploy
+    steps:
+      - name: check repository
+        uses: actions/checkout@v1
+      - name: find the PR associated with this push, if there is one
+        uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+        with:
+          state: closed
+      - run: echo "PR=${PR}" >> $GITHUB_ENV
+        if: success() && steps.findPr.outputs.number
+        env:
+          PR: ${{ steps.findPr.outputs.pr }}
+      - name: send message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_ID }}
+          token: ${{ secrets.TELEGRAM_TOKEN }}
+          message: |
+                  Код на сервере разработки обновлён!
 
-#                   Панель администратора:
-#                   ${{ secrets.ADMIN_URL }}
+                  Изменения можно посмотреть в PR:
+                  ${{ secrets.HUB_URL }}${{ github.repository }}/pull/${{env.PR}}
+
+                  Сcылка на документацию в Swagger:
+                  ${{ secrets.DEVELOP_SWAGGER_URL }}
+
+                  Панель администратора:
+                  ${{ secrets.DEVELOP_ADMIN_URL }}
