@@ -8,8 +8,6 @@ from apps.content_pages.tests.factories import (
     ImagesBlockFactory,
     PersonsBlockFactory,
     PlaysBlockFactory,
-    PreambleFactory,
-    QuoteFactory,
     TextFactory,
     TitleFactory,
 )
@@ -65,22 +63,12 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Project
 
-    description = factory.Faker(
-        "paragraph",
-        locale="ru_RU",
-        nb_sentences=5,
-        variable_nb_sentences=False,
-    )
+    description = factory.Faker("paragraph", locale="ru_RU", nb_sentences=5, variable_nb_sentences=False)
     image = factory.django.ImageField(color=factory.Faker("color"))
+    intro = factory.Faker("sentence", locale="ru_RU", nb_words=12)
     is_draft = factory.Faker("boolean", chance_of_getting_true=25)
     pub_date = factory.Faker("date_time", tzinfo=timezone.utc)
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
-
-    @factory.post_generation
-    def add_several_preamble(self, created, count, **kwargs):
-        """Add specified count of Preamble item to Project."""
-        subfactory = factory.SubFactory(PreambleFactory)
-        add_content_item_to_project(self, created, count, subfactory)
 
     @factory.post_generation
     def add_several_text(self, created, count, **kwargs):
@@ -92,12 +80,6 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     def add_several_title(self, created, count, **kwargs):
         """Add specified count of Title item to Project."""
         subfactory = factory.SubFactory(TitleFactory)
-        add_content_item_to_project(self, created, count, subfactory)
-
-    @factory.post_generation
-    def add_several_quote(self, created, count, **kwargs):
-        """Add specified count of Quote item to Project."""
-        subfactory = factory.SubFactory(QuoteFactory)
         add_content_item_to_project(self, created, count, subfactory)
 
     @factory.post_generation
@@ -123,10 +105,8 @@ class ProjectFactory(factory.django.DjangoModelFactory):
         """Create specified count of Project with fully populated content."""
         return cls.create_batch(
             count,
-            add_several_preamble=1,
             add_several_text=1,
             add_several_title=1,
-            add_several_quote=1,
             add_several_playsblock=1,
             add_several_imagesblock=1,
             add_several_personsblock=1,

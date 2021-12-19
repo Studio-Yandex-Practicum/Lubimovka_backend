@@ -34,7 +34,10 @@ services:
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput &&
-             python manage.py createsuperuser --noinput"
+             python manage.py createsuperuser --noinput &&
+             python manage.py filldb &&
+             python manage.py set_perms &&
+             python manage.py filldb_articles"
     depends_on:
       - backend_test
     env_file:
@@ -43,12 +46,17 @@ services:
       - test_db_network
 
 networks:
-  test_db_network:
-    driver: bridge
-  swag_network:
-    driver: bridge
+    test_db_network:
+      name: test_db_network
+      driver: bridge
+    swag_network:
+      name: swag_network
+      external: true
 
 volumes:
   postgres_data_test:
+    name: postgres_data_test
   static_value_test:
+    name: static_value_test
   media_value_test:
+    name: media_value_test

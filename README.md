@@ -1,5 +1,7 @@
-[![codestyle PEP8 and tests](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml)
-[![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml/badge.svg)](https://github.com/KonstantinRaikhert/Lubimovka_backend/actions/workflows/backend_deploy.yaml)
+[![codestyle PEP8 and tests](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml)
+[![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml)
+[![python safety](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/check_vulnerabilities.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/check_vulnerabilities.yaml)
+
 # Бэкенд "Любимовка"
 
 ## Что сделано и чем отличается от структуры по умолчанию
@@ -110,6 +112,13 @@
 - волонтёры
 - команды фестиваля
 - пользователи-админы и редакторы (для входа используем ник admin_X или editor_X, где Х - число от 1 до 5 и дефолтный пароль "pass")
+
+Для создания таких тестовых данных, как проекты, новости и блог доступна команда:
+```
+./ manage.py filldb_articles
+```
+Ее следует применять ПОСЛЕ команды filldb (создает объекты, необходимые для создания сложных сущностей блога/проекта/новости).
+
 Для очистки БД от данных (но не удаления таблиц) можно использовать команду:
 ```
 ./ manage.py flush

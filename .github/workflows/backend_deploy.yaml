@@ -1,5 +1,9 @@
 name: develop backend build and deploy
 
+concurrency:
+  group: develop_deploy
+  cancel-in-progress: true
+
 on:
   push:
     branches:
@@ -72,6 +76,8 @@ jobs:
   deploy:
     name: Deploy changes on server
     runs-on: ubuntu-latest
+    environment:
+      name: develop_deploy
     needs: build-and-push-image-to-github-packages
     steps:
       -
@@ -96,18 +102,24 @@ jobs:
             cd ${{ github.event.repository.name }}
             git pull
             cd infra_deploy
-            chmod +x check_env_script.sh
-            ./check_env_script.sh .env-dev
 
-            # Github package name: writing in .env to read in docker-compose script
-            ./check_env_script.sh .github_image
-            echo "IMAGE=${{ env.IMAGE }}" >> .github_image
-            echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .github_image
-            source .github_image
+            chmod +x check_env_script.sh
+            chmod +x docker_check.sh
+
+            # Github package name: writing in .env to read in docker-compose script and nginx scripts
+            ./check_env_script.sh .github_vars
+            echo "IMAGE=${{ env.IMAGE }}" >> .github_vars
+            echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .github_vars
+            echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .github_vars
+            echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .github_vars
+            source .github_vars
             export IMAGE
             export IMAGE_TAG
+            export DEV_SUBDOMAIN
+            export TEST_SUBDOMAIN
 
             # PostgreSQL variables: reading and writing Github secrets in .env-dev
+            ./check_env_script.sh .env-dev
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-dev
             echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env-dev
@@ -136,13 +148,10 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
             # Pull docker image from github packages with tag
-            docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+            # docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
             # re-run docker containers
-            docker-compose -f test_branch_deploy.yaml down
-            docker-compose -f develop_deploy.yaml down
-            docker-compose -f develop_deploy.yaml up -d
-            docker-compose -f test_branch_deploy.yaml up -d
+            ./docker_check.sh develop_deploy.yaml develop
 
   send_message:
     name: Send message in telegram group
@@ -169,10 +178,10 @@ jobs:
                   Код на сервере разработки обновлён!
 
                   Изменения можно посмотреть в PR:
-                  https://github.com/${{ github.repository }}/pull/${{env.PR}}
+                  ${{ secrets.HUB_URL }}${{ github.repository }}/pull/${{env.PR}}
 
                   Сcылка на документацию в Swagger:
-                  https://lubimovka.kiryanov.ru/api/v1/schema/swagger-ui/
+                  ${{ secrets.DEVELOP_SWAGGER_URL }}
 
                   Панель администратора:
-                  https://develop.prostringer.ru/admin/
+                  ${{ secrets.DEVELOP_ADMIN_URL }}

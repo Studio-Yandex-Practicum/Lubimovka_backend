@@ -7,7 +7,7 @@ from django.contrib.auth.models import Group
 from django.core.files.base import ContentFile
 from faker import Faker
 
-from apps.core.models import Image, Person
+from apps.core.models import Image, Person, Role
 from apps.core.utilities import slugify
 
 fake = Faker(locale="ru_RU")
@@ -128,3 +128,11 @@ class UserFactory(factory.django.DjangoModelFactory):
         if extracted:
             group = Group.objects.get(name="admin")
             self.groups.add(group)
+
+
+class RoleFactory(factory.django.DjangoModelFactory):
+    """This factory can be used only inside TeamMemberFactory."""
+
+    class Meta:
+        model = Role
+        django_get_or_create = ["slug"]
