@@ -156,7 +156,6 @@ jobs:
                   Код на сервере разработки обновлён!
 
                   Изменения можно посмотреть в PR:
-
                   ${{ secrets.HUB_URL }}/${{ github.repository }}/pull/${{env.PR}}
 
                   Сcылка на документацию в Swagger:
