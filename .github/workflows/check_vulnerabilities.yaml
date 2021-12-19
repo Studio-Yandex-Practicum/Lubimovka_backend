@@ -12,7 +12,6 @@ env:
   # https://github.com/aufdenpunkt/python-safety-check#env-variables
   DEP_PATH: None
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
