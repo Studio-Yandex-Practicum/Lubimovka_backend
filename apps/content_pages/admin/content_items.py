@@ -1,14 +1,6 @@
 from django.contrib import admin
 
-from apps.content_pages.models import (
-    Image,
-    Link,
-    Preamble,
-    Quote,
-    Text,
-    Title,
-    Video,
-)
+from apps.content_pages.models import Image, Link, Preamble, Quote, Text, Title, Video
 from apps.core.mixins import AdminImagePreview
 
 

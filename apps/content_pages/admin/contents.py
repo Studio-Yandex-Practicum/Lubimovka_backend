@@ -2,13 +2,13 @@ from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
-from gfklookupwidget.widgets import GfkLookupWidget
 
 from apps.content_pages.models import AbstractContent
+from apps.content_pages.widgets import GfkPopupWidget
 from apps.core.mixins import AdminImagePreview
 
 
-class BaseContentInline(SortableInlineAdminMixin, admin.StackedInline):
+class BaseContentInline(SortableInlineAdminMixin, admin.TabularInline):
     """Extends StackedInline for a bit more convenient work in the admin panel.
 
     It do 3 things:
@@ -22,7 +22,7 @@ class BaseContentInline(SortableInlineAdminMixin, admin.StackedInline):
     content_type_model = tuple()
     formfield_overrides = {
         models.PositiveIntegerField: {
-            "widget": GfkLookupWidget(
+            "widget": GfkPopupWidget(
                 content_type_field_name="content_type",
                 parent_field=AbstractContent._meta.get_field("content_type"),
             )
