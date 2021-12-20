@@ -3,8 +3,8 @@ from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from apps.content_pages.admin.widgets import GfkPopupWidget
 from apps.content_pages.models import AbstractContent
-from apps.content_pages.widgets import GfkPopupWidget
 from apps.core.mixins import AdminImagePreview
 
 
@@ -24,7 +24,7 @@ class BaseContentInline(SortableInlineAdminMixin, admin.TabularInline):
         models.PositiveIntegerField: {
             "widget": GfkPopupWidget(
                 content_type_field_name="content_type",
-                parent_field=AbstractContent._meta.get_field("content_type"),
+                parent_class=AbstractContent,
             )
         },
     }

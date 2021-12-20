@@ -20,8 +20,6 @@ class GfkPopupWidget(django.forms.Widget):
     contenttypes framework's content_type field and uses Django's normal
     showRelatedObjectPopup to populate the text field represented by this
     widget.
-
-    This widget is compatible with inlines.
     """
 
     def __init__(self, *args, **kwargs):
@@ -30,16 +28,15 @@ class GfkPopupWidget(django.forms.Widget):
         Args:
             - content_type_field_name: This is name of the field that becomes a
             select box in the admin.
-            - parent_field: This is a field on the model. It's used to find the
-            related content_type field to generate URLs for the choices.
+            - parent_class: This is a model class.
         """
         self.ct_field_name = kwargs.pop("content_type_field_name")
-        self.parent_field = kwargs.pop("parent_field")
+        self.parent_class = kwargs.pop("parent_class")
         super().__init__(*args, **kwargs)
 
     def render(self, name, value, attrs=None, renderer=None):
-        ct_field = self.parent_field.model._meta.get_field(self.ct_field_name)
-        choices = ct_field.get_choices()
+        content_type_field = self.parent_class._meta.get_field(self.ct_field_name)
+        choices = content_type_field.get_choices()
 
         # Generate an ID to Content Type lookup dict now so we don't have to
         # perform multiple queries in the for-loop below.
