@@ -1,8 +1,7 @@
-from rest_framework import mixins, status, viewsets
-from rest_framework.decorators import action
-from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
+from rest_framework import mixins, viewsets
 
-from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
+from apps.library.models import Performance
 from apps.library.serializers import (
     PerformanceMediaReviewSerializer,
     PerformanceReviewSerializer,
@@ -14,26 +13,28 @@ class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     queryset = Performance.objects.all()
     serializer_class = PerformanceSerializer
 
-    @action(
-        detail=True,
-        methods=["GET"],
-        url_path="media-review",
-        serializer_class=PerformanceMediaReviewSerializer,
-    )
-    def get_media_review(self, request, pk):
-        """Get all performance media reviews."""
-        query = PerformanceMediaReview.objects.filter(performance=pk)
-        serializer = self.serializer_class(query, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
 
-    @action(
-        detail=True,
-        methods=["GET"],
-        url_path="review",
-        serializer_class=PerformanceReviewSerializer,
-    )
-    def get_review(self, request, pk):
-        """Get all performance reviews."""
-        query = PerformanceReview.objects.filter(performance=pk)
-        serializer = self.serializer_class(query, many=True)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class PerformanceReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+    """Get all performance reviews."""
+
+    serializer_class = PerformanceReviewSerializer
+
+    def get_queryset(self):
+        performance = get_object_or_404(
+            Performance,
+            pk=self.kwargs.get("performance_id"),
+        )
+        return performance.reviews.all()
+
+
+class PerformanceMediaReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
+    """Get all performance media reviews."""
+
+    serializer_class = PerformanceMediaReviewSerializer
+
+    def get_queryset(self):
+        performance = get_object_or_404(
+            Performance,
+            pk=self.kwargs.get("performance_id"),
+        )
+        return performance.media_reviews.all()

@@ -28,8 +28,7 @@ class PerformanceSerializer(serializers.ModelSerializer):
         return team_collector(TeamMember, {"performance": obj})
 
     def get_events(self, obj):
-        event = Event.objects.filter(common_event=obj.events)
-        return EventSerializer(event.first()).data
+        return EventSerializer(obj.events.body.first()).data
 
     class Meta:
         exclude = (

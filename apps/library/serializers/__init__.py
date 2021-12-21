@@ -21,4 +21,6 @@ __all__ = (
     PlaySerializer,
     PlayFiltersSerializer,
     PerformanceSerializer,
+    PerformanceReviewSerializer,
+    PerformanceMediaReviewSerializer,
 )
