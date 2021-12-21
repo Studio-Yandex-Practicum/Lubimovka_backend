@@ -24,7 +24,9 @@ router.register(
     basename="performance-media-reviews",
 )
 router.register(
-    r"performances/(?P<performance_id>\d+)/reviews", PerformanceReviewViewSet, basename="performance-reviews"
+    r"performances/(?P<performance_id>\d+)/reviews",
+    PerformanceReviewViewSet,
+    basename="performance-reviews",
 )
 
 router.register(
