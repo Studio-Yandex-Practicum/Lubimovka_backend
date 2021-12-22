@@ -119,6 +119,15 @@ class ExtendedPerson(AbstractOrderedItemBase):
         ordering = ("order",)
         verbose_name = "Элемент блока персон"
         verbose_name_plural = "Элементы блоков песроны"
+        constraints = (
+            UniqueConstraint(
+                fields=(
+                    "block",
+                    "person",
+                ),
+                name="unique_person_per_block",
+            ),
+        )
 
     def __str__(self):
         if self.roles.all():
