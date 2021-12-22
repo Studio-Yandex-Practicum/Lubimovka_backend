@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
@@ -130,11 +131,18 @@ class ExtendedPerson(AbstractOrderedItemBase):
         )
 
     def __str__(self):
+        return f"{self.order} — {self.person}"
+
+    @property
+    @admin.display(
+        description="Роли",
+    )
+    def person_roles(self):
         if self.roles.all():
             roles = ", ".join([role.name for role in self.roles.all()])
         else:
             roles = "не установлено"
-        return f"{self.order} — {self.person}, роли: {roles}"
+        return roles
 
 
 class OrderedPlay(AbstractOrderedItemBase):
