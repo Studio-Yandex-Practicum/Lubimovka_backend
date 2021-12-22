@@ -73,6 +73,9 @@ class ContentPersonRole(BaseModel):
         verbose_name="Роль",
     )
 
+    def __str__(self):
+        return self.role.name
+
     class Meta:
         verbose_name = "Роль у персоны в блоке"
         verbose_name_plural = "Роли персон в блоках"
