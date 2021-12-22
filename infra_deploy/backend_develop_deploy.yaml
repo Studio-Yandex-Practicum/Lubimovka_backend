@@ -12,7 +12,7 @@ services:
     networks:
       - develop_db_network
   backend:
-    image: "${IMAGE}:${IMAGE_TAG}"
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
     container_name: backend_develop
     restart: always
     volumes:
@@ -26,15 +26,14 @@ services:
       - develop_db_network
       - swag_network
   migrations:
-    image: "${IMAGE}:${IMAGE_TAG}"
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
     container_name: migrations_develop
     volumes:
       - static_value:/code/staticfiles/
       - media_value:/code/media/
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             python manage.py createsuperuser --noinput"
+             python manage.py collectstatic --noinput"
     depends_on:
       - backend
     env_file:

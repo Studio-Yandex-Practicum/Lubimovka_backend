@@ -12,7 +12,7 @@ services:
     networks:
       - test_db_network
   backend_test:
-    image: "${IMAGE}:${IMAGE_TAG}"
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
     container_name: backend_test
     restart: always
     volumes:
@@ -26,7 +26,7 @@ services:
       - test_db_network
       - swag_network
   migrations_test:
-    image: "${IMAGE}:${IMAGE_TAG}"
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
     container_name: migrations_test
     volumes:
       - static_value_test:/code/staticfiles/
