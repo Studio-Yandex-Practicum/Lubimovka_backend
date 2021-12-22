@@ -134,9 +134,7 @@ class ExtendedPerson(AbstractOrderedItemBase):
         return f"{self.order} — {self.person}"
 
     @property
-    @admin.display(
-        description="Роли",
-    )
+    @admin.display(description="Роли")
     def person_roles(self):
         if self.roles.all():
             roles = ", ".join([role.name for role in self.roles.all()])
