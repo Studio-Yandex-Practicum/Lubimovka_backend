@@ -104,15 +104,18 @@ jobs:
 
             # Github package name: writing in .env to read in docker-compose script and nginx scripts
             ./check_env_script.sh .github_vars
-            echo "IMAGE=${{ env.IMAGE }}" >> .github_vars
-            echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .github_vars
+            echo "IMAGE_BACK=${{ env.IMAGE }}" >> .github_vars
+            echo "IMAGE_BACK_TAG=${{ env.IMAGE_TAG }}" >> .github_vars
+            echo "IMAGE_FRONT=${{ secrets.IMAGE_FRONT }}" >> .github_vars
+            echo "IMAGE_FRONT_TAG=${{ secrets.IMAGE_FRONT_TAG }}" >> .github_vars
+            echo "FRONT_BASE_URL=${{ secrets.FRONT_BASE_URL }}" >> .github_vars
+            echo "TEST_API_BASE_URL=${{ secrets.TEST_API_BASE_URL }}" >> .github_vars
             echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .github_vars
             echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .github_vars
+
+            # Export all variables from .github_vars
+            set -a
             source .github_vars
-            export IMAGE
-            export IMAGE_TAG
-            export DEV_SUBDOMAIN
-            export TEST_SUBDOMAIN
 
             # PostgreSQL variables: reading and writing Github secrets in .env-test
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-test
@@ -140,7 +143,7 @@ jobs:
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
             # re-run docker containers
-            ./docker_check.sh test_branch_deploy.yaml test
+            ./docker_check.sh backend_test_deploy.yaml test
 
   send_message:
     name: Send message in telegram group
