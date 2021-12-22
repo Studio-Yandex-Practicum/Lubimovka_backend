@@ -44,3 +44,4 @@ admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(ProxyUser, UserAdmin)
 admin.site.site_header = "Администрирование сайта"
+admin.site.index_template = "admin/base_site.html"

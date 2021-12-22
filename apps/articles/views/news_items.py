@@ -5,10 +5,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
-from apps.articles.serializers import (
-    NewsItemDetailedSerializer,
-    NewsItemListSerializer,
-)
+from apps.articles.serializers import NewsItemDetailedSerializer, NewsItemListSerializer
 
 
 class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
