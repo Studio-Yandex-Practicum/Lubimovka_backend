@@ -160,6 +160,9 @@ jobs:
                   Изменения можно посмотреть в PR:
                   ${{ secrets.HUB_URL }}/${{ github.repository }}/pull/${{env.PR}}
 
+                  Сайт доступен по адресу:
+                  https://${{ secrets.DEV_SUBDOMAIN }}/${{ secrets.SITE_URL }}
+
                   Сcылка на документацию в Swagger:
                   ${{ secrets.DEVELOP_SWAGGER_URL }}
 
