@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
@@ -73,6 +74,9 @@ class ContentPersonRole(BaseModel):
         verbose_name="Роль",
     )
 
+    def __str__(self):
+        return self.role.name
+
     class Meta:
         verbose_name = "Роль у персоны в блоке"
         verbose_name_plural = "Роли персон в блоках"
@@ -116,9 +120,27 @@ class ExtendedPerson(AbstractOrderedItemBase):
         ordering = ("order",)
         verbose_name = "Элемент блока персон"
         verbose_name_plural = "Элементы блоков песроны"
+        constraints = (
+            UniqueConstraint(
+                fields=(
+                    "block",
+                    "person",
+                ),
+                name="unique_person_per_block",
+            ),
+        )
 
     def __str__(self):
         return f"{self.order} — {self.person}"
+
+    @property
+    @admin.display(description="Роли")
+    def person_roles(self):
+        if self.roles.all():
+            roles = ", ".join([role.name for role in self.roles.all()])
+        else:
+            roles = "не установлено"
+        return roles
 
 
 class OrderedPlay(AbstractOrderedItemBase):
