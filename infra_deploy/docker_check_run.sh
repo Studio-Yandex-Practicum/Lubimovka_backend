@@ -2,8 +2,9 @@
 # and run compose script
 compose=$1
 project_name=$2
-container_name=swag_deploy
-network_name=swag_network
+swag_container_name=swag_deploy
+swag_network_name=swag_network
+
 
 # array of all volumes used in the deployment
 volumes_array=(static_value media_value static_value_test media_value_test)
@@ -21,17 +22,17 @@ fi
 done
 
 
-if [ "$( docker network inspect -f '{{json .Name}}' $network_name)" ]
+if [ "$( docker network inspect -f '{{json .Name}}' $swag_network_name)" ]
 then
-    echo "$network_name is already running!"
+    echo "$swag_network_name is already running!"
 else
-    docker network create $network_name
-    echo "$network_name created!"
+    docker network create $swag_network_name
+    echo "$swag_network_name created!"
 fi
 
-if [ "$( docker container inspect -f '{{.State.Status}}' $container_name )" == "running" ]
+if [ "$( docker container inspect -f '{{.State.Status}}' $swag_container_name )" == "running" ]
 then
-    echo "$container_name already running!"
+    echo "$swag_container_name already running!"
 else
     docker-compose -f swag_deploy.yaml -p lubimovka up -d
 fi
@@ -46,10 +47,10 @@ fi
 
 if [ $project_name = "test" ]
 then
-    docker-compose -f swag_deploy.yaml -p lubimovka down
-    docker-compose -f $compose -p $project_name down --volumes
+    docker-compose -f $compose -p $project_name down
+    # remove DB volumes
+    docker volume rm postgres_data_test
     docker-compose -f $compose -p $project_name up -d
-    docker-compose -f swag_deploy.yaml -p lubimovka up -d
     echo "Test containers run succesfully!"
 fi
 
