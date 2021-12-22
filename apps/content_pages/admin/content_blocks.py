@@ -44,6 +44,7 @@ class OrderedPlayInline(OrderedInline):
 
 class ExtendedPersonInline(OrderedInline):
     model = ExtendedPerson
+    show_change_link = True
 
 
 @admin.register(ExtendedPerson)

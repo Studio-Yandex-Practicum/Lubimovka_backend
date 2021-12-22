@@ -118,7 +118,11 @@ class ExtendedPerson(AbstractOrderedItemBase):
         verbose_name_plural = "Элементы блоков песроны"
 
     def __str__(self):
-        return f"{self.order} — {self.person}"
+        if self.roles.all():
+            roles = ", ".join([role.name for role in self.roles.all()])
+        else:
+            roles = "не установлено"
+        return f"{self.order} — {self.person}, роли: {roles}"
 
 
 class OrderedPlay(AbstractOrderedItemBase):
