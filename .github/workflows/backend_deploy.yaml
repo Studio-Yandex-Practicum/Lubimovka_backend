@@ -136,6 +136,8 @@ jobs:
   send_message:
     name: Send message in telegram group
     runs-on: ubuntu-latest
+    environment:
+      name: develop_deploy
     needs: deploy
     steps:
       - name: check repository

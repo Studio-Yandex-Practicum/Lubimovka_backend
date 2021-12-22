@@ -148,6 +148,8 @@ jobs:
   send_message:
     name: Send message in telegram group
     runs-on: ubuntu-latest
+    environment:
+      name: test_deploy
     needs: deploy_testing_branch
     steps:
       - name: send message

@@ -21,7 +21,7 @@ else
 fi
 done
 
-
+# swag_network is created if there is none
 if [ "$( docker network inspect -f '{{json .Name}}' $swag_network_name)" ]
 then
     echo "$swag_network_name is already running!"
@@ -30,11 +30,20 @@ else
     echo "$swag_network_name created!"
 fi
 
+# swag_container is created if there is none
 if [ "$( docker container inspect -f '{{.State.Status}}' $swag_container_name )" == "running" ]
 then
     echo "$swag_container_name already running!"
 else
     docker-compose -f swag_deploy.yaml -p lubimovka up -d
+fi
+
+# frontend container is created if there is none
+if [ "$( docker container inspect -f '{{.State.Status}}' frontend_develop )" == "running" ]
+then
+    echo "Frontend already running!"
+else
+    docker-compose -f frontend_deploy.yaml -p frontend up -d
 fi
 
 # Choosing a compose script (develop or test)
