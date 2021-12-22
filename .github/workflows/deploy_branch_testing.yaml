@@ -164,7 +164,7 @@ jobs:
                   Тестирует - ${{ github.event.inputs.name }}
 
                   Сайт доступен по адресу:
-                  https://${{ secrets.TEST_SUBDOMAIN }}/${{ secrets.SITE_URL }}
+                  https://${{ secrets.TEST_SUBDOMAIN }}.${{ secrets.SITE_URL }}
 
                   Сcылка на документацию в Swagger:
                   ${{ secrets.TEST_SWAGGER_URL }}
