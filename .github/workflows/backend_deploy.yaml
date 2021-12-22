@@ -131,7 +131,7 @@ jobs:
             # docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
             # re-run docker containers
-            ./docker_check_run.sh backend_develop_deploy develop
+            ./docker_check_run.sh backend_develop_deploy.yaml develop
 
   send_message:
     name: Send message in telegram group
