@@ -38,13 +38,9 @@ else
     docker-compose -f swag_deploy.yaml -p lubimovka up -d
 fi
 
-# frontend container is created if there is none
-if [ "$( docker container inspect -f '{{.State.Status}}' frontend_develop )" == "running" ]
-then
-    echo "Frontend already running!"
-else
-    docker-compose -f frontend_deploy.yaml -p frontend up -d
-fi
+# re-run frontend containers
+docker-compose -f frontend_deploy.yaml -p frontend down
+docker-compose -f frontend_deploy.yaml -p frontend up -d
 
 # Choosing a compose script (develop or test)
 if [ $project_name = "develop" ]
