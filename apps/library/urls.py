@@ -4,6 +4,8 @@ from rest_framework.routers import DefaultRouter
 from apps.library.views import (
     AuthorsReadViewSet,
     ParticipationViewSet,
+    PerformanceMediaReviewViewSet,
+    PerformanceReviewViewSet,
     PerformanceViewSet,
     PlayFiltersAPIView,
     PlayViewSet,
@@ -16,6 +18,17 @@ router.register(
     PerformanceViewSet,
     basename="performances",
 )
+router.register(
+    r"performances/(?P<performance_id>\d+)/media-reviews",
+    PerformanceMediaReviewViewSet,
+    basename="performance-media-reviews",
+)
+router.register(
+    r"performances/(?P<performance_id>\d+)/reviews",
+    PerformanceReviewViewSet,
+    basename="performance-reviews",
+)
+
 router.register(
     "plays",
     PlayViewSet,
