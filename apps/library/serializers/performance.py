@@ -1,10 +1,19 @@
 from rest_framework import serializers
 
+from apps.afisha.models import Event
 from apps.core.serializers import ImageSerializer
-from apps.library.models import Performance, TeamMember
+from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview, TeamMember
 from apps.library.utilities import team_collector
 
 from .play import PlaySerializer
+
+
+class LocalEventSerializer(serializers.ModelSerializer):
+    """Serializer for performance__events,using only for PerformanceSerializer."""
+
+    class Meta:
+        model = Event
+        fields = ("id", "date_time", "paid", "url", "place", "pinned_on_main")
 
 
 class PerformanceSerializer(serializers.ModelSerializer):
@@ -13,6 +22,8 @@ class PerformanceSerializer(serializers.ModelSerializer):
     play = PlaySerializer()
     team = serializers.SerializerMethodField()
     images_in_block = ImageSerializer(many=True)
+    events = serializers.SerializerMethodField()
+    events = LocalEventSerializer(source="events.body", many=True)
 
     def get_team(self, obj):
         return team_collector(TeamMember, {"performance": obj})
@@ -49,4 +60,24 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "team",
             "image",
             "project_title",
+        )
+
+
+class PerformanceMediaReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PerformanceMediaReview
+        exclude = (
+            "created",
+            "modified",
+            "performance",
+        )
+
+
+class PerformanceReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PerformanceReview
+        exclude = (
+            "created",
+            "modified",
+            "performance",
         )

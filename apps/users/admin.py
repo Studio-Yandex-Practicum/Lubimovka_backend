@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Group
 
 from .forms import GroupAdminForm, UserAdminForm
+from .models import ProxyUser
 
 User = get_user_model()
 
@@ -41,4 +42,5 @@ class GroupAdmin(admin.ModelAdmin):
 
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
-admin.site.register(User, UserAdmin)
+admin.site.register(ProxyUser, UserAdmin)
+admin.site.site_header = "Администрирование сайта"
