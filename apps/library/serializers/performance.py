@@ -13,7 +13,7 @@ class LocalEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ("id", "date_time", "paid", "url", "place")
+        fields = ("id", "date_time", "paid", "url", "place", "pinned_on_main")
 
 
 class PerformanceSerializer(serializers.ModelSerializer):
