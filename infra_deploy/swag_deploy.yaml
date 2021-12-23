@@ -10,6 +10,7 @@ services:
       - TZ=Europe/Moscow
       - VALIDATION=http
       - SUBDOMAINS=${DEV_SUBDOMAIN},${TEST_SUBDOMAIN}
+      - ONLY_SUBDOMAINS=true
       - CERTPROVIDER=zerossl
     env_file:
       - .env-dev
