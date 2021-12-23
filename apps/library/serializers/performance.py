@@ -9,8 +9,7 @@ from .play import PlaySerializer
 
 
 class LocalEventSerializer(serializers.ModelSerializer):
-    """Serializer for performance__events,
-    using only for PerformanceSerializer."""
+    """Serializer for performance__events,using only for PerformanceSerializer."""
 
     class Meta:
         model = Event
