@@ -5,11 +5,14 @@ from django.utils import timezone
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.models import Image
 from apps.content_pages.tests.factories import (
+    ImageForContentFactory,
     ImagesBlockFactory,
+    LinkFactory,
+    PerformancesBlockFactory,
     PersonsBlockFactory,
     PlaysBlockFactory,
     TextFactory,
-    TitleFactory,
+    VideosBlockFactory,
 )
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
@@ -25,11 +28,10 @@ def add_content_item_to_project(project, created, count, factory):
 
 
 class ProjectContentFactory(factory.django.DjangoModelFactory):
-    """
-    Base model for content items and blocks for Project.
+    """Base model for content items and blocks for Project.
 
-    When add content to Project (via add_content_item_to_project - see above) you should add
-    item=factory.SubFactory(BLOCK_OR_ITEM_FACTORY_YOU_NEED),
+    When add content to Project (via add_content_item_to_project - see above)
+    you should add item=factory.SubFactory(BLOCK_OR_ITEM_FACTORY_YOU_NEED),
     content_page=PROJECT and count=INT.
     """
 
@@ -49,8 +51,7 @@ class ProjectContentFactory(factory.django.DjangoModelFactory):
     }
 )
 class ProjectFactory(factory.django.DjangoModelFactory):
-    """
-    Creates Project Page.
+    """Creates Project Page.
 
     You can customize Project's content by adding method and count when
     create (e.g. 'ProjectFactory.create(add_several_preamble=5,
@@ -63,7 +64,12 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Project
 
-    description = factory.Faker("paragraph", locale="ru_RU", nb_sentences=5, variable_nb_sentences=False)
+    description = factory.Faker(
+        "paragraph",
+        locale="ru_RU",
+        nb_sentences=5,
+        variable_nb_sentences=False,
+    )
     image = factory.django.ImageField(color=factory.Faker("color"))
     intro = factory.Faker("sentence", locale="ru_RU", nb_words=12)
     is_draft = factory.Faker("boolean", chance_of_getting_true=25)
@@ -71,15 +77,21 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
 
     @factory.post_generation
-    def add_several_text(self, created, count, **kwargs):
-        """Add specified count of Text item to Project."""
-        subfactory = factory.SubFactory(TextFactory)
+    def add_several_images(self, created, count, **kwargs):
+        """Add specified count of Image item to Project."""
+        subfactory = factory.SubFactory(ImageForContentFactory)
         add_content_item_to_project(self, created, count, subfactory)
 
     @factory.post_generation
-    def add_several_title(self, created, count, **kwargs):
-        """Add specified count of Title item to Project."""
-        subfactory = factory.SubFactory(TitleFactory)
+    def add_several_links(self, created, count, **kwargs):
+        """Add specified count of Links item to Project."""
+        subfactory = factory.SubFactory(LinkFactory)
+        add_content_item_to_project(self, created, count, subfactory)
+
+    @factory.post_generation
+    def add_several_text(self, created, count, **kwargs):
+        """Add specified count of Text item to Project."""
+        subfactory = factory.SubFactory(TextFactory)
         add_content_item_to_project(self, created, count, subfactory)
 
     @factory.post_generation
@@ -100,14 +112,29 @@ class ProjectFactory(factory.django.DjangoModelFactory):
         subfactory = factory.SubFactory(PlaysBlockFactory)
         add_content_item_to_project(self, created, count, subfactory)
 
+    @factory.post_generation
+    def add_several_videosblock(self, created, count, **kwargs):
+        """Add specified count of content block with Video to Project."""
+        subfactory = factory.SubFactory(VideosBlockFactory)
+        add_content_item_to_project(self, created, count, subfactory)
+
+    @factory.post_generation
+    def add_several_performancesblock(self, created, count, **kwargs):
+        """Add specified count of content block with Performances to Project."""
+        subfactory = factory.SubFactory(PerformancesBlockFactory)
+        add_content_item_to_project(self, created, count, subfactory)
+
     @classmethod
     def complex_create(cls, count):
         """Create specified count of Project with fully populated content."""
         return cls.create_batch(
             count,
+            add_several_images=1,
             add_several_text=1,
-            add_several_title=1,
+            add_several_links=1,
             add_several_playsblock=1,
             add_several_imagesblock=1,
             add_several_personsblock=1,
+            add_several_videosblock=1,
+            add_several_performancesblock=1,
         )
