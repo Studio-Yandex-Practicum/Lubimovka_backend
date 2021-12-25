@@ -5,10 +5,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import BlogItem
-from apps.articles.serializers import (
-    BlogItemDetailedSerializer,
-    BlogItemListSerializer,
-)
+from apps.articles.serializers import BlogItemDetailedSerializer, BlogItemListSerializer
 
 
 class BlogItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):

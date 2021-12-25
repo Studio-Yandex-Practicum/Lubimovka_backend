@@ -3,9 +3,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from apps.library.models import ParticipationApplicationFestival
-from apps.library.models.participation_application import (
-    UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION,
-)
+from apps.library.models.participation_application import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION
 
 
 class ParticipationSerializer(serializers.ModelSerializer):
