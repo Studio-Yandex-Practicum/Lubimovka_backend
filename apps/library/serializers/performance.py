@@ -8,12 +8,12 @@ from apps.library.utilities import team_collector
 from .play import PlaySerializer
 
 
-class EventSerializer(serializers.ModelSerializer):
-    """Serializer for performance."""
+class LocalEventSerializer(serializers.ModelSerializer):
+    """Serializer for performance__events,using only for PerformanceSerializer."""
 
     class Meta:
         model = Event
-        fields = ("id", "date_time", "paid", "url", "place")
+        fields = ("id", "date_time", "paid", "url", "place", "pinned_on_main")
 
 
 class PerformanceSerializer(serializers.ModelSerializer):
@@ -23,12 +23,10 @@ class PerformanceSerializer(serializers.ModelSerializer):
     team = serializers.SerializerMethodField()
     images_in_block = ImageSerializer(many=True)
     events = serializers.SerializerMethodField()
+    events = LocalEventSerializer(source="events.body", many=True)
 
     def get_team(self, obj):
         return team_collector(TeamMember, {"performance": obj})
-
-    def get_events(self, obj):
-        return EventSerializer(obj.events.body.first()).data
 
     class Meta:
         exclude = (
