@@ -33,11 +33,6 @@ class UserAdmin(DjangoUserAdmin):
         return obj.groups.first()
 
 
-admin.site.register(ProxyUser, UserAdmin)
-
-admin.site.site_header = "Администрирование сайта"
-
-
 class GroupAdmin(admin.ModelAdmin):
 
     form = GroupAdminForm
