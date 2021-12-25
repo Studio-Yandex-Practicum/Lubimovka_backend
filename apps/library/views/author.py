@@ -4,10 +4,7 @@ from rest_framework import viewsets
 
 from apps.library.filters import AuthorFilter
 from apps.library.models import Author
-from apps.library.serializers import (
-    AuthorListSerializer,
-    AuthorRetrieveSerializer,
-)
+from apps.library.serializers import AuthorListSerializer, AuthorRetrieveSerializer
 
 
 class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
