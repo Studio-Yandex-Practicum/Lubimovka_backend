@@ -1,11 +1,11 @@
-"""
-Base settings to build other settings files upon.
-"""
+"""Base settings to build other settings files upon."""
+import os
 from pathlib import Path
 
 import environ
 
 env = environ.Env()
+
 
 # Root folder of the project
 # ------------------------------------------------------------------------------
@@ -38,12 +38,25 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "corsheaders",
     "rest_framework",
-    "rest_framework_simplejwt",
+    "django_filters",
     "drf_spectacular",
-    "djoser",
+    "adminsortable2",
+    "phonenumber_field",
+    "markdownx",
+    "drf_multiple_model",
+    "ckeditor",
+    "anymail",
 ]
 LOCAL_APPS = [
     "apps.users",
+    "apps.core",
+    "apps.main",
+    "apps.afisha",
+    "apps.library",
+    "apps.articles",
+    "apps.info",
+    "apps.static_pages",
+    "apps.content_pages",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -69,11 +82,12 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
 ]
 
+TEMPLATES_DIR = os.path.join(ROOT_DIR, "templates")
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [TEMPLATES_DIR],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -108,17 +122,14 @@ AUTH_PASSWORD_VALIDATORS = [
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAdminUser",
-    ],
-    "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
     "PAGE_SIZE": 10,
-    'DATETIME_FORMAT': "%Y-%m-%dT%H:%M:%S",
+    "DATETIME_FORMAT": "%Y-%m-%dT%H:%M:%S",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
@@ -177,7 +188,14 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.smtp.EmailBackend",
+    default="django.core.mail.backends.console.EmailBackend",
 )
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
+
+# See markdownx docs https://neutronx.github.io/django-markdownx/
+MARKDOWNX_MARKDOWN_EXTENSIONS = ("markdown.extensions.extra",)
+MARKDOWNX_MEDIA_PATH = "static_pages/"
+MARKDOWNX_URLS_PATH = "/admin/markdownx/markdownify/"
+MARKDOWNX_IMAGE_MAX_SIZE = {"size": (1000, 1000), "quality": 100}

@@ -1,3 +1,7 @@
+[![codestyle PEP8 and tests](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml)
+[![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml)
+[![python safety](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/check_vulnerabilities.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/check_vulnerabilities.yaml)
+
 # Бэкенд "Любимовка"
 
 ## Что сделано и чем отличается от структуры по умолчанию
@@ -10,13 +14,26 @@
 - pre-commit хуки
 - используется PostgreSQL
 - базовая модель TimeStampedModel (импортировать из core.models)
-- djoser для эндпоинтов пользователя
-- автодокументация swagger/redoc (http://base_url/api/schema/swagger-ui/ или http://base_url/api/schema/redoc/)
+- автодокументация swagger/redoc (http://base_url/api/v1/schema/swagger-ui/ или http://base_url/api/v1/schema/redoc/)
+
+## Общие требования к стилю кода - [ссылка](docs/codestyle.md)
+
+## Что нужно проверить, когда вы сделали PR - [чек-лист для PR](docs/pull_request.md)
 
 ## Правила работы с git (как делать коммиты и pull request-ы)
-**Не написано, ждёт когда кто-то напишет.**\
-В планах придерживаться [вот таких](https://habr.com/ru/post/106912/) и [таких](https://www.atlassian.com/ru/git/tutorials/comparing-workflows/gitflow-workflow) схем
+1. Две основные ветки: master и develop
+2. Ветка develop — “предрелизная”. Т.е. здесь должен быть рабочий и выверенный код
+3. В master будет то, что будет заливаться на прод (CI/CD)
+4. Порядок именования веток
+    - весь новый функционал — **feature/название-функционала**
+    - исправление ошибок — **bugfix/название-багфикса**
+5. При создании новой ветки наследоваться от develop
+6. PR в develop и master должны быть базово покрыты тестами:
+    - на доступность эндпонтов
+    - проверка списка полей
+    - проверен критичный функционал (пример: фильтр по слову “сосиска” возвращает только результаты с “сосиска“)
 
+Правила возможно будут добавляться и обновляться.
 ## Подготовка окружения для разработки
 
 Что нужно подготовить предварительно:
@@ -66,6 +83,7 @@
         docker-compose -f postgres-local.yaml down
         ```
     - Остановить контейнер с БД удалив данные:
+
         ```shell
         docker-compose -f postgres-local.yaml down --volumes
         ```
@@ -75,3 +93,33 @@
 ## Про тесты
 
 Тестов нет, но есть настройки для ускорения тестов + настройки для запуска unittest через pytest (удобно в vscode)
+
+## Права пользователей админ-зоны
+Доступна команда для установки прав пользователей согласно их группам:
+```
+./ manage.py set_perms
+```
+
+## Заполнение БД тестовыми данными
+Доступна команда для наполнения БД данными:
+```
+./ manage.py filldb
+```
+Команда сейчас немного "сырая". Но заполняет такими тестовыми данными, как:
+- персоны
+- партнёры
+- попечители
+- волонтёры
+- команды фестиваля
+- пользователи-админы и редакторы (для входа используем ник admin_X или editor_X, где Х - число от 1 до 5 и дефолтный пароль "pass")
+
+Для создания таких тестовых данных, как проекты, новости и блог доступна команда:
+```
+./ manage.py filldb_articles
+```
+Ее следует применять ПОСЛЕ команды filldb (создает объекты, необходимые для создания сложных сущностей блога/проекта/новости).
+
+Для очистки БД от данных (но не удаления таблиц) можно использовать команду:
+```
+./ manage.py flush
+```

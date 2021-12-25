@@ -104,6 +104,7 @@ celerybeat.pid
 # Environments
 .env
 .venv
+.envs/
 env/
 venv/
 ENV/
@@ -127,3 +128,19 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Media and Static Django
+/media
+/staticfiles
+
+# Папки, создаваемые средой разработки
+.idea
+.DS_Store
+.AppleDouble
+.LSOverride
+
+*.sublime-project
+*.sublime-workspace
+
+.vscode/
+*.code-workspace
