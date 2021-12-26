@@ -78,7 +78,11 @@ class Event(BaseModel):
         verbose_name_plural = "События"
 
     def __str__(self):
-        return f"{self.common_event} - {self.type}, {self.date_time}"
+        event_name = self.common_event.target_model
+        event_type_cyrillic = str(dict(self.EventType.choices)[self.type])
+        event_date = self.date_time.date().strftime("%d.%m.%Y")
+        event_time = self.date_time.time().strftime("%H:%M")
+        return f'{event_type_cyrillic} - "{event_name}". Дата: {event_date}. Время: {event_time}.'
 
     def clean(self):
         if self.type and self.common_event_id:
