@@ -38,11 +38,12 @@ class GfkPopupWidget(django.forms.NumberInput):
         super().__init__(*args, **kwargs)
 
     def get_context(self, name: str, value: Any, attrs: Optional[Any]) -> Dict[str, Any]:
-        urls = self._prepare_context_urls(value)
+        popup_type, urls = self._prepare_context(value)
         urls_id = name + "_urls"
 
         extended_context = {
             "content_type_field_name": self.content_type_field_name,
+            "popup_type": popup_type,
             "urls": urls,
             "urls_id": urls_id,
         }
@@ -51,7 +52,7 @@ class GfkPopupWidget(django.forms.NumberInput):
         context.update(extended_context)
         return context
 
-    def _prepare_context_urls(self, value):
+    def _prepare_context(self, value):
         content_type_field = self.parent_class._meta.get_field(self.content_type_field_name)
         choices = content_type_field.get_choices()
 
@@ -100,4 +101,4 @@ class GfkPopupWidget(django.forms.NumberInput):
 
             urls[type_id] = url
 
-        return urls
+        return popup_type, urls

@@ -1,11 +1,15 @@
 function genericForeignKeyPopupOnClick($, element, event) {
-    
-    function getContentTypeFieldId(id, contentTypeFieldName) {
-        var prefix = id.substring(0, id.lastIndexOf("-") + 1)
-        prefix = prefix.replace("id_href_", "")
-        return prefix + contentTypeFieldName
+
+    function getCommonPrefix(id) {
+        return id.replace("add_id_", "").replace("change_id_", "")
     }
-    
+
+    function getContentTypeFieldId(id, contentTypeFieldName) {
+        var prefix = getCommonPrefix(id);
+        prefix = prefix.substring(0, prefix.lastIndexOf("-") + 1);
+        return prefix + contentTypeFieldName;
+    }
+
     if (event) {
         event.preventDefault();
         event.stopPropagation();
@@ -15,8 +19,10 @@ function genericForeignKeyPopupOnClick($, element, event) {
 
     var $this = $(element);
     var id = $this.attr('id');
-    var contentTypeFieldNameId = getContentTypeFieldId(id, contentTypeFieldName)
-    var urls = JSON.parse(document.getElementById(id + "_urls").textContent);
+    var commonPrefix = getCommonPrefix(id)
+    var urls = JSON.parse(document.getElementById(commonPrefix + "_urls").textContent);
+
+    var contentTypeFieldNameId = getContentTypeFieldId(id, contentTypeFieldName);
 
     var selected = $('select[name="' + contentTypeFieldNameId + '"]').find('option:selected');
     var contentTypeId = selected.val();
