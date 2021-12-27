@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.utilities import slugify
+from apps.core.utilities import check_related_settings, slugify
 
 
 class BaseModel(models.Model):
@@ -225,6 +225,10 @@ class Setting(BaseModel):
         blank=True,
         verbose_name="Email",
     )
+
+    def save(self, *args, **kwargs):
+        check_related_settings(self)
+        super(Setting, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ("group", "settings_key")
