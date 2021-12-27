@@ -1,10 +1,7 @@
 from rest_framework import serializers
 
 from apps.afisha.serializers import EventSerializer
-from apps.articles.serializers import (
-    BlogItemListSerializer,
-    NewsItemListSerializer,
-)
+from apps.articles.serializers import BlogItemListSerializer, NewsItemListSerializer
 from apps.info.serializers.place import PlaceSerializer
 from apps.library.serializers import PlaySerializer
 from apps.main.models import Banner

@@ -1,13 +1,5 @@
-from .blog_items import (
-    BlogItemBaseSerializer,
-    BlogItemDetailedSerializer,
-    BlogItemListSerializer,
-)
-from .news_items import (
-    NewsItemBaseSerializer,
-    NewsItemDetailedSerializer,
-    NewsItemListSerializer,
-)
+from .blog_items import BlogItemBaseSerializer, BlogItemDetailedSerializer, BlogItemListSerializer
+from .news_items import NewsItemBaseSerializer, NewsItemDetailedSerializer, NewsItemListSerializer
 from .projects import ProjectListSerializer, ProjectSerializer
 
 __all__ = (

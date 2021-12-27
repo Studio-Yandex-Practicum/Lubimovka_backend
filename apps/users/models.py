@@ -24,3 +24,13 @@ class User(AbstractUser):
         """Set "is_staff" for each user."""
         self.is_staff = True
         super().save(*args, **kwargs)
+
+
+class ProxyUser(User):
+    pass
+
+    class Meta:
+        app_label = "auth"
+        proxy = True
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
