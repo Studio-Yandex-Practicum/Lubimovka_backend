@@ -1,8 +1,7 @@
 # Some sort of modification of the `django-gfklookupwidget`
 # https://github.com/mqsoh/django-gfklookupwidget
 
-import json
-from random import randint
+from typing import Any, Dict, Optional
 
 import django.forms
 from django.contrib.contenttypes.models import ContentType
@@ -13,7 +12,7 @@ POPUP_TYPE_CHANGE = "change"
 POPUP_SUFFIX = "?_popup=1"
 
 
-class GfkPopupWidget(django.forms.Widget):
+class GfkPopupWidget(django.forms.NumberInput):
     """Provide a link to add or edit GenericForeignKeys related object.
 
     It's a wad of JavaScript that inspects the select box generated for the
@@ -22,20 +21,38 @@ class GfkPopupWidget(django.forms.Widget):
     widget.
     """
 
+    template_name = "admin/widgets/generic_foreign_key_widget.html"
+
+    class Media:
+        js = ("content-pages/admin/genericForeignKeyPopupOnClick.js",)
+
     def __init__(self, *args, **kwargs):
         """Set required for widget args.
 
         Args:
-            - content_type_field_name: This is name of the field that becomes a
-            select box in the admin.
+            - content_type_field_name: This is name of the field that becomes a select box in the admin.
             - parent_class: This is a model class.
         """
-        self.ct_field_name = kwargs.pop("content_type_field_name")
+        self.content_type_field_name = kwargs.pop("content_type_field_name")
         self.parent_class = kwargs.pop("parent_class")
         super().__init__(*args, **kwargs)
 
-    def render(self, name, value, attrs=None, renderer=None):
-        content_type_field = self.parent_class._meta.get_field(self.ct_field_name)
+    def get_context(self, name: str, value: Any, attrs: Optional[Any]) -> Dict[str, Any]:
+        urls = self._prepare_context_urls(value)
+        urls_id = name + "_urls"
+
+        extended_context = {
+            "content_type_field_name": self.content_type_field_name,
+            "urls": urls,
+            "urls_id": urls_id,
+        }
+
+        context = super().get_context(name, value, attrs)
+        context.update(extended_context)
+        return context
+
+    def _prepare_context_urls(self, value):
+        content_type_field = self.parent_class._meta.get_field(self.content_type_field_name)
         choices = content_type_field.get_choices()
 
         # Generate an ID to Content Type lookup dict now so we don't have to
@@ -83,65 +100,4 @@ class GfkPopupWidget(django.forms.Widget):
 
             urls[type_id] = url
 
-        return django.utils.safestring.mark_safe(
-            """
-            <input
-                class="vForeignKeyRawIdAdminField"
-                id="id_{name}"
-                name="{name}"
-                value="{value}"
-                type="hidden"
-            />
-            <a
-                id="{popup_type}_id_{name}"
-                class="related-lookup gfkpopup"
-                onclick="return gfkpopupwidget_{uniq}_click(django.jQuery, this, event);">
-            </a>
-            <script type="text/javascript">
-                if (typeof(gfkpopupwidget_{uniq}_click) == 'undefined') {{
-                    function gfkpopupwidget_{uniq}_click($, element, event) {{
-                        if (event) {{
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }}
-
-                        var urls = {urls};
-                        var $this = $(element);
-                        var ct_field_name = "{ct_field_name}";
-
-                        var prefix = "";
-                        var id = $this.attr('id');
-                        if (id.indexOf('-')) {{
-                            ct_field_name = id.substring(0, id.lastIndexOf('-') + 1).replace('{popup_type}_id_', '')
-                            + ct_field_name;
-                        }}
-
-                        var selected = $('select[name="'+ct_field_name+'"]').find('option:selected');
-                        var content_type_id = selected.val();
-                        var content_type = selected.text();
-
-                        if (!content_type) {{
-                            alert('No content type found for GenericForeignKey lookup.');
-                            return false;
-                        }}
-
-                        if (!content_type_id) {{
-                            alert('You must select: '+ct_field_name+'.');
-                            return false;
-                        }}
-
-                        $this.attr('href', urls[content_type_id]);
-
-                        return showRelatedObjectPopup(element);
-                    }}
-                }}
-            </script>
-        """.format(
-                uniq="{:X}".format(randint(1, 1000000)),
-                name=name,
-                value=value,
-                urls=json.dumps(urls),
-                ct_field_name=self.ct_field_name,
-                popup_type=popup_type,
-            )
-        )
+        return urls
