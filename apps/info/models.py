@@ -35,7 +35,7 @@ class Partner(BaseModel):
     )
     in_footer_partner = models.BooleanField(
         default=False,
-        verbose_name="Отображение внизу страницы",
+        verbose_name="Отображать внизу страницы",
         help_text=("Поставьте галочку, чтобы показать логотип партнёра внизу страницы"),
     )
 
