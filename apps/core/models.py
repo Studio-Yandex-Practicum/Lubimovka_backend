@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.utilities import check_related_settings, slugify
+from apps.core.utilities import slugify
 
 
 class BaseModel(models.Model):
@@ -184,6 +184,10 @@ class Setting(BaseModel):
         SettingFieldType.JSON: ["json"],
         SettingFieldType.BANNER: ["json", "url", "image"],
     }
+    RELATED_SETTINGS = {
+        "main_add_blog": "main_add_news",
+        "main_add_news": "main_add_blog",
+    }
 
     group = models.CharField(
         choices=SettingGroup.choices,
@@ -237,7 +241,7 @@ class Setting(BaseModel):
     )
 
     def save(self, *args, **kwargs):
-        check_related_settings(self)
+        self._check_related_settings(self)
         super(Setting, self).save(*args, **kwargs)
 
     class Meta:
@@ -257,3 +261,16 @@ class Setting(BaseModel):
         if Setting.objects.filter(settings_key=settings_key).exists():
             setting = Setting.objects.get(settings_key=settings_key)
             return setting.value
+
+    @classmethod
+    def _turn_off_setting(cls, setting):
+        if cls.objects.filter(settings_key=setting).exists():
+            setting = cls.objects.get(settings_key=setting)
+            setting.boolean = False
+            setting.save()
+
+    @classmethod
+    def _check_related_settings(cls, setting):
+        for enable_setting, disabled_setting in cls.RELATED_SETTINGS.items():
+            if setting.settings_key == enable_setting and setting.boolean is True:
+                cls._turn_off_setting(disabled_setting)
