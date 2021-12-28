@@ -12,7 +12,7 @@ services:
     networks:
       - develop_db_network
   backend:
-    image: "${IMAGE}:${IMAGE_TAG}"
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
     container_name: backend_develop
     restart: always
     volumes:
@@ -26,59 +26,33 @@ services:
       - develop_db_network
       - swag_network
   migrations:
-    image: "${IMAGE}:${IMAGE_TAG}"
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
     container_name: migrations_develop
     volumes:
       - static_value:/code/staticfiles/
       - media_value:/code/media/
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput &&
-             python manage.py createsuperuser --noinput"
+             python manage.py collectstatic --noinput"
     depends_on:
       - backend
     env_file:
       - .env-dev
     networks:
       - develop_db_network
-  swag:
-    image: ghcr.io/linuxserver/swag
-    container_name: swag
-    cap_add:
-      - NET_ADMIN
-    environment:
-      - TZ=Europe/Moscow
-      - VALIDATION=http
-      - SUBDOMAINS=lubimovka,test-lubimovka
-      - CERTPROVIDER=zerossl
-      - ONLY_SUBDOMAINS=true
-    env_file:
-      - .env-dev
-    networks:
-      - swag_network
-    volumes:
-      - ./swag_config/:/config/
-      - ./swag/swag_nginx.conf:/config/nginx/site-confs/default
-      - static_value:/config/static/
-      - media_value:/config/media/
-      - static_value_test:/config/test/static/
-      - media_value_test:/config/test/media/
-    ports:
-      - 443:443
-      - 80:80
-    depends_on:
-      - backend
-    restart: unless-stopped
 
 networks:
     develop_db_network:
+      name: develop_db_network
       driver: bridge
     swag_network:
-      driver: bridge
+      name: swag_network
+      external: true
 
 volumes:
   postgres_data:
+    name: postgres_data
   static_value:
+    name: static_value
   media_value:
-  static_value_test:
-  media_value_test:
+    name: media_value

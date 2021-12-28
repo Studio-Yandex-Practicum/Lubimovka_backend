@@ -1,5 +1,9 @@
 name: develop backend build and deploy
 
+concurrency:
+  group: develop_deploy
+  cancel-in-progress: true
+
 on:
   push:
     branches:
@@ -14,31 +18,9 @@ defaults:
     working-directory: .
 
 jobs:
-  tests:
-    name: Run tests
-    runs-on: ubuntu-latest
-    steps:
-    -
-      name: Check out the repo
-      uses: actions/checkout@v2
-    -
-      name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.9
-    -
-      name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements/dev.txt
-    -
-      name: Test with pytest
-      run: pytest
-
   build-and-push-image-to-github-packages:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
-    needs: tests
     permissions:
       contents: read
       packages: write
@@ -72,6 +54,8 @@ jobs:
   deploy:
     name: Deploy changes on server
     runs-on: ubuntu-latest
+    environment:
+      name: develop_deploy
     needs: build-and-push-image-to-github-packages
     steps:
       -
@@ -93,21 +77,30 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ${{ github.event.repository.name }}
+            cd ${{ github.event.repository.name }}/infra_deploy
             git pull
-            cd infra_deploy
-            chmod +x check_env_script.sh
-            ./check_env_script.sh .env-dev
 
-            # Github package name: writing in .env to read in docker-compose script
-            ./check_env_script.sh .github_image
-            echo "IMAGE=${{ env.IMAGE }}" >> .github_image
-            echo "IMAGE_TAG=${{ env.IMAGE_TAG }}" >> .github_image
-            source .github_image
-            export IMAGE
-            export IMAGE_TAG
+            chmod +x check_env_script.sh
+            chmod +x docker_check_run.sh
+
+            # Github package name: writing in .env to read in docker-compose script and nginx scripts
+            ./check_env_script.sh .github_vars
+            echo "IMAGE_BACK=${{ env.IMAGE }}" >> .github_vars
+            echo "IMAGE_BACK_TAG=${{ env.IMAGE_TAG }}" >> .github_vars
+            echo "IMAGE_FRONT=${{ secrets.IMAGE_FRONT }}" >> .github_vars
+            echo "IMAGE_FRONT_TAG=${{ secrets.IMAGE_FRONT_TAG }}" >> .github_vars
+            echo "FRONT_BASE_URL=${{ secrets.FRONT_BASE_URL }}" >> .github_vars
+            echo "DEVELOP_API_BASE_URL=${{ secrets.DEVELOP_API_BASE_URL }}" >> .github_vars
+            echo "TEST_API_BASE_URL=${{ secrets.TEST_API_BASE_URL }}" >> .github_vars
+            echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .github_vars
+            echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .github_vars
+
+            # Export all variables from .github_vars
+            set -a
+            source .github_vars
 
             # PostgreSQL variables: reading and writing Github secrets in .env-dev
+            ./check_env_script.sh .env-dev
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-dev
             echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env-dev
@@ -136,17 +129,16 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
             # Pull docker image from github packages with tag
-            docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+            # docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
             # re-run docker containers
-            docker-compose -f test_branch_deploy.yaml down
-            docker-compose -f develop_deploy.yaml down
-            docker-compose -f develop_deploy.yaml up -d
-            docker-compose -f test_branch_deploy.yaml up -d
+            ./docker_check_run.sh backend_develop_deploy.yaml develop
 
   send_message:
     name: Send message in telegram group
     runs-on: ubuntu-latest
+    environment:
+      name: develop_deploy
     needs: deploy
     steps:
       - name: check repository
@@ -169,10 +161,13 @@ jobs:
                   Код на сервере разработки обновлён!
 
                   Изменения можно посмотреть в PR:
-                  https://github.com/${{ github.repository }}/pull/${{env.PR}}
+                  ${{ secrets.HUB_URL }}/${{ github.repository }}/pull/${{env.PR}}
+
+                  Сайт доступен по адресу:
+                  https://${{ secrets.DEV_SUBDOMAIN }}.${{ secrets.SITE_URL }}
 
                   Сcылка на документацию в Swagger:
-                  https://lubimovka.kiryanov.ru/api/v1/schema/swagger-ui/
+                  ${{ secrets.DEVELOP_SWAGGER_URL }}
 
                   Панель администратора:
-                  https://lubimovka.kiryanov.ru/admin/
+                  ${{ secrets.DEVELOP_ADMIN_URL }}

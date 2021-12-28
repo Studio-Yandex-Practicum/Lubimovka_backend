@@ -1,10 +1,4 @@
-from .author import (
-    Achievement,
-    Author,
-    OtherLink,
-    OtherPlay,
-    SocialNetworkLink,
-)
+from .author import Achievement, Author, OtherLink, OtherPlay, SocialNetworkLink
 from .master_class import MasterClass
 from .participation_application import ParticipationApplicationFestival
 from .performance import Performance, PerformanceMediaReview, PerformanceReview
