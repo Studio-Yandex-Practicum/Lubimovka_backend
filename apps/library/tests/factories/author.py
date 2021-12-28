@@ -17,7 +17,7 @@ class AchievementFactory(factory.django.DjangoModelFactory):
     tag = factory.Faker("word", locale="ru_RU")
 
 
-SocialNetwork_choices = [x[0] for x in SocialNetworkLink.SocialNetwork.choices]
+social_links_choices = [x[0] for x in SocialNetworkLink.SocialNetwork.choices]
 
 
 @restrict_factory({"global": [Author]})
@@ -32,7 +32,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
         model = SocialNetworkLink
 
     author = factory.Iterator(Author.objects.all())
-    name = factory.Iterator(SocialNetwork_choices)
+    name = factory.Iterator(social_links_choices)
     link = factory.Faker("url")
 
 
@@ -81,10 +81,10 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         - biography;
         - plays.
     For other fields, use arguments:
-        - add_achievement;
-        - add_social_network_link;
-        - add_other_link;
-        - add_other_play;
+        - add_several_achievement;
+        - add_several_social_network_link;
+        - add_several_other_link;
+        - add_several_other_play;
     For creation object with fully populated fields use complex_create method.
     """
 
@@ -96,7 +96,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     biography = factory.Faker("text", locale="ru_RU")
 
     @factory.post_generation
-    def add_achievement(self, created, extracted, **kwargs):
+    def add_several_achievement(self, created, count, **kwargs):
         """
         Create an Achievement object.
 
@@ -106,13 +106,13 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         """
         if not created:
             return
-        if extracted:
-            achievement_count = extracted
+        if count:
+            achievement_count = count
             achievements = AchievementFactory.create_batch(achievement_count)
             self.achievements.add(*achievements)
 
     @factory.post_generation
-    def add_social_network_link(self, created, extracted, **kwargs):
+    def add_several_social_network_link(self, created, count, **kwargs):
         """
         Create a SocialNetworkLink object.
 
@@ -122,12 +122,12 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         """
         if not created:
             return
-        if extracted:
-            links_count = extracted
+        if count:
+            links_count = count
             SocialNetworkLinkFactory.create_batch(links_count, author=self)
 
     @factory.post_generation
-    def add_other_link(self, created, extracted, **kwargs):
+    def add_several_other_link(self, created, count, **kwargs):
         """
         Create an OtherLink object.
 
@@ -137,12 +137,12 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         """
         if not created:
             return
-        if extracted:
-            links_count = extracted
+        if count:
+            links_count = count
             OtherLinkFactory.create_batch(links_count, author=self)
 
     @factory.post_generation
-    def add_other_play(self, created, extracted, **kwargs):
+    def add_several_other_play(self, created, count, **kwargs):
         """
         Create an OtherPlayLink object.
 
@@ -152,8 +152,8 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         """
         if not created:
             return
-        if extracted:
-            plays_count = extracted
+        if count:
+            plays_count = count
             OtherPlayFactory.create_batch(plays_count, author=self)
 
     @factory.post_generation
@@ -192,5 +192,9 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         before use this method.
         """
         return cls.create(
-            add_achievement=3, add_social_network_link=3, add_other_link=3, add_other_play=3, plays__num=3
+            add_several_achievement=3,
+            add_several_social_network_link=3,
+            add_several_other_link=3,
+            add_several_other_play=3,
+            plays__num=3,
         )
