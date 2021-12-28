@@ -1,17 +1,17 @@
 from django.contrib import admin
 
 from apps.core.models import Setting
-from apps.main.models import Banner, SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
+from apps.main.models import SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
 
-
-@admin.register(Banner)
-class BannerAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "title",
-        "description",
-        "url",
-    )
+BANNER_HELP_TEXT = (
+    "Укажите параметры банера в следующем формате: {"
+    '"title": ".......", '
+    '"description": ".......", '
+    '"button": ".......", '
+    "} "
+    "Возможные варианты значения для кнопки: TICKETS, READ, DETAILS"
+)
+BANNER_LABEL = "Банер (заголовок, описание, кнопка)"
 
 
 @admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen)
@@ -31,6 +31,13 @@ class SettingAdmin(admin.ModelAdmin):
         "settings_key",
         "description",
     )
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if obj.field_type == Setting.SettingFieldType.BANNER:
+            form.base_fields["json"].help_text = BANNER_HELP_TEXT
+            form.base_fields["json"].label = BANNER_LABEL
+        return form
 
     def get_fields(self, request, obj=None):
         field_for_setting_value = Setting.TYPES_AND_FIELDS[obj.field_type]

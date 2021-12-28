@@ -172,13 +172,17 @@ class Setting(BaseModel):
         URL = "URL", _("URL")
         IMAGE = "IMAGE", _("Картинка")
         EMAIL = "EMAIL", _("EMAIL")
+        BANNER = "BANNER", _("BANNER")
+        JSON = "JSON", _("JSON")
 
     TYPES_AND_FIELDS = {
-        SettingFieldType.BOOLEAN: "boolean",
-        SettingFieldType.TEXT: "text",
-        SettingFieldType.URL: "url",
-        SettingFieldType.IMAGE: "image",
-        SettingFieldType.EMAIL: "email",
+        SettingFieldType.BOOLEAN: ["boolean"],
+        SettingFieldType.TEXT: ["text"],
+        SettingFieldType.URL: ["url"],
+        SettingFieldType.IMAGE: ["image"],
+        SettingFieldType.EMAIL: ["email"],
+        SettingFieldType.JSON: ["json"],
+        SettingFieldType.BANNER: ["json", "url", "image"],
     }
 
     group = models.CharField(
@@ -211,6 +215,12 @@ class Setting(BaseModel):
         blank=True,
         verbose_name="Текст",
     )
+    json = models.JSONField(
+        max_length=500,
+        blank=True,
+        verbose_name="Json",
+        help_text="Настройки указываются в формате: {" '"поле": "значение", ' '"поле": "значение"' "}",
+    )
     url = models.URLField(
         max_length=200,
         blank=True,
@@ -240,10 +250,7 @@ class Setting(BaseModel):
 
     @property
     def value(self):
-        return getattr(
-            self,
-            self.TYPES_AND_FIELDS[self.field_type],
-        )
+        return list(getattr(self, field) for field in self.TYPES_AND_FIELDS[self.field_type])
 
     @classmethod
     def get_setting(cls, settings_key):

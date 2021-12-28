@@ -2,17 +2,34 @@ from rest_framework import serializers
 
 from apps.afisha.serializers import EventSerializer
 from apps.articles.serializers import BlogItemListSerializer, NewsItemListSerializer
+from apps.core.models import Setting
 from apps.info.serializers.place import PlaceSerializer
 from apps.library.serializers import PlaySerializer
-from apps.main.models import Banner
 
 
 class BannerSerializer(serializers.ModelSerializer):
+
+    title = serializers.SerializerMethodField()
+    description = serializers.SerializerMethodField()
+    button = serializers.SerializerMethodField()
+
+    def get_title(self, obj):
+        return obj.json["title"]
+
+    def get_description(self, obj):
+        return obj.json["description"]
+
+    def get_button(self, obj):
+        return obj.json["button"]
+
     class Meta:
-        model = Banner
-        exclude = (
-            "created",
-            "modified",
+        model = Setting
+        fields = (
+            "title",
+            "description",
+            "url",
+            "image",
+            "button",
         )
 
 
