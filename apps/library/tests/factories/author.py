@@ -29,7 +29,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
         model = SocialNetworkLink
 
     author = factory.Iterator(Author.objects.all())
-    name = factory.Iterator((SocialNetworkLink.SocialNetwork.choices)[0])
+    name = factory.Iterator(SocialNetworkLink.SocialNetwork.choices)
     link = factory.Faker("url")
 
 
@@ -98,13 +98,15 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         Create an Achievement object.
 
         Add it to achievements field for Author.
-        To use "add_achievement=True"
+        To use "add_achievement=<int>" - it will add
+        specified count of achievements.
         """
         if not created:
             return
         if extracted:
-            achievement = AchievementFactory.create()
-            self.achievements.add(achievement)
+            achievement_count = extracted
+            achievement = AchievementFactory.create_batch(achievement_count)
+            self.achievements.add(*achievement)
 
     @factory.post_generation
     def add_social_network_link(self, created, extracted, **kwargs):
@@ -112,12 +114,14 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         Create a SocialNetworkLink object.
 
         Add it to social_networks field for Author.
-        To use "add_social_network_link=True"
+        To use "add_social_network_link=<int>" - it will add
+        specified count of network links.
         """
         if not created:
             return
         if extracted:
-            SocialNetworkLinkFactory.create(author=self)
+            links_count = extracted
+            SocialNetworkLinkFactory.create_batch(links_count, author=self)
 
     @factory.post_generation
     def add_other_link(self, created, extracted, **kwargs):
@@ -125,12 +129,14 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         Create an OtherLink object.
 
         Add it to other_links field for Author.
-        To use "add_other_link=True"
+        To use "add_other_link=<int>" - it will add
+        specified count of links.
         """
         if not created:
             return
         if extracted:
-            OtherLinkFactory.create(author=self)
+            links_count = extracted
+            OtherLinkFactory.create_batch(links_count, author=self)
 
     @factory.post_generation
     def add_other_play(self, created, extracted, **kwargs):
@@ -138,12 +144,14 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         Create an OtherPlayLink object.
 
         Add it to other_plays_links field for Author.
-        To use "add_other_play=True"
+        To use "add_other_play=<int>" - it will add
+        specified count of other plays.
         """
         if not created:
             return
         if extracted:
-            OtherPlayFactory.create(author=self)
+            plays_count = extracted
+            OtherPlayFactory.create_batch(plays_count, author=self)
 
     @factory.post_generation
     def plays(self, created, extracted, **kwargs):
@@ -181,8 +189,5 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         before use this method.
         """
         return cls.create(
-            add_achievement=True,
-            add_social_network_link=True,
-            add_other_link=True,
-            add_other_play=True,
+            add_achievement=3, add_social_network_link=3, add_other_link=3, add_other_play=3, plays__num=3
         )
