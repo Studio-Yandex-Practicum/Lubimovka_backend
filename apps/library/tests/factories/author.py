@@ -108,8 +108,8 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             return
         if extracted:
             achievement_count = extracted
-            achievement = AchievementFactory.create_batch(achievement_count)
-            self.achievements.add(*achievement)
+            achievements = AchievementFactory.create_batch(achievement_count)
+            self.achievements.add(*achievements)
 
     @factory.post_generation
     def add_social_network_link(self, created, extracted, **kwargs):
