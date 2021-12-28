@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from apps.content_pages.admin.widgets import GfkPopupWidget
+from apps.content_pages.admin.widgets import CustomSelect, GfkPopupWidget
 from apps.content_pages.models import AbstractContent
 from apps.core.mixins import AdminImagePreview
 
@@ -26,6 +26,9 @@ class BaseContentInline(SortableInlineAdminMixin, admin.TabularInline):
                 content_type_field_name="content_type",
                 parent_class=AbstractContent,
             )
+        },
+        models.ForeignKey: {
+            "widget": CustomSelect,
         },
     }
 

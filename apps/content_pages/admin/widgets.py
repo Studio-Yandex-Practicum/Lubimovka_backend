@@ -3,8 +3,8 @@
 
 from typing import Any, Dict, Optional
 
-import django.forms
 from django.contrib.contenttypes.models import ContentType
+from django.forms.widgets import NumberInput, Select
 from django.urls import NoReverseMatch, reverse
 
 POPUP_TYPE_ADD = "add"
@@ -12,7 +12,16 @@ POPUP_TYPE_CHANGE = "change"
 POPUP_SUFFIX = "?_popup=1"
 
 
-class GfkPopupWidget(django.forms.NumberInput):
+class CustomSelect(Select):
+    template_name = "admin/widgets/custom_select.html"
+
+    def get_context(self, name: str, value: Any, attrs: Optional[Any]) -> Dict[str, Any]:
+        context = super().get_context(name, value, attrs)
+        context["value"] = value
+        return context
+
+
+class GfkPopupWidget(NumberInput):
     """Provide a link to add or edit GenericForeignKeys related object.
 
     It's a wad of JavaScript that inspects the select box generated for the
