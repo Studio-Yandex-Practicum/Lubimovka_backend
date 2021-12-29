@@ -17,7 +17,7 @@ class AchievementFactory(factory.django.DjangoModelFactory):
     tag = factory.Faker("word", locale="ru_RU")
 
 
-social_links_choices = [x[0] for x in SocialNetworkLink.SocialNetwork.choices]
+social_links_choices = [link[0] for link in SocialNetworkLink.SocialNetwork.choices]
 
 
 @restrict_factory({"global": [Author]})
@@ -96,7 +96,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     biography = factory.Faker("text", locale="ru_RU")
 
     @factory.post_generation
-    def add_several_achievement(self, created, count, **kwargs):
+    def add_achievement(self, created, count, **kwargs):
         """
         Create an Achievement object.
 
@@ -112,7 +112,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             self.achievements.add(*achievements)
 
     @factory.post_generation
-    def add_several_social_network_link(self, created, count, **kwargs):
+    def add_social_network_link(self, created, count, **kwargs):
         """
         Create a SocialNetworkLink object.
 
@@ -127,7 +127,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             SocialNetworkLinkFactory.create_batch(links_count, author=self)
 
     @factory.post_generation
-    def add_several_other_link(self, created, count, **kwargs):
+    def add_other_link(self, created, count, **kwargs):
         """
         Create an OtherLink object.
 
@@ -142,7 +142,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             OtherLinkFactory.create_batch(links_count, author=self)
 
     @factory.post_generation
-    def add_several_other_play(self, created, count, **kwargs):
+    def add_other_play(self, created, count, **kwargs):
         """
         Create an OtherPlayLink object.
 
@@ -192,9 +192,9 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         before use this method.
         """
         return cls.create(
-            add_several_achievement=3,
-            add_several_social_network_link=3,
-            add_several_other_link=3,
-            add_several_other_play=3,
+            add_achievement=3,
+            add_social_network_link=3,
+            add_other_link=3,
+            add_other_play=3,
             plays__num=3,
         )
