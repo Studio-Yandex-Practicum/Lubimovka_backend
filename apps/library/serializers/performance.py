@@ -1,13 +1,11 @@
-from django.db.models.query import Prefetch
 from rest_framework import serializers
 
 from apps.afisha.models import Event
-from apps.core.models import Role
 from apps.core.serializers import ImageSerializer
 from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
+from apps.library.utilities_team_data import team_data
 
 from .play import PlaySerializer
-from .role import RoleAfishaSerializer, RoleSerializer
 
 
 class LocalEventSerializer(serializers.ModelSerializer):
@@ -28,20 +26,7 @@ class PerformanceSerializer(serializers.ModelSerializer):
     events = LocalEventSerializer(source="events.body", many=True)
 
     def get_team(self, obj):
-        performance = obj
-        performance_roles = Role.objects.filter(team_members__performance=performance).distinct()
-        performance_team = performance.team_members.all()
-        performance_roles_with_limited_persons = performance_roles.prefetch_related(
-            Prefetch(
-                "team_members",
-                queryset=performance_team,
-            ),
-        )
-        serializer = RoleSerializer(
-            instance=performance_roles_with_limited_persons,
-            many=True,
-        )
-        return serializer.data
+        return team_data(obj, {"team_members__performance": obj})
 
     class Meta:
         exclude = (
@@ -61,22 +46,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     def get_team(self, obj):
-        performance = obj
-        performance_roles = Role.objects.filter(
-            team_members__performance=performance, slug__in=("director", "dramatist")
-        ).distinct()
-        performance_team = performance.team_members.all()
-        performance_roles_with_limited_persons = performance_roles.prefetch_related(
-            Prefetch(
-                "team_members",
-                queryset=performance_team,
-            ),
-        )
-        serializer = RoleAfishaSerializer(
-            instance=performance_roles_with_limited_persons,
-            many=True,
-        )
-        return serializer.data
+        return team_data(obj, {"team_members__performance": obj, "slug__in": ["director", "dramatist"]})
 
     class Meta:
         model = Performance

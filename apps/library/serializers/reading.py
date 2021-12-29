@@ -1,10 +1,7 @@
-from django.db.models.query import Prefetch
 from rest_framework import serializers
 
-from apps.core.models import Role
 from apps.library.models import Reading
-
-from .role import RoleAfishaSerializer
+from apps.library.utilities_team_data import team_data
 
 
 class EventReadingSerializer(serializers.ModelSerializer):
@@ -12,22 +9,7 @@ class EventReadingSerializer(serializers.ModelSerializer):
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     def get_team(self, obj):
-        reading = obj
-        reading_roles = Role.objects.filter(
-            team_members__reading=reading, slug__in=("director", "dramatist")
-        ).distinct()
-        reading_team = reading.team_members.all()
-        reading_roles_with_limited_persons = reading_roles.prefetch_related(
-            Prefetch(
-                "team_members",
-                queryset=reading_team,
-            ),
-        )
-        serializer = RoleAfishaSerializer(
-            instance=reading_roles_with_limited_persons,
-            many=True,
-        )
-        return serializer.data
+        return team_data(obj, {"team_members__reading": obj, "slug__in": ["director", "dramatist"]})
 
     class Meta:
         model = Reading
