@@ -7,7 +7,7 @@ from apps.core.serializers import ImageSerializer
 from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
 
 from .play import PlaySerializer
-from .role import RoleSerializer
+from .role import RoleAfishaSerializer, RoleSerializer
 
 
 class LocalEventSerializer(serializers.ModelSerializer):
@@ -72,7 +72,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
                 queryset=performance_team,
             ),
         )
-        serializer = RoleSerializer(
+        serializer = RoleAfishaSerializer(
             instance=performance_roles_with_limited_persons,
             many=True,
         )

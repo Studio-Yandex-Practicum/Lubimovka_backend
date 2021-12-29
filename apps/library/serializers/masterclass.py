@@ -4,7 +4,7 @@ from rest_framework import serializers
 from apps.core.models import Role
 from apps.library.models import MasterClass
 
-from .role import RoleSerializer
+from .role import RoleAfishaSerializer
 
 
 class EventMasterClassSerializer(serializers.ModelSerializer):
@@ -21,7 +21,7 @@ class EventMasterClassSerializer(serializers.ModelSerializer):
                 queryset=masterclass_team,
             ),
         )
-        serializer = RoleSerializer(
+        serializer = RoleAfishaSerializer(
             instance=masterclass_roles_with_limited_persons,
             many=True,
         )

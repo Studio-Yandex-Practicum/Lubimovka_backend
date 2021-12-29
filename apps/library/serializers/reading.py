@@ -4,7 +4,7 @@ from rest_framework import serializers
 from apps.core.models import Role
 from apps.library.models import Reading
 
-from .role import RoleSerializer
+from .role import RoleAfishaSerializer
 
 
 class EventReadingSerializer(serializers.ModelSerializer):
@@ -23,7 +23,7 @@ class EventReadingSerializer(serializers.ModelSerializer):
                 queryset=reading_team,
             ),
         )
-        serializer = RoleSerializer(
+        serializer = RoleAfishaSerializer(
             instance=reading_roles_with_limited_persons,
             many=True,
         )
