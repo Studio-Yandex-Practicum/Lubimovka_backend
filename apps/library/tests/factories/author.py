@@ -29,7 +29,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
         model = SocialNetworkLink
 
     author = factory.Iterator(Author.objects.all())
-    name = factory.Iterator((SocialNetworkLink.SocialNetwork.choices)[0])
+    name = factory.Iterator(SocialNetworkLink.SocialNetwork.values)
     link = factory.Faker("url")
 
 
@@ -78,10 +78,10 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         - biography;
         - plays.
     For other fields, use arguments:
-        - add_achievement;
-        - add_social_network_link;
-        - add_other_link;
-        - add_other_play;
+        - add_several_achievement;
+        - add_several_social_network_link;
+        - add_several_other_link;
+        - add_several_other_play;
     For creation object with fully populated fields use complex_create method.
     """
 
@@ -93,57 +93,65 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     biography = factory.Faker("text", locale="ru_RU")
 
     @factory.post_generation
-    def add_achievement(self, created, extracted, **kwargs):
+    def add_achievement(self, created, count, **kwargs):
         """
         Create an Achievement object.
 
         Add it to achievements field for Author.
-        To use "add_achievement=True"
+        To use "add_achievement=<int>" - it will add
+        specified count of achievements.
         """
         if not created:
             return
-        if extracted:
-            achievement = AchievementFactory.create()
-            self.achievements.add(achievement)
+        if count:
+            achievement_count = count
+            achievements = AchievementFactory.create_batch(achievement_count)
+            self.achievements.add(*achievements)
 
     @factory.post_generation
-    def add_social_network_link(self, created, extracted, **kwargs):
+    def add_social_network_link(self, created, count, **kwargs):
         """
         Create a SocialNetworkLink object.
 
         Add it to social_networks field for Author.
-        To use "add_social_network_link=True"
+        To use "add_social_network_link=<int>" - it will add
+        specified count of network links.
         """
         if not created:
             return
-        if extracted:
-            SocialNetworkLinkFactory.create(author=self)
+        if count:
+            links_count = count
+            SocialNetworkLinkFactory.create_batch(links_count, author=self)
 
     @factory.post_generation
-    def add_other_link(self, created, extracted, **kwargs):
+    def add_other_link(self, created, count, **kwargs):
         """
         Create an OtherLink object.
 
         Add it to other_links field for Author.
-        To use "add_other_link=True"
+        To use "add_other_link=<int>" - it will add
+        specified count of links.
         """
         if not created:
             return
-        if extracted:
-            OtherLinkFactory.create(author=self)
+        if count:
+            links_count = count
+            OtherLinkFactory.create_batch(links_count, author=self)
 
     @factory.post_generation
-    def add_other_play(self, created, extracted, **kwargs):
+    def add_other_play(self, created, count, **kwargs):
         """
         Create an OtherPlayLink object.
 
         Add it to other_plays_links field for Author.
-        To use "add_other_play=True"
+        To use "add_other_play=<int>" - it will add
+        specified count of other plays.
         """
         if not created:
             return
-        if extracted:
-            OtherPlayFactory.create(author=self)
+        if count:
+            plays_count = count
+            OtherPlayFactory.create_batch(plays_count, author=self)
 
     @factory.post_generation
     def plays(self, created, extracted, **kwargs):
@@ -181,8 +189,9 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         before use this method.
         """
         return cls.create(
-            add_achievement=True,
-            add_social_network_link=True,
-            add_other_link=True,
-            add_other_play=True,
+            add_achievement=3,
+            add_social_network_link=3,
+            add_other_link=3,
+            add_other_play=3,
+            plays__num=3,
         )
