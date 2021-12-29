@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.postgres.aggregates.general import ArrayAgg
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -48,5 +49,5 @@ class PressReleaseViewSet(mixins.ListModelMixin, GenericViewSet):
             PressRelease.objects.select_related("festival"),
             id=id,
         )
-        path_to_font = "staticfiles/fonts/NeueMachinaRegular/PPNeueMachina-Regular.ttf"
+        path_to_font = f"{settings.STATIC_ROOT}/fonts/NeueMachinaRegular/PPNeueMachina-Regular.ttf"
         return get_pdf_response(press_release, path_to_font)
