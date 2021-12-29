@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
@@ -44,6 +45,18 @@ class OrderedImage(AbstractOrderedItemBase):
         on_delete=models.CASCADE,
         related_name="ordered_images",
     )
+
+    def clean(self):
+        if self.block.pk:
+            images_count = self.block.items.count()
+            if images_count >= 8:
+                raise ValidationError({"item": "You can't assign more than 8 images!"})
+
+    def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
+        self.full_clean()
+        return super().save(
+            force_insert=force_insert, force_update=force_update, using=using, update_fields=update_fields
+        )
 
 
 class OrderedPerformance(AbstractOrderedItemBase):
