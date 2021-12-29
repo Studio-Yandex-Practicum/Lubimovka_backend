@@ -21,6 +21,11 @@ def create_roles(apps, schema_editor):
             "types": "play_role",
         },
         {
+            "name": "Драматург",
+            "slug": "dramatist",
+            "types": "performanse_role",
+        },
+        {
             "name": "Режиссёр",
             "slug": "director",
             "types": "performanse_role",

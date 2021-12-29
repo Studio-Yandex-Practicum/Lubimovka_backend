@@ -8,38 +8,47 @@ def create_roles(apps, schema_editor):
     roles = [
         {
             "name": "Актёр",
+            "name_plural": "Актёры",
             "slug": "actor",
         },
         {
             "name": "Адаптация текста",
+            "name_plural": "Адаптация текста",
             "slug": "text_adaptation",
         },
         {
             "name": "Драматург",
+            "name_plural": "Драматурги",
             "slug": "dramatist",
         },
         {
             "name": "Режиссёр",
+            "name_plural": "Режиссёры",
             "slug": "director",
         },
         {
             "name": "Переводчик",
+            "name_plural": "Переводчики",
             "slug": "translator",
         },
         {
             "name": "Ведущий",
+            "name_plural": "Ведущие",
             "slug": "host",
         },
         {
             "name": "Текст",
+            "name_plural": "Текст",
             "slug": "text",
         },
         {
             "name": "Иллюстрации",
+            "name_plural": "Иллюстрации",
             "slug": "illustrations",
         },
         {
             "name": "Фото",
+            "name_plural": "Фото",
             "slug": "photo",
         },
     ]

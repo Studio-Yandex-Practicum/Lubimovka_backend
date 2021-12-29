@@ -9,6 +9,8 @@ from .performance import (
 from .play import AuthorForPlaySerializer, PlaySerializer
 from .playfilters import PlayFiltersSerializer
 from .reading import EventReadingSerializer
+from .role import RoleSerializer
+from .team_member import TeamMemberSerializer
 
 __all__ = (
     AuthorListSerializer,
@@ -23,4 +25,6 @@ __all__ = (
     PerformanceSerializer,
     PerformanceReviewSerializer,
     PerformanceMediaReviewSerializer,
+    RoleSerializer,
+    TeamMemberSerializer,
 )
