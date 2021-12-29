@@ -26,9 +26,19 @@ def create_roles(apps, schema_editor):
             "types": "performanse_role",
         },
         {
+            "name": "Драматург",
+            "slug": "dramatist",
+            "types": "reading_role",
+        },
+        {
             "name": "Режиссёр",
             "slug": "director",
             "types": "performanse_role",
+        },
+        {
+            "name": "Режиссёр",
+            "slug": "director",
+            "types": "reading_role",
         },
         {
             "name": "Переводчик",
@@ -39,6 +49,11 @@ def create_roles(apps, schema_editor):
             "name": "Ведущий",
             "slug": "host",
             "types": "play_role",
+        },
+        {
+            "name": "Ведущий",
+            "slug": "host",
+            "types": "master_class_role",
         },
         {
             "name": "Текст",
