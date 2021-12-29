@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
 from apps.library.models import Reading
-from apps.library.utilities_team_data import team_data
+from apps.library.serializers.utilities import team_data
 
 
 class EventReadingSerializer(serializers.ModelSerializer):
+    """Сериализатор читки на странице афиши."""
+
     team = serializers.SerializerMethodField()
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 

@@ -6,7 +6,8 @@ from apps.library.models import TeamMember
 class TeamMemberSerializer(serializers.ModelSerializer):
     """Сериализатор для членов команды.
 
-    Используется в сериализаторе роли на странице афиши.
+    Используется в сериализаторе роли на странице афиши
+    и на странице отдельного спектакля.
     """
 
     full_name = serializers.SlugRelatedField(

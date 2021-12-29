@@ -5,6 +5,26 @@ from apps.library.serializers.role import RoleSerializer, RoleWithPluralPersonsS
 
 
 def team_data(obj, filters: dict = None):
+    """Group team members by roles.
+
+    Form array with next structure:
+    [
+      {
+        "name": "Драматурги",
+          "persons": [
+            {"full_name": "Наум Быкова"},
+            {"full_name": "Анатолий Соболева"}
+                      ]
+        },
+      {
+        "name": "Режиссёр",
+        "persons": [
+          {"full_name": "Рубен Васильева"}
+                    ]
+        }
+      ]
+    Duplication of role, name pairs should be avoided by model's constraints.
+    """
     roles = Role.objects.filter(**filters).distinct()
     team = obj.team_members.all()
     roles_with_limited_persons = roles.prefetch_related(Prefetch("team_members", team))

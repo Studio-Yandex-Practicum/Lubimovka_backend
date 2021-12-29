@@ -1,10 +1,12 @@
 from rest_framework import serializers
 
 from apps.library.models import MasterClass
-from apps.library.utilities_team_data import team_data
+from apps.library.serializers.utilities import team_data
 
 
 class EventMasterClassSerializer(serializers.ModelSerializer):
+    """Сериализатор мастер-класса на странице афиши."""
+
     team = serializers.SerializerMethodField()
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 

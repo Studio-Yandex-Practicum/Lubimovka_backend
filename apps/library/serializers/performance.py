@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.afisha.models import Event
 from apps.core.serializers import ImageSerializer
 from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
-from apps.library.utilities_team_data import team_data
+from apps.library.serializers.utilities import team_data
 
 from .play import PlaySerializer
 
