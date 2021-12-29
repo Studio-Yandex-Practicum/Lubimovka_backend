@@ -17,9 +17,6 @@ class AchievementFactory(factory.django.DjangoModelFactory):
     tag = factory.Faker("word", locale="ru_RU")
 
 
-social_links_choices = [link[0] for link in SocialNetworkLink.SocialNetwork.choices]
-
-
 @restrict_factory({"global": [Author]})
 class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
     """
@@ -32,7 +29,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
         model = SocialNetworkLink
 
     author = factory.Iterator(Author.objects.all())
-    name = factory.Iterator(social_links_choices)
+    name = factory.Iterator(SocialNetworkLink.SocialNetwork.values)
     link = factory.Faker("url")
 
 
