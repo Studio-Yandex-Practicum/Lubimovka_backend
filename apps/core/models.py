@@ -111,6 +111,7 @@ class Role(BaseModel):
     name_plural = models.CharField(
         max_length=50,
         unique=True,
+        blank=False,
         verbose_name="Название во множественном числе",
     )
     slug = models.SlugField(

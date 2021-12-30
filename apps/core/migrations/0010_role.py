@@ -17,7 +17,6 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=50, unique=True, verbose_name='Название')),
-                ('name_plural', models.CharField(max_length=50, unique=True, verbose_name='Название во множественном числе')),
                 ('slug', models.SlugField(help_text='Если пустое, то заполняется автоматически', max_length=60, unique=True, verbose_name='Код-имя латиницей')),
             ],
             options={
