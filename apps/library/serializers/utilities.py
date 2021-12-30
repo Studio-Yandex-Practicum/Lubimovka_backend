@@ -4,32 +4,30 @@ from apps.core.models import Role
 from apps.library.serializers.role import RoleSerializer, RoleWithPluralPersonsSerializer
 
 
-def team_data(obj, filters: dict = None):
-    """Group team members by roles.
+def get_roles(obj, filters: dict = None):
+    """Получает все используемые в событии роли.
 
-    Form array with next structure:
-    [
-      {
-        "name": "Драматурги",
-          "persons": [
-            {"full_name": "Наум Быкова"},
-            {"full_name": "Анатолий Соболева"}
-                      ]
-        },
-      {
-        "name": "Режиссёр",
-        "persons": [
-          {"full_name": "Рубен Васильева"}
-                    ]
-        }
-      ]
-    Duplication of role, name pairs should be avoided by model's constraints.
+    С помощью Prefetch собирает связанные с ролью и событием персоны.
     """
     roles = Role.objects.filter(**filters).distinct()
     team = obj.team_members.all()
-    roles_with_limited_persons = roles.prefetch_related(Prefetch("team_members", team))
+    return roles.prefetch_related(Prefetch("team_members", team))
+
+
+def get_serialized_data(roles):
+    """Формирует словарь со следующей структурой.
+
+    [
+      {
+        "name": "Драматург",
+        "persons": ["Антип Аксенова"]
+        }
+      ]
+    В зависимости от количества персон у каждой роли
+    используются разные сериализаторы.
+    """
     data = []
-    for role in roles_with_limited_persons:
+    for role in roles:
         if role.team_members.count() == 1:
             serializer = RoleSerializer(instance=role)
         else:
