@@ -2,7 +2,12 @@ from rest_framework import serializers
 
 from apps.core.models import Role
 
-from .team_member import TeamMemberSerializer
+
+def team_persons(role):
+    persons = []
+    for team_member in role.team_members.all():
+        persons.append(team_member.person.full_name)
+    return persons
 
 
 class RoleSerializer(serializers.ModelSerializer):
@@ -14,11 +19,7 @@ class RoleSerializer(serializers.ModelSerializer):
     Применяется в случае, когда у роли только одна персона.
     """
 
-    persons = TeamMemberSerializer(
-        source="team_members",
-        read_only=True,
-        many=True,
-    )
+    persons = serializers.SerializerMethodField()
 
     class Meta:
         model = Role
@@ -27,8 +28,11 @@ class RoleSerializer(serializers.ModelSerializer):
             "persons",
         )
 
+    def get_persons(self, obj):
+        return team_persons(obj)
 
-class RoleWithPluralPersonsSerializer(serializers.ModelSerializer):
+
+class RoleWithPluralPersonsSerializer(RoleSerializer):
     """Сериализатор для роли.
 
     Используется в сериализаторе спектакля,
@@ -38,15 +42,3 @@ class RoleWithPluralPersonsSerializer(serializers.ModelSerializer):
     """
 
     name = serializers.CharField(source="name_plural")
-    persons = TeamMemberSerializer(
-        source="team_members",
-        read_only=True,
-        many=True,
-    )
-
-    class Meta:
-        model = Role
-        fields = (
-            "name",
-            "persons",
-        )
