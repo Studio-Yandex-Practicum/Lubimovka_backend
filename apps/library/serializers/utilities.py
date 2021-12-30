@@ -4,7 +4,7 @@ from apps.core.models import Role
 from apps.library.serializers.role import RoleSerializer, RoleWithPluralPersonsSerializer
 
 
-def get_roles(obj, filters: dict = None):
+def get_event_team_roles(obj, filters: dict = None):
     """Получает все используемые в событии роли.
 
     С помощью Prefetch собирает связанные с ролью и событием персоны.
@@ -14,7 +14,7 @@ def get_roles(obj, filters: dict = None):
     return roles.prefetch_related(Prefetch("team_members", team))
 
 
-def get_serialized_data(roles):
+def get_event_team_serialized_data(roles):
     """Формирует словарь со следующей структурой.
 
     [

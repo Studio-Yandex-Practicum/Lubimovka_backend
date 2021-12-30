@@ -3,13 +3,6 @@ from rest_framework import serializers
 from apps.core.models import Role
 
 
-def team_persons(role):
-    persons = []
-    for team_member in role.team_members.all():
-        persons.append(team_member.person.full_name)
-    return persons
-
-
 class RoleSerializer(serializers.ModelSerializer):
     """Сериализатор для роли.
 
@@ -21,15 +14,18 @@ class RoleSerializer(serializers.ModelSerializer):
 
     persons = serializers.SerializerMethodField()
 
+    def get_persons(self, obj):
+        persons = []
+        for team_member in obj.team_members.all():
+            persons.append(team_member.person.full_name)
+        return persons
+
     class Meta:
         model = Role
         fields = (
             "name",
             "persons",
         )
-
-    def get_persons(self, obj):
-        return team_persons(obj)
 
 
 class RoleWithPluralPersonsSerializer(RoleSerializer):

@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.library.models import MasterClass
-from apps.library.serializers.utilities import get_roles, get_serialized_data
+from apps.library.serializers.utilities import get_event_team_roles, get_event_team_serialized_data
 
 
 class EventMasterClassSerializer(serializers.ModelSerializer):
@@ -16,8 +16,8 @@ class EventMasterClassSerializer(serializers.ModelSerializer):
         Сначала отбираем роли и связанные с ролью и событием персоны.
         Затем формируем словарь с правильной структурой.
         """
-        roles = get_roles(obj, {"team_members__masterclass": obj, "slug__in": ["host"]})
-        return get_serialized_data(roles)
+        roles = get_event_team_roles(obj, {"team_members__masterclass": obj, "slug__in": ["host"]})
+        return get_event_team_serialized_data(roles)
 
     class Meta:
         model = MasterClass
