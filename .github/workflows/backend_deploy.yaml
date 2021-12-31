@@ -129,7 +129,7 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
             # Pull docker image from github packages with tag
-            # docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+            docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
             # re-run docker containers
             ./docker_check_run.sh backend_develop_deploy.yaml develop
