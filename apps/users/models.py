@@ -27,8 +27,6 @@ class User(AbstractUser):
 
 
 class ProxyUser(User):
-    pass
-
     class Meta:
         app_label = "auth"
         proxy = True

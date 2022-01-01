@@ -28,6 +28,7 @@ class OrderedInline(SortableInlineAdminMixin, admin.TabularInline):
 
 class OrderedImageInline(OrderedInline):
     model = OrderedImage
+    max_num = 8
 
 
 class OrderedVideoInline(OrderedInline):

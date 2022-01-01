@@ -1,15 +1,23 @@
 from rest_framework import serializers
 
-from apps.library.models import MasterClass, TeamMember
-from apps.library.utilities import team_collector
+from apps.library.models import MasterClass
+from apps.library.serializers.utilities import get_event_team_roles, get_event_team_serialized_data
 
 
 class EventMasterClassSerializer(serializers.ModelSerializer):
+    """Сериализатор мастер-класса на странице афиши."""
+
     team = serializers.SerializerMethodField()
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     def get_team(self, obj):
-        return team_collector(TeamMember, {"masterclass": obj, "role__slug": "host"})
+        """Собираем команду в два этапа.
+
+        Сначала отбираем роли и связанные с ролью и событием персоны.
+        Затем формируем словарь с правильной структурой.
+        """
+        roles = get_event_team_roles(obj, {"team_members__masterclass": obj, "slug__in": ["host"]})
+        return get_event_team_serialized_data(roles)
 
     class Meta:
         model = MasterClass
