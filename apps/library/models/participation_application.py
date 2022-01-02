@@ -46,8 +46,8 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name="Город проживания",
     )
     phone_number = PhoneNumberField(
-        help_text="Номер телефона указывается в формате +7",
         verbose_name="Номер телефона",
+        help_text="Номер телефона указывается в формате +7",
     )
     email = models.EmailField(
         max_length=100,
