@@ -1,6 +1,0 @@
-<input type=hidden name="{{ widget.name }}"{% if widget.value != None %} value="{{ widget.value|stringformat:'s' }}"{% endif %}{% include "django/forms/widgets/attrs.html" %}>
-
-{{ content_type_field_name|json_script:"content_type_field_name" }}
-{{ urls|json_script:urls_id }}
-
-<a id="{{ popup_type }}_id_{{ widget.name }}" class="related-lookup gfkpopup" onclick="return genericForeignKeyPopupOnClick(django.jQuery, this, event);"></a>
