@@ -4,7 +4,7 @@ function disableNotSelectedOptions(func_variable) {
     };
 };
 
-function getAPILink($, $link, contentTypeIdValue, objectIdValue, link_type) {
+function getLinkAndClick($, $link, contentTypeIdValue, objectIdValue, link_type) {
     $.ajax({
         url: "/api/v1/content-pages/get-content-type-link/",
         data: {
@@ -13,13 +13,16 @@ function getAPILink($, $link, contentTypeIdValue, objectIdValue, link_type) {
             object_id: objectIdValue,
         },
         success: function (response) {
-            console.log(response.url);
-            $link.attr('href', response.url);
+            $link.attr("href", response.url);
+            $link.off("click");
+            $link.click();
         },
-        errors: function (response) {
-            console.log("error")
+        error: function (response) {
+            console.log(response);
+            alert("Не удалось получить ссылку 😞");
+            $link.removeAttr("href");
         }
-    })
+    });
 };
 
 function addLink($, $contentTypeId, $objectId) {
@@ -27,37 +30,36 @@ function addLink($, $contentTypeId, $objectId) {
     const objectIdValue = $objectId.val();
     const objectId = $objectId.attr("id");
 
+    if (contentTypeIdValue === "") {
+        return;
+    };
+
     if (contentTypeIdValue != "" && objectIdValue == "") {
-        const addLinkId = "add_" + objectId;
-        const $image = $("<img>", {
-            src: "/static/admin/img/icon-addlink.svg",
-            alt: "Добавить",
-        })
-        let $addLink = $("<a>", {
-            id: addLinkId,
-            href: "#",
-            class: "related-widget-wrapper-link add-related",
-        });
-        $addLink = $image.wrap($addLink).parent();
-        $contentTypeId.after($addLink);
-        getAPILink($, $addLink, contentTypeIdValue, objectIdValue, "add");
+        var linkType = "add";
+        var linkId = "add_" + objectId;
+        var imageSrc = "/static/admin/img/icon-addlink.svg";
+        var imageAlt = "Добавить";
+        var linkClass = "related-widget-wrapper-link add-related";
     };
     if (contentTypeIdValue != "" && objectIdValue != "") {
-        const changeLinkId = "change_" + objectId;
-        const $image = $("<img>", {
-            id: changeLinkId + "_image",
-            src: "/static/admin/img/icon-changelink.svg",
-            alt: "Изменить",
-        })
-        let $changeLink = $("<a>", {
-            id: changeLinkId,
-            href: "#",
-            class: "related-widget-wrapper-link change-related",
-        });
-        $changeLink = $image.wrap($changeLink).parent();
-        $contentTypeId.after($changeLink);
-        getAPILink($, $changeLink, contentTypeIdValue, objectIdValue, "change");
+        var linkType = "change";
+        var linkId = "change_" + objectId;
+        var imageSrc = "/static/admin/img/icon-changelink.svg";
+        var imageAlt = "Изменить";
+        var linkClass = "related-widget-wrapper-link change-related";
     };
+
+    let $image = $("<img>", { src: imageSrc, alt: imageAlt });
+    let $link = $("<a>", { id: linkId, href: "#", class: linkClass });
+
+    $link = $image.wrap($link).parent();
+    $contentTypeId.after($link);
+
+    $link.click(function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+        getLinkAndClick($, $link, contentTypeIdValue, objectIdValue, linkType);
+    });
 };
 
 function getPrefix($this) {
@@ -98,23 +100,23 @@ function removeAddLink($, $objectId) {
 };
 
 jQuery(document).ready(function ($) {
-    const contentTypeFields = $(".content-pages-content-type");
-    const objectIDFields = $(".content-pages-object-id")
+    const contentTypeClass = $(".content-pages-content-type");
+    const objectIdClass = $(".content-pages-object-id")
 
-    objectIDFields.change(function () {
+    objectIdClass.change(function () {
         const $objectId = $(this);
         const $contentTypeId = getContentTypeId($, $objectId);
         removeAddLink($, $objectId);
         addLink($, $contentTypeId, $objectId);
     });
 
-    contentTypeFields.change(function () {
+    contentTypeClass.change(function () {
         const $contentTypeId = $(this);
         const $objectId = getObjectId($, $contentTypeId);
         disableNotSelectedOptions($contentTypeId);
         addLink($, $contentTypeId, $objectId);
     });
 
-    contentTypeFields.change()
+    contentTypeClass.change();
 
 });
