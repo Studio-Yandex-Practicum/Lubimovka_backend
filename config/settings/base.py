@@ -46,6 +46,8 @@ THIRD_PARTY_APPS = [
     "drf_multiple_model",
     "ckeditor",
     "anymail",
+    'django_admin_json_editor',
+
 ]
 LOCAL_APPS = [
     "apps.users",

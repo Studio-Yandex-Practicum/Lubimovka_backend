@@ -1,16 +1,10 @@
 from django.contrib import admin
+from django_admin_json_editor.admin import JSONEditorWidget
 
 from apps.core.models import Setting
 from apps.main.models import SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
 
-BANNER_HELP_TEXT = (
-    "Укажите параметры банера в следующем формате: {"
-    '"title": ".......", '
-    '"description": ".......", '
-    '"button": ".......", '
-    "} "
-    "Возможные варианты значения для кнопки: TICKETS, READ, DETAILS"
-)
+BANNER_HELP_TEXT = "Возможные варианты значения для кнопки: TICKETS, READ, DETAILS"
 BANNER_LABEL = "Банер (заголовок, описание, кнопка)"
 
 
@@ -33,7 +27,8 @@ class SettingAdmin(admin.ModelAdmin):
     )
 
     def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
+        widget = JSONEditorWidget({}, False)
+        form = super().get_form(request, obj, widgets={"json": widget}, **kwargs)
         if obj.field_type == Setting.SettingFieldType.BANNER:
             form.base_fields["json"].help_text = BANNER_HELP_TEXT
             form.base_fields["json"].label = BANNER_LABEL
