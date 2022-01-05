@@ -82,8 +82,8 @@ class TestAboutFestivalAPIViews:
     @pytest.mark.parametrize(
         "url, objects",
         [
-            # (TEAMS_URL, pytest.lazy_fixture("teams")),
-            # (SPONSORS_URL, pytest.lazy_fixture("sponsors")),
+            (TEAMS_URL, pytest.lazy_fixture("teams")),
+            (SPONSORS_URL, pytest.lazy_fixture("sponsors")),
             (VOLUNTEERS_URL, pytest.lazy_fixture("volunteers")),
         ],
     )
