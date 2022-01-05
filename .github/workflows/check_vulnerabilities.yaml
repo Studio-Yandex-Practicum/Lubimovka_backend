@@ -26,3 +26,5 @@ jobs:
         run: echo "DEP_PATH=$DEVELOP" >> $GITHUB_ENV
       - name: Security vulnerabilities scan
         uses: aufdenpunkt/python-safety-check@master
+        with:
+          safety_args: '-i 39642'

@@ -1,5 +1,4 @@
 import factory
-import pytz
 from faker import Faker
 
 from apps.library.models import ParticipationApplicationFestival
@@ -15,7 +14,7 @@ class ParticipationApplicationFestivalFactory(factory.django.DjangoModelFactory)
 
     first_name = factory.Faker("first_name", locale="ru_RU")
     last_name = factory.Faker("last_name", locale="ru_RU")
-    birthday = factory.LazyFunction(lambda: fake.past_datetime(tzinfo=pytz.UTC))
+    birth_year = factory.Faker("year")
     city = factory.Faker("city_name", locale="ru_RU")
     phone_number = factory.Faker("phone_number")
     email = factory.Faker("email")
