@@ -1,11 +1,11 @@
 from django.forms.widgets import HiddenInput, Select
 
 
-class CustomHiddenInput(HiddenInput):
+class GfkHiddenInput(HiddenInput):
     template_name = "admin/widgets/custom_hidden.html"
 
 
-class CustomSelect(Select):
+class GfkSelect(Select):
     template_name = "admin/widgets/custom_select.html"
 
     class Media:

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from apps.content_pages.admin.widgets import CustomHiddenInput, CustomSelect
+from apps.content_pages.admin.widgets import GfkHiddenInput, GfkSelect
 from apps.content_pages.models import AbstractContent
 from apps.core.mixins import AdminImagePreview
 
@@ -30,8 +30,8 @@ class BaseContentInline(SortableInlineAdminMixin, admin.TabularInline):
     raw_id_fields = ("content_type",)
     content_type_model = tuple()
     formfield_overrides = {
-        models.PositiveIntegerField: {"widget": CustomHiddenInput},
-        models.ForeignKey: {"widget": CustomSelect},
+        models.PositiveIntegerField: {"widget": GfkHiddenInput},
+        models.ForeignKey: {"widget": GfkSelect},
     }
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):

@@ -1,6 +1,6 @@
-function disableNotSelectedOptions(func_variable) {
-    if (func_variable.val() != "") {
-        func_variable.find(":not(:selected)").prop('disabled', true);
+function disableNotSelectedOptions($contentTypeId) {
+    if ($contentTypeId.val() != "") {
+        $contentTypeId.find(":not(:selected)").prop('disabled', true);
     };
 };
 
@@ -34,14 +34,13 @@ function addLink($, $contentTypeId, $objectId) {
         return;
     };
 
-    if (contentTypeIdValue != "" && objectIdValue == "") {
+    if (objectIdValue === "") {
         var linkType = "add";
         var linkId = "add_" + objectId;
         var imageSrc = "/static/admin/img/icon-addlink.svg";
         var imageAlt = "Добавить";
         var linkClass = "related-widget-wrapper-link add-related";
-    };
-    if (contentTypeIdValue != "" && objectIdValue != "") {
+    } else {
         var linkType = "change";
         var linkId = "change_" + objectId;
         var imageSrc = "/static/admin/img/icon-changelink.svg";
