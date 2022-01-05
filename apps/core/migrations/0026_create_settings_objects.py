@@ -51,7 +51,7 @@ def add_settings(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0022_auto_20211228_1318"),
+        ("core", "0025_auto_20220105_1332"),
     ]
 
     operations = [migrations.RunPython(add_settings)]
