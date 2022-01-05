@@ -135,9 +135,8 @@ class ExtendedPerson(AbstractOrderedItemBase):
 
     @admin.display(description="Роли")
     def person_roles(self):
-        roles = self.roles.all()
-        if roles:
-            roles = ", ".join([role.name for role in roles])
+        if self.roles.exists():
+            roles = ", ".join([role.name for role in self.roles.all()])
         else:
             roles = "не установлено"
         return roles

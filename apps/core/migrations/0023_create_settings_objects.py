@@ -14,7 +14,7 @@ def add_settings(apps, schema_editor):
         json={
             "title": "title",
             "description": "description",
-            "button": "TICKETS."
+            "button": "TICKETS"
         },
         description="Банер",
     )
@@ -28,7 +28,7 @@ def add_settings(apps, schema_editor):
         json={
             "title": "title",
             "description": "description",
-            "button": "TICKETS."
+            "button": "TICKETS"
         },
         description="Банер",
     )
@@ -42,7 +42,7 @@ def add_settings(apps, schema_editor):
         json={
             "title": "title",
             "description": "description",
-            "button": "TICKETS."
+            "button": "TICKETS"
         },
         description="Банер",
     )

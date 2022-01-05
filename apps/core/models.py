@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.utilities import slugify
+from apps.core.utilities import check_json_field, slugify
 
 
 class BaseModel(models.Model):
@@ -220,10 +220,8 @@ class Setting(BaseModel):
         verbose_name="Текст",
     )
     json = models.JSONField(
-        max_length=500,
         blank=True,
         verbose_name="Json",
-        help_text="Настройки указываются в формате: {" '"поле": "значение", ' '"поле": "значение"' "}",
     )
     url = models.URLField(
         max_length=200,
@@ -242,7 +240,10 @@ class Setting(BaseModel):
 
     def save(self, *args, **kwargs):
         self._check_related_settings(self)
-        super(Setting, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
+
+    def clean(self):
+        check_json_field(self)
 
     class Meta:
         ordering = ("group", "settings_key")
