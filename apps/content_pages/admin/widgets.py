@@ -9,4 +9,4 @@ class GfkSelect(Select):
     template_name = "admin/widgets/custom_select.html"
 
     class Media:
-        js = ("content-pages/admin/genericForeignKeyAddChange.js",)
+        js = ("content-pages/admin/js/genericForeignKeyAddChange.js",)
