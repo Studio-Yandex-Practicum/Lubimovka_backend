@@ -10,6 +10,12 @@ class ParticipationSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(
         min_value=1900,
         max_value=timezone.now().year,
+        label="Год написания",
+    )
+    birth_year = serializers.IntegerField(
+        min_value=1900,
+        max_value=timezone.now().year,
+        label="Год рождения",
     )
 
     class Meta:

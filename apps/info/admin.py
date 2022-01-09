@@ -31,18 +31,24 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
                 "fields": (
                     "name",
                     "type",
-                    "url",
-                    "image",
-                    "image_preview_change_page",
                 ),
-                "classes": ("predefined",),
             },
         ),
         (
             None,
             {
                 "fields": ("in_footer_partner",),
-                "classes": ("included",),
+                "classes": ("depended_on_partner_type",),
+            },
+        ),
+        (
+            None,
+            {
+                "fields": (
+                    "url",
+                    "image",
+                    "image_preview_change_page",
+                ),
             },
         ),
     )
@@ -57,7 +63,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
     class Media:
         """Adds a script that displays the field ```in_footer_partner``` if the general partner is selected."""
 
-        js = ("admin/js/PartnerInFooter.js",)
+        js = ("admin/info/js/PartnerInFooter.js",)
 
 
 class PersonAdmin(AdminImagePreview, admin.ModelAdmin):

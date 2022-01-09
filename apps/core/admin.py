@@ -45,3 +45,7 @@ class RoleTypeAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         """Return empty perms dict thus hiding the model from admin index."""
         return {}
+
+
+admin.site.site_header = "Администрирование сайта"
+admin.site.index_template = "admin/base_site.html"

@@ -10,7 +10,7 @@ from apps.library.validators import year_validator
 UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION = (
     "first_name",
     "last_name",
-    "birthday",
+    "birth_year",
     "city",
     "phone_number",
     "email",
@@ -37,14 +37,18 @@ class ParticipationApplicationFestival(BaseModel):
         max_length=50,
         verbose_name="Фамилия",
     )
-    birthday = models.DateField(
-        verbose_name="День рождения",
+    birth_year = models.PositiveSmallIntegerField(
+        validators=(year_validator,),
+        verbose_name="Год рождения",
     )
     city = models.CharField(
         max_length=50,
         verbose_name="Город проживания",
     )
-    phone_number = PhoneNumberField(help_text="Номер телефона указывается в формате +7")
+    phone_number = PhoneNumberField(
+        verbose_name="Номер телефона",
+        help_text="Номер телефона указывается в формате +7",
+    )
     email = models.EmailField(
         max_length=100,
         verbose_name="Электронная почта",

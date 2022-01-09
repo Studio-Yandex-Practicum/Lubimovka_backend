@@ -1,10 +1,25 @@
 from django.db.models import Q
 from drf_multiple_model.viewsets import ObjectMultipleModelAPIViewSet
+from drf_spectacular.utils import OpenApiParameter, extend_schema
+from rest_framework import serializers
 
 from apps.library.models import Author, Play
 from apps.library.serializers import AuthorSearchSerializer, PlaySerializer
 
 
+class SearchResultSerializer(serializers.Serializer):
+    """Needed exclusively for the Schema."""
+
+    plays = PlaySerializer(many=True)
+    authors = AuthorSearchSerializer(many=True)
+
+
+@extend_schema(
+    parameters=[
+        OpenApiParameter(name="q", description="Search parameter", required=False, type=str),
+    ],
+    responses=SearchResultSerializer,
+)
 class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
     """
     Поиск авторов по имени и фамилии и пьес по названию.

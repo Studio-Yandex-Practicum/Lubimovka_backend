@@ -43,4 +43,3 @@ class GroupAdmin(admin.ModelAdmin):
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
 admin.site.register(ProxyUser, UserAdmin)
-admin.site.site_header = "Администрирование сайта"

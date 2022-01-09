@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 from apps.afisha.models import Event
 from apps.core.serializers import ImageSerializer
-from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview, TeamMember
-from apps.library.utilities import team_collector_with_plural_slug
+from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
+from apps.library.serializers.utilities import get_event_team_roles, get_event_team_serialized_data
 
 from .play import PlaySerializer
 
@@ -26,7 +26,13 @@ class PerformanceSerializer(serializers.ModelSerializer):
     events = LocalEventSerializer(source="events.body", many=True)
 
     def get_team(self, obj):
-        return team_collector_with_plural_slug(TeamMember, {"performance": obj})
+        """Собираем команду в два этапа.
+
+        Сначала отбираем роли и связанные с ролью и событием персоны.
+        Затем формируем словарь с правильной структурой.
+        """
+        roles = get_event_team_roles(obj, {"team_members__performance": obj})
+        return get_event_team_serialized_data(roles)
 
     class Meta:
         exclude = (
@@ -46,10 +52,13 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     def get_team(self, obj):
-        return team_collector_with_plural_slug(
-            TeamMember,
-            {"performance": obj, "role__slug__in": ["director", "dramatist"]},
-        )
+        """Собираем команду в два этапа.
+
+        Сначала отбираем роли и связанные с ролью и событием персоны.
+        Затем формируем словарь с правильной структурой.
+        """
+        roles = get_event_team_roles(obj, {"team_members__performance": obj, "slug__in": ["director", "dramatist"]})
+        return get_event_team_serialized_data(roles)
 
     class Meta:
         model = Performance
