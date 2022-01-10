@@ -5,6 +5,7 @@ from apps.articles.models import BlogItem, NewsItem
 from apps.core.models import Setting
 from apps.info.models import Festival, Place
 from apps.library.models import Play, ProgramType
+from apps.main.models import Banner
 
 
 class MainObject:
@@ -66,9 +67,8 @@ class MainObject:
     def add_banners(self):
         main_add_banners = Setting.get_setting("main_add_banners")
         if main_add_banners:
-            self.banners = {"items": Setting.objects.filter(field_type=Setting.SettingFieldType.BANNER)}
-            # items = Banner.objects.all()
-            # self.banners = {"items": items}
+            items = Banner.objects.all()
+            self.banners = {"items": items}
 
     def add_short_list(self):
         main_add_short_list = Setting.get_setting("main_add_short_list")

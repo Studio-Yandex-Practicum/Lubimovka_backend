@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.utilities import check_json_field, slugify
+from apps.core.utilities import slugify
 
 
 class BaseModel(models.Model):
@@ -178,8 +178,6 @@ class Setting(BaseModel):
         URL = "URL", _("URL")
         IMAGE = "IMAGE", _("Картинка")
         EMAIL = "EMAIL", _("EMAIL")
-        BANNER = "BANNER", _("BANNER")
-        JSON = "JSON", _("JSON")
 
     TYPES_AND_FIELDS = {
         SettingFieldType.BOOLEAN: ["boolean"],
@@ -187,8 +185,6 @@ class Setting(BaseModel):
         SettingFieldType.URL: ["url"],
         SettingFieldType.IMAGE: ["image"],
         SettingFieldType.EMAIL: ["email"],
-        SettingFieldType.JSON: ["json"],
-        SettingFieldType.BANNER: ["json", "url", "image"],
     }
     RELATED_SETTINGS = {
         "main_add_blog": "main_add_news",
@@ -225,10 +221,6 @@ class Setting(BaseModel):
         blank=True,
         verbose_name="Текст",
     )
-    json = models.JSONField(
-        blank=True,
-        verbose_name="Json",
-    )
     url = models.URLField(
         max_length=200,
         blank=True,
@@ -247,9 +239,6 @@ class Setting(BaseModel):
     def save(self, *args, **kwargs):
         self._check_related_settings(self)
         super().save(*args, **kwargs)
-
-    def clean(self):
-        check_json_field(self)
 
     class Meta:
         ordering = ("group", "settings_key")
