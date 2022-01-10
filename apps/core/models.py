@@ -180,11 +180,11 @@ class Setting(BaseModel):
         EMAIL = "EMAIL", _("EMAIL")
 
     TYPES_AND_FIELDS = {
-        SettingFieldType.BOOLEAN: ["boolean"],
-        SettingFieldType.TEXT: ["text"],
-        SettingFieldType.URL: ["url"],
-        SettingFieldType.IMAGE: ["image"],
-        SettingFieldType.EMAIL: ["email"],
+        SettingFieldType.BOOLEAN: "boolean",
+        SettingFieldType.TEXT: "text",
+        SettingFieldType.URL: "url",
+        SettingFieldType.IMAGE: "image",
+        SettingFieldType.EMAIL: "email",
     }
     RELATED_SETTINGS = {
         "main_add_blog": "main_add_news",
@@ -236,10 +236,6 @@ class Setting(BaseModel):
         verbose_name="Email",
     )
 
-    def save(self, *args, **kwargs):
-        self._check_related_settings(self)
-        super().save(*args, **kwargs)
-
     class Meta:
         ordering = ("group", "settings_key")
         verbose_name = "Общие настройки"
@@ -248,9 +244,16 @@ class Setting(BaseModel):
     def __str__(self):
         return self.settings_key
 
+    def save(self, *args, **kwargs):
+        self._check_related_settings(self)
+        super().save(*args, **kwargs)
+
     @property
     def value(self):
-        return list(getattr(self, field) for field in self.TYPES_AND_FIELDS[self.field_type])
+        return getattr(
+            self,
+            self.TYPES_AND_FIELDS[self.field_type],
+        )
 
     @classmethod
     def get_setting(cls, settings_key):
