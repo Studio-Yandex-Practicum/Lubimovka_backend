@@ -241,6 +241,11 @@ class Festival(BaseModel):
     def __str__(self):
         return f"Фестиваль {self.year} года"
 
+    def clean(self):
+        if self.end_date < self.start_date:
+            raise ValidationError({"end_date": _("Дата окончания фестиваля не может быть раньше даты его начала.")})
+        return super().clean()
+
 
 class Question(BaseModel):
     question = models.TextField(
