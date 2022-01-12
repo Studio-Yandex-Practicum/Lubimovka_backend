@@ -2,7 +2,7 @@ from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinLengthValidator, MinValueValidator
 from django.db import models
-from django.db.models import UniqueConstraint
+from django.db.models import F, Q, UniqueConstraint
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -237,6 +237,7 @@ class Festival(BaseModel):
         verbose_name = "Фестиваль"
         verbose_name_plural = "Фестивали"
         ordering = ["-year"]
+        constraints = [models.CheckConstraint(name="start_date_before_end_date", check=Q(start_date__lt=F("end_date")))]
 
     def __str__(self):
         return f"Фестиваль {self.year} года"
@@ -245,6 +246,10 @@ class Festival(BaseModel):
         if self.end_date and self.start_date and self.end_date < self.start_date:
             raise ValidationError({"end_date": _("Дата окончания фестиваля не может быть раньше даты его начала.")})
         return super().clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
 
 
 class Question(BaseModel):
