@@ -242,7 +242,7 @@ class Festival(BaseModel):
         return f"Фестиваль {self.year} года"
 
     def clean(self):
-        if self.end_date < self.start_date:
+        if self.end_date and self.start_date and self.end_date < self.start_date:
             raise ValidationError({"end_date": _("Дата окончания фестиваля не может быть раньше даты его начала.")})
         return super().clean()
 
