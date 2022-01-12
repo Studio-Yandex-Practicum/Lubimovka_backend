@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
+from django.utils import timezone
 
 from apps.core.models import BaseModel
 from apps.library.models import MasterClass, Performance, Reading
@@ -85,6 +86,8 @@ class Event(BaseModel):
         return f'{event_type_cyrillic} - "{event_name}". Дата: {event_date}. Время: {event_time}.'
 
     def clean(self):
+        if self.date_time <= timezone.now():
+            raise ValidationError("Невозможно создать событие в прошломю")
         if self.type and self.common_event_id:
             allowed_event_types = {
                 "PERFORMANCE": Performance,
