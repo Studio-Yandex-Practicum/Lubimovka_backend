@@ -109,8 +109,13 @@ class Sponsor(BaseModel):
         return f"{self.person.first_name} {self.person.last_name}"
 
     def clean(self):
-        if not self.person.image:
-            raise ValidationError("Для спонсора необходимо выбрать его фото")
+        try:
+            image = self.person.image
+        except Person.DoesNotExist:
+            image = None
+        else:
+            if not image:
+                raise ValidationError(({"person": _("Для спонсора должно быть выбрано фото.")}))
 
 
 class Volunteer(BaseModel):
