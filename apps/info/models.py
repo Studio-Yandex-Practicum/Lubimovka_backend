@@ -108,9 +108,17 @@ class Sponsor(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name}"
 
-    def clean(self):
-        if not self.person.image:
-            raise ValidationError("Для спонсора необходимо выбрать его фото")
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        if self._has_person_before_saving() and not self.person.image:
+            raise ValidationError("Для спонсора должно быть выбрано фото")
+        return super().clean(*args, **kwargs)
+
+    def _has_person_before_saving(self):
+        return self.person_id is not None
 
 
 class Volunteer(BaseModel):
@@ -146,11 +154,19 @@ class Volunteer(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - волонтёр " f"фестиваля {self.year} года"
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
     def clean(self):
-        if not self.person.email:
-            raise ValidationError("Укажите email для волонтёра")
-        if not self.person.image:
-            raise ValidationError("Для волонтёра необходимо выбрать его фото")
+        if self._has_person_before_saving():
+            if not self.person.email:
+                raise ValidationError("Укажите email для волонтёра")
+            if not self.person.image:
+                raise ValidationError("Для волонтёра необходимо выбрать его фото")
+
+    def _has_person_before_saving(self):
+        return self.person_id is not None
 
 
 class Place(BaseModel):
