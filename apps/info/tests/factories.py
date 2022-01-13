@@ -73,7 +73,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
         model = Festival
         django_get_or_create = ("year",)
 
-    start_date = factory.Faker("past_date")
+    start_date = factory.Faker("date")
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2021, step=1)
