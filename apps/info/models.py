@@ -248,7 +248,7 @@ class Festival(BaseModel):
         return super().clean()
 
     def save(self, *args, **kwargs):
-        self.full_clean()
+        self.clean()
         return super().save(*args, **kwargs)
 
 
