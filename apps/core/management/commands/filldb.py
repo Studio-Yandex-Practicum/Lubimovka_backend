@@ -21,6 +21,7 @@ from apps.library.tests.factories import (
     ProgramFactory,
     ReadingFactory,
 )
+from apps.main.tests.factories import BannerFactory as MainBannerFactory
 
 
 def notification(command, objects, text):
@@ -29,7 +30,7 @@ def notification(command, objects, text):
 
 class Command(BaseCommand):
     help = (
-        "Заполняет базу данных тестовыми данными и сейчас доступны:"
+        "Заполняет БД тестовыми данными. Сейчас доступны:"
         " - Персоны"
         " - Персоны с фотографией"
         " - Персоны с фотографией, городом проживания и email"
@@ -42,7 +43,7 @@ class Command(BaseCommand):
         " - Фестивали"
         " - Пресс-релизы"
         " - Изображения для новостей/блогов/проектов"
-        " - Видео (сслыки с описанием)"
+        " - Видео (ссылки с описанием)"
         " - Пользователи-админы"
         " - Пользователи-редакторы"
         " - Программы"
@@ -51,6 +52,7 @@ class Command(BaseCommand):
         " - Спектакли"
         " - Мастер-классы"
         " - Читки"
+        " - Баннеры главной страницы"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -138,6 +140,9 @@ class Command(BaseCommand):
 
             participations = ParticipationApplicationFestivalFactory.create_batch(5)
             notification(self, participations, "заявок на участие в фестивале")
+
+            main_banners = MainBannerFactory.create_batch(3, add_real_image=True)
+            notification(self, main_banners, "баннеров на главной страницу (с картинкой)")
 
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))
