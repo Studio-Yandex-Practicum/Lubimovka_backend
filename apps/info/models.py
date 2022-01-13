@@ -108,7 +108,7 @@ class Sponsor(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name}"
 
-    def clean(self):
+    def clean(self, *args, **kwargs):
         try:
             image = self.person.image
         except Person.DoesNotExist:
@@ -116,6 +116,11 @@ class Sponsor(BaseModel):
         else:
             if not image:
                 raise ValidationError(({"person": _("Для спонсора должно быть выбрано фото.")}))
+        return super().clean(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super().save(*args, **kwargs)
 
 
 class Volunteer(BaseModel):
