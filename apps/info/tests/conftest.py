@@ -42,12 +42,12 @@ def team():
 
 @pytest.fixture
 def volunteers():
-    return list(VolunteerFactory(person=PersonFactory(add_image=True)) for _ in range(5))
+    return list(VolunteerFactory(person=PersonFactory(add_image=True, add_email=True)) for _ in range(5))
 
 
 @pytest.fixture
 def volunteer():
-    return VolunteerFactory(person=PersonFactory(add_image=True))
+    return VolunteerFactory(person=PersonFactory(add_image=True, add_email=True))
 
 
 @pytest.fixture
