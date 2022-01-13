@@ -242,14 +242,14 @@ class Festival(BaseModel):
     def __str__(self):
         return f"Фестиваль {self.year} года"
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
     def clean(self):
         if self.end_date and self.start_date and self.end_date < self.start_date:
             raise ValidationError({"end_date": _("Дата окончания фестиваля не может быть раньше даты его начала.")})
         return super().clean()
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        return super().save(*args, **kwargs)
 
 
 class Question(BaseModel):
