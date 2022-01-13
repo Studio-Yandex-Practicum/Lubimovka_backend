@@ -113,11 +113,11 @@ class Sponsor(BaseModel):
         return super().save(*args, **kwargs)
 
     def clean(self, *args, **kwargs):
-        if self.has_person() and not self.person.image:
+        if self._has_person_before_saving() and not self.person.image:
             raise ValidationError("Для спонсора должно быть выбрано фото")
         return super().clean(*args, **kwargs)
 
-    def has_person(self):
+    def _has_person_before_saving(self):
         return self.person_id is not None
 
 
@@ -159,13 +159,13 @@ class Volunteer(BaseModel):
         return super().save(*args, **kwargs)
 
     def clean(self):
-        if self.has_person():
+        if self._has_person_before_saving():
             if not self.person.email:
                 raise ValidationError("Укажите email для волонтёра")
             if not self.person.image:
                 raise ValidationError("Для волонтёра необходимо выбрать его фото")
 
-    def has_person(self):
+    def _has_person_before_saving(self):
         return self.person_id is not None
 
 
