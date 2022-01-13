@@ -48,4 +48,3 @@ class RoleTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = "Администрирование сайта"
-admin.site.index_template = "admin/base_site.html"
