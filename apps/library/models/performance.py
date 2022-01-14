@@ -50,6 +50,7 @@ class Performance(BaseModel):
         verbose_name="Краткое описание",
     )
     text = models.TextField(
+        max_length=500,
         verbose_name="Полное описание",
     )
     age_limit = models.PositiveSmallIntegerField(
