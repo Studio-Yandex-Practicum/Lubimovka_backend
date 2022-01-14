@@ -51,8 +51,8 @@ class TestFestivalAPIViews:
             "start_date",
             "end_date",
         ):
-            obj = data.get(field)
-            festival_field_in_response = datetime.strptime(obj, "%Y-%m-%d").date()
+            date = data.get(field)
+            festival_field_in_response = datetime.strptime(date, "%Y-%m-%d").date()
             festival_field_in_db = getattr(festival, field)
             assert (
                 festival_field_in_response == festival_field_in_db
