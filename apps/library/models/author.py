@@ -57,11 +57,19 @@ class Author(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name}"
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
     def clean(self):
-        if not self.person.email:
-            raise ValidationError("Для автора необходимо указать email")
-        if not self.person.city:
-            raise ValidationError("Для автора необходимо указать город")
+        if self._has_person_before_saving():
+            if not self.person.email:
+                raise ValidationError("Для автора необходимо указать email")
+            if not self.person.city:
+                raise ValidationError("Для автора необходимо указать город")
+
+    def _has_person_before_saving(self):
+        return self.person_id is not None
 
     @property
     def image(self):
