@@ -2,7 +2,7 @@ from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinLengthValidator, MinValueValidator
 from django.db import models
-from django.db.models import UniqueConstraint
+from django.db.models import F, Q, UniqueConstraint
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -108,9 +108,17 @@ class Sponsor(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name}"
 
-    def clean(self):
-        if not self.person.image:
-            raise ValidationError("Для спонсора необходимо выбрать его фото")
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self, *args, **kwargs):
+        if self._has_person_before_saving() and not self.person.image:
+            raise ValidationError("Для спонсора должно быть выбрано фото")
+        return super().clean(*args, **kwargs)
+
+    def _has_person_before_saving(self):
+        return self.person_id is not None
 
 
 class Volunteer(BaseModel):
@@ -130,6 +138,7 @@ class Volunteer(BaseModel):
         verbose_name="Заголовок отзыва",
     )
     review_text = models.TextField(
+        max_length=500,
         verbose_name="Текст отзыва",
     )
 
@@ -146,11 +155,19 @@ class Volunteer(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - волонтёр " f"фестиваля {self.year} года"
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
     def clean(self):
-        if not self.person.email:
-            raise ValidationError("Укажите email для волонтёра")
-        if not self.person.image:
-            raise ValidationError("Для волонтёра необходимо выбрать его фото")
+        if self._has_person_before_saving():
+            if not self.person.email:
+                raise ValidationError("Укажите email для волонтёра")
+            if not self.person.image:
+                raise ValidationError("Для волонтёра необходимо выбрать его фото")
+
+    def _has_person_before_saving(self):
+        return self.person_id is not None
 
 
 class Place(BaseModel):
@@ -237,9 +254,19 @@ class Festival(BaseModel):
         verbose_name = "Фестиваль"
         verbose_name_plural = "Фестивали"
         ordering = ["-year"]
+        constraints = [models.CheckConstraint(name="start_date_before_end_date", check=Q(start_date__lt=F("end_date")))]
 
     def __str__(self):
         return f"Фестиваль {self.year} года"
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.end_date and self.start_date and self.end_date < self.start_date:
+            raise ValidationError({"end_date": _("Дата окончания фестиваля не может быть раньше даты его начала.")})
+        return super().clean()
 
 
 class Question(BaseModel):
