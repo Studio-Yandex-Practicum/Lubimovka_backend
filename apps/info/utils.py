@@ -26,11 +26,6 @@ def send_question(serializer):
         "author_name": serializer.validated_data["author_name"],
         "author_email": serializer.validated_data["author_email"],
     }
-    print(message.template_id)
-    print(message.send())
-    print(Setting.get_setting("email_subject_for_question"))
-    print(Setting.get_setting("email_send_from"))
-    print(Setting.get_setting("email_send_to"))
     message.send()
 
 

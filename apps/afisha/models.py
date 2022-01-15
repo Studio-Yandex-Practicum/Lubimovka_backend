@@ -87,7 +87,7 @@ class Event(BaseModel):
 
     def clean(self):
         if self.date_time <= timezone.now():
-            raise ValidationError("Невозможно создать событие в прошломю")
+            raise ValidationError("Невозможно создать событие в прошлом.")
         if self.type and self.common_event_id:
             allowed_event_types = {
                 "PERFORMANCE": Performance,
