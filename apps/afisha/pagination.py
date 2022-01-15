@@ -17,10 +17,11 @@ class AfishaPagination(PageNumberPagination):
         is_festival = Setting.get_setting("festival_status")
 
         response_data = {
-            "links": {"next": self.get_next_link(), "previous": self.get_previous_link()},
             "count": self.page.paginator.count,
-            "description": Setting.get_setting("afisha_description_regular"),
+            "next": self.get_next_link(),
+            "previous": self.get_previous_link(),
             "title": Setting.get_setting("afisha_title_regular"),
+            "description": Setting.get_setting("afisha_description_regular"),
             "results": data,
         }
         if is_festival:
