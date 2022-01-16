@@ -1,10 +1,10 @@
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.response import Response
 
 from apps.core.models import Setting
 
 
-class AfishaPagination(PageNumberPagination):
+class AfishaPagination(LimitOffsetPagination):
     """Add blocks if festival mode is enabled in pagination response.
 
     info_registration - the text about registration under the description,
@@ -17,7 +17,7 @@ class AfishaPagination(PageNumberPagination):
         is_festival = Setting.get_setting("festival_status")
 
         response_data = {
-            "count": self.page.paginator.count,
+            "count": self.count,
             "next": self.get_next_link(),
             "previous": self.get_previous_link(),
             "title": Setting.get_setting("afisha_title_regular"),

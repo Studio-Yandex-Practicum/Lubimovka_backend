@@ -1,7 +1,7 @@
 SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR = {
     "count": 123,
-    "next": "http://api.example.org/accounts/?page=4",
-    "previous": "http://api.example.org/accounts/?page=2",
+    "next": "http://api.example.org/accounts/?limit=20&offset=10",
+    "previous": "http://api.example.org/accounts/?limit=10&offset=10",
     "title": "string",
     "description": "string",
     "results": [
@@ -40,8 +40,8 @@ SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR = {
 
 SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_FESTIVAL = {
     "count": 123,
-    "next": "http://api.example.org/accounts/?page=4",
-    "previous": "http://api.example.org/accounts/?page=2",
+    "next": "http://api.example.org/accounts/?limit=20&offset=10",
+    "previous": "http://api.example.org/accounts/?limit=10&offset=10",
     "title": "string",
     "description": "string",
     "info_registration": "string",
