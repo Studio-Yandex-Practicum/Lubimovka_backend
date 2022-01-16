@@ -13,14 +13,14 @@ from apps.library.serializers import EventMasterClassSerializer, EventPerformanc
 @extend_schema_serializer(
     examples=[
         OpenApiExample(
-            "Valid example 1",
+            name="Schema for afisha with festival setup",
             summary="Festival setup",
             value=SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_FESTIVAL,
             request_only=False,
             response_only=True,
         ),
         OpenApiExample(
-            "Valid example 2",
+            name="Schema for afisha with regular setup",
             summary="Regular setup",
             value=SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR,
             request_only=False,

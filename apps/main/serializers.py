@@ -1,3 +1,4 @@
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
 from apps.afisha.serializers import EventSerializer
@@ -6,6 +7,7 @@ from apps.core.models import Setting
 from apps.info.serializers.place import PlaceSerializer
 from apps.library.serializers import PlaySerializer
 from apps.main.models import Banner
+from apps.main.schema.schema_extension import MAIN_SCHEMA_SUCCESS_MESSAGE_FESTIVAL, MAIN_SCHEMA_SUCCESS_MESSAGE_REGULAR
 
 
 class BannerSerializer(serializers.ModelSerializer):
@@ -111,6 +113,24 @@ class MainVideoArchiveSerializer(serializers.Serializer):
     photo = serializers.ImageField()
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            name="Schema for main with festival setup",
+            summary="Festival setup",
+            value=MAIN_SCHEMA_SUCCESS_MESSAGE_FESTIVAL,
+            request_only=False,
+            response_only=True,
+        ),
+        OpenApiExample(
+            name="Schema for main with regular setup",
+            summary="Regular setup",
+            value=MAIN_SCHEMA_SUCCESS_MESSAGE_REGULAR,
+            request_only=False,
+            response_only=True,
+        ),
+    ],
+)
 class MainSerializer(serializers.Serializer):
     first_screen = MainFirstScreenSerializer(required=False)
     blog = MainBlogSerializer(required=False)
