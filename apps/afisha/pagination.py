@@ -20,8 +20,6 @@ class AfishaPagination(LimitOffsetPagination):
             "count": self.count,
             "next": self.get_next_link(),
             "previous": self.get_previous_link(),
-            "title": Setting.get_setting("afisha_title_regular"),
-            "description": Setting.get_setting("afisha_description_regular"),
             "results": data,
         }
         if is_festival:
@@ -29,4 +27,7 @@ class AfishaPagination(LimitOffsetPagination):
             response_data["asterisk_text"] = Setting.get_setting("afisha_asterisk_text")
             response_data["title"] = Setting.get_setting("afisha_title_festival")
             response_data["description"] = Setting.get_setting("afisha_description_festival")
+        else:
+            response_data["title"] = (Setting.get_setting("afisha_title_regular"),)
+            response_data["description"] = (Setting.get_setting("afisha_description_regular"),)
         return Response(response_data)
