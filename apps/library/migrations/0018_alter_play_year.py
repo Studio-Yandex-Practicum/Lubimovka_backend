@@ -7,13 +7,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0017_participation_birth_year'),
+        ("library", "0017_participation_birth_year"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='play',
-            name='year',
-            field=models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1990), django.core.validators.MaxValueValidator(2022)], verbose_name='Год написания пьесы'),
+            model_name="play",
+            name="year",
+            field=models.PositiveSmallIntegerField(
+                validators=[
+                    django.core.validators.MinValueValidator(1990),
+                    django.core.validators.MaxValueValidator(2022),
+                ],
+                verbose_name="Год написания пьесы",
+            ),
         ),
     ]
