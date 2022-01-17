@@ -3,6 +3,7 @@ from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.utilities import slugify
+from apps.core.validators import name_validator
 
 
 class BaseModel(models.Model):
@@ -37,14 +38,17 @@ class Image(BaseModel):
 class Person(BaseModel):
     first_name = models.CharField(
         max_length=50,
+        validators=(name_validator,),
         verbose_name="Имя",
     )
     last_name = models.CharField(
         max_length=50,
+        validators=(name_validator,),
         verbose_name="Фамилия",
     )
     middle_name = models.CharField(
         max_length=50,
+        validators=(name_validator,),
         verbose_name="Отчество",
         blank=True,
     )
