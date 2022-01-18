@@ -139,6 +139,7 @@ class Volunteer(BaseModel):
     )
     review_text = models.TextField(
         max_length=500,
+        blank=True,
         verbose_name="Текст отзыва",
     )
 
