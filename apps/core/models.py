@@ -4,6 +4,15 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.utilities import slugify
 
+NEWS_HELP_TEXT = (
+    "При включении данной настройки, автоматический будет "
+    "выключена настройка Отображение дневника на главной страницы"
+)
+BLOG_HELP_TEXT = (
+    "При включении данной настройки, автоматический будет "
+    "выключена настройка 'Отображение новостей на главной странице'"
+)
+
 
 class BaseModel(models.Model):
     """
@@ -191,7 +200,10 @@ class Setting(BaseModel):
         "main_add_blog": "main_add_news",
         "main_add_news": "main_add_blog",
     }
-
+    HELP_TEXT = {
+        "main_add_blog": BLOG_HELP_TEXT,
+        "main_add_news": NEWS_HELP_TEXT,
+    }
     group = models.CharField(
         choices=SettingGroup.choices,
         default="GENERAL",
@@ -271,6 +283,5 @@ class Setting(BaseModel):
 
     @classmethod
     def _check_related_settings(cls, setting):
-        for enable_setting, disabled_setting in cls.RELATED_SETTINGS.items():
-            if setting.settings_key == enable_setting and setting.boolean is True:
-                cls._turn_off_setting(disabled_setting)
+        if setting.settings_key in cls.RELATED_SETTINGS and setting.boolean:
+            cls._turn_off_setting(cls.RELATED_SETTINGS[setting.settings_key])

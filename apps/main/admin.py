@@ -3,15 +3,6 @@ from django.contrib import admin
 from apps.core.models import Setting
 from apps.main.models import Banner, SettingAfishaScreen, SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
 
-NEWS_HELP_TEXT = (
-    "При включении данной настройки, автоматический будет "
-    "выключена настройка Отображение дневника на главной страницы"
-)
-BLOG_HELP_TEXT = (
-    "При включении данной настройки, автоматический будет "
-    "выключена настройка 'Отображение новостей на главной странице'"
-)
-
 
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
@@ -43,10 +34,10 @@ class SettingAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        if obj.settings_key == "main_add_blog":
-            form.base_fields["boolean"].help_text = NEWS_HELP_TEXT
-        elif obj.settings_key == "main_add_news":
-            form.base_fields["boolean"].help_text = BLOG_HELP_TEXT
+        if obj.settings_key in Setting.HELP_TEXT:
+            field = Setting.TYPES_AND_FIELDS[obj.field_type]
+            help_text = Setting.HELP_TEXT[obj.settings_key]
+            form.base_fields[field].help_text = help_text
         return form
 
     def get_fields(self, request, obj=None):
