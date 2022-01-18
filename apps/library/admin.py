@@ -45,11 +45,12 @@ class PlayAdmin(admin.ModelAdmin):
         "is_draft",
     )
     search_fields = (
-        "authors_name",
+        "authors__person__first_name",
+        "authors__person__last_name",
         "name",
         "city",
-        "program_name",
-        "festival_year",
+        "program__name",
+        "festival__year",
     )
 
 
