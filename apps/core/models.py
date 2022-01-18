@@ -171,6 +171,7 @@ class Setting(BaseModel):
         MAIN = "MAIN", _("Главная")
         FIRST_SCREEN = "FIRST_SCREEN", _("Первая страница")
         GENERAL = "GENERAL", _("Общие")
+        AFISHA = "AFISHA", _("Афиша")
 
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")

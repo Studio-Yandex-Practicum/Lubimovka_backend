@@ -1,10 +1,33 @@
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
 from apps.afisha.models import Event
+from apps.afisha.schema.schema_extension import (
+    SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_FESTIVAL,
+    SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR,
+)
 from apps.library.models import MasterClass, Performance, Reading
 from apps.library.serializers import EventMasterClassSerializer, EventPerformanceSerializer, EventReadingSerializer
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            name="Schema for afisha with festival setup",
+            summary="Festival setup",
+            value=SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_FESTIVAL,
+            request_only=False,
+            response_only=True,
+        ),
+        OpenApiExample(
+            name="Schema for afisha with regular setup",
+            summary="Regular setup",
+            value=SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR,
+            request_only=False,
+            response_only=True,
+        ),
+    ],
+)
 class EventSerializer(serializers.ModelSerializer):
     event_body = serializers.SerializerMethodField()
     date_time = serializers.DateTimeField(format="%Y-%m-%dT%H:%M")
