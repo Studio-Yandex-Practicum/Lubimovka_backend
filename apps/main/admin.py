@@ -32,6 +32,14 @@ class SettingAdmin(admin.ModelAdmin):
         "description",
     )
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        if obj.settings_key in Setting.HELP_TEXT:
+            field = Setting.TYPES_AND_FIELDS[obj.field_type]
+            help_text = Setting.HELP_TEXT[obj.settings_key]
+            form.base_fields[field].help_text = help_text
+        return form
+
     def get_fields(self, request, obj=None):
         field_for_setting_value = Setting.TYPES_AND_FIELDS[obj.field_type]
         return (

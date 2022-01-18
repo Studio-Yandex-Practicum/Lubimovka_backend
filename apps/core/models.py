@@ -4,6 +4,15 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.utilities import slugify
 
+NEWS_HELP_TEXT = (
+    "При включении данной настройки, автоматический будет "
+    "выключена настройка Отображение дневника на главной страницы"
+)
+BLOG_HELP_TEXT = (
+    "При включении данной настройки, автоматический будет "
+    "выключена настройка 'Отображение новостей на главной странице'"
+)
+
 
 class BaseModel(models.Model):
     """
@@ -187,7 +196,14 @@ class Setting(BaseModel):
         SettingFieldType.IMAGE: "image",
         SettingFieldType.EMAIL: "email",
     }
-
+    RELATED_SETTINGS = {
+        "main_add_blog": "main_add_news",
+        "main_add_news": "main_add_blog",
+    }
+    HELP_TEXT = {
+        "main_add_blog": BLOG_HELP_TEXT,
+        "main_add_news": NEWS_HELP_TEXT,
+    }
     group = models.CharField(
         choices=SettingGroup.choices,
         default="GENERAL",
@@ -241,6 +257,10 @@ class Setting(BaseModel):
     def __str__(self):
         return self.settings_key
 
+    def save(self, *args, **kwargs):
+        self._check_related_settings(self)
+        super().save(*args, **kwargs)
+
     @property
     def value(self):
         return getattr(
@@ -253,3 +273,15 @@ class Setting(BaseModel):
         if Setting.objects.filter(settings_key=settings_key).exists():
             setting = Setting.objects.get(settings_key=settings_key)
             return setting.value
+
+    @classmethod
+    def _turn_off_setting(cls, setting):
+        if cls.objects.filter(settings_key=setting).exists():
+            setting = cls.objects.get(settings_key=setting)
+            setting.boolean = False
+            setting.save()
+
+    @classmethod
+    def _check_related_settings(cls, setting):
+        if setting.settings_key in cls.RELATED_SETTINGS and setting.boolean:
+            cls._turn_off_setting(cls.RELATED_SETTINGS[setting.settings_key])
