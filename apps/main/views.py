@@ -2,12 +2,13 @@ from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from apps.main.schema.schema_extension import MAIN_SCHEMA_DESCRIPTION
 from apps.main.serializers import MainSerializer
 from apps.main.utilities import MainObject
 
 
 class MainView(APIView):
-    @extend_schema(responses=MainSerializer)
+    @extend_schema(responses=MainSerializer, description=MAIN_SCHEMA_DESCRIPTION)
     def get(self, request):
         main = MainObject()
         main.add_first_screen_data()
