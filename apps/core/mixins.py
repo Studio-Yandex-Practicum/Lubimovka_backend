@@ -20,8 +20,8 @@ class AdminImagePreview:
             return format_html('<img src="{}" width="100" height="50" />'.format(obj.image.url))
 
 
-class ModelAdminToHide(admin.ModelAdmin):
-    """Mixin hides model from admin main page."""
+class HideOnNavPanelAdminModelMixin:
+    """Mixin hides model from admin main page(nav. panel)."""
 
     def has_module_permission(self, request):
         return False
