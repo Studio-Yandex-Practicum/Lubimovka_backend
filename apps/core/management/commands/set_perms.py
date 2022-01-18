@@ -10,7 +10,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:
-            permissions = Permission.objects.filter(
+            editors_permissions = Permission.objects.filter(
                 Q(codename__endswith="_achievement")
                 | Q(codename__endswith="_author")
                 | Q(codename__endswith="_banner")
@@ -76,7 +76,7 @@ class Command(BaseCommand):
             admin = Group.objects.get(name="admin")
             admin.permissions.add(*Permission.objects.all())
             editor = Group.objects.get(name="editor")
-            editor.permissions.add(*permissions)
+            editor.permissions.add(*editors_permissions)
             self.stdout.write(self.style.SUCCESS("Права для пользователей успешно установлены."))
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка установки прав."))
