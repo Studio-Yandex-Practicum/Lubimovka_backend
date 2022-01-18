@@ -88,3 +88,13 @@ class SettingFirstScreen(Setting):
         proxy = True
         verbose_name = "Настройки первой страницы"
         verbose_name_plural = "Настройки первой страницы"
+
+
+class SettingAfishaScreen(Setting):
+    objects = SettingGroupManager()
+    group_name = "AFISHA"
+
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки афиши"
+        verbose_name_plural = "Настройки афиши"

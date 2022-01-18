@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.core.models import Setting
-from apps.main.models import Banner, SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
+from apps.main.models import Banner, SettingAfishaScreen, SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
 
 NEWS_HELP_TEXT = (
     "При включении данной настройки, автоматический будет "
@@ -23,7 +23,7 @@ class BannerAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen)
+@admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen, SettingAfishaScreen)
 class SettingAdmin(admin.ModelAdmin):
     list_display = (
         "description",

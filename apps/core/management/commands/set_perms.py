@@ -1,9 +1,8 @@
 from typing import Any, Optional
 
-from django.core.management import call_command
+from django.contrib.auth.models import Group, Permission
 from django.core.management.base import BaseCommand, CommandError
-
-fixture = "apps/core/management/commands/fixture/fixture_group_perms.json"
+from django.db.models import Q
 
 
 class Command(BaseCommand):
@@ -11,7 +10,73 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:
-            call_command("loaddata", fixture, app_label="core")
+            editors_permissions = Permission.objects.filter(
+                Q(codename__endswith="_achievement")
+                | Q(codename__endswith="_author")
+                | Q(codename__endswith="_banner")
+                | Q(codename__endswith="_blogitem")
+                | Q(codename__endswith="_blogitemcontent")
+                | Q(codename__endswith="_blogperson")
+                | Q(codename__endswith="_commonevent")
+                | Q(codename__endswith="_contentpersonrole")
+                | Q(codename__endswith="_contenttype")
+                | Q(codename__endswith="_event")
+                | Q(codename__endswith="_extendedperson")
+                | Q(codename__endswith="_festival")
+                | Q(codename__endswith="_festivalteam")
+                | Q(codename__endswith="_image")
+                | Q(codename__endswith="_imagesblock")
+                | Q(codename__endswith="_link")
+                | Q(codename__endswith="_masterclass")
+                | Q(codename__endswith="_newsitem")
+                | Q(codename__endswith="_newsitemcontent")
+                | Q(codename__endswith="_orderedimage")
+                | Q(codename__endswith="_orderedperformance")
+                | Q(codename__endswith="_orderedplay")
+                | Q(codename__endswith="_orderedvideo")
+                | Q(codename__endswith="_otherlink")
+                | Q(codename__endswith="_otherplay")
+                | Q(codename__endswith="_participationapplicationfestival")
+                | Q(codename__endswith="_partner")
+                | Q(codename__endswith="_performance")
+                | Q(codename__endswith="_performancemediareview")
+                | Q(codename__endswith="_performancereview")
+                | Q(codename__endswith="_performancesblock")
+                | Q(codename__endswith="_person")
+                | Q(codename__endswith="_personsblock")
+                | Q(codename__endswith="_play")
+                | Q(codename__endswith="_place")
+                | Q(codename__endswith="_playsblock")
+                | Q(codename__endswith="_preamble")
+                | Q(codename__endswith="_pressrelease")
+                | Q(codename__endswith="_programtype")
+                | Q(codename__endswith="_project")
+                | Q(codename__endswith="_projectcontent")
+                | Q(codename__endswith="_question")
+                | Q(codename__endswith="_quote")
+                | Q(codename__endswith="_reading")
+                | Q(codename__endswith="_role")
+                | Q(codename__endswith="_roletype")
+                | Q(codename__endswith="_setting")
+                | Q(codename__endswith="_settingemail")
+                | Q(codename__endswith="_settingfirstscreen")
+                | Q(codename__endswith="_settinggeneral")
+                | Q(codename__endswith="_settingmain")
+                | Q(codename__endswith="_site")
+                | Q(codename__endswith="_socialnetworklink")
+                | Q(codename__endswith="_sponsor")
+                | Q(codename__endswith="_staticpagesmodel")
+                | Q(codename__endswith="_teammember")
+                | Q(codename__endswith="_text")
+                | Q(codename__endswith="_title")
+                | Q(codename__endswith="_video")
+                | Q(codename__endswith="_videosblock")
+                | Q(codename__endswith="_volunteer")
+            )
+            admin = Group.objects.get(name="admin")
+            admin.permissions.add(*Permission.objects.all())
+            editor = Group.objects.get(name="editor")
+            editor.permissions.add(*editors_permissions)
             self.stdout.write(self.style.SUCCESS("Права для пользователей успешно установлены."))
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка установки прав."))
