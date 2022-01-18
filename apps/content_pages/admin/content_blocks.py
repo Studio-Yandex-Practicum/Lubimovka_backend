@@ -14,6 +14,7 @@ from apps.content_pages.models import (
     PlaysBlock,
     VideosBlock,
 )
+from apps.core.mixins import ModelAdminToHide
 
 
 class ContentPersonRoleInline(admin.TabularInline):
@@ -50,7 +51,7 @@ class ExtendedPersonInline(OrderedInline):
 
 
 @admin.register(ExtendedPerson)
-class ExtendedPersonAdmin(admin.ModelAdmin):
+class ExtendedPersonAdmin(ModelAdminToHide):
     list_display = (
         "person",
         "block",
@@ -67,7 +68,7 @@ class ExtendedPersonAdmin(admin.ModelAdmin):
 
 
 @admin.register(ImagesBlock)
-class ImagesBlockAdmin(admin.ModelAdmin):
+class ImagesBlockAdmin(ModelAdminToHide):
     list_display = (
         "id",
         "title",
@@ -76,20 +77,20 @@ class ImagesBlockAdmin(admin.ModelAdmin):
 
 
 @admin.register(PersonsBlock)
-class PersonsBlockAdmin(admin.ModelAdmin):
+class PersonsBlockAdmin(ModelAdminToHide):
     inlines = (ExtendedPersonInline,)
 
 
 @admin.register(PerformancesBlock)
-class PerformancesBlockAdmin(admin.ModelAdmin):
+class PerformancesBlockAdmin(ModelAdminToHide):
     inlines = (OrderedPerformanceInline,)
 
 
 @admin.register(PlaysBlock)
-class PlaysBlockAdmin(admin.ModelAdmin):
+class PlaysBlockAdmin(ModelAdminToHide):
     inlines = (OrderedPlayInline,)
 
 
 @admin.register(VideosBlock)
-class VideosBlockAdmin(admin.ModelAdmin):
+class VideosBlockAdmin(ModelAdminToHide):
     inlines = (OrderedVideoInline,)
