@@ -1,3 +1,5 @@
+from typing import Dict, Tuple
+
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -114,3 +116,8 @@ class AbstractContent(models.Model):
 
     def __str__(self):
         return f"Блок/элемент — {self.item}"
+
+    def delete(self, *args, **kwargs) -> Tuple[int, Dict[str, int]]:
+        item = self.item
+        item.delete()
+        return super().delete(*args, **kwargs)
