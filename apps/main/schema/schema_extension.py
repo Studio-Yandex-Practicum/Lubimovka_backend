@@ -8,6 +8,7 @@ MAIN_SCHEMA_DESCRIPTION = """
     Please select Festival setup or Regular setup in examples.
     """
 
+
 MAIN_SCHEMA_SUCCESS_MESSAGE_FESTIVAL = {
     "first_screen": {"title": "string", "url_title": "string", "url": "string"},
     "blog": {
@@ -45,7 +46,16 @@ MAIN_SCHEMA_SUCCESS_MESSAGE_FESTIVAL = {
             {
                 "id": 0,
                 "type": "PERFORMANCE",
-                "event_body": "string",
+                "event_body": {
+                    "id": 0,
+                    "name": "string",
+                    "description": "string",
+                    "team": [
+                        {"name": "string", "persons": ["string"]},
+                    ],
+                    "image": "string",
+                    "project_title": "string",
+                },
                 "date_time": "2022-01-16T14:39:25.453Z",
                 "paid": True,
                 "url": "string",
@@ -129,7 +139,16 @@ MAIN_SCHEMA_SUCCESS_MESSAGE_REGULAR = {
             {
                 "id": 0,
                 "type": "PERFORMANCE",
-                "event_body": "string",
+                "event_body": {
+                    "id": 0,
+                    "name": "string",
+                    "description": "string",
+                    "team": [
+                        {"name": "string", "persons": ["string"]},
+                    ],
+                    "image": "string",
+                    "project_title": "string",
+                },
                 "date_time": "2022-01-16T14:39:25.453Z",
                 "paid": True,
                 "url": "string",

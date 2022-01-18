@@ -60,7 +60,11 @@ class MainObject:
                 )
                 title = AFISHA_CURRENT_DAY_TITLE + get_russian_date(timezone.localdate())
             else:
-                items = Event.objects.filter(pinned_on_main=True)[:6]
+                items = (
+                    Event.objects.filter(date_time__gte=timezone.now())
+                    .filter(pinned_on_main=True)
+                    .order_by("date_time")[:6]
+                )
                 if is_festival:
                     title = Setting.get_setting("afisha_title_festival")
                 else:
