@@ -110,11 +110,13 @@ class PerformanceMediaReview(BaseModel):
     url = models.URLField(
         max_length=200,
         blank=True,
+        null=True,
         verbose_name="Ссылка на отзыв",
         unique=True,
     )
     pub_date = models.DateTimeField(
         blank=True,
+        null=True,
         verbose_name="Дата публикации",
     )
 
@@ -145,11 +147,13 @@ class PerformanceReview(BaseModel):
     url = models.URLField(
         max_length=200,
         blank=True,
+        null=True,
         verbose_name="Ссылка на отзыв",
         unique=True,
     )
     pub_date = models.DateTimeField(
         blank=True,
+        null=True,
         verbose_name="Дата публикации",
     )
 
