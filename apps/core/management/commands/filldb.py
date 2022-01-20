@@ -8,6 +8,7 @@ from apps.info.tests.factories import (
     FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
+    PlaceFactory,
     PressReleaseFactory,
     SponsorFactory,
     VolunteerFactory,
@@ -53,6 +54,7 @@ class Command(BaseCommand):
         " - Мастер-классы"
         " - Читки"
         " - Баннеры главной страницы"
+        " - Места"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -143,6 +145,9 @@ class Command(BaseCommand):
 
             main_banners = MainBannerFactory.create_batch(3, add_real_image=True)
             notification(self, main_banners, "баннеров на главной страницу (с картинкой)")
+
+            places = PlaceFactory.create_batch(3, add_real_image=True)
+            notification(self, places, "мест")
 
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))

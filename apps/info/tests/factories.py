@@ -7,9 +7,10 @@ from faker import Faker
 
 from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person
-from apps.info.models import Festival, FestivalTeam, Partner, PressRelease, Sponsor, Volunteer
+from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
 
 fake = Faker(locale="en_US")
+fake_rus = Faker(locale="ru_RU")
 
 
 class PartnerFactory(factory.django.DjangoModelFactory):
@@ -124,3 +125,14 @@ class PressReleaseFactory(factory.django.DjangoModelFactory):
     festival = factory.Iterator(Festival.objects.all())
     title = factory.Faker("sentence", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
+
+
+class PlaceFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Place
+
+    name = factory.Faker("word", locale="ru_RU")
+    description = factory.Faker("sentence", locale="ru_RU")
+    city = factory.Faker("city", locale="ru_RU")
+    address = factory.Faker("address", locale="ru_RU")
+    map_link = factory.Faker("url", locale="ru_RU")
