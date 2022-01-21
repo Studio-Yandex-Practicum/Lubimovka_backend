@@ -19,4 +19,4 @@ class VolunteerInFestivalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Volunteer
-        fields = ("id", "created", "modified", "year", "review_title", "review_text", "person")
+        fields = ("id", "year", "review_title", "review_text", "person")

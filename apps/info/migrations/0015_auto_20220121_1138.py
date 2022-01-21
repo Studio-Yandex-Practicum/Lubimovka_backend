@@ -2,6 +2,17 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
+import random
+
+def distribute_volunteers_to_festivals(apps):
+    Volunteer = apps.get_model("info", "Volunteer")
+    Festival = apps.get_model("info", "Festival")
+
+    festivals = list(Festival.objects.all())
+
+    for obj in Volunteer.objects.all():
+        obj.festival = random.choice(festivals)
+        obj.save()
 
 
 class Migration(migrations.Migration):
@@ -29,4 +40,5 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, related_name='volunteers', to='info.festival', verbose_name='Фестиваль'),
             preserve_default=False,
         ),
+        migrations.RunPython(distribute_volunteers_to_festivals),
     ]
