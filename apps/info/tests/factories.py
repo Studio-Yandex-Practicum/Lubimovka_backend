@@ -79,18 +79,6 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     year = factory.Faker("random_int", min=1990, max=2021, step=1)
 
     @factory.post_generation
-    def volunteers(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.volunteers.add(*extracted)
-        else:
-            volunteers_count = Volunteer.objects.count()
-            how_many = min(volunteers_count, random.randint(1, 7))
-            volunteers = Volunteer.objects.order_by("?")[:how_many]
-            self.volunteers.add(*volunteers)
-
-    @factory.post_generation
     def images(self, create, extracted, **kwargs):
         if not create:
             return
