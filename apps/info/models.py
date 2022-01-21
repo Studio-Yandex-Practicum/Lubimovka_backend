@@ -222,7 +222,7 @@ class Volunteer(BaseModel):
     )
     festival = models.ForeignKey(
         Festival,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name="volunteers",
         verbose_name="Фестиваль",
     )

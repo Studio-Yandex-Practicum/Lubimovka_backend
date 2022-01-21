@@ -37,7 +37,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='volunteer',
             name='festival',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, related_name='volunteers', to='info.festival', verbose_name='Фестиваль'),
+            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='volunteers', to='info.festival', verbose_name='Фестиваль'),
             preserve_default=False,
         ),
         migrations.RunPython(distribute_volunteers_to_festivals),
