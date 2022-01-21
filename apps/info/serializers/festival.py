@@ -1,14 +1,14 @@
 from rest_framework import serializers
 
 from apps.info.models import Festival
-from apps.info.serializers.volunteers import VolunteersSerializer
+from apps.info.serializers.volunteers import VolunteerInFestivalSerializer
 
 
 class FestivalSerializer(serializers.ModelSerializer):
     volunteers = serializers.SerializerMethodField()
 
     def get_volunteers(self, obj):
-        serializer = VolunteersSerializer
+        serializer = VolunteerInFestivalSerializer
         volunteers = obj.volunteers.all()
         return serializer(volunteers, many=True).data
 
