@@ -223,7 +223,7 @@ class Volunteer(BaseModel):
     festival = models.ForeignKey(
         Festival,
         on_delete=models.PROTECT,
-        related_name="volunteer",
+        related_name="volunteers",
         verbose_name="Фестиваль",
     )
     review_title = models.CharField(

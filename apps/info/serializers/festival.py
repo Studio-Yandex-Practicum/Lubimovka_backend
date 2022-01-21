@@ -9,7 +9,7 @@ class FestivalSerializer(serializers.ModelSerializer):
 
     def get_volunteers(self, obj):
         serializer = VolunteersSerializer
-        volunteers = obj.volunteer.all()
+        volunteers = obj.volunteers.all()
         return serializer(volunteers, many=True).data
 
     class Meta:

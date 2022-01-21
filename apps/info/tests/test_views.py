@@ -159,11 +159,11 @@ class TestAboutFestivalAPIViews:
         url = VOLUNTEERS_URL
         response = client.get(url)
         data = response.json()
-        for field in ("id", "year", "review_title", "review_text"):
-            team_field_in_response = data[0].get(field)
-            team_field_in_db = getattr(volunteer, field)
+        for field in ("id", "review_title", "review_text"):
+            volunteer_field_in_response = data[0].get(field)
+            volunteer_field_in_db = getattr(volunteer, field)
             assert (
-                team_field_in_response == team_field_in_db
+                volunteer_field_in_response == volunteer_field_in_db
             ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
 
     @pytest.mark.parametrize("url, object", ABOUT_FESTIVAL_URLS_AND_FIXTURES)
