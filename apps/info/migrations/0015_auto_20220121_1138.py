@@ -4,7 +4,7 @@ from django.db import migrations, models
 import django.db.models.deletion
 import random
 
-def distribute_volunteers_to_festivals(apps):
+def distribute_volunteers_to_festivals(apps, schema_editor):
     Volunteer = apps.get_model("info", "Volunteer")
     Festival = apps.get_model("info", "Festival")
 
