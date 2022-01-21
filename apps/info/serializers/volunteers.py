@@ -11,4 +11,3 @@ class VolunteersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Volunteer
         fields = ("id", "person", "year", "review_title", "review_text")
-        # exclude = ("created", "modified")
