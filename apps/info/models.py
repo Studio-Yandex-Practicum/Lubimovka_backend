@@ -57,6 +57,8 @@ class FestivalTeam(BaseModel):
         Person,
         on_delete=models.PROTECT,
         verbose_name="Человек",
+        blank=False,
+        null=True,
     )
     team = models.CharField(
         max_length=5,
@@ -82,6 +84,8 @@ class FestivalTeam(BaseModel):
         return f"{self.person.first_name} {self.person.last_name} - " f"{self.team}"
 
     def clean(self):
+        if not self.person:
+            raise ValidationError("Необходимо указать человека для создания команды фестиваля")
         if not self.person.email:
             raise ValidationError("Для члена команды необходимо указать email")
         if not self.person.city:
