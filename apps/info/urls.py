@@ -11,7 +11,6 @@ from apps.info.views import (
     SponsorsAPIView,
     VolunteersAPIView,
 )
-from apps.static_pages.views import StaticPagesView
 
 router = DefaultRouter()
 router.register("", PressReleaseViewSet, basename="press_release")
@@ -32,11 +31,6 @@ about_festival_urls = [
         "volunteers/",
         VolunteersAPIView.as_view(),
         name="volunteers",
-    ),
-    path(
-        "<slug:static_page_url>/",
-        StaticPagesView.as_view(),
-        name="static_page",
     ),
 ]
 

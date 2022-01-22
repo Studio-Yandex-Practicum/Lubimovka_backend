@@ -55,7 +55,6 @@ LOCAL_APPS = [
     "apps.library",
     "apps.articles",
     "apps.info",
-    "apps.static_pages",
     "apps.content_pages",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
