@@ -8,3 +8,4 @@ class FestivalTeamsAPIView(ListAPIView):
     queryset = FestivalTeam.objects.all()
     serializer_class = FestivalTeamsSerializer
     filterset_fields = ("team",)
+    pagination_class = None
