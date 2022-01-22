@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -40,7 +41,7 @@ class Play(BaseModel):
     year = models.PositiveSmallIntegerField(
         validators=[
             MinValueValidator(1990),
-            MaxValueValidator(timezone.now().year),
+            MaxValueValidator(2200),
         ],
         verbose_name="Год написания пьесы",
     )
@@ -87,3 +88,8 @@ class Play(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def clean(self):
+        if self.year > timezone.now().year:
+            raise ValidationError("Год написания пьесы не может быть больше текущего")
+        return super().clean()

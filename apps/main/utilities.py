@@ -1,8 +1,12 @@
-from datetime import date, timedelta
+from datetime import timedelta
+
+from django.utils import timezone
 
 from apps.afisha.models import Event
 from apps.articles.models import BlogItem, NewsItem
+from apps.core.constants import AFISHA_CURRENT_DAY_TITLE
 from apps.core.models import Setting
+from apps.core.utilities import get_russian_date
 from apps.info.models import Festival, Place
 from apps.library.models import Play, ProgramType
 from apps.main.models import Banner
@@ -43,24 +47,34 @@ class MainObject:
 
     def add_afisha(self):
         main_add_afisha = Setting.get_setting("main_add_afisha")
+        is_festival = Setting.get_setting("festival_status")
         if main_add_afisha:
             main_show_afisha_only_for_today = Setting.get_setting("main_show_afisha_only_for_today")
+
             if main_show_afisha_only_for_today:
-                today = date.today()
-                tomorrow = today + timedelta(days=1)
+                today = timezone.now()
+                tomorrow = today.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
                 items = Event.objects.filter(
                     date_time__range=(today, tomorrow),
                     pinned_on_main=True,
                 )
+                title = AFISHA_CURRENT_DAY_TITLE + get_russian_date(timezone.localdate())
             else:
-                items = Event.objects.filter(pinned_on_main=True)[:6]
-            title = Setting.get_setting("main_afisha_title")
-            description = Setting.get_setting("main_afisha_description")
-            button_label = Setting.get_setting("main_afisha_button_label")
+                items = (
+                    Event.objects.filter(date_time__gte=timezone.now())
+                    .filter(pinned_on_main=True)
+                    .order_by("date_time")[:6]
+                )
+                if is_festival:
+                    title = Setting.get_setting("afisha_title_festival")
+                else:
+                    title = Setting.get_setting("afisha_title_regular")
+
+            description = Setting.get_setting("afisha_description_regular")
+
             self.afisha = {
                 "title": title,
                 "description": description,
-                "button_label": button_label,
                 "items": items,
             }
 
