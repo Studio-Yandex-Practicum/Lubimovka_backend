@@ -7,4 +7,3 @@ from apps.info.serializers import SponsorSerializer
 class SponsorsAPIView(ListAPIView):
     queryset = Sponsor.objects.all()
     serializer_class = SponsorSerializer
-    pagination_class = None
