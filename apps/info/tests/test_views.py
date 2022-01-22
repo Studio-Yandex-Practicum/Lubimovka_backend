@@ -100,7 +100,7 @@ class TestAboutFestivalAPIViews:
     def test_objects_count_in_response_matches_count_in_db(self, client, url, objects):
         """Checks that count objects in response matches count in db for team, sponsor, volunteer."""
         response = client.get(url)
-        objects_count_in_response = len(response.json())
+        objects_count_in_response = len(response.json()["results"])
         objects_count_in_db = len(objects)
         assert (
             objects_count_in_db == objects_count_in_response
@@ -118,7 +118,7 @@ class TestAboutFestivalAPIViews:
         url = TEAMS_URL_FILTER + teams_filter
         response = client.get(url)
         count_teams_in_db = FestivalTeam.objects.filter(team=teams_filter).count()
-        count_teams_in_response = len(response.json())
+        count_teams_in_response = len(response.json()["results"])
         assert (
             count_teams_in_db == count_teams_in_response
         ), f"Проверьте, что при GET запросе {url} возвращаются только соответствующие объекты"
@@ -127,7 +127,7 @@ class TestAboutFestivalAPIViews:
         """Checks team field in response."""
         url = TEAMS_URL
         response = client.get(url)
-        data = response.json()
+        data = response.json()["results"]
         for field in (
             "id",
             "team",
@@ -143,7 +143,7 @@ class TestAboutFestivalAPIViews:
         """Checks sponsor field in response."""
         url = SPONSORS_URL
         response = client.get(url)
-        data = response.json()
+        data = response.json()["results"]
         for field in (
             "id",
             "position",
@@ -158,7 +158,7 @@ class TestAboutFestivalAPIViews:
         """Checks volunteer field in response."""
         url = VOLUNTEERS_URL
         response = client.get(url)
-        data = response.json()
+        data = response.json()["results"]
         for field in ("id", "year", "review_title", "review_text"):
             team_field_in_response = data[0].get(field)
             team_field_in_db = getattr(volunteer, field)
@@ -170,7 +170,7 @@ class TestAboutFestivalAPIViews:
     def test_get_fields_for_person(self, client, url, object):
         """Checks fields for person field for team, sponsor, volunteer."""
         response = client.get(url)
-        data = response.json()
+        data = response.json()["results"]
         for field in (
             "id",
             "first_name",
@@ -189,7 +189,7 @@ class TestAboutFestivalAPIViews:
     def test_get_image_for_person(self, client, url, object):
         """Checks image field in person for team, sponsor, volunteer."""
         response = client.get(url)
-        data = response.json()
+        data = response.json()["results"]
         image_url_in_response = data[0].get("person").get("image")
         image_url_in_db = object.person.image.url
         assert image_url_in_response.endswith(
