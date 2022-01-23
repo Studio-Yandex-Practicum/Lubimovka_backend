@@ -57,7 +57,7 @@ class FestivalTeam(BaseModel):
         Person,
         on_delete=models.PROTECT,
         verbose_name="Человек",
-        blank=False,
+        blank=True,
         null=True,
     )
     team = models.CharField(
