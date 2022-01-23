@@ -240,6 +240,12 @@ class Volunteer(BaseModel):
     class Meta:
         verbose_name = "Волонтёр фестиваля"
         verbose_name_plural = "Волонтёры фестиваля"
+        constraints = [
+            UniqueConstraint(
+                fields=["person", "festival"],
+                name="unique_volunteer",
+            )
+        ]
 
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - волонтёр фестиваля {self.festival.year} года"

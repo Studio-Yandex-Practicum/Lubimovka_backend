@@ -40,5 +40,9 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='volunteers', to='info.festival', verbose_name='Фестиваль'),
             preserve_default=False,
         ),
+        migrations.AddConstraint(
+            model_name='volunteer',
+            constraint=models.UniqueConstraint(fields=('person', 'festival'), name='unique_volunteer'),
+        ),
         migrations.RunPython(distribute_volunteers_to_festivals),
     ]
