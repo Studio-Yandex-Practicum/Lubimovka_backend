@@ -65,6 +65,7 @@ class Person(BaseModel):
         max_length=50,
         verbose_name="Город проживания",
         blank=True,
+        help_text="Обязательно указать для: членов команды, волонтёров.",
     )
     email = models.EmailField(
         max_length=200,
@@ -72,11 +73,13 @@ class Person(BaseModel):
         null=True,
         blank=True,
         unique=True,
+        help_text="Обязательно указать для: членов команды, волонтёров.",
     )
     image = models.ImageField(
         upload_to="images/person_avatars",
         verbose_name="Фотография",
         blank=True,
+        help_text="Обязательно указать для: членов команды, спонсоров и волонтёров.",
     )
 
     class Meta:
