@@ -100,11 +100,10 @@ class TestAboutFestivalAPIViews:
     def test_objects_count_in_response_matches_count_in_db(self, client, url, objects):
         """Checks that count objects in response matches count in db for team, sponsor, volunteer."""
         response = client.get(url)
-        objects_count_in_response = len(response.json())
+        objects_in_response = response.json()
+        count_objects = len(objects_in_response)
         objects_count_in_db = len(objects)
-        assert (
-            objects_count_in_db == objects_count_in_response
-        ), f"Проверьте, что при GET запросе {url} возвращаются все объекты"
+        assert objects_count_in_db == count_objects, f"Проверьте, что при GET запросе {url} возвращаются все объекты"
 
     @pytest.mark.parametrize(
         "teams_filter",
