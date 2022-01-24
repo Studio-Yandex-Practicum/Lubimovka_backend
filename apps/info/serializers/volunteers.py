@@ -6,7 +6,17 @@ from apps.info.serializers.person import PersonsSerializer
 
 class VolunteersSerializer(serializers.ModelSerializer):
     person = PersonsSerializer()
+    year = serializers.IntegerField(source="festival.year")
 
     class Meta:
         model = Volunteer
-        exclude = ("created", "modified")
+        fields = ("id", "person", "year", "review_title", "review_text")
+
+
+class VolunteerInFestivalSerializer(serializers.ModelSerializer):
+    person = serializers.IntegerField(source="person.id")
+    year = serializers.IntegerField(source="festival.year")
+
+    class Meta:
+        model = Volunteer
+        fields = ("id", "year", "review_title", "review_text", "person")

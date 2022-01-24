@@ -80,10 +80,11 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
 
 
 class VolunteerInline(admin.TabularInline):
-    model = Festival.volunteers.through
+    model = Volunteer
     verbose_name = "Волонтёр"
     verbose_name_plural = "Волонтёры"
     extra = 1
+    exclude = ("review_title", "review_text")
 
 
 class FestivalImagesInline(admin.TabularInline):
@@ -105,7 +106,6 @@ class FestivalAdmin(admin.ModelAdmin):
     exclude = (
         "teams",
         "sponsors",
-        "volunteers",
         "images",
     )
     empty_value_display = "-пусто-"
