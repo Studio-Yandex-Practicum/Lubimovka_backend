@@ -6,3 +6,10 @@ class YearPressReleaseFilterSet(FilterSet):
 
     class Meta:
         fields = ("year",)
+
+
+class YearVolunteerFilterSet(FilterSet):
+    year = filters.NumberFilter(field_name="festival__year")
+
+    class Meta:
+        fields = ("year",)
