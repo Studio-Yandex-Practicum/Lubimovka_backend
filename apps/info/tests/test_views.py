@@ -102,7 +102,7 @@ class TestAboutFestivalAPIViews:
         response = client.get(url)
         objects_in_response = response.json()
         count_objects = len(objects_in_response)
-        objects_count_in_db = len(objects)
+        objects_count_in_db = len(set(objects))
         assert objects_count_in_db == count_objects, f"Проверьте, что при GET запросе {url} возвращаются все объекты"
 
     @pytest.mark.parametrize(
