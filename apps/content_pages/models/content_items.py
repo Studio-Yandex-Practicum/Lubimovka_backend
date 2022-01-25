@@ -1,9 +1,5 @@
-import os
-
 from ckeditor.fields import RichTextField
 from django.db import models
-from django.db.models.signals import pre_delete
-from django.dispatch import receiver
 
 from apps.core.models import BaseModel
 
@@ -124,10 +120,3 @@ class Video(AbstractItemWithTitle):
     class Meta:
         verbose_name = "Видео"
         verbose_name_plural = "Видео"
-
-
-@receiver(pre_delete, sender=Image)
-def handle_deleted(sender, instance, **kwargs):
-    path_to_photo = instance.image.path
-    if os.path.exists(path_to_photo):
-        os.remove(path_to_photo)
