@@ -9,7 +9,7 @@ def name_validator(lastname):
     ФИО может быть написано с использованием букв русского и английского
     алфавита, тире и пробела (последние два - необязательны).
     """
-    pattern = r"(^[a-zA-Zа-яА-ЯёЁ]+[a-zA-Zа-яА-ЯёЁ\s-]*[a-zA-Zа-яА-ЯёЁ]+$)|(^[a-zA-Zа-яА-яёЁ]+$)"
+    pattern = r"^[a-zA-Zа-яА-ЯёЁ]+[a-zA-Zа-яА-ЯёЁ\s-]*[a-zA-Zа-яА-ЯёЁ]+$"
     match = re.match(pattern, lastname)
     if match is None:
         raise ValidationError(
