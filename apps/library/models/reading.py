@@ -22,7 +22,7 @@ class Reading(BaseModel):
     )
     persons = models.ManyToManyField(
         Person,
-        through="TeamMember",
+        through="TeamMemberReading",
         related_name="readings",
         verbose_name="Члены команды",
     )

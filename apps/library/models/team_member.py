@@ -17,14 +17,6 @@ class TeamMember(BaseModel):
         related_name="team_members",
         verbose_name="Спектакль",
     )
-    reading = models.ForeignKey(
-        Reading,
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
-        related_name="team_members",
-        verbose_name="Читка",
-    )
     masterclass = models.ForeignKey(
         MasterClass,
         null=True,
@@ -63,14 +55,6 @@ class TeamMember(BaseModel):
                 fields=(
                     "person",
                     "role",
-                    "reading",
-                ),
-                name="unique_person_role_per_reading",
-            ),
-            UniqueConstraint(
-                fields=(
-                    "person",
-                    "role",
                     "masterclass",
                 ),
                 name="unique_person_role_per_masterclass",
@@ -79,3 +63,41 @@ class TeamMember(BaseModel):
 
     def __str__(self):
         return f"{self.role} - {self.person.full_name}"
+
+
+class TeamMemberReading(BaseModel):
+    reading = models.ForeignKey(
+        Reading,
+        on_delete=models.CASCADE,
+        related_name="team_members",
+        verbose_name="Читка",
+    )
+    person = models.ForeignKey(
+        Person,
+        on_delete=models.PROTECT,
+        related_name="team_members_reading",
+        verbose_name="Член команды",
+    )
+    role = models.ManyToManyField(
+        "core.Role",
+        limit_choices_to={"types__role_type": "reading_role"},
+        related_name="team_members_reading",
+        verbose_name="Роль",
+    )
+
+    class Meta:
+        ordering = ("person",)
+        verbose_name = "Член команды читки"
+        verbose_name_plural = "Члены команды читки"
+        constraints = (
+            UniqueConstraint(
+                fields=(
+                    "person",
+                    "reading",
+                ),
+                name="unique_person_with_roles_per_reading",
+            ),
+        )
+
+    def __str__(self):
+        return self.person.full_name

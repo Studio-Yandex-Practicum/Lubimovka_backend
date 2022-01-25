@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.db import models
+from django.forms.widgets import CheckboxSelectMultiple
 
 from apps.core.models import Role
 from apps.library.forms import PerformanceAdminForm
@@ -17,6 +19,7 @@ from apps.library.models import (
     Reading,
     SocialNetworkLink,
     TeamMember,
+    TeamMemberReading,
 )
 
 
@@ -190,6 +193,21 @@ class TeamMemberInline(admin.TabularInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class TeamMemberReadingInline(admin.TabularInline):
+    model = TeamMemberReading
+    fields = (
+        "person",
+        "role",
+    )
+    extra = 1
+
+    def formfield_for_manytomany(self, db_field, request, **kwargs):
+        """Restricts role types for the model where inline is used."""
+        if db_field.name == "role":
+            kwargs["queryset"] = Role.objects.filter(types__role_type="reading_role")
+        return super().formfield_for_manytomany(db_field, request, **kwargs)
+
+
 class PerformanceAdmin(admin.ModelAdmin):
     exclude = ("events",)
     filter_horizontal = (
@@ -220,7 +238,7 @@ class ReadingAdmin(admin.ModelAdmin):
         "play__name",
         "name",
     )
-    inlines = (TeamMemberInline,)
+    inlines = (TeamMemberReadingInline,)
 
 
 class MasterClassAdmin(admin.ModelAdmin):
@@ -268,6 +286,14 @@ class TeamMemberAdmin(admin.ModelAdmin):
     search_fields = ("role",)
 
 
+class TeamMemberReadingAdmin(admin.ModelAdmin):
+    list_display = ("id", "person", "reading")
+    search_fields = ("person",)
+    formfield_overrides = {
+        models.ManyToManyField: {"widget": CheckboxSelectMultiple},
+    }
+
+
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
@@ -276,6 +302,7 @@ admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
 admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
 admin.site.register(TeamMember, TeamMemberAdmin)
+admin.site.register(TeamMemberReading, TeamMemberReadingAdmin)
 admin.site.register(SocialNetworkLink)
 admin.site.register(OtherPlay)
 admin.site.register(OtherLink)

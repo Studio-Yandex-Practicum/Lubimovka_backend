@@ -4,7 +4,7 @@ from .participation_application import ParticipationApplicationFestival
 from .performance import Performance, PerformanceMediaReview, PerformanceReview
 from .play import Play, ProgramType
 from .reading import Reading
-from .team_member import TeamMember
+from .team_member import TeamMember, TeamMemberReading
 
 __all__ = (
     Achievement,
@@ -21,4 +21,5 @@ __all__ = (
     Reading,
     SocialNetworkLink,
     TeamMember,
+    TeamMemberReading,
 )
