@@ -100,11 +100,10 @@ class TestAboutFestivalAPIViews:
     def test_objects_count_in_response_matches_count_in_db(self, client, url, objects):
         """Checks that count objects in response matches count in db for team, sponsor, volunteer."""
         response = client.get(url)
-        objects_count_in_response = len(response.json())
-        objects_count_in_db = len(objects)
-        assert (
-            objects_count_in_db == objects_count_in_response
-        ), f"Проверьте, что при GET запросе {url} возвращаются все объекты"
+        objects_in_response = response.json()
+        count_objects = len(objects_in_response)
+        objects_count_in_db = len(set(objects))
+        assert objects_count_in_db == count_objects, f"Проверьте, что при GET запросе {url} возвращаются все объекты"
 
     @pytest.mark.parametrize(
         "teams_filter",
@@ -159,11 +158,11 @@ class TestAboutFestivalAPIViews:
         url = VOLUNTEERS_URL
         response = client.get(url)
         data = response.json()
-        for field in ("id", "year", "review_title", "review_text"):
-            team_field_in_response = data[0].get(field)
-            team_field_in_db = getattr(volunteer, field)
+        for field in ("id", "review_title", "review_text"):
+            volunteer_field_in_response = data[0].get(field)
+            volunteer_field_in_db = getattr(volunteer, field)
             assert (
-                team_field_in_response == team_field_in_db
+                volunteer_field_in_response == volunteer_field_in_db
             ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
 
     @pytest.mark.parametrize("url, object", ABOUT_FESTIVAL_URLS_AND_FIXTURES)
