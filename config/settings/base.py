@@ -199,3 +199,17 @@ MARKDOWNX_MARKDOWN_EXTENSIONS = ("markdown.extensions.extra",)
 MARKDOWNX_MEDIA_PATH = "static_pages/"
 MARKDOWNX_URLS_PATH = "/admin/markdownx/markdownify/"
 MARKDOWNX_IMAGE_MAX_SIZE = {"size": (1000, 1000), "quality": 100}
+
+
+# Use CKEditor (Configuration)
+# ------------------------------------------------------------------------------
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Undo', 'Redo'],
+            ['Bold', 'Italic', 'Underline', 'Strike'],
+            ['Link', 'Unlink'],
+        ]
+    }
+}
