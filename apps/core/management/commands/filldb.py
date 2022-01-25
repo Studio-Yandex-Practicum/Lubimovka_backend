@@ -91,9 +91,6 @@ class Command(BaseCommand):
             sponsors = SponsorFactory.create_batch(50)
             notification(self, sponsors, "попечителей")
 
-            volunteers = VolunteerFactory.create_batch(50)
-            notification(self, volunteers, "волонтёров")
-
             teams = FestivalTeamFactory.create_batch(70)
             notification(self, teams, "членов команд")
 
@@ -102,6 +99,9 @@ class Command(BaseCommand):
 
             festivals = FestivalFactory.create_batch(10)
             notification(self, festivals, "фестивалей")
+
+            volunteers = VolunteerFactory.create_batch(50)
+            notification(self, volunteers, "волонтёров")
 
             press_releases = PressReleaseFactory.create_batch(10)
             notification(self, press_releases, "пресс-релизов")

@@ -44,14 +44,15 @@ class SponsorFactory(factory.django.DjangoModelFactory):
     position = factory.Faker("job", locale="ru_RU")
 
 
-@restrict_factory({"global": [Person]})
+@restrict_factory({"global": [Festival, Person]})
 class VolunteerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Volunteer
         django_get_or_create = ["person"]
+        django_get_or_create = ("festival",)
 
+    festival = factory.Iterator(Festival.objects.all())
     person = factory.Iterator(Person.objects.filter(email__isnull=False).exclude(image__exact=""))
-    year = factory.Faker("random_int", min=2018, max=2021, step=1)
     review_title = factory.Faker("text", max_nb_chars=50, locale="ru_RU")
     review_text = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
 
@@ -78,18 +79,6 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2021, step=1)
-
-    @factory.post_generation
-    def volunteers(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.volunteers.add(*extracted)
-        else:
-            volunteers_count = Volunteer.objects.count()
-            how_many = min(volunteers_count, random.randint(1, 7))
-            volunteers = Volunteer.objects.order_by("?")[:how_many]
-            self.volunteers.add(*volunteers)
 
     @factory.post_generation
     def images(self, create, extracted, **kwargs):
