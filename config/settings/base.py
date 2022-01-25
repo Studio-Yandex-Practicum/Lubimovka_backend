@@ -27,6 +27,8 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Application definition
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
+    'admin_interface',
+    'colorfield',
     "django.contrib.sites",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -199,3 +201,5 @@ MARKDOWNX_MARKDOWN_EXTENSIONS = ("markdown.extensions.extra",)
 MARKDOWNX_MEDIA_PATH = "static_pages/"
 MARKDOWNX_URLS_PATH = "/admin/markdownx/markdownify/"
 MARKDOWNX_IMAGE_MAX_SIZE = {"size": (1000, 1000), "quality": 100}
+
+X_FRAME_OPTIONS='SAMEORIGIN'

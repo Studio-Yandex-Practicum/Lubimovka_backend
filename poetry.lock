@@ -178,6 +178,20 @@ argon2 = ["argon2-cffi (>=19.1.0)"]
 bcrypt = ["bcrypt"]
 
 [[package]]
+name = "django-admin-interface"
+version = "0.18.5"
+description = "django-admin-interface is a modern responsive flat admin interface customizable by the admin itself."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+django-colorfield = ">=0.2,<1.0"
+django-flat-responsive = ">=1.0,<3.0"
+django-flat-theme = ">=1.0,<2.0"
+six = ">=1.9.0,<2.0.0"
+
+[[package]]
 name = "django-admin-sortable2"
 version = "1.0.3"
 description = "Generic drag-and-drop sorting for the List, the Stacked- and the Tabular-Inlines Views in the Django Admin"
@@ -215,6 +229,17 @@ python-versions = "*"
 
 [package.dependencies]
 django-js-asset = ">=1.2.2"
+
+[[package]]
+name = "django-colorfield"
+version = "0.6.3"
+description = "simple color field for your models with a nice color-picker in the admin-interface."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+Pillow = ">=5.0"
 
 [[package]]
 name = "django-cors-headers"
@@ -273,6 +298,22 @@ python-versions = ">=3.5"
 
 [package.dependencies]
 Django = ">=2.2"
+
+[[package]]
+name = "django-flat-responsive"
+version = "2.0"
+description = "An extension for Django admin that makes interface mobile friendly."
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
+name = "django-flat-theme"
+version = "1.1.4"
+description = "A flat theme for Django admin interface. Modern, fresh, simple."
+category = "main"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "django-js-asset"
@@ -1116,7 +1157,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "c7189a7bf27e23dfe2ce914a0ed5ea788c47d3d273e29bba1120241b27f901d2"
+content-hash = "b18541b3b593c22856ff99f2ef4a68f2cc43ca2d9d396f1e3f6024ca2a8a34ba"
 
 [metadata.files]
 appnope = [
@@ -1234,6 +1275,10 @@ django = [
     {file = "Django-3.2.11-py3-none-any.whl", hash = "sha256:0a0a37f0b93aef30c4bf3a839c187e1175bcdeb7e177341da0cb7b8194416891"},
     {file = "Django-3.2.11.tar.gz", hash = "sha256:69c94abe5d6b1b088bf475e09b7b74403f943e34da107e798465d2045da27e75"},
 ]
+django-admin-interface = [
+    {file = "django-admin-interface-0.18.5.tar.gz", hash = "sha256:b9cbedcab524935dca71637f0eb4979182d36c2089c99567826248f57713833b"},
+    {file = "django_admin_interface-0.18.5-py3-none-any.whl", hash = "sha256:b9cc4344a724681c09380a9042331bd2481bf506955cafcfda04425bdcb09e39"},
+]
 django-admin-sortable2 = [
     {file = "django-admin-sortable2-1.0.3.tar.gz", hash = "sha256:fbc193dbb169d9e05c1325e567158e4da7568b6d121d149f6665e692fafc7857"},
     {file = "django_admin_sortable2-1.0.3-py3-none-any.whl", hash = "sha256:40a9942317d66db2c5cee289d284754ae3f95470143f4914afa06fb864d38fb4"},
@@ -1245,6 +1290,10 @@ django-anymail = [
 django-ckeditor = [
     {file = "django-ckeditor-6.2.0.tar.gz", hash = "sha256:df64dc9e62790ef824f609605d31be847bdbce1cc7aa94e49bd5ca60d7aa79bb"},
     {file = "django_ckeditor-6.2.0-py2.py3-none-any.whl", hash = "sha256:9f66420907e41f5b4e698fa5671a00a86995776735f2c4696174aed4640fcbd8"},
+]
+django-colorfield = [
+    {file = "django-colorfield-0.6.3.tar.gz", hash = "sha256:441172f8c6024f70b01e3f63195fe83afc554387b34ad999880e86fde989e5af"},
+    {file = "django_colorfield-0.6.3-py3-none-any.whl", hash = "sha256:97625246fb5c4f4a17c9d83b2406a3c98dd9545c40c47741a7b62f7284609910"},
 ]
 django-cors-headers = [
     {file = "django-cors-headers-3.11.0.tar.gz", hash = "sha256:eb98389bf7a2afc5d374806af4a9149697e3a6955b5a2dc2bf049f7d33647456"},
@@ -1265,6 +1314,12 @@ django-extensions = [
 django-filter = [
     {file = "django-filter-2.4.0.tar.gz", hash = "sha256:84e9d5bb93f237e451db814ed422a3a625751cbc9968b484ecc74964a8696b06"},
     {file = "django_filter-2.4.0-py3-none-any.whl", hash = "sha256:e00d32cebdb3d54273c48f4f878f898dced8d5dfaad009438fe61ebdf535ace1"},
+]
+django-flat-responsive = [
+    {file = "django-flat-responsive-2.0.tar.gz", hash = "sha256:451caa2700c541b52fb7ce2d34d3d8dee9e980cf29f5463bc8a8c6256a1a6474"},
+]
+django-flat-theme = [
+    {file = "django-flat-theme-1.1.4.tar.gz", hash = "sha256:6b522d8c2b5a8228b30947fb002eff2868da076e9beacf3e798410e5c1a2d849"},
 ]
 django-js-asset = [
     {file = "django-js-asset-1.2.2.tar.gz", hash = "sha256:c163ae80d2e0b22d8fb598047cd0dcef31f81830e127cfecae278ad574167260"},

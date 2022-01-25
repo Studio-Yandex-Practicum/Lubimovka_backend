@@ -5,12 +5,16 @@ attrs==21.4.0; python_version >= "3.7" and python_full_version < "3.0.0" or pyth
 certifi==2021.10.8; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.5"
 charset-normalizer==2.0.10; python_full_version >= "3.6.0" and python_version >= "3.5"
 colorama==0.4.4; python_version >= "3.6" and python_full_version < "3.0.0" and sys_platform == "win32" or sys_platform == "win32" and python_version >= "3.6" and python_full_version >= "3.5.0"
+django-admin-interface==0.18.5
 django-admin-sortable2==1.0.3
 django-anymail==8.5; python_version >= "3.5"
 django-ckeditor==6.2.0
+django-colorfield==0.6.3
 django-cors-headers==3.11.0; python_version >= "3.7"
 django-environ==0.7.0; python_version >= "3.4" and python_version < "4"
 django-filter==2.4.0; python_version >= "3.5"
+django-flat-responsive==2.0
+django-flat-theme==1.1.4
 django-js-asset==1.2.2
 django-markdownx==3.0.1
 django-phonenumber-field==5.2.0; python_version >= "3.6"
