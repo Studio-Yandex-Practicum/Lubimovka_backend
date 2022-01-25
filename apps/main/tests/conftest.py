@@ -1,12 +1,16 @@
+from datetime import timedelta
+
 import pytest
 from django.urls import reverse
+from django.utils import timezone
 
+from apps.afisha.tests.factories import EventFactory
 from apps.articles.tests.factories.blog_factory import BlogFactory
 from apps.articles.tests.factories.news_factory import NewsFactory
 from apps.content_pages.tests.factories import ImageForContentFactory, ImagesBlockFactory
 from apps.core.tests.factories import PersonFactory
 from apps.info.tests.factories import FestivalFactory, PlaceFactory
-from apps.library.tests.factories import PlayFactory
+from apps.library.tests.factories import MasterClassFactory, PerformanceFactory, PlayFactory, ReadingFactory
 from apps.main.tests.factories import BannerFactory
 
 MAIN_URL = reverse("main:main_page")
@@ -14,7 +18,7 @@ MAIN_URL = reverse("main:main_page")
 
 @pytest.fixture
 def images_for_content():
-    PersonFactory.create_batch(3)
+    PersonFactory.create_batch(6)
     return ImageForContentFactory.create_batch(2)
 
 
@@ -68,3 +72,28 @@ def blog():
 @pytest.fixture
 def places():
     return list(PlaceFactory.create_batch(3))
+
+
+@pytest.fixture
+def person():
+    return list(PersonFactory.create_batch(3))
+
+
+@pytest.fixture
+def master_class(person):
+    return list(MasterClassFactory.create_batch(1))
+
+
+@pytest.fixture
+def reading(plays, person):
+    return list(ReadingFactory.create_batch(1))
+
+
+@pytest.fixture
+def performance(plays, person):
+    return list(PerformanceFactory.create_batch(1))
+
+
+@pytest.fixture
+def events(reading, performance, master_class):
+    return list(EventFactory(date_time=timezone.now() + timedelta(hours=1)) for _ in range(4))

@@ -2,6 +2,7 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
+from apps.afisha.tests.factories import EventFactory
 from apps.content_pages.tests.factories import ImageForContentFactory, VideoFactory
 from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
 from apps.info.tests.factories import (
@@ -148,6 +149,9 @@ class Command(BaseCommand):
 
             places = PlaceFactory.create_batch(3)
             notification(self, places, "мест")
+
+            events = EventFactory.create_batch(10)
+            notification(self, events, "событий")
 
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))
