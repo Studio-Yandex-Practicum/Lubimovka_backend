@@ -77,9 +77,9 @@ class Command(BaseCommand):
             editors_permissions = list(editors_permissions)
             admin_permissions = list(Permission.objects.all())
 
-            admin = Group.objects.get(name="admin")
+            admin, created = Group.objects.get_or_create(name="admin")
             admin.permissions.set(admin_permissions)
-            editor = Group.objects.get(name="editor")
+            editor, created = Group.objects.get_or_create(name="editor")
             editor.permissions.set(editors_permissions)
             self.stdout.write(self.style.SUCCESS("Права для пользователей успешно установлены."))
         except CommandError:

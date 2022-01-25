@@ -1,3 +1,14 @@
+EVENT_BODY = {
+    "id": 0,
+    "name": "string",
+    "description": "string",
+    "team": [
+        {"name": "string", "persons": ["string"]},
+    ],
+    "image": "string",
+    "project_title": "string",
+}
+
 SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR = {
     "count": 123,
     "next": "http://api.example.org/accounts/?limit=20&offset=10",
@@ -8,7 +19,7 @@ SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR = {
         {
             "id": 0,
             "type": "PERFORMANCE",
-            "event_body": "string",
+            "event_body": EVENT_BODY,
             "date_time": "2022-01-15T22:33:39.049Z",
             "paid": True,
             "pinned_on_main": False,
@@ -18,7 +29,7 @@ SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR = {
         {
             "id": 1,
             "type": "READING",
-            "event_body": "string",
+            "event_body": EVENT_BODY,
             "date_time": "2022-01-15T22:33:39.049Z",
             "paid": False,
             "pinned_on_main": True,
@@ -28,7 +39,7 @@ SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR = {
         {
             "id": 0,
             "type": "MASTERCLASS",
-            "event_body": "string",
+            "event_body": EVENT_BODY,
             "date_time": "2022-01-15T22:33:39.049Z",
             "paid": True,
             "pinned_on_main": True,
@@ -50,7 +61,7 @@ SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_FESTIVAL = {
         {
             "id": 0,
             "type": "PERFORMANCE",
-            "event_body": "string",
+            "event_body": EVENT_BODY,
             "date_time": "2022-01-15T22:33:39.049Z",
             "paid": True,
             "pinned_on_main": False,
@@ -60,7 +71,7 @@ SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_FESTIVAL = {
         {
             "id": 1,
             "type": "READING",
-            "event_body": "string",
+            "event_body": EVENT_BODY,
             "date_time": "2022-01-15T22:33:39.049Z",
             "paid": False,
             "pinned_on_main": True,
@@ -70,7 +81,7 @@ SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_FESTIVAL = {
         {
             "id": 0,
             "type": "MASTERCLASS",
-            "event_body": "string",
+            "event_body": EVENT_BODY,
             "date_time": "2022-01-15T22:33:39.049Z",
             "paid": True,
             "pinned_on_main": True,
