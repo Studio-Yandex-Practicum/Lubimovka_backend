@@ -44,10 +44,6 @@ api_schema_patterns = [
 
 urlpatterns = [
     path(
-        route="admin/markdownx/",
-        view=include("markdownx.urls"),
-    ),
-    path(
         route="admin/",
         view=admin.site.urls,
     ),
