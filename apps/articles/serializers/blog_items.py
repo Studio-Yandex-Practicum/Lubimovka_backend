@@ -1,39 +1,25 @@
 from django.db.models.query import Prefetch
-from drf_spectacular.utils import extend_schema_field
+from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
-from apps.articles.models import BlogItem, BlogPerson
+from apps.articles.models import BlogItem
+from apps.articles.schema.schema_extension import SUCCESS_MESSAGE_FOR_BLOG_ITEM_DETAIL_FOR_200
 from apps.articles.services import get_latest_four_published_items_data
 from apps.content_pages.serializers import BaseContentPageSerializer
 from apps.core.models import Role
 
 
-class BlogPersonSerializer(serializers.ModelSerializer):
-    id = serializers.SlugRelatedField(
-        source="person",
-        slug_field="id",
-        read_only=True,
-    )
-    full_name = serializers.SlugRelatedField(
-        source="person",
-        slug_field="full_name",
-        read_only=True,
-    )
-
-    class Meta:
-        model = BlogPerson
-        fields = (
-            "id",
-            "full_name",
-        )
-
-
 class RoleSerializer(serializers.ModelSerializer):
-    persons = BlogPersonSerializer(
-        source="blog_persons",
-        read_only=True,
-        many=True,
-    )
+
+    persons = serializers.SerializerMethodField()
+
+    def get_persons(self, obj):
+
+        persons = []
+
+        for team_member in obj.blog_persons.all():
+            persons.append(team_member.person.full_name)
+        return persons
 
     class Meta:
         model = Role
@@ -62,6 +48,16 @@ class BlogItemListSerializer(BlogItemBaseSerializer):
     pass
 
 
+@extend_schema_serializer(
+    examples=[
+        OpenApiExample(
+            name="Schema for blog item detail",
+            value=SUCCESS_MESSAGE_FOR_BLOG_ITEM_DETAIL_FOR_200,
+            request_only=False,
+            response_only=True,
+        ),
+    ],
+)
 class BlogItemDetailedSerializer(
     BaseContentPageSerializer,
     serializers.ModelSerializer,
@@ -69,7 +65,6 @@ class BlogItemDetailedSerializer(
     other_blogs = serializers.SerializerMethodField()
     team = serializers.SerializerMethodField()
 
-    @extend_schema_field(BlogItemBaseSerializer(many=True))
     def get_other_blogs(self, obj):
         """Return latest four `BlogItem` except the object itself."""
         serialized_data = get_latest_four_published_items_data(
@@ -78,7 +73,6 @@ class BlogItemDetailedSerializer(
         )
         return serialized_data
 
-    @extend_schema_field(RoleSerializer(many=True))
     def get_team(self, obj):
         """Make `team` serialized data based on `roles` and `blog_persons`.
 
@@ -88,14 +82,8 @@ class BlogItemDetailedSerializer(
                 "name": "Переводчик",
                 "slug": "translator",
                 "persons": [
-                    {
-                        "id": 6,
-                        "full_name": "Творимир Алексеев"
-                    },
-                    {
-                        "id": 47,
-                        "full_name": "Раиса Авдеева"
-                    }
+                    "Каллистрат Абрамов",
+                    "Александра Авдеева"
             },
             {
                 ...

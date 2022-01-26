@@ -73,9 +73,9 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_videosblock")
                 | Q(codename__endswith="_volunteer")
             )
-            admin = Group.objects.get(name="admin")
+            admin, created = Group.objects.get_or_create(name="admin")
             admin.permissions.add(*Permission.objects.all())
-            editor = Group.objects.get(name="editor")
+            editor, created = Group.objects.get_or_create(name="editor")
             editor.permissions.add(*editors_permissions)
             self.stdout.write(self.style.SUCCESS("Права для пользователей успешно установлены."))
         except CommandError:

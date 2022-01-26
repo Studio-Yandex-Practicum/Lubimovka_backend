@@ -127,7 +127,7 @@ class Sponsor(BaseModel):
 
 class Place(BaseModel):
     name = models.CharField(max_length=50, verbose_name="Название")
-    description = models.CharField(max_length=255, verbose_name="Описание")
+    description = models.TextField(max_length=255, verbose_name="Описание")
     city = models.CharField(max_length=50, verbose_name="Город")
     address = models.CharField(max_length=50, verbose_name="Адрес")
     map_link = models.URLField(verbose_name="Ссылка на карту")
