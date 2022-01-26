@@ -20,7 +20,7 @@ class BannerFactory(factory.django.DjangoModelFactory):
     id = factory.Iterator(range(3))
     title = factory.Faker("sentence", nb_words=6, locale="ru_RU")
     description = factory.Faker("sentence", nb_words=16, locale="ru_RU")
-    url = factory.Faker("uri")
+    url = factory.Faker("url")
     image = factory.django.ImageField(color=factory.Faker("color"))
     button = factory.Iterator(Banner.ButtonType.values)
 

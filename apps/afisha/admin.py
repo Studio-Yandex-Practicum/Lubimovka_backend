@@ -21,6 +21,7 @@ class EventAdmin(admin.ModelAdmin):
         "paid",
         "pinned_on_main",
     )
+    fields = ("common_event", "date_time", "paid", "url", "place", "pinned_on_main")
     list_filter = ("type",)
     empty_value_display = "-пусто-"
 
