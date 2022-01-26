@@ -167,7 +167,7 @@ class OtherPlay(BaseModel):
         verbose_name="Автор",
     )
     name = models.CharField(
-        max_length=40,
+        max_length=70,
         verbose_name="Название",
     )
     link = models.URLField(

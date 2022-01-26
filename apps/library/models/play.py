@@ -30,7 +30,7 @@ class ProgramType(BaseModel):
 
 class Play(BaseModel):
     name = models.CharField(
-        max_length=200,
+        max_length=70,
         unique=True,
         verbose_name="Название пьесы",
     )
