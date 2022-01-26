@@ -74,8 +74,7 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_videosblock")
                 | Q(codename__endswith="_volunteer")
             )
-            editors_permissions = list(editors_permissions)
-            admin_permissions = list(Permission.objects.all())
+            admin_permissions = Permission.objects.all()
 
             admin, created = Group.objects.get_or_create(name="admin")
             admin.permissions.set(admin_permissions)
