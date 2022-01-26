@@ -58,6 +58,7 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_role")
                 | Q(codename__endswith="_roletype")
                 | Q(codename__endswith="_setting")
+                | Q(codename__endswith="_settingafishascreen")
                 | Q(codename__endswith="_settingemail")
                 | Q(codename__endswith="_settingfirstscreen")
                 | Q(codename__endswith="_settinggeneral")
@@ -73,10 +74,12 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_videosblock")
                 | Q(codename__endswith="_volunteer")
             )
+            admin_permissions = Permission.objects.all()
+
             admin, created = Group.objects.get_or_create(name="admin")
-            admin.permissions.add(*Permission.objects.all())
+            admin.permissions.set(admin_permissions)
             editor, created = Group.objects.get_or_create(name="editor")
-            editor.permissions.add(*editors_permissions)
+            editor.permissions.set(editors_permissions)
             self.stdout.write(self.style.SUCCESS("Права для пользователей успешно установлены."))
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка установки прав."))
