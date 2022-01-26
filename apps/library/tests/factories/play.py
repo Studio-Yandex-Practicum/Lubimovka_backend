@@ -39,3 +39,4 @@ class PlayFactory(factory.django.DjangoModelFactory):
     url_reading = factory.LazyAttribute(lambda obj: f"www.plays-reading/{obj.name}")
     program = factory.Iterator(ProgramType.objects.all())
     festival = factory.Iterator(Festival.objects.all())
+    is_draft = factory.Faker("boolean", chance_of_getting_true=25)
