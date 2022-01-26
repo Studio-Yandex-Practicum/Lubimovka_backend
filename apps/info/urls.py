@@ -10,7 +10,6 @@ from apps.info.views import (
     SponsorsAPIView,
     VolunteersAPIView,
 )
-from apps.static_pages.views import StaticPagesView
 
 press_release = PressReleaseViewSet.as_view({"get": "retrieve"})
 press_release_years = PressReleaseViewSet.as_view({"get": "get_press_release_years"})
@@ -32,11 +31,6 @@ about_festival_urls = [
         "volunteers/",
         VolunteersAPIView.as_view(),
         name="volunteers",
-    ),
-    path(
-        "<slug:static_page_url>/",
-        StaticPagesView.as_view(),
-        name="static_page",
     ),
 ]
 
