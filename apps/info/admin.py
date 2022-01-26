@@ -140,11 +140,21 @@ class PressRealeaseAdmin(admin.ModelAdmin):
     search_fields = ("title",)
 
 
+class FestivalTeamAdmin(admin.ModelAdmin):
+    list_display = (
+        "person",
+        "team",
+        "position",
+    )
+    list_filter = ("team",)
+    search_fields = ("position", "person__first_name", "person__last_name")
+
+
 admin.site.register(Festival, FestivalAdmin)
 admin.site.register(PressRelease, PressReleaseAdmin)
 admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)
-admin.site.register(FestivalTeam)
+admin.site.register(FestivalTeam, FestivalTeamAdmin)
 admin.site.register(Volunteer)
 admin.site.register(Sponsor)
