@@ -1,5 +1,4 @@
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
 from apps.info.views import (
     FestivalAPIView,
@@ -13,8 +12,9 @@ from apps.info.views import (
 )
 from apps.static_pages.views import StaticPagesView
 
-router = DefaultRouter()
-router.register("", PressReleaseViewSet, basename="press_release")
+press_release = PressReleaseViewSet.as_view({"get": "retrieve"})
+press_release_years = PressReleaseViewSet.as_view({"get": "get_press_release_years"})
+press_release_download = PressReleaseViewSet.as_view({"get": "download_press_release"})
 
 
 about_festival_urls = [
@@ -65,7 +65,21 @@ info_urls = [
         QuestionCreateAPIView.as_view(),
         name="questions",
     ),
-    path("press-releases/", include(router.urls)),
+    path(
+        "press-releases/<int:festival__year>/",
+        press_release,
+        name="press-releases",
+    ),
+    path(
+        "press-releases/years/",
+        press_release_years,
+        name="press-releases_years",
+    ),
+    path(
+        "press-releases/<int:festival__year>/download/",
+        press_release_download,
+        name="press-releases_download",
+    ),
 ]
 
 app_prefix = [
