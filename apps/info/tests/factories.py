@@ -10,7 +10,6 @@ from apps.core.models import Image, Person
 from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
 
 fake = Faker(locale="en_US")
-fake_rus = Faker(locale="ru_RU")
 
 
 class PartnerFactory(factory.django.DjangoModelFactory):
