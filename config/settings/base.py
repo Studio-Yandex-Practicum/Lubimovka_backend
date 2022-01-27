@@ -186,6 +186,7 @@ EMAIL_TIMEOUT = 5
 CKEDITOR_CONFIGS = {
     'default': {
         "removePlugins": "elementspath",
+        "removeDialogTabs": 'dialog:advanced',
         'toolbar': 'Custom',
         'toolbar_Custom': [
             ['Undo', 'Redo'],
