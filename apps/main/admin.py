@@ -7,7 +7,6 @@ from apps.main.models import Banner, SettingAfishaScreen, SettingEmail, SettingF
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "title",
         "description",
         "url",

@@ -55,10 +55,7 @@ class PlayAdmin(admin.ModelAdmin):
 
 
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "tag",
-    )
+    list_display = ("tag",)
 
 
 class AchievementInline(admin.TabularInline):
@@ -92,7 +89,6 @@ class OtherPlayInline(admin.StackedInline):
 
 class AuthorAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "person",
         "quote",
         "biography",
@@ -240,7 +236,6 @@ class MasterClassAdmin(admin.ModelAdmin):
 
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "verified",
         "title",
         "first_name",
