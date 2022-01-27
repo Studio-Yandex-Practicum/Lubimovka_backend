@@ -259,15 +259,6 @@ class ParticipationAdmin(admin.ModelAdmin):
     )
 
 
-class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "person",
-        "role",
-    )
-    search_fields = ("role",)
-
-
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
@@ -275,7 +266,6 @@ admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
 admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
-admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(SocialNetworkLink)
 admin.site.register(OtherPlay)
 admin.site.register(OtherLink)
