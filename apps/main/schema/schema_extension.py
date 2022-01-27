@@ -10,7 +10,12 @@ MAIN_SCHEMA_DESCRIPTION = """
 
 
 MAIN_SCHEMA_SUCCESS_MESSAGE_FESTIVAL = {
-    "first_screen": {"title": "string", "url_title": "string", "url": "string"},
+    "first_screen": {
+        "title": "string",
+        "url_title": "string",
+        "url": "string",
+        "image": "string",
+    },
     "blog": {
         "title": "string",
         "items": [

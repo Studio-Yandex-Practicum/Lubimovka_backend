@@ -19,10 +19,12 @@ class MainObject:
             title = Setting.get_setting("main_first_screen_title")
             url_title = Setting.get_setting("main_first_screen_url_title")
             url = Setting.get_setting("main_first_screen_url")
+            image = Setting.get_setting("main_first_screen_image")
             self.first_screen = {
                 "title": title,
                 "url_title": url_title,
                 "url": url,
+                "image": image,
             }
 
     def add_blog_data(self):
