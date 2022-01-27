@@ -3,7 +3,7 @@ from faker import Faker
 
 from apps.core.decorators import restrict_factory
 from apps.core.tests.factories import PersonFactory
-from apps.library.models import Achievement, Author, OtherLink, OtherPlay, Play, SocialNetworkLink
+from apps.library.models import Achievement, Author, OtherLink, OtherPlay, Play, Publications, SocialNetworkLink
 
 fake = Faker("ru_RU")
 
@@ -52,6 +52,24 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
 
 
 @restrict_factory({"global": [Author]})
+class PublicationsFactory(factory.django.DjangoModelFactory):
+    """
+    Create Publication object.
+
+    You should create at least one Author before use this factory.
+    """
+
+    class Meta:
+        model = Publications
+
+    author = factory.Iterator(Author.objects.all())
+    name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
+    link = factory.Faker("url")
+    is_pinned = factory.Faker("pybool")
+    order_number = factory.Sequence(lambda x: x)
+
+
+@restrict_factory({"global": [Author]})
 class OtherPlayFactory(factory.django.DjangoModelFactory):
     """
     Create OtherPlay object.
@@ -78,10 +96,12 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         - biography;
         - plays.
     For other fields, use arguments:
-        - add_several_achievement;
-        - add_several_social_network_link;
-        - add_several_other_link;
-        - add_several_other_play;
+        - add_achievement,
+        - add_social_network_link,
+        - add_other_link,
+        - add_other_play,
+        - plays__num=<int>,
+        - add_publication.
     For creation object with fully populated fields use complex_create method.
     """
 
@@ -180,6 +200,21 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         plays = Play.objects.order_by("?")[:how_many]
         self.plays.add(*plays)
 
+    @factory.post_generation
+    def add_publication(self, created, count, **kwargs):
+        """
+        Create a Publication object.
+
+        Add it to publication field for Author.
+        To use "add_publication=<int>" - it will add
+        specified count of publications.
+        """
+        if not created:
+            return
+        if count:
+            publications_count = count
+            PublicationsFactory.create_batch(publications_count, author=self)
+
     @classmethod
     def complex_create(cls):
         """
@@ -194,4 +229,5 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             add_other_link=3,
             add_other_play=3,
             plays__num=3,
+            add_publication=4,
         )

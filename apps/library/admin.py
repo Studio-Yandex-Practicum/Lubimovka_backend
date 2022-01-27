@@ -14,6 +14,7 @@ from apps.library.models import (
     PerformanceReview,
     Play,
     ProgramType,
+    Publications,
     Reading,
     SocialNetworkLink,
     TeamMember,
@@ -90,6 +91,11 @@ class OtherPlayInline(admin.StackedInline):
     extra = 1
 
 
+class PublicationsInline(admin.TabularInline):
+    model = Publications
+    extra = 1
+
+
 class AuthorAdmin(admin.ModelAdmin):
     list_display = (
         "id",
@@ -100,6 +106,7 @@ class AuthorAdmin(admin.ModelAdmin):
     inlines = (
         AchievementInline,
         PlayInline,
+        PublicationsInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
         OtherPlayInline,

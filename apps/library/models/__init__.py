@@ -1,4 +1,4 @@
-from .author import Achievement, Author, OtherLink, OtherPlay, SocialNetworkLink
+from .author import Achievement, Author, OtherLink, OtherPlay, Publications, SocialNetworkLink
 from .master_class import MasterClass
 from .participation_application import ParticipationApplicationFestival
 from .performance import Performance, PerformanceMediaReview, PerformanceReview
@@ -18,6 +18,7 @@ __all__ = (
     PerformanceReview,
     Play,
     ProgramType,
+    Publications,
     Reading,
     SocialNetworkLink,
     TeamMember,

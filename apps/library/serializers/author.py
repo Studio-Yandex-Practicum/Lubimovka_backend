@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.library.models import Author, OtherLink, OtherPlay, SocialNetworkLink
+from apps.library.models import Author, OtherLink, OtherPlay, Publications, SocialNetworkLink
 
 from .play import PlaySerializer
 
@@ -25,6 +25,17 @@ class OtherPlayLinksSerializer(serializers.ModelSerializer):
         )
 
 
+class PublicationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Publications
+        fields = (
+            "name",
+            "link",
+            "is_pinned",
+            "order_number",
+        )
+
+
 class SocialNetworkSerializer(serializers.ModelSerializer):
     class Meta:
         model = SocialNetworkLink
@@ -42,6 +53,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
     email = serializers.SlugRelatedField(source="person", slug_field="email", read_only=True)
     other_links = OtherLinkSerializer(many=True)
     plays = PlaySerializer(many=True)
+    publications = PublicationsSerializer(many=True)
     other_plays = OtherPlayLinksSerializer(many=True)
     image = serializers.ImageField()
 
@@ -58,6 +70,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
             "email",
             "other_links",
             "plays",
+            "publications",
             "other_plays",
             "image",
         )

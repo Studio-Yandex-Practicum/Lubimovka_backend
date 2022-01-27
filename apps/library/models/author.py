@@ -144,7 +144,7 @@ class OtherLink(BaseModel):
     class Meta:
         ordering = ("order_number",)
         verbose_name = "Ссылка на сторонний ресурс"
-        verbose_name_plural = "Ссылки на стороннии ресурсы"
+        verbose_name_plural = "Ссылки на сторонние ресурсы"
         constraints = (
             models.UniqueConstraint(
                 fields=(
@@ -152,6 +152,48 @@ class OtherLink(BaseModel):
                     "name",
                 ),
                 name="unique_link",
+            ),
+        )
+
+    def __str__(self):
+        return self.name
+
+
+class Publications(BaseModel):
+    author = models.ForeignKey(
+        Author,
+        related_name="publications",
+        on_delete=models.CASCADE,
+        verbose_name="Автор",
+    )
+    name = models.CharField(
+        max_length=200,
+        verbose_name="Название",
+    )
+    link = models.URLField(
+        max_length=500,
+        verbose_name="Ссылка",
+    )
+    is_pinned = models.BooleanField(
+        verbose_name="Закрепить ссылку",
+        help_text="Закрепить ссылку вверху страницы?",
+    )
+    order_number = models.PositiveSmallIntegerField(
+        verbose_name="Порядковый номер",
+        help_text="Указывается для формирования порядка вывода информации",
+    )
+
+    class Meta:
+        ordering = ("order_number",)
+        verbose_name = "Публикации и прочие материалы"
+        verbose_name_plural = "Публикации и прочие материалы"
+        constraints = (
+            models.UniqueConstraint(
+                fields=(
+                    "author",
+                    "name",
+                ),
+                name="unique_publication",
             ),
         )
 
