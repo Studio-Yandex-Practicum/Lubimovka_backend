@@ -27,6 +27,7 @@ class Author(BaseModel):
         Person,
         on_delete=models.CASCADE,
         verbose_name="Человек",
+        related_name="authors",
     )
     quote = models.CharField(
         max_length=200,
