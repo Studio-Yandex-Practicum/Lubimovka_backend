@@ -20,7 +20,7 @@ class TestMainAPIViews:
 
     def test_get_main_first_screen_fields(self, client):
         """Checks data["first_screen"] fields in response."""
-        fields = ["title", "url_title", "url"]
+        fields = ["title", "url_title", "url", "image"]
         response = client.get(MAIN_URL)
         for field in fields:
             assert (
