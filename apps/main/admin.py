@@ -48,7 +48,6 @@ class SettingAdmin(admin.ModelAdmin):
             "settings_key",
             "field_type",
             "group",
-            "image",
             field_for_setting_value,
         )
 
