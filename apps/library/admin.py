@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.core.models import Role
+from apps.core.models import Person, Role
 from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
@@ -112,6 +112,11 @@ class AuthorAdmin(admin.ModelAdmin):
         "other_plays_links",
     )
     empty_value_display = "-пусто-"
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
+        return form
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
