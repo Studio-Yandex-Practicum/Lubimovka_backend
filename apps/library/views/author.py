@@ -19,6 +19,7 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "social_networks",
                 "other_links",
                 "plays",
+                "publications",
                 "other_plays",
             ),
             id=self.kwargs["pk"],
