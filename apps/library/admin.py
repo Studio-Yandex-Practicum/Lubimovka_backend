@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.sites.models import Site
 
 from apps.core.models import Role
 from apps.library.forms import PerformanceAdminForm
@@ -259,15 +260,6 @@ class ParticipationAdmin(admin.ModelAdmin):
     )
 
 
-class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "person",
-        "role",
-    )
-    search_fields = ("role",)
-
-
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
@@ -275,7 +267,7 @@ admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
 admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
-admin.site.register(TeamMember, TeamMemberAdmin)
 admin.site.register(Reading, ReadingAdmin)
 admin.site.register(MasterClass, MasterClassAdmin)
 admin.site.register(ProgramType, ProgramTypeAdmin)
+admin.site.unregister(Site)
