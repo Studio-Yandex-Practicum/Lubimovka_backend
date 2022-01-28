@@ -8,9 +8,8 @@ class PressReleaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PressRelease
-        fields = (
-            "id",
-            "image",
-            "title",
-            "text",
-        )
+        fields = ("id", "image", "title", "text")
+
+
+class YearsSerializer(serializers.Serializer):
+    years = serializers.ListField(child=serializers.IntegerField())
