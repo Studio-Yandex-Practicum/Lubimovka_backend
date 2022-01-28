@@ -5,7 +5,7 @@ from django.db import migrations
 
 def add_settings(apps, schema_editor):
 
-    Settings = apps.get_model('core', 'Settings')
+    Settings = apps.get_model("core", "Settings")
     Settings.objects.create(
         field_type="BOOLEAN",
         settings_key="main_add_afisha",
@@ -34,8 +34,7 @@ def add_settings(apps, schema_editor):
         field_type="BOOLEAN",
         settings_key="main_show_afisha_only_for_today",
         boolean=True,
-        description="Отображение афиши только на сегодня (в противном случае "
-                    "на ближайшие 6 дней)",
+        description="Отображение афиши только на сегодня (в противном случае " "на ближайшие 6 дней)",
     )
     Settings.objects.create(
         field_type="BOOLEAN",
@@ -114,12 +113,6 @@ def add_settings(apps, schema_editor):
         settings_key="main_first_screen_title",
         text="Открыт прием пьес на фестиваль 2021 года",
         description="Заголовок для первой страницы",
-    )
-    Settings.objects.create(
-        field_type="IMAGE",
-        settings_key="main_first_screen_image",
-        image="core/2021-09-30_14.37.56.jpg",
-        description="Изображение для первой страницы",
     )
     Settings.objects.create(
         field_type="TEXT",
