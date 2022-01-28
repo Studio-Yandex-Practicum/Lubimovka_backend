@@ -143,8 +143,8 @@ class OtherLink(BaseModel):
 
     class Meta:
         ordering = ("order_number",)
-        verbose_name = "Ссылка на сторонний ресурс"
-        verbose_name_plural = "Ссылки на стороннии ресурсы"
+        verbose_name = "Публикации и другие материалы"
+        verbose_name_plural = "Публикации и другие материалы"
         constraints = (
             models.UniqueConstraint(
                 fields=(
