@@ -12,7 +12,6 @@ User = get_user_model()
 class UserAdmin(DjangoUserAdmin):
     form = UserAdminForm
     list_display = (
-        "id",
         "username",
         "is_active",
         "role",

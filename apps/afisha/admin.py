@@ -14,7 +14,6 @@ class EventAdmin(admin.ModelAdmin):
         return qs
 
     list_display = (
-        "pk",
         "common_event",
         "type",
         "date_time",

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.core.models import Role
+from apps.core.models import Person, Role
 from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
@@ -55,10 +55,7 @@ class PlayAdmin(admin.ModelAdmin):
 
 
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "tag",
-    )
+    list_display = ("tag",)
 
 
 class AchievementInline(admin.TabularInline):
@@ -92,7 +89,6 @@ class OtherPlayInline(admin.StackedInline):
 
 class AuthorAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "person",
         "quote",
         "biography",
@@ -112,6 +108,11 @@ class AuthorAdmin(admin.ModelAdmin):
         "other_plays_links",
     )
     empty_value_display = "-пусто-"
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
+        return form
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
@@ -235,7 +236,6 @@ class MasterClassAdmin(admin.ModelAdmin):
 
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "verified",
         "title",
         "first_name",
