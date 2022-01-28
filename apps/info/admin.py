@@ -68,7 +68,6 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
 
 class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
-        "id",
         "first_name",
         "last_name",
         "city",
@@ -95,10 +94,7 @@ class FestivalImagesInline(admin.TabularInline):
 
 
 class FestivalAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "year",
-    )
+    list_display = ("year",)
     inlines = (
         VolunteerInline,
         FestivalImagesInline,
@@ -113,7 +109,6 @@ class FestivalAdmin(admin.ModelAdmin):
 
 class PlaceAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "name",
         "city",
         "address",
@@ -124,20 +119,24 @@ class PlaceAdmin(admin.ModelAdmin):
 
 
 class PressReleaseAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "festival",
-    )
+    list_display = ("festival",)
     list_filter = ("festival",)
 
 
 class PressRealeaseAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "title",
-    )
+    list_display = ("title",)
     list_filter = ("title",)
     search_fields = ("title",)
+
+
+class FestivalTeamAdmin(admin.ModelAdmin):
+    list_display = (
+        "person",
+        "team",
+        "position",
+    )
+    list_filter = ("team",)
+    search_fields = ("position", "person__first_name", "person__last_name")
 
 
 admin.site.register(Festival, FestivalAdmin)
@@ -145,6 +144,6 @@ admin.site.register(PressRelease, PressReleaseAdmin)
 admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)
-admin.site.register(FestivalTeam)
+admin.site.register(FestivalTeam, FestivalTeamAdmin)
 admin.site.register(Volunteer)
 admin.site.register(Sponsor)

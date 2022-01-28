@@ -122,5 +122,5 @@ class PlaceFactory(factory.django.DjangoModelFactory):
     name = factory.Faker("word", locale="ru_RU")
     description = factory.Faker("sentence", locale="ru_RU")
     city = factory.Faker("city", locale="ru_RU")
-    address = factory.Faker("address", locale="ru_RU")
+    address = factory.Faker("street_address", locale="ru_RU")
     map_link = factory.Faker("url", locale="ru_RU")

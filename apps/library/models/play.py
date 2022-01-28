@@ -30,7 +30,7 @@ class ProgramType(BaseModel):
 
 class Play(BaseModel):
     name = models.CharField(
-        max_length=200,
+        max_length=70,
         unique=True,
         verbose_name="Название пьесы",
     )
@@ -40,7 +40,7 @@ class Play(BaseModel):
     )
     year = models.PositiveSmallIntegerField(
         validators=[
-            MinValueValidator(1990),
+            MinValueValidator(1000),
             MaxValueValidator(2200),
         ],
         verbose_name="Год написания пьесы",
