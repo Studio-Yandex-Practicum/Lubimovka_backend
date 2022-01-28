@@ -116,6 +116,12 @@ def add_settings(apps, schema_editor):
         description="Заголовок для первой страницы",
     )
     Settings.objects.create(
+        field_type="IMAGE",
+        settings_key="main_first_screen_image",
+        image="core/2021-09-30_14.37.56.jpg",
+        description="Изображение для первой страницы",
+    )
+    Settings.objects.create(
         field_type="TEXT",
         settings_key="main_first_screen_url_title",
         text="Заголовок для ссылки для первой страницы",
