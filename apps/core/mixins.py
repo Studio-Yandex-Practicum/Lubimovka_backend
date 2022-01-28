@@ -29,10 +29,3 @@ class HideOnNavPanelAdminModelMixin:
 
     def has_module_permission(self, request):
         return False
-
-
-class AdminSlugFieldExcludeMixin:
-    """Mixin excluded slug field from admin model."""
-
-    def get_exclude(self, request, obj=None):
-        return ("slug",)

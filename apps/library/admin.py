@@ -1,7 +1,6 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
-from apps.core.mixins import AdminSlugFieldExcludeMixin
 from apps.core.models import Person, Role
 from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
@@ -153,10 +152,16 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
     )
 
 
-class ProgramTypeAdmin(AdminSlugFieldExcludeMixin, admin.ModelAdmin):
+class ProgramTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
     list_filter = ("name",)
     search_fields = ("name",)
+
+    def get_readonly_fields(self, request, obj=None):
+        """Only superusers can edit slug field."""
+        if not request.user.is_superuser:
+            return ("slug",)
+        return super().get_readonly_fields(request, obj)
 
 
 class PerformanceReviewInline(admin.TabularInline):
