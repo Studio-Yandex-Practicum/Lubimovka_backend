@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db import models
 from django.forms.widgets import CheckboxSelectMultiple
 
-from apps.core.mixins import AdminImagePreview
+from apps.core.mixins import AdminImagePreview, AdminSlugFieldExcludeMixin
 from apps.core.models import Image, Role, RoleType
 
 
@@ -13,7 +13,7 @@ class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
 
 
 @admin.register(Role)
-class RoleAdmin(admin.ModelAdmin):
+class RoleAdmin(AdminSlugFieldExcludeMixin, admin.ModelAdmin):
     list_display = (
         "name",
         "slug",
@@ -21,12 +21,6 @@ class RoleAdmin(admin.ModelAdmin):
     formfield_overrides = {
         models.ManyToManyField: {"widget": CheckboxSelectMultiple},
     }
-
-    def get_readonly_fields(self, request, obj=None):
-        """Only superusers can edit slug field."""
-        if not request.user.is_superuser:
-            return ("slug",)
-        return super().get_readonly_fields(request, obj)
 
 
 @admin.register(RoleType)

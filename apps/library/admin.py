@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
+from apps.core.mixins import AdminSlugFieldExcludeMixin
 from apps.core.models import Person, Role
 from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
@@ -152,7 +153,7 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
     )
 
 
-class ProgramTypeAdmin(admin.ModelAdmin):
+class ProgramTypeAdmin(AdminSlugFieldExcludeMixin, admin.ModelAdmin):
     list_display = ("name",)
     list_filter = ("name",)
     search_fields = ("name",)

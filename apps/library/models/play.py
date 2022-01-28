@@ -5,6 +5,7 @@ from django.db.models import UniqueConstraint
 from django.utils import timezone
 
 from apps.core.models import BaseModel
+from apps.core.utilities import slugify
 from apps.info.models import Festival
 
 
@@ -26,6 +27,10 @@ class ProgramType(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
 
 
 class Play(BaseModel):
