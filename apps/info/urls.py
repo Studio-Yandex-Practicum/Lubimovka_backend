@@ -5,16 +5,13 @@ from apps.info.views import (
     FestivalTeamsAPIView,
     FestivalYearsAPIView,
     PartnersAPIView,
+    PressReleaseDownloadAPIView,
     PressReleaseViewSet,
+    PressReleaseYearsAPIView,
     QuestionCreateAPIView,
     SponsorsAPIView,
     VolunteersAPIView,
 )
-
-press_release = PressReleaseViewSet.as_view({"get": "retrieve"})
-press_release_years = PressReleaseViewSet.as_view({"get": "get_press_release_years"})
-press_release_download = PressReleaseViewSet.as_view({"get": "download_press_release"})
-
 
 about_festival_urls = [
     path(
@@ -61,17 +58,17 @@ info_urls = [
     ),
     path(
         "press-releases/<int:festival__year>/",
-        press_release,
+        PressReleaseViewSet.as_view({"get": "retrieve"}),
         name="press-releases",
     ),
     path(
         "press-releases/years/",
-        press_release_years,
+        PressReleaseYearsAPIView.as_view(),
         name="press-releases_years",
     ),
     path(
         "press-releases/<int:festival__year>/download/",
-        press_release_download,
+        PressReleaseDownloadAPIView.as_view(),
         name="press-releases_download",
     ),
 ]
