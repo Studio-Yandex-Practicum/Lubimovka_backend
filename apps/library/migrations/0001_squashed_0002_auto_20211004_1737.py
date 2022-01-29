@@ -190,9 +190,9 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('authors_plays_links', models.ManyToManyField(related_name='authors_links', to='library.Play', verbose_name='Ссылки на пьесы автора')),
-                ('biography', models.TextField(default=1, max_length=3000, verbose_name='Текст про автора')),
+                ('biography', models.TextField(max_length=3000, verbose_name='Текст про автора')),
                 ('person', models.OneToOneField(default=1, on_delete=django.db.models.deletion.CASCADE, to='core.person', verbose_name='Автор')),
-                ('quote', models.CharField(default=1, max_length=200, verbose_name='Цитата')),
+                ('quote', models.CharField(max_length=200, verbose_name='Цитата')),
             ],
             options={
                 'verbose_name': 'Автор',
