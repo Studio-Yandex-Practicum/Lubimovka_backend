@@ -80,7 +80,7 @@ class Person(BaseModel):
         upload_to="images/person_avatars",
         verbose_name="Фотография",
         blank=True,
-        help_text="Обязательно указать для: членов команды, спонсоров и волонтёров.",
+        help_text="Обязательно указать для: членов команды, попечителей фестиваля и волонтёров.",
     )
 
     class Meta:
