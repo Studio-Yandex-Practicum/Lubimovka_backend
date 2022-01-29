@@ -60,6 +60,7 @@ class Event(BaseModel):
         choices=EventType.choices,
         max_length=50,
         verbose_name="Тип события",
+        blank=True,
     )
     date_time = models.DateTimeField(verbose_name="Дата и время")
     paid = models.BooleanField(verbose_name="Платное", default=False)
@@ -85,19 +86,18 @@ class Event(BaseModel):
         event_time = self.date_time.time().strftime("%H:%M")
         return f'{event_type_cyrillic} - "{event_name}". Дата: {event_date}. Время: {event_time}.'
 
+    def save(self, *args, **kwargs):
+        allowed_event_types = {
+            Performance: self.EventType.PERFORMANCE,
+            MasterClass: self.EventType.MASTERCLASS,
+            Reading: self.EventType.READING,
+        }
+        self.type = allowed_event_types[type(self.common_event.target_model)]
+        super().save(*args, **kwargs)
+
     def clean(self):
         if self.date_time <= timezone.now():
             raise ValidationError("Невозможно создать событие в прошлом.")
-        if self.type and self.common_event_id:
-            allowed_event_types = {
-                "PERFORMANCE": Performance,
-                "MASTERCLASS": MasterClass,
-                "READING": Reading,
-            }
-            common_event_type = type(self.common_event.target_model)
-            allowed_type = allowed_event_types[self.type]
-            if common_event_type != allowed_type:
-                raise ValidationError("Указан некорректный тип события.")
         return super().clean()
 
 

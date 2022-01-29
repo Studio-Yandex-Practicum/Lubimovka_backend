@@ -57,6 +57,8 @@ class FestivalTeam(BaseModel):
         Person,
         on_delete=models.PROTECT,
         verbose_name="Человек",
+        blank=True,
+        null=True,
     )
     team = models.CharField(
         max_length=5,
@@ -82,6 +84,8 @@ class FestivalTeam(BaseModel):
         return f"{self.person.first_name} {self.person.last_name} - " f"{self.team}"
 
     def clean(self):
+        if not self.person:
+            raise ValidationError("Необходимо указать человека для создания команды фестиваля")
         if not self.person.email:
             raise ValidationError("Для члена команды необходимо указать email")
         if not self.person.city:
@@ -123,7 +127,7 @@ class Sponsor(BaseModel):
 
 class Place(BaseModel):
     name = models.CharField(max_length=50, verbose_name="Название")
-    description = models.CharField(max_length=255, verbose_name="Описание")
+    description = models.TextField(max_length=255, verbose_name="Описание")
     city = models.CharField(max_length=50, verbose_name="Город")
     address = models.CharField(max_length=50, verbose_name="Адрес")
     map_link = models.URLField(verbose_name="Ссылка на карту")
