@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0025_alter_play_year'),
+        ('library', '0026_alter_play_url_download'),
     ]
 
     operations = [
