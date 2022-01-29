@@ -68,6 +68,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
 
 class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
+        "full_name",
         "first_name",
         "last_name",
         "city",
