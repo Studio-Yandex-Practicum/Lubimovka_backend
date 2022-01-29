@@ -78,12 +78,49 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
+class VolunteerAdmin(admin.ModelAdmin):
+    list_display = (
+        "person",
+        "festival",
+        "is_review",
+    )
+    readonly_fields = ("is_review",)
+
+    @admin.display(
+        boolean=True,
+        ordering="review_title",
+        description="ОТЗЫВ?",
+    )
+    def is_review(self, obj):
+        if obj.review_text:
+            return True
+        return False
+
+
 class VolunteerInline(admin.TabularInline):
     model = Volunteer
+    fields = (
+        "person",
+        "is_review",
+    )
+    readonly_fields = ("is_review",)
     verbose_name = "Волонтёр"
     verbose_name_plural = "Волонтёры"
     extra = 1
-    exclude = ("review_title", "review_text")
+    exclude = (
+        "review_title",
+        "review_text",
+    )
+
+    @admin.display(
+        boolean=True,
+        ordering="review_title",
+        description="ОТЗЫВ?",
+    )
+    def is_review(self, obj):
+        if obj.review_text:
+            return True
+        return False
 
 
 class FestivalImagesInline(admin.TabularInline):
@@ -145,5 +182,5 @@ admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)
 admin.site.register(FestivalTeam, FestivalTeamAdmin)
-admin.site.register(Volunteer)
+admin.site.register(Volunteer, VolunteerAdmin)
 admin.site.register(Sponsor)
