@@ -24,7 +24,6 @@ class Migration(migrations.Migration):
                 ('end_date', models.DateField(verbose_name='Дата окончания фестиваля')),
                 ('description', models.CharField(max_length=200, verbose_name='Описание фестиваля')),
                 ('year', models.PositiveSmallIntegerField(default=2021, unique=True, validators=[django.core.validators.MinValueValidator(1990), django.core.validators.MaxValueValidator(2500)], verbose_name='Год фестиваля')),
-                ('programms', models.CharField(max_length=10, verbose_name='Программы фестиваля')),
                 ('plays_count', models.PositiveIntegerField(default=1, verbose_name='Общее количество пьес')),
                 ('selected_plays_count', models.PositiveSmallIntegerField(default=1, verbose_name='Количество отобранных пьес')),
                 ('selectors_count', models.PositiveSmallIntegerField(default=1, verbose_name='Количество отборщиков пьес')),
@@ -168,9 +167,5 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='festivalteam',
             constraint=models.UniqueConstraint(fields=('person', 'team'), name='unique_person_team'),
-        ),
-        migrations.RemoveField(
-            model_name='festival',
-            name='programms',
         ),
     ]

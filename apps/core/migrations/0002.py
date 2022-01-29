@@ -345,7 +345,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('field_type', models.CharField(choices=[('BOOLEAN', 'Да/Нет'), ('TEXT', 'Текст'), ('URL', 'URL'), ('IMAGE', 'Картинка'), ('EMAIL', 'EMAIL')], max_length=40, verbose_name='Выбор поля настроек')),
-                ('settings_key', models.SlugField(max_length=40, unique=True, verbose_name='Ключ настроек')),
+                ('settings_key', models.SlugField(max_length=40, unique=True, verbose_name='Ключ настройки')),
                 ('boolean', models.BooleanField(default=False, verbose_name='Да или Нет')),
                 ('text', models.CharField(blank=True, max_length=100, verbose_name='Текст')),
                 ('url', models.URLField(blank=True, verbose_name='Ссылка')),
@@ -364,11 +364,6 @@ class Migration(migrations.Migration):
             model_name='settings',
             name='description',
             field=models.CharField(max_length=60, null=True, verbose_name='Описание настройки'),
-        ),
-        migrations.AlterField(
-            model_name='settings',
-            name='settings_key',
-            field=models.SlugField(max_length=40, unique=True, verbose_name='Ключ настройки'),
         ),
         migrations.RunPython(
             add_description,
