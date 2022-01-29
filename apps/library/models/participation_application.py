@@ -76,8 +76,8 @@ class ParticipationApplicationFestival(BaseModel):
     )
 
     class Meta:
-        verbose_name_plural = "Заявления на участие"
-        verbose_name = "Заявление на участие"
+        verbose_name_plural = "Заявки на участие"
+        verbose_name = "Заявка на участие"
         constraints = (
             models.UniqueConstraint(
                 fields=UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION,
