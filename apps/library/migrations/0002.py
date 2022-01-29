@@ -13,9 +13,9 @@ class Migration(migrations.Migration):
     replaces = [('library', '0003_auto_20211013_0054'), ('library', '0004_added_model_performance'), ('library', '0005_auto_20211017_2001_squashed_0010_auto_20211022_2025'), ('library', '0006_updated_performance'), ('library', '0006_auto_20211024_0733_squashed_0007_auto_20211025_1939'), ('library', '0007_merge_20211027_1905'), ('library', '0008_auto_20211028_2106'), ('library', '0009_alter_author_options')]
 
     dependencies = [
-        ('core', '0005_settings_squashed_0017_data_add_type_roles'),
-        ('afisha', '0004_auto_20211007_1713_squashed_0008_alter_event_type'),
-        ('library', '0001_squashed_0002_auto_20211004_1737'),
+        ('core', '0002'),
+        ('afisha', '0002'),
+        ('library', '0001_initial'),
     ]
 
     operations = [

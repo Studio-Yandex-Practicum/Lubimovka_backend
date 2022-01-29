@@ -12,9 +12,9 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('info', '0001_initial_squashed_0002_remove_festival_programms'),
-        ('afisha', '0001_initial_squashed_0003_baseevent'),
-        ('core', '0001_initial_squashed_0004_alter_person_image'),
+        ('info', '0001_initial'),
+        ('afisha', '0001_initial'),
+        ('core', '0001_initial'),
     ]
 
     operations = [

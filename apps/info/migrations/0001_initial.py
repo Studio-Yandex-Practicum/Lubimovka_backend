@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     replaces = [('info', '0001_initial'), ('info', '0002_remove_festival_programms')]
 
     dependencies = [
-        ('core', '0001_initial_squashed_0004_alter_person_image'),
+        ('core', '0001_initial'),
     ]
 
     operations = [

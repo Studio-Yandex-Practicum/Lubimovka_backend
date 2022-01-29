@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('core', '0005_settings_squashed_0017_data_add_type_roles'),
+        ('core', '0002'),
         ('contenttypes', '0002_remove_content_type_name'),
     ]
 
@@ -31,6 +31,7 @@ class Migration(migrations.Migration):
                 ('pub_date', models.DateTimeField(default=django.utils.timezone.now, verbose_name='Дата публикации')),
             ],
             options={
+                'ordering': ('-pub_date',),
                 'verbose_name': 'Проект',
                 'verbose_name_plural': 'Проекты',
             },
@@ -68,6 +69,7 @@ class Migration(migrations.Migration):
                 ('is_draft', models.BooleanField(default=True, help_text='Поставьте отметку если это черновик', verbose_name='Черновик')),
             ],
             options={
+                'ordering': ('-pub_date',),
                 'verbose_name': 'Новость',
                 'verbose_name_plural': 'Новости',
             },
@@ -125,7 +127,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('blog', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='blog_persons', to='articles.blogitem', verbose_name='Блог')),
                 ('person', models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, related_name='blog_persons', to='core.person', verbose_name='Соавтор блога')),
-                ('role', models.ForeignKey(on_delete=django.db.models.deletion.RESTRICT, related_name='blog_persons', to='core.role', verbose_name='Роль в соавторстве')),
+                ('role', models.ForeignKey(limit_choices_to={'types__role_type': 'blog_persons_role'}, on_delete=django.db.models.deletion.RESTRICT, related_name='blog_persons', to='core.role', verbose_name='Роль в соавторстве')),
             ],
             options={
                 'verbose_name': 'Соавтор блога',
@@ -141,24 +143,6 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='blogperson',
             constraint=models.UniqueConstraint(fields=('person', 'blog', 'role'), name='unique_person_role_per_blog'),
-        ),
-        migrations.AlterModelOptions(
-            name='newsitem',
-            options={'ordering': ('-pub_date',), 'verbose_name': 'Новость', 'verbose_name_plural': 'Новости'},
-        ),
-        migrations.AlterModelOptions(
-            name='project',
-            options={'ordering': ('-pub_date',), 'verbose_name': 'Проект', 'verbose_name_plural': 'Проекты'},
-        ),
-        migrations.AlterField(
-            model_name='blogperson',
-            name='role',
-            field=models.ForeignKey(limit_choices_to={'type_roles__role_type': 'blog_persons_role'}, on_delete=django.db.models.deletion.RESTRICT, related_name='blog_persons', to='core.role', verbose_name='Роль в соавторстве'),
-        ),
-        migrations.AlterField(
-            model_name='blogperson',
-            name='role',
-            field=models.ForeignKey(limit_choices_to={'types__role_type': 'blog_persons_role'}, on_delete=django.db.models.deletion.RESTRICT, related_name='blog_persons', to='core.role', verbose_name='Роль в соавторстве'),
         ),
         migrations.AddField(
             model_name='project',

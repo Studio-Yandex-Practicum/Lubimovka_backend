@@ -22,11 +22,11 @@ class Migration(migrations.Migration):
     replaces = [('library', '0010_changes_requested_in_library'), ('library', '0011_auto_20211118_2204'), ('library', '0012_auto_20211127_0741'), ('library', '0013_programtype_slug'), ('library', '0014_add_short_list_program'), ('library', '0015_auto_20211210_1116'), ('library', '0016_performance_duration'), ('library', '0017_participation_birth_year'), ('library', '0018_alter_play_year'), ('library', '0019_perfomance_text_limit'), ('library', '0020_alter_play_year'), ('library', '0021_auto_20220118_1944'), ('library', '0022_auto_20220126_2032'), ('library', '0023_alter_author_person'), ('library', '0024_alter_otherlink_options')]
 
     dependencies = [
-        ('core', '0018_auto_20211209_1958_squashed_0030_auto_20220127_1720'),
-        ('articles', '0001_squashed_0009_project_intro'),
-        ('afisha', '0004_auto_20211007_1713_squashed_0008_alter_event_type'),
-        ('library', '0003_auto_20211013_0054_squashed_0009_alter_author_options'),
-        ('core', '0005_settings_squashed_0017_data_add_type_roles'),
+        ('core', '0003'),
+        ('articles', '0001_initial'),
+        ('afisha', '0002'),
+        ('library', '0002'),
+        ('core', '0002'),
     ]
 
     operations = [

@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('core', '0018_auto_20211209_1958_squashed_0030_auto_20220127_1720'),
+        ('core', '0003'),
     ]
 
     operations = [

@@ -24,8 +24,8 @@ class Migration(migrations.Migration):
     replaces = [('info', '0003_auto_20211005_2119'), ('info', '0004_auto_20211017_1522'), ('info', '0005_auto_20211110_0116'), ('info', '0006_auto_20211115_2025'), ('info', '0007_partner_in_footer_partner'), ('info', '0008_alter_partner_options'), ('info', '0009_auto_20211210_1839'), ('info', '0010_alter_partner_in_footer_partner'), ('info', '0011_auto_20220113_0014'), ('info', '0012_festival_start_date_before_end_date'), ('info', '0013_review_text_limit'), ('info', '0014_alter_volunteer_review_text'), ('info', '0015_alter_festivalteam_person'), ('info', '0016_auto_20220121_1138'), ('info', '0017_alter_place_description')]
 
     dependencies = [
-        ('info', '0001_initial_squashed_0002_remove_festival_programms'),
-        ('core', '0018_auto_20211209_1958_squashed_0030_auto_20220127_1720'),
+        ('info', '0001_initial'),
+        ('core', '0003'),
     ]
 
     operations = [

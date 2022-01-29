@@ -12,9 +12,9 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('core', '0001_initial_squashed_0004_alter_person_image'),
-        ('library', '0003_auto_20211013_0054_squashed_0009_alter_author_options'),
-        ('core', '0005_settings_squashed_0017_data_add_type_roles'),
+        ('core', '0001_initial'),
+        ('library', '0002'),
+        ('core', '0002'),
     ]
 
     operations = [

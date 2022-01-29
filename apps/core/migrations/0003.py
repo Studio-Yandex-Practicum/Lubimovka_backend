@@ -184,7 +184,7 @@ class Migration(migrations.Migration):
     replaces = [('core', '0018_auto_20211209_1958'), ('core', '0019_sorting_settings_by_groups'), ('core', '0020_data_add_mail_settings'), ('core', '0021_alter_setting_description'), ('core', '0022_role_name_plural'), ('core', '0023_data_roles_add_plural'), ('core', '0024_data_add_type_roles_another'), ('core', '0025_alter_setting_group'), ('core', '0026_delete_old_afisha_settings'), ('core', '0027_add_afisha_settings'), ('core', '0028_auto_20220118_2233'), ('core', '0029_auto_20220123_1450'), ('core', '0030_auto_20220127_1720'), ('core', '0031_add_image_main_settings')]
 
     dependencies = [
-        ('core', '0005_settings_squashed_0017_data_add_type_roles'),
+        ('core', '0002'),
     ]
 
     operations = [
