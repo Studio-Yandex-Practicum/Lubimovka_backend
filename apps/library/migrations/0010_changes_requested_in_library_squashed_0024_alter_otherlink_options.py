@@ -269,4 +269,9 @@ class Migration(migrations.Migration):
             name='otherlink',
             options={'ordering': ('order_number',), 'verbose_name': 'Публикации и другие материалы', 'verbose_name_plural': 'Публикации и другие материалы'},
         ),
+        migrations.AlterField(
+            model_name='performance',
+            name='description',
+            field=models.TextField(max_length=500, verbose_name='Краткое описание'),
+        ),
     ]

@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('description', models.TextField(max_length=500, verbose_name='Описание')),
                 ('url', models.URLField(verbose_name='Ссылка')),
                 ('image', models.ImageField(upload_to='images/main/banner', verbose_name='Картинка')),
-                ('button', models.CharField(choices=[('TICKETS', 'Билеты'), ('DETAILS', 'Подробнее'), ('READ', 'Читать')], default='TICKETS', max_length=40, verbose_name='Выбор типа кнопки')),
+                ('button', models.CharField(choices=[('TICKETS', 'Билеты'), ('DETAILS', 'Подробнее'), ('READ', 'Читать')], max_length=40, verbose_name='Выбор типа кнопки')),
             ],
             options={
                 'abstract': False,
