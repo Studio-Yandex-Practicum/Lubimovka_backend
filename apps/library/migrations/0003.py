@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('core', '0003'),
-        ('articles', '0001_initial'),
+        ('articles', '0001'),
         ('afisha', '0002'),
         ('library', '0002'),
         ('core', '0002'),

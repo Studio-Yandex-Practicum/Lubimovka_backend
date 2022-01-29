@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('core', '0002'),
         ('afisha', '0002'),
-        ('library', '0001_initial'),
+        ('library', '0001'),
     ]
 
     operations = [

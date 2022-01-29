@@ -12,9 +12,9 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('info', '0001_initial'),
-        ('afisha', '0001_initial'),
-        ('core', '0001_initial'),
+        ('info', '0001'),
+        ('afisha', '0001'),
+        ('core', '0001'),
     ]
 
     operations = [

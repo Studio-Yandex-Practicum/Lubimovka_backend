@@ -334,7 +334,7 @@ class Migration(migrations.Migration):
     replaces = [('core', '0005_settings'), ('core', '0006_create_settings_objects'), ('core', '0007_add_and_fix_settings'), ('core', '0008_auto_20211118_1714'), ('core', '0009_add_description'), ('core', '0010_role'), ('core', '0011_data_initial_roles'), ('core', '0012_auto_20211130_0005'), ('core', '0013_data_add_main_settings'), ('core', '0014_data_add_missing_main_settings'), ('core', '0015_auto_20211207_2057'), ('core', '0016_data_role_types'), ('core', '0017_data_add_type_roles')]
 
     dependencies = [
-        ('core', '0001_initial'),
+        ('core', '0001'),
     ]
 
     operations = [

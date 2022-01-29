@@ -10,8 +10,8 @@ class Migration(migrations.Migration):
     replaces = [('afisha', '0004_auto_20211007_1713'), ('afisha', '0005_alter_event_url'), ('afisha', '0006_auto_20211127_0741'), ('afisha', '0007_alter_event_options'), ('afisha', '0008_alter_event_type')]
 
     dependencies = [
-        ('afisha', '0001_initial'),
-        ('library', '0001_initial'),
+        ('afisha', '0001'),
+        ('library', '0001'),
     ]
 
     operations = [
