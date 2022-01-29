@@ -5,7 +5,7 @@ from django.db import migrations
 
 def add_settings(apps, schema_editor):
 
-    Settings = apps.get_model('core', 'Settings')
+    Settings = apps.get_model("core", "Settings")
     Settings.objects.create(
         field_type="BOOLEAN",
         settings_key="main_add_afisha",
@@ -34,8 +34,7 @@ def add_settings(apps, schema_editor):
         field_type="BOOLEAN",
         settings_key="main_show_afisha_only_for_today",
         boolean=True,
-        description="Отображение афиши только на сегодня (в противном случае "
-                    "на ближайшие 6 дней)",
+        description="Отображение афиши только на сегодня (в противном случае " "на ближайшие 6 дней)",
     )
     Settings.objects.create(
         field_type="BOOLEAN",

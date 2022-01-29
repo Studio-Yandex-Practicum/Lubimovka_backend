@@ -1,6 +1,7 @@
 from django.contrib import admin
+from django.contrib.sites.models import Site
 
-from apps.core.models import Role
+from apps.core.models import Person, Role
 from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
@@ -55,10 +56,7 @@ class PlayAdmin(admin.ModelAdmin):
 
 
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "tag",
-    )
+    list_display = ("tag",)
 
 
 class AchievementInline(admin.TabularInline):
@@ -92,7 +90,6 @@ class OtherPlayInline(admin.StackedInline):
 
 class AuthorAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "person",
         "quote",
         "biography",
@@ -112,6 +109,11 @@ class AuthorAdmin(admin.ModelAdmin):
         "other_plays_links",
     )
     empty_value_display = "-пусто-"
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
+        return form
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
@@ -154,6 +156,12 @@ class ProgramTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
     list_filter = ("name",)
     search_fields = ("name",)
+
+    def get_readonly_fields(self, request, obj=None):
+        """Only superusers can edit slug field."""
+        if not request.user.is_superuser:
+            return ("slug",)
+        return super().get_readonly_fields(request, obj)
 
 
 class PerformanceReviewInline(admin.TabularInline):
@@ -235,8 +243,6 @@ class MasterClassAdmin(admin.ModelAdmin):
 
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
-        "verified",
         "title",
         "first_name",
         "last_name",
@@ -244,6 +250,7 @@ class ParticipationAdmin(admin.ModelAdmin):
         "year",
         "created",
         "file",
+        "verified",
     )
     list_filter = (
         "year",
@@ -259,15 +266,6 @@ class ParticipationAdmin(admin.ModelAdmin):
     )
 
 
-class TeamMemberAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "person",
-        "role",
-    )
-    search_fields = ("role",)
-
-
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
 admin.site.register(Achievement, AchievementAdmin)
@@ -275,10 +273,7 @@ admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
 admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
-admin.site.register(TeamMember, TeamMemberAdmin)
-admin.site.register(SocialNetworkLink)
-admin.site.register(OtherPlay)
-admin.site.register(OtherLink)
 admin.site.register(Reading, ReadingAdmin)
 admin.site.register(MasterClass, MasterClassAdmin)
 admin.site.register(ProgramType, ProgramTypeAdmin)
+admin.site.unregister(Site)

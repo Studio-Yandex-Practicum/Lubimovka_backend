@@ -69,10 +69,7 @@ class ExtendedPersonAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 
 @admin.register(ImagesBlock)
 class ImagesBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
-    list_display = (
-        "id",
-        "title",
-    )
+    list_display = ("title",)
     inlines = (OrderedImageInline,)
 
 
