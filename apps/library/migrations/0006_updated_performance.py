@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('core', '0004_alter_person_image'),
-        ('library', '0005_auto_20211017_2001'),
+        ('library', '0005_auto_20211017_2001_squashed_0010_auto_20211022_2025'),
     ]
 
     operations = [

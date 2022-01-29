@@ -9,8 +9,6 @@ import apps.library.validators
 
 class Migration(migrations.Migration):
 
-    replaces = [('library', '0005_auto_20211017_2001'), ('library', '0006_auto_20211022_1625'), ('library', '0007_auto_20211022_1811'), ('library', '0008_auto_20211022_2020'), ('library', '0009_alter_participationapplicationfestival_year'), ('library', '0010_auto_20211022_2025')]
-
     dependencies = [
         ('library', '0004_added_model_performance'),
         ('core', '0004_alter_person_image'),

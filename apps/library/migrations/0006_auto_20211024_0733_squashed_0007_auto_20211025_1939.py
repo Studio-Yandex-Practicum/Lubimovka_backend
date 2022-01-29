@@ -7,8 +7,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    replaces = [('library', '0006_auto_20211024_0733'), ('library', '0007_auto_20211025_1939')]
-
     dependencies = [
         ('library', '0005_auto_20211017_2001_squashed_0010_auto_20211022_2025'),
     ]
