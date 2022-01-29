@@ -51,12 +51,10 @@ class Play(BaseModel):
         ],
         verbose_name="Год написания пьесы",
     )
-    url_download = models.URLField(
+    url_download = models.FileField(
         max_length=200,
-        blank=True,
-        null=True,
-        verbose_name="Ссылка на скачивание пьесы",
-        unique=True,
+        upload_to="plays",
+        verbose_name="Текст пьесы",
     )
     url_reading = models.URLField(
         max_length=200,
