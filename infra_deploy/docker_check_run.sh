@@ -5,9 +5,8 @@ project_name=$2
 swag_container_name=swag_deploy
 swag_network_name=swag_network
 
-
 # array of all volumes used in the deployment
-volumes_array=(static_value media_value static_value_test media_value_test)
+volumes_array=("static_value" "media_value" "static_value_test" "media_value_test")
 
 # creating all volumes if there are none
 for volume in ${volumes_array[@]}
@@ -35,12 +34,30 @@ if [ "$( docker container inspect -f '{{.State.Status}}' $swag_container_name )"
 then
     echo "$swag_container_name already running!"
 else
+  if [ $project_name = "develop" ]
+  then
     docker-compose -f swag_deploy.yaml -p lubimovka up -d
+  fi
+
+  if [ $project_name = "prod" ]
+  then
+    docker-compose -f swag_prod_deploy.yaml -p lubimovka up -d
+  fi
 fi
 
 # re-run frontend containers
-docker-compose -f frontend_deploy.yaml -p frontend down
-docker-compose -f frontend_deploy.yaml -p frontend up -d
+if [ $project_name = "develop" ]
+then
+    docker-compose -f frontend_deploy.yaml -p frontend down
+    docker-compose -f frontend_deploy.yaml -p frontend up -d
+fi
+
+if [ $project_name = "prod" ]
+then
+    docker-compose -f frontend_prod_deploy.yaml -p frontend down
+    docker-compose -f frontend_prod_deploy.yaml -p frontend up -d
+fi
+
 
 # Choosing a compose script (develop or test)
 if [ $project_name = "develop" ]
@@ -49,6 +66,14 @@ then
     docker-compose -f $compose -p $project_name up -d
     echo "Develop containers run succesfully!"
 fi
+
+if [ $project_name = "prod" ]
+then
+    docker-compose -f $compose -p $project_name down
+    docker-compose -f $compose -p $project_name up -d
+    echo "Develop containers run succesfully!"
+fi
+
 
 if [ $project_name = "test" ]
 then
