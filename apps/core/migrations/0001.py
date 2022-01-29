@@ -34,8 +34,8 @@ class Migration(migrations.Migration):
                 ('last_name', models.CharField(max_length=50, verbose_name='Фамилия')),
                 ('middle_name', models.CharField(blank=True, max_length=50, verbose_name='Отчество')),
                 ('city', models.CharField(blank=True, max_length=50, verbose_name='Город проживания')),
-                ('email', models.EmailField(blank=True, max_length=200, unique=True, verbose_name='Электронная почта')),
-                ('image', models.ImageField(upload_to='images/person_avatars', verbose_name='Фотография')),
+                ('email', models.EmailField(blank=True, max_length=200, null=True, unique=True, verbose_name='Электронная почта')),
+                ('image', models.ImageField(blank=True, upload_to='images/person_avatars', verbose_name='Фотография')),
             ],
             options={
                 'verbose_name': 'Человек',
@@ -46,15 +46,5 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='person',
             constraint=models.UniqueConstraint(fields=('first_name', 'last_name', 'middle_name', 'email'), name='unique_person'),
-        ),
-        migrations.AlterField(
-            model_name='person',
-            name='email',
-            field=models.EmailField(blank=True, max_length=200, null=True, unique=True, verbose_name='Электронная почта'),
-        ),
-        migrations.AlterField(
-            model_name='person',
-            name='image',
-            field=models.ImageField(blank=True, upload_to='images/person_avatars', verbose_name='Фотография'),
         ),
     ]

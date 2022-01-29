@@ -258,27 +258,17 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='person',
             name='city',
-            field=models.CharField(blank=True, help_text='Обязательно указать для: членов команды, волонтёров.', max_length=50, verbose_name='Город проживания'),
-        ),
-        migrations.AlterField(
-            model_name='person',
-            name='email',
-            field=models.EmailField(blank=True, help_text='Обязательно указать для: членов команды, волонтёров.', max_length=200, null=True, unique=True, verbose_name='Электронная почта'),
-        ),
-        migrations.AlterField(
-            model_name='person',
-            name='image',
-            field=models.ImageField(blank=True, help_text='Обязательно указать для: членов команды, спонсоров и волонтёров.', upload_to='images/person_avatars', verbose_name='Фотография'),
-        ),
-        migrations.AlterField(
-            model_name='person',
-            name='city',
             field=models.CharField(blank=True, help_text='Обязательно указать для: членов команды, волонтёров и авторов.', max_length=50, verbose_name='Город проживания'),
         ),
         migrations.AlterField(
             model_name='person',
             name='email',
             field=models.EmailField(blank=True, help_text='Обязательно указать для: членов команды, волонтёров и авторов.', max_length=200, null=True, unique=True, verbose_name='Электронная почта'),
+        ),
+        migrations.AlterField(
+            model_name='person',
+            name='image',
+            field=models.ImageField(blank=True, help_text='Обязательно указать для: членов команды, спонсоров и волонтёров.', upload_to='images/person_avatars', verbose_name='Фотография'),
         ),
         migrations.RunPython(
             add_group_to_setting_image,
