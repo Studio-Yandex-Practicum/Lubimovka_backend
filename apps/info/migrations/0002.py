@@ -8,17 +8,6 @@ import django.db.models.deletion
 import django.db.models.expressions
 
 
-def distribute_volunteers_to_festivals(apps, schema_editor):
-    Volunteer = apps.get_model("info", "Volunteer")
-    Festival = apps.get_model("info", "Festival")
-
-    festivals = list(Festival.objects.all())
-
-    for obj in Volunteer.objects.all():
-        obj.festival = random.choice(festivals)
-        obj.save()
-
-
 class Migration(migrations.Migration):
 
     replaces = [('info', '0003_auto_20211005_2119'), ('info', '0004_auto_20211017_1522'), ('info', '0005_auto_20211110_0116'), ('info', '0006_auto_20211115_2025'), ('info', '0007_partner_in_footer_partner'), ('info', '0008_alter_partner_options'), ('info', '0009_auto_20211210_1839'), ('info', '0010_alter_partner_in_footer_partner'), ('info', '0011_auto_20220113_0014'), ('info', '0012_festival_start_date_before_end_date'), ('info', '0013_review_text_limit'), ('info', '0014_alter_volunteer_review_text'), ('info', '0015_alter_festivalteam_person'), ('info', '0016_auto_20220121_1138'), ('info', '0017_alter_place_description')]
@@ -89,7 +78,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='partner',
             name='in_footer_partner',
-            field=models.BooleanField(default=False, help_text='Поставьте галочку, чтобы показать логотип партнёра внизу страницы', verbose_name='Отображение внизу страницы'),
+            field=models.BooleanField(default=False, help_text='Поставьте галочку, чтобы показать логотип партнёра внизу страницы', verbose_name='Отображать внизу страницы'),
         ),
         migrations.AlterModelOptions(
             name='partner',
@@ -118,11 +107,6 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.AlterField(
-            model_name='partner',
-            name='in_footer_partner',
-            field=models.BooleanField(default=False, help_text='Поставьте галочку, чтобы показать логотип партнёра внизу страницы', verbose_name='Отображать внизу страницы'),
-        ),
-        migrations.AlterField(
             model_name='festival',
             name='year',
             field=models.PositiveSmallIntegerField(default=2022, unique=True, validators=[django.core.validators.MinValueValidator(1990), django.core.validators.MaxValueValidator(2500)], verbose_name='Год фестиваля'),
@@ -135,11 +119,6 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='festival',
             constraint=models.CheckConstraint(check=models.Q(('start_date__lt', django.db.models.expressions.F('end_date'))), name='start_date_before_end_date'),
-        ),
-        migrations.AlterField(
-            model_name='volunteer',
-            name='review_text',
-            field=models.TextField(max_length=500, verbose_name='Текст отзыва'),
         ),
         migrations.AlterField(
             model_name='volunteer',
@@ -172,9 +151,6 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='volunteer',
             constraint=models.UniqueConstraint(fields=('person', 'festival'), name='unique_volunteer'),
-        ),
-        migrations.RunPython(
-            distribute_volunteers_to_festivals,
         ),
         migrations.AlterField(
             model_name='place',
