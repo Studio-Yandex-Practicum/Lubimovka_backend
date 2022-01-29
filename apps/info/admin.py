@@ -81,7 +81,7 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
 class VolunteerAdmin(admin.ModelAdmin):
     list_display = (
         "person",
-        "festival",
+        "get_year",
         "is_review",
     )
     readonly_fields = ("is_review",)
@@ -89,20 +89,25 @@ class VolunteerAdmin(admin.ModelAdmin):
     @admin.display(
         boolean=True,
         ordering="review_title",
-        description="ОТЗЫВ?",
+        description="Есть отзыв?",
     )
     def is_review(self, obj):
+        """Возвращает: есть ли отзыв."""
         if obj.review_text:
             return True
         return False
 
+    @admin.display(
+        ordering="festival",
+        description="Год фестиваля",
+    )
+    def get_year(self, obj):
+        """Возвращает год фестиваля."""
+        return obj.festival.year
+
 
 class VolunteerInline(admin.TabularInline):
     model = Volunteer
-    fields = (
-        "person",
-        "is_review",
-    )
     readonly_fields = ("is_review",)
     verbose_name = "Волонтёр"
     verbose_name_plural = "Волонтёры"
