@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('core', '0005_settings_squashed_0017_data_add_type_roles'),
         ('afisha', '0004_auto_20211007_1713_squashed_0008_alter_event_type'),
-        ('library', '0002_auto_20211004_1737'),
+        ('library', '0001_squashed_0002_auto_20211004_1737'),
     ]
 
     operations = [

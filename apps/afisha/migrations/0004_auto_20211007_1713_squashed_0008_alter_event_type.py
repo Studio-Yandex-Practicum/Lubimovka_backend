@@ -11,7 +11,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('afisha', '0001_initial_squashed_0003_baseevent'),
-        ('library', '0002_auto_20211004_1737'),
+        ('library', '0001_squashed_0002_auto_20211004_1737'),
     ]
 
     operations = [
