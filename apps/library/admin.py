@@ -243,7 +243,6 @@ class MasterClassAdmin(admin.ModelAdmin):
 
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = (
-        "verified",
         "title",
         "first_name",
         "last_name",
@@ -251,6 +250,7 @@ class ParticipationAdmin(admin.ModelAdmin):
         "year",
         "created",
         "file",
+        "verified",
     )
     list_filter = (
         "year",
