@@ -168,10 +168,20 @@ def add_afisha_settings(apps, schema_editor):
         description="Текст со звёздочкой возле заголовка",
     )
 
+def add_group_to_setting_image(apps, schema_editor):
+    Setting = apps.get_model("core", "Setting")
+    Setting.objects.create(
+        field_type="IMAGE",
+        group="FIRST_SCREEN",
+        settings_key="main_first_screen_image",
+        image="core/2021-09-30_14.37.56.jpg",
+        description="Изображение для первой страницы",
+    )
+
 
 class Migration(migrations.Migration):
 
-    replaces = [('core', '0018_auto_20211209_1958'), ('core', '0019_sorting_settings_by_groups'), ('core', '0020_data_add_mail_settings'), ('core', '0021_alter_setting_description'), ('core', '0022_role_name_plural'), ('core', '0023_data_roles_add_plural'), ('core', '0024_data_add_type_roles_another'), ('core', '0025_alter_setting_group'), ('core', '0026_delete_old_afisha_settings'), ('core', '0027_add_afisha_settings'), ('core', '0028_auto_20220118_2233'), ('core', '0029_auto_20220123_1450'), ('core', '0030_auto_20220127_1720')]
+    replaces = [('core', '0018_auto_20211209_1958'), ('core', '0019_sorting_settings_by_groups'), ('core', '0020_data_add_mail_settings'), ('core', '0021_alter_setting_description'), ('core', '0022_role_name_plural'), ('core', '0023_data_roles_add_plural'), ('core', '0024_data_add_type_roles_another'), ('core', '0025_alter_setting_group'), ('core', '0026_delete_old_afisha_settings'), ('core', '0027_add_afisha_settings'), ('core', '0028_auto_20220118_2233'), ('core', '0029_auto_20220123_1450'), ('core', '0030_auto_20220127_1720'), ('core', '0031_add_image_main_settings')]
 
     dependencies = [
         ('core', '0005_settings_squashed_0017_data_add_type_roles'),
@@ -270,4 +280,7 @@ class Migration(migrations.Migration):
             name='email',
             field=models.EmailField(blank=True, help_text='Обязательно указать для: членов команды, волонтёров и авторов.', max_length=200, null=True, unique=True, verbose_name='Электронная почта'),
         ),
+        migrations.RunPython(
+            add_group_to_setting_image,
+        )
     ]
