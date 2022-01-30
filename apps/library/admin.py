@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.sites.models import Site
 
 from apps.core.models import Person, Role
 from apps.library.forms import PerformanceAdminForm
@@ -156,6 +157,12 @@ class ProgramTypeAdmin(admin.ModelAdmin):
     list_filter = ("name",)
     search_fields = ("name",)
 
+    def get_readonly_fields(self, request, obj=None):
+        """Only superusers can edit slug field."""
+        if not request.user.is_superuser:
+            return ("slug",)
+        return super().get_readonly_fields(request, obj)
+
 
 class PerformanceReviewInline(admin.TabularInline):
     model = PerformanceReview
@@ -236,7 +243,6 @@ class MasterClassAdmin(admin.ModelAdmin):
 
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = (
-        "verified",
         "title",
         "first_name",
         "last_name",
@@ -244,6 +250,7 @@ class ParticipationAdmin(admin.ModelAdmin):
         "year",
         "created",
         "file",
+        "verified",
     )
     list_filter = (
         "year",
@@ -266,9 +273,7 @@ admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
 admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
-admin.site.register(SocialNetworkLink)
-admin.site.register(OtherPlay)
-admin.site.register(OtherLink)
 admin.site.register(Reading, ReadingAdmin)
 admin.site.register(MasterClass, MasterClassAdmin)
 admin.site.register(ProgramType, ProgramTypeAdmin)
+admin.site.unregister(Site)

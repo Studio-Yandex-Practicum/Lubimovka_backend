@@ -1,3 +1,4 @@
+from django.contrib import admin
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
@@ -79,7 +80,7 @@ class Person(BaseModel):
         upload_to="images/person_avatars",
         verbose_name="Фотография",
         blank=True,
-        help_text="Обязательно указать для: членов команды, спонсоров и волонтёров.",
+        help_text="Обязательно указать для: членов команды, попечителей фестиваля и волонтёров.",
     )
 
     class Meta:
@@ -97,8 +98,9 @@ class Person(BaseModel):
         return f"{self.first_name} {self.last_name}"
 
     @property
+    @admin.display(description="Имя и фамилия")
     def full_name(self):
-        return f"{self.first_name} {self.last_name}"
+        return self.first_name + " " + self.last_name
 
     @property
     def reversed_full_name(self):

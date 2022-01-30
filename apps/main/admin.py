@@ -19,7 +19,6 @@ class SettingAdmin(admin.ModelAdmin):
         "description",
         "settings_key",
         "get_value",
-        "group",
         "image",
     )
     search_fields = (
@@ -46,7 +45,6 @@ class SettingAdmin(admin.ModelAdmin):
             "description",
             "settings_key",
             "field_type",
-            "group",
             field_for_setting_value,
         )
 

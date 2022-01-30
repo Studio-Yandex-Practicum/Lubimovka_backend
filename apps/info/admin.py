@@ -68,6 +68,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
 
 class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
+        "full_name",
         "first_name",
         "last_name",
         "city",
@@ -78,12 +79,54 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
+class VolunteerAdmin(admin.ModelAdmin):
+    list_display = (
+        "person",
+        "get_year",
+        "is_review",
+    )
+    readonly_fields = ("is_review",)
+
+    @admin.display(
+        boolean=True,
+        ordering="review_title",
+        description="Есть отзыв?",
+    )
+    def is_review(self, obj):
+        """Возвращает: есть ли отзыв."""
+        if obj.review_text:
+            return True
+        return False
+
+    @admin.display(
+        ordering="festival",
+        description="Год фестиваля",
+    )
+    def get_year(self, obj):
+        """Возвращает год фестиваля."""
+        return obj.festival.year
+
+
 class VolunteerInline(admin.TabularInline):
     model = Volunteer
+    readonly_fields = ("is_review",)
     verbose_name = "Волонтёр"
     verbose_name_plural = "Волонтёры"
     extra = 1
-    exclude = ("review_title", "review_text")
+    exclude = (
+        "review_title",
+        "review_text",
+    )
+
+    @admin.display(
+        boolean=True,
+        ordering="review_title",
+        description="ОТЗЫВ?",
+    )
+    def is_review(self, obj):
+        if obj.review_text:
+            return True
+        return False
 
 
 class FestivalImagesInline(admin.TabularInline):
@@ -145,5 +188,5 @@ admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)
 admin.site.register(FestivalTeam, FestivalTeamAdmin)
-admin.site.register(Volunteer)
+admin.site.register(Volunteer, VolunteerAdmin)
 admin.site.register(Sponsor)
