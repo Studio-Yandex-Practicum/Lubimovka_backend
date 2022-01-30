@@ -5,6 +5,7 @@ from django.db.models import UniqueConstraint
 from django.utils import timezone
 
 from apps.core.models import BaseModel
+from apps.core.utilities import slugify
 from apps.info.models import Festival
 
 
@@ -27,6 +28,11 @@ class ProgramType(BaseModel):
     def __str__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        return super().save(*args, **kwargs)
+
 
 class Play(BaseModel):
     name = models.CharField(
@@ -40,17 +46,15 @@ class Play(BaseModel):
     )
     year = models.PositiveSmallIntegerField(
         validators=[
-            MinValueValidator(1990),
+            MinValueValidator(1000),
             MaxValueValidator(2200),
         ],
         verbose_name="Год написания пьесы",
     )
-    url_download = models.URLField(
+    url_download = models.FileField(
         max_length=200,
-        blank=True,
-        null=True,
-        verbose_name="Ссылка на скачивание пьесы",
-        unique=True,
+        upload_to="plays",
+        verbose_name="Текст пьесы",
     )
     url_reading = models.URLField(
         max_length=200,

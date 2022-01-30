@@ -203,7 +203,12 @@ class Festival(BaseModel):
         verbose_name = "Фестиваль"
         verbose_name_plural = "Фестивали"
         ordering = ["-year"]
-        constraints = [models.CheckConstraint(name="start_date_before_end_date", check=Q(start_date__lt=F("end_date")))]
+        constraints = [
+            models.CheckConstraint(
+                name="start_date_before_end_date",
+                check=Q(start_date__lt=F("end_date")),
+            )
+        ]
 
     def __str__(self):
         return f"Фестиваль {self.year} года"
@@ -308,4 +313,8 @@ class PressRelease(BaseModel):
         verbose_name_plural = "Пресс-релизы"
 
     def __str__(self):
-        return f"Пресс-релиз {self.festival.year} года"
+        return f"Пресс-релиз {self.festival__year} года"
+
+    @property
+    def festival__year(self):
+        return self.festival.year
