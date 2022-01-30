@@ -6,17 +6,6 @@ from django.db import migrations, models
 import django.utils.timezone
 
 
-def set_default_groups(apps, schema_editor):
-
-    Group = apps.get_model("auth", "Group")
-    Group.objects.bulk_create(
-        [
-            Group(name="admin"),
-            Group(name="editor"),
-        ]
-    )
-
-
 class Migration(migrations.Migration):
 
     initial = True
@@ -51,7 +40,4 @@ class Migration(migrations.Migration):
                 ('objects', django.contrib.auth.models.UserManager()),
             ],
         ),
-        migrations.RunPython(
-            set_default_groups,
-        )
     ]

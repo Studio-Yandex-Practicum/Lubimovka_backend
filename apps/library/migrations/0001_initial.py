@@ -9,14 +9,6 @@ import django.db.models.deletion
 import phonenumber_field.modelfields
 
 
-def add_short_list_program(apps, schema_editor):
-    Program = apps.get_model('library', 'ProgramType')
-    Program.objects.create(
-        name="Шорт-лист",
-        slug="short-list"
-    )
-
-
 class Migration(migrations.Migration):
 
     initial = True
@@ -373,9 +365,6 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='otherlink',
             constraint=models.UniqueConstraint(fields=('author', 'name'), name='unique_link'),
-        ),
-        migrations.RunPython(
-            add_short_list_program,
         ),
         migrations.AlterField(
             model_name='play',
