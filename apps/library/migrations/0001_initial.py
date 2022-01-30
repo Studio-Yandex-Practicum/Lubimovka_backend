@@ -376,5 +376,20 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             add_short_list_program,
-        )
+        ),
+        migrations.AlterField(
+            model_name='play',
+            name='year',
+            field=models.PositiveSmallIntegerField(validators=[django.core.validators.MinValueValidator(1000), django.core.validators.MaxValueValidator(2200)], verbose_name='Год написания пьесы'),
+        ),
+        migrations.AlterField(
+            model_name='play',
+            name='url_download',
+            field=models.FileField(default=1, max_length=200, upload_to='plays', verbose_name='Текст пьесы'),
+            preserve_default=False,
+        ),
+        migrations.AlterModelOptions(
+            name='participationapplicationfestival',
+            options={'verbose_name': 'Заявка на участие', 'verbose_name_plural': 'Заявки на участие'},
+        ),
     ]
