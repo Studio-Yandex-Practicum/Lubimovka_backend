@@ -157,170 +157,9 @@ def add_types_to_roles(apps, schema_editor):
         role_obj.types.add(type_of_role)
         role_obj.save()
 
-def add_settings(apps, schema_editor):
+def add_email_settings(apps, schema_editor):
+
     Setting = apps.get_model("core", "Setting")
-
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="festival_status",
-        boolean=True,
-        description="Статус фестиваля",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        settings_key="site_color",
-        text="green",
-        description="Цвет сайта",
-    )
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="form_to_submit_a_play",
-        boolean=True,
-        description="Форма для отправки пьесы",
-    )
-    values = [
-        "Festival_status",
-        "Site_color",
-        "Mail_send_to",
-        "Form_to_submit_a_play"
-    ]
-    for value in values:
-        if Setting.objects.filter(
-            settings_key=value,
-        ).exists():
-            setting = Setting.objects.get(settings_key=value,)
-            setting.settings_key = value.lower()
-            setting.save()
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="main_add_afisha",
-        boolean=True,
-        description="Отображение афиши на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="main_show_afisha_only_for_today",
-        boolean=True,
-        description="Отображение афиши только на сегодня (в противном случае " "на ближайшие 6 дней)",
-    )
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="main_add_news",
-        boolean=True,
-        description="Отображение новостей на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        settings_key="main_news_title",
-        text="Новости",
-        description="Заголовок для новостей на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="main_add_blog",
-        boolean=True,
-        description="Отображение дневника на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        settings_key="main_blog_title",
-        text="Дневник фестиваля",
-        description="Заголовок для дневника на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="main_add_banners",
-        boolean=True,
-        description="Отображение банера на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="main_add_short_list",
-        boolean=True,
-        description="Отображение шорт-листа на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        settings_key="main_short_list_title",
-        text="Шорт-лист 2020 года",
-        description="Заголовок для шорт-листа на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="main_add_video_archive",
-        boolean=True,
-        description="Отображение видео-архива на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="URL",
-        settings_key="main_video_archive_url",
-        url="https://lubimovks.url.ru",
-        description="Ссылка на youtube видео-архива на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="IMAGE",
-        settings_key="main_video_archive_photo",
-        image="core/2021-09-30_14.37.56.jpg",
-        description="Фото для видео-архива на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="main_add_places",
-        boolean=True,
-        description="Отображение площадок на главной страницы",
-    )
-    Setting.objects.create(
-        field_type="BOOLEAN",
-        settings_key="main_add_first_screen",
-        boolean=True,
-        description="Отображение первой страницы",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        settings_key="main_first_screen_title",
-        text="Открыт прием пьес на фестиваль 2021 года",
-        description="Заголовок для первой страницы",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        settings_key="main_first_screen_url_title",
-        text="Заголовок для ссылки для первой страницы",
-        description="Заголовок для первой страницы",
-    )
-    Setting.objects.create(
-        field_type="URL",
-        settings_key="main_first_screen_url",
-        url="https://lubimovks.url.ru",
-        description="Ссылка для первой страницы страницы",
-    )
-
-    group = {
-        "EMAIL": "mail",
-        "MAIN": "main",
-        "FIRST_SCREEN": "first_screen",
-        "GENERAL": "GENERAL"
-    }
-    setting_first_screen = Setting.objects.filter(
-        settings_key__icontains=group['FIRST_SCREEN']
-    ).all()
-    for setting in setting_first_screen:
-        setting.group = 'FIRST_SCREEN'
-        setting.save()
-    setting_main = Setting.objects.filter(
-        settings_key__icontains=group['MAIN'],
-        group='GENERAL'
-    ).all()
-    for setting in setting_main:
-        setting.group = 'MAIN'
-        setting.save()
-    setting_email = Setting.objects.filter(
-        settings_key__icontains=group['EMAIL'],
-        group="GENERAL"
-    ).all()
-    for setting in setting_email:
-        setting.group = 'EMAIL'
-        setting.save()
-
 
     Setting.objects.create(
         field_type="TEXT",
@@ -345,25 +184,16 @@ def add_settings(apps, schema_editor):
     )
     Setting.objects.create(
         field_type="TEXT",
-        group="AFISHA",
-        settings_key="afisha_title_festival",
-        text="Афиша фестиваля",
-        description="Заголовок афиши во время фестиваля",
+        group="EMAIL",
+        settings_key="email_subject_for_question",
+        text="Вопрос Любимовке",
+        description="Тема письма для вопроса",
     )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="AFISHA",
-        settings_key="afisha_title_regular",
-        text="Афиша событий",
-        description="Заголовок афиши регулярный",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="AFISHA",
-        settings_key="afisha_description_festival",
-        text="На все читки и мастер-классы фестиваля вход свободный по предварительной регистрации.",
-        description="Описание под заголовком во время фестиваля",
-    )
+
+def add_afisha_settings(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
     Setting.objects.create(
         field_type="TEXT",
         group="AFISHA",
@@ -386,11 +216,187 @@ def add_settings(apps, schema_editor):
         description="Текст со звёздочкой возле заголовка",
     )
     Setting.objects.create(
+        field_type="TEXT",
+        group="AFISHA",
+        settings_key="afisha_title_festival",
+        text="Афиша фестиваля",
+        description="Заголовок афиши во время фестиваля",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="AFISHA",
+        settings_key="afisha_title_regular",
+        text="Афиша событий",
+        description="Заголовок афиши регулярный",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="AFISHA",
+        settings_key="afisha_description_festival",
+        text="На все читки и мастер-классы фестиваля вход свободный по предварительной регистрации.",
+        description="Описание под заголовком во время фестиваля",
+    )
+
+def add_first_screen_settings(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
+    Setting.objects.create(
         field_type="IMAGE",
         group="FIRST_SCREEN",
         settings_key="main_first_screen_image",
         image="core/2021-09-30_14.37.56.jpg",
         description="Изображение для первой страницы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="FIRST_SCREEN",
+        settings_key="main_add_first_screen",
+        boolean=True,
+        description="Отображение первой страницы",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="FIRST_SCREEN",
+        settings_key="main_first_screen_title",
+        text="Открыт прием пьес на фестиваль 2021 года",
+        description="Заголовок для первой страницы",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="FIRST_SCREEN",
+        settings_key="main_first_screen_url_title",
+        text="Заголовок для ссылки для первой страницы",
+        description="Заголовок для первой страницы",
+    )
+    Setting.objects.create(
+        field_type="URL",
+        group="FIRST_SCREEN",
+        settings_key="main_first_screen_url",
+        url="https://lubimovks.url.ru",
+        description="Ссылка для первой страницы страницы",
+    )
+
+def add_general_settings(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="GENERAL",
+        settings_key="festival_status",
+        boolean=True,
+        description="Статус фестиваля",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="GENERAL",
+        settings_key="site_color",
+        text="green",
+        description="Цвет сайта",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="GENERAL",
+        settings_key="form_to_submit_a_play",
+        boolean=True,
+        description="Форма для отправки пьесы",
+    )
+
+def add_main_settings(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="MAIN",
+        settings_key="main_add_afisha",
+        boolean=True,
+        description="Отображение афиши на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="MAIN",
+        settings_key="main_add_banners",
+        boolean=True,
+        description="Отображение банера на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="MAIN",
+        settings_key="main_add_blog",
+        boolean=True,
+        description="Отображение дневника на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="MAIN",
+        settings_key="main_add_news",
+        boolean=True,
+        description="Отображение новостей на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="MAIN",
+        settings_key="main_add_places",
+        boolean=True,
+        description="Отображение площадок на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="MAIN",
+        settings_key="main_add_short_list",
+        boolean=True,
+        description="Отображение шорт-листа на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="MAIN",
+        settings_key="main_add_video_archive",
+        boolean=True,
+        description="Отображение видео-архива на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="MAIN",
+        settings_key="main_blog_title",
+        text="Дневник фестиваля",
+        description="Заголовок для дневника на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="MAIN",
+        settings_key="main_news_title",
+        text="Новости",
+        description="Заголовок для новостей на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="MAIN",
+        settings_key="main_short_list_title",
+        text="Шорт-лист 2020 года",
+        description="Заголовок для шорт-листа на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="MAIN",
+        settings_key="main_show_afisha_only_for_today",
+        boolean=True,
+        description="Отображение афиши только на сегодня (в противном случае " "на ближайшие 6 дней)",
+    )
+    Setting.objects.create(
+        field_type="IMAGE",
+        group="MAIN",
+        settings_key="main_video_archive_photo",
+        image="core/2021-09-30_14.37.56.jpg",
+        description="Фото для видео-архива на главной страницы",
+    )
+    Setting.objects.create(
+        field_type="URL",
+        group="MAIN",
+        settings_key="main_video_archive_url",
+        url="https://lubimovks.url.ru",
+        description="Ссылка на youtube видео-архива на главной страницы",
     )
 
 
@@ -499,6 +505,18 @@ class Migration(migrations.Migration):
             add_types_to_roles,
         ),
         migrations.RunPython(
-            add_settings,
-        )
+            add_email_settings,
+        ),
+        migrations.RunPython(
+            add_afisha_settings,
+        ),
+        migrations.RunPython(
+            add_first_screen_settings,
+        ),
+        migrations.RunPython(
+            add_main_settings,
+        ),
+        migrations.RunPython(
+            add_general_settings,
+        ),
     ]
