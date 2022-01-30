@@ -8,7 +8,7 @@ from apps.library.models.participation_application import (
 ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400 = {
     "example": {
         "non_field_errors": [
-            f"Поля {UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION} должны производить массив с уникальными значениями."
+            f"Повторная отправка заявки с данными в полях {UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION}."
         ],
         "year": [
             "Обязательное поле.",
