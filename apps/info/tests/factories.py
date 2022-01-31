@@ -7,7 +7,7 @@ from faker import Faker
 
 from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person
-from apps.info.models import Festival, FestivalTeam, Partner, PressRelease, Sponsor, Volunteer
+from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
 
 fake = Faker(locale="en_US")
 
@@ -43,14 +43,15 @@ class SponsorFactory(factory.django.DjangoModelFactory):
     position = factory.Faker("job", locale="ru_RU")
 
 
-@restrict_factory({"global": [Person]})
+@restrict_factory({"global": [Festival, Person]})
 class VolunteerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Volunteer
         django_get_or_create = ["person"]
+        django_get_or_create = ("festival",)
 
+    festival = factory.Iterator(Festival.objects.all())
     person = factory.Iterator(Person.objects.filter(email__isnull=False).exclude(image__exact=""))
-    year = factory.Faker("random_int", min=2018, max=2021, step=1)
     review_title = factory.Faker("text", max_nb_chars=50, locale="ru_RU")
     review_text = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
 
@@ -77,18 +78,6 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2021, step=1)
-
-    @factory.post_generation
-    def volunteers(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.volunteers.add(*extracted)
-        else:
-            volunteers_count = Volunteer.objects.count()
-            how_many = min(volunteers_count, random.randint(1, 7))
-            volunteers = Volunteer.objects.order_by("?")[:how_many]
-            self.volunteers.add(*volunteers)
 
     @factory.post_generation
     def images(self, create, extracted, **kwargs):
@@ -124,3 +113,14 @@ class PressReleaseFactory(factory.django.DjangoModelFactory):
     festival = factory.Iterator(Festival.objects.all())
     title = factory.Faker("sentence", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
+
+
+class PlaceFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Place
+
+    name = factory.Faker("word", locale="ru_RU")
+    description = factory.Faker("sentence", locale="ru_RU")
+    city = factory.Faker("city", locale="ru_RU")
+    address = factory.Faker("street_address", locale="ru_RU")
+    map_link = factory.Faker("url", locale="ru_RU")

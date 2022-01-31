@@ -7,7 +7,6 @@ from apps.main.models import Banner, SettingAfishaScreen, SettingEmail, SettingF
 @admin.register(Banner)
 class BannerAdmin(admin.ModelAdmin):
     list_display = (
-        "id",
         "title",
         "description",
         "url",
@@ -20,7 +19,7 @@ class SettingAdmin(admin.ModelAdmin):
         "description",
         "settings_key",
         "get_value",
-        "group",
+        "image",
     )
     search_fields = (
         "field_type",
@@ -46,7 +45,6 @@ class SettingAdmin(admin.ModelAdmin):
             "description",
             "settings_key",
             "field_type",
-            "group",
             field_for_setting_value,
         )
 

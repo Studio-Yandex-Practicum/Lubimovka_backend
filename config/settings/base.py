@@ -6,7 +6,6 @@ import environ
 
 env = environ.Env()
 
-
 # Root folder of the project
 # ------------------------------------------------------------------------------
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -42,7 +41,6 @@ THIRD_PARTY_APPS = [
     "drf_spectacular",
     "adminsortable2",
     "phonenumber_field",
-    "markdownx",
     "drf_multiple_model",
     "ckeditor",
     "anymail",
@@ -55,7 +53,6 @@ LOCAL_APPS = [
     "apps.library",
     "apps.articles",
     "apps.info",
-    "apps.static_pages",
     "apps.content_pages",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -66,9 +63,7 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 
-
 SITE_ID = 1
-
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -100,7 +95,6 @@ TEMPLATES = [
     },
 ]
 
-
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
 
@@ -119,7 +113,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.AllowAny",
@@ -134,7 +127,6 @@ REST_FRAMEWORK = {
     "TEST_REQUEST_DEFAULT_FORMAT": "json",
 }
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 LANGUAGE_CODE = "ru-Ru"
@@ -143,7 +135,6 @@ TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
 
 # STATIC
 # ------------------------------------------------------------------------------
@@ -164,24 +155,20 @@ MEDIA_ROOT = str(ROOT_DIR / "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
-
 # FIXTURES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#fixture-dirs
 FIXTURE_DIRS = (str(APPS_DIR / "fixtures"),)
-
 
 # Default primary key field type
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-
 # CORS
 # ------------------------------------------------------------------------------
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_URLS_REGEX = r"^/api/.*$"
-
 
 # EMAIL
 # ------------------------------------------------------------------------------
@@ -194,8 +181,17 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
-# See markdownx docs https://neutronx.github.io/django-markdownx/
-MARKDOWNX_MARKDOWN_EXTENSIONS = ("markdown.extensions.extra",)
-MARKDOWNX_MEDIA_PATH = "static_pages/"
-MARKDOWNX_URLS_PATH = "/admin/markdownx/markdownify/"
-MARKDOWNX_IMAGE_MAX_SIZE = {"size": (1000, 1000), "quality": 100}
+# Use CKEditor (Configuration)
+# ------------------------------------------------------------------------------
+CKEDITOR_CONFIGS = {
+    'default': {
+        "removePlugins": "elementspath",
+        "removeDialogTabs": 'dialog:advanced',
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Undo', 'Redo'],
+            ['Bold', 'Italic', 'Underline', 'Strike'],
+            ['Link', 'Unlink'],
+        ]
+    }
+}

@@ -1,5 +1,6 @@
 from rest_framework.generics import ListAPIView
 
+from apps.info.filters import YearVolunteerFilterSet
 from apps.info.models import Volunteer
 from apps.info.serializers import VolunteersSerializer
 
@@ -7,5 +8,5 @@ from apps.info.serializers import VolunteersSerializer
 class VolunteersAPIView(ListAPIView):
     queryset = Volunteer.objects.all()
     serializer_class = VolunteersSerializer
-    filterset_fields = ("year",)
+    filterset_class = YearVolunteerFilterSet
     pagination_class = None

@@ -2,12 +2,14 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
+from apps.afisha.tests.factories import EventFactory
 from apps.content_pages.tests.factories import ImageForContentFactory, VideoFactory
 from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
 from apps.info.tests.factories import (
     FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
+    PlaceFactory,
     PressReleaseFactory,
     SponsorFactory,
     VolunteerFactory,
@@ -53,6 +55,7 @@ class Command(BaseCommand):
         " - Мастер-классы"
         " - Читки"
         " - Баннеры главной страницы"
+        " - Места"
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
@@ -89,9 +92,6 @@ class Command(BaseCommand):
             sponsors = SponsorFactory.create_batch(50)
             notification(self, sponsors, "попечителей")
 
-            volunteers = VolunteerFactory.create_batch(50)
-            notification(self, volunteers, "волонтёров")
-
             teams = FestivalTeamFactory.create_batch(70)
             notification(self, teams, "членов команд")
 
@@ -100,6 +100,9 @@ class Command(BaseCommand):
 
             festivals = FestivalFactory.create_batch(10)
             notification(self, festivals, "фестивалей")
+
+            volunteers = VolunteerFactory.create_batch(50)
+            notification(self, volunteers, "волонтёров")
 
             press_releases = PressReleaseFactory.create_batch(10)
             notification(self, press_releases, "пресс-релизов")
@@ -143,6 +146,12 @@ class Command(BaseCommand):
 
             main_banners = MainBannerFactory.create_batch(3, add_real_image=True)
             notification(self, main_banners, "баннеров на главной страницу (с картинкой)")
+
+            places = PlaceFactory.create_batch(3)
+            notification(self, places, "мест")
+
+            events = EventFactory.create_batch(10)
+            notification(self, events, "событий")
 
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))
