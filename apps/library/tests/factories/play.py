@@ -37,6 +37,6 @@ class PlayFactory(factory.django.DjangoModelFactory):
     year = factory.Faker("random_int", min=1990, max=2021, step=1)
     url_download = factory.django.FileField()
     url_reading = factory.LazyAttribute(lambda obj: f"www.plays-reading/{obj.name}")
-    program = factory.Iterator(ProgramType.objects.all())
+    program = factory.Iterator(ProgramType.objects.filter(slug="short-list"))
     festival = factory.Iterator(Festival.objects.all())
     is_draft = factory.Faker("boolean", chance_of_getting_true=25)
