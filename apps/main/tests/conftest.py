@@ -5,8 +5,8 @@ from django.urls import reverse
 from django.utils import timezone
 
 from apps.afisha.tests.factories import EventFactory
-from apps.articles.tests.factories.blog_factory import BlogFactory
-from apps.articles.tests.factories.news_factory import NewsFactory
+from apps.articles.factories.blog_item import BlogItemFactory
+from apps.articles.factories.news_factory import NewsFactory
 from apps.content_pages.tests.factories import ImageForContentFactory, ImagesBlockFactory
 from apps.core.tests.factories import PersonFactory
 from apps.info.tests.factories import FestivalFactory, PlaceFactory
@@ -66,7 +66,7 @@ def news(plays, image):
 
 @pytest.fixture
 def blog():
-    return list(BlogFactory.complex_create(1))
+    return list(BlogItemFactory.complex_create(1))
 
 
 @pytest.fixture

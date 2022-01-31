@@ -1,6 +1,12 @@
 import factory
+from django.contrib.contenttypes.models import ContentType
 
-from apps.content_pages.models import (
+from apps.core.decorators import restrict_factory
+from apps.core.models import Person, Role
+from apps.library.models import Performance, Play
+
+from ...content_pages.models import (
+    AbstractContent,
     ContentPersonRole,
     ExtendedPerson,
     Image,
@@ -20,9 +26,6 @@ from apps.content_pages.models import (
     Video,
     VideosBlock,
 )
-from apps.core.decorators import restrict_factory
-from apps.core.models import Person, Role
-from apps.library.models import Performance, Play
 
 
 @restrict_factory({"global": (Role,)})
@@ -268,11 +271,7 @@ class TitleFactory(factory.django.DjangoModelFactory):
 
 
 class VideosBlockFactory(factory.django.DjangoModelFactory):
-    """
-    Creates content block Video for projects.
-
-    Block creates with 3 ordered videos.
-    """
+    """Create `content block` of videos. The block will contain 3 videos."""
 
     class Meta:
         model = VideosBlock
@@ -287,7 +286,7 @@ class VideosBlockFactory(factory.django.DjangoModelFactory):
 
 
 class VideoFactory(factory.django.DjangoModelFactory):
-    """Creates content item Video for project."""
+    """Create `content item` for videos block."""
 
     class Meta:
         model = Video
@@ -300,3 +299,16 @@ class VideoFactory(factory.django.DjangoModelFactory):
     )
     title = factory.Faker("sentence", locale="ru_RU")
     url = factory.Faker("url")
+
+
+class AbstractContentFactory(factory.django.DjangoModelFactory):
+    """Abstract class for base content."""
+
+    class Meta:
+        model = AbstractContent
+        exclude = ("item", "content_page")
+        abstract = True
+
+    content_type = factory.LazyAttribute(lambda obj: ContentType.objects.get_for_model(obj.item))
+    object_id = factory.SelfAttribute("item.id")
+    order = factory.Sequence(lambda n_iterator: n_iterator)

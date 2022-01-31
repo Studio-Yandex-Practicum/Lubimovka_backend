@@ -1,29 +1,29 @@
 import factory
-from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
-from apps.articles.models import BlogItem, BlogItemContent, BlogPerson
+from apps.articles.models import BlogItem, BlogPerson
 from apps.content_pages.models import Image
-from apps.content_pages.tests.factories import (
-    ImagesBlockFactory,
-    PersonsBlockFactory,
-    PlaysBlockFactory,
-    PreambleFactory,
-    QuoteFactory,
-    TextFactory,
-    TitleFactory,
-)
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.library.models.play import Play
 
+from .blog_item_content import (
+    BlogItemImagesBlockContentFactory,
+    BlogItemPersonsBlockContentFactory,
+    BlogItemPlaysBlockContentFactory,
+    BlogItemPreambleContentFactory,
+    BlogItemQuoteContentFactory,
+    BlogItemTextContentFactory,
+    BlogItemTitleContentFactory,
+)
 
-def add_content_item_to_blog(blog, created, count, factory):
+
+def add_content_item_to_blog(blog_item, created, count, factory_class):
     """Add specified count of content item or block to Blog."""
     if not created:
         return
     if count:
-        BlogItemContentFactory.create_batch(count, item=factory, content_page=blog)
+        factory_class.create_batch(count, content_page=blog_item)
 
 
 @restrict_factory({"global": [Person, Role]})
@@ -42,23 +42,6 @@ class BlogPersonFactory(factory.django.DjangoModelFactory):
     role = factory.Iterator(Role.objects.filter(types__role_type="blog_persons_role"))
 
 
-class BlogItemContentFactory(factory.django.DjangoModelFactory):
-    """
-    Base model for content items and blocks for Blog.
-
-    When add content to Blog (via add_content_item_to_blog - see above) you should add
-    item=factory.SubFactory(BLOCK_OR_ITEM_FACTORY_YOU_NEED), content_page=BLOG
-    and count=INT.
-    """
-
-    class Meta:
-        model = BlogItemContent
-
-    content_type = factory.LazyAttribute(lambda obj: ContentType.objects.get_for_model(obj.item))
-    object_id = factory.SelfAttribute("item.id")
-    order = factory.Sequence(lambda n: n)
-
-
 @restrict_factory(
     {
         "add_several_imagesblock": (Image,),
@@ -66,7 +49,7 @@ class BlogItemContentFactory(factory.django.DjangoModelFactory):
         "add_several_personsblock": (Person,),
     }
 )
-class BlogFactory(factory.django.DjangoModelFactory):
+class BlogItemFactory(factory.django.DjangoModelFactory):
     """
     Creates Blog Page.
 
@@ -104,46 +87,74 @@ class BlogFactory(factory.django.DjangoModelFactory):
             BlogPersonFactory.create_batch(count, blog=self)
 
     @factory.post_generation
-    def add_several_preamble(self, created, count, **kwargs):
-        """Add specified count of Preamble item to Blog."""
-        subfactory = factory.SubFactory(PreambleFactory)
-        add_content_item_to_blog(self, created, count, subfactory)
-
-    @factory.post_generation
-    def add_several_text(self, created, count, **kwargs):
-        """Add specified count of Text item to Blog."""
-        subfactory = factory.SubFactory(TextFactory)
-        add_content_item_to_blog(self, created, count, subfactory)
-
-    @factory.post_generation
-    def add_several_title(self, created, count, **kwargs):
-        """Add specified count of Title item to Blog."""
-        subfactory = factory.SubFactory(TitleFactory)
-        add_content_item_to_blog(self, created, count, subfactory)
-
-    @factory.post_generation
-    def add_several_quote(self, created, count, **kwargs):
-        """Add specified count of Quote item to Blog."""
-        subfactory = factory.SubFactory(QuoteFactory)
-        add_content_item_to_blog(self, created, count, subfactory)
+    def add_several_imagesblock(self, created, count, **kwargs):
+        """Add specified count of content block with Images to Blog."""
+        add_content_item_to_blog(
+            blog_item=self,
+            created=created,
+            count=count,
+            factory_class=BlogItemImagesBlockContentFactory,
+        )
 
     @factory.post_generation
     def add_several_personsblock(self, created, count, **kwargs):
         """Add specified count of content block with Persons to Blog."""
-        subfactory = factory.SubFactory(PersonsBlockFactory)
-        add_content_item_to_blog(self, created, count, subfactory)
-
-    @factory.post_generation
-    def add_several_imagesblock(self, created, count, **kwargs):
-        """Add specified count of content block with Images to Blog."""
-        subfactory = factory.SubFactory(ImagesBlockFactory)
-        add_content_item_to_blog(self, created, count, subfactory)
+        add_content_item_to_blog(
+            blog_item=self,
+            created=created,
+            count=count,
+            factory_class=BlogItemPersonsBlockContentFactory,
+        )
 
     @factory.post_generation
     def add_several_playsblock(self, created, count, **kwargs):
         """Add specified count of content block with Plays to Blog."""
-        subfactory = factory.SubFactory(PlaysBlockFactory)
-        add_content_item_to_blog(self, created, count, subfactory)
+        add_content_item_to_blog(
+            blog_item=self,
+            created=created,
+            count=count,
+            factory_class=BlogItemPlaysBlockContentFactory,
+        )
+
+    @factory.post_generation
+    def add_several_preamble(self, created, count, **kwargs):
+        """Add specified count of Preamble item to Blog."""
+        add_content_item_to_blog(
+            blog_item=self,
+            created=created,
+            count=count,
+            factory_class=BlogItemPreambleContentFactory,
+        )
+
+    @factory.post_generation
+    def add_several_quote(self, created, count, **kwargs):
+        """Add specified count of Quote item to Blog."""
+        add_content_item_to_blog(
+            blog_item=self,
+            created=created,
+            count=count,
+            factory_class=BlogItemQuoteContentFactory,
+        )
+
+    @factory.post_generation
+    def add_several_text(self, created, count, **kwargs):
+        """Add specified count of Text item to Blog."""
+        add_content_item_to_blog(
+            blog_item=self,
+            created=created,
+            count=count,
+            factory_class=BlogItemTextContentFactory,
+        )
+
+    @factory.post_generation
+    def add_several_title(self, created, count, **kwargs):
+        """Add specified count of Title item to Blog."""
+        add_content_item_to_blog(
+            blog_item=self,
+            created=created,
+            count=count,
+            factory_class=BlogItemTitleContentFactory,
+        )
 
     @classmethod
     def complex_create(cls, count):
