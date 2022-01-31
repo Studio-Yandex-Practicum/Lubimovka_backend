@@ -1,7 +1,12 @@
 from .festival import FestivalAPIView, FestivalYearsAPIView
 from .festivalteams import FestivalTeamsAPIView
 from .partners import PartnersAPIView
-from .press_release import PressReleaseDownloadAPIView, PressReleaseViewSet, PressReleaseYearsAPIView
+from .press_release import (
+    PressReleaseDownloadAPIView,
+    PressReleasePhotoGalleryLink,
+    PressReleaseViewSet,
+    PressReleaseYearsAPIView,
+)
 from .question import QuestionCreateAPIView
 from .sponsors import SponsorsAPIView
 from .volunteers import VolunteersAPIView
@@ -12,6 +17,7 @@ __all__ = (
     FestivalYearsAPIView,
     PartnersAPIView,
     QuestionCreateAPIView,
+    PressReleasePhotoGalleryLink,
     PressReleaseViewSet,
     PressReleaseYearsAPIView,
     PressReleaseDownloadAPIView,

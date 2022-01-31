@@ -13,3 +13,7 @@ class PressReleaseSerializer(serializers.ModelSerializer):
 
 class YearsSerializer(serializers.Serializer):
     years = serializers.ListField(child=serializers.IntegerField())
+
+
+class PhotoGalleryLinkSerializer(serializers.Serializer):
+    url = serializers.URLField()
