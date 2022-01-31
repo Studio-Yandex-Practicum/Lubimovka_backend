@@ -1,4 +1,4 @@
-name: develop backend build and deploy
+name: develop backend build and  deploy
 
 concurrency:
   group: develop_deploy
@@ -124,8 +124,10 @@ jobs:
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-dev
 
             # Swag-nginx variables: reading and writing Github secrets in .env-dev
-            echo PUID=$(id -u) >> .env-dev
-            echo PGID=$(id -g) >> .env-dev
+            #echo PUID=$(id -u) >> .env-dev
+            #echo PGID=$(id -g) >> .env-dev
+            echo PUID=${{ secrets.PUID }} >> .env-dev
+            echo PGID=${{ secrets.PGID }} >> .env-dev
             echo URL=${{ secrets.SITE_URL }} >> .env-dev
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
