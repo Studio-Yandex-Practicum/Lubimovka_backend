@@ -2,12 +2,12 @@ from django.contrib import admin
 from django.db import models
 from django.forms.widgets import CheckboxSelectMultiple
 
-from apps.core.mixins import AdminImagePreview
+from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 from apps.core.models import Image, Role, RoleType
 
 
 @admin.register(Image)
-class ImageAdmin(AdminImagePreview, admin.ModelAdmin):
+class ImageAdmin(HideOnNavPanelAdminModelMixin, AdminImagePreview, admin.ModelAdmin):
     list_display = ("image_preview_list_page",)
     readonly_fields = ("image_preview_change_page",)
 
