@@ -43,6 +43,7 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = OtherLink
+        django_get_or_create = ["author", "name"]
 
     author = factory.Iterator(Author.objects.all())
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
