@@ -9,6 +9,8 @@ from apps.content_pages.querysets import ContenPageQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel
 
+from ..services import abstract_content_delete_generic_related_items
+
 
 class AbstractContentPage(BaseModel):
     """Шаблон модели с конструктором.
@@ -118,6 +120,10 @@ class AbstractContent(models.Model):
         return f"Блок/элемент — {self.item}"
 
     def delete(self, *args, **kwargs) -> Tuple[int, Dict[str, int]]:
-        item = self.item
-        item.delete()
-        return super().delete(*args, **kwargs)
+        """Delete related item with generic relation."""
+        related_count_deleted, realted_dict_deleted = abstract_content_delete_generic_related_items(object=self)
+
+        count_deleted, dict_deleted = super().delete(*args, **kwargs)
+        count_deleted += related_count_deleted
+        dict_deleted.update(realted_dict_deleted)
+        return count_deleted, dict_deleted

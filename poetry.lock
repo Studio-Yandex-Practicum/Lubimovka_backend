@@ -190,7 +190,7 @@ Django = ">=3.2,<4.1"
 
 [[package]]
 name = "django-anymail"
-version = "8.4"
+version = "8.5"
 description = "Django email integration for Amazon SES, Mailgun, Mailjet, Postmark, SendGrid, SendinBlue, SparkPost and other transactional ESPs"
 category = "main"
 optional = false
@@ -871,6 +871,19 @@ docs = ["sphinx", "sphinx-rtd-theme"]
 testing = ["django", "django-configurations (>=2.0)"]
 
 [[package]]
+name = "pytest-factoryboy"
+version = "2.1.0"
+description = "Factory Boy support for pytest."
+category = "dev"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+factory-boy = ">=2.10.0"
+inflection = "*"
+pytest = ">=4.6"
+
+[[package]]
 name = "pytest-lazy-fixture"
 version = "0.6.3"
 description = "It helps to use fixtures in pytest.mark.parametrize"
@@ -880,6 +893,19 @@ python-versions = "*"
 
 [package.dependencies]
 pytest = ">=3.2.5"
+
+[[package]]
+name = "pytest-sugar"
+version = "0.9.4"
+description = "pytest-sugar is a plugin for pytest that changes the default look and feel of pytest (e.g. progressbar, show tests that fail instantly)."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+packaging = ">=14.1"
+pytest = ">=2.9"
+termcolor = ">=1.1.0"
 
 [[package]]
 name = "python-bidi"
@@ -974,6 +1000,14 @@ description = "A non-validating SQL parser."
 category = "main"
 optional = false
 python-versions = ">=3.5"
+
+[[package]]
+name = "termcolor"
+version = "1.1.0"
+description = "ANSII Color formatting for output in terminal."
+category = "dev"
+optional = false
+python-versions = "*"
 
 [[package]]
 name = "text-unidecode"
@@ -1116,7 +1150,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "3ace2de321c51df61c018dc0709d428077f76268295a4f576da3c18838124937"
+content-hash = "f794b8c2a6b6ea2f8afc3d1cfeca9cd6319d04137e3b812136281176ded15edf"
 
 [metadata.files]
 appnope = [
@@ -1239,8 +1273,8 @@ django-admin-sortable2 = [
     {file = "django_admin_sortable2-1.0.3-py3-none-any.whl", hash = "sha256:40a9942317d66db2c5cee289d284754ae3f95470143f4914afa06fb864d38fb4"},
 ]
 django-anymail = [
-    {file = "django-anymail-8.4.tar.gz", hash = "sha256:671a338de43b8e414d48c6d16aac1df54d2f24f916e1073f9f60aef5acffaf89"},
-    {file = "django_anymail-8.4-py3-none-any.whl", hash = "sha256:2e8307e84f0a12f9283469017094a8246db9a0fc608ac17dd1027ee011ece986"},
+    {file = "django-anymail-8.5.tar.gz", hash = "sha256:677e937dc9e2671ca7631abb1d94ddc6b840beb3d53c0fbf699e866a6a9ba92f"},
+    {file = "django_anymail-8.5-py3-none-any.whl", hash = "sha256:2325932f56f914d96e0a54db850f2b246ed2277b753f75319620d051a51551e2"},
 ]
 django-ckeditor = [
     {file = "django-ckeditor-6.2.0.tar.gz", hash = "sha256:df64dc9e62790ef824f609605d31be847bdbce1cc7aa94e49bd5ca60d7aa79bb"},
@@ -1571,9 +1605,16 @@ pytest-django = [
     {file = "pytest-django-4.5.2.tar.gz", hash = "sha256:d9076f759bb7c36939dbdd5ae6633c18edfc2902d1a69fdbefd2426b970ce6c2"},
     {file = "pytest_django-4.5.2-py3-none-any.whl", hash = "sha256:c60834861933773109334fe5a53e83d1ef4828f2203a1d6a0fa9972f4f75ab3e"},
 ]
+pytest-factoryboy = [
+    {file = "pytest-factoryboy-2.1.0.tar.gz", hash = "sha256:23bc562ab32cc39eddfbbbf70e618a1b30e834a4cfa451c4bedc36216f0a7b19"},
+    {file = "pytest_factoryboy-2.1.0-py3-none-any.whl", hash = "sha256:10c02d2736cb52c7af28065db9617e7f50634e95eaa07eeb9a007026aa3dc0a8"},
+]
 pytest-lazy-fixture = [
     {file = "pytest-lazy-fixture-0.6.3.tar.gz", hash = "sha256:0e7d0c7f74ba33e6e80905e9bfd81f9d15ef9a790de97993e34213deb5ad10ac"},
     {file = "pytest_lazy_fixture-0.6.3-py3-none-any.whl", hash = "sha256:e0b379f38299ff27a653f03eaa69b08a6fd4484e46fd1c9907d984b9f9daeda6"},
+]
+pytest-sugar = [
+    {file = "pytest-sugar-0.9.4.tar.gz", hash = "sha256:b1b2186b0a72aada6859bea2a5764145e3aaa2c1cfbb23c3a19b5f7b697563d3"},
 ]
 python-bidi = [
     {file = "python-bidi-0.4.2.tar.gz", hash = "sha256:5347f71e82b3e9976dc657f09ded2bfe39ba8d6777ca81a5b2c56c30121c496e"},
@@ -1683,6 +1724,9 @@ snowballstemmer = [
 sqlparse = [
     {file = "sqlparse-0.4.2-py3-none-any.whl", hash = "sha256:48719e356bb8b42991bdbb1e8b83223757b93789c00910a616a071910ca4a64d"},
     {file = "sqlparse-0.4.2.tar.gz", hash = "sha256:0c00730c74263a94e5a9919ade150dfc3b19c574389985446148402998287dae"},
+]
+termcolor = [
+    {file = "termcolor-1.1.0.tar.gz", hash = "sha256:1d6d69ce66211143803fbc56652b41d73b4a400a2891d7bf7a1cdf4c02de613b"},
 ]
 text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
