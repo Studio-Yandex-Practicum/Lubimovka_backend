@@ -1,4 +1,4 @@
-name: prod backend build and  deploy
+name: prod backend build and deploy
 
 concurrency:
   group: prod_deploy
@@ -26,8 +26,6 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v2
-        with:
-          ref: master
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
       - name: Log in to the Container registry
