@@ -94,6 +94,9 @@ class Play(BaseModel):
         return self.name
 
     def clean(self):
-        if self.year > timezone.now().year:
+        if self._has_year_before_saving() and self.year > timezone.now().year:
             raise ValidationError("Год написания пьесы не может быть больше текущего")
         return super().clean()
+
+    def _has_year_before_saving(self):
+        return self.year is None
