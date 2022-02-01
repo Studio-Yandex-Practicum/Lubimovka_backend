@@ -7,7 +7,10 @@ from apps.info.serializers import ContactsSerializer
 
 class ContactsAPIView(APIView):
     def get(self, request):
-        """Get an email and link for contacts page."""
+        """Get an email for questions and link for document.
+
+        with a privacy policy on contacts page.
+        """
         email = Setting.get_setting("email_send_to")
         link = Setting.get_setting("url_to_privacy_policy")
         data = {"email": email, "link": link}
