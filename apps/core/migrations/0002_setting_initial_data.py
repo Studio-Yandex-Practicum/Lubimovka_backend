@@ -309,6 +309,13 @@ def add_general_settings(apps, schema_editor):
         boolean=True,
         description="Форма для отправки пьесы",
     )
+    Setting.objects.create(
+        field_type="URL",
+        group="GENERAL",
+        settings_key="url_to_privacy_policy",
+        url="privacy-policy",
+        description="Ссылка на обработку персональных данных",
+    )
 
 def add_main_settings(apps, schema_editor):
 
