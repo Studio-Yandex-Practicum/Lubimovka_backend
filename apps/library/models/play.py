@@ -99,4 +99,4 @@ class Play(BaseModel):
         return super().clean()
 
     def _has_year_before_saving(self):
-        return self.year is None
+        return self.year is not None
