@@ -12,7 +12,7 @@ class ContactsAPIView(APIView):
         with a privacy policy on contacts page.
         """
         email = Setting.get_setting("email_send_to")
-        link = Setting.get_setting("url_to_privacy_policy")
-        data = {"email": email, "link": link}
+        privacy_policy_link = Setting.get_setting("url_to_privacy_policy")
+        data = {"email": email, "privacy_policy_link": privacy_policy_link}
         serializer = ContactsSerializer(data)
         return Response(serializer.data)
