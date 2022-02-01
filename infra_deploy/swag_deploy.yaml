@@ -9,7 +9,8 @@ services:
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
-      - SUBDOMAINS=${DEV_SUBDOMAIN},${TEST_SUBDOMAIN}
+#      - SUBDOMAINS=${DEV_SUBDOMAIN},${TEST_SUBDOMAIN}
+      - SUBDOMAINS=${DEV_SUBDOMAIN}
       - ONLY_SUBDOMAINS=true
       - CERTPROVIDER=zerossl
     env_file:
