@@ -1,12 +1,10 @@
-from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import UniqueConstraint
-from django.utils import timezone
 
 from apps.core.models import BaseModel
 from apps.core.utilities import slugify
 from apps.info.models import Festival
+from apps.library.validators import year_validator
 
 
 class ProgramType(BaseModel):
@@ -45,10 +43,7 @@ class Play(BaseModel):
         verbose_name="Город",
     )
     year = models.PositiveSmallIntegerField(
-        validators=[
-            MinValueValidator(1000),
-            MaxValueValidator(2200),
-        ],
+        validators=[year_validator],
         verbose_name="Год написания пьесы",
     )
     url_download = models.FileField(
@@ -92,8 +87,3 @@ class Play(BaseModel):
 
     def __str__(self):
         return self.name
-
-    def clean(self):
-        if self.year > timezone.now().year:
-            raise ValidationError("Год написания пьесы не может быть больше текущего")
-        return super().clean()
