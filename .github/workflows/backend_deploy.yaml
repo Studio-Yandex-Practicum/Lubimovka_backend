@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: lubimovka_backend
+  IMAGE_NAME: lubimovkabackend
 
 defaults:
   run:
