@@ -66,7 +66,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - name: Deploy with scp
-        run: scp -r infra_deploy/!(.env_example) ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
+        run: scp -r infra_deploy/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
       -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
