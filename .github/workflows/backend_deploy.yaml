@@ -43,7 +43,7 @@ jobs:
           file: Dockerfile
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
-          tags: lubimovka_backend-1:latest
+          tags: ghcr.io/maxbur89/lubimovka_backend-1:latest
       
   deploy:
     name: Deploy changes on server
