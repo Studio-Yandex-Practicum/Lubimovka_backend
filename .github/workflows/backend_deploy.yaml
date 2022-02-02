@@ -52,12 +52,15 @@ jobs:
       name: develop_deploy
     needs: build-and-push-image-to-github-packages
     steps:
+      -
+        name: Checkout
+        uses: actions/checkout@v2
       - name: Create SSH key
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - name: Deploy with rsync
+      - name: Deploy with scp
         run: scp -r infra_deploy/ Dockerfile ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/usr/local/src/
       -
         name: executing remote ssh commands to deploy
