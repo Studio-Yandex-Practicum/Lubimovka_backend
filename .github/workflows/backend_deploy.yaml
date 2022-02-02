@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: lubimovkabackend
+  IMAGE_NAME: lubimovka_backend
 
 defaults:
   run:
@@ -34,7 +34,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          tags: \\$IMAGE_NAME
+          tags: ${{ secrets.IMAGE_NAME_BACKEND }}
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
       -
