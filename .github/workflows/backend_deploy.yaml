@@ -34,9 +34,9 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          tags: ${{ secrets.IMAGE_NAME_BACKEND }}
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
+          tags: ${{ secrets.IMAGE_NAME_BACKEND }}
       -
         name: Docker login
         uses: docker/login-action@v1
