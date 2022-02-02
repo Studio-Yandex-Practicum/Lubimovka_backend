@@ -113,3 +113,11 @@ jobs:
             echo PGID=${{ secrets.PGID }} >> .env-dev
             echo URL=${{ secrets.URL }} >> .env-dev
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
+             
+            # Установка приложения
+            cp -rf ${{ env.DEPLOY_PATH }}/infra_deploy/lubimovka.service /etc/systemd/system/lubimovka.service
+            systemctl daemon-reload
+            systemctl restart lubimovka.service
+
+            # После установки удаляем данный файл
+            rm ${{ env.DEPLOY_PATH }}/infra_deploy/lubimovka.service
