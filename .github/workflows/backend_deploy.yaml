@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: lubimovka_backend
+  IMAGE_NAME: lubimovka_backend-1
 
 defaults:
   run:
@@ -43,7 +43,7 @@ jobs:
           file: Dockerfile
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
-          tags: ghcr.io/maxbur89/lubimovka_backend-1:latest
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ IMAGE_NAME }}:latest
       
   deploy:
     name: Deploy changes on server
