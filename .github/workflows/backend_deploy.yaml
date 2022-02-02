@@ -71,6 +71,39 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            ls -l
-            cd /usr/local/src
-            ls -l
+            # GitHub variables
+            echo "IMAGE_BACK=${{ env.IMAGE }}" >> .github_vars
+            echo "IMAGE_BACK_TAG=${{ env.IMAGE_TAG }}" >> .github_vars
+            echo "IMAGE_FRONT=${{ secrets.IMAGE_FRONT }}" >> .github_vars
+            echo "IMAGE_FRONT_TAG=${{ secrets.IMAGE_FRONT_TAG }}" >> .github_vars
+            echo "FRONT_BASE_URL=${{ secrets.FRONT_BASE_URL }}" >> .github_vars
+            echo "DEVELOP_API_BASE_URL=${{ secrets.DEVELOP_API_BASE_URL }}" >> .github_vars
+            echo "TEST_API_BASE_URL=${{ secrets.TEST_API_BASE_URL }}" >> .github_vars
+            echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .github_vars
+            echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .github_vars
+            
+            # PostgreSQL environment variables
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env-dev
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env-dev
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-dev
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-dev
+            
+            # Django environment variables
+            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-dev
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-dev
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-dev
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-dev
+            echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-dev
+            echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-dev
+            echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-dev
+            echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-dev
+            echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-dev
+            echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-dev
+            echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-dev
+
+            # Swag environment variables
+            echo PUID=${{ secrets.PUID }} >> .env-prod
+            echo PGID=${{ secrets.PGID }} >> .env-prod
+            echo URL=${{ secrets.URL }} >> .env-dev
+            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
