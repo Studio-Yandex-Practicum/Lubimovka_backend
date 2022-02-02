@@ -80,9 +80,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ${{ github.event.repository.name }}/
+            cd /usr/local/src/${{ github.event.repository.name }}/
             git pull
-            cd ${{ github.event.repository.name }}/infra_deploy
+            cd /usr/local/src/${{ github.event.repository.name }}/infra_deploy
 
             chmod +x check_env_script.sh
             chmod +x docker_check_run.sh
