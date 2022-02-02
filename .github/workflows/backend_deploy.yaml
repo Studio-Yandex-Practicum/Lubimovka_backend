@@ -74,6 +74,3 @@ jobs:
             ls -l
             cd /usr/local/src
             ls -l
-            
-            
-            
