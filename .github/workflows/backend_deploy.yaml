@@ -74,8 +74,8 @@ jobs:
           script: |
             cd ${{ env.DEPLOY_PATH }}/infra_deploy/
             # GitHub variables
-            echo "IMAGE_BACK=${{ env.IMAGE }}" > .github_vars
-            echo "IMAGE_BACK_TAG=${{ env.IMAGE_TAG }}" >> .github_vars
+            echo "IMAGE_BACK=${{ secrets.IMAGE_BACK }}" > .github_vars
+            echo "IMAGE_BACK_TAG=${{ secrets.IMAGE_BACK_TAG }}" >> .github_vars
             echo "IMAGE_FRONT=${{ secrets.IMAGE_FRONT }}" >> .github_vars
             echo "IMAGE_FRONT_TAG=${{ secrets.IMAGE_FRONT_TAG }}" >> .github_vars
             echo "FRONT_BASE_URL=${{ secrets.FRONT_BASE_URL }}" >> .github_vars
