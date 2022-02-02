@@ -34,7 +34,7 @@ jobs:
         with:
           context: .
           file: Dockerfile
-          tags: "$IMAGE_NAME"
+          tags: $IMAGE_NAME
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
       -
