@@ -12,6 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: lubimovka_backend-1
+  DEPLOY_PATH: /usr/local/src/
 
 defaults:
   run:
@@ -61,7 +62,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - name: Deploy with scp
-        run: scp -r infra_deploy/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:/usr/local/src/
+        run: scp -r infra_deploy/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
       -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -71,8 +72,9 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
+            cd ${{ env.DEPLOY_PATH }}/infra_deploy/
             # GitHub variables
-            echo "IMAGE_BACK=${{ env.IMAGE }}" >> .github_vars
+            echo "IMAGE_BACK=${{ env.IMAGE }}" > .github_vars
             echo "IMAGE_BACK_TAG=${{ env.IMAGE_TAG }}" >> .github_vars
             echo "IMAGE_FRONT=${{ secrets.IMAGE_FRONT }}" >> .github_vars
             echo "IMAGE_FRONT_TAG=${{ secrets.IMAGE_FRONT_TAG }}" >> .github_vars
@@ -83,7 +85,7 @@ jobs:
             echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .github_vars
             
             # PostgreSQL environment variables
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env-dev
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} > .env-dev
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env-dev
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-dev
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
@@ -103,7 +105,7 @@ jobs:
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-dev
 
             # Swag environment variables
-            echo PUID=${{ secrets.PUID }} >> .env-prod
-            echo PGID=${{ secrets.PGID }} >> .env-prod
+            echo PUID=${{ secrets.PUID }} >> .env-dev
+            echo PGID=${{ secrets.PGID }} >> .env-dev
             echo URL=${{ secrets.URL }} >> .env-dev
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
