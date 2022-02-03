@@ -8,7 +8,7 @@ services:
       BASE_URL: ${FRONT_BASE_URL}
       API_BASE_URL: ${DEVELOP_API_BASE_URL}
     networks:
-      - swag_network
+      - develop_swag_network
     ports:
       - "3005:3000"
     restart: always
@@ -19,14 +19,14 @@ services:
       BASE_URL: ${FRONT_BASE_URL}
       API_BASE_URL: ${TEST_API_BASE_URL}
     networks:
-      - swag_network
+      - develop_swag_network
     ports:
       - "3004:3000"
     restart: always
 
 networks:
-  swag_network:
-    name: swag_network
+  develop_swag_network:
+    name: develop_swag_network
     external: true
   develop_db_network:
     name: develop_db_network
