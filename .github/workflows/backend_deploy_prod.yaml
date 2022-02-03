@@ -1,4 +1,4 @@
-name: prod backend build and deploy
+name: Prod backend build and deploy
 
 concurrency:
   group: prod_deploy
@@ -11,7 +11,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: lubimovka_backend
+  IMAGE_NAME: lubimovka_backend-1
+  DEPLOY_PATH: /usr/local/src
 
 defaults:
   run:
@@ -25,36 +26,27 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v2
+      -
+        name: Checkout
+        uses: actions/checkout@v2
         with:
           ref: master
-      - name: Build image
-        run: docker build . --file Dockerfile --tag $IMAGE_NAME --label "runnumber=${GITHUB_RUN_ID}"
-      - uses: docker/login-action@v1
+      -
+        name: Docker login
+        uses: docker/login-action@v1
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Push image
-        run: |
-          IMAGE_ID=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
-
-          # Change all uppercase to lowercase
-          IMAGE_ID=$(echo $IMAGE_ID | tr '[A-Z]' '[a-z]')
-
-          # Strip git ref prefix from version
-          VERSION=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-
-          # Strip "v" prefix from tag name
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
-
-          # Use Docker `latest` tag convention
-          [ "$VERSION" == "master" ] && VERSION=prod
-          echo IMAGE_ID=$IMAGE_ID
-          echo VERSION=$VERSION
-
-          docker tag $IMAGE_NAME $IMAGE_ID:prod
-          docker push $IMAGE_ID:prod
+      -
+        name: Build and push
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: Dockerfile
+          labels: runnumber=${GITHUB_RUN_ID}
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:master,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy:
     name: Deploy changes on server
@@ -64,15 +56,20 @@ jobs:
     needs: build-and-push-image-to-github-packages
     steps:
       -
-        name: Getting docker image name and tag, write in environment
+        name: Checkout
+        uses: actions/checkout@v2
+        with:
+          ref: master
+      -
+        name: Create SSH key
+        # (SSH_KNOWN_HOSTS=ssh-keyscan -H сервер, SSH_PRIVATE_KEY - ключ с ПК, которому разрешен вход)
         run: |
-          IMAGE=$REGISTRY/${{ github.repository_owner }}/$IMAGE_NAME
-          IMAGE=$(echo $IMAGE | tr '[A-Z]' '[a-z]')
-          IMAGE_TAG=$(echo "${{ github.ref }}" | sed -e 's,.*/\(.*\),\1,')
-          [[ "${{ github.ref }}" == "refs/tags/"* ]] && IMAGE_TAG=$(echo $IMAGE_TAG | sed -e 's/^v//')
-
-          echo IMAGE=$IMAGE >> $GITHUB_ENV
-          echo IMAGE_TAG=$IMAGE_TAG >> $GITHUB_ENV
+          install -m 600 -D /dev/null ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+      -
+        name: Deploy with scp
+        run: scp -r infra_deploy/prod/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
       -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -82,62 +79,55 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ../../usr/local/src/
-            cd ${{ github.event.repository.name }}/infra_deploy
-            git pull
-            chmod +x check_env_script.sh
-            chmod +x docker_check_run.sh
+            cd ${{ env.DEPLOY_PATH }}/prod/
 
-            # Github package name: writing in .env to read in docker-compose script and nginx scripts
-            ./check_env_script.sh .github_vars
-            echo "IMAGE_BACK=${{ env.IMAGE }}" >> .github_vars
-            echo "IMAGE_BACK_TAG=${{ env.IMAGE_TAG }}" >> .github_vars
+            # GitHub variables
+            echo "IMAGE_BACK=${{ secrets.IMAGE_BACK }}" > .github_vars
+            echo "IMAGE_BACK_TAG=${{ secrets.IMAGE_BACK_TAG }}" >> .github_vars
             echo "IMAGE_FRONT=${{ secrets.IMAGE_FRONT }}" >> .github_vars
             echo "IMAGE_FRONT_TAG=${{ secrets.IMAGE_FRONT_TAG }}" >> .github_vars
             echo "FRONT_BASE_URL=${{ secrets.FRONT_BASE_URL }}" >> .github_vars
             echo "DEVELOP_API_BASE_URL=${{ secrets.DEVELOP_API_BASE_URL }}" >> .github_vars
-            echo "MASTER_API_BASE_URL=${{ secrets.MASTER_API_BASE_URL }}" >> .github_vars
             echo "TEST_API_BASE_URL=${{ secrets.TEST_API_BASE_URL }}" >> .github_vars
             echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .github_vars
             echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .github_vars
 
-            # Export all variables from .github_vars
-            set -a
-            source .github_vars
-
-            # PostgreSQL variables: reading and writing Github secrets in .env-prod
-            ./check_env_script.sh .env-prod
-            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-prod
-            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-prod
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} >> .env-prod
+            # PostgreSQL environment variables
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} > .env-prod
             echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env-prod
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-prod
-
-            # Django variables: reading and writing Github secrets in .env-prod
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-prod
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-prod
+            
+            # Django environment variables
             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-prod
             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-prod
             echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-prod
-
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-prod
             echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-prod
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-prod
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-prod
-
-            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-prod
             echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-prod
             echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-prod
             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-prod
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-prod
 
-            # Swag-nginx variables: reading and writing Github secrets in .env-prod
-            # echo PUID=$(id -u) >> .env-prod
-            # echo PGID=$(id -g) >> .env-prod
+            # Swag environment variables
             echo PUID=${{ secrets.PUID }} >> .env-prod
             echo PGID=${{ secrets.PGID }} >> .env-prod
-            echo URL=${{ secrets.SITE_URL }} >> .env-prod
+            echo URL=${{ secrets.URL }} >> .env-prod
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-prod
+            
+            # Установка приложения - backend
+            cp -rf ${{ env.DEPLOY_PATH }}/prod/lubimovka-backend.service /etc/systemd/system/lubimovka-backend.service
+            systemctl daemon-reload
+            systemctl restart lubimovka-backend.service
 
-            # Pull docker image from github packages with tag
-            docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
+            # Установка приложения - frontend
+            cp -rf ${{ env.DEPLOY_PATH }}/prod/lubimovka-frontend.service /etc/systemd/system/lubimovka-frontend.service
+            systemctl daemon-reload
+            systemctl restart lubimovka-frontend.service
 
-            # re-run docker containers
-            ./docker_check_run.sh backend_prod_deploy.yaml prod
+            # После установки удаляем файлы
+            rm ${{ env.DEPLOY_PATH }}/prod/lubimovka-backend.service
+            rm ${{ env.DEPLOY_PATH }}/prod/lubimovka-frontend.service

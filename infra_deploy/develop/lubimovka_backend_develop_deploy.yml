@@ -6,7 +6,7 @@ services:
     container_name: postgres_develop
     restart: always
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - postgres_data_develop:/var/lib/postgresql/data
     env_file:
       - .env-dev
     networks:
@@ -24,7 +24,7 @@ services:
       - .env-dev
     networks:
       - develop_db_network
-      - swag_network
+      - develop_swag_network
   migrations:
     image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
     container_name: migrations_develop
@@ -55,7 +55,7 @@ services:
     env_file:
       - .env-dev
     networks:
-      - swag_network
+      - develop_swag_network
     volumes:
       - ./swag/swag_nginx_develop.conf:/config/nginx/site-confs/default
       - static_value_develop:/config/develop/static/
@@ -68,14 +68,14 @@ services:
     restart: unless-stopped
 
 networks:
-  swag_network:
-    name: swag_network
+  develop_swag_network:
+    name: develop_swag_network
   develop_db_network:
     name: develop_db_network
 
 volumes:
-  postgres_data:
-    name: postgres_data
+  postgres_data_develop:
+    name: postgres_data_develop
   static_value_develop:
     name: static_value_develop
   media_value_develop:

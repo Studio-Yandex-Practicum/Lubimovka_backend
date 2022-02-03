@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13.3
+    container_name: postgres_prod
+    restart: always
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    env_file:
+      - .env-prod
+    networks:
+      - prod_db_network
+  backend:
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
+    container_name: backend_prod
+    restart: always
+    volumes:
+      - static_value_prod:/code/staticfiles/
+      - media_value_prod:/code/media/
+    depends_on:
+      - postgres
+    env_file:
+      - .env-prod
+    networks:
+      - prod_db_network
+      - swag_network
+  migrations:
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
+    container_name: migrations_prod
+    volumes:
+      - static_value_prod:/code/staticfiles/
+      - media_value_prod:/code/media/
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput"
+    depends_on:
+      - backend
+    env_file:
+      - .env-prod
+    networks:
+      - prod_db_network
+  swag:
+    image: ghcr.io/linuxserver/swag
+    container_name: swag_prod
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=Europe/Moscow
+      - VALIDATION=http
+#      - SUBDOMAINS=${DEV_SUBDOMAIN},${TEST_SUBDOMAIN}
+      - SUBDOMAINS=${DEV_SUBDOMAIN}
+      - ONLY_SUBDOMAINS=true
+      - CERTPROVIDER=zerossl
+    env_file:
+      - .env-prod
+    networks:
+      - prod_swag_network
+    volumes:
+      - ./swag/swag_nginx_prod.conf:/config/nginx/site-confs/default
+      - static_value_prod:/config/prod/static/
+      - media_value_prod:/config/prod/media/
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped
+
+networks:
+  prod_swag_network:
+    name: prod_swag_network
+  prod_db_network:
+    name: prod_db_network
+
+volumes:
+  postgres_data_prod:
+    name: postgres_data_prod
+  static_value_prod:
+    name: static_value_prod
+  media_value_prod:
+    name: media_value_prod
