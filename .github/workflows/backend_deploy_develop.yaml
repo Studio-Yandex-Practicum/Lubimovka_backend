@@ -46,7 +46,7 @@ jobs:
           file: Dockerfile
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:develop,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:test
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:develop,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ env.GITHUB_SHA}}
       
   deploy:
     name: Deploy changes on server
