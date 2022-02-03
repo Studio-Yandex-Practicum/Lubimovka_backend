@@ -103,11 +103,10 @@ volumes:
   postgres_data:
     name: postgres_data
   static_value_develop:
-    name: static_value
+    name: static_value_develop
   media_value_develop:
-    name: media_value
+    name: media_value_develop
   static_value_test:
     name: static_value_test
   media_value_test:
     name: media_value_test
-
