@@ -46,9 +46,7 @@ jobs:
           file: Dockerfile
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:develop, \
-                ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest, \
-                ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:develop,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           
   deploy:
     name: Deploy changes on server
@@ -62,12 +60,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: develop
-      - name: Create SSH key
+      - 
+        name: Create SSH key
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - name: Deploy with scp
+      - 
+        name: Deploy with scp
         run: scp -r infra_deploy/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
       -
         name: executing remote ssh commands to deploy
