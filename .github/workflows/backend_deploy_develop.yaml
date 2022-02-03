@@ -46,10 +46,8 @@ jobs:
           file: Dockerfile
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:develop,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ steps.slug.outputs.sha8 }}
-          # ${{ github.sha }}
-          # ${steps.slug.outputs.sha8}
-
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:develop,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          
   deploy:
     name: Deploy changes on server
     runs-on: ubuntu-latest
@@ -62,13 +60,15 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: develop
-      - name: Create SSH key
+      - 
+        name: Create SSH key
         run: |
           install -m 600 -D /dev/null ~/.ssh/id_rsa
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
-      - name: Deploy with scp
-        run: scp -r infra_deploy/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
+      - 
+        name: Deploy with scp
+        run: scp -r infra_deploy/develop/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
       -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -118,9 +118,9 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
              
             # Установка приложения
-            cp -rf ${{ env.DEPLOY_PATH }}/infra_deploy/lubimovka.service /etc/systemd/system/lubimovka.service
+            cp -rf ${{ env.DEPLOY_PATH }}/infra_deploy/develop/lubimovka.service /etc/systemd/system/lubimovka.service
             systemctl daemon-reload
             systemctl restart lubimovka.service
 
             # После установки удаляем данный файл
-            rm ${{ env.DEPLOY_PATH }}/infra_deploy/lubimovka.service
+            rm ${{ env.DEPLOY_PATH }}/infra_deploy/develop/lubimovka.service
