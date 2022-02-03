@@ -9,6 +9,7 @@ ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400 = {
     "example": {
         "non_field_errors": [
             f"Повторная отправка заявки с данными в полях {UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION}."
+            f"При необходимости отправить повторную заявку, укажите это в названии пьесы."
         ],
         "year": [
             "Обязательное поле.",

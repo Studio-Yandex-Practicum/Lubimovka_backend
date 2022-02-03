@@ -17,7 +17,6 @@ class BannerAdmin(admin.ModelAdmin):
 class SettingAdmin(admin.ModelAdmin):
     list_display = (
         "description",
-        "settings_key",
         "get_value",
         "image",
     )

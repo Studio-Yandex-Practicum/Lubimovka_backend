@@ -2,6 +2,7 @@ from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Person, Role
 
 
@@ -58,6 +59,10 @@ class BlogItem(AbstractContentPage):
         through=BlogPerson,
         related_name="blogs",
         verbose_name="Роли",
+    )
+    image = models.ImageField(
+        upload_to=path_by_app_label_and_class_name,
+        verbose_name="Заглавная картинка",
     )
 
     class Meta:

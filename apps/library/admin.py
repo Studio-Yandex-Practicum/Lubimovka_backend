@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 
 from apps.core.models import Person, Role
-from apps.library.forms import PerformanceAdminForm
 from apps.library.models import (
     Achievement,
     Author,
@@ -112,7 +111,10 @@ class AuthorAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
+        if obj:
+            form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
+        else:
+            form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
         return form
 
 
@@ -166,13 +168,13 @@ class ProgramTypeAdmin(admin.ModelAdmin):
 
 class PerformanceReviewInline(admin.TabularInline):
     model = PerformanceReview
-    extra = 1
+    extra = 0
     max_num = 8
 
 
 class PerformanceMediaReviewInline(admin.TabularInline):
     model = PerformanceMediaReview
-    extra = 1
+    extra = 0
     max_num = 8
 
 
@@ -182,7 +184,7 @@ class TeamMemberInline(admin.TabularInline):
         "person",
         "role",
     )
-    extra = 1
+    extra = 0
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Restricts role types for the model where inline is used."""
@@ -198,11 +200,22 @@ class TeamMemberInline(admin.TabularInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class ImagesInBlockInline(admin.TabularInline):
+    model = Performance.images_in_block.through
+    verbose_name = "Изображение в блоке изображений"
+    verbose_name_plural = "Изображения в блоке изображений"
+    extra = 0
+    max_num = 8
+
+
 class PerformanceAdmin(admin.ModelAdmin):
-    exclude = ("events",)
-    filter_horizontal = (
+    list_display = (
+        "name",
+        "play",
+    )
+    exclude = (
+        "events",
         "images_in_block",
-        "persons",
     )
     list_filter = ("age_limit",)
     search_fields = (
@@ -210,8 +223,8 @@ class PerformanceAdmin(admin.ModelAdmin):
         "name",
         "text",
     )
-    form = PerformanceAdminForm
     inlines = (
+        ImagesInBlockInline,
         PerformanceReviewInline,
         PerformanceMediaReviewInline,
         TeamMemberInline,
