@@ -116,11 +116,17 @@ jobs:
             echo PGID=${{ secrets.PGID }} >> .env-dev
             echo URL=${{ secrets.URL }} >> .env-dev
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
-             
-            # Установка приложения
-            cp -rf ${{ env.DEPLOY_PATH }}/develop/lubimovka.service /etc/systemd/system/lubimovka.service
+            
+            # Установка приложения - backend
+            cp -rf ${{ env.DEPLOY_PATH }}/develop/lubimovka-backend.service /etc/systemd/system/lubimovka-backend.service
             systemctl daemon-reload
-            systemctl restart lubimovka.service
+            systemctl restart lubimovka-backend.service
 
-            # После установки удаляем данный файл
-            rm ${{ env.DEPLOY_PATH }}/develop/lubimovka.service
+            # Установка приложения - frontend
+            cp -rf ${{ env.DEPLOY_PATH }}/develop/lubimovka-frontend.service /etc/systemd/system/lubimovka-frontend.service
+            systemctl daemon-reload
+            systemctl restart lubimovka-frontend.service
+
+            # После установки удаляем файлы
+            rm ${{ env.DEPLOY_PATH }}/develop/lubimovka-backend.service
+            rm ${{ env.DEPLOY_PATH }}/develop/lubimovka-frontend.service
