@@ -13,6 +13,7 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: lubimovka_backend-1
   DEPLOY_PATH: /usr/local/src/
+  ${{ env.GITHUB_SHA }}
 
 defaults:
   run:
@@ -46,8 +47,8 @@ jobs:
           file: Dockerfile
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:develop,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest
-          # ,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ env.GITHUB_SHA }}
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:develop,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha	}}
+          # ,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ env.GITHUB_SHA }} ${{ github.sha	}}
       
   deploy:
     name: Deploy changes on server
