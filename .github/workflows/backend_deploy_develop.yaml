@@ -68,7 +68,7 @@ jobs:
           echo "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
       - 
         name: Deploy with scp
-        run: scp -r infra_deploy/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
+        run: scp -r infra_deploy/develop/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
       -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -78,7 +78,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ${{ env.DEPLOY_PATH }}/infra_deploy/
+            cd ${{ env.DEPLOY_PATH }}/infra_deploy/develop/
 
             # GitHub variables
             echo "IMAGE_BACK=${{ secrets.IMAGE_BACK }}" > .github_vars
@@ -118,9 +118,9 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
              
             # Установка приложения
-            cp -rf ${{ env.DEPLOY_PATH }}/infra_deploy/lubimovka.service /etc/systemd/system/lubimovka.service
+            cp -rf ${{ env.DEPLOY_PATH }}/infra_deploy/develop/lubimovka.service /etc/systemd/system/lubimovka.service
             systemctl daemon-reload
             systemctl restart lubimovka.service
 
             # После установки удаляем данный файл
-            rm ${{ env.DEPLOY_PATH }}/infra_deploy/lubimovka.service
+            rm ${{ env.DEPLOY_PATH }}/infra_deploy/develop/lubimovka.service
