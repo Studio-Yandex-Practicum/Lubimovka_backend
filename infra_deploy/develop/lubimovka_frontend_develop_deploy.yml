@@ -23,3 +23,11 @@ services:
     ports:
       - "3004:3000"
     restart: always
+
+networks:
+  swag_network:
+    name: swag_network
+    external: true
+  develop_db_network:
+    name: develop_db_network
+    external: true
