@@ -13,7 +13,6 @@ env:
   REGISTRY: ghcr.io
   IMAGE_NAME: lubimovka_backend-1
   DEPLOY_PATH: /usr/local/src/
-  ${{ env.GITHUB_SHA }}
 
 defaults:
   run:
