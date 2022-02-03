@@ -186,6 +186,13 @@ class FestivalTeamAdmin(admin.ModelAdmin):
     search_fields = ("position", "person__first_name", "person__last_name")
 
 
+class SponsorAdmin(admin.ModelAdmin):
+    list_display = (
+        "person",
+        "position",
+    )
+
+
 admin.site.register(Festival, FestivalAdmin)
 admin.site.register(PressRelease, PressReleaseAdmin)
 admin.site.register(Partner, PartnerAdmin)
@@ -193,4 +200,4 @@ admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)
 admin.site.register(FestivalTeam, FestivalTeamAdmin)
 admin.site.register(Volunteer, VolunteerAdmin)
-admin.site.register(Sponsor)
+admin.site.register(Sponsor, SponsorAdmin)
