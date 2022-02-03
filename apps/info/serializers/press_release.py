@@ -16,4 +16,4 @@ class YearsSerializer(serializers.Serializer):
 
 
 class PhotoGalleryLinkSerializer(serializers.Serializer):
-    url = serializers.URLField()
+    photo_gallery_facebook_link = serializers.URLField()
