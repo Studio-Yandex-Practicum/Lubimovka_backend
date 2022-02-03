@@ -36,7 +36,7 @@ class Partner(BaseModel):
     in_footer_partner = models.BooleanField(
         default=False,
         verbose_name="Отображать внизу страницы",
-        help_text=("Поставьте галочку, чтобы показать логотип партнёра внизу страницы"),
+        help_text="Поставьте галочку, чтобы показать логотип партнёра внизу страницы",
     )
 
     class Meta:
@@ -69,6 +69,11 @@ class FestivalTeam(BaseModel):
         max_length=150,
         verbose_name="Должность",
     )
+    is_pr_manager = models.BooleanField(
+        default=False,
+        verbose_name="PR-менеджер",
+        help_text="Поставьте галочку, чтобы назначить человека PR-менеджером",
+    )
 
     class Meta:
         verbose_name = "Команда фестиваля"
@@ -92,6 +97,10 @@ class FestivalTeam(BaseModel):
             raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
+        if self.is_pr_manager:
+            item = Person.objects.filter(festivalteam__is_pr_manager=True)
+            if item:
+                raise ValidationError(f"PR-менеджером уже назначен {item[0].first_name} {item[0].last_name}")
 
 
 class Sponsor(BaseModel):

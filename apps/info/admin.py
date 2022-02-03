@@ -121,7 +121,7 @@ class VolunteerInline(admin.TabularInline):
     @admin.display(
         boolean=True,
         ordering="review_title",
-        description="ОТЗЫВ?",
+        description="Есть отзыв?",
     )
     def is_review(self, obj):
         if obj.review_text:
@@ -177,8 +177,12 @@ class FestivalTeamAdmin(admin.ModelAdmin):
         "person",
         "team",
         "position",
+        "is_pr_manager",
     )
-    list_filter = ("team",)
+    list_filter = (
+        "team",
+        "is_pr_manager",
+    )
     search_fields = ("position", "person__first_name", "person__last_name")
 
 
