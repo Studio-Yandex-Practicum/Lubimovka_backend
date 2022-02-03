@@ -12,7 +12,7 @@ on:
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: lubimovka_backend-1
-  DEPLOY_PATH: /usr/local/src/
+  DEPLOY_PATH: /usr/local/src
 
 defaults:
   run:
@@ -78,7 +78,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ${{ env.DEPLOY_PATH }}/infra_deploy/develop/
+            cd ${{ env.DEPLOY_PATH }}/develop/
 
             # GitHub variables
             echo "IMAGE_BACK=${{ secrets.IMAGE_BACK }}" > .github_vars
@@ -118,9 +118,9 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
              
             # Установка приложения
-            cp -rf ${{ env.DEPLOY_PATH }}/infra_deploy/develop/lubimovka.service /etc/systemd/system/lubimovka.service
+            cp -rf ${{ env.DEPLOY_PATH }}/develop/lubimovka.service /etc/systemd/system/lubimovka.service
             systemctl daemon-reload
             systemctl restart lubimovka.service
 
             # После установки удаляем данный файл
-            rm ${{ env.DEPLOY_PATH }}/infra_deploy/develop/lubimovka.service
+            rm ${{ env.DEPLOY_PATH }}/develop/lubimovka.service

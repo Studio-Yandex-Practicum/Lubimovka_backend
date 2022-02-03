@@ -8,16 +8,16 @@ Restart=always
 RestartSec=5
 User=root
 
-WorkingDirectory=/usr/local/src/infra_deploy/
+WorkingDirectory=/usr/local/src/develop/
 
 # Remove old containers and networks
-ExecStartPre=/usr/local/bin/docker-compose -f application_develop_deploy.yml --env-file /usr/local/src/infra_deploy/develop/.github_vars down
+ExecStartPre=/usr/local/bin/docker-compose -f application_develop_deploy.yml --env-file /usr/local/src/develop/.github_vars down
 
 # Compose up
-ExecStart=/usr/local/bin/docker-compose -f application_develop_deploy.yml --env-file /usr/local/src/infra_deploy/develop/.github_vars up
+ExecStart=/usr/local/bin/docker-compose -f application_develop_deploy.yml --env-file /usr/local/src/develop/.github_vars up
 
 # Compose down
-ExecStop=/usr/local/bin/docker-compose -f application_develop_deploy.yml --env-file /usr/local/src/infra_deploy/develop/.github_vars down
+ExecStop=/usr/local/bin/docker-compose -f application_develop_deploy.yml --env-file /usr/local/src/develop/.github_vars down
 
 [Install]
 WantedBy=multi-user.target
