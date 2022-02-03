@@ -70,8 +70,10 @@ services:
 networks:
   swag_network:
     name: swag_network
+    external: true
   develop_db_network:
     name: develop_db_network
+    external: true
 
 volumes:
   postgres_data:
