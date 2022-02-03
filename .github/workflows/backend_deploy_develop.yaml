@@ -1,4 +1,4 @@
-name: develop backend build and  deploy
+name: develop backend build and deploy
 
 concurrency:
   group: develop_deploy
