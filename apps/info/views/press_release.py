@@ -37,7 +37,7 @@ class PressReleaseDownloadAPIView(APIView):
 
 class PressReleasePhotoGalleryLink(APIView):
     def get(self, request):
-        url = Setting.get_setting("photo_gallery_facebook")
-        photo_gallery_url = {"url": url}
-        url_serializer = PhotoGalleryLinkSerializer(photo_gallery_url)
+        link = Setting.get_setting("photo_gallery_facebook")
+        photo_gallery_facebook_link = {"photo_gallery_facebook_link": link}
+        url_serializer = PhotoGalleryLinkSerializer(photo_gallery_facebook_link)
         return Response(url_serializer.data)
