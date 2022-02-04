@@ -40,6 +40,7 @@ services:
 networks:
   prod_swag_network:
     name: prod_swag_network
+    external: true
 
 volumes:
   static_value_prod:

@@ -44,6 +44,7 @@ services:
 networks:
   prod_db_network:
     name: prod_db_network
+    external: true
   prod_swag_network:
     name: prod_swag_network
     external: true

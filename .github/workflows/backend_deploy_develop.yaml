@@ -116,7 +116,10 @@ jobs:
             echo PGID=${{ secrets.PGID }} >> .env-dev
             echo URL=${{ secrets.URL }} >> .env-dev
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
-            
+
+            docker network create develop_db_network || true
+            docker network create develop_swag_network || true
+
             # Установка приложения - backend
             cp -rf ${{ env.DEPLOY_PATH }}/develop/lubimovka-backend.service /etc/systemd/system/lubimovka-backend.service
             systemctl daemon-reload

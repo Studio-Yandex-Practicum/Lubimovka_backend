@@ -117,6 +117,9 @@ jobs:
             echo PGID=${{ secrets.PGID }} >> .env-prod
             echo URL=${{ secrets.URL }} >> .env-prod
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-prod
+
+            docker network create prod_db_network || true
+            docker network create prod_swag_network || true
             
             # Установка приложения - backend
             cp -rf ${{ env.DEPLOY_PATH }}/prod/lubimovka-backend.service /etc/systemd/system/lubimovka-backend.service

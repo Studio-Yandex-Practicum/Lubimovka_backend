@@ -57,6 +57,7 @@ services:
 networks:
   develop_swag_network:
     name: develop_swag_network
+    external: true
 
 volumes:
   static_value_test:
