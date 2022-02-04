@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.contrib.admin.templatetags.admin_list import _boolean_icon
 
 from apps.core.models import Setting
 from apps.main.models import Banner, SettingAfishaScreen, SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
@@ -50,7 +51,11 @@ class SettingAdmin(admin.ModelAdmin):
     @admin.display(description="Значение")
     def get_value(self, obj: object):
         """Return value of the setting object."""
+        if isinstance(obj.value, bool):
+            return _boolean_icon(True) if obj.value else _boolean_icon(False)
         return obj.value
+
+    get_value.allow_tags = True
 
     def has_add_permission(self, request, obj=None):
         """Remove the save and add new button."""
