@@ -1,5 +1,5 @@
 from .contacts import ContactsSerializer
-from .emails import EmailsSerializer
+from .feedback import FeedbackSerializer
 from .festival import FestivalSerializer, YearsSerializer
 from .festivalteams import FestivalTeamsSerializer
 from .partners import PartnerSerializer
@@ -18,5 +18,5 @@ __all__ = (
     FestivalSerializer,
     YearsSerializer,
     ContactsSerializer,
-    EmailsSerializer,
+    FeedbackSerializer,
 )

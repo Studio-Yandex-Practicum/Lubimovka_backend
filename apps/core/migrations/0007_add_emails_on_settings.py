@@ -8,51 +8,44 @@ def add_email_settings(apps, schema_editor):
     Setting.objects.get_or_create(
         field_type="EMAIL",
         group="EMAIL",
-        settings_key="email_for_press",
-        email="press@gmail.com",
-        description="почта для вопросов по PR",
-    )
-    Setting.objects.get_or_create(
-        field_type="EMAIL",
-        group="EMAIL",
         settings_key="email_on_project_page",
         email="project@gmail.com",
-        description="почта чтобы присоединиться как режиссер",
+        description="Почта, чтобы присоединиться как режиссер",
     )
     Setting.objects.get_or_create(
         field_type="EMAIL",
         group="EMAIL",
-        settings_key="email_on_organizers_page",
+        settings_key="email_on_what_we_do_page",
         email="organizers@gmail.com",
-        description="почта для заявок от волонтеров",
+        description="Почта, чтобы присоединиться как режиссёр на странице «Что мы делаем»",
     )
     Setting.objects.get_or_create(
         field_type="EMAIL",
         group="EMAIL",
         settings_key="email_on_trustees_page",
         email="trustees@gmail.com",
-        description="почта чтобы стать попечителем",
+        description="Почта, чтобы стать попечителем",
     )
     Setting.objects.get_or_create(
         field_type="EMAIL",
         group="EMAIL",
         settings_key="email_on_about_festival_page",
         email="festival@gmail.com",
-        description="почта чтобы стать режиссером одной из читок",
+        description="Почта для сотрудничества режиссёров и актёров",
     )
     Setting.objects.get_or_create(
         field_type="EMAIL",
         group="EMAIL",
         settings_key="email_on_acceptance_of_plays_page",
         email="plays@gmail.com",
-        description="почта для заявок на участие",
+        description="Почта для заявок на участие",
     )
     Setting.objects.get_or_create(
         field_type="EMAIL",
         group="EMAIL",
         settings_key="email_on_author_page",
         email="author@gmail.com",
-        description="почта для внесений изменений об авторе",
+        description="Почта для внесений изменений об авторе",
     )
 
 
