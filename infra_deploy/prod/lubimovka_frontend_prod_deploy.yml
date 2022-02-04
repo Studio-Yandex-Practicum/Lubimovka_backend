@@ -1,6 +1,30 @@
 version: '3.8'
 
 services:
+  swag:
+    image: ghcr.io/linuxserver/swag:1.22.0
+    container_name: swag_prod
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=Europe/Moscow
+      - VALIDATION=http
+#      - SUBDOMAINS=${DEV_SUBDOMAIN},${TEST_SUBDOMAIN}
+      - SUBDOMAINS=${DEV_SUBDOMAIN}
+      - ONLY_SUBDOMAINS=true
+      - CERTPROVIDER=zerossl
+    env_file:
+      - .env-prod
+    networks:
+      - prod_swag_network
+    volumes:
+      - ./swag/swag_nginx_prod.conf:/config/nginx/site-confs/default
+      - static_value_prod:/config/prod/static/
+      - media_value_prod:/config/prod/media/
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped
   frontend_develop:
     image: "${IMAGE_FRONT}:${IMAGE_FRONT_TAG}"
     container_name: frontend_prod
@@ -16,4 +40,9 @@ services:
 networks:
   prod_swag_network:
     name: prod_swag_network
-    external: true
+
+volumes:
+  static_value_prod:
+    name: static_value_prod
+  media_value_prod:
+    name: media_value_prod
