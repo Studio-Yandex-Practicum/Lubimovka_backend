@@ -40,7 +40,7 @@ services:
       - .env-dev
     networks:
       - develop_db_network
-  
+
 networks:
   develop_db_network:
     name: develop_db_network
@@ -55,4 +55,3 @@ volumes:
     name: static_value_develop
   media_value_develop:
     name: media_value_develop
-  
