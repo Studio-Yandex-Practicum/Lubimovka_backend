@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  swag:
+    image: ghcr.io/linuxserver/swag:1.22.0
+    container_name: swag_develop
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=Europe/Moscow
+      - VALIDATION=http
+#      - SUBDOMAINS=${DEV_SUBDOMAIN},${TEST_SUBDOMAIN}
+      - SUBDOMAINS=${DEV_SUBDOMAIN}
+      - ONLY_SUBDOMAINS=true
+      - CERTPROVIDER=zerossl
+    env_file:
+      - .env-dev
+    networks:
+      - develop_swag_network
+    volumes:
+      - ./swag/swag_nginx_develop.conf:/config/nginx/site-confs/default
+      - static_value_develop:/config/develop/static/
+      - media_value_develop:/config/develop/media/
+      - static_value_test:/config/test/static/
+      - media_value_test:/config/test/media/
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped
+
+networks:
+  develop_swag_network:
+    name: develop_swag_network
+  develop_db_network:
+    name: develop_db_network
+    external: true
+
+volumes:
+  static_value_develop:
+    name: static_value_develop
+  media_value_develop:
+    name: media_value_develop
+  static_value_test:
+    name: static_value_test
+  media_value_test:
+    name: media_value_test
