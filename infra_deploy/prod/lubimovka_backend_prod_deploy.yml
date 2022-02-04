@@ -41,7 +41,7 @@ services:
     networks:
       - prod_db_network
   swag:
-    image: hcr.io/linuxserver/swag:1.22.0
+    image: ghcr.io/linuxserver/swag:1.22.0
     container_name: swag_prod
     cap_add:
       - NET_ADMIN
