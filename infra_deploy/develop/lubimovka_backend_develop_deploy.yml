@@ -41,7 +41,7 @@ services:
     networks:
       - develop_db_network
   swag:
-    image: ghcr.io/linuxserver/swag
+    image: hcr.io/linuxserver/swag:1.22.0
     container_name: swag_develop
     cap_add:
       - NET_ADMIN
