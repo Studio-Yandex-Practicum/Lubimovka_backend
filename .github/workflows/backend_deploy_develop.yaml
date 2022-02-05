@@ -117,6 +117,7 @@ jobs:
             echo URL=${{ secrets.URL }} >> .env-dev
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
+            # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create develop_db_network || true
             docker network create develop_swag_network || true
 
