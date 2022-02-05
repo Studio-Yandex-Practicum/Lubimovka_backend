@@ -195,3 +195,18 @@ CKEDITOR_CONFIGS = {
         ]
     }
 }
+environ.Env.read_env(os.path.join(ROOT_DIR, '.env'))
+GOOGLE_EXPORT_KEYS = {
+  "type": "service_account",
+  "project_id": env("GOOGLE_PROJECT_ID", default="project_id"),
+  "private_key_id": env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id"),
+  "private_key": env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n"),
+  "client_email": env("GOOGLE_CLIENT_EMAIL", default="client_email"),
+  "client_id": env("GOOGLE_CLIENT_ID", default="client_id"),
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": env("GOOGLE_CLIENT_X509_CERT_URL", default="client_cert"),
+}
+GOOGLE_SHEET_ID = env("GOOGLE_SHEET_ID", default="sheet_id")
+PARTICIPATION_FILE_PATH = env("PARTICIPATION_FILE_PATH", default="file_path")

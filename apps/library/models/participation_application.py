@@ -4,7 +4,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
 from apps.core.utilities import slugify
-from apps.library.utilities import generate_class_name_path
+from apps.library.utilities import export_new_object, generate_class_name_path, get_festival_year
 from apps.library.validators import year_validator
 
 UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION = (
@@ -67,6 +67,11 @@ class ParticipationApplicationFestival(BaseModel):
         upload_to=generate_class_name_path,
         help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
     )
+    festival_year = models.PositiveSmallIntegerField(
+        blank=True,
+        null=True,
+        verbose_name="Год фестиваля",
+    )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
     verified = models.BooleanField(
@@ -95,6 +100,13 @@ class ParticipationApplicationFestival(BaseModel):
         return f"{filename.title()}.{self.file.name.split('.')[1]}"
 
     def save(self, *args, **kwargs):
-        """Save generated filename."""
+        """Save generated filename.
+
+        Create festival year respectively to date when object is creating
+        and export only new objects to Google sheet.
+        """
         self.file.name = self.generate_filename()
+        if self.id is None:
+            self.festival_year = get_festival_year()
+            export_new_object(self)
         super().save(*args, **kwargs)
