@@ -1,8 +1,7 @@
 from datetime import datetime as dt
 
-import httplib2
+from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from oauth2client.service_account import ServiceAccountCredentials
 
 from apps.info.models import Festival
 from config.settings.base import GOOGLE_EXPORT_KEYS, GOOGLE_SHEET_ID, PARTICIPATION_FILE_PATH
@@ -51,11 +50,11 @@ def export_new_object(obj):
 
     scopes = ["https://www.googleapis.com/auth/spreadsheets"]
     try:
-        credentials = ServiceAccountCredentials.from_json_keyfile_dict(KEYS, scopes)
+        credentials = service_account.Credentials.from_service_account_info(KEYS)
     except ValueError:
         return
-    httpAuth = credentials.authorize(httplib2.Http())
-    service = build("sheets", "v4", http=httpAuth)
+    scoped_credentials = credentials.with_scopes(scopes)
+    service = build("sheets", "v4", credentials=scoped_credentials)
 
     request = (
         service.spreadsheets()
