@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -6,6 +7,7 @@ from apps.info.serializers import FeedbackSerializer
 
 
 class FeedbackAPIView(APIView):
+    @extend_schema(request=None, responses=FeedbackSerializer)
     def get(self, request):
         """Get all required emails that can be changed.
 
