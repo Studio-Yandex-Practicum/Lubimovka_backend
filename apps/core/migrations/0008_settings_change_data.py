@@ -164,7 +164,7 @@ def change_afisha_settings(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0006_facebook_photo_gallery_link'),
+        ('core', '0007_add_emails_on_settings'),
     ]
 
     operations = [
