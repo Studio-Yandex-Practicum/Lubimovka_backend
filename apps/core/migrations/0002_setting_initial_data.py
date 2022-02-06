@@ -206,7 +206,7 @@ def add_afisha_settings(apps, schema_editor):
         group="AFISHA",
         settings_key="afisha_description_regular",
         text="На все читки и мастер-классы фестиваля вход свободный по предварительной регистрации.",
-        description="Описание под заголовком регулярное",
+        description="Описание под заголовком",
     )
     Setting.objects.create(
         field_type="TEXT",
@@ -234,7 +234,7 @@ def add_afisha_settings(apps, schema_editor):
         group="AFISHA",
         settings_key="afisha_title_regular",
         text="Афиша событий",
-        description="Заголовок афиши регулярный",
+        description="Заголовок афиши",
     )
     Setting.objects.create(
         field_type="TEXT",
@@ -274,14 +274,14 @@ def add_first_screen_settings(apps, schema_editor):
         group="FIRST_SCREEN",
         settings_key="main_first_screen_url_title",
         text="Заголовок для ссылки для первой страницы",
-        description="Заголовок для первой страницы",
+        description="Заголовок для ссылки для первой страницы",
     )
     Setting.objects.create(
         field_type="URL",
         group="FIRST_SCREEN",
         settings_key="main_first_screen_url",
         url="https://lubimovks.url.ru",
-        description="Ссылка для первой страницы страницы",
+        description="Ссылка для первой страницы",
     )
 
 def add_general_settings(apps, schema_editor):
@@ -334,70 +334,70 @@ def add_main_settings(apps, schema_editor):
         group="MAIN",
         settings_key="main_add_afisha",
         boolean=True,
-        description="Отображение афиши на главной страницы",
+        description="Отображение афиши на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_banners",
         boolean=True,
-        description="Отображение банера на главной страницы",
+        description="Отображение банера на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_blog",
         boolean=True,
-        description="Отображение дневника на главной страницы",
+        description="Отображение дневника на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_news",
         boolean=True,
-        description="Отображение новостей на главной страницы",
+        description="Отображение новостей на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_places",
         boolean=True,
-        description="Отображение площадок на главной страницы",
+        description="Отображение площадок на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_short_list",
         boolean=True,
-        description="Отображение шорт-листа на главной страницы",
+        description="Отображение шорт-листа на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_video_archive",
         boolean=True,
-        description="Отображение видео-архива на главной страницы",
+        description="Отображение видео-архива на главной странице",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="MAIN",
         settings_key="main_blog_title",
         text="Дневник фестиваля",
-        description="Заголовок для дневника на главной страницы",
+        description="Заголовок для дневника на главной странице",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="MAIN",
         settings_key="main_news_title",
         text="Новости",
-        description="Заголовок для новостей на главной страницы",
+        description="Заголовок для новостей на главной странице",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="MAIN",
         settings_key="main_short_list_title",
         text="Шорт-лист 2020 года",
-        description="Заголовок для шорт-листа на главной страницы",
+        description="Заголовок для шорт-листа на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
@@ -411,14 +411,14 @@ def add_main_settings(apps, schema_editor):
         group="MAIN",
         settings_key="main_video_archive_photo",
         image="core/2021-09-30_14.37.56.jpg",
-        description="Фото для видео-архива на главной страницы",
+        description="Фото для видео-архива на главной странице",
     )
     Setting.objects.create(
         field_type="URL",
         group="MAIN",
         settings_key="main_video_archive_url",
         url="https://lubimovks.url.ru",
-        description="Ссылка на youtube видео-архива на главной страницы",
+        description="Ссылка на youtube видео-архива на главной странице",
     )
 
 def add_short_list_program(apps, schema_editor):
