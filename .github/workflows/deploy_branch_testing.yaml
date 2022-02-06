@@ -141,6 +141,18 @@ jobs:
             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-test
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-test
 
+            # Secrets variables for google sheets in Django:
+            echo GOOGLE_PROJECT_ID=${{ secrets.GOOGLE_PROJECT_ID }} >> .env-test
+            echo GOOGLE_PRIVATE_KEY_ID=${{ secrets.GOOGLE_PRIVATE_KEY_ID }} >> .env-test
+            echo GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }} >> .env-test
+            echo GOOGLE_CLIENT_EMAIL=${{ secrets.GOOGLE_CLIENT_EMAIL }} >> .env-test
+            echo GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }} >> .env-test
+            echo GOOGLE_CLIENT_X509_CERT_URL=${{ secrets.GOOGLE_CLIENT_X509_CERT_URL }} >> .env-test
+            echo GOOGLE_SHEET_ID=${{ secrets.GOOGLE_SHEET_ID }} >> .env-test
+            echo PARTICIPATION_FILE_PATH=${{ secrets.PARTICIPATION_FILE_PATH }} >> .env-test
+            echo GOOGLE_RANGE=${{ secrets.GOOGLE_RANGE }} >> .env-test
+            echo GOOGLE_SCOPES=${{ secrets.GOOGLE_SCOPES }} >> .env-test
+
             # Pull docker image from github packages with tag
             docker pull ${{ env.IMAGE }}:${{ env.IMAGE_TAG }}
 
