@@ -52,10 +52,8 @@ class SettingAdmin(admin.ModelAdmin):
     def get_value(self, obj: object):
         """Return value of the setting object."""
         if isinstance(obj.value, bool):
-            return _boolean_icon(True) if obj.value else _boolean_icon(False)
+            return _boolean_icon(obj.value)
         return obj.value
-
-    get_value.allow_tags = True
 
     def has_add_permission(self, request, obj=None):
         """Remove the save and add new button."""
