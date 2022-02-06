@@ -22,8 +22,3 @@ def get_picsum_image(width: int = 1024, height: int = 768) -> ContentFile:
     """Return real image from picsum.photos. Supports width and height arguments."""
     image = urllib.request.urlopen(f"https://picsum.photos/{width}/{height}").read()
     return ContentFile(image)
-
-
-def get_slug_full_name(first_name: str, last_name: str) -> str:
-    full_name = first_name + last_name
-    return slugify(full_name)
