@@ -2,23 +2,15 @@ from django.utils import timezone
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import views
-from rest_framework.pagination import LimitOffsetPagination
 
 from apps.afisha.models import Event
+from apps.afisha.pagination import AfishaFestivalPagination, AfishaRegularPagination, EventPaginationMixin
 from apps.afisha.schema.schema_extension import AFISHA_EVENTS_SCHEMA_DESCRIPTION
 from apps.afisha.serializers import EventSerializerFestival, EventSerializerRegular
 from apps.core.models import Setting
 
 
-class EventsAPIView(LimitOffsetPagination, views.APIView):
-    """Add blocks if festival mode is enabled in pagination response.
-
-    info_registration - the text about registration under the description,
-    asterisk_text - text with an asterisk near the title.
-
-    And also changes title and description for the festival.
-    """
-
+class EventsAPIView(EventPaginationMixin, views.APIView):
     @extend_schema(
         description=AFISHA_EVENTS_SCHEMA_DESCRIPTION,
         responses=EventSerializerRegular,
@@ -43,15 +35,18 @@ class EventsAPIView(LimitOffsetPagination, views.APIView):
             sorted_dates = sorted(list(dates))
             results = []
             for date in sorted_dates:
-                query = {"date": date[0], "events": Event.objects.filter(date_time__date=date[0]).order_by("date_time")}
-                results.append(query)
+                events_in_date = {
+                    "date": date[0],
+                    "events": Event.objects.filter(date_time__date=date[0]).order_by("date_time"),
+                }
+                results.append(events_in_date)
 
-            paginated_results = self.paginate_queryset(results, request, view=self)
+            paginated_results = self.paginate_queryset(results)
             serializer = EventSerializerFestival(paginated_results, many=True)
             return self.get_paginated_response(serializer.data)
 
         queryset = Event.objects.filter(date_time__gte=timezone.now()).order_by("date_time")
-        paginated_results = self.paginate_queryset(queryset, request, view=self)
+        paginated_results = self.paginate_queryset(queryset)
         serializer = EventSerializerRegular(paginated_results, many=True)
         return self.get_paginated_response(serializer.data)
 
@@ -59,14 +54,21 @@ class EventsAPIView(LimitOffsetPagination, views.APIView):
     def festival_status(self):
         return Setting.get_setting("festival_status")
 
-    # @property
-    # def pagination_class(self):
-    #     if self.festival_status:
-    #         return AfishaPagination
-    #     return LimitOffsetPagination
+    @property
+    def pagination_class(self):
+        if self.festival_status:
+            return AfishaFestivalPagination
+        return AfishaRegularPagination
 
     def finalize_response(self, request, response, *args, **kwargs):
+        """Add blocks if festival mode is enabled in pagination response.
+
+        info_registration - the text about registration under the description,
+        asterisk_text - text with an asterisk near the title.
+        And also changes title and description for the festival.
+        """
         super(EventsAPIView, self).finalize_response(request, response, *args, **kwargs)
+        response.data["festival_status"] = self.festival_status
 
         if self.festival_status:
             response.data["info_registration"] = Setting.get_setting("afisha_info_festival_text")
