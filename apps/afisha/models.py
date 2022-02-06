@@ -26,7 +26,7 @@ class CommonEvent(BaseModel):
         verbose_name_plural = "Базовые события"
 
     def __str__(self):
-        return f"{repr(self.target_model)}"
+        return f"{self.target_model._meta.verbose_name} - {self.target_model}"
 
     @property
     def target_model(self):
