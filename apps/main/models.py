@@ -56,8 +56,8 @@ class SettingEmail(Setting):
 
     class Meta:
         proxy = True
-        verbose_name = "Настройки почты"
-        verbose_name_plural = "Настройки почты"
+        verbose_name = "Настройки обратной связи"
+        verbose_name_plural = "Настройки обратной связи"
 
 
 class SettingGeneral(Setting):
