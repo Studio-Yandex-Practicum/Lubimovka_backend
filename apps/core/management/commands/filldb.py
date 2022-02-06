@@ -64,10 +64,10 @@ class Command(BaseCommand):
             persons_with_image = []
             persons_with_image_email_city = []
             for _ in range(50):
-                persons_with_image.append(PersonFactory.create(add_image=True))
+                persons_with_image.append(PersonFactory.create(add_real_image=True))
                 persons_with_image_email_city.append(
                     PersonFactory(
-                        add_image=True,
+                        add_real_image=True,
                         add_email=True,
                         add_city=True,
                     )
