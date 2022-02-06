@@ -1,5 +1,6 @@
 """Base settings to build other settings files upon."""
 import os
+from email.policy import default
 from pathlib import Path
 
 import environ
@@ -209,4 +210,7 @@ GOOGLE_EXPORT_KEYS = {
     "client_x509_cert_url": env("GOOGLE_CLIENT_X509_CERT_URL", default="client_cert"),
 }
 GOOGLE_SHEET_ID = env("GOOGLE_SHEET_ID", default="sheet_id")
+# host-part of file address (example: "https://festival.ru")
 PARTICIPATION_FILE_PATH = env("PARTICIPATION_FILE_PATH", default="file_path")
+GOOGLE_RANGE = env("GOOGLE_RANGE", default="лист1")
+GOOGLE_SCOPES = env("GOOGLE_SCOPES", default="scopes")
