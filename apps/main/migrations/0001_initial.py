@@ -47,8 +47,8 @@ class Migration(migrations.Migration):
             fields=[
             ],
             options={
-                'verbose_name': 'Настройки почты',
-                'verbose_name_plural': 'Настройки почты',
+                'verbose_name': 'Настройки обратной связи',
+                'verbose_name_plural': 'Настройки обратной связи',
                 'proxy': True,
                 'indexes': [],
                 'constraints': [],

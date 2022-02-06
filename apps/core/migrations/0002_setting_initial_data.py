@@ -1,6 +1,4 @@
-import django.contrib.auth.validators
 from django.db import migrations
-import django.utils.timezone
 
 
 def set_default_groups(apps, schema_editor):
@@ -11,6 +9,7 @@ def set_default_groups(apps, schema_editor):
             Group(name="editor"),
         ]
     )
+
 
 def create_roles(apps, schema_editor):
     Role = apps.get_model("core", "Role")
@@ -65,6 +64,7 @@ def create_roles(apps, schema_editor):
         role_obj, _ = Role.objects.get_or_create(**role)
         role_obj.save()
 
+
 def create_role_types(apps, schema_editor):
     RoleType = apps.get_model("core", "RoleType")
     role_types = [
@@ -87,6 +87,7 @@ def create_role_types(apps, schema_editor):
     for type in role_types:
         type_obj, _ = RoleType.objects.get_or_create(**type)
         type_obj.save()
+
 
 def add_types_to_roles(apps, schema_editor):
     Role = apps.get_model("core", "Role")
@@ -164,6 +165,7 @@ def add_types_to_roles(apps, schema_editor):
         role_obj.types.add(type_of_role)
         role_obj.save()
 
+
 def add_email_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
@@ -172,21 +174,21 @@ def add_email_settings(apps, schema_editor):
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_question_template_id",
-        text="3420599",
+        text="3482754",
         description="Id шаблона письма с вопросом",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_send_from",
-        text="questions@lyubimovka.ru",
+        text="lubimovka-2021@yandex.ru",
         description="Почта для отправки вопроса",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_send_to",
-        text="admin@lyubimovka.ru",
+        text="lubimovka-2021@yandex.ru",
         description="Почта для приёма вопроса",
     )
     Setting.objects.create(
@@ -196,6 +198,7 @@ def add_email_settings(apps, schema_editor):
         text="Вопрос Любимовке",
         description="Тема письма для вопроса",
     )
+
 
 def add_afisha_settings(apps, schema_editor):
 
@@ -244,6 +247,7 @@ def add_afisha_settings(apps, schema_editor):
         description="Описание под заголовком во время фестиваля",
     )
 
+
 def add_first_screen_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
@@ -283,6 +287,7 @@ def add_first_screen_settings(apps, schema_editor):
         url="https://lubimovks.url.ru",
         description="Ссылка для первой страницы",
     )
+
 
 def add_general_settings(apps, schema_editor):
 
@@ -324,6 +329,7 @@ def add_general_settings(apps, schema_editor):
         url="https://www.facebook.com/festival.lubimovka/photos",
         description="Ссылка на фотоальбомы в Facebook на странице для прессы",
     )
+
 
 def add_main_settings(apps, schema_editor):
 
@@ -421,19 +427,23 @@ def add_main_settings(apps, schema_editor):
         description="Ссылка на youtube видео-архива на главной странице",
     )
 
+
 def add_short_list_program(apps, schema_editor):
-    Program = apps.get_model('library', 'ProgramType')
+    Program = apps.get_model(
+        "library",
+        "ProgramType",
+    )
     Program.objects.create(
         name="Шорт-лист",
-        slug="short-list"
+        slug="short-list",
     )
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0001_initial'),
-        ('sites', '0002_alter_domain_unique'),
+        ("core", "0001_initial"),
+        ("sites", "0002_alter_domain_unique"),
     ]
 
     operations = [

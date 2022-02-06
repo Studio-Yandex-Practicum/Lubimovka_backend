@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -6,6 +7,7 @@ from apps.info.serializers import ContactsSerializer
 
 
 class ContactsAPIView(APIView):
+    @extend_schema(request=None, responses=ContactsSerializer)
     def get(self, request):
         """Get an email for questions and link for document.
 
