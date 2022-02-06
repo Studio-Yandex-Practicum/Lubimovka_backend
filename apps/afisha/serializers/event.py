@@ -28,7 +28,7 @@ from apps.library.serializers import EventMasterClassSerializer, EventPerformanc
         ),
     ],
 )
-class EventSerializer(serializers.ModelSerializer):
+class EventSerializerRegular(serializers.ModelSerializer):
     event_body = serializers.SerializerMethodField()
     date_time = serializers.DateTimeField(format="%Y-%m-%dT%H:%M")
 
@@ -54,3 +54,8 @@ class EventSerializer(serializers.ModelSerializer):
             "url",
             "place",
         )
+
+
+class EventSerializerFestival(serializers.Serializer):
+    date = serializers.DateField()
+    events = EventSerializerRegular(many=True)

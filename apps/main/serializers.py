@@ -1,7 +1,7 @@
 from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
-from apps.afisha.serializers import EventSerializer
+from apps.afisha.serializers import EventSerializerRegular
 from apps.articles.serializers import BlogItemListSerializer, NewsItemListSerializer
 from apps.core.models import Setting
 from apps.info.serializers.place import PlaceSerializer
@@ -28,7 +28,7 @@ class MainAfishaSerializer(serializers.Serializer):
 
     title = serializers.CharField()
     description = serializers.CharField()
-    items = EventSerializer(many=True)
+    items = EventSerializerRegular(many=True)
 
     def to_representation(self, instance):
         """Add other blocks if festival mode is enabled.
