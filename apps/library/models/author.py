@@ -1,3 +1,4 @@
+from autoslug import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -48,6 +49,13 @@ class Author(BaseModel):
         related_name="authors",
         blank=True,
         verbose_name="Пьесы автора",
+    )
+    slug_name = AutoSlugField(
+        verbose_name="Слаг",
+        populate_from=lambda instance: instance.person.last_name,
+        # unique=True,
+        editable=True,
+        blank=True,
     )
 
     class Meta:
