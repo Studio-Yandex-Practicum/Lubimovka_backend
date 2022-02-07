@@ -3,7 +3,7 @@ version: '3.8'
 services:
   swag:
     image: ghcr.io/linuxserver/swag:1.22.0
-    container_name: swag_prod
+    container_name: swag_test
     cap_add:
       - NET_ADMIN
     environment:
@@ -13,25 +13,25 @@ services:
       - ONLY_SUBDOMAINS=true
       - CERTPROVIDER=zerossl
     env_file:
-      - .env-prod
+      - .env-test
     networks:
-      - prod_swag_network
+      - test_swag_network
     volumes:
-      - ./swag/swag_nginx_prod.conf:/config/nginx/site-confs/default
-      - static_value_prod:/config/prod/static/
-      - media_value_prod:/config/prod/media/
+      - ./swag/swag_nginx_test.conf:/config/nginx/site-confs/default
+      - static_value_test:/config/test/static/
+      - media_value_test:/config/test/media/
     ports:
       - 443:443
       - 80:80
     restart: unless-stopped
-  frontend_prod:
+  frontend_test:
     image: "${IMAGE_FRONT}:${IMAGE_FRONT_TAG}"
-    container_name: frontend_prod
+    container_name: frontend_test
     environment:
       BASE_URL: ${FRONT_BASE_URL}
       API_BASE_URL: ${DEVELOP_API_BASE_URL}
     networks:
-      - prod_swag_network
+      - test_swag_network
     ports:
       - "3005:3000"
     restart: always
@@ -39,12 +39,12 @@ services:
       - swag
 
 networks:
-  prod_swag_network:
-    name: prod_swag_network
+  test_swag_network:
+    name: test_swag_network
     external: true
 
 volumes:
-  static_value_prod:
-    name: static_value_prod
-  media_value_prod:
-    name: media_value_prod
+  static_value_test:
+    name: static_value_test
+  media_value_test:
+    name: media_value_test

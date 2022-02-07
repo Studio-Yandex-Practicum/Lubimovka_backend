@@ -1,0 +1,25 @@
+[Unit]
+Description=lubimovka-frontend
+Requires=docker.service
+After=docker.service
+
+[Service]
+Restart=always
+RestartSec=5
+User=root
+
+WorkingDirectory=/LUBIMOVKA/test/
+
+# Remove old containers and networks
+ExecStartPre=docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars pull swag
+ExecStartPre=docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars pull frontend_develop
+ExecStartPre=docker-compose -f lubimovka_frontend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars stop
+
+# Compose up
+ExecStart=docker-compose -f lubimovka_frontend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars up
+
+# Compose down
+ExecStop=docker-compose -f lubimovka_frontend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars stop
+
+[Install]
+WantedBy=multi-user.target

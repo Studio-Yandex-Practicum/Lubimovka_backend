@@ -1,13 +1,16 @@
-name: develop backend build and deploy
+name: test backend build and deploy
 
 concurrency:
-  group: develop_deploy
+  group: test_deploy
   cancel-in-progress: true
 
 on:
-  push:
-    branches:
-      - develop
+  workflow_dispatch:
+    inputs:
+      name:
+        description: 'Please, enter your name and surname'
+        default: 'Имя Фамилия'
+        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -19,6 +22,26 @@ defaults:
     working-directory: .
 
 jobs:
+  tests:
+      name: Run tests
+      runs-on: ubuntu-latest
+      steps:
+      -
+        name: Check out the repo
+        uses: actions/checkout@v2
+      -
+        name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      -
+        name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements/dev.txt
+      -
+        name: Test with pytest
+        run: pytest
   build-and-push-image-to-github-packages:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
@@ -29,8 +52,6 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: develop
       -
         name: Docker login
         uses: docker/login-action@v1
@@ -46,20 +67,18 @@ jobs:
           file: Dockerfile
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:develop,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:test,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy:
     name: Deploy changes on server
     runs-on: ubuntu-latest
     environment:
-      name: develop_deploy
+      name: test_deploy
     needs: build-and-push-image-to-github-packages
     steps:
       -
         name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: develop
       -
         name: Create SSH key 
         # (SSH_KNOWN_HOSTS=ssh-keyscan -H сервер, SSH_PRIVATE_KEY - ключ с ПК, которому разрешен вход)
@@ -75,7 +94,7 @@ jobs:
         run: ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} mkdir -p ${{ env.DEPLOY_PATH }}
       -
         name: Deploy with scp
-        run: scp -r infra_deploy/develop/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
+        run: scp -r infra_deploy/test/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
       -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -85,7 +104,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            cd ${{ env.DEPLOY_PATH }}/develop/
+            cd ${{ env.DEPLOY_PATH }}/test/
 
             # GitHub variables
             echo "IMAGE_BACK=${{ secrets.IMAGE_BACK }}" > .github_vars
@@ -125,28 +144,28 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
 
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
-            docker network create develop_db_network || true
-            docker network create develop_swag_network || true
+            docker network create test_db_network || true
+            docker network create test_swag_network || true
 
             # Установка приложения - backend
-            cp -rf ${{ env.DEPLOY_PATH }}/develop/lubimovka-backend.service /etc/systemd/system/lubimovka-backend.service
+            cp -rf ${{ env.DEPLOY_PATH }}/test/lubimovka-backend.service /etc/systemd/system/lubimovka-backend.service
             systemctl daemon-reload
             systemctl restart lubimovka-backend.service
 
             # Установка приложения - frontend
-            cp -rf ${{ env.DEPLOY_PATH }}/develop/lubimovka-frontend.service /etc/systemd/system/lubimovka-frontend.service
+            cp -rf ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend.service /etc/systemd/system/lubimovka-frontend.service
             systemctl daemon-reload
             systemctl restart lubimovka-frontend.service
 
             # После установки удаляем файлы
-            rm ${{ env.DEPLOY_PATH }}/develop/lubimovka-backend.service
-            rm ${{ env.DEPLOY_PATH }}/develop/lubimovka-frontend.service
+            rm ${{ env.DEPLOY_PATH }}/test/lubimovka-backend.service
+            rm ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend.service
   
   send_message:
     name: Send message in telegram group
     runs-on: ubuntu-latest
     environment:
-      name: develop_deploy
+      name: test_deploy
     needs: deploy
     steps:
       - name: check repository
