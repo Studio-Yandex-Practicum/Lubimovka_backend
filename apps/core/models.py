@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.utilities import slugify
+from apps.core.utils import slugify
 from apps.core.validators import name_validator
 
 NEWS_HELP_TEXT = (

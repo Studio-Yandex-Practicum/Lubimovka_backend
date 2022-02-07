@@ -1,37 +1,37 @@
 import random
-import urllib
 
 import factory
-from django.core.files.base import ContentFile
 from faker import Faker
 
 from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person
+from apps.core.utils import get_picsum_image
 from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
 
 fake = Faker(locale="en_US")
 
 
 class PartnerFactory(factory.django.DjangoModelFactory):
+    """Create Partner objects.
+
+    The behavior is different based on param:
+        - `add_real_image`: create Partner with real image. Requires internet.
+    """
+
     class Meta:
         model = Partner
         django_get_or_create = ["name"]
 
     name = factory.Faker("company", locale="ru_RU")
-    type = factory.Iterator(
-        Partner.PartnerType.choices,
-        getter=lambda choice: choice[0],
-    )
+    type = factory.Iterator(Partner.PartnerType.values)
     url = factory.Faker("url", locale="ru_RU")
+    image = factory.django.ImageField(color=factory.Faker("color"))
     in_footer_partner = False
 
-    @factory.post_generation
-    def image(self, created, extracted, **kwargs):
-        if not created:
-            return
-
-        image = urllib.request.urlopen("https://placeimg.com/200/100").read()
-        self.image.save(self.name + ".jpg", ContentFile(image), save=False)
+    class Params:
+        add_real_image = factory.Trait(
+            image=factory.django.ImageField(from_func=get_picsum_image),
+        )
 
 
 class SponsorFactory(factory.django.DjangoModelFactory):
