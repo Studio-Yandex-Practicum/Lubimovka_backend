@@ -1,4 +1,4 @@
-name: test backend build and deploy
+name: Test backend build and deploy
 
 concurrency:
   group: test_deploy

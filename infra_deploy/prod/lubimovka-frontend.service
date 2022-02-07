@@ -11,8 +11,8 @@ User=root
 WorkingDirectory=/LUBIMOVKA/prod/
 
 # Remove old containers and networks
-ExecStartPre=docker-compose -f lubimovka_backend_develop_deploy.yml --env-file /LUBIMOVKA/develop/.github_vars pull swag
-ExecStartPre=docker-compose -f lubimovka_backend_develop_deploy.yml --env-file /LUBIMOVKA/develop/.github_vars pull frontend_prod
+ExecStartPre=docker-compose -f lubimovka_frontend_develop_deploy.yml --env-file /LUBIMOVKA/develop/.github_vars pull swag
+ExecStartPre=docker-compose -f lubimovka_frontend_develop_deploy.yml --env-file /LUBIMOVKA/develop/.github_vars pull frontend_prod
 ExecStartPre=docker-compose -f lubimovka_frontend_prod_deploy.yml --env-file /LUBIMOVKA/prod/.github_vars down
 
 # Compose up

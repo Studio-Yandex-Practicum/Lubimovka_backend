@@ -1,4 +1,4 @@
-name: stage backend build and deploy
+name: Stage backend build and deploy
 
 concurrency:
   group: develop_deploy
