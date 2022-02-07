@@ -125,6 +125,7 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-stage
 
 
+
             echo "DEVELOP_API_BASE_URL=${{ secrets.DEVELOP_API_BASE_URL }}" > .my_env_gl
             echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .my_env_gl
             echo "HOST=${{ secrets.HOST }}" >> .my_env_gl
