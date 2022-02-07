@@ -125,22 +125,22 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-stage
 
 
-            echo "DEVELOP_API_BASE_URL=${{ secrets.DEVELOP_API_BASE_URL }}" > .my_env
-            echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .my_env
-            echo "HOST=${{ secrets.HOST }}" >> .my_env
-            echo "SSH_KNOWN_HOSTS=${{ secrets.SSH_KNOWN_HOSTS }}" >> .my_env
-            echo "SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY }}" >> .my_env
-            echo "SSL_EMAIL=${{ secrets.SSL_EMAIL }}" >> .my_env
-            echo "TEST_API_BASE_URL=${{ secrets.TEST_API_BASE_URL }}" >> .my_env
-            echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .my_env
-            echo "URL=${{ secrets.URL }}" >> .my_env
-            echo "USERNAME=${{ secrets.USERNAME }}" >> .my_env
-            echo "TELEGRAM_ID=${{ secrets.TELEGRAM_ID }}" >> .my_env
-            echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .my_env
-            echo "PASSPHRASE=${{ secrets.PASSPHRASE }}" >> .my_env
-            echo "HUB_URL=${{ secrets.HUB_URL }}" >> .my_env
+            echo "DEVELOP_API_BASE_URL=${{ secrets.DEVELOP_API_BASE_URL }}" > .my_env_gl
+            echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .my_env_gl
+            echo "HOST=${{ secrets.HOST }}" >> .my_env_gl
+            echo "SSH_KNOWN_HOSTS=${{ secrets.SSH_KNOWN_HOSTS }}" >> .my_env_gl
+            echo "SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY }}" >> .my_env_gl
+            echo "SSL_EMAIL=${{ secrets.SSL_EMAIL }}" >> .my_env_gl
+            echo "TEST_API_BASE_URL=${{ secrets.TEST_API_BASE_URL }}" >> .my_env_gl
+            echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .my_env_gl
+            echo "URL=${{ secrets.URL }}" >> .my_env_gl
+            echo "USERNAME=${{ secrets.USERNAME }}" >> .my_env_gl
+            echo "TELEGRAM_ID=${{ secrets.TELEGRAM_ID }}" >> .my_env_gl
+            echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .my_env_gl
+            echo "PASSPHRASE=${{ secrets.PASSPHRASE }}" >> .my_env_gl
+            echo "HUB_URL=${{ secrets.HUB_URL }}" >> .my_env_gl
 
-            echo "DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }}" >> .my_env
+            echo "DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }}" > .my_env
             echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .my_env
             echo "DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }}" >> .my_env
             echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .my_env
