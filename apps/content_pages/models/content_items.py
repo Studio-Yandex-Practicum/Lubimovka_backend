@@ -92,18 +92,3 @@ class Title(BaseModel):
 
     def __str__(self):
         return self.title
-
-
-class Video(AbstractItemWithTitle):
-    """Video with title for `content` blocks."""
-
-    description = models.TextField(
-        max_length=500,
-        blank=True,
-        verbose_name="Описание видео",
-    )
-    url = models.URLField()
-
-    class Meta:
-        verbose_name = "Видео"
-        verbose_name_plural = "Видео"

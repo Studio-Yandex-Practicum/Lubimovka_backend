@@ -1,12 +1,13 @@
 from .content_items import (
     ExtendedPersonSerializer,
     LinkSerializer,
+    OrderedImageSerializer,
+    OrderedVideoSerializer,
     PerformanceSerializer,
     PreambleSerializer,
     QuoteSerializer,
     TextSerializer,
     TitleSerializer,
-    VideoSerializer,
 )
 
 # Prevent isort to rearrange imports and prevent circular imports.

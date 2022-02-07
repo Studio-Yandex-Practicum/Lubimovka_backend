@@ -10,5 +10,5 @@ from .content_blocks import (
     PlaysBlockAdmin,
     VideosBlockAdmin,
 )
-from .content_items import Link, Quote, Text, Title, Video
+from .content_items import Link, Quote, Text, Title
 from .contents import BaseContentInline, BaseContentPageAdmin

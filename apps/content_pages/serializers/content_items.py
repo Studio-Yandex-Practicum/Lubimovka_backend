@@ -1,8 +1,9 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import Link, Preamble, Quote, Text, Title, Video
 from apps.core.serializers import RoleSerializer
 from apps.library.models import Performance
+
+from ..models import Link, OrderedImage, OrderedVideo, Preamble, Quote, Text, Title
 
 
 class ExtendedPersonSerializer(serializers.Serializer):
@@ -86,9 +87,18 @@ class TitleSerializer(serializers.ModelSerializer):
         fields = ("title",)
 
 
-class VideoSerializer(serializers.ModelSerializer):
+class OrderedImageSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Video
+        model = OrderedImage
+        fields = (
+            "title",
+            "image",
+        )
+
+
+class OrderedVideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderedVideo
         fields = (
             "title",
             "url",

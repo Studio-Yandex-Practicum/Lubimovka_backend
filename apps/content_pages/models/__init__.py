@@ -1,4 +1,4 @@
-from .content_items import AbstractItemWithTitle, Link, Preamble, Quote, Text, Title, Video
+from .content_items import AbstractItemWithTitle, Link, Preamble, Quote, Text, Title
 from .contents import AbstractContent, AbstractContentPage
 
 # Prevent isort to rearrange imports and prevent circular imports.

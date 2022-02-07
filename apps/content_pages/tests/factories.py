@@ -16,7 +16,6 @@ from apps.content_pages.models import (
     Quote,
     Text,
     Title,
-    Video,
     VideosBlock,
 )
 from apps.core.decorators import restrict_factory
@@ -64,8 +63,7 @@ class ExtendedPersonFactory(factory.django.DjangoModelFactory):
 
 
 class ImagesBlockFactory(factory.django.DjangoModelFactory):
-    """
-    Creates content block Image for blog, news or projects.
+    """Creates content block Image for blog, news or projects.
 
     Block creates with 3 ordered images.
     """
@@ -99,30 +97,31 @@ class LinkFactory(factory.django.DjangoModelFactory):
 
 
 class OrderedImageFactory(factory.django.DjangoModelFactory):
-    """
-    Create Image with order for block.
+    """Create Image with order for block.
 
     Order in factory assume that there are not more than 3 ordered images in a block.
+    Parameters:
+    1. `add_real_image` — if True, tries to create object with real image
+    2. `empty_title` - if True, create OrderedImage objects with empty title
     """
 
     class Meta:
         model = OrderedImage
 
     class Params:
-        not_empty_title = factory.Trait(title=factory.Faker("sentence", locale="ru_RU"))
+        empty_title = factory.Trait(title="")
         add_real_image = factory.Trait(
             image=factory.django.ImageField(from_func=get_picsum_image),
         )
 
-    title = ""
+    title = factory.Faker("sentence", locale="ru_RU")
     image = factory.django.ImageField(color=factory.Faker("color"))
     order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
 @restrict_factory({"global": (Performance,)})
 class OrderedPerformanceFactory(factory.django.DjangoModelFactory):
-    """
-    Creates Performance with order for block.
+    """Creates Performance with order for block.
 
     Order in factory assume that there are not more than 3 ordered performances in a block.
     """
@@ -136,8 +135,7 @@ class OrderedPerformanceFactory(factory.django.DjangoModelFactory):
 
 @restrict_factory({"global": (Play,)})
 class OrderedPlayFactory(factory.django.DjangoModelFactory):
-    """
-    Creates Play with order for block.
+    """Create Play with order for block.
 
     Order in factory assume that there are not more than 3 ordered plays in a block.
     """
@@ -149,18 +147,22 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
     order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
-@restrict_factory({"global": (Video,)})
 class OrderedVideoFactory(factory.django.DjangoModelFactory):
-    """
-    Creates Video with order for block.
+    """Create Video with order for block.
 
     Order in factory assume that there are not more than 3 ordered videos in a block.
+    Parameters:
+    1. `empty_title` - if True, create OrderedVideo objects with empty title
     """
 
     class Meta:
         model = OrderedVideo
 
-    item = factory.Iterator(Video.objects.all())
+    class Params:
+        empty_title = factory.Trait(title="")
+
+    title = factory.Faker("sentence", locale="ru_RU")
+    url = factory.Faker("url")
     order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
@@ -279,19 +281,3 @@ class VideosBlockFactory(factory.django.DjangoModelFactory):
         if not created:
             return
         OrderedVideoFactory.create_batch(3, block=self)
-
-
-class VideoFactory(factory.django.DjangoModelFactory):
-    """Creates content item Video for project."""
-
-    class Meta:
-        model = Video
-
-    description = factory.Faker(
-        "paragraph",
-        locale="ru_RU",
-        nb_sentences=5,
-        variable_nb_sentences=False,
-    )
-    title = factory.Faker("sentence", locale="ru_RU")
-    url = factory.Faker("url")

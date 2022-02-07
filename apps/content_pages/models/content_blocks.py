@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
-from apps.content_pages.models import AbstractItemWithTitle, Video
+from apps.content_pages.models import AbstractItemWithTitle
 from apps.core.models import BaseModel, Person, Role
 from apps.library.models import Performance, Play
 
@@ -164,17 +164,23 @@ class OrderedPlay(AbstractOrderedItemBase):
 
 
 class OrderedVideo(AbstractOrderedItemBase):
-    item = models.ForeignKey(
-        Video,
-        on_delete=models.CASCADE,
-        related_name="ordered_videos",
-        verbose_name="Видео",
+    title = models.CharField(
+        max_length=250,
+        blank=True,
+        verbose_name="Заголовок",
+        help_text="Заголовок/подпись для видео. Может быть пустым",
+    )
+    url = models.URLField(
+        verbose_name="Ссылка на видео",
     )
     block = models.ForeignKey(
         "VideosBlock",
         on_delete=models.CASCADE,
         related_name="ordered_videos",
     )
+
+    def __str__(self):
+        return f"Видео {self.order}"
 
 
 class ImagesBlock(AbstractItemWithTitle):
@@ -222,11 +228,7 @@ class PlaysBlock(AbstractItemWithTitle):
 
 
 class VideosBlock(AbstractItemWithTitle):
-    items = models.ManyToManyField(
-        to=Video,
-        through=OrderedVideo,
-        related_name="video_blocks",
-    )
+    """Model to store and organize OrderedVideos objects."""
 
     class Meta:
         verbose_name = "Блок видео"

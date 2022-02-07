@@ -1,9 +1,14 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import ImagesBlock, PerformancesBlock, PersonsBlock, PlaysBlock, VideosBlock
-from apps.content_pages.models.content_blocks import OrderedImage
-from apps.content_pages.serializers import ExtendedPersonSerializer, PerformanceSerializer, VideoSerializer
 from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
+
+from ..models import ImagesBlock, PerformancesBlock, PersonsBlock, PlaysBlock, VideosBlock
+from ..serializers.content_items import (
+    ExtendedPersonSerializer,
+    OrderedImageSerializer,
+    OrderedVideoSerializer,
+    PerformanceSerializer,
+)
 
 
 class SlugRelatedSerializerField(serializers.SlugRelatedField):
@@ -21,13 +26,10 @@ class SlugRelatedSerializerField(serializers.SlugRelatedField):
 
 
 class VideosBlockSerializer(serializers.ModelSerializer):
-
-    items = SlugRelatedSerializerField(
+    items = OrderedVideoSerializer(
         many=True,
         read_only=True,
         source="ordered_videos",
-        slug_field="item",
-        serializer_class=VideoSerializer,
     )
 
     class Meta:
@@ -35,15 +37,6 @@ class VideosBlockSerializer(serializers.ModelSerializer):
         fields = (
             "title",
             "items",
-        )
-
-
-class OrderedImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderedImage
-        fields = (
-            "title",
-            "image",
         )
 
 

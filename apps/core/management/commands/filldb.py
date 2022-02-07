@@ -3,7 +3,6 @@ from typing import Any, Optional
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.afisha.tests.factories import EventFactory
-from apps.content_pages.tests.factories import VideoFactory
 from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
 from apps.info.tests.factories import (
     FestivalFactory,
@@ -106,9 +105,6 @@ class Command(BaseCommand):
 
             press_releases = PressReleaseFactory.create_batch(10)
             notification(self, press_releases, "пресс-релизов")
-
-            videos_url = VideoFactory.create_batch(5)
-            notification(self, videos_url, "видео")
 
             users_editors = []
             users_admins = []
