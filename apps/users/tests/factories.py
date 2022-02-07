@@ -1,6 +1,6 @@
 import factory
-from django.contrib.auth.models import Group
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 from faker import Faker
 
 fake = Faker(locale="ru_RU")
@@ -55,14 +55,15 @@ class UserFactory(factory.django.DjangoModelFactory):
 
 class EditorUserFactory(UserFactory):
     """Create Editor User objects.
-    
+
     Do two things:
     1. The username in format `editor_{sequence_number}`
     2. Add user to `editor` group.
     """
+
     class Params:
         username_prefix = "editor"
-    
+
     @classmethod
     def create(cls, **kwargs):
         kwargs["role_type"] = "editor"
@@ -71,14 +72,15 @@ class EditorUserFactory(UserFactory):
 
 class AdminUserFactory(UserFactory):
     """Create Admin User objects.
-    
+
     Do two things:
     1. The username in format `admin_{sequence_number}`
     2. Add user to `admin` group.
     """
+
     class Params:
         username_prefix = "admin"
-    
+
     @classmethod
     def create(cls, **kwargs):
         kwargs["role_type"] = "admin"
