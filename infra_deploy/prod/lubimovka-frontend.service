@@ -8,18 +8,18 @@ Restart=always
 RestartSec=5
 User=root
 
-WorkingDirectory=/usr/local/src/prod/
+WorkingDirectory=/LUBIMOVKA/prod/
 
 # Remove old containers and networks
-ExecStartPre=/usr/local/bin/docker-compose -f lubimovka_backend_develop_deploy.yml --env-file /usr/local/src/develop/.github_vars pull swag
-ExecStartPre=/usr/local/bin/docker-compose -f lubimovka_backend_develop_deploy.yml --env-file /usr/local/src/develop/.github_vars pull frontend_prod
-ExecStartPre=/usr/local/bin/docker-compose -f lubimovka_frontend_prod_deploy.yml --env-file /usr/local/src/prod/.github_vars down
+ExecStartPre=docker-compose -f lubimovka_backend_develop_deploy.yml --env-file /LUBIMOVKA/develop/.github_vars pull swag
+ExecStartPre=docker-compose -f lubimovka_backend_develop_deploy.yml --env-file /LUBIMOVKA/develop/.github_vars pull frontend_prod
+ExecStartPre=docker-compose -f lubimovka_frontend_prod_deploy.yml --env-file /LUBIMOVKA/prod/.github_vars down
 
 # Compose up
-ExecStart=/usr/local/bin/docker-compose -f lubimovka_frontend_prod_deploy.yml --env-file /usr/local/src/prod/.github_vars up
+ExecStart=docker-compose -f lubimovka_frontend_prod_deploy.yml --env-file /LUBIMOVKA/prod/.github_vars up
 
 # Compose down
-ExecStop=/usr/local/bin/docker-compose -f lubimovka_frontend_prod_deploy.yml --env-file /usr/local/src/prod/.github_vars down
+ExecStop=docker-compose -f lubimovka_frontend_prod_deploy.yml --env-file /LUBIMOVKA/prod/.github_vars down
 
 [Install]
 WantedBy=multi-user.target
