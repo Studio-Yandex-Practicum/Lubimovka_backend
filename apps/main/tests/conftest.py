@@ -7,7 +7,7 @@ from django.utils import timezone
 from apps.afisha.tests.factories import EventFactory
 from apps.articles.tests.factories.blog_factory import BlogFactory
 from apps.articles.tests.factories.news_factory import NewsFactory
-from apps.content_pages.tests.factories import ImageForContentFactory, ImagesBlockFactory
+from apps.content_pages.tests.factories import ImagesBlockFactory
 from apps.core.tests.factories import PersonFactory
 from apps.info.tests.factories import FestivalFactory, PlaceFactory
 from apps.library.tests.factories import MasterClassFactory, PerformanceFactory, PlayFactory, ReadingFactory
@@ -17,13 +17,12 @@ MAIN_URL = reverse("main:main_page")
 
 
 @pytest.fixture
-def images_for_content():
+def persons():
     PersonFactory.create_batch(6)
-    return ImageForContentFactory.create_batch(2)
 
 
 @pytest.fixture
-def image(images_for_content):
+def image(persons):
     return ImagesBlockFactory(add_image=True)
 
 

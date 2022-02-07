@@ -19,19 +19,6 @@ class AbstractItemWithTitle(BaseModel):
         return self.title
 
 
-class Image(AbstractItemWithTitle):
-    """Image with title for `content` blocks."""
-
-    image = models.ImageField(
-        upload_to="content_images",
-        verbose_name="Изображение",
-    )
-
-    class Meta:
-        verbose_name = "Изображение"
-        verbose_name_plural = "Изображения"
-
-
 class Link(AbstractItemWithTitle):
     """Link with title for `content` blocks."""
 

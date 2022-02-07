@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
-from apps.content_pages.models import AbstractItemWithTitle, Image, Video
+from apps.content_pages.models import AbstractItemWithTitle, Video
 from apps.core.models import BaseModel, Person, Role
 from apps.library.models import Performance, Play
 
@@ -33,10 +33,14 @@ class AbstractOrderedItemBase(BaseModel):
 
 
 class OrderedImage(AbstractOrderedItemBase):
-    item = models.ForeignKey(
-        Image,
-        on_delete=models.CASCADE,
-        related_name="ordered_images",
+    title = models.CharField(
+        max_length=250,
+        blank=True,
+        verbose_name="Заголовок",
+        help_text="Заголовок/подпись для картинки. Может быть пустым",
+    )
+    image = models.ImageField(
+        upload_to="content_images",
         verbose_name="Изображение",
     )
     block = models.ForeignKey(
@@ -44,6 +48,9 @@ class OrderedImage(AbstractOrderedItemBase):
         on_delete=models.CASCADE,
         related_name="ordered_images",
     )
+
+    def __str__(self):
+        return f"Изображение {self.order}"
 
 
 class OrderedPerformance(AbstractOrderedItemBase):
@@ -171,11 +178,7 @@ class OrderedVideo(AbstractOrderedItemBase):
 
 
 class ImagesBlock(AbstractItemWithTitle):
-    items = models.ManyToManyField(
-        to=Image,
-        through=OrderedImage,
-        related_name="image_blocks",
-    )
+    """Model to store and organize OrderedImages objects."""
 
     class Meta:
         verbose_name = "Блок изображения"

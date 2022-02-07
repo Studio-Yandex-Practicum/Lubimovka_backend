@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import Image, Link, Preamble, Quote, Text, Title, Video
+from apps.content_pages.models import Link, Preamble, Quote, Text, Title, Video
 from apps.core.serializers import RoleSerializer
 from apps.library.models import Performance
 
@@ -41,15 +41,6 @@ class ExtendedPersonSerializer(serializers.Serializer):
         read_only=True,
     )
     roles = RoleSerializer(many=True)
-
-
-class ImageSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Image
-        fields = (
-            "title",
-            "image",
-        )
 
 
 class LinkSerializer(serializers.ModelSerializer):

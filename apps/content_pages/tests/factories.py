@@ -3,7 +3,6 @@ import factory
 from apps.content_pages.models import (
     ContentPersonRole,
     ExtendedPerson,
-    Image,
     ImagesBlock,
     Link,
     OrderedImage,
@@ -22,6 +21,7 @@ from apps.content_pages.models import (
 )
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
+from apps.core.utils import get_picsum_image
 from apps.library.models import Performance, Play
 
 
@@ -82,17 +82,6 @@ class ImagesBlockFactory(factory.django.DjangoModelFactory):
         OrderedImageFactory.create_batch(3, block=self)
 
 
-class ImageForContentFactory(factory.django.DjangoModelFactory):
-    """Creates image for content block."""
-
-    class Meta:
-        model = Image
-        django_get_or_create = ("image",)
-
-    image = factory.django.ImageField(color=factory.Faker("color"))
-    title = factory.Faker("sentence", locale="ru_RU")
-
-
 class LinkFactory(factory.django.DjangoModelFactory):
     """Creates content item Link for project."""
 
@@ -109,7 +98,6 @@ class LinkFactory(factory.django.DjangoModelFactory):
     url = factory.Faker("url")
 
 
-@restrict_factory({"global": (Image,)})
 class OrderedImageFactory(factory.django.DjangoModelFactory):
     """
     Create Image with order for block.
@@ -120,7 +108,14 @@ class OrderedImageFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OrderedImage
 
-    item = factory.Iterator(Image.objects.all())
+    class Params:
+        not_empty_title = factory.Trait(title=factory.Faker("sentence", locale="ru_RU"))
+        add_real_image = factory.Trait(
+            image=factory.django.ImageField(from_func=get_picsum_image),
+        )
+
+    title = ""
+    image = factory.django.ImageField(color=factory.Faker("color"))
     order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
