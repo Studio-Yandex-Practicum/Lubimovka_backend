@@ -1,7 +1,7 @@
 name: Stage backend build and deploy
 
 concurrency:
-  group: develop_deploy
+  group: stage_deploy
   cancel-in-progress: true
 
 on:
@@ -52,7 +52,7 @@ jobs:
     name: Deploy changes on server
     runs-on: ubuntu-latest
     environment:
-      name: develop_deploy
+      name: stage_deploy
     needs: build-and-push-image-to-github-packages
     steps:
       -
@@ -188,7 +188,7 @@ jobs:
     name: Send message in telegram group
     runs-on: ubuntu-latest
     environment:
-      name: develop_deploy
+      name: stage_deploy
     needs: deploy
     steps:
       - name: check repository
