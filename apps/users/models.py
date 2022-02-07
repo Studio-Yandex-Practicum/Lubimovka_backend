@@ -1,4 +1,4 @@
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
 
 
 class User(AbstractUser):
@@ -26,9 +26,10 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
 
 
-class ProxyUser(User):
+class ProxyGroup(Group):
+    """Ordinary django's Group. The class is required to register model in `users` app."""
+
     class Meta:
-        app_label = "auth"
         proxy = True
-        verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
+        verbose_name = "Группа"
+        verbose_name_plural = "Группы"

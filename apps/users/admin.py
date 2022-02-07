@@ -1,14 +1,14 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
-from django.contrib.auth.models import Group
 
 from .forms import GroupAdminForm, UserAdminForm
-from .models import ProxyUser
+from .models import ProxyGroup
 
 User = get_user_model()
 
 
+@admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     form = UserAdminForm
     list_display = (
@@ -39,6 +39,4 @@ class GroupAdmin(admin.ModelAdmin):
     filter_horizontal = ("permissions",)
 
 
-admin.site.unregister(Group)
-admin.site.register(Group, GroupAdmin)
-admin.site.register(ProxyUser, UserAdmin)
+admin.site.register(ProxyGroup, GroupAdmin)
