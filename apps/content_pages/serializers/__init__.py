@@ -1,7 +1,7 @@
+from .content_block_items import ContentImagesBlockItemSerializer
 from .content_items import (
     ExtendedPersonSerializer,
     LinkSerializer,
-    OrderedImageSerializer,
     OrderedVideoSerializer,
     PerformanceSerializer,
     PreambleSerializer,

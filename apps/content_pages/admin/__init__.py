@@ -1,7 +1,7 @@
 from .content_blocks import (
+    ContentImagesBlockItemInline,
     ExtendedPersonInline,
     ImagesBlockAdmin,
-    OrderedImageInline,
     OrderedPerformanceInline,
     OrderedPlayInline,
     OrderedVideoInline,

@@ -6,54 +6,10 @@ from apps.content_pages.models import AbstractItemWithTitle
 from apps.core.models import BaseModel, Person, Role
 from apps.library.models import Performance, Play
 
-
-class AbstractOrderedItemBase(BaseModel):
-    """Abstract 'through' model for 'contet' blocks with ordered items.
-
-    It's required that inherited models have to have 'item' and 'base' fields.
-    It's good idea to check it during class initialization but haven't
-    find how to do it for now.
-    """
-
-    order = models.PositiveIntegerField(
-        default=0,
-        blank=False,
-        null=False,
-        verbose_name="Порядок в блоке",
-    )
-
-    class Meta:
-        verbose_name = "Содержимое блока"
-        verbose_name_plural = "Содержимое блоков"
-        abstract = True
-        ordering = ("order",)
-
-    def __str__(self):
-        return f"{self.order} — {self.item}"
+from ..models.content_block_items import AbstractContentBlockItem
 
 
-class OrderedImage(AbstractOrderedItemBase):
-    title = models.CharField(
-        max_length=250,
-        blank=True,
-        verbose_name="Заголовок",
-        help_text="Заголовок/подпись для картинки. Может быть пустым",
-    )
-    image = models.ImageField(
-        upload_to="content_images",
-        verbose_name="Изображение",
-    )
-    block = models.ForeignKey(
-        "ImagesBlock",
-        on_delete=models.CASCADE,
-        related_name="ordered_images",
-    )
-
-    def __str__(self):
-        return f"Изображение {self.order}"
-
-
-class OrderedPerformance(AbstractOrderedItemBase):
+class OrderedPerformance(AbstractContentBlockItem):
     item = models.ForeignKey(
         Performance,
         on_delete=models.CASCADE,
@@ -98,7 +54,7 @@ class ContentPersonRole(BaseModel):
         )
 
 
-class ExtendedPerson(AbstractOrderedItemBase):
+class ExtendedPerson(AbstractContentBlockItem):
     """Extended `Person` for `personsblock`.
 
     Person extended not only with `order` but also with `roles`.
@@ -149,7 +105,7 @@ class ExtendedPerson(AbstractOrderedItemBase):
         return roles
 
 
-class OrderedPlay(AbstractOrderedItemBase):
+class OrderedPlay(AbstractContentBlockItem):
     item = models.ForeignKey(
         Play,
         on_delete=models.CASCADE,
@@ -163,7 +119,7 @@ class OrderedPlay(AbstractOrderedItemBase):
     )
 
 
-class OrderedVideo(AbstractOrderedItemBase):
+class OrderedVideo(AbstractContentBlockItem):
     title = models.CharField(
         max_length=250,
         blank=True,
@@ -184,7 +140,7 @@ class OrderedVideo(AbstractOrderedItemBase):
 
 
 class ImagesBlock(AbstractItemWithTitle):
-    """Model to store and organize OrderedImages objects."""
+    """Model to store and organize OrderedContentImagesBlockItems objects."""
 
     class Meta:
         verbose_name = "Блок изображения"

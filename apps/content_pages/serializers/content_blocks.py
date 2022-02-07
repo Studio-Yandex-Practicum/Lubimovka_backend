@@ -3,9 +3,9 @@ from rest_framework import serializers
 from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
 
 from ..models import ImagesBlock, PerformancesBlock, PersonsBlock, PlaysBlock, VideosBlock
-from ..serializers.content_items import (
+from ..serializers import (
+    ContentImagesBlockItemSerializer,
     ExtendedPersonSerializer,
-    OrderedImageSerializer,
     OrderedVideoSerializer,
     PerformanceSerializer,
 )
@@ -41,10 +41,10 @@ class VideosBlockSerializer(serializers.ModelSerializer):
 
 
 class ImagesBlockSerializer(serializers.ModelSerializer):
-    items = OrderedImageSerializer(
+    items = ContentImagesBlockItemSerializer(
         many=True,
         read_only=True,
-        source="ordered_images",
+        source="block_items",
     )
 
     class Meta:

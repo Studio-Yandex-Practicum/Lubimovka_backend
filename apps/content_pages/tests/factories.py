@@ -1,11 +1,11 @@
 import factory
 
 from apps.content_pages.models import (
+    ContentImagesBlockItem,
     ContentPersonRole,
     ExtendedPerson,
     ImagesBlock,
     Link,
-    OrderedImage,
     OrderedPerformance,
     OrderedPlay,
     OrderedVideo,
@@ -77,7 +77,7 @@ class ImagesBlockFactory(factory.django.DjangoModelFactory):
     def add_image(self, created, extracted, **kwargs):
         if not created:
             return
-        OrderedImageFactory.create_batch(3, block=self)
+        ContentImagesBlockItemFactory.create_batch(3, block=self)
 
 
 class LinkFactory(factory.django.DjangoModelFactory):
@@ -96,17 +96,17 @@ class LinkFactory(factory.django.DjangoModelFactory):
     url = factory.Faker("url")
 
 
-class OrderedImageFactory(factory.django.DjangoModelFactory):
+class ContentImagesBlockItemFactory(factory.django.DjangoModelFactory):
     """Create Image with order for block.
 
     Order in factory assume that there are not more than 3 ordered images in a block.
     Parameters:
     1. `add_real_image` — if True, tries to create object with real image
-    2. `empty_title` - if True, create OrderedImage objects with empty title
+    2. `empty_title` - if True, create ContentImagesBlockItem objects with empty title
     """
 
     class Meta:
-        model = OrderedImage
+        model = ContentImagesBlockItem
 
     class Params:
         empty_title = factory.Trait(title="")

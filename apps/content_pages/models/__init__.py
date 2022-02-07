@@ -4,11 +4,11 @@ from .contents import AbstractContent, AbstractContentPage
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split
 
+from .content_block_items import ContentImagesBlockItem
 from .content_blocks import (
     ContentPersonRole,
     ExtendedPerson,
     ImagesBlock,
-    OrderedImage,
     OrderedPerformance,
     OrderedPlay,
     OrderedVideo,

@@ -1,11 +1,12 @@
-from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 
-from apps.content_pages.models import (
+from apps.core.mixins import HideOnNavPanelAdminModelMixin
+
+from ..admin.content_block_items import ContentBlockItemInline, ContentImagesBlockItemInline
+from ..models import (
     ContentPersonRole,
     ExtendedPerson,
     ImagesBlock,
-    OrderedImage,
     OrderedPerformance,
     OrderedPlay,
     OrderedVideo,
@@ -14,7 +15,6 @@ from apps.content_pages.models import (
     PlaysBlock,
     VideosBlock,
 )
-from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 
 
 class ContentPersonRoleInline(admin.TabularInline):
@@ -22,30 +22,19 @@ class ContentPersonRoleInline(admin.TabularInline):
     extra = 0
 
 
-class OrderedInline(SortableInlineAdminMixin, admin.TabularInline):
-    min_num = 1
-    extra = 0
-
-
-class OrderedImageInline(AdminImagePreview, OrderedInline):
-    readonly_fields = ("image_preview_change_page",)
-    model = OrderedImage
-    max_num = 8
-
-
-class OrderedVideoInline(OrderedInline):
+class OrderedVideoInline(ContentBlockItemInline):
     model = OrderedVideo
 
 
-class OrderedPerformanceInline(OrderedInline):
+class OrderedPerformanceInline(ContentBlockItemInline):
     model = OrderedPerformance
 
 
-class OrderedPlayInline(OrderedInline):
+class OrderedPlayInline(ContentBlockItemInline):
     model = OrderedPlay
 
 
-class ExtendedPersonInline(OrderedInline):
+class ExtendedPersonInline(ContentBlockItemInline):
     model = ExtendedPerson
     show_change_link = True
     readonly_fields = ("person_roles",)
@@ -71,7 +60,7 @@ class ExtendedPersonAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 @admin.register(ImagesBlock)
 class ImagesBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
     list_display = ("title",)
-    inlines = (OrderedImageInline,)
+    inlines = (ContentImagesBlockItemInline,)
 
 
 @admin.register(PersonsBlock)
