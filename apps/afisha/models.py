@@ -96,7 +96,7 @@ class Event(BaseModel):
         super().save(*args, **kwargs)
 
     def clean(self):
-        if self.date_time <= timezone.now():
+        if self.date_time is not None and self.date_time <= timezone.now():
             raise ValidationError("Невозможно создать событие в прошлом.")
         return super().clean()
 
