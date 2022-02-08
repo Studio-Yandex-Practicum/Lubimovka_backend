@@ -206,18 +206,6 @@ dev = ["flake8", "sphinx", "sphinx-rtd-theme", "tox", "twine", "wheel"]
 postal = ["cryptography"]
 
 [[package]]
-name = "django-autoslug"
-version = "1.9.8"
-description = "An automated slug field for Django."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.extras]
-cyrillic = ["pytils (>=0.2)"]
-translitcodec = ["translitcodec (>=0.3)"]
-
-[[package]]
 name = "django-ckeditor"
 version = "6.2.0"
 description = "Django admin CKEditor integration."
@@ -1073,7 +1061,7 @@ six = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "e190cb58973fd0c2ea1120864ffc9af7739e08751d66bd5f94c97d4ae44a6191"
+content-hash = "dc2606760375caa847fd6929fa6f09d838a6ea5af93006eee09e92e9112ca239"
 
 [metadata.files]
 appnope = [
@@ -1198,10 +1186,6 @@ django-admin-sortable2 = [
 django-anymail = [
     {file = "django-anymail-8.5.tar.gz", hash = "sha256:677e937dc9e2671ca7631abb1d94ddc6b840beb3d53c0fbf699e866a6a9ba92f"},
     {file = "django_anymail-8.5-py3-none-any.whl", hash = "sha256:2325932f56f914d96e0a54db850f2b246ed2277b753f75319620d051a51551e2"},
-]
-django-autoslug = [
-    {file = "django-autoslug-1.9.8.tar.gz", hash = "sha256:bae66c27d35615f472865b99c4d107f3b3add3d22ee337e84960fc07694abd45"},
-    {file = "django_autoslug-1.9.8-py2.py3-none-any.whl", hash = "sha256:26459eeddec207e307c55777a10fc25d17f4978753695340b16a17ed248a6f70"},
 ]
 django-ckeditor = [
     {file = "django-ckeditor-6.2.0.tar.gz", hash = "sha256:df64dc9e62790ef824f609605d31be847bdbce1cc7aa94e49bd5ca60d7aa79bb"},

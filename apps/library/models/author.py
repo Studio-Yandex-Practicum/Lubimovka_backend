@@ -1,4 +1,3 @@
-from autoslug import AutoSlugField
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -51,11 +50,12 @@ class Author(BaseModel):
         blank=True,
         verbose_name="Пьесы автора",
     )
-    slug = AutoSlugField(
-        "Слаг",
+    slug = models.SlugField(
+        "Транслит фамилии для формирования адресной строки",
+        blank=True,
         unique=True,
-        editable=False,
         db_index=True,
+        help_text="Если не заполнено, будет сформировано автоматически",
     )
 
     class Meta:
@@ -68,8 +68,6 @@ class Author(BaseModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
-        if not self.id:
-            self.slug = self.get_unique_slug(self.person)
         return super().save(*args, **kwargs)
 
     def clean(self):
@@ -78,6 +76,10 @@ class Author(BaseModel):
                 raise ValidationError("Для автора необходимо указать email")
             if not self.person.city:
                 raise ValidationError("Для автора необходимо указать город")
+        if not self.slug:
+            self.slug = self.get_unique_slug(self.person)
+            if Author.objects.filter(slug=self.slug).exists():
+                raise ValidationError("Автоматическое формирование транслита фамилии невозможно из-за дублирования")
 
     def _has_person_before_saving(self):
         return self.person_id is not None
