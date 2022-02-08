@@ -207,13 +207,6 @@ def add_afisha_settings(apps, schema_editor):
     Setting.objects.create(
         field_type="TEXT",
         group="AFISHA",
-        settings_key="afisha_description_regular",
-        text="На все читки и мастер-классы фестиваля вход свободный по предварительной регистрации.",
-        description="Описание под заголовком",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="AFISHA",
         settings_key="afisha_info_festival_text",
         text="Регистрация на каждое мероприятие открывается в 12:00 предыдущего дня.",
         description="Информация о регистрации на событие фестиваля",
@@ -228,23 +221,9 @@ def add_afisha_settings(apps, schema_editor):
     Setting.objects.create(
         field_type="TEXT",
         group="AFISHA",
-        settings_key="afisha_title_festival",
-        text="Афиша фестиваля",
-        description="Заголовок афиши во время фестиваля",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="AFISHA",
-        settings_key="afisha_title_regular",
-        text="Афиша событий",
-        description="Заголовок афиши",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="AFISHA",
-        settings_key="afisha_description_festival",
+        settings_key="afisha_description",
         text="На все читки и мастер-классы фестиваля вход свободный по предварительной регистрации.",
-        description="Описание под заголовком во время фестиваля",
+        description="Описание под заголовком",
     )
 
 

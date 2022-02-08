@@ -142,23 +142,42 @@ def change_afisha_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
 
-    # changing afisha_title_regular
-    setting = Setting.objects.get_or_create(
+    # adding afisha_description
+    Setting.objects.get_or_create(
+        field_type="TEXT",
+        group="AFISHA",
+        settings_key="afisha_description",
+        text="На все читки и мастер-классы фестиваля вход свободный по предварительной регистрации.",
+        description="Описание под заголовком",
+    )
+
+    # removing afisha_title_regular
+    Setting.objects.filter(
         field_type="TEXT",
         group="AFISHA",
         settings_key="afisha_title_regular",
-    )[0]
-    setting.description = "Заголовок афиши"
-    setting.save()
+    ).delete()
 
-    # changing afisha_description_regular
-    setting = Setting.objects.get_or_create(
+    # removing afisha_title_festival
+    Setting.objects.filter(
+        field_type="TEXT",
+        group="AFISHA",
+        settings_key="afisha_title_festival",
+    ).delete()
+
+    # removing afisha_description_festival
+    Setting.objects.filter(
+        field_type="TEXT",
+        group="AFISHA",
+        settings_key="afisha_description_festival",
+    ).delete()
+
+    # removing afisha_description_regular
+    Setting.objects.filter(
         field_type="TEXT",
         group="AFISHA",
         settings_key="afisha_description_regular",
-    )[0]
-    setting.description = "Описание под заголовком"
-    setting.save()
+    ).delete()
 
 
 class Migration(migrations.Migration):
