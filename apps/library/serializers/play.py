@@ -10,7 +10,7 @@ class AuthorForPlaySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Author
-        fields = ("name", "id")
+        fields = ("name", "slug", "id")
 
 
 class PlaySerializer(serializers.ModelSerializer):
