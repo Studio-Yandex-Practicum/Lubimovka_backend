@@ -69,13 +69,9 @@ class EventsAPIView(EventPaginationMixin, views.APIView):
         """
         super(EventsAPIView, self).finalize_response(request, response, *args, **kwargs)
         response.data["festival_status"] = self.festival_status
+        response.data["description"] = Setting.get_setting("afisha_description")
 
         if self.festival_status:
             response.data["info_registration"] = Setting.get_setting("afisha_info_festival_text")
             response.data["asterisk_text"] = Setting.get_setting("afisha_asterisk_text")
-            response.data["title"] = Setting.get_setting("afisha_title_festival")
-            response.data["description"] = Setting.get_setting("afisha_description_festival")
-        else:
-            response.data["title"] = Setting.get_setting("afisha_title_regular")
-            response.data["description"] = Setting.get_setting("afisha_description_regular")
         return response
