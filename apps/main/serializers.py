@@ -26,7 +26,7 @@ class MainAfishaSerializer(serializers.Serializer):
 
     """
 
-    title = serializers.CharField()
+    afisha_today = serializers.BooleanField(default=False)
     description = serializers.CharField()
     items = EventSerializerRegular(many=True)
 
