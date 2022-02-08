@@ -13,13 +13,13 @@ WorkingDirectory=/LUBIMOVKA/stage/
 # Remove old containers and networks
 ExecStartPre=docker-compose -f lubimovka_frontend_stage_deploy.yml --env-file /LUBIMOVKA/stage/.github_vars pull swag
 ExecStartPre=docker-compose -f lubimovka_frontend_stage_deploy.yml --env-file /LUBIMOVKA/stage/.github_vars pull frontend_stage
-ExecStartPre=docker-compose -f lubimovka_frontend_stage_deploy.yml --env-file /LUBIMOVKA/stage/.github_vars stop
+ExecStartPre=docker-compose -f lubimovka_frontend_stage_deploy.yml --env-file /LUBIMOVKA/stage/.github_vars down
 
 # Compose up
 ExecStart=docker-compose -f lubimovka_frontend_stage_deploy.yml --env-file /LUBIMOVKA/stage/.github_vars up
 
 # Compose down
-ExecStop=docker-compose -f lubimovka_frontend_stage_deploy.yml --env-file /LUBIMOVKA/stage/.github_vars stop
+ExecStop=docker-compose -f lubimovka_frontend_stage_deploy.yml --env-file /LUBIMOVKA/stage/.github_vars down
 
 [Install]
 WantedBy=multi-user.target
