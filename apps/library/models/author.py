@@ -53,12 +53,9 @@ class Author(BaseModel):
     )
     slug = AutoSlugField(
         "Слаг",
-        # unique=True,
-        # populate_from=person,
-        default="someslug",
-        # blank=True,
-        # editable=True,
-        # db_index=True,
+        unique=True,
+        editable=False,
+        db_index=True,
     )
 
     class Meta:
@@ -71,7 +68,8 @@ class Author(BaseModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
-        self.slug = self.get_unique_slug(self.person)
+        if not self.id:
+            self.slug = self.get_unique_slug(self.person)
         return super().save(*args, **kwargs)
 
     def clean(self):
@@ -89,12 +87,6 @@ class Author(BaseModel):
         return self.person.image
 
     def get_unique_slug(self, value):
-        # baseslug = slugify(value.last_name)
-        # qs = self.__class__.objects.all()
-        # used = qs.values_list("slug", flat=True)
-        # if baseslug in used:
-        #    baseslug += str(value.id)
-        # return baseslug
         return slugify(value.last_name)
 
 

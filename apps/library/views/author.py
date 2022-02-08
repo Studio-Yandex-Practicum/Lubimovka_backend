@@ -22,7 +22,6 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "plays",
                 "other_plays",
             ),
-            # id=self.kwargs["pk"],
             slug=self.kwargs["slug"],
         )
         return author
