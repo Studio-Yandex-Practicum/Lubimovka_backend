@@ -8,7 +8,7 @@ services:
     volumes:
       - postgres_data_develop:/var/lib/postgresql/data
     env_file:
-      - .env-dev
+      - .env-test
     networks:
       - develop_db_network
   backend:
@@ -21,7 +21,7 @@ services:
     depends_on:
       - postgres
     env_file:
-      - .env-dev
+      - .env-test
     networks:
       - develop_db_network
       - develop_swag_network
@@ -37,7 +37,7 @@ services:
     depends_on:
       - backend
     env_file:
-      - .env-dev
+      - .env-test
     networks:
       - develop_db_network
 
