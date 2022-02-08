@@ -92,6 +92,7 @@ class AuthorAdmin(admin.ModelAdmin):
         "person",
         "quote",
         "biography",
+        "slug",
     )
     inlines = (
         AchievementInline,

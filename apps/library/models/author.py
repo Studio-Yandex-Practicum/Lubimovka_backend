@@ -4,6 +4,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
+from apps.core.utils import slugify
 
 from .play import Play
 
@@ -50,12 +51,14 @@ class Author(BaseModel):
         blank=True,
         verbose_name="Пьесы автора",
     )
-    slug_name = AutoSlugField(
-        verbose_name="Слаг",
-        populate_from=lambda instance: instance.person.last_name,
+    slug = AutoSlugField(
+        "Слаг",
         # unique=True,
-        editable=True,
-        blank=True,
+        # populate_from=person,
+        default="someslug",
+        # blank=True,
+        # editable=True,
+        # db_index=True,
     )
 
     class Meta:
@@ -68,6 +71,7 @@ class Author(BaseModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
+        self.slug = self.get_unique_slug(self.person)
         return super().save(*args, **kwargs)
 
     def clean(self):
@@ -83,6 +87,15 @@ class Author(BaseModel):
     @property
     def image(self):
         return self.person.image
+
+    def get_unique_slug(self, value):
+        # baseslug = slugify(value.last_name)
+        # qs = self.__class__.objects.all()
+        # used = qs.values_list("slug", flat=True)
+        # if baseslug in used:
+        #    baseslug += str(value.id)
+        # return baseslug
+        return slugify(value.last_name)
 
 
 class SocialNetworkLink(BaseModel):

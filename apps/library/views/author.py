@@ -11,6 +11,7 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Author.objects.select_related("person").all()
     filter_backends = (DjangoFilterBackend,)
     filterset_class = AuthorFilter
+    lookup_field = "slug"
 
     def get_object(self):
         author = get_object_or_404(
@@ -21,7 +22,8 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "plays",
                 "other_plays",
             ),
-            id=self.kwargs["pk"],
+            # id=self.kwargs["pk"],
+            slug=self.kwargs["slug"],
         )
         return author
 
