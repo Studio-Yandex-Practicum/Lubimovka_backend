@@ -1,4 +1,4 @@
-name: Prod backend build and deploy
+name: Prod backend build and  deploy
 
 concurrency:
   group: prod_deploy
