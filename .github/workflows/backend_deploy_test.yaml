@@ -25,7 +25,6 @@ jobs:
   tests:
       name: Run tests
       runs-on: ubuntu-latest
-      needs: tests
       steps:
       -
         name: Check out the repo
@@ -46,6 +45,7 @@ jobs:
   build-and-push-image-to-github-packages:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
+    needs: tests
     permissions:
       contents: read
       packages: write
