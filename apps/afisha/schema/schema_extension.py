@@ -14,7 +14,6 @@ SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_REGULAR = {
     "next": "http://api.example.org/accounts/?limit=20&offset=10",
     "previous": "http://api.example.org/accounts/?limit=10&offset=10",
     "festival_status": False,
-    "title": "string",
     "description": "string",
     "results": [
         {
@@ -55,7 +54,6 @@ SUCCESS_MESSAGE_FOR_AFISHA_EVENTS_FOR_200_FESTIVAL = {
     "next": "http://api.example.org/accounts/?limit=3&offset=3",
     "previous": "http://api.example.org/accounts/?limit=6&offset=3",
     "festival_status": True,
-    "title": "string",
     "description": "string",
     "info_registration": "string",
     "asterisk_text": "string",
