@@ -43,9 +43,4 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             set_slug,
         ),
-        migrations.AlterField(
-            model_name='author',
-            name='slug',
-            field=models.SlugField(blank=True, help_text='Если не заполнено, будет сформировано автоматически', unique=True, verbose_name='Транслит фамилии для формирования адресной строки'),
-        ),
     ]
