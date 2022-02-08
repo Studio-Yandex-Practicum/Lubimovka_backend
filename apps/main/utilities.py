@@ -64,7 +64,7 @@ class MainObject:
                     .order_by("date_time")[:6]
                 )
 
-            description = Setting.get_setting("afisha_description_regular")
+            description = Setting.get_setting("afisha_description")
 
             self.afisha = {
                 "afisha_today": main_show_afisha_only_for_today,
