@@ -119,30 +119,30 @@ jobs:
             echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .github_vars
 
             # PostgreSQL environment variables
-            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} > .env-dev
-            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env-dev
-            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-dev
-            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-dev
-            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-dev
+            echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} > .env-test
+            echo POSTGRES_USER=${{ secrets.POSTGRES_USER }} >> .env-test
+            echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-test
+            echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-test
+            echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-test
             
             # Django environment variables
-            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-dev
-            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-dev
-            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-dev
-            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-dev
-            echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-dev
-            echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-dev
-            echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-dev
-            echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-dev
-            echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-dev
-            echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-dev
-            echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-dev
+            echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-test
+            echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-test
+            echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-test
+            echo DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }} >> .env-test
+            echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-test
+            echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-test
+            echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-test
+            echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-test
+            echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-test
+            echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-test
+            echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-test
 
             # Swag environment variables
-            echo PUID=${{ secrets.PUID }} >> .env-dev
-            echo PGID=${{ secrets.PGID }} >> .env-dev
-            echo URL=${{ secrets.URL }} >> .env-dev
-            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-dev
+            echo PUID=${{ secrets.PUID }} >> .env-test
+            echo PGID=${{ secrets.PGID }} >> .env-test
+            echo URL=${{ secrets.URL }} >> .env-test
+            echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
 
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create test_db_network || true
