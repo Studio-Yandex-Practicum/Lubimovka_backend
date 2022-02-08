@@ -70,7 +70,6 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:test,
-            ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,
             ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy:
