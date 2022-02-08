@@ -4,9 +4,7 @@ from django.utils import timezone
 
 from apps.afisha.models import Event
 from apps.articles.models import BlogItem, NewsItem
-from apps.core.constants import AFISHA_CURRENT_DAY_TITLE
 from apps.core.models import Setting
-from apps.core.utils import get_russian_date
 from apps.info.models import Festival, Place
 from apps.library.models import Play, ProgramType
 from apps.main.models import Banner
@@ -60,7 +58,7 @@ class MainObject:
                     date_time__range=(today, tomorrow),
                     pinned_on_main=True,
                 )
-                title = AFISHA_CURRENT_DAY_TITLE + get_russian_date(timezone.localdate())
+                title = ""
             else:
                 items = (
                     Event.objects.filter(date_time__gte=timezone.now())
