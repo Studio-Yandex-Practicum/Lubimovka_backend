@@ -49,6 +49,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
         model = Author
         fields = (
             "id",
+            "slug",
             "name",
             "city",
             "quote",
@@ -70,6 +71,7 @@ class AuthorListSerializer(serializers.ModelSerializer):
         model = Author
         fields = (
             "id",
+            "slug",
             "name",
         )
 
@@ -89,6 +91,7 @@ class AuthorSearchSerializer(serializers.ModelSerializer):
         model = Author
         fields = (
             "id",
+            "slug",
             "name",
             "first_letter",
         )
