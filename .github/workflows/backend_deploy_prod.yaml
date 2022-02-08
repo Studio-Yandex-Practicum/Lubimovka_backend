@@ -29,8 +29,8 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: master
+#! !!! ВЕРНУТЬ        with:
+#          ref: master
       -
         name: Docker login
         uses: docker/login-action@v1
@@ -58,8 +58,8 @@ jobs:
       -
         name: Checkout
         uses: actions/checkout@v2
-        with:
-          ref: master
+# !!!!!!        with:
+#          ref: master
       -
         name: Create SSH key
         # (SSH_KNOWN_HOSTS=ssh-keyscan -H сервер, SSH_PRIVATE_KEY - ключ с ПК, которому разрешен вход)
