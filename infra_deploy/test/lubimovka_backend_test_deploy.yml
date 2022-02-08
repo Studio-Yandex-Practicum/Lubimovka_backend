@@ -3,34 +3,34 @@ version: '3.8'
 services:
   postgres:
     image: postgres:13.3
-    container_name: postgres_develop
+    container_name: postgres_test
     restart: always
     volumes:
-      - postgres_data_develop:/var/lib/postgresql/data
+      - postgres_data_test:/var/lib/postgresql/data
     env_file:
       - .env-test
     networks:
-      - develop_db_network
+      - test_db_network
   backend:
     image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
-    container_name: backend_develop
+    container_name: backend_test
     restart: always
     volumes:
-      - static_value_develop:/code/staticfiles/
-      - media_value_develop:/code/media/
+      - static_value_test:/code/staticfiles/
+      - media_value_test:/code/media/
     depends_on:
       - postgres
     env_file:
       - .env-test
     networks:
-      - develop_db_network
-      - develop_swag_network
+      - test_db_network
+      - test_swag_network
   migrations:
     image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
-    container_name: migrations_develop
+    container_name: migrations_test
     volumes:
-      - static_value_develop:/code/staticfiles/
-      - media_value_develop:/code/media/
+      - static_value_test:/code/staticfiles/
+      - media_value_test:/code/media/
     command: >
       sh -c "python manage.py migrate &&
              python manage.py collectstatic --noinput"
@@ -39,20 +39,20 @@ services:
     env_file:
       - .env-test
     networks:
-      - develop_db_network
+      - test_db_network
 
 networks:
-  develop_db_network:
-    name: develop_db_network
+  test_db_network:
+    name: test_db_network
     external: true
-  develop_swag_network:
-    name: develop_swag_network
+  test_swag_network:
+    name: test_swag_network
     external: true
 
 volumes:
-  postgres_data_develop:
-    name: postgres_data_develop
-  static_value_develop:
-    name: static_value_develop
-  media_value_develop:
-    name: media_value_develop
+  postgres_data_test:
+    name: postgres_data_test
+  static_value_test:
+    name: static_value_test
+  media_value_test:
+    name: media_value_test
