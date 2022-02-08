@@ -4,20 +4,6 @@ import apps.library.validators
 import autoslug.fields
 from django.db import migrations, models
 
-from apps.core.utils import slugify
-
-def set_slug(apps, schema_editor):
-    Author = apps.get_model("library", "Author")
-    qs = Author.objects.all()
-    for author in qs:
-        if author.slug == "someslug":
-            baseslug = slugify(author.person.last_name)
-            used = qs.values_list("slug", flat=True)
-            if baseslug in used:
-                baseslug += str(author.person.id)
-            author.slug = baseslug
-            author.save()
-
 
 class Migration(migrations.Migration):
 
@@ -40,13 +26,5 @@ class Migration(migrations.Migration):
             model_name='play',
             name='year',
             field=models.PositiveSmallIntegerField(blank=True, validators=[apps.library.validators.year_validator], verbose_name='Год написания пьесы'),
-        ),
-        migrations.RunPython(
-            set_slug,
-        ),
-        migrations.AlterField(
-            model_name='author',
-            name='slug',
-            field=autoslug.fields.AutoSlugField(editable=False, unique=True, verbose_name='Слаг'),
         ),
     ]
