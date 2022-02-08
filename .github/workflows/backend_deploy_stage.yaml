@@ -46,7 +46,10 @@ jobs:
           file: Dockerfile
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
-          tags: ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:stage,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          tags: |
+            ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:stage,
+            ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:latest,
+            ${{ env.REGISTRY }}/${{ github.actor }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
 
   deploy:
     name: Deploy changes on server
@@ -123,49 +126,6 @@ jobs:
             echo PGID=${{ secrets.PGID }} >> .env-stage
             echo URL=${{ secrets.URL }} >> .env-stage
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-stage
-
-
-
-            echo "DEVELOP_API_BASE_URL=${{ secrets.DEVELOP_API_BASE_URL }}" > .my_env_gl
-            echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .my_env_gl
-            echo "HOST=${{ secrets.HOST }}" >> .my_env_gl
-            echo "SSH_KNOWN_HOSTS=${{ secrets.SSH_KNOWN_HOSTS }}" >> .my_env_gl
-            echo "SSH_PRIVATE_KEY=${{ secrets.SSH_PRIVATE_KEY }}" >> .my_env_gl
-            echo "SSL_EMAIL=${{ secrets.SSL_EMAIL }}" >> .my_env_gl
-            echo "TEST_API_BASE_URL=${{ secrets.TEST_API_BASE_URL }}" >> .my_env_gl
-            echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .my_env_gl
-            echo "URL=${{ secrets.URL }}" >> .my_env_gl
-            echo "USERNAME=${{ secrets.USERNAME }}" >> .my_env_gl
-            echo "TELEGRAM_ID=${{ secrets.TELEGRAM_ID }}" >> .my_env_gl
-            echo "TELEGRAM_TOKEN=${{ secrets.TELEGRAM_TOKEN }}" >> .my_env_gl
-            echo "PASSPHRASE=${{ secrets.PASSPHRASE }}" >> .my_env_gl
-            echo "HUB_URL=${{ secrets.HUB_URL }}" >> .my_env_gl
-
-            echo "DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }}" > .my_env
-            echo "DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }}" >> .my_env
-            echo "DJANGO_EMAIL_BACKEND=${{ secrets.DJANGO_EMAIL_BACKEND }}" >> .my_env
-            echo "DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }}" >> .my_env
-            echo "DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }}" >> .my_env
-            echo "DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }}" >> .my_env
-            echo "DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }}" >> .my_env
-            echo "DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }}" >> .my_env
-            echo "FRONT_BASE_URL=${{ secrets.FRONT_BASE_URL }}" >> .my_env
-            echo "IMAGE_BACK=${{ secrets.IMAGE_BACK }}" >> .my_env
-            echo "IMAGE_BACK_TAG=${{ secrets.IMAGE_BACK_TAG }}" >> .my_env
-            echo "IMAGE_FRONT=${{ secrets.IMAGE_FRONT }}" >> .my_env
-            echo "IMAGE_FRONT_TAG=${{ secrets.IMAGE_FRONT_TAG }}" >> .my_env
-            echo "MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }}" >> .my_env
-            echo "MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }}" >> .my_env
-            echo "PGID=${{ secrets.PGID }}" >> .my_env
-            echo "POSTGRES_DB=${{ secrets.POSTGRES_DB }}" >> .my_env
-            echo "POSTGRES_HOST=${{ secrets.POSTGRES_HOST }}" >> .my_env
-            echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> .my_env
-            echo "POSTGRES_PORT=${{ secrets.POSTGRES_PORT }}" >> .my_env
-            echo "POSTGRES_USER=${{ secrets.POSTGRES_USER }}" >> .my_env
-            echo "PUID=${{ secrets.PUID }}" >> .my_env
-            echo "SERVER_EMAIL=${{ secrets.SERVER_EMAIL }}" >> .my_env
-
-
 
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create stage_db_network || true
