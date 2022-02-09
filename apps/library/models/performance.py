@@ -135,7 +135,7 @@ class PerformanceReview(BaseModel):
         verbose_name="Имя зрителя",
     )
     text = models.TextField(
-        max_length=500,
+        max_length=2000,
         verbose_name="Текст отзыва",
     )
     performance = models.ForeignKey(
