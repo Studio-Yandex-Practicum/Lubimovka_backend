@@ -1,14 +1,13 @@
 from rest_framework import serializers
 
-from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
-
-from ..models import ImagesBlock, PerformancesBlock, PersonsBlock, PlaysBlock, VideosBlock
-from ..serializers.content_items import (
+from apps.content_pages.models import ImagesBlock, PerformancesBlock, PersonsBlock, PlaysBlock, VideosBlock
+from apps.content_pages.serializers import (
     ExtendedPersonSerializer,
     OrderedImageSerializer,
     OrderedVideoSerializer,
     PerformanceSerializer,
 )
+from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
 
 
 class SlugRelatedSerializerField(serializers.SlugRelatedField):
