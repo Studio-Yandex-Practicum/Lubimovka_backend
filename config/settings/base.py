@@ -1,6 +1,5 @@
 """Base settings to build other settings files upon."""
 import os
-from email.policy import default
 from pathlib import Path
 
 import environ
@@ -197,7 +196,6 @@ CKEDITOR_CONFIGS = {
         ]
     }
 }
-
 GOOGLE_EXPORT_KEYS = {
     "type": "service_account",
     "project_id": env("GOOGLE_PROJECT_ID", default="project_id"),

@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime as dt
 
 from google.oauth2 import service_account
@@ -17,20 +18,23 @@ RANGE = GOOGLE_RANGE
 SCOPES = GOOGLE_SCOPES
 SHEET_ID = GOOGLE_SHEET_ID
 
+logger = logging.getLogger(__name__)
+
 
 def build_service():
     scopes = [SCOPES]
     # try:
     credentials = service_account.Credentials.from_service_account_info(KEYS)
-    # except ValueError:
-    # return
+    # except ValueError as error:
+    #     logger.error(error, exc_info=True)
+    #     return
     scoped_credentials = credentials.with_scopes(scopes)
     return build("sheets", "v4", credentials=scoped_credentials)
 
 
 def get_instance_values(instance) -> dict:
     instance_created = str(dt.now().date())
-    instance_file_path = PATH + str(instance.file.url)
+    instance_file_path = str(instance.file.url)
     instance_number = " "
     return {
         "values": [
@@ -43,7 +47,6 @@ def get_instance_values(instance) -> dict:
                 instance.city,
                 str(instance.phone_number),
                 instance.email,
-                instance.festival_year,
                 instance.year,
                 instance.title,
                 instance_file_path,
