@@ -94,7 +94,7 @@ class PerformanceMediaReview(BaseModel):
         verbose_name="Название медиа ресурса",
     )
     text = models.TextField(
-        max_length=500,
+        max_length=2000,
         verbose_name="Текст отзыва",
     )
     image = models.ImageField(
