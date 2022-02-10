@@ -18,7 +18,7 @@ class BannerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Banner
-        fields = ["id", "title", "description", "url", "image", "button"]
+        fields = ("id", "title", "description", "url", "image", "button")
 
 
 class MainAfishaSerializer(serializers.Serializer):
