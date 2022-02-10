@@ -197,7 +197,10 @@ class Festival(BaseModel):
         max_length=10,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
     )  # При изменении - скорректировать фабрику в части создания данного поля
-    press_release_image = models.ImageField(blank=True, verbose_name="Изображение для страницы пресс-релизов")
+    press_release_image = models.ImageField(
+        blank=True,
+        verbose_name="Изображение для страницы пресс-релизов",
+    )
 
     class Meta:
         verbose_name = "Фестиваль"
