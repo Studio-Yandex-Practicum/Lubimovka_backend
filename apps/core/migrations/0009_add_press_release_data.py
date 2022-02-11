@@ -17,7 +17,7 @@ def add_press_release_setting(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0006_facebook_photo_gallery_link"),
+        ("core", "0008_settings_change_data"),
     ]
 
     operations = [
