@@ -21,7 +21,7 @@ def set_slug(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0002_alter_play_year'),
+        ('library', '0005_alter_performancemediareview_text'),
     ]
 
     operations = [
