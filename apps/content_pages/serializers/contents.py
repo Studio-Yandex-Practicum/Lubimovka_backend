@@ -2,7 +2,6 @@ from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_fiel
 from rest_framework import serializers
 
 from apps.content_pages.models import (
-    Image,
     ImagesBlock,
     Link,
     PerformancesBlock,
@@ -16,7 +15,6 @@ from apps.content_pages.models import (
 )
 from apps.content_pages.serializers import (
     ImagesBlockSerializer,
-    ImageSerializer,
     LinkSerializer,
     PerformancesBlockSerializer,
     PersonsBlockSerializer,
@@ -29,7 +27,6 @@ from apps.content_pages.serializers import (
 )
 
 CONTENT_OBJECT_SERIALIZER_PAIRS = {
-    Image: ImageSerializer,
     ImagesBlock: ImagesBlockSerializer,
     Link: LinkSerializer,
     PerformancesBlock: PerformancesBlockSerializer,
