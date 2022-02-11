@@ -9,22 +9,8 @@ def add_press_release_setting(apps, schema_editor):
         field_type="TEXT",
         group="GENERAL",
         settings_key="press_release_data",
-        text="По вопросам PR и аккредитации пишите Анне Загородниковой",
+        text="Имя Фамилия в дателльном падеже (пример: Анне Загородниковой)",
         description="Данные о PR-менеджере на странице для прессы",
-    )
-    Setting.objects.create(
-        field_type="IMAGE",
-        group="GENERAL",
-        settings_key="press_release_image",
-        image="core/2021-09-30_14.37.56.jpg",
-        description="Фото PR-менеджера на странице для прессы",
-    )
-    Setting.objects.create(
-        field_type="EMAIL",
-        group="GENERAL",
-        settings_key="press_release_email",
-        email="annaszagorodnikova@gmail.com",
-        description="Почта PR-менеджера на странице для прессы",
     )
 
 

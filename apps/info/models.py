@@ -88,6 +88,20 @@ class FestivalTeam(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - " f"{self.team}"
 
+    def save(self, *args, **kwargs):
+        """
+        Перед сохранением, если установлен флажек - 'is_pr_manager'.
+
+        То снимается этот флажек с предыдущего персонажа.
+        """
+        # self.full_clean()
+        if self.is_pr_manager:
+            data = FestivalTeam.objects.filter(is_pr_manager=True)
+            new_data = data[0]
+            new_data.is_pr_manager = False
+            new_data.save(update_fields=["is_pr_manager"])
+        return super().save(*args, **kwargs)
+
     def clean(self):
         if not self.person:
             raise ValidationError("Необходимо указать человека для создания команды фестиваля")
@@ -97,10 +111,10 @@ class FestivalTeam(BaseModel):
             raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
-        if self.is_pr_manager:
-            item = Person.objects.filter(festivalteam__is_pr_manager=True)
-            if item:
-                raise ValidationError(f"PR-менеджером уже назначен {item[0].first_name} {item[0].last_name}")
+        if not self.is_pr_manager:
+            manager = Person.objects.filter(festivalteam__is_pr_manager=True)
+            if self.person == manager[0]:
+                raise ValidationError("Назначьте другого человека на должность PR-менеджера")
 
 
 class Sponsor(BaseModel):

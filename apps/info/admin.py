@@ -1,8 +1,10 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
-from apps.core.models import Person
+from apps.core.models import Person, Setting
+from apps.info.form import FestivalTeamForm
 from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
 
 
@@ -173,6 +175,8 @@ class PressRealeaseAdmin(admin.ModelAdmin):
 
 
 class FestivalTeamAdmin(admin.ModelAdmin):
+    # добавил новую форму, где добавил одно поле
+    form = FestivalTeamForm
     list_display = (
         "person",
         "team",
@@ -183,7 +187,48 @@ class FestivalTeamAdmin(admin.ModelAdmin):
         "team",
         "is_pr_manager",
     )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "person",
+                    "team",
+                    "position",
+                ),
+            },
+        ),
+        (
+            None,
+            {  # всплывают два этих поля, если выбирается поле "team" = "art"
+                "fields": (
+                    "is_pr_manager",
+                    "data_manager",
+                ),
+                "classes": ("depended_on_team_type",),
+            },
+        ),
+    )
+
     search_fields = ("position", "person__first_name", "person__last_name")
+
+    def save_model(self, request, obj, form, change):
+        """Данные из поля 'data_manager' проверяются и сохраняются в модели 'Setting'."""
+        if obj.is_pr_manager:
+            if form.is_valid():
+                data_manager = form.cleaned_data["data_manager"]
+                # где и как лучше сделать проверку на пустую строку?
+                if not data_manager:
+                    raise ValidationError("Укажите Имя Фамилия в дательном падеже")
+                item = Setting.objects.get(settings_key="press_release_data")
+                item.text = data_manager
+                item.save(update_fields=["text"])
+        obj.save()
+
+    class Media:
+        """Adds a script that displays the field ```is_pr_manager``` if the team art is selected."""
+
+        js = ("admin/info/js/FestivalTeamFooter.js",)
 
 
 class SponsorAdmin(admin.ModelAdmin):
