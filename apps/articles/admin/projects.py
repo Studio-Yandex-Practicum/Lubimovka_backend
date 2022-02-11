@@ -8,7 +8,6 @@ class ProjectContentInline(BaseContentInline):
     model = ProjectContent
 
     content_type_model = (
-        "image",
         "imagesblock",
         "link",
         "performancesblock",

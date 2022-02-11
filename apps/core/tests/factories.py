@@ -1,16 +1,12 @@
 import random
 
 import factory
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
 from faker import Faker
 
 from apps.core.models import Image, Person, Role
 from apps.core.utils import get_picsum_image, slugify
 
 fake = Faker(locale="ru_RU")
-
-User = get_user_model()
 
 
 class PersonFactory(factory.django.DjangoModelFactory):
@@ -58,46 +54,6 @@ class ImageFactory(factory.django.DjangoModelFactory):
         width=factory.LazyFunction(lambda: random.randint(10, 1000)),
         height=factory.SelfAttribute("width"),
     )
-
-
-class UserFactory(factory.django.DjangoModelFactory):
-    """Create User objects.
-
-    Creates username and default password.
-    For other fields, use arguments: add_role_editor, add_role_admin.
-    """
-
-    class Meta:
-        model = User
-
-    username = factory.Faker("user_name")
-    password = factory.PostGenerationMethodCall("set_password", "pass")
-
-    @factory.post_generation
-    def add_role_editor(self, created, extracted, **kwargs):
-        """Add role Editor to User.
-
-        To use "add_role_editor=True"
-        """
-        if not created:
-            return
-
-        if extracted:
-            group = Group.objects.get(name="editor")
-            self.groups.add(group)
-
-    @factory.post_generation
-    def add_role_admin(self, created, extracted, **kwargs):
-        """Add role Admin to User.
-
-        To use "add_role_admin=True"
-        """
-        if not created:
-            return
-
-        if extracted:
-            group = Group.objects.get(name="admin")
-            self.groups.add(group)
 
 
 class RoleFactory(factory.django.DjangoModelFactory):

@@ -54,14 +54,14 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
 
 @restrict_factory({"global": [Author]})
 class OtherPlayFactory(factory.django.DjangoModelFactory):
-    """
-    Create OtherPlay object.
+    """Create OtherPlay object.
 
     You should create at least one Author before use this factory.
     """
 
     class Meta:
         model = OtherPlay
+        django_get_or_create = ("author", "name")
 
     author = factory.Iterator(Author.objects.all())
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())

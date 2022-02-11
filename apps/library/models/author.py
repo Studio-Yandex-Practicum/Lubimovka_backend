@@ -72,8 +72,6 @@ class Author(BaseModel):
 
     def clean(self):
         if self._has_person_before_saving():
-            if not self.person.email:
-                raise ValidationError("Для автора необходимо указать email")
             if not self.person.city:
                 raise ValidationError("Для автора необходимо указать город")
         if not self.slug:
