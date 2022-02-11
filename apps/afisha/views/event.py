@@ -6,14 +6,26 @@ from rest_framework import views
 from apps.afisha.models import Event
 from apps.afisha.pagination import AfishaFestivalPagination, AfishaRegularPagination, EventPaginationMixin
 from apps.afisha.schema.schema_extension import AFISHA_EVENTS_SCHEMA_DESCRIPTION
-from apps.afisha.serializers import EventSerializerFestival, EventSerializerRegular
+from apps.afisha.serializers import EventFestivalSerializer, EventRegularSerializer
 from apps.core.models import Setting
 
 
 class EventsAPIView(EventPaginationMixin, views.APIView):
+    """Returns the response depending festival mode on the settings.
+
+    Add in finalize_response on the settings:
+        festival_status - True or False
+        description -  text under title in the afisha page
+
+        blocks if festival mode is enabled in pagination response:
+        info_registration - the text about registration under the description,
+        asterisk_text - text with an asterisk near the title.
+
+    """
+
     @extend_schema(
         description=AFISHA_EVENTS_SCHEMA_DESCRIPTION,
-        responses=EventSerializerRegular,
+        responses=EventRegularSerializer,
         parameters=[
             OpenApiParameter(
                 "limit",
@@ -31,23 +43,26 @@ class EventsAPIView(EventPaginationMixin, views.APIView):
     )
     def get(self, request):
         if self.festival_status:
-            dates = set(Event.objects.values_list("date_time__date").filter(date_time__gte=timezone.now()))
-            sorted_dates = sorted(list(dates))
+            dates_queryset = (
+                Event.objects.filter(date_time__gte=timezone.now()).order_by("date").distinct("date").values("date")
+            )
+            print(dates_queryset)
             results = []
-            for date in sorted_dates:
-                events_in_date = {
-                    "date": date[0],
-                    "events": Event.objects.filter(date_time__date=date[0]).order_by("date_time"),
-                }
-                results.append(events_in_date)
+            if dates_queryset:
+                for date in dates_queryset:
+                    events_in_date = {
+                        "date": date["date"],
+                        "events": Event.objects.filter(date_time__date=date["date"]).order_by("date_time"),
+                    }
+                    results.append(events_in_date)
 
             paginated_results = self.paginate_queryset(results)
-            serializer = EventSerializerFestival(paginated_results, many=True)
+            serializer = EventFestivalSerializer(paginated_results, many=True)
             return self.get_paginated_response(serializer.data)
 
         queryset = Event.objects.filter(date_time__gte=timezone.now()).order_by("date_time")
         paginated_results = self.paginate_queryset(queryset)
-        serializer = EventSerializerRegular(paginated_results, many=True)
+        serializer = EventRegularSerializer(paginated_results, many=True)
         return self.get_paginated_response(serializer.data)
 
     @property
@@ -61,12 +76,6 @@ class EventsAPIView(EventPaginationMixin, views.APIView):
         return AfishaRegularPagination
 
     def finalize_response(self, request, response, *args, **kwargs):
-        """Add blocks if festival mode is enabled in pagination response.
-
-        info_registration - the text about registration under the description,
-        asterisk_text - text with an asterisk near the title.
-        And also changes title and description for the festival.
-        """
         super(EventsAPIView, self).finalize_response(request, response, *args, **kwargs)
         response.data["festival_status"] = self.festival_status
         response.data["description"] = Setting.get_setting("afisha_description")

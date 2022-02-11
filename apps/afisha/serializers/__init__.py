@@ -1,3 +1,3 @@
-from .event import EventSerializerFestival, EventSerializerRegular
+from .event import EventFestivalSerializer, EventRegularSerializer
 
-__all__ = (EventSerializerRegular, EventSerializerFestival)
+__all__ = (EventRegularSerializer, EventFestivalSerializer)

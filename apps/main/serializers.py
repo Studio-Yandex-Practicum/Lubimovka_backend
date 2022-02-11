@@ -1,7 +1,7 @@
 from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
-from apps.afisha.serializers import EventSerializerRegular
+from apps.afisha.serializers import EventRegularSerializer
 from apps.articles.serializers import BlogItemListSerializer, NewsItemListSerializer
 from apps.info.serializers.place import PlaceSerializer
 from apps.library.serializers import PlaySerializer
@@ -27,7 +27,7 @@ class MainAfishaSerializer(serializers.Serializer):
 
     afisha_today = serializers.BooleanField(default=False)
     description = serializers.CharField()
-    items = EventSerializerRegular(many=True)
+    items = EventRegularSerializer(many=True)
 
 
 class MainBannersSerializer(serializers.Serializer):
