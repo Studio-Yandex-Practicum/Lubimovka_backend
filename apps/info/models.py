@@ -198,6 +198,7 @@ class Festival(BaseModel):
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
     )  # При изменении - скорректировать фабрику в части создания данного поля
     press_release_image = models.ImageField(
+        upload_to="images/info/press_releases",
         blank=True,
         verbose_name="Изображение для страницы пресс-релизов",
     )
