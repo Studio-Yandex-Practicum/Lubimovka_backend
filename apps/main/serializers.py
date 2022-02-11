@@ -10,12 +10,14 @@ from apps.main.schema.schema_extension import MAIN_SCHEMA_SUCCESS_MESSAGE
 
 
 class BannerSerializer(serializers.ModelSerializer):
+    button = serializers.SerializerMethodField()
+
+    def get_button(self, obj):
+        return obj.get_button_display()
+
     class Meta:
         model = Banner
-        exclude = (
-            "created",
-            "modified",
-        )
+        fields = ("id", "title", "description", "url", "image", "button")
 
 
 class MainAfishaSerializer(serializers.Serializer):

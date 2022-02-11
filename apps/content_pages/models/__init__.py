@@ -1,4 +1,4 @@
-from .content_items import AbstractItemWithTitle, Image, Link, Preamble, Quote, Text, Title, Video
+from .content_items import AbstractItemWithTitle, Link, Preamble, Quote, Text, Title
 from .contents import AbstractContent, AbstractContentPage
 
 # Prevent isort to rearrange imports and prevent circular imports.
@@ -15,29 +15,5 @@ from .content_blocks import (
     PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
-    VideosBlock,
-)
-
-__all__ = (
-    AbstractItemWithTitle,
-    AbstractContent,
-    AbstractContentPage,
-    ContentPersonRole,
-    ExtendedPerson,
-    Preamble,
-    Quote,
-    Image,
-    ImagesBlock,
-    Link,
-    OrderedImage,
-    OrderedPerformance,
-    OrderedPlay,
-    OrderedVideo,
-    PerformancesBlock,
-    PersonsBlock,
-    PlaysBlock,
-    Text,
-    Title,
-    Video,
     VideosBlock,
 )

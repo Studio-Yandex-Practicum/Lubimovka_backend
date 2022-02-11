@@ -70,7 +70,6 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_teammember")
                 | Q(codename__endswith="_text")
                 | Q(codename__endswith="_title")
-                | Q(codename__endswith="_video")
                 | Q(codename__endswith="_videosblock")
                 | Q(codename__endswith="_volunteer")
             )

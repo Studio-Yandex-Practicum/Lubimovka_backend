@@ -3,9 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
 from apps.articles.models import Project, ProjectContent
-from apps.content_pages.models import Image
 from apps.content_pages.tests.factories import (
-    ImageForContentFactory,
     ImagesBlockFactory,
     LinkFactory,
     PerformancesBlockFactory,
@@ -45,7 +43,6 @@ class ProjectContentFactory(factory.django.DjangoModelFactory):
 
 @restrict_factory(
     {
-        "add_several_imagesblock": (Image,),
         "add_several_playsblock": (Play,),
         "add_several_personsblock": (Person,),
     }
@@ -75,12 +72,6 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     is_draft = factory.Faker("boolean", chance_of_getting_true=25)
     pub_date = factory.Faker("date_time", tzinfo=timezone.utc)
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
-
-    @factory.post_generation
-    def add_several_images(self, created, count, **kwargs):
-        """Add specified count of Image item to Project."""
-        subfactory = factory.SubFactory(ImageForContentFactory)
-        add_content_item_to_project(self, created, count, subfactory)
 
     @factory.post_generation
     def add_several_links(self, created, count, **kwargs):
@@ -129,7 +120,6 @@ class ProjectFactory(factory.django.DjangoModelFactory):
         """Create specified count of Project with fully populated content."""
         return cls.create_batch(
             count,
-            add_several_images=1,
             add_several_text=1,
             add_several_links=1,
             add_several_playsblock=1,
