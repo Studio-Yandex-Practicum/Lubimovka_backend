@@ -5,7 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.library.utilities.export_to_google import export_new_object
-from apps.library.utilities.utilities import generate_class_name_path, get_festival_year
+from apps.library.utilities.utilities import generate_class_name_path
 from apps.library.validators import year_validator
 
 UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION = (
@@ -68,11 +68,6 @@ class ParticipationApplicationFestival(BaseModel):
         upload_to=generate_class_name_path,
         help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
     )
-    festival_year = models.PositiveSmallIntegerField(
-        blank=True,
-        null=True,
-        verbose_name="Год фестиваля",
-    )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
     verified = models.BooleanField(
@@ -108,6 +103,5 @@ class ParticipationApplicationFestival(BaseModel):
         """
         self.file.name = self.generate_filename()
         if self.id is None:
-            self.festival_year = get_festival_year()
             export_new_object(self)
         super().save(*args, **kwargs)

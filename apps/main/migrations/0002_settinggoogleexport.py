@@ -53,7 +53,7 @@ def add_google_settings(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0008_alter_setting_group'),
+        ('core', '0009_alter_setting_group'),
         ('main', '0001_initial'),
     ]
 

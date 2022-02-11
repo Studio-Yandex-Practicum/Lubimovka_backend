@@ -12,6 +12,7 @@ PRIVATE_KEY = GOOGLE_PRIVATE_KEY
 PRIVATE_KEY_ID = GOOGLE_PRIVATE_KEY_ID
 
 SCOPES = "https://www.googleapis.com/auth/spreadsheets"
+PATH = "https://lubimovka.kiryanov.ru"
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
@@ -51,7 +52,7 @@ def build_service():
 
 def get_instance_values(instance) -> dict:
     instance_created = str(dt.now().date())
-    instance_file_path = str(instance.file.url)
+    instance_file_path = PATH + str(instance.file.url)
     instance_number = "---"
     return {
         "values": [
