@@ -3,7 +3,15 @@ from django.contrib.admin.templatetags.admin_list import _boolean_icon
 from django.utils.html import format_html
 
 from apps.core.models import Setting
-from apps.main.models import Banner, SettingAfishaScreen, SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
+from apps.main.models import (
+    Banner,
+    SettingAfishaScreen,
+    SettingEmail,
+    SettingFirstScreen,
+    SettingGeneral,
+    SettingGoogleExport,
+    SettingMain,
+)
 
 
 @admin.register(Banner)
@@ -15,7 +23,7 @@ class BannerAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen, SettingAfishaScreen)
+@admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen, SettingAfishaScreen, SettingGoogleExport)
 class SettingAdmin(admin.ModelAdmin):
     list_display = (
         "description",

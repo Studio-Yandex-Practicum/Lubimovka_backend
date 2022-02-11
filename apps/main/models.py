@@ -98,3 +98,13 @@ class SettingAfishaScreen(Setting):
         proxy = True
         verbose_name = "Настройки афиши"
         verbose_name_plural = "Настройки афиши"
+
+
+class SettingGoogleExport(Setting):
+    objects = SettingGroupManager()
+    group_name = "GOOGLE_EXPORT"
+
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки выгрузки в Google таблицу"
+        verbose_name_plural = "Настройки выгрузки в Google таблицу"
