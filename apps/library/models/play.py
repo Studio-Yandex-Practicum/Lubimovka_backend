@@ -2,7 +2,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 
 from apps.core.models import BaseModel
-from apps.core.utilities import slugify
+from apps.core.utils import slugify
 from apps.info.models import Festival
 from apps.library.validators import year_validator
 

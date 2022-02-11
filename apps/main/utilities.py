@@ -6,7 +6,7 @@ from apps.afisha.models import Event
 from apps.articles.models import BlogItem, NewsItem
 from apps.core.constants import AFISHA_CURRENT_DAY_TITLE
 from apps.core.models import Setting
-from apps.core.utilities import get_russian_date
+from apps.core.utils import get_russian_date
 from apps.info.models import Festival, Place
 from apps.library.models import Play, ProgramType
 from apps.main.models import Banner
