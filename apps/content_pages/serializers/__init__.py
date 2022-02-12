@@ -1,13 +1,13 @@
 from .content_items import (
     ExtendedPersonSerializer,
-    ImageSerializer,
     LinkSerializer,
+    OrderedImageSerializer,
+    OrderedVideoSerializer,
     PerformanceSerializer,
     PreambleSerializer,
     QuoteSerializer,
     TextSerializer,
     TitleSerializer,
-    VideoSerializer,
 )
 
 # Prevent isort to rearrange imports and prevent circular imports.
@@ -25,22 +25,3 @@ from .content_blocks import (
 # isort: split
 
 from .contents import BaseContentPageSerializer, BaseContentSerializer
-
-__all__ = (
-    ExtendedPersonSerializer,
-    BaseContentPageSerializer,
-    BaseContentSerializer,
-    ImagesBlockSerializer,
-    ImageSerializer,
-    LinkSerializer,
-    PerformancesBlockSerializer,
-    PerformanceSerializer,
-    PersonsBlockSerializer,
-    PlaysBlockSerializer,
-    PreambleSerializer,
-    QuoteSerializer,
-    TextSerializer,
-    TitleSerializer,
-    VideosBlockSerializer,
-    VideoSerializer,
-)

@@ -3,7 +3,7 @@ from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
-from apps.core.utilities import slugify
+from apps.core.utils import slugify
 from apps.library.utilities import generate_class_name_path
 from apps.library.validators import year_validator
 
