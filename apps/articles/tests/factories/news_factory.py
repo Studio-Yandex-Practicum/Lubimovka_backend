@@ -3,7 +3,6 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
 from apps.articles.models import NewsItem, NewsItemContent
-from apps.content_pages.models import Image
 from apps.content_pages.tests.factories import (
     ImagesBlockFactory,
     PersonsBlockFactory,
@@ -45,7 +44,6 @@ class NewsItemContentFactory(factory.django.DjangoModelFactory):
 
 @restrict_factory(
     {
-        "add_several_imagesblock": (Image,),
         "add_several_playsblock": (Play,),
         "add_several_personsblock": (Person,),
     }

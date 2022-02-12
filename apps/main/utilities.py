@@ -4,9 +4,7 @@ from django.utils import timezone
 
 from apps.afisha.models import Event
 from apps.articles.models import BlogItem, NewsItem
-from apps.core.constants import AFISHA_CURRENT_DAY_TITLE
 from apps.core.models import Setting
-from apps.core.utils import get_russian_date
 from apps.info.models import Festival, Place
 from apps.library.models import Play, ProgramType
 from apps.main.models import Banner
@@ -49,7 +47,6 @@ class MainObject:
 
     def add_afisha(self):
         main_add_afisha = Setting.get_setting("main_add_afisha")
-        is_festival = Setting.get_setting("festival_status")
         if main_add_afisha:
             main_show_afisha_only_for_today = Setting.get_setting("main_show_afisha_only_for_today")
 
@@ -59,23 +56,18 @@ class MainObject:
                 items = Event.objects.filter(
                     date_time__range=(today, tomorrow),
                     pinned_on_main=True,
-                )
-                title = AFISHA_CURRENT_DAY_TITLE + get_russian_date(timezone.localdate())
+                ).order_by("date_time")
             else:
                 items = (
                     Event.objects.filter(date_time__gte=timezone.now())
                     .filter(pinned_on_main=True)
                     .order_by("date_time")[:6]
                 )
-                if is_festival:
-                    title = Setting.get_setting("afisha_title_festival")
-                else:
-                    title = Setting.get_setting("afisha_title_regular")
 
-            description = Setting.get_setting("afisha_description_regular")
+            description = Setting.get_setting("afisha_description")
 
             self.afisha = {
-                "title": title,
+                "afisha_today": main_show_afisha_only_for_today,
                 "description": description,
                 "items": items,
             }
