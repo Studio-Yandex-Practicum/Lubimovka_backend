@@ -34,3 +34,12 @@ class FestivalTeamForm(ManagerForm):
     def __init__(self, *args, **kwargs):
         super(ManagerForm, self).__init__(*args, **kwargs)
         self.fields["data_manager"].widget.attrs["class"] = "js-person-name"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        is_pr_manager = cleaned_data["is_pr_manager"]
+        data_manager = cleaned_data["data_manager"]
+
+        if is_pr_manager and not data_manager:
+            msg = "Дополните данные о менеджере. Укажите Имя Фамилия в дательном падеже."
+            self.add_error("data_manager", msg)

@@ -92,12 +92,13 @@ class FestivalTeam(BaseModel):
         """
         Перед сохранением, если установлен флажек - 'is_pr_manager'.
 
-        То снимается этот флажек с предыдущего персонажа.
+        То снимается этот флажок с предыдущего персонажа.
         """
-        # self.full_clean()
         if self.is_pr_manager:
-            data = FestivalTeam.objects.filter(is_pr_manager=True)
-            new_data = data[0]
+            data = FestivalTeam.objects.filter(is_pr_manager=True).first()
+            if not data:
+                return super().save(*args, **kwargs)
+            new_data = data
             new_data.is_pr_manager = False
             new_data.save(update_fields=["is_pr_manager"])
         return super().save(*args, **kwargs)
@@ -112,8 +113,8 @@ class FestivalTeam(BaseModel):
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
         if not self.is_pr_manager:
-            manager = Person.objects.filter(festivalteam__is_pr_manager=True)
-            if self.person == manager[0]:
+            manager = Person.objects.filter(festivalteam__is_pr_manager=True).first()
+            if self.person == manager:
                 raise ValidationError("Назначьте другого человека на должность PR-менеджера")
 
 

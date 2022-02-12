@@ -175,7 +175,6 @@ class PressRealeaseAdmin(admin.ModelAdmin):
 
 
 class FestivalTeamAdmin(admin.ModelAdmin):
-    # добавил новую форму, где добавил одно поле
     form = FestivalTeamForm
     list_display = (
         "person",
@@ -200,7 +199,7 @@ class FestivalTeamAdmin(admin.ModelAdmin):
         ),
         (
             None,
-            {  # всплывают два этих поля, если выбирается поле "team" = "art"
+            {
                 "fields": (
                     "is_pr_manager",
                     "data_manager",
@@ -217,9 +216,9 @@ class FestivalTeamAdmin(admin.ModelAdmin):
         if obj.is_pr_manager:
             if form.is_valid():
                 data_manager = form.cleaned_data["data_manager"]
-                # где и как лучше сделать проверку на пустую строку?
                 if not data_manager:
                     raise ValidationError("Укажите Имя Фамилия в дательном падеже")
+                # может вытаскивать через get_object_or_404 ?
                 item = Setting.objects.get(settings_key="press_release_data")
                 item.text = data_manager
                 item.save(update_fields=["text"])
