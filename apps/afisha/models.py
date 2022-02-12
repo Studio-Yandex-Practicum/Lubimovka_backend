@@ -62,13 +62,25 @@ class Event(BaseModel):
         verbose_name="Тип события",
         blank=True,
     )
-    date_time = models.DateTimeField(verbose_name="Дата и время")
-    paid = models.BooleanField(verbose_name="Платное", default=False)
+    date_time = models.DateTimeField(
+        verbose_name="Дата и время",
+    )
+    date = models.DateField(
+        null=True,
+        verbose_name="Дата",
+    )
+    paid = models.BooleanField(
+        verbose_name="Платное",
+        default=False,
+    )
     url = models.URLField(
         max_length=200,
         verbose_name="Ссылка",
     )
-    place = models.CharField(verbose_name="Место", max_length=200)
+    place = models.CharField(
+        verbose_name="Место",
+        max_length=200,
+    )
     pinned_on_main = models.BooleanField(
         default=False,
         verbose_name="Закрепить на главной",
@@ -93,10 +105,11 @@ class Event(BaseModel):
             Reading: self.EventType.READING,
         }
         self.type = allowed_event_types[type(self.common_event.target_model)]
+        self.date = self.date_time.date()
         super().save(*args, **kwargs)
 
     def clean(self):
-        if self.date_time <= timezone.now():
+        if self.date_time is not None and self.date_time <= timezone.now():
             raise ValidationError("Невозможно создать событие в прошлом.")
         return super().clean()
 
