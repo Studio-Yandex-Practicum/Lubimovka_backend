@@ -46,7 +46,6 @@ class EventsAPIView(EventPaginationMixin, views.APIView):
             dates_queryset = (
                 Event.objects.filter(date_time__gte=timezone.now()).order_by("date").distinct("date").values("date")
             )
-            print(dates_queryset)
             results = []
             if dates_queryset:
                 for date in dates_queryset:
