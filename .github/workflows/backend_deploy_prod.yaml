@@ -12,7 +12,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: lubimovka_backend-1
+  IMAGE_NAME: lubimovka_backend
   DEPLOY_PATH: /LUBIMOVKA
 
 defaults:
