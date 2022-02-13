@@ -8,7 +8,7 @@ from apps.library.models import TeamMember
 fake = Faker("ru_RU")
 
 
-@restrict_factory({"global": (Person, Role)})
+@restrict_factory(general=(Person, Role))
 class TeamMemberFactory(factory.django.DjangoModelFactory):
     """Create TeamMember object.
 

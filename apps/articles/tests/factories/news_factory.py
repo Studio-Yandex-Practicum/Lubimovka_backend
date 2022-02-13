@@ -43,10 +43,8 @@ class NewsItemContentFactory(factory.django.DjangoModelFactory):
 
 
 @restrict_factory(
-    {
-        "add_several_playsblock": (Play,),
-        "add_several_personsblock": (Person,),
-    }
+    add_several_playsblock=(Play,),
+    add_several_personsblock=(Person,),
 )
 class NewsFactory(factory.django.DjangoModelFactory):
     """

@@ -42,10 +42,8 @@ class ProjectContentFactory(factory.django.DjangoModelFactory):
 
 
 @restrict_factory(
-    {
-        "add_several_playsblock": (Play,),
-        "add_several_personsblock": (Person,),
-    }
+    add_several_playsblock=(Play,),
+    add_several_personsblock=(Person,),
 )
 class ProjectFactory(factory.django.DjangoModelFactory):
     """Creates Project Page.

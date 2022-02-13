@@ -48,7 +48,7 @@ class SponsorFactory(factory.django.DjangoModelFactory):
         return person
 
 
-@restrict_factory({"global": (Festival, Person)})
+@restrict_factory(general=(Festival, Person))
 class VolunteerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Volunteer
@@ -65,7 +65,7 @@ class VolunteerFactory(factory.django.DjangoModelFactory):
         return person
 
 
-@restrict_factory({"global": (Person,)})
+@restrict_factory(general=(Person,))
 class FestivalTeamFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = FestivalTeam
@@ -81,7 +81,7 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
         return person
 
 
-@restrict_factory({"global": (Image,)})
+@restrict_factory(general=(Image,))
 class FestivalFactory(factory.django.DjangoModelFactory):
     """Create Festival object with 1-6 images."""
 
@@ -119,7 +119,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     press_release_image = factory.django.ImageField(color="blue")
 
 
-@restrict_factory({"global": (Festival,)})
+@restrict_factory(general=(Festival,))
 class PressReleaseFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = PressRelease

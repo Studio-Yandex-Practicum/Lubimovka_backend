@@ -13,7 +13,10 @@ from .team_member import TeamMemberFactory
 fake = Faker("ru_RU")
 
 
-@restrict_factory({"global": (Person, Role), "add_project": (Project,)})
+@restrict_factory(
+    general=(Person, Role),
+    add_project=(Project,),
+)
 class MasterClassFactory(factory.django.DjangoModelFactory):
     """Create MasterClass object.
 

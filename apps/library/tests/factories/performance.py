@@ -17,7 +17,7 @@ from .team_member import TeamMemberFactory
 fake = Faker("ru_RU")
 
 
-@restrict_factory({"global": (Person, Play, Role)})
+@restrict_factory(general=(Person, Play, Role))
 class PerformanceFactory(factory.django.DjangoModelFactory):
     """Create Performance object.
 
@@ -147,7 +147,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
         )
 
 
-@restrict_factory({"global": (Performance,)})
+@restrict_factory(general=(Performance,))
 class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
     """Create PerformanceMediaReview object."""
 
@@ -174,7 +174,7 @@ class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
         return Performance.objects.order_by("?").first()
 
 
-@restrict_factory({"global": (Performance,)})
+@restrict_factory(general=(Performance,))
 class PerformanceReviewFactory(factory.django.DjangoModelFactory):
     """Create PerformanceReview object."""
 

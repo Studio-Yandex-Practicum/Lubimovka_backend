@@ -24,7 +24,7 @@ from apps.core.utils import get_picsum_image
 from apps.library.models import Performance, Play
 
 
-@restrict_factory({"global": (Role,)})
+@restrict_factory(general=(Role,))
 class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
     """Create 'through' object with attrs ExtendedPerson and Role.
 
@@ -44,7 +44,7 @@ class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
         return ExtendedPerson.objects.order_by("?").first()
 
 
-@restrict_factory({"global": (Person,)})
+@restrict_factory(general=(Person,))
 class ExtendedPersonFactory(factory.django.DjangoModelFactory):
     """
     Create Person with order and role for block.
@@ -133,7 +133,7 @@ class OrderedImageFactory(factory.django.DjangoModelFactory):
     order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
-@restrict_factory({"global": (Performance,)})
+@restrict_factory(general=(Performance,))
 class OrderedPerformanceFactory(factory.django.DjangoModelFactory):
     """Creates Performance with order for block.
 
@@ -150,7 +150,7 @@ class OrderedPerformanceFactory(factory.django.DjangoModelFactory):
         return Performance.objects.order_by("?").first()
 
 
-@restrict_factory({"global": (Play,)})
+@restrict_factory(general=(Play,))
 class OrderedPlayFactory(factory.django.DjangoModelFactory):
     """Create Play with order for block.
 

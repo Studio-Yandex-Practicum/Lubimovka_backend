@@ -19,7 +19,7 @@ class ProgramFactory(factory.django.DjangoModelFactory):
     slug = factory.Faker("word", locale="en_US")
 
 
-@restrict_factory({"global": (Festival, ProgramType)})
+@restrict_factory(general=(Festival, ProgramType))
 class PlayFactory(factory.django.DjangoModelFactory):
     """Create Play object."""
 

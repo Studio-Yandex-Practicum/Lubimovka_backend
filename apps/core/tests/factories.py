@@ -97,7 +97,7 @@ class RoleFactoryData(models.TextChoices):
         return self.label
 
 
-@restrict_factory({"global": RoleType})
+@restrict_factory(general=(RoleType,))
 class RoleFactory(factory.django.DjangoModelFactory):
     """Create roles based on RoleFactoryData and set at least one role_type.
 

@@ -12,7 +12,7 @@ from .team_member import TeamMemberFactory
 fake = Faker("ru_RU")
 
 
-@restrict_factory({"global": (Person, Play, Role)})
+@restrict_factory(general=(Person, Play, Role))
 class ReadingFactory(factory.django.DjangoModelFactory):
     """Create Reading object.
 

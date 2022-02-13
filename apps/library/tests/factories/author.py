@@ -19,7 +19,7 @@ class AchievementFactory(factory.django.DjangoModelFactory):
     tag = factory.Faker("word", locale="ru_RU")
 
 
-@restrict_factory({"global": (Author,)})
+@restrict_factory(general=(Author,))
 class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
     """Create SocialNetworkLink object."""
 
@@ -35,7 +35,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
         return Author.objects.order_by("?").first()
 
 
-@restrict_factory({"global": (Author,)})
+@restrict_factory(general=(Author,))
 class OtherLinkFactory(factory.django.DjangoModelFactory):
     """Create OtherLink object."""
 
@@ -53,7 +53,7 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
         return Author.objects.order_by("?").first()
 
 
-@restrict_factory({"global": (Author,)})
+@restrict_factory(general=(Author,))
 class OtherPlayFactory(factory.django.DjangoModelFactory):
     """Create OtherPlay object."""
 
@@ -69,7 +69,7 @@ class OtherPlayFactory(factory.django.DjangoModelFactory):
         return Author.objects.order_by("?").first()
 
 
-@restrict_factory({"global": (Play, Person, Festival, ProgramType)})
+@restrict_factory(general=(Play, Person, Festival, ProgramType))
 class AuthorFactory(factory.django.DjangoModelFactory):
     """Create Author object.
 

@@ -25,7 +25,7 @@ def add_content_item_to_blog(blog, created, count, factory):
         BlogItemContentFactory.create_batch(count, item=factory, content_page=blog)
 
 
-@restrict_factory({"global": [Person, Role]})
+@restrict_factory(general=(Person, Role))
 class BlogPersonFactory(factory.django.DjangoModelFactory):
     """
     Creates co-author for Blog.
@@ -64,10 +64,8 @@ class BlogItemContentFactory(factory.django.DjangoModelFactory):
 
 
 @restrict_factory(
-    {
-        "add_several_playsblock": (Play,),
-        "add_several_personsblock": (Person,),
-    }
+    add_several_playsblock=(Play,),
+    add_several_personsblock=(Person,),
 )
 class BlogFactory(factory.django.DjangoModelFactory):
     """
