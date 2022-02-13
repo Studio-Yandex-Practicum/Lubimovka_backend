@@ -70,8 +70,8 @@ info_urls = [
         name="questions",
     ),
     path(
-        "press-releases/<int:festival__year>/",
-        PressReleaseViewSet.as_view({"get": "retrieve"}),
+        "press-releases/<festival__year>/",
+        PressReleaseViewSet.as_view(),
         name="press-releases",
     ),
     path(

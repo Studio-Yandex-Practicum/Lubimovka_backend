@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404
-from rest_framework import mixins, viewsets
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -11,11 +11,13 @@ from apps.info.serializers.press_release import PhotoGalleryLinkSerializer, Pres
 from apps.info.utils import get_pdf_response
 
 
-class PressReleaseViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
-    queryset = PressRelease.objects.all()
-    serializer_class = PressReleaseSerializer
-    lookup_field = "festival__year"
-    pagination_class = None
+class PressReleaseViewSet(APIView):
+    def get(self, request, festival__year):
+        if festival__year.isdigit() is False:
+            return Response(status=status.HTTP_200_OK)
+        queryset = PressRelease.objects.filter(festival__year=int(festival__year)).first()
+        serializer = PressReleaseSerializer(queryset)
+        return Response(serializer.data)
 
 
 class PressReleaseYearsAPIView(APIView):
