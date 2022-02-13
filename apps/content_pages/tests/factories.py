@@ -26,16 +26,22 @@ from apps.library.models import Performance, Play
 
 @restrict_factory({"global": (Role,)})
 class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
-    """
-    Creates 'through' object with attrs ExtendedPerson and Role.
+    """Create 'through' object with attrs ExtendedPerson and Role.
 
     For using in ExtendedPersonFactory.
     """
 
     class Meta:
         model = ContentPersonRole
+        django_get_or_create = ("extended_person", "role")
 
-    role = factory.Iterator(Role.objects.all())
+    @factory.lazy_attribute
+    def role(self):
+        return Role.objects.order_by("?").first()
+
+    @factory.lazy_attribute
+    def extended_person(self):
+        return ExtendedPerson.objects.order_by("?").first()
 
 
 @restrict_factory({"global": (Person,)})
@@ -50,9 +56,17 @@ class ExtendedPersonFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = ExtendedPerson
+        django_get_or_create = ("block", "person")
 
     order = factory.Sequence(lambda n: (n % 3 + 1))
-    person = factory.Iterator(Person.objects.all())
+
+    @factory.lazy_attribute
+    def person(self):
+        return Person.objects.order_by("?").first()
+
+    @factory.lazy_attribute
+    def block(self):
+        return PersonsBlock.objects.order_by("?").first()
 
     @factory.post_generation
     def add_roles(self, created, extracted, **kwargs):
@@ -129,8 +143,11 @@ class OrderedPerformanceFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OrderedPerformance
 
-    item = factory.Iterator(Performance.objects.all())
     order = factory.Sequence(lambda n: (n % 3 + 1))
+
+    @factory.lazy_attribute
+    def item(self):
+        return Performance.objects.order_by("?").first()
 
 
 @restrict_factory({"global": (Play,)})
@@ -143,8 +160,11 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = OrderedPlay
 
-    item = factory.Iterator(Play.objects.all())
     order = factory.Sequence(lambda n: (n % 3 + 1))
+
+    @factory.lazy_attribute
+    def item(self):
+        return Play.objects.order_by("?").first()
 
 
 class OrderedVideoFactory(factory.django.DjangoModelFactory):

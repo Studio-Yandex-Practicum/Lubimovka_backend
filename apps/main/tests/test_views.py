@@ -125,9 +125,9 @@ class TestMainAPIViews:
             objects_count_in_db == objects_count_in_response
         ), f"Проверьте, что при GET запросе {MAIN_URL} возвращаются все объекты"
 
-    def test_get_main_short_list_items_fields(self, client, play):
-        """Checks data["short_list"]["items"] in response."""
-        fields = [
+    @pytest.mark.parametrize(
+        "field_name",
+        (
             "id",
             "name",
             "authors",
@@ -135,12 +135,18 @@ class TestMainAPIViews:
             "year",
             "url_download",
             "url_reading",
-        ]
+        ),
+    )
+    def test_get_main_short_list_items_fields(self, field_name, client, play_in_short_list):
+        """Checks data["short_list"]["items"] in response."""
         response = client.get(MAIN_URL)
-        for field in fields:
-            assert (
-                field in response.data["short_list"]["items"][0]
-            ), f"Проверьте, что при GET запросе {MAIN_URL} data[short_list][items] содержит {field}"
+        short_list_item_count = len(response.data["short_list"]["items"])
+        assert short_list_item_count > 0, "Шорт-лист должен быть непустым"
+
+        short_list_item = response.data["short_list"]["items"][0]
+        assert (
+            field_name in short_list_item
+        ), f"Проверьте, что при GET запросе {MAIN_URL} блок `short_list` содержит {field_name}"
 
     def test_places_count_in_response_matches_count_in_db(self, client, places):
         """Checks that count places in response matches count in db."""
@@ -172,6 +178,8 @@ class TestMainAPIViews:
         client,
         news,
         events,
+        banners,
+        places,
     ):
         """Checks data["afisha"]["items"] in response."""
         fields = ["id", "type", "event_body", "date_time", "paid", "url", "place"]

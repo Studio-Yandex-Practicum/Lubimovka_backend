@@ -37,8 +37,13 @@ class BlogPersonFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = BlogPerson
 
-    person = factory.Iterator(Person.objects.all())
-    role = factory.Iterator(Role.objects.filter(types__role_type="blog_persons_role"))
+    @factory.lazy_attribute
+    def person(self):
+        return Person.objects.order_by("?").first()
+
+    @factory.lazy_attribute
+    def role(self):
+        return Role.objects.filter(types__role_type="blog_persons_role").order_by("?").first()
 
 
 class BlogItemContentFactory(factory.django.DjangoModelFactory):

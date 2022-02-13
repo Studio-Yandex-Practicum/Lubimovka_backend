@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Iterable
 
 
 def check_restriction(models: list[Any], factory_info: str):
@@ -9,7 +9,7 @@ def check_restriction(models: list[Any], factory_info: str):
         assert model.objects.first(), error_msg
 
 
-def restrict_factory(restrictions: dict[str, list[Any]]):
+def restrict_factory(restrictions: dict[str, Iterable[Any]]):
     """
     Check if instances of required models exist before use the factory.
 
@@ -27,7 +27,7 @@ def restrict_factory(restrictions: dict[str, list[Any]]):
     for the entire factory to work correctly.
 
     Example:
-    @restrict_factory({"add_play": [Festival, ProgramType]})
+    @restrict_factory({"add_play": (Festival, ProgramType)})
     class AuthorFactory(factory.django.DjangoModelFactory):
         @factory.post_generation
         def add_play(self, created, extracted, **kwargs):
@@ -48,18 +48,18 @@ def restrict_factory(restrictions: dict[str, list[Any]]):
     def decorator(klass):
         class Factory(klass):
             @classmethod
-            def create(cls, **kwargs):
+            def _generate(cls, strategy, params):
                 factory_name = klass.__name__
                 if "global" in restrictions:
                     models = restrictions.pop("global")
                     check_restriction(models, factory_name)
-                method_keyword_variables = kwargs
-                for keyword_variable in method_keyword_variables:
+                method_params = params
+                for keyword_variable in method_params:
                     if keyword_variable in restrictions:
                         models = restrictions[keyword_variable]
                         factory_info = factory_name + f" with {keyword_variable}=True"
                         check_restriction(models, factory_info)
-                return super().create(**kwargs)
+                return super()._generate(strategy, params)
 
         return Factory
 

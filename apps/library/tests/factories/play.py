@@ -13,30 +13,31 @@ class ProgramFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = ProgramType
-        django_get_or_create = ["name"]
+        django_get_or_create = ("name",)
 
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
     slug = factory.Faker("word", locale="en_US")
 
 
-@restrict_factory({"global": [Festival, ProgramType]})
+@restrict_factory({"global": (Festival, ProgramType)})
 class PlayFactory(factory.django.DjangoModelFactory):
-    """
-    Create Play object.
-
-    You should create at least one Festival and Program
-    before use this factory.
-    """
+    """Create Play object."""
 
     class Meta:
         model = Play
-        django_get_or_create = ["name"]
+        django_get_or_create = ("name",)
 
     name = factory.LazyFunction(lambda: fake.word().capitalize())
     city = factory.Faker("city_name", locale="ru_RU")
-    year = factory.Faker("random_int", min=1990, max=2021, step=1)
+    year = factory.Faker("random_int", min=1990, max=2021)
     url_download = factory.django.FileField()
-    url_reading = factory.LazyAttribute(lambda obj: f"www.plays-reading/{obj.name}")
-    program = factory.Iterator(ProgramType.objects.all())
-    festival = factory.Iterator(Festival.objects.all())
+    url_reading = factory.LazyAttribute(lambda play: f"www.plays-reading/{play.name}")
     is_draft = factory.Faker("boolean", chance_of_getting_true=25)
+
+    @factory.lazy_attribute
+    def program(self):
+        return ProgramType.objects.order_by("?").first()
+
+    @factory.lazy_attribute
+    def festival(self):
+        return Festival.objects.order_by("?").first()

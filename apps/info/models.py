@@ -75,7 +75,7 @@ class FestivalTeam(BaseModel):
         verbose_name_plural = "Команды фестиваля"
         constraints = [
             UniqueConstraint(
-                fields=["person", "team"],
+                fields=("person", "team"),
                 name="unique_person_team",
             )
         ]
@@ -136,7 +136,10 @@ class Place(BaseModel):
         verbose_name = "Площадка"
         verbose_name_plural = "Площадки"
         constraints = [
-            models.UniqueConstraint(fields=["name", "city"], name="unique_place"),
+            models.UniqueConstraint(
+                fields=("name", "city"),
+                name="unique_place",
+            ),
         ]
 
     def __str__(self):
@@ -251,7 +254,7 @@ class Volunteer(BaseModel):
         verbose_name_plural = "Волонтёры фестиваля"
         constraints = [
             UniqueConstraint(
-                fields=["person", "festival"],
+                fields=("person", "festival"),
                 name="unique_volunteer",
             )
         ]
