@@ -22,7 +22,7 @@ defaults:
     working-directory: .
 
 jobs:
-   tests:
+  tests:
     name: Run tests
     runs-on: ubuntu-latest
     steps:
