@@ -44,11 +44,9 @@ class TestMainAPIViews:
     def test_get_main_afisha_fields(self, client):
         """Checks data["afisha"] fields in response."""
         fields = [
-            "title",
+            "afisha_today",
             "description",
             "items",
-            "info_registration",
-            "asterisk_text",
         ]
         response = client.get(MAIN_URL)
         for field in fields:
