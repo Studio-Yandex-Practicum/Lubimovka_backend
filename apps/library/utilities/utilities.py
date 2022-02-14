@@ -1,4 +1,4 @@
-from time import timezone
+from django.utils import timezone
 
 
 def get_festival_year():
