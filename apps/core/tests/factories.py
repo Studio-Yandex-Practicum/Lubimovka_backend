@@ -70,7 +70,7 @@ class RoleFactoryData(models.TextChoices):
     Mapping:
         - RoleFactoryData.names: returns role's slugs
         - RoleFactoryData.values: returns role's names
-        - RoleFactoryData.values: returns role's plural_names
+        - RoleFactoryData.labels: returns role's plural_names
 
     The class extended with two properties for convenience:
         - RoleFactoryData.slug: returns role's slug
