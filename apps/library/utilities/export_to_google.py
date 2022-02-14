@@ -139,6 +139,7 @@ def set_borders():
     except HttpError as error:
         logger.error(error, exc_info=True)
         return
+    service.spreadsheets().close()
 
 
 def set_header():
@@ -181,6 +182,7 @@ def set_header():
     except HttpError as error:
         logger.error(error, exc_info=True)
         return
+    service.spreadsheets().close()
 
 
 def export_new_object(instance) -> None:
@@ -204,3 +206,4 @@ def export_new_object(instance) -> None:
     except HttpError as error:
         logger.error(error, exc_info=True)
         return
+    service.spreadsheets().close()
