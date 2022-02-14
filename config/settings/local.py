@@ -2,6 +2,8 @@ import os  # noqa
 
 from .base import *  # noqa
 
+environ.Env.read_env(os.path.join(ROOT_DIR, '.env'))
+
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug

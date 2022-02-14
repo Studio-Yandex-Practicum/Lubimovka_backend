@@ -5,7 +5,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.library.utilities.export_to_google import full_export
-from apps.library.utilities.utilities import generate_class_name_path
+from apps.library.utilities.utilities import generate_upload_path
 from apps.library.validators import year_validator
 
 UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION = (
@@ -65,7 +65,7 @@ class ParticipationApplicationFestival(BaseModel):
     file = models.FileField(
         validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PARTICIPATION),),
         verbose_name="Файл",
-        upload_to=generate_class_name_path,
+        upload_to=generate_upload_path,
         help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
     )
 

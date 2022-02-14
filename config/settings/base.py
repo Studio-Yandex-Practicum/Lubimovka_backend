@@ -4,13 +4,11 @@ from pathlib import Path
 
 import environ
 
+env = environ.Env()
 # Root folder of the project
 # ------------------------------------------------------------------------------
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = ROOT_DIR / "apps"
-
-env = environ.Env()
-environ.Env.read_env(os.path.join(ROOT_DIR, '.env'))
 
 # GENERAL
 # ------------------------------------------------------------------------------
