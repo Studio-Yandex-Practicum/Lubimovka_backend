@@ -9,14 +9,14 @@ def add_google_settings(apps, schema_editor):
     Setting.objects.create(
         field_type="TEXT",
         group="GOOGLE_EXPORT",
-        settings_key="SHEET_ID",
+        settings_key="SPREADSHEET_ID",
         text="1PB-Rzd46wHpldZptqc7CEn9VNkv3iRJuo9e87Xtpgb4",
         description="id Google таблицы",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="GOOGLE_EXPORT",
-        settings_key="RANGE",
+        settings_key="SHEET",
         text="Лист1",
         description="Наименование листа Google таблицы",
     )

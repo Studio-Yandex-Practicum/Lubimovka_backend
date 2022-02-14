@@ -103,8 +103,7 @@ class ParticipationApplicationFestival(BaseModel):
         """
         self.file.name = self.generate_filename()
         if self.id is None:
-            if ParticipationApplicationFestival.objects.count() == 0:
-                set_borders()
-                set_header()
+            set_borders()
+            set_header()
             export_new_object(self)
         super().save(*args, **kwargs)

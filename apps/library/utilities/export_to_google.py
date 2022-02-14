@@ -73,8 +73,24 @@ def get_instance_values(instance) -> dict:
     }
 
 
+def get_sheet_id_by_title():
+    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
+    SHEET = SettingGoogleExport.objects.get(settings_key="SHEET").text
+    service = build_service()
+    try:
+        spreadsheet = service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
+        for _sheet in spreadsheet["sheets"]:
+            if _sheet["properties"]["title"] == SHEET:
+                return _sheet["properties"]["sheetId"]
+    except HttpError as error:
+        logger.error(error, exc_info=True)
+        return
+    service.spreadsheets().close()
+
+
 def set_borders():
-    SHEET_ID = SettingGoogleExport.objects.get(settings_key="SHEET_ID").text
+    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
+    sheet_id = get_sheet_id_by_title()
     service = build_service()
     body = {
         "includeSpreadsheetInResponse": False,
@@ -82,7 +98,7 @@ def set_borders():
             {  # настраиваем границы
                 "updateBorders": {
                     "range": {
-                        "sheetId": 0,  # номер листа указывается в числовом формате
+                        "sheetId": sheet_id,
                         "startRowIndex": 0,
                         "endRowIndex": 200,
                         "startColumnIndex": 0,
@@ -104,7 +120,7 @@ def set_borders():
             },
             {  # настраиваем ячейки заголовка
                 "repeatCell": {
-                    "range": {"sheetId": 0, "startRowIndex": 0, "endRowIndex": 1},
+                    "range": {"sheetId": sheet_id, "startRowIndex": 0, "endRowIndex": 1},
                     "cell": {
                         "userEnteredFormat": {
                             "backgroundColor": {"red": 1.0, "green": 1.0, "blue": 1.0},
@@ -122,7 +138,7 @@ def set_borders():
             {  # закрепляем заголовок
                 "updateSheetProperties": {
                     "properties": {
-                        "sheetId": 0,
+                        "sheetId": sheet_id,
                         "gridProperties": {"frozenRowCount": 1},
                     },
                     "fields": "gridProperties.frozenRowCount",
@@ -131,7 +147,7 @@ def set_borders():
         ],
     }
     request = service.spreadsheets().batchUpdate(
-        spreadsheetId=SHEET_ID,
+        spreadsheetId=SPREADSHEET_ID,
         body=body,
     )
     try:
@@ -143,8 +159,10 @@ def set_borders():
 
 
 def set_header():
-    SHEET_ID = SettingGoogleExport.objects.get(settings_key="SHEET_ID").text
-    RANGE = SettingGoogleExport.objects.get(settings_key="RANGE").text + "!A1"
+    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
+    RANGE = (
+        SettingGoogleExport.objects.get(settings_key="SHEET").text + "!A1"
+    )  # header starts at position "SheetTitle!A1"
     service = build_service()
     body = {
         "data": [
@@ -173,7 +191,7 @@ def set_header():
         service.spreadsheets()
         .values()
         .batchUpdate(
-            spreadsheetId=SHEET_ID,
+            spreadsheetId=SPREADSHEET_ID,
             body=body,
         )
     )
@@ -186,8 +204,8 @@ def set_header():
 
 
 def export_new_object(instance) -> None:
-    SHEET_ID = SettingGoogleExport.objects.get(settings_key="SHEET_ID").text
-    RANGE = SettingGoogleExport.objects.get(settings_key="RANGE").text
+    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
+    RANGE = SettingGoogleExport.objects.get(settings_key="SHEET").text
     value_input_option = "USER_ENTERED"
     body = get_instance_values(instance)
     service = build_service()
@@ -195,7 +213,7 @@ def export_new_object(instance) -> None:
         service.spreadsheets()
         .values()
         .append(
-            spreadsheetId=SHEET_ID,
+            spreadsheetId=SPREADSHEET_ID,
             range=RANGE,
             valueInputOption=value_input_option,
             body=body,
