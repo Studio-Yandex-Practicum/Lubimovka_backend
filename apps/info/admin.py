@@ -182,10 +182,7 @@ class FestivalTeamAdmin(admin.ModelAdmin):
         "position",
         "is_pr_manager",
     )
-    list_filter = (
-        "team",
-        "is_pr_manager",
-    )
+
     fieldsets = (
         (
             None,
@@ -208,6 +205,8 @@ class FestivalTeamAdmin(admin.ModelAdmin):
             },
         ),
     )
+    ordering = ("person__last_name",)
+    list_filter = ("team",)
 
     search_fields = ("position", "person__first_name", "person__last_name")
 

@@ -12,13 +12,15 @@ User = get_user_model()
 class UserAdmin(DjangoUserAdmin):
     form = UserAdminForm
     list_display = (
+        "full_name",
         "username",
         "is_active",
         "role",
+        "get_last_login",
     )
     list_filter = (
-        "email",
-        "username",
+        "groups",
+        "is_active",
     )
 
     def get_readonly_fields(self, request, obj=None):
@@ -30,6 +32,10 @@ class UserAdmin(DjangoUserAdmin):
     @admin.display(description="Роль")
     def role(self, obj):
         return obj.groups.first()
+
+    @admin.display(description="Последний визит")
+    def get_last_login(self, obj):
+        return obj.last_login
 
 
 class GroupAdmin(admin.ModelAdmin):
