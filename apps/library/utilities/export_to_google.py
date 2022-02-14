@@ -73,6 +73,116 @@ def get_instance_values(instance) -> dict:
     }
 
 
+def set_borders():
+    SHEET_ID = SettingGoogleExport.objects.get(settings_key="SHEET_ID").text
+    service = build_service()
+    body = {
+        "includeSpreadsheetInResponse": False,
+        "requests": [
+            {  # настраиваем границы
+                "updateBorders": {
+                    "range": {
+                        "sheetId": 0,  # номер листа указывается в числовом формате
+                        "startRowIndex": 0,
+                        "endRowIndex": 200,
+                        "startColumnIndex": 0,
+                        "endColumnIndex": 11,
+                    },
+                    "bottom": {"style": "SOLID", "width": 1, "color": {"red": 0, "green": 0, "blue": 0, "alpha": 1}},
+                    "innerHorizontal": {
+                        "style": "SOLID",
+                        "width": 1,
+                        "color": {"red": 0, "green": 0, "blue": 0, "alpha": 1},
+                    },
+                    "innerVertical": {
+                        "style": "SOLID",
+                        "width": 1,
+                        "color": {"red": 0, "green": 0, "blue": 0, "alpha": 1},
+                    },
+                    "right": {"style": "SOLID", "width": 1, "color": {"red": 0, "green": 0, "blue": 0, "alpha": 1}},
+                },
+            },
+            {  # настраиваем ячейки заголовка
+                "repeatCell": {
+                    "range": {"sheetId": 0, "startRowIndex": 0, "endRowIndex": 1},
+                    "cell": {
+                        "userEnteredFormat": {
+                            "backgroundColor": {"red": 1.0, "green": 1.0, "blue": 1.0},
+                            "horizontalAlignment": "CENTER",
+                            "textFormat": {
+                                "foregroundColor": {"red": 0.0, "green": 0.0, "blue": 0.0},
+                                "fontSize": 10,
+                                "bold": True,
+                            },
+                        },
+                    },
+                    "fields": "userEnteredFormat(backgroundColor,textFormat,horizontalAlignment)",
+                },
+            },
+            {  # закрепляем заголовок
+                "updateSheetProperties": {
+                    "properties": {
+                        "sheetId": 0,
+                        "gridProperties": {"frozenRowCount": 1},
+                    },
+                    "fields": "gridProperties.frozenRowCount",
+                },
+            },
+        ],
+    }
+    request = service.spreadsheets().batchUpdate(
+        spreadsheetId=SHEET_ID,
+        body=body,
+    )
+    try:
+        request.execute()
+    except HttpError as error:
+        logger.error(error, exc_info=True)
+        return
+
+
+def set_header():
+    SHEET_ID = SettingGoogleExport.objects.get(settings_key="SHEET_ID").text
+    RANGE = SettingGoogleExport.objects.get(settings_key="RANGE").text + "!A1"
+    service = build_service()
+    body = {
+        "data": [
+            {
+                "range": RANGE,
+                "values": [
+                    [
+                        "Номер",
+                        "Дата создания заявки",
+                        "Имя",
+                        "Фамилия",
+                        "Год рождения",
+                        "Город",
+                        "Телефон",
+                        "Электронная почта",
+                        "Год написания",
+                        "Название",
+                        "Ссылка на файл",
+                    ]
+                ],
+            }
+        ],
+        "valueInputOption": "USER_ENTERED",
+    }
+    request = (
+        service.spreadsheets()
+        .values()
+        .batchUpdate(
+            spreadsheetId=SHEET_ID,
+            body=body,
+        )
+    )
+    try:
+        request.execute()
+    except HttpError as error:
+        logger.error(error, exc_info=True)
+        return
+
+
 def export_new_object(instance) -> None:
     SHEET_ID = SettingGoogleExport.objects.get(settings_key="SHEET_ID").text
     RANGE = SettingGoogleExport.objects.get(settings_key="RANGE").text

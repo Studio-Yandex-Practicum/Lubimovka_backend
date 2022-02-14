@@ -4,7 +4,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
-from apps.library.utilities.export_to_google import export_new_object
+from apps.library.utilities.export_to_google import export_new_object, set_borders, set_header
 from apps.library.utilities.utilities import generate_class_name_path
 from apps.library.validators import year_validator
 
@@ -93,7 +93,7 @@ class ParticipationApplicationFestival(BaseModel):
         """Generate new filename as "Last_name-Title" format."""
         filename = f"{self.last_name}_{self.first_name}___{self.title}"
         filename = slugify(filename).replace("-", "_")
-        return f"{filename.title()}.{self.file.name.split('.')[1]}"
+        return f"{filename.title()}.{self.file.name.split('.')[-1]}"
 
     def save(self, *args, **kwargs):
         """Save generated filename.
@@ -103,5 +103,8 @@ class ParticipationApplicationFestival(BaseModel):
         """
         self.file.name = self.generate_filename()
         if self.id is None:
+            if ParticipationApplicationFestival.objects.count() == 0:
+                set_borders()
+                set_header()
             export_new_object(self)
         super().save(*args, **kwargs)
