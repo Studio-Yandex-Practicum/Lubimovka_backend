@@ -4,7 +4,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
-from apps.library.utilities.export_to_google import export_new_object, set_borders, set_header
+from apps.library.utilities.export_to_google import full_export
 from apps.library.utilities.utilities import generate_class_name_path
 from apps.library.validators import year_validator
 
@@ -103,7 +103,5 @@ class ParticipationApplicationFestival(BaseModel):
         """
         self.file.name = self.generate_filename()
         if self.id is None:
-            set_borders()
-            set_header()
-            export_new_object(self)
+            full_export(self)
         super().save(*args, **kwargs)

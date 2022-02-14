@@ -225,3 +225,9 @@ def export_new_object(instance) -> None:
         logger.error(error, exc_info=True)
         return
     service.spreadsheets().close()
+
+
+def full_export(instance) -> None:
+    set_borders()
+    set_header()
+    export_new_object(instance)
