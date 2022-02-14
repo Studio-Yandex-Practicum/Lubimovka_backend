@@ -28,7 +28,9 @@ from apps.library.serializers import EventMasterClassSerializer, EventPerformanc
         ),
     ],
 )
-class EventSerializer(serializers.ModelSerializer):
+class EventRegularSerializer(serializers.ModelSerializer):
+    """Returns events on afisha page if festival_status == False on the settings."""
+
     event_body = serializers.SerializerMethodField()
     date_time = serializers.DateTimeField(format="%Y-%m-%dT%H:%M")
 
@@ -54,3 +56,10 @@ class EventSerializer(serializers.ModelSerializer):
             "url",
             "place",
         )
+
+
+class EventFestivalSerializer(serializers.Serializer):
+    """Returns events for date on afisha page if festival_status == True on the settings."""
+
+    date = serializers.DateField()
+    events = EventRegularSerializer(many=True)
