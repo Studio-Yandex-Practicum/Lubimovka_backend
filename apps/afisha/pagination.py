@@ -1,33 +1,34 @@
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.response import Response
-
-from apps.core.models import Setting
 
 
-class AfishaPagination(LimitOffsetPagination):
-    """Add blocks if festival mode is enabled in pagination response.
+class EventPaginationMixin(object):
+    @property
+    def paginator(self):
+        """Paginator instance associated with the view, or `None`."""
+        if not hasattr(self, "_paginator"):
+            if self.pagination_class is None:
+                self._paginator = None
+            else:
+                self._paginator = self.pagination_class()
+        return self._paginator
 
-    info_registration - the text about registration under the description,
-    asterisk_text - text with an asterisk near the title.
-
-    And also changes title and description for the festival.
-    """
+    def paginate_queryset(self, queryset):
+        """Return a single page of results, or `None` if pagination is disabled."""
+        if self.paginator is None:
+            return None
+        return self.paginator.paginate_queryset(queryset, self.request, view=self)
 
     def get_paginated_response(self, data):
-        is_festival = Setting.get_setting("festival_status")
+        """Return a paginated style `Response` object for the given output data."""
+        assert self.paginator is not None
+        return self.paginator.get_paginated_response(data)
 
-        response_data = {
-            "count": self.count,
-            "next": self.get_next_link(),
-            "previous": self.get_previous_link(),
-            "results": data,
-        }
-        if is_festival:
-            response_data["info_registration"] = Setting.get_setting("afisha_info_festival_text")
-            response_data["asterisk_text"] = Setting.get_setting("afisha_asterisk_text")
-            response_data["title"] = Setting.get_setting("afisha_title_festival")
-            response_data["description"] = Setting.get_setting("afisha_description_festival")
-        else:
-            response_data["title"] = (Setting.get_setting("afisha_title_regular"),)
-            response_data["description"] = (Setting.get_setting("afisha_description_regular"),)
-        return Response(response_data)
+
+class AfishaFestivalPagination(LimitOffsetPagination):
+    default_limit = 3
+    max_limit = None
+
+
+class AfishaRegularPagination(LimitOffsetPagination):
+    default_limit = 10
+    max_limit = None
