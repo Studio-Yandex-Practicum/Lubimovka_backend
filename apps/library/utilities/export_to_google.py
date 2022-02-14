@@ -1,4 +1,5 @@
 import logging
+import sys
 from datetime import datetime as dt
 
 from google.oauth2 import service_account
@@ -16,6 +17,8 @@ PATH = "https://lubimovka.kiryanov.ru"
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)
+handler = logging.StreamHandler(sys.stdout)
+logger.addHandler(handler)
 
 
 def get_keys():
