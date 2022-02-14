@@ -1,18 +1,9 @@
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
 from apps.afisha.views import EventsAPIView
 
-router = DefaultRouter()
-router.register(
-    "events",
-    EventsAPIView,
-    basename="events",
-)
-
-
 afisha_urls = [
-    path("afisha/", include(router.urls)),
+    path("afisha/events/", EventsAPIView.as_view(), name="events"),
 ]
 
 urlpatterns = [

@@ -119,6 +119,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
+    ordering = ("person__last_name",)
 
     @admin.display(
         boolean=True,
