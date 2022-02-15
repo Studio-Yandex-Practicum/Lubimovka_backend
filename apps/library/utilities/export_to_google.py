@@ -222,7 +222,17 @@ def export_new_object(instance) -> None:
     return True
 
 
-def full_export(instance) -> None:
-    set_borders()
-    set_header()
+def export(instance) -> None:
+    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
+    RANGE = SettingGoogleExport.objects.get(settings_key="SHEET").text + "!A1"  # check position "SheetTitle!A1"
+    service = build_service()
+    request = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=RANGE)
+    try:
+        response = request.execute()
+    except HttpError as error:
+        logger.error(error, exc_info=True)
+        return
+    if response.get("values") is None:
+        set_borders()
+        set_header()
     return export_new_object(instance)
