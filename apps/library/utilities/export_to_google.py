@@ -10,11 +10,11 @@ from apps.main.models import SettingGoogleExport
 from config.settings.local import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
 
 GOOGLE_CLIENT_X509_CERT_URL = (
-    "https://www.googleapis.com/robot/v1/metadata/x509/main-account%40level-slate-340208.iam.gserviceaccount.com"
+    "https://www.googleapis.com/robot/v1/metadata/x509/lubimovka%40swift-area-340613.iam.gserviceaccount.com"
 )
-GOOGLE_CLIENT_ID = "117079348063365665883"
-GOOGLE_CLIENT_EMAIL = "main-account@level-slate-340208.iam.gserviceaccount.com"
-GOOGLE_PROJECT_ID = "level-slate-340208"
+GOOGLE_CLIENT_ID = "118115305686832196913"
+GOOGLE_CLIENT_EMAIL = "lubimovka@swift-area-340613.iam.gserviceaccount.com"
+GOOGLE_PROJECT_ID = "swift-area-340613"
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 PATH = "https://lubimovka.kiryanov.ru"
 
