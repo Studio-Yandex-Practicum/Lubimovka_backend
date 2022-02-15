@@ -1,6 +1,7 @@
 import logging
 import sys
 from datetime import datetime as dt
+from typing import Optional
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -9,20 +10,14 @@ from googleapiclient.errors import HttpError
 from apps.main.models import SettingGoogleExport
 from config.settings.local import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
 
-GOOGLE_CLIENT_X509_CERT_URL = (
-    "https://www.googleapis.com/robot/v1/metadata/x509/lubimovka%40swift-area-340613.iam.gserviceaccount.com"
-)
-GOOGLE_CLIENT_ID = "118115305686832196913"
-GOOGLE_CLIENT_EMAIL = "lubimovka@swift-area-340613.iam.gserviceaccount.com"
-GOOGLE_PROJECT_ID = "swift-area-340613"
-SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-PATH = "https://lubimovka.kiryanov.ru"
-
 logging.basicConfig()
 logger = logging.getLogger(__name__)
 handler = logging.StreamHandler(sys.stdout)
 logger.addHandler(handler)
 
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
+PATH = "https://lubimovka.kiryanov.ru"
+URL = "https://www.googleapis.com/robot/v1/metadata/x509/lubimovka%40swift-area-340613.iam.gserviceaccount.com"
 KEYS = {
     "type": "service_account",
     "private_key": GOOGLE_PRIVATE_KEY,
@@ -30,21 +25,11 @@ KEYS = {
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    "project_id": GOOGLE_PROJECT_ID,
-    "client_email": GOOGLE_CLIENT_EMAIL,
-    "client_id": GOOGLE_CLIENT_ID,
-    "client_x509_cert_url": GOOGLE_CLIENT_X509_CERT_URL,
+    "project_id": "swift-area-340613",
+    "client_email": "lubimovka@swift-area-340613.iam.gserviceaccount.com",
+    "client_id": "118115305686832196913",
+    "client_x509_cert_url": URL,
 }
-
-
-def build_service():
-    try:
-        credentials = service_account.Credentials.from_service_account_info(KEYS)
-    except ValueError as error:
-        logger.error(error, exc_info=True)
-        return
-    scoped_credentials = credentials.with_scopes(SCOPES)
-    return build("sheets", "v4", credentials=scoped_credentials)
 
 
 def get_instance_values(instance) -> dict:
@@ -68,25 +53,30 @@ def get_instance_values(instance) -> dict:
     }
 
 
-def get_sheet_id_by_title():
-    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
-    SHEET = SettingGoogleExport.objects.get(settings_key="SHEET").text
-    service = build_service()
+def build_service():
     try:
-        spreadsheet = service.spreadsheets().get(spreadsheetId=SPREADSHEET_ID).execute()
+        credentials = service_account.Credentials.from_service_account_info(KEYS)
+    except ValueError as error:
+        logger.error(error, exc_info=True)
+        return
+    scoped_credentials = credentials.with_scopes(SCOPES)
+    return build("sheets", "v4", credentials=scoped_credentials)
+
+
+def get_sheet_id_by_title(service, spreadsheetId: str, sheet: str) -> Optional[int]:
+    request = service.spreadsheets().get(spreadsheetId=spreadsheetId)
+    try:
+        spreadsheet = request.execute()
         for _sheet in spreadsheet["sheets"]:
-            if _sheet["properties"]["title"] == SHEET:
+            if _sheet["properties"]["title"] == sheet:
                 return _sheet["properties"]["sheetId"]
     except HttpError as error:
         logger.error(error, exc_info=True)
         return
-    service.spreadsheets().close()
 
 
-def set_borders():
-    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
-    sheet_id = get_sheet_id_by_title()
-    service = build_service()
+def set_borders(service, spreadsheetId: str, sheet: str) -> None:
+    sheet_id = get_sheet_id_by_title(service=service, spreadsheetId=spreadsheetId, sheet=sheet)
     body = {
         "includeSpreadsheetInResponse": False,
         "requests": [
@@ -142,7 +132,7 @@ def set_borders():
         ],
     }
     request = service.spreadsheets().batchUpdate(
-        spreadsheetId=SPREADSHEET_ID,
+        spreadsheetId=spreadsheetId,
         body=body,
     )
     try:
@@ -150,15 +140,10 @@ def set_borders():
     except HttpError as error:
         logger.error(error, exc_info=True)
         return
-    service.spreadsheets().close()
 
 
-def set_header():
-    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
-    RANGE = (
-        SettingGoogleExport.objects.get(settings_key="SHEET").text + "!A1"
-    )  # header starts at position "SheetTitle!A1"
-    service = build_service()
+def set_header(service, spreadsheetId: str, sheet: str) -> None:
+    RANGE = sheet + "!A1"  # header starts at position "SheetTitle!A1"
     body = {
         "data": [
             {
@@ -185,7 +170,7 @@ def set_header():
         service.spreadsheets()
         .values()
         .batchUpdate(
-            spreadsheetId=SPREADSHEET_ID,
+            spreadsheetId=spreadsheetId,
             body=body,
         )
     )
@@ -194,20 +179,17 @@ def set_header():
     except HttpError as error:
         logger.error(error, exc_info=True)
         return
-    service.spreadsheets().close()
 
 
-def export_new_object(instance) -> None:
-    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
-    RANGE = SettingGoogleExport.objects.get(settings_key="SHEET").text
+def export_new_object(instance, service, spreadsheetId: str, sheet: str) -> Optional[bool]:
+    RANGE = sheet
     value_input_option = "USER_ENTERED"
     body = get_instance_values(instance)
-    service = build_service()
     request = (
         service.spreadsheets()
         .values()
         .append(
-            spreadsheetId=SPREADSHEET_ID,
+            spreadsheetId=spreadsheetId,
             range=RANGE,
             valueInputOption=value_input_option,
             body=body,
@@ -222,17 +204,28 @@ def export_new_object(instance) -> None:
     return True
 
 
-def export(instance) -> None:
-    SPREADSHEET_ID = SettingGoogleExport.objects.get(settings_key="SPREADSHEET_ID").text
-    RANGE = SettingGoogleExport.objects.get(settings_key="SHEET").text + "!A1"  # check position "SheetTitle!A1"
-    service = build_service()
-    request = service.spreadsheets().values().get(spreadsheetId=SPREADSHEET_ID, range=RANGE)
+def check_header_exists(service, spreadsheetId: str, sheet: str) -> bool:
+    RANGE = sheet + "!A1"  # check position "SheetTitle!A1"
+    request = service.spreadsheets().values().get(spreadsheetId=spreadsheetId, range=RANGE)
     try:
         response = request.execute()
     except HttpError as error:
         logger.error(error, exc_info=True)
         return
-    if response.get("values") is None:
-        set_borders()
-        set_header()
-    return export_new_object(instance)
+    return response.get("values") is not None
+
+
+def export(instance) -> Optional[bool]:
+    SPREADSHEET_ID = SettingGoogleExport.get_setting("SPREADSHEET_ID")
+    SHEET = SettingGoogleExport.get_setting("SHEET")
+    RANGE = SHEET + "!A1"
+
+    service = build_service()
+    if service is None:
+        return
+
+    header_exists = check_header_exists(service=service, spreadsheetId=SPREADSHEET_ID, sheet=SHEET)
+    if not header_exists:
+        set_borders(service=service, spreadsheetId=SPREADSHEET_ID, sheet=SHEET)
+        set_header(service=service, spreadsheetId=SPREADSHEET_ID, sheet=SHEET)
+    return export_new_object(instance, service=service, spreadsheetId=SPREADSHEET_ID, sheet=RANGE)
