@@ -264,6 +264,8 @@ class ParticipationAdmin(admin.ModelAdmin):
         "created",
         "file",
         "verified",
+        "exported_to_google",
+        "saved_to_storage",
     )
     list_filter = (
         "year",
