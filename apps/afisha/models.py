@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
-from django.utils import timezone
 
 from apps.core.models import BaseModel
 from apps.library.models import MasterClass, Performance, Reading
@@ -109,8 +108,8 @@ class Event(BaseModel):
         super().save(*args, **kwargs)
 
     def clean(self):
-        if self.date_time is not None and self.date_time <= timezone.now():
-            raise ValidationError("Невозможно создать событие в прошлом.")
+        if self.date_time is None:
+            raise ValidationError("Невозможно создать событие без указания даты и времени.")
         return super().clean()
 
 
