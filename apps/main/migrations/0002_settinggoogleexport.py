@@ -20,34 +20,6 @@ def add_google_settings(apps, schema_editor):
         text="Лист1",
         description="Наименование листа Google таблицы",
     )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="GOOGLE_EXPORT",
-        settings_key="GOOGLE_CLIENT_X509_CERT_URL",
-        text="https://www.googleapis.com/robot/v1/metadata/x509/main-account%40level-slate-340208.iam.gserviceaccount.com",
-        description="Сертификат клиента Х509_URL",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="GOOGLE_EXPORT",
-        settings_key="GOOGLE_CLIENT_ID",
-        text="117079348063365665883",
-        description="ID клиента",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="GOOGLE_EXPORT",
-        settings_key="GOOGLE_CLIENT_EMAIL",
-        text="main-account@level-slate-340208.iam.gserviceaccount.com",
-        description="email клиента Google",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="GOOGLE_EXPORT",
-        settings_key="GOOGLE_PROJECT_ID",
-        text="level-slate-340208",
-        description="ID проекта в Google",
-    )
 
 
 class Migration(migrations.Migration):

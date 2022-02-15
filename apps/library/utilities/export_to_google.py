@@ -7,12 +7,15 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from apps.main.models import SettingGoogleExport
-from config.settings.base import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
+from config.settings.local import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
 
-PRIVATE_KEY = GOOGLE_PRIVATE_KEY
-PRIVATE_KEY_ID = GOOGLE_PRIVATE_KEY_ID
-
-SCOPES = "https://www.googleapis.com/auth/spreadsheets"
+GOOGLE_CLIENT_X509_CERT_URL = (
+    "https://www.googleapis.com/robot/v1/metadata/x509/main-account%40level-slate-340208.iam.gserviceaccount.com"
+)
+GOOGLE_CLIENT_ID = "117079348063365665883"
+GOOGLE_CLIENT_EMAIL = "main-account@level-slate-340208.iam.gserviceaccount.com"
+GOOGLE_PROJECT_ID = "level-slate-340208"
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 PATH = "https://lubimovka.kiryanov.ru"
 
 logging.basicConfig()
@@ -20,47 +23,36 @@ logger = logging.getLogger(__name__)
 handler = logging.StreamHandler(sys.stdout)
 logger.addHandler(handler)
 
-
-def get_keys():
-    KEYS = {
-        "type": "service_account",
-        "private_key": PRIVATE_KEY,
-        "private_key_id": PRIVATE_KEY_ID,
-        "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-        "token_uri": "https://oauth2.googleapis.com/token",
-        "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-    }
-    dict = {
-        "project_id": "GOOGLE_PROJECT_ID",
-        "client_email": "GOOGLE_CLIENT_EMAIL",
-        "client_id": "GOOGLE_CLIENT_ID",
-        "client_x509_cert_url": "GOOGLE_CLIENT_X509_CERT_URL",
-    }
-    for key, value in dict.items():
-        KEYS[key] = SettingGoogleExport.objects.get(settings_key=value).text
-    return KEYS
+KEYS = {
+    "type": "service_account",
+    "private_key": GOOGLE_PRIVATE_KEY,
+    "private_key_id": GOOGLE_PRIVATE_KEY_ID,
+    "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+    "token_uri": "https://oauth2.googleapis.com/token",
+    "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+    "project_id": GOOGLE_PROJECT_ID,
+    "client_email": GOOGLE_CLIENT_EMAIL,
+    "client_id": GOOGLE_CLIENT_ID,
+    "client_x509_cert_url": GOOGLE_CLIENT_X509_CERT_URL,
+}
 
 
 def build_service():
-    KEYS = get_keys()
-    scopes = [SCOPES]
     try:
         credentials = service_account.Credentials.from_service_account_info(KEYS)
     except ValueError as error:
         logger.error(error, exc_info=True)
         return
-    scoped_credentials = credentials.with_scopes(scopes)
+    scoped_credentials = credentials.with_scopes(SCOPES)
     return build("sheets", "v4", credentials=scoped_credentials)
 
 
 def get_instance_values(instance) -> dict:
     instance_created = str(dt.now().date())
     instance_file_path = PATH + str(instance.file.url)
-    instance_number = "---"
     return {
         "values": [
             [
-                instance_number,
                 instance_created,
                 instance.first_name,
                 instance.last_name,
@@ -98,14 +90,14 @@ def set_borders():
     body = {
         "includeSpreadsheetInResponse": False,
         "requests": [
-            {  # настраиваем границы
+            {  # boraders settings
                 "updateBorders": {
                     "range": {
                         "sheetId": sheet_id,
                         "startRowIndex": 0,
                         "endRowIndex": 200,
                         "startColumnIndex": 0,
-                        "endColumnIndex": 11,
+                        "endColumnIndex": 10,
                     },
                     "bottom": {"style": "SOLID", "width": 1, "color": {"red": 0, "green": 0, "blue": 0, "alpha": 1}},
                     "innerHorizontal": {
@@ -121,7 +113,7 @@ def set_borders():
                     "right": {"style": "SOLID", "width": 1, "color": {"red": 0, "green": 0, "blue": 0, "alpha": 1}},
                 },
             },
-            {  # настраиваем ячейки заголовка
+            {  # header cells settings
                 "repeatCell": {
                     "range": {"sheetId": sheet_id, "startRowIndex": 0, "endRowIndex": 1},
                     "cell": {
@@ -138,7 +130,7 @@ def set_borders():
                     "fields": "userEnteredFormat(backgroundColor,textFormat,horizontalAlignment)",
                 },
             },
-            {  # закрепляем заголовок
+            {  # freeze header cells
                 "updateSheetProperties": {
                     "properties": {
                         "sheetId": sheet_id,
@@ -173,7 +165,6 @@ def set_header():
                 "range": RANGE,
                 "values": [
                     [
-                        "Номер",
                         "Дата создания заявки",
                         "Имя",
                         "Фамилия",
