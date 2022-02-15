@@ -12,14 +12,20 @@ User = get_user_model()
 class UserAdmin(DjangoUserAdmin):
     form = UserAdminForm
     list_display = (
+        "full_name",
         "username",
         "is_active",
         "role",
+        "get_last_login",
     )
     list_filter = (
-        "email",
-        "username",
+        "groups",
+        "is_active",
     )
+
+    @admin.display(description="Последний визит")
+    def get_last_login(self, obj):
+        return obj.last_login
 
     def get_readonly_fields(self, request, obj=None):
         """Only superusers can edit `is_superuser` field."""
