@@ -1,4 +1,3 @@
-from django.contrib import admin
 from django.contrib.auth.models import AbstractUser, Group
 
 
@@ -10,11 +9,6 @@ class User(AbstractUser):
     def __str__(self):
 
         return f"{self.username} ({self.groups.first() if self.groups.first() else '-'})"
-
-    @property
-    @admin.display(description="Имя и фамилия")
-    def full_name(self):
-        return self.get_full_name
 
     @property
     def is_admin(self):

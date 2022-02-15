@@ -27,6 +27,10 @@ class UserAdmin(DjangoUserAdmin):
     def get_last_login(self, obj):
         return obj.last_login
 
+    @admin.display(description="Имя и фамилия")
+    def full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
+
     def get_readonly_fields(self, request, obj=None):
         """Only superusers can edit `is_superuser` field."""
         if not request.user.is_superuser:
