@@ -273,6 +273,8 @@ class Volunteer(BaseModel):
                 raise ValidationError("Укажите email для волонтёра")
             if not self.person.image:
                 raise ValidationError("Для волонтёра необходимо выбрать его фото")
+            if not self.person.city:
+                raise ValidationError("Укажите город проживания волонтёра")
 
     def _has_person_before_saving(self):
         return self.person_id is not None
