@@ -1,6 +1,5 @@
 import logging.config
 from datetime import datetime as dt
-from dbm.ndbm import library
 from typing import Optional
 
 from google.oauth2 import service_account
@@ -8,11 +7,9 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from apps.main.models import SettingGoogleExport
-from config.logging import LOGGING_CONFIG
 from config.settings.local import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
 
-logging.config.dictConfig(LOGGING_CONFIG)
-logger = logging.getLogger(library)
+logger = logging.getLogger(__name__)
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 URL = "https://www.googleapis.com/robot/v1/metadata/x509/lubimovka%40swift-area-340613.iam.gserviceaccount.com"

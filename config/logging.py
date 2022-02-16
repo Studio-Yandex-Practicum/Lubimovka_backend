@@ -18,7 +18,7 @@ LOGGING_CONFIG = {
         },
     },
     "loggers": {
-        "library": {
+        "lubimovka": {
             "level": "DEBUG",
             "handlers": [
                 "console_output",
