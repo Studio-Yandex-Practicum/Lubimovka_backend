@@ -216,6 +216,7 @@ def check_header_exists(service, spreadsheetId: str, sheet: str) -> bool:
 
 
 def export(instance) -> Optional[bool]:
+    logger.error("запуск экспорта")
     SPREADSHEET_ID = SettingGoogleExport.get_setting("SPREADSHEET_ID")
     SHEET = SettingGoogleExport.get_setting("SHEET")
     RANGE = SHEET + "!A1"

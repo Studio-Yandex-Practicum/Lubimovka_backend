@@ -4,7 +4,6 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
-from apps.library.utilities.export_to_google import export
 from apps.library.utilities.utilities import generate_upload_path
 from apps.library.validators import year_validator
 
@@ -98,13 +97,6 @@ class ParticipationApplicationFestival(BaseModel):
         return f"{filename.title()}.{self.file.name.split('.')[-1]}"
 
     def save(self, *args, **kwargs):
-        """Save generated filename.
-
-        Create festival year respectively to date when object is creating
-        and export only new objects to Google sheet.
-        """
+        """Save generated filename."""
         self.file.name = self.generate_filename()
-        if self.id is None:
-            if export(self):
-                self.exported_to_google = True
         super().save(*args, **kwargs)
