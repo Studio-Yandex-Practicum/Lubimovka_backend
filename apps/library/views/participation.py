@@ -17,7 +17,8 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        export_success = export(instance)
+        domain = self.request.build_absolute_uri()
+        export_success = export(instance, domain)
         if export_success:
             instance.exported_to_google = True
             instance.save()

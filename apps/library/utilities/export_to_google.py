@@ -1,6 +1,6 @@
-import logging
-import sys
+import logging.config
 from datetime import datetime as dt
+from dbm.ndbm import library
 from typing import Optional
 
 from google.oauth2 import service_account
@@ -8,15 +8,13 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from apps.main.models import SettingGoogleExport
+from config.logging import LOGGING_CONFIG
 from config.settings.local import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
 
-logging.basicConfig()
-logger = logging.getLogger(__name__)
-handler = logging.StreamHandler(sys.stdout)
-logger.addHandler(handler)
+logging.config.dictConfig(LOGGING_CONFIG)
+logger = logging.getLogger(library)
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
-PATH = "https://lubimovka.kiryanov.ru"
 URL = "https://www.googleapis.com/robot/v1/metadata/x509/lubimovka%40swift-area-340613.iam.gserviceaccount.com"
 KEYS = {
     "type": "service_account",
@@ -32,9 +30,9 @@ KEYS = {
 }
 
 
-def get_instance_values(instance) -> dict:
+def get_instance_values(instance, domain) -> dict:
     instance_created = str(dt.now().date())
-    instance_file_path = PATH + str(instance.file.url)
+    instance_file_path = domain + str(instance.file.url)
     return {
         "values": [
             [
@@ -80,7 +78,7 @@ def set_borders(service, spreadsheetId: str, sheet: str) -> None:
     body = {
         "includeSpreadsheetInResponse": False,
         "requests": [
-            {  # boraders settings
+            {  # borders settings
                 "updateBorders": {
                     "range": {
                         "sheetId": sheet_id,
@@ -181,10 +179,10 @@ def set_header(service, spreadsheetId: str, sheet: str) -> None:
         return
 
 
-def export_new_object(instance, service, spreadsheetId: str, sheet: str) -> Optional[bool]:
+def export_new_object(instance, service, spreadsheetId: str, sheet: str, domain) -> Optional[bool]:
     RANGE = sheet
     value_input_option = "USER_ENTERED"
-    body = get_instance_values(instance)
+    body = get_instance_values(instance, domain)
     request = (
         service.spreadsheets()
         .values()
@@ -215,8 +213,8 @@ def check_header_exists(service, spreadsheetId: str, sheet: str) -> bool:
     return response.get("values") is not None
 
 
-def export(instance) -> Optional[bool]:
-    logger.error("запуск экспорта")
+def export(instance, domain) -> Optional[bool]:
+    logger.info("Start export")
     SPREADSHEET_ID = SettingGoogleExport.get_setting("SPREADSHEET_ID")
     SHEET = SettingGoogleExport.get_setting("SHEET")
     RANGE = SHEET + "!A1"
@@ -229,4 +227,4 @@ def export(instance) -> Optional[bool]:
     if not header_exists:
         set_borders(service=service, spreadsheetId=SPREADSHEET_ID, sheet=SHEET)
         set_header(service=service, spreadsheetId=SPREADSHEET_ID, sheet=SHEET)
-    return export_new_object(instance, service=service, spreadsheetId=SPREADSHEET_ID, sheet=RANGE)
+    return export_new_object(instance, service=service, spreadsheetId=SPREADSHEET_ID, sheet=RANGE, domain=domain)
