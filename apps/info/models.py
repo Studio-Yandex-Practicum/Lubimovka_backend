@@ -88,21 +88,6 @@ class FestivalTeam(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - " f"{self.team}"
 
-    def save(self, *args, **kwargs):
-        """
-        Перед сохранением, если установлен флажек - 'is_pr_manager'.
-
-        То снимается этот флажок с предыдущего персонажа.
-        """
-        if self.is_pr_manager:
-            data = FestivalTeam.objects.filter(is_pr_manager=True).first()
-            if not data:
-                return super().save(*args, **kwargs)
-            new_data = data
-            new_data.is_pr_manager = False
-            new_data.save(update_fields=["is_pr_manager"])
-        return super().save(*args, **kwargs)
-
     def clean(self):
         if not self.person:
             raise ValidationError("Необходимо указать человека для создания команды фестиваля")
@@ -113,9 +98,12 @@ class FestivalTeam(BaseModel):
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
         if not self.is_pr_manager:
-            manager = Person.objects.filter(festivalteam__is_pr_manager=True).first()
-            if self.person == manager:
-                raise ValidationError("Назначьте другого человека на должность PR-менеджера")
+            hasAnotherPrManager = FestivalTeam.objects.filter(Q(is_pr_manager=True) & Q(person=self.person)).exists()
+            if hasAnotherPrManager:
+                raise ValidationError(
+                    "Для того чтобы снять с должности PR-менеджера, "
+                    "нужно назначить другого человека на эту должность"
+                )
 
 
 class Sponsor(BaseModel):
@@ -221,7 +209,11 @@ class Festival(BaseModel):
         max_length=10,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
     )  # При изменении - скорректировать фабрику в части создания данного поля
-    press_release_image = models.ImageField(verbose_name="Изображение для страницы пресс-релизов")
+    press_release_image = models.ImageField(
+        upload_to="images/info/press_releases",
+        blank=True,
+        verbose_name="Изображение для страницы пресс-релизов",
+    )
 
     class Meta:
         verbose_name = "Фестиваль"

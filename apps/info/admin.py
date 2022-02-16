@@ -119,6 +119,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
+    ordering = ("person__last_name",)
 
     @admin.display(
         boolean=True,
@@ -209,20 +210,20 @@ class FestivalTeamAdmin(admin.ModelAdmin):
         ),
     )
 
+    ordering = ("person__last_name",)
+
     search_fields = ("position", "person__first_name", "person__last_name")
 
     def save_model(self, request, obj, form, change):
         """Данные из поля 'data_manager' проверяются и сохраняются в модели 'Setting'."""
-        if obj.is_pr_manager:
-            if form.is_valid():
-                data_manager = form.cleaned_data["data_manager"]
-                if not data_manager:
+        if form.is_valid():
+            if obj.is_pr_manager:
+                name_manager = form.cleaned_data["data_manager"]
+                if not name_manager:
                     raise ValidationError("Укажите Имя Фамилия в дательном падеже")
-                # может вытаскивать через get_object_or_404 ?
-                item = Setting.objects.get(settings_key="press_release_data")
-                item.text = data_manager
-                item.save(update_fields=["text"])
-        obj.save()
+                FestivalTeam.objects.filter(is_pr_manager=True).update(is_pr_manager=False)
+                Setting.objects.filter(settings_key="pr_manager_name").update(text=name_manager)
+            obj.save()
 
     class Media:
         """Adds a script that displays the field ```is_pr_manager``` if the team art is selected."""

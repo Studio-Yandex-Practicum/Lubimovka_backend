@@ -3,11 +3,10 @@ from django import forms
 from apps.info.models import FestivalTeam
 
 
-class ManagerForm(forms.ModelForm):
-    """
-    Форма для дополнительного поля о данных о PR-менеджере.
+class FestivalTeamForm(forms.ModelForm):
+    """Форма для команды-фестиваля.
 
-    Данные пойдут в модель Setting.
+    Плюс дополнительное поле о данных о PR-менеджере.
     """
 
     data_manager = forms.CharField(
@@ -16,10 +15,6 @@ class ManagerForm(forms.ModelForm):
         help_text="пример: Ивану Иванову",
         max_length=60,
     )
-
-
-class FestivalTeamForm(ManagerForm):
-    """Форма для команды-фестиваля."""
 
     class Meta:
         model = FestivalTeam
@@ -30,10 +25,6 @@ class FestivalTeamForm(ManagerForm):
             "is_pr_manager",
             "data_manager",
         )
-
-    def __init__(self, *args, **kwargs):
-        super(ManagerForm, self).__init__(*args, **kwargs)
-        self.fields["data_manager"].widget.attrs["class"] = "js-person-name"
 
     def clean(self):
         cleaned_data = super().clean()

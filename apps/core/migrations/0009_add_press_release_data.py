@@ -7,8 +7,8 @@ def add_press_release_setting(apps, schema_editor):
 
     Setting.objects.create(
         field_type="TEXT",
-        group="GENERAL",
-        settings_key="press_release_data",
+        group="EMAIL",
+        settings_key="pr_manager_name",
         text="Имя Фамилия в дателльном падеже (пример: Анне Загородниковой)",
         description="Данные о PR-менеджере на странице для прессы",
     )
