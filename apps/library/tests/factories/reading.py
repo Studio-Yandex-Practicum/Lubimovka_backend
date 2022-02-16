@@ -1,3 +1,5 @@
+from typing import Iterable
+
 import factory
 from faker import Faker
 
@@ -10,46 +12,48 @@ from .team_member import TeamMemberFactory
 fake = Faker("ru_RU")
 
 
-@restrict_factory({"global": [Person, Play, Role]})
+@restrict_factory(general=(Person, Play, Role))
 class ReadingFactory(factory.django.DjangoModelFactory):
-    """
-    Create Reading object.
+    """Create Reading object.
 
-    You should create at least one Play and Person and Role
-    before use this factory.
-    By default adds two team_members: dramatist and director
-    For adding actors or other members use
-    add_team_members=(actor, actor, text_adaptation, ...)
+    !!! The `events` field (the name also confuses: actually it's
+    OneToOneField) is created by a signal in afisha app.
+
+    Parameters:
+    - `add_team_members_with_roles`: waits for an iterable of strings. The
+    strings should be a slug of any role. Selects random `Person` and add it to
+    the `Reading` as team_member with the corresponding role.
+
+    Not obvious details:
+    - `dramatist_person` and `director_person`: it's not a model fields. It's a
+    `hook`s to create `TeamMember` with roles "Драматург" and "Режиссер".
     """
 
     class Meta:
         model = Reading
 
-    play = factory.Iterator(Play.objects.all())
     name = factory.LazyFunction(lambda: fake.word().capitalize())
     description = factory.Faker("text", locale="ru_RU")
-    dramatist = factory.RelatedFactory(
+
+    @factory.lazy_attribute
+    def play(self):
+        return Play.objects.order_by("?").first()
+
+    dramatist_person = factory.RelatedFactory(
         TeamMemberFactory,
         factory_related_name="reading",
         role__slug="dramatist",
     )
-    director = factory.RelatedFactory(
+    director_person = factory.RelatedFactory(
         TeamMemberFactory,
         factory_related_name="reading",
         role__slug="director",
     )
 
     @factory.post_generation
-    def add_team_members(self, created, extracted, **kwargs):
+    def add_team_members_with_roles(self, created, role_slugs: Iterable[str], **kwargs):
         """Add other team_members for created Reading object."""
         if not created:
             return
-        if extracted:
-            roles = extracted
-            for role in roles:
-                self.team_members.add(
-                    TeamMemberFactory(
-                        reading=self,
-                        role__slug=f"{role}",
-                    )
-                )
+        if role_slugs:
+            [TeamMemberFactory.create(reading=self, role_slug=role_slug) for role_slug in role_slugs]

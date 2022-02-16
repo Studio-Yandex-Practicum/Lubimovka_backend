@@ -1,11 +1,14 @@
 from django.urls import include, path
 
 from apps.info.views import (
+    ContactsAPIView,
+    FeedbackAPIView,
     FestivalAPIView,
     FestivalTeamsAPIView,
     FestivalYearsAPIView,
     PartnersAPIView,
     PressReleaseDownloadAPIView,
+    PressReleasePhotoGalleryLink,
     PressReleaseViewSet,
     PressReleaseYearsAPIView,
     QuestionCreateAPIView,
@@ -52,6 +55,16 @@ info_urls = [
         name="partners",
     ),
     path(
+        "contacts/",
+        ContactsAPIView.as_view(),
+        name="contacts",
+    ),
+    path(
+        "feedback/",
+        FeedbackAPIView.as_view(),
+        name="feedback",
+    ),
+    path(
         "questions/",
         QuestionCreateAPIView.as_view(),
         name="questions",
@@ -70,6 +83,11 @@ info_urls = [
         "press-releases/<int:festival__year>/download/",
         PressReleaseDownloadAPIView.as_view(),
         name="press-releases_download",
+    ),
+    path(
+        "press-releases/photo_gallery_link/",
+        PressReleasePhotoGalleryLink.as_view(),
+        name="press-release-photo-gallery-link",
     ),
 ]
 

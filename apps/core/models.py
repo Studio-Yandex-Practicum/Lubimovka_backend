@@ -3,7 +3,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.utilities import slugify
+from apps.core.utils import slugify
 from apps.core.validators import name_validator
 
 NEWS_HELP_TEXT = (
@@ -35,7 +35,7 @@ class BaseModel(models.Model):
 
 class Image(BaseModel):
     image = models.ImageField(
-        upload_to="images/",
+        upload_to="images/core/",
         verbose_name="Изображение",
         help_text="Загрузите фотографию",
     )
@@ -180,7 +180,8 @@ class RoleType(models.Model):
         verbose_name_plural = "Типы ролей"
 
     def __str__(self):
-        return str(dict(self.SelectRoleType.choices)[self.role_type])
+        role_label = RoleType.SelectRoleType(self.role_type).label
+        return str(role_label)
 
 
 class Setting(BaseModel):

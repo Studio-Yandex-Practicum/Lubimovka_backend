@@ -3,7 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
 from apps.articles.models import NewsItem, NewsItemContent
-from apps.content_pages.factories import (
+from apps.content_pages.tests.factories import (
     ImagesBlockFactory,
     PersonsBlockFactory,
     PlaysBlockFactory,
@@ -12,7 +12,6 @@ from apps.content_pages.factories import (
     TextFactory,
     TitleFactory,
 )
-from apps.content_pages.models import Image
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.library.models.play import Play
@@ -44,11 +43,8 @@ class NewsItemContentFactory(factory.django.DjangoModelFactory):
 
 
 @restrict_factory(
-    {
-        "add_several_imagesblock": (Image,),
-        "add_several_playsblock": (Play,),
-        "add_several_personsblock": (Person,),
-    }
+    add_several_playsblock=(Play,),
+    add_several_personsblock=(Person,),
 )
 class NewsFactory(factory.django.DjangoModelFactory):
     """

@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.admin.templatetags.admin_list import _boolean_icon
+from django.utils.html import format_html
 
 from apps.core.models import Setting
 from apps.main.models import Banner, SettingAfishaScreen, SettingEmail, SettingFirstScreen, SettingGeneral, SettingMain
@@ -17,9 +19,7 @@ class BannerAdmin(admin.ModelAdmin):
 class SettingAdmin(admin.ModelAdmin):
     list_display = (
         "description",
-        "settings_key",
         "get_value",
-        "image",
     )
     search_fields = (
         "field_type",
@@ -51,6 +51,12 @@ class SettingAdmin(admin.ModelAdmin):
     @admin.display(description="Значение")
     def get_value(self, obj: object):
         """Return value of the setting object."""
+        if isinstance(obj.value, bool):
+            return _boolean_icon(obj.value)
+        if obj.field_type == "IMAGE":
+            return format_html('<a href="{}">{}</a>'.format(obj.image.url, obj.value))
+        if obj.field_type == "URL":
+            return format_html('<a href="{}">{}</a>'.format(obj.url, obj.value))
         return obj.value
 
     def has_add_permission(self, request, obj=None):

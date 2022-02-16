@@ -1,26 +1,22 @@
-import random
-import urllib
-
 import factory
-from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
-from django.core.files.base import ContentFile
+from django.db import models
 from faker import Faker
 
-from apps.core.models import Image, Person, Role
-from apps.core.utilities import slugify
+from apps.core.decorators.factory import restrict_factory
+from apps.core.models import Image, Person, Role, RoleType
+from apps.core.utils import get_picsum_image, slugify
 
 fake = Faker(locale="ru_RU")
 
-User = get_user_model()
-
 
 class PersonFactory(factory.django.DjangoModelFactory):
-    """
-    Creates Person objects.
+    """Create Person objects.
 
-    In default creates: first_name, last_name, middle_name.
-    For other fields, use arguments: add_email, add_city, add_image.
+    The behavior is different based on params:
+        - `add_image`: create Person with fake not empty image
+        - `add_real_image`: create Person with real image. Requires internet.
+        - `add_city`: create Person with fake not empty city
+        - `add_email`: create Person with fake email link nikolaykiryanov@lubimovka.ru
     """
 
     class Meta:
@@ -29,50 +25,23 @@ class PersonFactory(factory.django.DjangoModelFactory):
     first_name = factory.Faker("first_name", locale="ru_RU")
     last_name = factory.Faker("last_name", locale="ru_RU")
     middle_name = factory.Faker("middle_name", locale="ru_RU")
+    email = None
+    image = ""
+    city = ""
 
-    @factory.post_generation
-    def add_email(self, created, extracted, **kwargs):
-        """
-        Add Email field for Person (needs for volunteers, teams).
-
-        To use "add_email=True"
-        """
-        if not created:
-            return
-
-        if extracted:
-            self.email = slugify(self.first_name + self.last_name) + "@lubimovka.ru"
-
-    @factory.post_generation
-    def add_city(self, created, extracted, **kwargs):
-        """
-        Add City field for Person (needs for volunteers, teams).
-
-        To use "add_city=True"
-        """
-        if not created:
-            return
-
-        if extracted:
-            self.city = fake.city_name()
-
-    @factory.post_generation
-    def add_image(self, created, extracted, **kwargs):
-        """
-        Add Image field for Person.
-
-        To use "add_image=True"
-        """
-        if not created:
-            return
-
-        if extracted:
-            image = urllib.request.urlopen("https://picsum.photos/210/265").read()
-            self.image.save(
-                self.first_name + " " + self.last_name + ".jpg",
-                ContentFile(image),
-                save=False,
-            )
+    class Params:
+        add_image = factory.Trait(
+            image=factory.django.ImageField(color=factory.Faker("color")),
+        )
+        add_real_image = factory.Trait(
+            image=factory.django.ImageField(from_func=get_picsum_image),
+        )
+        add_city = factory.Trait(
+            city=factory.Faker("city_name", locale="ru_RU"),
+        )
+        add_email = factory.Trait(
+            email=factory.LazyAttribute(lambda person: slugify(person.first_name + person.last_name) + "@lubimovka.ru"),
+        )
 
 
 class ImageFactory(factory.django.DjangoModelFactory):
@@ -81,58 +50,94 @@ class ImageFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("image",)
 
     image = factory.django.ImageField(
-        color=factory.LazyFunction(lambda: random.choice(["blue", "yellow", "green", "orange"])),
-        width=factory.LazyFunction(lambda: random.randint(10, 1000)),
+        color=factory.Faker("color"),
+        width=factory.Faker("random_int", min=10, max=1000),
         height=factory.SelfAttribute("width"),
     )
 
 
-class UserFactory(factory.django.DjangoModelFactory):
-    """
-    Creates User objects.
-
-    Creates username and default password.
-    For other fields, use arguments: add_role_editor, add_role_admin.
-    """
-
+class RoleTypeFactory(factory.django.DjangoModelFactory):
     class Meta:
-        model = User
+        model = RoleType
+        django_get_or_create = ("role_type",)
 
-    username = factory.Faker("user_name")
-    password = factory.PostGenerationMethodCall("set_password", "pass")
-
-    @factory.post_generation
-    def add_role_editor(self, created, extracted, **kwargs):
-        """
-        Add role Editor to User.
-
-        To use "add_role_editor=True"
-        """
-        if not created:
-            return
-
-        if extracted:
-            group = Group.objects.get(name="editor")
-            self.groups.add(group)
-
-    @factory.post_generation
-    def add_role_admin(self, created, extracted, **kwargs):
-        """
-        Add role Admin to User.
-
-        To use "add_role_admin=True"
-        """
-        if not created:
-            return
-
-        if extracted:
-            group = Group.objects.get(name="admin")
-            self.groups.add(group)
+    role_type = factory.Iterator(RoleType.SelectRoleType.values)
 
 
+class RoleFactoryData(models.TextChoices):
+    """DjangoEnum class is used to store slug, name, name_plural for RoleFactory.
+
+    Mapping:
+        - RoleFactoryData.names: returns role's slugs
+        - RoleFactoryData.values: returns role's names
+        - RoleFactoryData.labels: returns role's plural_names
+
+    The class extended with two properties for convenience:
+        - RoleFactoryData.slug: returns role's slug
+        - RoleFactoryData.name_plural: returns role's name_plural
+    """
+
+    actor = "Актёр", "Актеры"
+    author = "Автор", "Авторы"
+    director = "Режиссёр", "Режиссёры"
+    dramatist = "Драматург", "Драматурги"
+    host = "Ведущий", "Ведущие"
+    illustrations = "Иллюстрации", "Иллюстрации"
+    photo = "Фото", "Фото"
+    text_adaptation = "Адаптация текста", "Адаптация текста"
+    translator = "Переводчик", "Переводчики"
+    text = "Текст", "Текст"
+
+    @property
+    def slug(self):
+        return self.name
+
+    @property
+    def name_plural(self):
+        return self.label
+
+
+@restrict_factory(general=(RoleType,))
 class RoleFactory(factory.django.DjangoModelFactory):
-    """This factory can be used only inside TeamMemberFactory."""
+    """Create roles based on RoleFactoryData and set at least one role_type.
+
+    Parameters:
+    1. `role_types`: wait for list of RoleType objects.
+    2. `role_types__num`: wait for integer. How many role types set to role.
+    """
 
     class Meta:
         model = Role
-        django_get_or_create = ["slug"]
+        django_get_or_create = ("slug",)
+
+    name = factory.Iterator(iterator=RoleFactoryData.values)
+
+    @factory.lazy_attribute
+    def slug(self):
+        slug = RoleFactoryData(self.name).slug
+        return slug
+
+    @factory.lazy_attribute
+    def name_plural(self):
+        name_plural = RoleFactoryData(self.name).name_plural
+        return name_plural
+
+    @factory.post_generation
+    def role_types(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            role_types = extracted
+            self.types.add(*role_types)
+            return
+
+        at_least = 1
+        num = kwargs.get("num", None)
+        how_many = num or at_least
+
+        tags_count = RoleType.objects.count()
+        how_many = min(tags_count, how_many)
+
+        role_types = RoleType.objects.order_by("?")[:how_many]
+        self.types.add(*role_types)

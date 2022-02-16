@@ -50,7 +50,7 @@ class Performance(BaseModel):
         verbose_name="Краткое описание",
     )
     text = models.TextField(
-        max_length=500,
+        max_length=2000,
         verbose_name="Полное описание",
     )
     age_limit = models.PositiveSmallIntegerField(
@@ -94,7 +94,7 @@ class PerformanceMediaReview(BaseModel):
         verbose_name="Название медиа ресурса",
     )
     text = models.TextField(
-        max_length=500,
+        max_length=2000,
         verbose_name="Текст отзыва",
     )
     image = models.ImageField(
@@ -135,7 +135,7 @@ class PerformanceReview(BaseModel):
         verbose_name="Имя зрителя",
     )
     text = models.TextField(
-        max_length=500,
+        max_length=2000,
         verbose_name="Текст отзыва",
     )
     performance = models.ForeignKey(
