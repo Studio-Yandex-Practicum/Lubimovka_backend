@@ -3,8 +3,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
 
 from apps.articles.models import Project, ProjectContent
-from apps.content_pages.models import Image
-from apps.content_pages.tests.factories import (
+from apps.content_pages.factories import (
     ImageForContentFactory,
     ImagesBlockFactory,
     LinkFactory,
@@ -14,6 +13,7 @@ from apps.content_pages.tests.factories import (
     TextFactory,
     VideosBlockFactory,
 )
+from apps.content_pages.models import Image
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.library.models.play import Play

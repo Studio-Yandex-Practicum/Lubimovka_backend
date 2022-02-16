@@ -1,6 +1,6 @@
 import factory
 
-from apps.content_pages.tests.factories import (
+from apps.content_pages.factories import (
     AbstractContentFactory,
     ImagesBlockFactory,
     PersonsBlockFactory,
@@ -17,8 +17,8 @@ from ...models import BlogItem, BlogItemContent
 class AbstractBlogItemContentFactory(AbstractContentFactory):
     """Base content factory for `BlogItem`.
 
-    1. It set relation with `BlogItem` object.
-    2. It inherits generic relations with `content_items` form `AbstractContentFactory`
+    1. Set relation to `BlogItem` object.
+    2. It inherits generic relations to content items or blocks form `AbstractContentFactory`
     """
 
     class Meta:
