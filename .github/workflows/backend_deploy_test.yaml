@@ -176,26 +176,15 @@ jobs:
       name: test_deploy
     needs: deploy
     steps:
-      - name: check repository
-        uses: actions/checkout@v1
-      - name: find the PR associated with this push, if there is one
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          state: closed
-      - run: echo "PR=${PR}" >> $GITHUB_ENV
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
       - name: send message
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-                  Код на сервере разработки обновлён!
-                  Изменения можно посмотреть в PR:
-                  ${{ secrets.HUB_URL }}/${{ github.repository }}/pull/${{env.PR}}
+                  Новая ветка в тестировании:
+                  ${{ secrets.HUB_URL }}/${{ github.repository }}/tree/${{ github.ref_name }}
+                  Тестирует - ${{ github.event.inputs.name }}
                   Сайт доступен по адресу:
                   https://${{ secrets.DEV_SUBDOMAIN }}.${{ secrets.URL }}
                   Сcылка на документацию в Swagger:
