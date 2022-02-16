@@ -26,8 +26,8 @@ def persons_with_image():
 
 
 @pytest.fixture
-def persons_with_image_and_email():
-    return PersonFactory.create_batch(10, add_image=True, add_email=True)
+def persons_with_image_email_city():
+    return PersonFactory.create_batch(10, add_image=True, add_email=True, add_city=True)
 
 
 @pytest.fixture
@@ -61,12 +61,12 @@ def festival(images):
 
 
 @pytest.fixture
-def volunteer(persons_with_image_and_email, festival):
+def volunteer(persons_with_image_email_city, festival):
     return VolunteerFactory()
 
 
 @pytest.fixture
-def volunteers(persons_with_image_and_email, festival):
+def volunteers(persons_with_image_email_city, festival):
     return VolunteerFactory.create_batch(5)
 
 
