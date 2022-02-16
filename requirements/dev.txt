@@ -32,6 +32,7 @@ faker==12.0.0; python_version >= "3.6"
 filelock==3.4.2; python_version >= "3.7" and python_full_version >= "3.6.1"
 flake8-docstrings==1.6.0
 flake8==3.9.2; (python_version >= "2.7" and python_full_version < "3.0.0") or (python_full_version >= "3.5.0")
+freezegun==1.1.0; python_version >= "3.5"
 future==0.18.2; python_version >= "2.6" and python_full_version < "3.0.0" or python_full_version >= "3.3.0"
 gunicorn==20.1.0; python_version >= "3.5"
 html5lib==1.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
@@ -69,7 +70,9 @@ pyparsing==3.0.7; python_version >= "3.6"
 pypdf2==1.26.0
 pyrsistent==0.18.1; python_version >= "3.7"
 pytest-django==4.5.2; python_version >= "3.5"
+pytest-freezegun==0.4.2
 pytest-lazy-fixture==0.6.3
+pytest-sugar==0.9.4
 pytest==6.2.5; python_version >= "3.6"
 python-bidi==0.4.2
 python-dateutil==2.8.2; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.3.0" and python_version >= "3.6"
@@ -80,6 +83,7 @@ requests==2.27.1; python_version >= "3.5" and python_full_version < "3.0.0" or p
 six==1.16.0; python_full_version >= "3.6.1" and python_version >= "3.6"
 snowballstemmer==2.2.0; python_version >= "3.6"
 sqlparse==0.4.2; python_version >= "3.7"
+termcolor==1.1.0
 toml==0.10.2; python_full_version >= "3.6.1" and python_version >= "3.6"
 tomli==1.2.3; python_version >= "3.6" and python_full_version >= "3.6.2"
 traitlets==5.1.1; python_version >= "3.7"

@@ -88,7 +88,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Create SSH key 
+        name: Create SSH key
         # (SSH_KNOWN_HOSTS=ssh-keyscan -H сервер, SSH_PRIVATE_KEY - ключ с ПК, которому разрешен вход)
         run: |
           mkdir -p ~/.ssh
@@ -131,7 +131,7 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-test
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-test
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-test
-            
+
             # Django environment variables
             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-test
             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-test
@@ -168,7 +168,7 @@ jobs:
             # После установки удаляем файлы
             rm ${{ env.DEPLOY_PATH }}/test/lubimovka-backend.service
             rm ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend.service
-  
+
   send_message:
     name: Send message in telegram group
     runs-on: ubuntu-latest

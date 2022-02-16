@@ -1,5 +1,4 @@
 from django.db import models
-from django.db.models import UniqueConstraint
 
 from apps.core.models import BaseModel, Person
 
@@ -51,7 +50,7 @@ class TeamMember(BaseModel):
         verbose_name = "Член команды"
         verbose_name_plural = "Члены команды"
         constraints = (
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=(
                     "person",
                     "role",
@@ -59,7 +58,7 @@ class TeamMember(BaseModel):
                 ),
                 name="unique_person_role_per_performance",
             ),
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=(
                     "person",
                     "role",
@@ -67,7 +66,7 @@ class TeamMember(BaseModel):
                 ),
                 name="unique_person_role_per_reading",
             ),
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=(
                     "person",
                     "role",

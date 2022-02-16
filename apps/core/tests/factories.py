@@ -1,9 +1,9 @@
-import random
-
 import factory
+from django.db import models
 from faker import Faker
 
-from apps.core.models import Image, Person, Role
+from apps.core.decorators.factory import restrict_factory
+from apps.core.models import Image, Person, Role, RoleType
 from apps.core.utils import get_picsum_image, slugify
 
 fake = Faker(locale="ru_RU")
@@ -50,15 +50,94 @@ class ImageFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("image",)
 
     image = factory.django.ImageField(
-        color=factory.LazyFunction(lambda: random.choice(["blue", "yellow", "green", "orange"])),
-        width=factory.LazyFunction(lambda: random.randint(10, 1000)),
+        color=factory.Faker("color"),
+        width=factory.Faker("random_int", min=10, max=1000),
         height=factory.SelfAttribute("width"),
     )
 
 
+class RoleTypeFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = RoleType
+        django_get_or_create = ("role_type",)
+
+    role_type = factory.Iterator(RoleType.SelectRoleType.values)
+
+
+class RoleFactoryData(models.TextChoices):
+    """DjangoEnum class is used to store slug, name, name_plural for RoleFactory.
+
+    Mapping:
+        - RoleFactoryData.names: returns role's slugs
+        - RoleFactoryData.values: returns role's names
+        - RoleFactoryData.labels: returns role's plural_names
+
+    The class extended with two properties for convenience:
+        - RoleFactoryData.slug: returns role's slug
+        - RoleFactoryData.name_plural: returns role's name_plural
+    """
+
+    actor = "Актёр", "Актеры"
+    author = "Автор", "Авторы"
+    director = "Режиссёр", "Режиссёры"
+    dramatist = "Драматург", "Драматурги"
+    host = "Ведущий", "Ведущие"
+    illustrations = "Иллюстрации", "Иллюстрации"
+    photo = "Фото", "Фото"
+    text_adaptation = "Адаптация текста", "Адаптация текста"
+    translator = "Переводчик", "Переводчики"
+    text = "Текст", "Текст"
+
+    @property
+    def slug(self):
+        return self.name
+
+    @property
+    def name_plural(self):
+        return self.label
+
+
+@restrict_factory(general=(RoleType,))
 class RoleFactory(factory.django.DjangoModelFactory):
-    """This factory can be used only inside TeamMemberFactory."""
+    """Create roles based on RoleFactoryData and set at least one role_type.
+
+    Parameters:
+    1. `role_types`: wait for list of RoleType objects.
+    2. `role_types__num`: wait for integer. How many role types set to role.
+    """
 
     class Meta:
         model = Role
-        django_get_or_create = ["slug"]
+        django_get_or_create = ("slug",)
+
+    name = factory.Iterator(iterator=RoleFactoryData.values)
+
+    @factory.lazy_attribute
+    def slug(self):
+        slug = RoleFactoryData(self.name).slug
+        return slug
+
+    @factory.lazy_attribute
+    def name_plural(self):
+        name_plural = RoleFactoryData(self.name).name_plural
+        return name_plural
+
+    @factory.post_generation
+    def role_types(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            role_types = extracted
+            self.types.add(*role_types)
+            return
+
+        at_least = 1
+        num = kwargs.get("num", None)
+        how_many = num or at_least
+
+        tags_count = RoleType.objects.count()
+        how_many = min(tags_count, how_many)
+
+        role_types = RoleType.objects.order_by("?")[:how_many]
+        self.types.add(*role_types)
