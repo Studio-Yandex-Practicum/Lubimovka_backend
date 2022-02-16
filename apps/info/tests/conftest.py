@@ -43,14 +43,18 @@ def team():
 @pytest.fixture
 def volunteers():
     return list(
-        VolunteerFactory(person=PersonFactory(add_image=True, add_email=True), festival=FestivalFactory())
+        VolunteerFactory(
+            person=PersonFactory(add_image=True, add_email=True, add_city=True), festival=FestivalFactory()
+        )
         for _ in range(5)
     )
 
 
 @pytest.fixture
 def volunteer():
-    return VolunteerFactory(person=PersonFactory(add_image=True, add_email=True), festival=FestivalFactory())
+    return VolunteerFactory(
+        person=PersonFactory(add_image=True, add_email=True, add_city=True), festival=FestivalFactory()
+    )
 
 
 @pytest.fixture
