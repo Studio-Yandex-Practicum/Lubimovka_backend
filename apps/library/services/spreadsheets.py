@@ -29,10 +29,15 @@ KEYS = {
 }
 
 
-class GoogleExport:
+class GoogleSpreadsheets:
     def __init__(self) -> None:
         self.keys = KEYS
         self.scopes = SCOPES
+        self.spreadsheet_id = None
+        self.sheet = None
+        self.range = None
+
+    def _get_settings(self):
         self.spreadsheet_id = SettingGoogleExport.get_setting("SPREADSHEET_ID")
         self.sheet = SettingGoogleExport.get_setting("SHEET")
         self.range = self.sheet + "!A1"
@@ -184,7 +189,7 @@ class GoogleExport:
             logger.error(error, exc_info=True)
             return
 
-    def export_new_object(self, instance, service, domain) -> Optional[bool]:
+    def _export_new_object(self, instance, service, domain) -> Optional[bool]:
         value_input_option = "USER_ENTERED"
         body = self._get_instance_values(instance, domain)
         request = (
@@ -215,6 +220,7 @@ class GoogleExport:
         return response.get("values") is not None
 
     def export(self, instance, domain) -> Optional[bool]:
+        self._get_settings()
         service = self._build_service()
         if service is None:
             return
@@ -222,4 +228,4 @@ class GoogleExport:
         if not header_exists:
             self._set_borders(service=service)
             self._set_header(service=service)
-        return self.export_new_object(instance, service=service, domain=domain)
+        return self._export_new_object(instance, service=service, domain=domain)
