@@ -1,4 +1,4 @@
-import logging.config
+import logging
 from datetime import datetime as dt
 from typing import Optional
 
@@ -7,8 +7,10 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
 from apps.main.models import SettingGoogleExport
+from config.logging import LOGGING_CONFIG
 from config.settings.local import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
 
+logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
