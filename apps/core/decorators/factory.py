@@ -7,11 +7,11 @@ def restrict_factory(
     general: Optional[Iterable[Model]] = None,
     **params_restrictions: Iterable[Model],
 ) -> Callable:
-    """Check if instances of required models exist before using the factory.
+    """Check if instances of required models exist before using the `Factory`.
 
     Parameters:
     1. `general`: wait for the iterable of django `Model`. If set the decorator
-    check whether even one object of the model exists.
+    check whether at least one object of the model exists.
     2. `**params_restrictions`: keyword variables. Each variable has to be
     iterable of django `Model`. The decorator checks whether at least one
     object of the model exists before running `Factory(variable)`.
@@ -20,8 +20,8 @@ def restrict_factory(
     1. @restrict_factory(general: (Festival, ProgramType))
         class AuthorFactory(factory.django.DjangoModelFactory):
         ...
-    In this case the decorator checks for one `Festival` and `Program_Type` in
-    database before every call.
+    In this case the decorator:
+    - checks `Festival` and `Program_Type` objects in database before call factory
 
     2. @restrict_factory(
         general=(Festival, ProgramType),
@@ -30,16 +30,15 @@ def restrict_factory(
         class AuthorFactory(factory.django.DjangoModelFactory):
         ...
     In this case the decorator
-    - checks for one `Festival` and `Program_Type` in database before call
+    - checks `Festival` and `Program_Type` objects in database before call factory
     - checks for `Play` object if `add_play` parameter was used
 
     3. @restrict_factory(add_play=(Play,))
         class AuthorFactory(factory.django.DjangoModelFactory):
         ...
     In this case:
-    - AuthorFactory() runs without restrictions
-    - AuthorFactory(add_play=True) will prohibited to run if there is no
-    `Play` objects in database.
+    - AuthorFactory() calls without restrictions
+    - checks for `Play` object if `add_play` parameter was used
     """
     general_restrictions = general
 
