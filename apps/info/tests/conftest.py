@@ -1,7 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from apps.core.tests.factories import PersonFactory
+from apps.core.tests.factories import ImageFactory, PersonFactory
 from apps.info.tests.factories import (
     FestivalFactory,
     FestivalTeamFactory,
@@ -21,45 +21,53 @@ QUESTIONS_URL = reverse("questions")
 
 
 @pytest.fixture
-def sponsors():
-    return list(SponsorFactory(person=PersonFactory(add_image=True)) for _ in range(5))
+def persons_with_image():
+    return PersonFactory.create_batch(10, add_image=True)
 
 
 @pytest.fixture
-def sponsor():
-    return SponsorFactory(person=PersonFactory(add_image=True))
+def persons_with_image_email_city():
+    return PersonFactory.create_batch(10, add_image=True, add_email=True, add_city=True)
 
 
 @pytest.fixture
-def teams():
-    return list(FestivalTeamFactory(person=PersonFactory(add_image=True)) for _ in range(5))
+def sponsor(persons_with_image):
+    return SponsorFactory()
 
 
 @pytest.fixture
-def team():
+def sponsors(persons_with_image):
+    return SponsorFactory.create_batch(5)
+
+
+@pytest.fixture
+def festival_team(persons_with_image):
     return FestivalTeamFactory(person=PersonFactory(add_image=True))
 
 
 @pytest.fixture
-def volunteers():
-    return list(
-        VolunteerFactory(
-            person=PersonFactory(add_image=True, add_email=True, add_city=True), festival=FestivalFactory()
-        )
-        for _ in range(5)
-    )
+def festival_teams(persons_with_image):
+    return FestivalTeamFactory.create_batch(5)
 
 
 @pytest.fixture
-def volunteer():
-    return VolunteerFactory(
-        person=PersonFactory(add_image=True, add_email=True, add_city=True), festival=FestivalFactory()
-    )
+def images():
+    return ImageFactory.create_batch(10)
 
 
 @pytest.fixture
-def partners():
-    return list(PartnerFactory.create_batch(5))
+def festival(images):
+    return FestivalFactory()
+
+
+@pytest.fixture
+def volunteer(persons_with_image_email_city, festival):
+    return VolunteerFactory()
+
+
+@pytest.fixture
+def volunteers(persons_with_image_email_city, festival):
+    return VolunteerFactory.create_batch(5)
 
 
 @pytest.fixture
@@ -68,8 +76,5 @@ def partner():
 
 
 @pytest.fixture
-def festival():
-    return FestivalFactory(
-        start_date="2021-07-14",
-        end_date="2021-07-15",
-    )
+def partners():
+    return PartnerFactory.create_batch(5)

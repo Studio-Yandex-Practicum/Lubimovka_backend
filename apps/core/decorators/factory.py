@@ -1,65 +1,87 @@
-from typing import Any
+from typing import Callable, Iterable, Optional
+
+from django.db.models import Model
 
 
-def check_restriction(models: list[Any], factory_info: str):
-    model_names = [model.__qualname__ for model in models]
-    required_instances = ", ".join(model_names)
-    error_msg = f"You should create at least one {required_instances} before use {factory_info}"
-    for model in models:
-        assert model.objects.first(), error_msg
+def restrict_factory(
+    general: Optional[Iterable[Model]] = None,
+    **params_restrictions: Iterable[Model],
+) -> Callable:
+    """Check if instances of required models exist before using the `Factory`.
 
+    Parameters:
+    1. `general`: wait for the iterable of django `Model`. If set the decorator
+    check whether at least one object of the model exists.
+    2. `**params_restrictions`: keyword variables. Each variable has to be
+    iterable of django `Model`. The decorator checks whether at least one
+    object of the model exists before running `Factory(variable)`.
 
-def restrict_factory(restrictions: dict[str, list[Any]]):
+    Examples:
+    1. @restrict_factory(general: (Festival, ProgramType))
+        class AuthorFactory(factory.django.DjangoModelFactory):
+        ...
+    In this case the decorator:
+    - checks `Festival` and `Program_Type` objects in database before call factory
+
+    2. @restrict_factory(
+        general=(Festival, ProgramType),
+        add_play=(Play,)
+        )
+        class AuthorFactory(factory.django.DjangoModelFactory):
+        ...
+    In this case the decorator
+    - checks `Festival` and `Program_Type` objects in database before call factory
+    - checks for `Play` object if `add_play` parameter was used
+
+    3. @restrict_factory(add_play=(Play,))
+        class AuthorFactory(factory.django.DjangoModelFactory):
+        ...
+    In this case:
+    - AuthorFactory() calls without restrictions
+    - checks for `Play` object if `add_play` parameter was used
     """
-    Check if instances of required models exist before use the factory.
+    general_restrictions = general
 
-    How to use:
-    The decorator takes a dictionary as a parameter.
-    The keys of this dictionary are post_generation methods
-    that can only be used if there are related model instances.
-    Values is a list of models whose instances must exist in order
-    to use the tested method.
+    def check_restriction(
+        models: Iterable[Model],
+        factory_name: str,
+        param: str = "",
+    ) -> None:
+        """Check is there at least one object of models exists. Assert if none."""
+        model_names = [model.__qualname__ for model in models]
+        required_instances = ", ".join(model_names)
+        error_msg = f"You should create at least one {required_instances} before use {factory_name}({param})"
+        for model in models:
+            assert model.objects.exists(), error_msg
 
-    The decorator is applied to factory class and expands create classmethod
-    with necessary checks.
+    def process_global_restrictions(
+        factory_name: str,
+        general_restrictions: Optional[Iterable[Model]],
+    ) -> None:
+        """Process restriction for the whole factory."""
+        if general_restrictions is not None:
+            models = general_restrictions
+            check_restriction(models, factory_name)
 
-    Use the 'global' key if the related model instances are required
-    for the entire factory to work correctly.
-
-    Example:
-    @restrict_factory({"add_play": [Festival, ProgramType]})
-    class AuthorFactory(factory.django.DjangoModelFactory):
-        @factory.post_generation
-        def add_play(self, created, extracted, **kwargs):
-            '''
-            Create a Play object and add it to other_plays_links
-            field for Author.
-            You should create at least one Festival and Program
-            before use this method.
-            To use "add_play=True"
-            '''
-            if not created:
-                return
-            if extracted:
-                play = PlayFactory.create()
-                self.plays.add(play)
-    """
+    def process_parameters_restrictions(
+        factory_name: str,
+        params_restrictions: Optional[Iterable[Model]],
+        called_params: str,
+    ) -> None:
+        """Process restriction for the the used parameters during factory call."""
+        for param in called_params:
+            if param in params_restrictions:
+                models = params_restrictions[param]
+                check_restriction(models, factory_name, param)
 
     def decorator(klass):
         class Factory(klass):
             @classmethod
-            def create(cls, **kwargs):
+            def _generate(cls, strategy, params):
                 factory_name = klass.__name__
-                if "global" in restrictions:
-                    models = restrictions.pop("global")
-                    check_restriction(models, factory_name)
-                method_keyword_variables = kwargs
-                for keyword_variable in method_keyword_variables:
-                    if keyword_variable in restrictions:
-                        models = restrictions[keyword_variable]
-                        factory_info = factory_name + f" with {keyword_variable}=True"
-                        check_restriction(models, factory_info)
-                return super().create(**kwargs)
+                process_global_restrictions(factory_name, general_restrictions)
+                process_parameters_restrictions(factory_name, params_restrictions, params)
+                return super()._generate(strategy, params)
 
         return Factory
 
