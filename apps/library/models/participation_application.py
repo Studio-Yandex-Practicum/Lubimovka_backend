@@ -4,7 +4,7 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
-from apps.library.utilities.utilities import generate_upload_path
+from apps.library.utilities import generate_upload_path
 from apps.library.validators import year_validator
 
 UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION = (
