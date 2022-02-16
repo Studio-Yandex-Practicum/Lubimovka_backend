@@ -1,5 +1,6 @@
 from ckeditor.fields import RichTextField
 from django.db import models
+from django.utils.html import strip_tags
 
 from apps.core.models import BaseModel
 
@@ -75,7 +76,7 @@ class Text(BaseModel):
         verbose_name_plural = "Тексты"
 
     def __str__(self):
-        return self.text
+        return strip_tags(self.text)
 
 
 class Title(BaseModel):
