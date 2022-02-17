@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
@@ -33,6 +34,13 @@ class ProgramType(BaseModel):
 
 
 class Play(BaseModel):
+    class SelectPlayStatus(models.TextChoices):
+        IN_PROGRESS = "in_progres", _("в работе")
+        REVIEW = "review", _("на проверке")
+        READY_FOR_PUBLISH = "ready_for_publish", _("готово к публикации")
+        PUBLISHED = "published", _("опубликовано")
+        REMOVED_FROM_PUBLISH = "removed_from_publish", _("снято с публикации")
+
     name = models.CharField(
         max_length=70,
         unique=True,
@@ -70,9 +78,11 @@ class Play(BaseModel):
         related_name="plays",
         verbose_name="Фестиваль",
     )
-    is_draft = models.BooleanField(
-        default=True,
-        verbose_name="Черновик",
+    status = models.CharField(
+        max_length=25,
+        default="in_progres",
+        choices=SelectPlayStatus.choices,
+        verbose_name="Статус",
     )
 
     class Meta:
