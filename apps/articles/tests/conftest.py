@@ -1,4 +1,5 @@
 import pytest
+from django.conf import settings
 
 from apps.core.factories import ImageFactory, PersonFactory
 from apps.info.factories import FestivalFactory
@@ -7,9 +8,14 @@ from apps.library.factories import PerformanceFactory, PlayFactory
 pytestmark = [pytest.mark.django_db]
 
 
+@pytest.fixture(autouse=True)
+def set_media_temp_folder(tmpdir):
+    settings.MEDIA_ROOT = tmpdir.mkdir("media")
+
+
 @pytest.fixture
 def images():
-    ImageFactory.create_batch(10)
+    return ImageFactory.create_batch(10)
 
 
 @pytest.fixture

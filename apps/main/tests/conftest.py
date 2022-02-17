@@ -1,4 +1,5 @@
 import pytest
+from django.conf import settings
 from django.urls import reverse
 
 from apps.afisha.factories import EventFactory
@@ -13,9 +14,14 @@ from apps.main.factories import BannerFactory
 MAIN_URL = reverse("main:main_page")
 
 
+@pytest.fixture(autouse=True)
+def set_media_temp_folder(tmpdir):
+    settings.MEDIA_ROOT = tmpdir.mkdir("media")
+
+
 @pytest.fixture
 def images():
-    ImageFactory.create_batch(10)
+    return ImageFactory.create_batch(10)
 
 
 @pytest.fixture

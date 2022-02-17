@@ -1,4 +1,5 @@
 import pytest
+from django.conf import settings
 from django.urls import reverse
 
 from apps.core.factories import ImageFactory, PersonFactory
@@ -12,6 +13,11 @@ SPONSORS_URL = reverse("sponsors")
 VOLUNTEERS_URL = reverse("volunteers")
 PARTNERS_URL = reverse("partners")
 QUESTIONS_URL = reverse("questions")
+
+
+@pytest.fixture(autouse=True)
+def set_media_temp_folder(tmpdir):
+    settings.MEDIA_ROOT = tmpdir.mkdir("media")
 
 
 @pytest.fixture
