@@ -1,14 +1,8 @@
 import pytest
 from django.urls import reverse
 
-from apps.core.tests.factories import ImageFactory, PersonFactory
-from apps.info.tests.factories import (
-    FestivalFactory,
-    FestivalTeamFactory,
-    PartnerFactory,
-    SponsorFactory,
-    VolunteerFactory,
-)
+from apps.core.factories import ImageFactory, PersonFactory
+from apps.info.factories import FestivalFactory, FestivalTeamFactory, PartnerFactory, SponsorFactory, VolunteerFactory
 
 FESTIVAL_URL_NAME = "festivals"
 FESTIVAL_YEARS_URL = reverse("festivals-years")

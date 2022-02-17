@@ -2,9 +2,9 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.afisha.tests.factories import EventFactory
-from apps.core.tests.factories import ImageFactory, PersonFactory
-from apps.info.tests.factories import (
+from apps.afisha.factories import EventFactory
+from apps.core.factories import ImageFactory, PersonFactory
+from apps.info.factories import (
     FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
@@ -13,7 +13,7 @@ from apps.info.tests.factories import (
     SponsorFactory,
     VolunteerFactory,
 )
-from apps.library.tests.factories import (
+from apps.library.factories import (
     AuthorFactory,
     MasterClassFactory,
     ParticipationApplicationFestivalFactory,
@@ -22,8 +22,8 @@ from apps.library.tests.factories import (
     ProgramFactory,
     ReadingFactory,
 )
-from apps.main.tests.factories import BannerFactory as MainBannerFactory
-from apps.users.tests.factories import AdminUserFactory, EditorUserFactory
+from apps.main.factories import BannerFactory as MainBannerFactory
+from apps.users.factories import AdminUserFactory, EditorUserFactory
 
 
 def notification(command, objects, text):
