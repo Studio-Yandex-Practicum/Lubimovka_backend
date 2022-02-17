@@ -117,10 +117,10 @@ class Command(BaseCommand):
             plays = PlayFactory.create_batch(10)
             notification(self, plays, "пьес")
 
-            perfomances = [PerformanceFactory.complex_create() for _ in range(6)]
+            perfomances = PerformanceFactory.complex_create(6)
             notification(self, perfomances, "спектаклей")
 
-            authors = [AuthorFactory.complex_create() for _ in range(15)]
+            authors = AuthorFactory.complex_create(15)
             notification(self, authors, "авторов")
 
             masterclasses = MasterClassFactory.create_batch(10)
