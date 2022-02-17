@@ -155,6 +155,11 @@ jobs:
             echo URL=${{ secrets.URL }} >> .env-test
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
 
+            # Уделение старых данных
+            systemctl stop lubimovka-frontend.service
+            systemctl stop lubimovka-backend.service
+            docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
+
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create test_db_network || true
             docker network create test_swag_network || true
