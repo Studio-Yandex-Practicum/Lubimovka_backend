@@ -78,16 +78,16 @@ class TestMainAPIViews:
                 field in response.data["video_archive"]
             ), f"Проверьте, что при GET запросе {MAIN_URL} data[video_archive] содержит items"
 
-    def test_news_count_in_response_matches_count_in_db(self, client, news):
+    def test_news_count_in_response_matches_count_in_db(self, client, news_items_with_content):
         """Checks that count news in response matches count in db."""
         response = client.get(MAIN_URL)
         objects_count_in_response = len(response.data["news"]["items"])
-        objects_count_in_db = len(news)
+        objects_count_in_db = len(news_items_with_content)
         assert (
             objects_count_in_db == objects_count_in_response
         ), f"Проверьте, что при GET запросе {MAIN_URL} возвращаются все объекты"
 
-    def test_get_main_news_items_fields(self, client, news):
+    def test_get_main_news_items_fields(self, client, news_items_with_content):
         """Checks data["news"]["items"] in response."""
         fields = ["id", "title", "description", "image", "pub_date"]
         response = client.get(MAIN_URL)
@@ -174,7 +174,7 @@ class TestMainAPIViews:
     def test_get_main_afisha_items_fields(
         self,
         client,
-        news,
+        news_items_with_content,
         events,
         banners,
         places,
@@ -190,7 +190,7 @@ class TestMainAPIViews:
     def test_get_main_afisha_items_event_body_fields(
         self,
         client,
-        news,
+        news_items_with_content,
         events,
     ):
         """Checks data["afisha"]["items"]["event_body"] in response."""
@@ -204,7 +204,7 @@ class TestMainAPIViews:
     def test_get_main_afisha_items_event_body_team_fields(
         self,
         client,
-        news,
+        news_items_with_content,
         events,
     ):
         """Checks data["afisha"]["items"]["event_body"]["team"] in response."""
@@ -222,11 +222,11 @@ class TestMainAPIViews:
     def test_afisha_items_count_in_response_matches_count_in_db(
         self,
         client,
-        news,
-        blog,
+        news_items_with_content,
+        blog_items_with_content,
         plays,
         events,
-        person,
+        persons,
         reading,
         performance,
         master_class,

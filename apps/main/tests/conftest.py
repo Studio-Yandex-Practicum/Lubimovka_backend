@@ -1,22 +1,27 @@
 import pytest
+from django.conf import settings
 from django.urls import reverse
 
-from apps.afisha.tests.factories import EventFactory
-from apps.articles.tests.factories.blog_factory import BlogFactory
-from apps.articles.tests.factories.news_factory import NewsFactory
-from apps.content_pages.tests.factories import ImagesBlockFactory
-from apps.core.tests.factories import ImageFactory, PersonFactory
-from apps.info.tests.factories import FestivalFactory, PlaceFactory
+from apps.afisha.factories import EventFactory
+from apps.articles.factories import BlogItemFactory, NewsItemFactory
+from apps.content_pages.factories import ImagesBlockFactory
+from apps.core.factories import ImageFactory, PersonFactory
+from apps.info.factories import FestivalFactory, PlaceFactory
+from apps.library.factories import MasterClassFactory, PerformanceFactory, PlayFactory, ReadingFactory
 from apps.library.models.play import ProgramType
-from apps.library.tests.factories import MasterClassFactory, PerformanceFactory, PlayFactory, ReadingFactory
-from apps.main.tests.factories import BannerFactory
+from apps.main.factories import BannerFactory
 
 MAIN_URL = reverse("main:main_page")
 
 
+@pytest.fixture(autouse=True)
+def set_media_temp_folder(tmpdir):
+    settings.MEDIA_ROOT = tmpdir.mkdir("media")
+
+
 @pytest.fixture
 def images():
-    ImageFactory.create_batch(10)
+    return ImageFactory.create_batch(10)
 
 
 @pytest.fixture
@@ -56,25 +61,33 @@ def banners():
 
 
 @pytest.fixture
-def news(plays, images_block):
-    return list(
-        NewsFactory.create_batch(
-            3,
-            add_several_preamble=1,
-            add_several_text=1,
-            add_several_title=1,
-            add_several_quote=1,
-            add_several_playsblock=1,
-            add_several_imagesblock=1,
-            add_several_personsblock=1,
-            is_draft=False,
-        )
+def news_items_with_content(plays, images_block):
+    return NewsItemFactory.create_batch(
+        3,
+        add_several_preamble=1,
+        add_several_text=1,
+        add_several_title=1,
+        add_several_quote=1,
+        add_several_playsblock=1,
+        add_several_imagesblock=1,
+        add_several_personsblock=1,
+        is_draft=False,
     )
 
 
 @pytest.fixture
-def blog():
-    return BlogFactory.complex_create(1)
+def blog_items_with_content():
+    return BlogItemFactory.create_batch(
+        3,
+        add_several_co_author=1,
+        add_several_imagesblock=1,
+        add_several_personsblock=1,
+        add_several_playsblock=1,
+        add_several_preamble=1,
+        add_several_quote=1,
+        add_several_text=1,
+        add_several_title=1,
+    )
 
 
 @pytest.fixture
@@ -83,22 +96,17 @@ def places():
 
 
 @pytest.fixture
-def person():
-    return PersonFactory.create_batch(3)
-
-
-@pytest.fixture
-def master_class(person):
+def master_class(persons):
     return MasterClassFactory()
 
 
 @pytest.fixture
-def reading(plays, person):
+def reading(plays, persons):
     return ReadingFactory()
 
 
 @pytest.fixture
-def performance(plays, person):
+def performance(plays, persons):
     return PerformanceFactory()
 
 
