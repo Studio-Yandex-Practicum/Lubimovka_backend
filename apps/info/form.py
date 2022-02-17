@@ -3,7 +3,7 @@ from django import forms
 from apps.info.models import FestivalTeam
 
 
-class FestivalTeamForm(forms.ModelForm):
+class FestivalTeamMemberForm(forms.ModelForm):
     """Форма для команды-фестиваля.
 
     Плюс дополнительное поле о данных о PR-менеджере.

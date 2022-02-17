@@ -51,16 +51,3 @@ def get_pdf_response(press_release_instance, path_to_font):
             status_code=status.HTTP_400_BAD_REQUEST,
         )
     return response
-
-
-def get_data(instance):
-    """Фильтрация данных о PR-менеджере.
-
-    Добавляются только где есть данные.
-    """
-    new_data = {}
-    for item in instance:
-        for key, value in item.items():
-            if value:
-                new_data[key] = value
-    return new_data

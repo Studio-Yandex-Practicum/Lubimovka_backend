@@ -4,7 +4,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.form import FestivalTeamForm
+from apps.info.form import FestivalTeamMemberForm
 from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
 
 
@@ -176,7 +176,7 @@ class PressRealeaseAdmin(admin.ModelAdmin):
 
 
 class FestivalTeamAdmin(admin.ModelAdmin):
-    form = FestivalTeamForm
+    form = FestivalTeamMemberForm
     list_display = (
         "person",
         "team",
@@ -224,6 +224,8 @@ class FestivalTeamAdmin(admin.ModelAdmin):
                 FestivalTeam.objects.filter(is_pr_manager=True).update(is_pr_manager=False)
                 Setting.objects.filter(settings_key="pr_manager_name").update(text=name_manager)
             obj.save()
+        else:
+            raise ValidationError("Заполните поля корректно")
 
     class Media:
         """Adds a script that displays the field ```is_pr_manager``` if the team art is selected."""
