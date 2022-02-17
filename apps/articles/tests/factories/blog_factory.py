@@ -1,3 +1,5 @@
+import random
+
 import factory
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
@@ -92,7 +94,7 @@ class BlogFactory(factory.django.DjangoModelFactory):
         variable_nb_sentences=False,
     )
     image = factory.django.ImageField(color=factory.Faker("color"))
-    is_draft = factory.Faker("boolean", chance_of_getting_true=25)
+    status = factory.LazyFunction(lambda: random.choice(list(BlogItem.SelectStatus)))
     pub_date = factory.Faker("date_time", tzinfo=timezone.utc)
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
 

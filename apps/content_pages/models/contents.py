@@ -2,6 +2,7 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.querysets import ContenPageQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
@@ -14,13 +15,20 @@ class AbstractContentPage(BaseModel):
     Для создания полноценной модели с конструктором создайте две новые модели
     унаследовав их от 'AbstractContentPage' и 'AbstractContent'.
 
-    Модель обладает обычными полями (title, description, image, is_draft,
+    Модель обладает обычными полями (title, description, image, status,
     pub_date). К ней подключается блок с конструктором.
 
     Дополнена расширенным manager (`ext_objects`) для более простого
     доступа к часто используемым данным (пример: получить только опубликованные
     записи)
     """
+
+    class SelectStatus(models.TextChoices):
+        IN_PROGRESS = "in_progres", _("в работе")
+        REVIEW = "review", _("на проверке")
+        READY_FOR_PUBLISH = "ready_for_publish", _("готово к публикации")
+        PUBLISHED = "published", _("опубликовано")
+        REMOVED_FROM_PUBLISH = "removed_from_publish", _("снято с публикации")
 
     description = models.TextField(
         max_length=500,
@@ -31,10 +39,11 @@ class AbstractContentPage(BaseModel):
         blank=True,
         verbose_name="Заглавная картинка",
     )
-    is_draft = models.BooleanField(
-        default=True,
-        verbose_name="Черновик",
-        help_text="Поставьте отметку если это черновик",
+    status = models.CharField(
+        max_length=25,
+        default="in_progres",
+        choices=SelectStatus.choices,
+        verbose_name="Статус",
     )
     pub_date = models.DateTimeField(
         default=timezone.now,

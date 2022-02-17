@@ -67,7 +67,7 @@ def news(plays, images_block):
             add_several_playsblock=1,
             add_several_imagesblock=1,
             add_several_personsblock=1,
-            is_draft=False,
+            status="published",
         )
     )
 
