@@ -37,7 +37,7 @@ services:
     restart: always
     depends_on:
       - swag
- 
+
 networks:
   stage_swag_network:
     name: stage_swag_network

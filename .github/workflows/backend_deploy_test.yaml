@@ -88,7 +88,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Create SSH key 
+        name: Create SSH key
         # (SSH_KNOWN_HOSTS=ssh-keyscan -H сервер, SSH_PRIVATE_KEY - ключ с ПК, которому разрешен вход)
         run: |
           mkdir -p ~/.ssh
@@ -131,7 +131,7 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-test
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-test
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-test
-            
+
             # Django environment variables
             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-test
             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-test
@@ -145,11 +145,20 @@ jobs:
             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-test
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-test
 
+            # Secrets variables for google sheets in Django:
+            echo GOOGLE_PRIVATE_KEY_ID=${{ secrets.GOOGLE_PRIVATE_KEY_ID }} >> .env-test
+            echo GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }} >> .env-test
+
             # Swag environment variables
             echo PUID=${{ secrets.PUID }} >> .env-test
             echo PGID=${{ secrets.PGID }} >> .env-test
             echo URL=${{ secrets.URL }} >> .env-test
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
+
+            # Уделение старых данных
+            systemctl stop lubimovka-frontend.service
+            systemctl stop lubimovka-backend.service
+            docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
 
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create test_db_network || true
@@ -168,7 +177,7 @@ jobs:
             # После установки удаляем файлы
             rm ${{ env.DEPLOY_PATH }}/test/lubimovka-backend.service
             rm ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend.service
-  
+
   send_message:
     name: Send message in telegram group
     runs-on: ubuntu-latest
@@ -176,26 +185,15 @@ jobs:
       name: test_deploy
     needs: deploy
     steps:
-      - name: check repository
-        uses: actions/checkout@v1
-      - name: find the PR associated with this push, if there is one
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          state: closed
-      - run: echo "PR=${PR}" >> $GITHUB_ENV
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
       - name: send message
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_ID }}
           token: ${{ secrets.TELEGRAM_TOKEN }}
           message: |
-                  Код на сервере разработки обновлён!
-                  Изменения можно посмотреть в PR:
-                  ${{ secrets.HUB_URL }}/${{ github.repository }}/pull/${{env.PR}}
+                  Новая ветка в тестировании:
+                  ${{ secrets.HUB_URL }}/${{ github.repository }}/tree/${{ github.ref_name }}
+                  Тестирует - ${{ github.event.inputs.name }}
                   Сайт доступен по адресу:
                   https://${{ secrets.DEV_SUBDOMAIN }}.${{ secrets.URL }}
                   Сcылка на документацию в Swagger:
