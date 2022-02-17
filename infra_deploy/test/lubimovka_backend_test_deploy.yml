@@ -33,7 +33,11 @@ services:
       - media_value_test:/code/media/
     command: >
       sh -c "python manage.py migrate &&
-             python manage.py collectstatic --noinput"
+             python manage.py collectstatic --noinput &&
+             python manage.py createsuperuser --noinput &&
+             python manage.py filldb &&
+             python manage.py set_perms &&
+             python manage.py filldb_articles"
     depends_on:
       - backend
     env_file:

@@ -151,6 +151,9 @@ jobs:
             echo URL=${{ secrets.URL }} >> .env-test
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
 
+            # Уделение старых данных
+            docker volume rm media_value_test postgres_data_test static_value_test
+
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create test_db_network || true
             docker network create test_swag_network || true
