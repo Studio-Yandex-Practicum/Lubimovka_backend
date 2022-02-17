@@ -53,9 +53,15 @@ class PlayAdmin(admin.ModelAdmin):
         "festival__year",
     )
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 class AchievementAdmin(admin.ModelAdmin):
     list_display = ("tag",)
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 class AchievementInline(admin.TabularInline):
@@ -77,14 +83,29 @@ class SocialNetworkLinkInline(admin.TabularInline):
     extra = 1
 
 
+class SocialNetworkLinkAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
 class OtherLinkInline(admin.TabularInline):
     model = OtherLink
     extra = 1
 
 
+class OtherLinkAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
 class OtherPlayInline(admin.StackedInline):
     model = OtherPlay
     extra = 1
+
+
+class OtherPlayAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 class AuthorAdmin(admin.ModelAdmin):
@@ -117,6 +138,9 @@ class AuthorAdmin(admin.ModelAdmin):
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
         return form
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
     list_display = (
@@ -134,6 +158,9 @@ class PerformanceMediaReviewAdmin(admin.ModelAdmin):
         "performance__name",
         "pub_date",
     )
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 class PerformanceReviewAdmin(admin.ModelAdmin):
@@ -153,6 +180,9 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
         "pub_date",
     )
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 class ProgramTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
@@ -164,6 +194,9 @@ class ProgramTypeAdmin(admin.ModelAdmin):
         if not request.user.is_superuser:
             return ("slug",)
         return super().get_readonly_fields(request, obj)
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 class PerformanceReviewInline(admin.TabularInline):
@@ -230,6 +263,9 @@ class PerformanceAdmin(admin.ModelAdmin):
         TeamMemberInline,
     )
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 class ReadingAdmin(admin.ModelAdmin):
     list_display = (
@@ -243,6 +279,9 @@ class ReadingAdmin(admin.ModelAdmin):
     )
     inlines = (TeamMemberInline,)
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 class MasterClassAdmin(admin.ModelAdmin):
     list_display = ("name",)
@@ -252,6 +291,14 @@ class MasterClassAdmin(admin.ModelAdmin):
         "name",
     )
     inlines = (TeamMemberInline,)
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+class OtherPlayClassAdmin(admin.ModelAdmin):
+    def has_change_permission(self, request, obj=None):
+        return False
 
 
 class ParticipationAdmin(admin.ModelAdmin):
@@ -278,6 +325,21 @@ class ParticipationAdmin(admin.ModelAdmin):
         "year",
     )
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
+
+class TeamMemberAdmin(admin.ModelAdmin):
+    list_display = (
+        "id",
+        "person",
+        "role",
+    )
+    search_fields = ("role",)
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
 
 admin.site.register(Play, PlayAdmin)
 admin.site.register(Performance, PerformanceAdmin)
@@ -286,6 +348,10 @@ admin.site.register(Author, AuthorAdmin)
 admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
 admin.site.register(PerformanceReview, PerformanceReviewAdmin)
 admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)
+admin.site.register(TeamMember, TeamMemberAdmin)
+admin.site.register(SocialNetworkLink, SocialNetworkLinkAdmin)
+admin.site.register(OtherPlay, OtherPlayClassAdmin)
+admin.site.register(OtherLink, OtherLinkAdmin)
 admin.site.register(Reading, ReadingAdmin)
 admin.site.register(MasterClass, MasterClassAdmin)
 admin.site.register(ProgramType, ProgramTypeAdmin)

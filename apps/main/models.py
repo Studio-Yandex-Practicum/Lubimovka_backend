@@ -34,8 +34,8 @@ class Banner(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Банер для главной странице"
-        verbose_name_plural = "Банеры для главной странице"
+        verbose_name = "Баннер для главной странице"
+        verbose_name_plural = "Баннеры для главной странице"
 
     def __str__(self):
         return f"{self.title}"
