@@ -31,13 +31,13 @@ def festival(images):
 
 @pytest.fixture
 def play(festival):
-    return PlayFactory(is_draft=False)
+    return PlayFactory(status="ready_for_publish")
 
 
 @pytest.fixture
 def play_in_short_list(festival):
     short_list_program_type = ProgramType.objects.get(slug="short-list")
-    return PlayFactory(is_draft=False, program=short_list_program_type)
+    return PlayFactory(status="ready_for_publish", program=short_list_program_type)
 
 
 @pytest.fixture
