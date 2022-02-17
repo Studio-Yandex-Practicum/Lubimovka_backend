@@ -78,7 +78,7 @@ class GoogleSpreadsheets:
                         "range": {
                             "sheetId": sheet_id,
                             "startRowIndex": 0,
-                            "endRowIndex": 200,
+                            "endRowIndex": 1000,
                             "startColumnIndex": 0,
                             "endColumnIndex": 10,
                         },
