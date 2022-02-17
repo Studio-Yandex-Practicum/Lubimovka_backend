@@ -28,7 +28,8 @@ def blog_item_content_module(request, simple_blog_item, plays):
     return BlogItemContentModuleFactory.create(content_page=simple_blog_item, **content_module_param)
 
 
-def test_blog_item_delete_related_content(blog_item_content_module, plays, festivals):
+def test_blog_item_delete_related_content_module(blog_item_content_module, plays, festivals):
+    """Delete `ContentModule` object and check that related object also deleted."""
     item = blog_item_content_module.item
     blog_item_content_module.delete()
 

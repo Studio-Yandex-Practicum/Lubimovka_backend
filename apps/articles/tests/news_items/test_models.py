@@ -28,7 +28,8 @@ def news_item_content_module(request, simple_news_item, plays, persons):
     return NewsItemContentModuleFactory.create(content_page=simple_news_item, **content_module_param)
 
 
-def test_news_item_delete_related_content(news_item_content_module, plays, festivals):
+def test_news_item_delete_related_content_module(news_item_content_module, plays, festivals):
+    """Delete `ContentModule` object and check that related object also deleted."""
     item = news_item_content_module.item
     news_item_content_module.delete()
 

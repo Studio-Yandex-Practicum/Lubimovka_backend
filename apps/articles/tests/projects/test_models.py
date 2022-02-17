@@ -28,7 +28,8 @@ def project_content_module(request, simple_project, plays, persons, performances
     return ProjectContentModuleFactory.create(content_page=simple_project, **content_module_param)
 
 
-def test_project_delete_related_content(project_content_module, plays, festivals):
+def test_project_delete_related_content_module(project_content_module, plays, festivals):
+    """Delete `ContentModule` object and check that related object also deleted."""
     item = project_content_module.item
     project_content_module.delete()
 
