@@ -1,17 +1,11 @@
-import logging
 from datetime import datetime as dt
 from typing import Optional
 
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 
 from apps.main.models import SettingGoogleExport
-from config.logging import LOGGING_CONFIG
-from config.settings.local import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
-
-logging.config.dictConfig(LOGGING_CONFIG)
-logger = logging.getLogger(__name__)
+from config.settings.base import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 URL = "https://www.googleapis.com/robot/v1/metadata/x509/lubimovka%40swift-area-340613.iam.gserviceaccount.com"
@@ -63,24 +57,16 @@ class GoogleSpreadsheets:
         }
 
     def _build_service(self):
-        try:
-            credentials = service_account.Credentials.from_service_account_info(self.keys)
-        except ValueError as error:
-            logger.error(error, exc_info=True)
-            return
+        credentials = service_account.Credentials.from_service_account_info(self.keys)
         scoped_credentials = credentials.with_scopes(self.scopes)
         return build("sheets", "v4", credentials=scoped_credentials)
 
     def _get_sheet_id_by_title(self, service) -> Optional[int]:
         request = service.spreadsheets().get(spreadsheetId=self.spreadsheet_id)
-        try:
-            spreadsheet = request.execute()
-            for _sheet in spreadsheet["sheets"]:
-                if _sheet["properties"]["title"] == self.sheet:
-                    return _sheet["properties"]["sheetId"]
-        except HttpError as error:
-            logger.error(error, exc_info=True)
-            return
+        spreadsheet = request.execute()
+        for _sheet in spreadsheet["sheets"]:
+            if _sheet["properties"]["title"] == self.sheet:
+                return _sheet["properties"]["sheetId"]
 
     def _set_borders(self, service) -> None:
         sheet_id = self._get_sheet_id_by_title(service=service)
@@ -146,11 +132,7 @@ class GoogleSpreadsheets:
             spreadsheetId=self.spreadsheet_id,
             body=body,
         )
-        try:
-            request.execute()
-        except HttpError as error:
-            logger.error(error, exc_info=True)
-            return
+        request.execute()
 
     def _set_header(self, service) -> None:
         body = {
@@ -183,11 +165,7 @@ class GoogleSpreadsheets:
                 body=body,
             )
         )
-        try:
-            request.execute()
-        except HttpError as error:
-            logger.error(error, exc_info=True)
-            return
+        request.execute()
 
     def _export_new_object(self, instance, service, domain) -> Optional[bool]:
         value_input_option = "USER_ENTERED"
@@ -202,21 +180,13 @@ class GoogleSpreadsheets:
                 body=body,
             )
         )
-        try:
-            request.execute()
-        except HttpError as error:
-            logger.error(error, exc_info=True)
-            return
+        request.execute()
         service.spreadsheets().close()
         return True
 
     def _check_header_exists(self, service) -> bool:
         request = service.spreadsheets().values().get(spreadsheetId=self.spreadsheet_id, range=self.range)
-        try:
-            response = request.execute()
-        except HttpError as error:
-            logger.error(error, exc_info=True)
-            return
+        response = request.execute()
         return response.get("values") is not None
 
     def export(self, instance, domain) -> Optional[bool]:

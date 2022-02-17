@@ -6,14 +6,14 @@ def add_google_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
 
-    Setting.objects.create(
+    Setting.objects.get_or_create(
         field_type="TEXT",
         group="GOOGLE_EXPORT",
         settings_key="SPREADSHEET_ID",
         text="1PB-Rzd46wHpldZptqc7CEn9VNkv3iRJuo9e87Xtpgb4",
         description="id Google таблицы",
     )
-    Setting.objects.create(
+    Setting.objects.get_or_create(
         field_type="TEXT",
         group="GOOGLE_EXPORT",
         settings_key="SHEET",

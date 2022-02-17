@@ -407,6 +407,26 @@ def add_main_settings(apps, schema_editor):
     )
 
 
+def add_google_settings(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
+    Setting.objects.create(
+        field_type="TEXT",
+        group="GOOGLE_EXPORT",
+        settings_key="SPREADSHEET_ID",
+        text="1PB-Rzd46wHpldZptqc7CEn9VNkv3iRJuo9e87Xtpgb4",
+        description="id Google таблицы",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="GOOGLE_EXPORT",
+        settings_key="SHEET",
+        text="Лист1",
+        description="Наименование листа Google таблицы",
+    )
+
+
 def add_short_list_program(apps, schema_editor):
     Program = apps.get_model(
         "library",

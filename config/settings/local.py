@@ -1,8 +1,12 @@
 import os  # noqa
+from pathlib import Path
+
+import environ
+
+ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+environ.Env.read_env(os.path.join(ROOT_DIR, '.env'))
 
 from .base import *  # noqa
-
-environ.Env.read_env(os.path.join(ROOT_DIR, '.env'))
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -52,5 +56,3 @@ DATABASES = {
         "PORT": env("POSTGRES_PORT", default="5432"),
     }
 }
-GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
-GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
