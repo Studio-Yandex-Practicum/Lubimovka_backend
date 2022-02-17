@@ -147,6 +147,10 @@ jobs:
             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-stage
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-stage
 
+            # Secrets variables for google sheets in Django:
+            echo GOOGLE_PRIVATE_KEY_ID=${{ secrets.GOOGLE_PRIVATE_KEY_ID }} >> .env-stage
+            echo GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }} >> .env-stage
+
             # Swag environment variables
             echo PUID=${{ secrets.PUID }} >> .env-stage
             echo PGID=${{ secrets.PGID }} >> .env-stage
