@@ -17,7 +17,7 @@ def add_press_release_setting(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0008_settings_change_data"),
+        ("core", "0009_alter_image_image"),
     ]
 
     operations = [
