@@ -1,5 +1,5 @@
 """
-ASGI config for lubimovka_backend project.
+ASGI config for develop in lubimovka_backend project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

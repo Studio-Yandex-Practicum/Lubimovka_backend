@@ -1,5 +1,5 @@
 """
-WSGI config for lubimovka_backend project.
+WSGI config for production in lubimovka_backend project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
