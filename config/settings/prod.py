@@ -13,9 +13,6 @@ ALLOWED_HOSTS = env.list(
     default=[".lyubimovka.ru"],
 )
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = "config.wsgi_prod.application"
-
 # DATABASES
 # -----------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases

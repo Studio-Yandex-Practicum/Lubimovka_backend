@@ -15,10 +15,6 @@ ALLOWED_HOSTS = env.list(
     default=["127.0.0.1"],
 )
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
-WSGI_APPLICATION = "config.wsgi_dev.application"
-
-
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
