@@ -28,14 +28,10 @@ MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa: F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
 DEBUG_TOOLBAR_CONFIG = {
     "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
+    "SHOW_COLLAPSED": True,
     "SHOW_TEMPLATE_CONTEXT": True,
+    "SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG,
 }
-# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-INTERNAL_IPS = env.list(
-    "INTERNAL_IPS",
-    default=["127.0.0.1"],
-)
-
 
 # Use PostgreSQL
 # ------------------------------------------------------------------------------
