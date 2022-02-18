@@ -15,6 +15,8 @@ SECRET_KEY = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ["127.0.0.1"]
 
+# https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
+WSGI_APPLICATION = "config.wsgi_dev.application"
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
