@@ -1,8 +1,7 @@
 import factory
 
 from apps.core.utils import get_picsum_image
-
-from ..models import Banner
+from apps.main.models import Banner
 
 
 class BannerFactory(factory.django.DjangoModelFactory):

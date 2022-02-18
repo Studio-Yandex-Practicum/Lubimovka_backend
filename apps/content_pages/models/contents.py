@@ -1,9 +1,12 @@
+from typing import Tuple
+
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
 
 from apps.content_pages.querysets import ContenPageQuerySet
+from apps.content_pages.services import content_delete_generic_related_items
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel
 
@@ -114,3 +117,8 @@ class AbstractContent(models.Model):
 
     def __str__(self):
         return f"Блок/элемент — {self.item}"
+
+    def delete(self, *args, **kwargs) -> Tuple[int, dict[str, int]]:
+        """Delete related item with generic relation."""
+        super_delete_result = super().delete(*args, **kwargs)
+        return content_delete_generic_related_items(self, super_delete_result)
