@@ -136,7 +136,6 @@ jobs:
 
             # Django environment variables
             echo DEBUG=${{ secrets.DEBUG }} >> .env-stage
-            echo INTERNAL_IPS=${{ secrets.INTERNAL_IPS }} >> .env-stage
             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-stage
             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-stage
             echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-stage
