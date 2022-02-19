@@ -105,6 +105,11 @@ class FestivalTeam(BaseModel):
                     "нужно назначить другого человека на эту должность"
                 )
 
+    def delete(self, *args, **kwargs):
+        if self.is_pr_manager:
+            raise ValidationError("Перед удалением назначьте на должность PR-менеджера другого человека")
+        super().delete(*args, **kwargs)
+
 
 class Sponsor(BaseModel):
     person = models.OneToOneField(

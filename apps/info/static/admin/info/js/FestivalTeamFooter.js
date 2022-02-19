@@ -7,19 +7,13 @@
 
 jQuery(document).ready(function ($) {
     let teamTypeSelectField = $("#id_team");
-    let isPrManagerField = $("#id_is_pr_manager");
     let divDependedOnTeamType = $(".depended_on_team_type");
 
-    function toggleDivDependedOnTeamType(teamType, isFirstLoad) {
+    function toggleDivDependedOnTeamType(teamType) {
         if (teamType === "art") {
             divDependedOnTeamType.slideDown();
         } else {
-            if (isFirstLoad) {
-                divDependedOnTeamType.hide();
-            } else {
-                isPrManagerField.prop("checked", false);
-                divDependedOnTeamType.slideUp();
-            }
+        divDependedOnTeamType.slideUp();
         }
     }
 

@@ -1,16 +1,14 @@
 from rest_framework import serializers
 
-
-class PRManagerSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=100)
-    email = serializers.EmailField()
-    # тут нужно вытащить ссылку на картинку или саму картинку?
-    photo_link = serializers.ImageField(max_length=None, use_url=True, source="image")
+from apps.core.models import Person
 
 
-class ForPressSerializer(serializers.Serializer):
-    pr_manager = PRManagerSerializer()
-    photo_gallery_facebook_link = serializers.URLField()
+class PhotoManagerSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField()
+
+    class Meta:
+        model = Person
+        fields = ("image",)
 
 
 class FeedbackSerializer(serializers.Serializer):
@@ -20,4 +18,7 @@ class FeedbackSerializer(serializers.Serializer):
     email_on_about_festival_page = serializers.EmailField()
     email_on_acceptance_of_plays_page = serializers.EmailField()
     email_on_author_page = serializers.EmailField()
-    for_press = ForPressSerializer()
+    photo_gallery_facebook_link = serializers.URLField()
+    pr_manager_name = serializers.CharField(max_length=60)
+    pr_manager_email = serializers.EmailField()
+    pr_manager_photo_link = PhotoManagerSerializer()
