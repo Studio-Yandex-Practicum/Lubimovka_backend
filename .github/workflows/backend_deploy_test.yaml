@@ -133,7 +133,7 @@ jobs:
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-test
 
             # Django environment variables
-            echo DEBUG=${{ secrets.DEBUG }} >> .env-stage
+            echo DEBUG=${{ secrets.DEBUG }} >> .env-test
             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-test
             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-test
             echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-test
