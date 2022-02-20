@@ -154,6 +154,7 @@ class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = PerformanceMediaReview
+        django_get_or_create = ("url",)
 
     class Params:
         add_real_image = factory.Trait(

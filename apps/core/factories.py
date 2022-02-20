@@ -12,11 +12,11 @@ fake = Faker(locale="ru_RU")
 class PersonFactory(factory.django.DjangoModelFactory):
     """Create Person objects.
 
-    The behavior is different based on params:
-        - `add_image`: create Person with fake not empty image
-        - `add_real_image`: create Person with real image. Requires internet.
-        - `add_city`: create Person with fake not empty city
-        - `add_email`: create Person with fake email link nikolaykiryanov@lubimovka.ru
+    Parameters:
+    1. `add_image`: create Person with fake not empty image
+    2. `add_real_image`: create Person with real image. Requires internet.
+    3. `add_city`: create Person with fake not empty city
+    4. `add_email`: create Person with fake email link nikolaykiryanov@lubimovka.ru
     """
 
     class Meta:
@@ -102,8 +102,8 @@ class RoleFactory(factory.django.DjangoModelFactory):
     """Create roles based on RoleFactoryData and set at least one role_type.
 
     Parameters:
-    1. `role_types`: wait for list of RoleType objects.
-    2. `role_types__num`: wait for integer. How many role types set to role.
+    1. `role_type`: wait for `role_type` text name and set it to the role.
+    Example: `role_type="blog_persons_role"`,
     """
 
     class Meta:
@@ -123,21 +123,8 @@ class RoleFactory(factory.django.DjangoModelFactory):
         return name_plural
 
     @factory.post_generation
-    def role_types(self, create, extracted, **kwargs):
-        if not create:
-            return
-
-        if extracted:
-            role_types = extracted
-            self.types.add(*role_types)
-            return
-
-        at_least = 1
-        num = kwargs.get("num", None)
-        how_many = num or at_least
-
-        tags_count = RoleType.objects.count()
-        how_many = min(tags_count, how_many)
-
-        role_types = RoleType.objects.order_by("?")[:how_many]
-        self.types.add(*role_types)
+    def role_type(self, create, role_type, **kwargs):
+        if create and role_type:
+            assert type(role_type) is str, "Тип роли должны быть строкой."
+            role_type = RoleType.objects.filter(role_type=role_type)
+            self.types.set(role_type)

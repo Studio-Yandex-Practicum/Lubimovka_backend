@@ -1,11 +1,17 @@
 import pytest
 from django.conf import settings
+from rest_framework.test import APIClient
 
 from apps.core.factories import ImageFactory, PersonFactory
 from apps.info.factories import FestivalFactory
 from apps.library.factories import PerformanceFactory, PlayFactory
 
 pytestmark = [pytest.mark.django_db]
+
+
+@pytest.fixture
+def client():
+    return APIClient(format="json")
 
 
 @pytest.fixture(autouse=True)
