@@ -1,4 +1,7 @@
-def content_delete_generic_related_items(content_module, super_delete_result) -> tuple[int, dict[str, int]]:
+from typing import Dict, Tuple
+
+
+def content_delete_generic_related_items(content_module, super_delete_result) -> Tuple[int, Dict[str, int]]:
     """Take deleted `ContentModule` and delete generic related item. Return updated delete() result.
 
     DjangoModel's delete method has to return a tuple of amount and the dict of deleted objects.
