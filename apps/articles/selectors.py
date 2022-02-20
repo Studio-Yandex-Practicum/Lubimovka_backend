@@ -7,14 +7,14 @@ from apps.articles.filters import PubDateFilter
 from apps.articles.models import BlogItem
 
 
-def blog_item_list(filters: dict[str, str] = None) -> QuerySet:
+def blog_item_list_get(filters: dict[str, str] = None) -> QuerySet:
     """Return published and filtered `BlogItem` queryset."""
     filters = filters or {}
     published_blog_items = BlogItem.ext_objects.published()
     return PubDateFilter(filters, published_blog_items).qs
 
 
-def blog_item_detail_published_item(blog_item_id):
+def blog_item_detail_get(blog_item_id):
     """Return `detailed` published `BlogItem` object if it exists.
 
     The `BlogItem` extends with:
