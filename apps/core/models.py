@@ -295,3 +295,52 @@ class Setting(BaseModel):
     def _check_related_settings(cls, setting):
         if setting.settings_key in cls.RELATED_SETTINGS and setting.boolean:
             cls._turn_off_setting(cls.RELATED_SETTINGS[setting.settings_key])
+
+
+class Status(models.Model):
+    name = models.CharField(
+        max_length=30,
+        verbose_name="Наименование",
+        unique=True,
+    )
+    previous_button_name = models.CharField(
+        max_length=40,
+        blank=True,
+        null=True,
+        verbose_name="Название кнопки возврата в предыдущее состояние",
+    )
+    next_button_name = models.CharField(
+        max_length=40,
+        blank=True,
+        null=True,
+        verbose_name="Название кнопки перехода в следующее состояние",
+    )
+    protected = models.BooleanField(
+        verbose_name="Требуются особые права для установки данного статуса",
+        default=False,
+    )
+    ordering = models.PositiveSmallIntegerField(
+        verbose_name="Порядковый номер",
+        unique=True,
+        blank=True,
+    )
+
+    class Meta:
+        ordering = ("ordering",)
+        verbose_name = "Статус страницы"
+        verbose_name_plural = "Статусы страницы"
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def get_upper_name(self):
+        return self.name.upper()
+
+    def next(self):
+        ordering = self.ordering + 1
+        return Status.objects.get(ordering=ordering)
+
+    def prev(self):
+        ordering = self.ordering - 1
+        return Status.objects.get(ordering=ordering)

@@ -1,3 +1,4 @@
+from django.conf.urls import url
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
@@ -11,6 +12,7 @@ from apps.library.views import (
     PlayViewSet,
     SearchResultViewSet,
 )
+from apps.library.views.play import next_status, prev_status
 
 router = DefaultRouter()
 router.register(
@@ -61,4 +63,6 @@ library_urls = [
 
 urlpatterns = [
     path("v1/", include(library_urls)),
+    url(r"^prev_status/(?P<object_pk>\d+)/$", prev_status, name="prev_status"),
+    url(r"^next_status/(?P<object_pk>\d+)/$", next_status, name="next_status"),
 ]

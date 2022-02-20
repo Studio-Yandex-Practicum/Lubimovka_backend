@@ -52,6 +52,7 @@ class PlayAdmin(admin.ModelAdmin):
         "program__name",
         "festival__year",
     )
+    exclude = ("status",)
 
 
 class AchievementAdmin(admin.ModelAdmin):

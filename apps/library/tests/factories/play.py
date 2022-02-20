@@ -1,9 +1,8 @@
-import random
-
 import factory
 from faker import Faker
 
 from apps.core.decorators import restrict_factory
+from apps.core.models import Status
 from apps.info.models import Festival
 from apps.library.models import Play, ProgramType
 
@@ -34,7 +33,7 @@ class PlayFactory(factory.django.DjangoModelFactory):
     year = factory.Faker("random_int", min=1990, max=2021)
     url_download = factory.django.FileField()
     url_reading = factory.LazyAttribute(lambda play: f"www.plays-reading/{play.name}")
-    status = factory.LazyFunction(lambda: random.choice(list(Play.SelectPlayStatus)))
+    status = factory.Iterator(Status.objects.all())
 
     @factory.lazy_attribute
     def program(self):
