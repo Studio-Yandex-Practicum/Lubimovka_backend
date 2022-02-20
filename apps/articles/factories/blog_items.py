@@ -27,7 +27,7 @@ class BlogItemContentModuleFactory(AbstractContentFactory):
         return BlogItem.objects.order_by("?").first()
 
 
-@restrict_factory(general=(Person, Role))
+@restrict_factory(general=(Person, Role, BlogItem))
 class BlogPersonFactory(factory.django.DjangoModelFactory):
     """Create co-author for `BlogItem`."""
 
@@ -41,6 +41,10 @@ class BlogPersonFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def role(self):
         return Role.objects.filter(types__role_type="blog_persons_role").order_by("?").first()
+
+    @factory.lazy_attribute
+    def blog(self):
+        return BlogItem.objects.filter("?").first()
 
 
 @restrict_factory(
