@@ -256,6 +256,7 @@ class Volunteer(BaseModel):
     class Meta:
         verbose_name = "Волонтёр фестиваля"
         verbose_name_plural = "Волонтёры фестиваля"
+        ordering = ("person__last_name",)
         constraints = [
             UniqueConstraint(
                 fields=("person", "festival"),
