@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from apps.articles.models import BlogItem
 from apps.articles.selectors import blog_item_detail_published_item, blog_item_list
-from apps.articles.serializers import BlogItemListSerializer, RoleSerializer
+from apps.articles.serializers import BlogItemListSerializer, BlogItemRoleSerializer
 from apps.content_pages.serializers import BaseContentPageSerializer
 from apps.core.utils import get_paginated_response
 
@@ -57,7 +57,7 @@ class BlogItemDetailAPI(APIView):
 
     class BlogItemDetailOutputSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
         other_blogs = BlogItemListSerializer(many=True, source="_other_blogs")
-        team = RoleSerializer(many=True, source="_team")
+        team = BlogItemRoleSerializer(many=True, source="_team")
         pub_date = serializers.DateTimeField(required=True)
 
         class Meta:

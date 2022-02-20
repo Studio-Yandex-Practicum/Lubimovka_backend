@@ -1,3 +1,3 @@
-from .blog_items import BlogItemListSerializer, RoleSerializer
+from .blog_items import BlogItemListSerializer, BlogItemRoleSerializer
 from .news_items import NewsItemDetailedSerializer, NewsItemListSerializer
 from .projects import ProjectListSerializer, ProjectSerializer

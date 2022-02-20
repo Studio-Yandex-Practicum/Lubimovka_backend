@@ -4,7 +4,7 @@ from apps.articles.models import BlogItem
 from apps.core.models import Role
 
 
-class RoleSerializer(serializers.ModelSerializer):
+class BlogItemRoleSerializer(serializers.ModelSerializer):
 
     persons = serializers.SlugRelatedField(
         source="blog_persons",
