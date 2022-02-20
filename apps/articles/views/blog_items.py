@@ -39,7 +39,7 @@ class BlogItemListAPI(APIView):
         responses=BlogItemListOutputSerializer(many=True),
     )
     def get(self, request):
-        filters_serializer = self.FilterSerializer(data=request.query_params)
+        filters_serializer = self.BlogItemListFilterSerializer(data=request.query_params)
         filters_serializer.is_valid(raise_exception=True)
 
         filtered_blog_items = blog_item_list(filters=filters_serializer.validated_data)
