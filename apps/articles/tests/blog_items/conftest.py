@@ -1,14 +1,8 @@
 import pytest
-from rest_framework.test import APIClient
 
 from apps.articles.factories import BlogItemFactory
 
 pytestmark = [pytest.mark.django_db]
-
-
-@pytest.fixture
-def client():
-    return APIClient(format="json")
 
 
 @pytest.fixture
