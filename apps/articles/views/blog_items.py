@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
+from apps.articles import selectors
 from apps.articles.models import BlogItem
-from apps.articles.selectors import blog_item_detail_published_item, blog_item_list
 from apps.articles.serializers import BlogItemListSerializer, BlogItemRoleSerializer
 from apps.content_pages.serializers import BaseContentPageSerializer
 from apps.core.utils import get_paginated_response
@@ -42,7 +42,7 @@ class BlogItemListAPI(APIView):
         filters_serializer = self.BlogItemListFilterSerializer(data=request.query_params)
         filters_serializer.is_valid(raise_exception=True)
 
-        filtered_blog_items = blog_item_list(filters=filters_serializer.validated_data)
+        filtered_blog_items = selectors.blog_item_list_get(filters=filters_serializer.validated_data)
         return get_paginated_response(
             pagination_class=self.pagination_class,
             serializer_class=self.BlogItemListOutputSerializer,
@@ -77,7 +77,7 @@ class BlogItemDetailAPI(APIView):
 
     @extend_schema(responses=BlogItemDetailOutputSerializer)
     def get(self, request, id):
-        blog_item_detail = blog_item_detail_published_item(blog_item_id=id)
+        blog_item_detail = selectors.blog_item_detail_get(blog_item_id=id)
         context = {"request": request}
         serializer = self.BlogItemDetailOutputSerializer(blog_item_detail, context=context)
         return Response(serializer.data)
