@@ -37,7 +37,7 @@ class GoogleSpreadsheets:
         self.range = self.sheet + "!A1"
 
     def _get_instance_values(self, instance, domain) -> dict:
-        instance_created = str(dt.now().date())
+        instance_created = dt.now().strftime("%Y-%m-%d %H:%M:%S")
         instance_file_path = domain + str(instance.file.url)
         return {
             "values": [
@@ -141,7 +141,7 @@ class GoogleSpreadsheets:
                     "range": self.range,
                     "values": [
                         [
-                            "Дата создания заявки",
+                            "Дата и время создания заявки",
                             "Имя",
                             "Фамилия",
                             "Год рождения",
