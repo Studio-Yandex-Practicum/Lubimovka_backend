@@ -126,16 +126,6 @@ class GoogleSpreadsheets:
                         "fields": "gridProperties.frozenRowCount",
                     },
                 },
-                {  # set autoResize for column
-                    "autoResizeDimensions": {
-                        "dimensions": {
-                            "sheetId": sheet_id,
-                            "dimension": "COLUMNS",
-                            "startIndex": 0,
-                            "endIndex": 10,
-                        }
-                    }
-                },
             ],
         }
         request = service.spreadsheets().batchUpdate(
