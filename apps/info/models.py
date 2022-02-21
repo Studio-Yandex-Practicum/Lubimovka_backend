@@ -6,6 +6,7 @@ from django.db.models import F, Q, UniqueConstraint
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Image, Person
 
 
@@ -29,7 +30,7 @@ class Partner(BaseModel):
         verbose_name="Ссылка на сайт",
     )
     image = models.ImageField(
-        upload_to="images/info/partnerslogo",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Логотип",
         help_text="Загрузите логотип партнёра",
     )

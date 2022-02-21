@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.utils import slugify
 from apps.core.validators import name_validator
 
@@ -35,7 +36,7 @@ class BaseModel(models.Model):
 
 class Image(BaseModel):
     image = models.ImageField(
-        upload_to="images/core/",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение",
         help_text="Загрузите фотографию",
     )
@@ -250,7 +251,7 @@ class Setting(BaseModel):
         verbose_name="Ссылка",
     )
     image = models.ImageField(
-        upload_to="core/",
+        upload_to=path_by_app_label_and_class_name,
         blank=True,
         verbose_name="Изображение",
     )
