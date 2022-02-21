@@ -5,6 +5,7 @@ import pytest
 from django.urls import reverse
 
 from apps.articles.factories.blog_items import BlogItemFactory
+from apps.core.models import Status
 
 pytestmark = [pytest.mark.django_db]
 
@@ -17,22 +18,22 @@ def simple_blog_items_with_known_datetime():
     blog_item_1 = BlogItemFactory(
         title="year_1995_month_10",
         pub_date=datetime(1995, 10, 12, tzinfo=moscow_tz),
-        is_draft=False,
+        status=Status.objects.get(name="Опубликовано"),
     )
     blog_item_2 = BlogItemFactory(
         title="year_1995_month_11",
         pub_date=datetime(1995, 11, 12, tzinfo=moscow_tz),
-        is_draft=False,
+        status=Status.objects.get(name="Опубликовано"),
     )
     blog_item_2 = BlogItemFactory(
         title="year_1995_month_12",
         pub_date=datetime(1995, 12, 12, tzinfo=moscow_tz),
-        is_draft=False,
+        status=Status.objects.get(name="Опубликовано"),
     )
     blog_item_3 = BlogItemFactory(
         title="year_2000_month_10",
         pub_date=datetime(200, 10, 12, tzinfo=moscow_tz),
-        is_draft=False,
+        status=Status.objects.get(name="Опубликовано"),
     )
     return blog_item_1, blog_item_2, blog_item_3
 

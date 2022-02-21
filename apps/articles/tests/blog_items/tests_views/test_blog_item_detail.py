@@ -4,6 +4,7 @@ from django.urls import reverse
 from apps.articles.factories import BlogItemFactory
 from apps.articles.factories.blog_items import BlogItemContentModuleFactory, BlogPersonFactory
 from apps.core.factories import PersonFactory, RoleFactory
+from apps.core.models import Status
 
 pytestmark = [pytest.mark.django_db]
 
@@ -31,7 +32,7 @@ def role_translator():
 def complex_blog_item(three_persons, role_text, role_translator, festivals, plays, persons, performances):
     blog_item = BlogItemFactory(
         id=100,
-        is_draft=False,
+        status=Status.objects.get(name="Опубликовано"),
     )
 
     BlogItemContentModuleFactory(unit_title=True, order=0, content_page=blog_item)

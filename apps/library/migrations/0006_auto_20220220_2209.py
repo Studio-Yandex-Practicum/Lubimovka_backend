@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0009_auto_20220220_2205'),
+        ('core', '0010_auto_20220220_2205'),
         ('library', '0005_alter_performancemediareview_text'),
     ]
 
