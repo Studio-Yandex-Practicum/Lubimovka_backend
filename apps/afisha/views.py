@@ -1,8 +1,11 @@
 from django.utils import timezone
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import views
+from rest_framework import serializers
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
+from apps.afisha import selectors
 from apps.afisha.models import Event
 from apps.afisha.pagination import AfishaFestivalPagination, AfishaRegularPagination, EventPaginationMixin
 from apps.afisha.schema.schema_extension import AFISHA_EVENTS_SCHEMA_DESCRIPTION
@@ -10,7 +13,7 @@ from apps.afisha.serializers import EventFestivalSerializer, EventRegularSeriali
 from apps.core.models import Setting
 
 
-class EventsAPIView(EventPaginationMixin, views.APIView):
+class EventsAPIView(EventPaginationMixin, APIView):
     """Returns the response depending festival mode on the settings.
 
     Add in finalize_response on the settings:
@@ -83,3 +86,20 @@ class EventsAPIView(EventPaginationMixin, views.APIView):
             response.data["info_registration"] = Setting.get_setting("afisha_info_festival_text")
             response.data["asterisk_text"] = Setting.get_setting("afisha_asterisk_text")
         return response
+
+
+class AfishaFestivalStatusAPIView(APIView):
+    """Return afisha (affiche) headers and festival status."""
+
+    class AfishaFestivalStatusOutputSerializer(serializers.Serializer):
+        festival_status = serializers.BooleanField()
+        description = serializers.CharField(max_length=500)
+        info_registration = serializers.CharField(max_length=500)
+        asterisk_text = serializers.CharField(max_length=500)
+
+    @extend_schema(responses=AfishaFestivalStatusOutputSerializer)
+    def get(self, request):
+        response_data = selectors.afisha_festival_status()
+        context = {"request": request}
+        serializer = self.AfishaFestivalStatusOutputSerializer(response_data, context=context)
+        return Response(serializer.data)
