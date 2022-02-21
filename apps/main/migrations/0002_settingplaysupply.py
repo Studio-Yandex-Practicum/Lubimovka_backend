@@ -20,12 +20,8 @@ def add_playsupply_settings(apps, schema_editor):
         text="Лист1",
         description="Наименование листа Google таблицы",
     )
-    form_to_submit_a_play = Setting.objects.get_or_create(
-        field_type="BOOLEAN",
-        group="GENERAL",
+    form_to_submit_a_play = Setting.objects.get(
         settings_key="form_to_submit_a_play",
-        boolean=True,
-        description="Форма для отправки пьесы",
     )
     form_to_submit_a_play.group = "PLAY_SUPPLY"
     form_to_submit_a_play.save()
