@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0008_settings_change_data'),
+        ('core', '0009_alter_image_image'),
     ]
 
     operations = [
