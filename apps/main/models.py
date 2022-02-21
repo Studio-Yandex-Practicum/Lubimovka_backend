@@ -107,4 +107,4 @@ class SettingPlaySupply(Setting):
     class Meta:
         proxy = True
         verbose_name = "Настройки подачи пьес"
-        verbose_name_plural = "Настройки  подачи пьес"
+        verbose_name_plural = "Настройки подачи пьес"
