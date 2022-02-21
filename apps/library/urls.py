@@ -1,5 +1,4 @@
-from django.conf.urls import url
-from django.urls import include, path
+from django.urls import include, path, re_path
 from rest_framework.routers import DefaultRouter
 
 from apps.library.views import (
@@ -63,6 +62,6 @@ library_urls = [
 
 urlpatterns = [
     path("v1/", include(library_urls)),
-    url(r"^prev_status/(?P<object_pk>\d+)/$", prev_status, name="prev_status"),
-    url(r"^next_status/(?P<object_pk>\d+)/$", next_status, name="next_status"),
+    re_path(r"^prev_status/(?P<object_pk>\d+)/$", prev_status, name="prev_status"),
+    re_path(r"^next_status/(?P<object_pk>\d+)/$", next_status, name="next_status"),
 ]
