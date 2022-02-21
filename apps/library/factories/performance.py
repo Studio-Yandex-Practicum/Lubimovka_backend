@@ -7,8 +7,8 @@ from django.conf import settings
 from faker import Faker
 
 from apps.core.decorators import restrict_factory
+from apps.core.factories import ImageFactory
 from apps.core.models import Person, Role
-from apps.core.tests.factories import ImageFactory
 from apps.core.utils import get_picsum_image
 from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview, Play
 
@@ -133,13 +133,14 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
             [TeamMemberFactory.create(reading=self, role_slug=role_slug) for role_slug in role_slugs]
 
     @classmethod
-    def complex_create(cls):
+    def complex_create(cls, count=1):
         """Create Performance object with fully populated fields.
 
         You should create at least one Play and Project
         before use this method.
         """
-        return cls.create(
+        return cls.create_batch(
+            count,
             add_video=True,
             add_images_in_block=True,
             add_review=True,
@@ -153,6 +154,7 @@ class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = PerformanceMediaReview
+        django_get_or_create = ("url",)
 
     class Params:
         add_real_image = factory.Trait(

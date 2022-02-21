@@ -181,9 +181,10 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         self.plays.add(*plays)
 
     @classmethod
-    def complex_create(cls):
+    def complex_create(cls, count=1):
         """Create Author object with fully populated fields."""
-        return cls.create(
+        return cls.create_batch(
+            count,
             add_achievement=3,
             add_social_network_link=3,
             add_other_link=3,

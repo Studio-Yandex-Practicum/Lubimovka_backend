@@ -1,21 +1,51 @@
-import os
+import os  # noqa
 
 from .base import *  # noqa
 
 # GENERAL
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#debug
+DEBUG = env("DEBUG", default=True)
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
-
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = env.list(
     "DJANGO_ALLOWED_HOSTS",
-    default=[".lyubimovka.ru"],
+    default=["127.0.0.1"],
 )
 
-# DATABASES
-# -----------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+# django-debug-toolbar
+# ------------------------------------------------------------------------------
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
+INSTALLED_APPS += ["debug_toolbar"]  # noqa: F405
+# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
+MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa: F405
+# https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
+DEBUG_TOOLBAR_CONFIG = {
+    "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
+    "SHOW_COLLAPSED": True,
+    "SHOW_TEMPLATE_CONTEXT": True,
+    "SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG,
+}
+
+INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
+
+# Add in INTERNAL_IPS internal IP of the docker container if DEGUG == True.
+if env("DEBUG"):
+    import socket
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
+    try:
+        _, _, ips = socket.gethostbyname_ex("node")
+        INTERNAL_IPS.extend(ips)
+    except socket.gaierror:
+        # The node container isn't started (yet?)
+        pass
+
+# Use PostgreSQL
+# ------------------------------------------------------------------------------
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
@@ -26,9 +56,6 @@ DATABASES = {
         "PORT": os.environ.get("POSTGRES_PORT"),
     }
 }
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
 
 # SECURE_PROXY_SSL_HEADER
 # -----------------------------------------------------------------------------
