@@ -20,6 +20,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
 ROOT_URLCONF = "config.urls"
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = "config.wsgi.application"
 
@@ -183,14 +184,14 @@ EMAIL_TIMEOUT = 5
 # Use CKEditor (Configuration)
 # ------------------------------------------------------------------------------
 CKEDITOR_CONFIGS = {
-    'default': {
+    "default": {
         "removePlugins": "elementspath",
-        "removeDialogTabs": 'dialog:advanced',
-        'toolbar': 'Custom',
-        'toolbar_Custom': [
-            ['Undo', 'Redo'],
-            ['Bold', 'Italic', 'Underline', 'Strike'],
-            ['Link', 'Unlink'],
-        ]
+        "removeDialogTabs": "dialog:advanced",
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Undo", "Redo"],
+            ["Bold", "Italic", "Underline", "Strike"],
+            ["Link", "Unlink"],
+        ],
     }
 }

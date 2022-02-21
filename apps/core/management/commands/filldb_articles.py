@@ -2,9 +2,7 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.articles.tests.factories.blog_factory import BlogFactory
-from apps.articles.tests.factories.news_factory import NewsFactory
-from apps.articles.tests.factories.project_factory import ProjectFactory
+from apps.articles.factories import BlogItemFactory, NewsItemFactory, ProjectFactory
 
 
 def notification(command, objects, text):
@@ -16,9 +14,9 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:
-            blog_items = BlogFactory.complex_create(5)
+            blog_items = BlogItemFactory.complex_create(5)
             notification(self, blog_items, "блогов")
-            news_items = NewsFactory.complex_create(5)
+            news_items = NewsItemFactory.complex_create(5)
             notification(self, news_items, "новостей")
             projects_item = ProjectFactory.complex_create(5)
             notification(self, projects_item, "проектов")

@@ -47,11 +47,5 @@ ANYMAIL = {
 }
 
 # https://anymail.readthedocs.io/en/stable/installation/?highlight=SERVER_EMAIL#configuring-django-s-email-backend
-SERVER_EMAIL = env(
-    "SERVER_EMAIL",
-    default="service@lyubimovka.ru",
-)
-DEFAULT_FROM_EMAIL = env(
-    "DEFAULT_FROM_EMAIL",
-    default="lyubimovka@lyubimovka.ru",
-)
+SERVER_EMAIL = env("SERVER_EMAIL", default=None)
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=None)

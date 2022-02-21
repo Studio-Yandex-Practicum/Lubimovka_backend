@@ -70,7 +70,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          file: Dockerfile
+          file: Dockerfile_dev
           labels: runnumber=${GITHUB_RUN_ID}
           push: true
           tags: |
@@ -133,6 +133,7 @@ jobs:
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-test
 
             # Django environment variables
+            echo DEBUG=${{ secrets.DEBUG }} >> .env-test
             echo DJANGO_SETTINGS_MODULE=${{ secrets.DJANGO_SETTINGS_MODULE }} >> .env-test
             echo DJANGO_SECRET_KEY=${{ secrets.DJANGO_SECRET_KEY }} >> .env-test
             echo DJANGO_ALLOWED_HOSTS=${{ secrets.DJANGO_ALLOWED_HOSTS }} >> .env-test
@@ -145,11 +146,20 @@ jobs:
             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-test
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-test
 
+            # Secrets variables for google sheets in Django:
+            echo GOOGLE_PRIVATE_KEY_ID=${{ secrets.GOOGLE_PRIVATE_KEY_ID }} >> .env-test
+            echo GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }} >> .env-test
+
             # Swag environment variables
             echo PUID=${{ secrets.PUID }} >> .env-test
             echo PGID=${{ secrets.PGID }} >> .env-test
             echo URL=${{ secrets.URL }} >> .env-test
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
+
+            # Уделение старых данных
+            systemctl stop lubimovka-frontend.service
+            systemctl stop lubimovka-backend.service
+            docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
 
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create test_db_network || true
