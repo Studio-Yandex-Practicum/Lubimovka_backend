@@ -3,7 +3,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person
-from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
+from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Sponsor, Volunteer
 
 
 class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
@@ -196,6 +196,6 @@ admin.site.register(PressRelease, PressReleaseAdmin)
 admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)
-admin.site.register(FestivalTeam, FestivalTeamAdmin)
+admin.site.register(FestivalTeamMember, FestivalTeamAdmin)
 admin.site.register(Volunteer, VolunteerAdmin)
 admin.site.register(Sponsor, SponsorAdmin)
