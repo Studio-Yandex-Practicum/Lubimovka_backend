@@ -24,6 +24,8 @@ def add_playsupply_settings(apps, schema_editor):
         settings_key="form_to_submit_a_play",
     )
     form_to_submit_a_play.group = "PLAY_SUPPLY"
+    form_to_submit_a_play.description="Открыт приём пьес"
+    form_to_submit_a_play.settings_key="plays_reception_is_open"
     form_to_submit_a_play.save()
 
 

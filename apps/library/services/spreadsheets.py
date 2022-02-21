@@ -126,6 +126,39 @@ class GoogleSpreadsheets:
                         "fields": "gridProperties.frozenRowCount",
                     },
                 },
+                {  # set autoResize for column
+                    "autoResizeDimensions": {
+                        "dimensions": {
+                            "sheetId": sheet_id,
+                            "dimension": "COLUMNS",
+                            "startIndex": 0,
+                            "endIndex": 10,
+                        }
+                    }
+                },
+            ],
+        }
+        request = service.spreadsheets().batchUpdate(
+            spreadsheetId=self.spreadsheet_id,
+            body=body,
+        )
+        request.execute()
+
+    def _set_autosize(self, service) -> None:
+        sheet_id = self._get_sheet_id_by_title(service=service)
+        body = {
+            "includeSpreadsheetInResponse": False,
+            "requests": [
+                {
+                    "autoResizeDimensions": {
+                        "dimensions": {
+                            "sheetId": sheet_id,
+                            "dimension": "COLUMNS",
+                            "startIndex": 0,
+                            "endIndex": 10,
+                        }
+                    }
+                }
             ],
         }
         request = service.spreadsheets().batchUpdate(
@@ -181,6 +214,7 @@ class GoogleSpreadsheets:
             )
         )
         request.execute()
+        self._set_autosize(service=service)
         service.spreadsheets().close()
         return True
 
