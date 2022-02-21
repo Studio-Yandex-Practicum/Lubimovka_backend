@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-def add_google_settings(apps, schema_editor):
+def add_playsupply_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
 
@@ -20,12 +20,21 @@ def add_google_settings(apps, schema_editor):
         text="Лист1",
         description="Наименование листа Google таблицы",
     )
+    form_to_submit_a_play = Setting.objects.get_or_create(
+        field_type="BOOLEAN",
+        group="GENERAL",
+        settings_key="form_to_submit_a_play",
+        boolean=True,
+        description="Форма для отправки пьесы",
+    )
+    form_to_submit_a_play.group = "PLAY_SUPPLY"
+    form_to_submit_a_play.save()
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0009_alter_setting_group'),
+        ('core', '0010_alter_setting_group'),
         ('main', '0001_initial'),
     ]
 
@@ -44,6 +53,6 @@ class Migration(migrations.Migration):
             bases=('core.setting',),
         ),
         migrations.RunPython(
-            add_google_settings,
+            add_playsupply_settings,
         )
     ]
