@@ -4,7 +4,7 @@ from typing import Optional
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
-from apps.main.models import SettingGoogleExport
+from apps.main.models import SettingPlaySupply
 from config.settings.base import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
@@ -32,8 +32,8 @@ class GoogleSpreadsheets:
         self.range = None
 
     def _get_settings(self):
-        self.spreadsheet_id = SettingGoogleExport.get_setting("SPREADSHEET_ID")
-        self.sheet = SettingGoogleExport.get_setting("SHEET")
+        self.spreadsheet_id = SettingPlaySupply.get_setting("SPREADSHEET_ID")
+        self.sheet = SettingPlaySupply.get_setting("SHEET")
         self.range = self.sheet + "!A1"
 
     def _get_instance_values(self, instance, domain) -> dict:

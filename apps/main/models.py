@@ -100,11 +100,11 @@ class SettingAfishaScreen(Setting):
         verbose_name_plural = "Настройки афиши"
 
 
-class SettingGoogleExport(Setting):
+class SettingPlaySupply(Setting):
     objects = SettingGroupManager()
-    group_name = "GOOGLE_EXPORT"
+    group_name = "PLAY_SUPPLY"
 
     class Meta:
         proxy = True
-        verbose_name = "Настройки выгрузки в Google таблицу"
-        verbose_name_plural = "Настройки выгрузки в Google таблицу"
+        verbose_name = "Настройки подачи пьес"
+        verbose_name_plural = "Настройки  подачи пьес"

@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='setting',
             name='group',
-            field=models.CharField(choices=[('EMAIL', 'Почта'), ('MAIN', 'Главная'), ('FIRST_SCREEN', 'Первая страница'), ('GENERAL', 'Общие'), ('AFISHA', 'Афиша'), ('GOOGLE_EXPORT', 'Экспорт в GOOGLE таблицу')], default='GENERAL', max_length=50, verbose_name='Группа настроек'),
+            field=models.CharField(choices=[('EMAIL', 'Почта'), ('MAIN', 'Главная'), ('FIRST_SCREEN', 'Первая страница'), ('GENERAL', 'Общие'), ('AFISHA', 'Афиша'), ('PLAY_SUPPLY', 'Подача пьес')], default='GENERAL', max_length=50, verbose_name='Группа настроек'),
         ),
     ]

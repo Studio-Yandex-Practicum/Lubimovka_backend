@@ -9,8 +9,8 @@ from apps.main.models import (
     SettingEmail,
     SettingFirstScreen,
     SettingGeneral,
-    SettingGoogleExport,
     SettingMain,
+    SettingPlaySupply,
 )
 
 
@@ -23,7 +23,7 @@ class BannerAdmin(admin.ModelAdmin):
     )
 
 
-@admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen, SettingAfishaScreen, SettingGoogleExport)
+@admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen, SettingAfishaScreen, SettingPlaySupply)
 class SettingAdmin(admin.ModelAdmin):
     list_display = (
         "description",

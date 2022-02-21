@@ -191,7 +191,7 @@ class Setting(BaseModel):
         FIRST_SCREEN = "FIRST_SCREEN", _("Первая страница")
         GENERAL = "GENERAL", _("Общие")
         AFISHA = "AFISHA", _("Афиша")
-        GOOGLE_EXPORT = "GOOGLE_EXPORT", _("Экспорт в GOOGLE таблицу")
+        GOOGLE_EXPORT = "PLAY_SUPPLY", _("Подача пьес")
 
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")

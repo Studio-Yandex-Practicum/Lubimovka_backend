@@ -4,7 +4,7 @@ from pathlib import Path
 import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-environ.Env.read_env(os.path.join(ROOT_DIR, '.env'))
+environ.Env.read_env(ROOT_DIR/'.env')
 
 from .base import *  # noqa
 
