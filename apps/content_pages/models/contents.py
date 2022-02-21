@@ -1,4 +1,4 @@
-from typing import Dict, Tuple
+from typing import Tuple
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -118,7 +118,7 @@ class AbstractContent(models.Model):
     def __str__(self):
         return f"Блок/элемент — {self.item}"
 
-    def delete(self, *args, **kwargs) -> Tuple[int, Dict[str, int]]:
+    def delete(self, *args, **kwargs) -> Tuple[int, dict[str, int]]:
         """Delete related item with generic relation."""
         super_delete_result = super().delete(*args, **kwargs)
         return content_delete_generic_related_items(self, super_delete_result)
