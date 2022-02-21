@@ -5,6 +5,7 @@ from apps.afisha.tests.factories import EventFactory
 from apps.articles.tests.factories.blog_factory import BlogFactory
 from apps.articles.tests.factories.news_factory import NewsFactory
 from apps.content_pages.tests.factories import ImagesBlockFactory
+from apps.core.models import Status
 from apps.core.tests.factories import ImageFactory, PersonFactory
 from apps.info.tests.factories import FestivalFactory, PlaceFactory
 from apps.library.models.play import ProgramType
@@ -26,13 +27,13 @@ def festival(images):
 
 @pytest.fixture
 def play(festival):
-    return PlayFactory(status="ready_for_publish")
+    return PlayFactory(status=Status.objects.get(name="Опубликовано"))
 
 
 @pytest.fixture
 def play_in_short_list(festival):
     short_list_program_type = ProgramType.objects.get(slug="short-list")
-    return PlayFactory(status="ready_for_publish", program=short_list_program_type)
+    return PlayFactory(status=Status.objects.get(name="Опубликовано"), program=short_list_program_type)
 
 
 @pytest.fixture
@@ -67,7 +68,7 @@ def news(plays, images_block):
             add_several_playsblock=1,
             add_several_imagesblock=1,
             add_several_personsblock=1,
-            status="published",
+            status=Status.objects.get(name="Опубликовано"),
         )
     )
 

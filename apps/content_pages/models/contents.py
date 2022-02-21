@@ -2,11 +2,10 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.querysets import ContenPageQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.models import BaseModel
+from apps.core.models import BaseModel, Status
 
 
 class AbstractContentPage(BaseModel):
@@ -23,13 +22,6 @@ class AbstractContentPage(BaseModel):
     записи)
     """
 
-    class SelectStatus(models.TextChoices):
-        IN_PROGRESS = "in_progres", _("в работе")
-        REVIEW = "review", _("на проверке")
-        READY_FOR_PUBLISH = "ready_for_publish", _("готово к публикации")
-        PUBLISHED = "published", _("опубликовано")
-        REMOVED_FROM_PUBLISH = "removed_from_publish", _("снято с публикации")
-
     description = models.TextField(
         max_length=500,
         verbose_name="Описание",
@@ -39,11 +31,11 @@ class AbstractContentPage(BaseModel):
         blank=True,
         verbose_name="Заглавная картинка",
     )
-    status = models.CharField(
-        max_length=25,
-        default="in_progres",
-        choices=SelectStatus.choices,
+    status = models.ForeignKey(
+        Status,
+        on_delete=models.PROTECT,
         verbose_name="Статус",
+        default=1,
     )
     pub_date = models.DateTimeField(
         default=timezone.now,
@@ -62,6 +54,7 @@ class AbstractContentPage(BaseModel):
         verbose_name = "Шаблон объекта с сложной версткой"
         verbose_name_plural = "Шаблоны объектов с сложной версткой"
         ordering = ("-modified",)
+        permissions = (("can_publish_content", "Может опубликовать контент"),)
 
     def __str__(self):
         return self.title

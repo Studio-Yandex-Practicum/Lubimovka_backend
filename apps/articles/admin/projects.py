@@ -32,7 +32,6 @@ class ProjectAdmin(BaseContentPageAdmin):
                         "image_preview_change_page",
                         "image",
                     ),
-                    "status",
                 )
             },
         ),

@@ -56,6 +56,7 @@ class Migration(migrations.Migration):
             options={
                 'verbose_name': 'Статус страницы',
                 'verbose_name_plural': 'Статусы страницы',
+                'ordering': ('ordering',),
             },
         ),
         migrations.AlterField(

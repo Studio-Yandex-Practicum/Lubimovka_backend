@@ -4,7 +4,7 @@ from django.utils import timezone
 
 from apps.afisha.models import Event
 from apps.articles.models import BlogItem, NewsItem
-from apps.core.models import Setting
+from apps.core.models import Setting, Status
 from apps.info.models import Festival, Place
 from apps.library.models import Play, ProgramType
 from apps.main.models import Banner
@@ -86,7 +86,7 @@ class MainObject:
             items = Play.objects.filter(
                 program=program,
                 festival=festival,
-                status="ready_for_publish",
+                status=Status.objects.get(name="Опубликовано"),
             )[:4]
             title = Setting.get_setting("main_short_list_title")
             self.short_list = {

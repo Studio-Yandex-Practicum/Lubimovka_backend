@@ -1,5 +1,3 @@
-import random
-
 import factory
 from django.contrib.contenttypes.models import ContentType
 from django.utils import timezone
@@ -15,7 +13,7 @@ from apps.content_pages.tests.factories import (
     TitleFactory,
 )
 from apps.core.decorators import restrict_factory
-from apps.core.models import Person, Role
+from apps.core.models import Person, Role, Status
 from apps.library.models.play import Play
 
 
@@ -94,7 +92,7 @@ class BlogFactory(factory.django.DjangoModelFactory):
         variable_nb_sentences=False,
     )
     image = factory.django.ImageField(color=factory.Faker("color"))
-    status = factory.LazyFunction(lambda: random.choice(list(BlogItem.SelectStatus)))
+    status = factory.Iterator(Status.objects.all())
     pub_date = factory.Faker("date_time", tzinfo=timezone.utc)
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
 

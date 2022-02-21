@@ -24,6 +24,5 @@ class Migration(migrations.Migration):
             model_name='play',
             name='status',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to='core.status', verbose_name='Статус'),
-            preserve_default=False,
         ),
     ]

@@ -20,6 +20,22 @@ class NewsItemContentInline(BaseContentInline):
 
 class NewsItemAdmin(BaseContentPageAdmin):
     inlines = (NewsItemContentInline,)
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "title",
+                    "pub_date",
+                    "description",
+                    (
+                        "image_preview_change_page",
+                        "image",
+                    ),
+                )
+            },
+        ),
+    )
 
 
 admin.site.register(NewsItem, NewsItemAdmin)

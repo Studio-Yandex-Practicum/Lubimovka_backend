@@ -1,0 +1,25 @@
+{% extends "admin/change_form.html" %}
+{% load i18n %}
+{% block submit_buttons_bottom %}
+    <div class="submit-row">
+        <strong> текущий статус новости: {{ original.status.get_upper_name }} </strong>
+        {% if not original.status.protected or perms.content_pages.can_publish_content %}
+            {% if original.status.prev %}
+                {% if not original.status.prev.protected or perms.content_pages.can_publish_content %}
+                    <a href="{% url 'news_prev_status' original.pk %}">
+                        <input type="button" value="{% trans original.status.previous_button_name %}" name="news_prev_status" />
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            {% if original.status.next %}
+                {% if not original.status.next.protected or perms.content_pages.can_publish_content %}
+                    <a href="{% url 'news_next_status' original.pk %}">
+                        <input type="button" value="{% trans original.status.next_button_name %}" name="news_next_status" />
+                    </a>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+    </div>
+    {{ block.super }}
+{% endblock %}

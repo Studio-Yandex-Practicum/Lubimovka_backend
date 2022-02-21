@@ -44,7 +44,6 @@ class BlogItemAdmin(BaseContentPageAdmin):
                         "image_preview_change_page",
                         "image",
                     ),
-                    "status",
                 )
             },
         ),
