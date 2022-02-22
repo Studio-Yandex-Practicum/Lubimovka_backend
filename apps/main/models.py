@@ -98,3 +98,13 @@ class SettingAfishaScreen(Setting):
         proxy = True
         verbose_name = "Настройки афиши"
         verbose_name_plural = "Настройки афиши"
+
+
+class SettingPlaySupply(Setting):
+    objects = SettingGroupManager()
+    group_name = "PLAY_SUPPLY"
+
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки подачи пьес"
+        verbose_name_plural = "Настройки подачи пьес"
