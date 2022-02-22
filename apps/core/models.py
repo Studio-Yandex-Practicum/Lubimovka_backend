@@ -314,14 +314,8 @@ class Status(models.Model):
         verbose_name="Требуются особые права для установки данного статуса",
         default=False,
     )
-    ordering = models.PositiveSmallIntegerField(
-        verbose_name="Порядковый номер",
-        unique=True,
-        blank=True,
-    )
 
     class Meta:
-        ordering = ("ordering",)
         verbose_name = "Статус страницы"
         verbose_name_plural = "Статусы страницы"
 

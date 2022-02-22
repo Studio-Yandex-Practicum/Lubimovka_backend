@@ -48,8 +48,8 @@ class RoleTypeAdmin(admin.ModelAdmin):
 @admin.register(Status)
 class StatusAdmin(admin.ModelAdmin):
     list_display = (
-        "ordering",
         "name",
+        "button_name",
         "protected",
     )
 

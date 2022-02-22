@@ -39,4 +39,16 @@ class Migration(migrations.Migration):
             name='status',
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.PROTECT, to='core.status', verbose_name='Статус'),
         ),
+        migrations.AlterModelOptions(
+            name='blogitem',
+            options={'ordering': ('-pub_date',), 'permissions': (('can_blog_publish', 'Может опубликовать блог'),), 'verbose_name': 'Запись блога', 'verbose_name_plural': 'Блог'},
+        ),
+        migrations.AlterModelOptions(
+            name='newsitem',
+            options={'ordering': ('-pub_date',), 'permissions': (('can_news_publish', 'Может опубликовать новость'),), 'verbose_name': 'Новость', 'verbose_name_plural': 'Новости'},
+        ),
+        migrations.AlterModelOptions(
+            name='project',
+            options={'ordering': ('-pub_date',), 'permissions': (('can_project_publish', 'Может опубликовать проект'),), 'verbose_name': 'Проект', 'verbose_name_plural': 'Проекты'},
+        ),
     ]

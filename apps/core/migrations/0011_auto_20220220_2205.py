@@ -8,29 +8,23 @@ def set_status(apps, schema_editor):
     Status.objects.create(
         name="В работе",
         button_name="Вернуть в работу",
-        ordering=1,
     )
     Status.objects.create(
         name="На проверке",
         button_name="Отправить на проверку",
-        ordering=2,
     )
     Status.objects.create(
         name="Готово к публикации",
         button_name="Подготовить к публикации",
-        ordering=3,
     )
     Status.objects.create(
         name="Опубликовано",
         button_name="Опубликовать",
-        ordering=4,
         protected=True,
     )
     Status.objects.create(
         name="Снято с публикации",
         button_name="Снять с публикации",
-        ordering=5,
-        protected=True,
     )
 
 class Migration(migrations.Migration):
@@ -47,12 +41,10 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=30, unique=True, verbose_name='Наименование')),
                 ('button_name', models.CharField(blank=True, max_length=55, null=True, verbose_name='Название кнопки для статуса')),
                 ('protected', models.BooleanField(default=False, verbose_name='Требуются особые права для установки данного статуса')),
-                ('ordering', models.PositiveSmallIntegerField(blank=True, unique=True, verbose_name='Порядковый номер')),
             ],
             options={
                 'verbose_name': 'Статус страницы',
                 'verbose_name_plural': 'Статусы страницы',
-                'ordering': ('ordering',),
             },
         ),
         migrations.AlterField(

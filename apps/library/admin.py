@@ -56,7 +56,10 @@ class PlayAdmin(admin.ModelAdmin):
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         play = Play.objects.get(pk=object_id)
-        statuses = Status.objects.all().exclude(name=play.status.name)
+        exclude_names = [play.status.name]
+        if not play.status.name == "Опубликовано":
+            exclude_names.append("Снято с публикации")
+        statuses = Status.objects.all().exclude(name__in=exclude_names)
         extra_context = {}
         extra_context["statuses"] = statuses
         return super().change_view(request, object_id, form_url, extra_context)

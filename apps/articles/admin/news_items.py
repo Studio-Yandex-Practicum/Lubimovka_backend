@@ -40,7 +40,10 @@ class NewsItemAdmin(BaseContentPageAdmin):
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         news = NewsItem.objects.get(pk=object_id)
-        statuses = Status.objects.all().exclude(name=news.status.name)
+        exclude_names = [news.status.name]
+        if not news.status.name == "Опубликовано":
+            exclude_names.append("Снято с публикации")
+        statuses = Status.objects.all().exclude(name__in=exclude_names)
         extra_context = {}
         extra_context["statuses"] = statuses
         return super().change_view(request, object_id, form_url, extra_context)
