@@ -91,3 +91,11 @@ def test_blog_item_list_month_filter(client, simple_blog_items_with_known_dateti
     count = response.data.get("count")
 
     assert count == 2, "Проверьте фильтрацию по месяцу. Ожидалось только 2 объекта в этом году."
+
+
+def test_blog_item_list_image_absolute_path(client, simple_blog_items_with_known_datetime):
+    response = client.get(BLOG_ITEM_LIST_URL)
+    results = response.data.get("results")
+    blog_item_image = results[0].get("image")
+
+    assert "http://" in blog_item_image, "Убедитесь, что для картинки отдается абсолютный url."
