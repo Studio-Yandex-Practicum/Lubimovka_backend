@@ -1,30 +1,20 @@
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from rest_framework import mixins, viewsets
 
 from apps.library.filters import PlayFilter
 from apps.library.models import Play
 from apps.library.serializers import PlaySerializer
-
-
-def prev_status(request, object_pk):
-    messages.info(request, "Статус успешно обновлен!")
-    play = Play.objects.get(pk=object_pk)
-    play.status = play.status.prev()
-    play.save()
-    return HttpResponseRedirect(reverse("admin:library_play_change", args=[object_pk]))
-
-
-def next_status(request, object_pk):
-    messages.info(request, "Статус успешно обновлен!")
-    play = Play.objects.get(pk=object_pk)
-    play.status = play.status.next()
-    play.save()
-    return HttpResponseRedirect(reverse("admin:library_play_change", args=[object_pk]))
+from apps.library.utilities import set_next_status, set_prev_status
 
 
 class PlayViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     queryset = Play.objects.all()
     serializer_class = PlaySerializer
     filterset_class = PlayFilter
+
+
+def play_prev_status(request, object_pk):
+    return set_prev_status(request=request, object_pk=object_pk, object_model=Play, view_name="library_play")
+
+
+def play_next_status(request, object_pk):
+    return set_next_status(request=request, object_pk=object_pk, object_model=Play, view_name="library_play")

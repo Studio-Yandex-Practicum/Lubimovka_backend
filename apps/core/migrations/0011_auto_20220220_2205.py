@@ -39,7 +39,7 @@ def set_status(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0009_alter_image_image'),
+        ('core', '0010_alter_setting_group'),
     ]
 
     operations = [

@@ -6,16 +6,16 @@
         {% if not original.status.protected or perms.library.can_publish_play %}
             {% if original.status.prev %}
                 {% if not original.status.prev.protected or perms.library.can_publish_play %}
-                    <a href="{% url 'prev_status' original.pk %}">
-                        <input type="button" value="{% trans original.status.previous_button_name %}" name="prev_status" />
+                    <a href="{% url 'play_prev_status' original.pk %}">
+                        <input type="button" value="{% trans original.status.previous_button_name %}" name="play_prev_status" />
                     </a>
                 {% endif %}
             {% endif %}
 
             {% if original.status.next %}
                 {% if not original.status.next.protected or perms.library.can_publish_play %}
-                    <a href="{% url 'next_status' original.pk %}">
-                        <input type="button" value="{% trans original.status.next_button_name %}" name="next_status" />
+                    <a href="{% url 'play_next_status' original.pk %}">
+                        <input type="button" value="{% trans original.status.next_button_name %}" name="play_next_status" />
                     </a>
                 {% endif %}
             {% endif %}

@@ -1,6 +1,3 @@
-from django.contrib import messages
-from django.http import HttpResponseRedirect
-from django.urls import reverse
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers
@@ -13,22 +10,7 @@ from apps.articles.models import BlogItem
 from apps.articles.serializers import BlogItemListSerializer, BlogItemRoleSerializer
 from apps.content_pages.serializers import BaseContentPageSerializer
 from apps.core.utils import get_paginated_response
-
-
-def blog_prev_status(request, object_pk):
-    messages.info(request, "Статус успешно обновлен!")
-    blog = BlogItem.objects.get(pk=object_pk)
-    blog.status = blog.status.prev()
-    blog.save()
-    return HttpResponseRedirect(reverse("admin:articles_blogitem_change", args=[object_pk]))
-
-
-def blog_next_status(request, object_pk):
-    messages.info(request, "Статус успешно обновлен!")
-    blog = BlogItem.objects.get(pk=object_pk)
-    blog.status = blog.status.next()
-    blog.save()
-    return HttpResponseRedirect(reverse("admin:articles_blogitem_change", args=[object_pk]))
+from apps.library.utilities import set_next_status, set_prev_status
 
 
 class BlogItemListAPI(APIView):
@@ -100,3 +82,11 @@ class BlogItemDetailAPI(APIView):
         context = {"request": request}
         serializer = self.BlogItemDetailOutputSerializer(blog_item_detail, context=context)
         return Response(serializer.data)
+
+
+def blog_prev_status(request, object_pk):
+    return set_prev_status(request=request, object_pk=object_pk, object_model=BlogItem, view_name="articles_blogitem")
+
+
+def blog_next_status(request, object_pk):
+    return set_next_status(request=request, object_pk=object_pk, object_model=BlogItem, view_name="articles_blogitem")
