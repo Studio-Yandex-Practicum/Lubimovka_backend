@@ -11,6 +11,7 @@ class NewsItem(AbstractContentPage):
         ordering = ("-pub_date",)
         verbose_name = "Новость"
         verbose_name_plural = "Новости"
+        permissions = (("can_news_publish", "Может опубликовать новость"),)
 
 
 class NewsItemContent(AbstractContent):

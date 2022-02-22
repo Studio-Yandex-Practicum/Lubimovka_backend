@@ -20,7 +20,7 @@ def set_prev_status(request, object_pk, object_model, view_name):
     instance = object_model.objects.get(pk=object_pk)
     instance.status = instance.status.prev()
     instance.save()
-    return HttpResponseRedirect(reverse(f"admin:{view_name}_change", args=[object_pk]))
+    return HttpResponseRedirect(reverse(f"admin:{view_name}_changelist"))
 
 
 def set_next_status(request, object_pk, object_model, view_name):

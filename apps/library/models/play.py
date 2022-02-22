@@ -86,7 +86,7 @@ class Play(BaseModel):
         )
         verbose_name = "Пьеса"
         verbose_name_plural = "Пьесы"
-        permissions = (("can_publish_play", "Может опубликовать пьесу"),)
+        permissions = (("can_play_publish", "Может опубликовать пьесу"),)
 
     def __str__(self):
         return self.name

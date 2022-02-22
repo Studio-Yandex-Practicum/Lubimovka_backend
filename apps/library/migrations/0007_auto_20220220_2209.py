@@ -14,7 +14,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='play',
-            options={'permissions': (('can_publish_play', 'Может опубликовать пьесу'),), 'verbose_name': 'Пьеса', 'verbose_name_plural': 'Пьесы'},
+            options={'permissions': (('can_play_publish', 'Может опубликовать пьесу'),), 'verbose_name': 'Пьеса', 'verbose_name_plural': 'Пьесы'},
         ),
         migrations.RemoveField(
             model_name='play',
