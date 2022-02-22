@@ -1,5 +1,10 @@
 from typing import Union
 
+from django.db.models import QuerySet
+from django.utils import timezone
+
+from apps.afisha.filters import AfishaEventsDateInFilter
+from apps.afisha.models import Event
 from apps.core.models import Setting
 
 
@@ -16,3 +21,19 @@ def afisha_festival_status() -> dict[str, Union[str, bool]]:
         "asterisk_text": asterisk_text,
     }
     return afisha_festival_status_data
+
+
+def afisha_events_get(filters: dict[str, str] = None) -> QuerySet:
+    """Return events filtered by date future events queryset."""
+    filters = filters or {}
+    afisha_events = (
+        Event.objects.filter(date_time__gte=timezone.now())
+        .select_related(
+            "common_event__masterclass",
+            "common_event__reading",
+            "common_event__performance",
+        )
+        .order_by("date_time")
+    )
+    filtered_afisha_events = AfishaEventsDateInFilter(filters, afisha_events).qs
+    return filtered_afisha_events

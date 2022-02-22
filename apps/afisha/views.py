@@ -1,91 +1,90 @@
-from django.utils import timezone
-from drf_spectacular.types import OpenApiTypes
-from drf_spectacular.utils import OpenApiParameter, extend_schema
+from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema, extend_schema_field
 from rest_framework import serializers
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
 from apps.afisha import selectors
 from apps.afisha.models import Event
-from apps.afisha.pagination import AfishaFestivalPagination, AfishaRegularPagination, EventPaginationMixin
-from apps.afisha.schema.schema_extension import AFISHA_EVENTS_SCHEMA_DESCRIPTION
-from apps.afisha.serializers import EventFestivalSerializer, EventRegularSerializer
-from apps.core.models import Setting
+from apps.afisha.serializers import EventRegularSerializer
+from apps.core.fields import CharacterSeparatedSerializerField
+from apps.core.utils import get_paginated_response
+from apps.library.models import MasterClass, Performance, Reading
+from apps.library.serializers import EventMasterClassSerializer, EventPerformanceSerializer, EventReadingSerializer
+
+AFISHA_EVENTS_SERIALIZER_PAIRS = {
+    MasterClass: EventMasterClassSerializer,
+    Performance: EventPerformanceSerializer,
+    Reading: EventReadingSerializer,
+}
 
 
-class EventsAPIView(EventPaginationMixin, APIView):
-    """Returns the response depending festival mode on the settings.
+class AfishaEventsAPIView(APIView):
+    """Return events. The response could be filtered by date."""
 
-    Add in finalize_response on the settings:
-        festival_status - True or False
-        description -  text under title in the afisha page
+    class AfishaEventsFilterSerializer(serializers.Serializer):
+        """Afisha events filters."""
 
-        blocks if festival mode is enabled in pagination response:
-        info_registration - the text about registration under the description,
-        asterisk_text - text with an asterisk near the title.
+        dates = CharacterSeparatedSerializerField(
+            child=serializers.DateField(required=True),
+            required=False,
+            help_text=("Support several comma-separared dates. Example: ?dates=2022-04-22,2023-04-25"),
+        )
 
-    """
+    class AfishaEventsOutputSerializer(serializers.ModelSerializer):
+        """Afisha event Output serializer."""
+
+        event_body = serializers.SerializerMethodField(
+            help_text="The response is different based on event type.",
+        )
+        date_time = serializers.DateTimeField()
+
+        @extend_schema_field(
+            PolymorphicProxySerializer(
+                component_name="Event Type objects",
+                serializers=AFISHA_EVENTS_SERIALIZER_PAIRS.values(),
+                resource_type_field_name="type",
+            )
+        )
+        def get_event_body(self, obj):
+            """Get event body type and return serialized data based on it type."""
+            event_body = obj.common_event.target_model
+            event_model = event_body._meta.model
+
+            serializer_class = AFISHA_EVENTS_SERIALIZER_PAIRS[event_model]
+            serializer = serializer_class(event_body, context=self.context)
+            return serializer.data
+
+        class Meta:
+            model = Event
+            fields = (
+                "id",
+                "type",
+                "event_body",
+                "date_time",
+                "paid",
+                "url",
+                "place",
+            )
+
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
 
     @extend_schema(
-        description=AFISHA_EVENTS_SCHEMA_DESCRIPTION,
-        responses=EventRegularSerializer,
-        parameters=[
-            OpenApiParameter(
-                "limit",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="Number of results to return per page.",
-            ),
-            OpenApiParameter(
-                "offset",
-                OpenApiTypes.INT,
-                OpenApiParameter.QUERY,
-                description="The initial index from which to return the results.",
-            ),
-        ],
+        parameters=[AfishaEventsFilterSerializer],
+        responses=AfishaEventsOutputSerializer(many=True),
     )
     def get(self, request):
-        if self.festival_status:
-            dates_queryset = (
-                Event.objects.filter(date_time__gte=timezone.now()).order_by("date").distinct("date").values("date")
-            )
-            results = []
-            if dates_queryset:
-                for date in dates_queryset:
-                    events_in_date = {
-                        "date": date["date"],
-                        "events": Event.objects.filter(date_time__date=date["date"]).order_by("date_time"),
-                    }
-                    results.append(events_in_date)
+        filters_serializer = self.AfishaEventsFilterSerializer(data=request.query_params)
+        filters_serializer.is_valid(raise_exception=True)
+        filtered_events = selectors.afisha_events_get(filters=filters_serializer.data)
 
-            paginated_results = self.paginate_queryset(results)
-            serializer = EventFestivalSerializer(paginated_results, many=True)
-            return self.get_paginated_response(serializer.data)
-
-        queryset = Event.objects.filter(date_time__gte=timezone.now()).order_by("date_time")
-        paginated_results = self.paginate_queryset(queryset)
-        serializer = EventRegularSerializer(paginated_results, many=True)
-        return self.get_paginated_response(serializer.data)
-
-    @property
-    def festival_status(self):
-        return Setting.get_setting("festival_status")
-
-    @property
-    def pagination_class(self):
-        if self.festival_status:
-            return AfishaFestivalPagination
-        return AfishaRegularPagination
-
-    def finalize_response(self, request, response, *args, **kwargs):
-        super(EventsAPIView, self).finalize_response(request, response, *args, **kwargs)
-        response.data["festival_status"] = self.festival_status
-        response.data["description"] = Setting.get_setting("afisha_description")
-
-        if self.festival_status:
-            response.data["info_registration"] = Setting.get_setting("afisha_info_festival_text")
-            response.data["asterisk_text"] = Setting.get_setting("afisha_asterisk_text")
-        return response
+        return get_paginated_response(
+            pagination_class=self.pagination_class,
+            serializer_class=EventRegularSerializer,
+            queryset=filtered_events,
+            request=request,
+            view=self,
+        )
 
 
 class AfishaFestivalStatusAPIView(APIView):
