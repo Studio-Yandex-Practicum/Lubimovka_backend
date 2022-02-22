@@ -57,7 +57,6 @@ class AbstractContentPage(BaseModel):
         verbose_name = "Шаблон объекта с сложной версткой"
         verbose_name_plural = "Шаблоны объектов с сложной версткой"
         ordering = ("-modified",)
-        permissions = (("can_publish_content", "Может опубликовать контент"),)
 
     def __str__(self):
         return self.title
