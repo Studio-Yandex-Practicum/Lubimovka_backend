@@ -11,7 +11,7 @@ from apps.library.views import (
     PlayViewSet,
     SearchResultViewSet,
 )
-from apps.library.views.play import play_next_status, play_prev_status
+from apps.library.views.play import play_status
 
 router = DefaultRouter()
 router.register(
@@ -62,6 +62,5 @@ library_urls = [
 
 urlpatterns = [
     path("v1/", include(library_urls)),
-    re_path(r"^play_prev_status/(?P<object_pk>\d+)/$", play_prev_status, name="play_prev_status"),
-    re_path(r"^play_next_status/(?P<object_pk>\d+)/$", play_next_status, name="play_next_status"),
+    re_path(r"^play_status/(?P<object_pk>\d+)/(?P<status_pk>\d+)$", play_status, name="play_status"),
 ]

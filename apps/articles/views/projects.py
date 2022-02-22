@@ -2,7 +2,7 @@ from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from apps.articles.models import Project
 from apps.articles.serializers import ProjectListSerializer, ProjectSerializer
-from apps.library.utilities import set_next_status, set_prev_status
+from apps.library.utilities import change_status
 
 
 class ProjectsViewSet(ReadOnlyModelViewSet):
@@ -19,9 +19,7 @@ class ProjectsViewSet(ReadOnlyModelViewSet):
         model = Project
 
 
-def project_prev_status(request, object_pk):
-    return set_prev_status(request=request, object_pk=object_pk, object_model=Project, view_name="articles_project")
-
-
-def project_next_status(request, object_pk):
-    return set_next_status(request=request, object_pk=object_pk, object_model=Project, view_name="articles_project")
+def project_status(request, object_pk, status_pk):
+    return change_status(
+        request=request, object_pk=object_pk, status_pk=status_pk, object_model=Project, view_name="articles_project"
+    )

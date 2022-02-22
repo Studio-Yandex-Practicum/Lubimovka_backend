@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
-from apps.core.models import Person, Role
+from apps.core.models import Person, Role, Status
 from apps.library.models import (
     Achievement,
     Author,
@@ -53,6 +53,13 @@ class PlayAdmin(admin.ModelAdmin):
         "festival__year",
     )
     exclude = ("status",)
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        play = Play.objects.get(pk=object_id)
+        statuses = Status.objects.all().exclude(name=play.status.name)
+        extra_context = {}
+        extra_context["statuses"] = statuses
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 class AchievementAdmin(admin.ModelAdmin):

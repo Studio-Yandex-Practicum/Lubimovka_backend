@@ -3,6 +3,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.utils import timezone
 
+from apps.core.models import Status
+
 
 def get_festival_year():
     if 7 <= timezone.now().month <= 12:
@@ -15,17 +17,9 @@ def generate_upload_path(instance, filename):
     return f"{instance.__class__.__name__}/{festival_year}/{filename}"
 
 
-def set_prev_status(request, object_pk, object_model, view_name):
+def change_status(request, object_pk, status_pk, object_model, view_name):
     messages.info(request, "Статус успешно обновлен!")
     instance = object_model.objects.get(pk=object_pk)
-    instance.status = instance.status.prev()
-    instance.save()
-    return HttpResponseRedirect(reverse(f"admin:{view_name}_changelist"))
-
-
-def set_next_status(request, object_pk, object_model, view_name):
-    messages.info(request, "Статус успешно обновлен!")
-    instance = object_model.objects.get(pk=object_pk)
-    instance.status = instance.status.next()
+    instance.status = Status.objects.get(pk=status_pk)
     instance.save()
     return HttpResponseRedirect(reverse(f"admin:{view_name}_change", args=[object_pk]))

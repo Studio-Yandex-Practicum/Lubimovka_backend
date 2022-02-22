@@ -304,17 +304,11 @@ class Status(models.Model):
         verbose_name="Наименование",
         unique=True,
     )
-    previous_button_name = models.CharField(
-        max_length=40,
+    button_name = models.CharField(
+        max_length=55,
         blank=True,
         null=True,
-        verbose_name="Название кнопки возврата в предыдущее состояние",
-    )
-    next_button_name = models.CharField(
-        max_length=40,
-        blank=True,
-        null=True,
-        verbose_name="Название кнопки перехода в следующее состояние",
+        verbose_name="Название кнопки для статуса",
     )
     protected = models.BooleanField(
         verbose_name="Требуются особые права для установки данного статуса",
@@ -337,11 +331,3 @@ class Status(models.Model):
     @property
     def get_upper_name(self):
         return self.name.upper()
-
-    def next(self):
-        ordering = self.ordering + 1
-        return Status.objects.get(ordering=ordering)
-
-    def prev(self):
-        ordering = self.ordering - 1
-        return Status.objects.get(ordering=ordering)

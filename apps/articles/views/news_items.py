@@ -6,7 +6,7 @@ from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
 from apps.articles.serializers import NewsItemDetailedSerializer, NewsItemListSerializer
-from apps.library.utilities import set_next_status, set_prev_status
+from apps.library.utilities import change_status
 
 
 class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
@@ -32,9 +32,7 @@ class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
         model = NewsItem
 
 
-def news_prev_status(request, object_pk):
-    return set_prev_status(request=request, object_pk=object_pk, object_model=NewsItem, view_name="articles_newsitem")
-
-
-def news_next_status(request, object_pk):
-    return set_next_status(request=request, object_pk=object_pk, object_model=NewsItem, view_name="articles_newsitem")
+def news_status(request, object_pk, status_pk):
+    return change_status(
+        request=request, object_pk=object_pk, status_pk=status_pk, object_model=NewsItem, view_name="articles_newsitem"
+    )

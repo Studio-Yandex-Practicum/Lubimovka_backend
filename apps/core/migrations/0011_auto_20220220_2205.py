@@ -7,31 +7,28 @@ def set_status(apps, schema_editor):
     Status = apps.get_model("core", "Status")
     Status.objects.create(
         name="В работе",
-        next_button_name="Отправить на проверку",
+        button_name="Вернуть в работу",
         ordering=1,
     )
     Status.objects.create(
         name="На проверке",
-        previous_button_name="Вернуть в работу",
-        next_button_name="Подготовить для публикации",
+        button_name="Отправить на проверку",
         ordering=2,
     )
     Status.objects.create(
         name="Готово к публикации",
-        previous_button_name="Вернуть на проверку",
-        next_button_name="Опубликовать",
+        button_name="Подготовить к публикации",
         ordering=3,
     )
     Status.objects.create(
         name="Опубликовано",
-        previous_button_name="Подготовить для публикации",
-        next_button_name="Снять с публикации",
+        button_name="Опубликовать",
         ordering=4,
         protected=True,
     )
     Status.objects.create(
         name="Снято с публикации",
-        previous_button_name="Опубликовать заново",
+        button_name="Снять с публикации",
         ordering=5,
         protected=True,
     )
@@ -48,8 +45,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=30, unique=True, verbose_name='Наименование')),
-                ('previous_button_name', models.CharField(blank=True, max_length=40, null=True, verbose_name='Название кнопки возврата в предыдущее состояние')),
-                ('next_button_name', models.CharField(blank=True, max_length=40, null=True, verbose_name='Название кнопки перехода в следующее состояние')),
+                ('button_name', models.CharField(blank=True, max_length=55, null=True, verbose_name='Название кнопки для статуса')),
                 ('protected', models.BooleanField(default=False, verbose_name='Требуются особые права для установки данного статуса')),
                 ('ordering', models.PositiveSmallIntegerField(blank=True, unique=True, verbose_name='Порядковый номер')),
             ],
