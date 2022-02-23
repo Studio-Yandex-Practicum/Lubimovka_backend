@@ -29,10 +29,14 @@ class FeedbackAPIView(APIView):
             "email_on_about_festival_page": email_on_about_festival_page,
             "email_on_acceptance_of_plays_page": email_on_acceptance_of_plays_page,
             "email_on_author_page": email_on_author_page,
-            "photo_gallery_facebook_link": photo_gallery_facebook_link,
-            "pr_manager_name": pr_manager_name,
-            "pr_manager_email": pr_manager.email,
-            "pr_manager_photo_link": pr_manager,
+            "for_press": {
+                "pr_manager": {
+                    "pr_manager_name": pr_manager_name,
+                    "pr_manager_email": pr_manager.email,
+                    "pr_manager_photo_link": pr_manager.image,
+                },
+                "photo_gallery_facebook_link": photo_gallery_facebook_link,
+            },
         }
-        serializer = FeedbackSerializer(data, context={"request": request})
+        serializer = FeedbackSerializer(data, context={"request": self.request})
         return Response(serializer.data)

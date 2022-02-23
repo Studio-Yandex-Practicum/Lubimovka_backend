@@ -1,5 +1,6 @@
 from django import forms
 
+from apps.core.models import Setting
 from apps.info.models import FestivalTeam
 
 
@@ -8,6 +9,12 @@ class FestivalTeamMemberForm(forms.ModelForm):
 
     Плюс дополнительное поле о данных о PR-менеджере.
     """
+
+    def __init__(self, *args, **kwargs):
+        super(FestivalTeamMemberForm, self).__init__(*args, **kwargs)
+        if self["is_pr_manager"].value():
+            pr_manager_name = Setting.objects.filter(settings_key="pr_manager_name").first()
+            self.fields["data_manager"].initial = pr_manager_name.text
 
     data_manager = forms.CharField(
         label="Данные о PR-менеджере (в дательном падеже)",

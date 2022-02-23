@@ -1,14 +1,15 @@
 from rest_framework import serializers
 
-from apps.core.models import Person
+
+class PRManager(serializers.Serializer):
+    pr_manager_name = serializers.CharField(max_length=60)
+    pr_manager_email = serializers.EmailField()
+    pr_manager_photo_link = serializers.ImageField()
 
 
-class PhotoManagerSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField()
-
-    class Meta:
-        model = Person
-        fields = ("image",)
+class ForPress(serializers.Serializer):
+    pr_manager = PRManager()
+    photo_gallery_facebook_link = serializers.URLField()
 
 
 class FeedbackSerializer(serializers.Serializer):
@@ -18,7 +19,4 @@ class FeedbackSerializer(serializers.Serializer):
     email_on_about_festival_page = serializers.EmailField()
     email_on_acceptance_of_plays_page = serializers.EmailField()
     email_on_author_page = serializers.EmailField()
-    photo_gallery_facebook_link = serializers.URLField()
-    pr_manager_name = serializers.CharField(max_length=60)
-    pr_manager_email = serializers.EmailField()
-    pr_manager_photo_link = PhotoManagerSerializer()
+    for_press = ForPress()
