@@ -25,7 +25,7 @@ articles_urls = [
 
 urlpatterns = [
     path("v1/", include(articles_urls)),
-    path("blog_status/<int:object_pk>/<str:status/", blog_status, name="blog_status"),
-    path("news_status/<int:object_pk>/<str:status/", news_status, name="news_status"),
-    path("project_status/<int:object_pk>/<str:status/", project_status, name="project_status"),
+    path("blog_status/<int:object_pk>/<str:status>/", blog_status, name="blog_status"),
+    path("news_status/<int:object_pk>/<str:status>/", news_status, name="news_status"),
+    path("project_status/<int:object_pk>/<str:status>/", project_status, name="project_status"),
 ]

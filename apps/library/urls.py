@@ -62,5 +62,5 @@ library_urls = [
 
 urlpatterns = [
     path("v1/", include(library_urls)),
-    path("play_status/(<int:object_pk>/<str:status>/", play_status, name="play_status"),
+    path("play_status/<int:object_pk>/<str:status>/", play_status, name="play_status"),
 ]
