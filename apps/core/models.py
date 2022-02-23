@@ -35,7 +35,7 @@ class BaseModel(models.Model):
 
 class Image(BaseModel):
     image = models.ImageField(
-        upload_to="images/",
+        upload_to="images/core/",
         verbose_name="Изображение",
         help_text="Загрузите фотографию",
     )
@@ -95,7 +95,7 @@ class Person(BaseModel):
         ]
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.last_name} {self.first_name}"
 
     @property
     @admin.display(description="Имя и фамилия")
@@ -180,7 +180,8 @@ class RoleType(models.Model):
         verbose_name_plural = "Типы ролей"
 
     def __str__(self):
-        return str(dict(self.SelectRoleType.choices)[self.role_type])
+        role_label = RoleType.SelectRoleType(self.role_type).label
+        return str(role_label)
 
 
 class Setting(BaseModel):
@@ -190,6 +191,7 @@ class Setting(BaseModel):
         FIRST_SCREEN = "FIRST_SCREEN", _("Первая страница")
         GENERAL = "GENERAL", _("Общие")
         AFISHA = "AFISHA", _("Афиша")
+        GOOGLE_EXPORT = "PLAY_SUPPLY", _("Подача пьес")
 
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")

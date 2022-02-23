@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
-from django.utils import timezone
 
 from apps.core.models import BaseModel
 from apps.library.models import MasterClass, Performance, Reading
@@ -93,10 +92,10 @@ class Event(BaseModel):
 
     def __str__(self):
         event_name = self.common_event.target_model
-        event_type_cyrillic = str(dict(self.EventType.choices)[self.type])
+        event_label = self.EventType(self.type).label
         event_date = self.date_time.date().strftime("%d.%m.%Y")
         event_time = self.date_time.time().strftime("%H:%M")
-        return f'{event_type_cyrillic} - "{event_name}". Дата: {event_date}. Время: {event_time}.'
+        return f'{event_label} - "{event_name}". Дата: {event_date}. Время: {event_time}'
 
     def save(self, *args, **kwargs):
         allowed_event_types = {
@@ -109,8 +108,8 @@ class Event(BaseModel):
         super().save(*args, **kwargs)
 
     def clean(self):
-        if self.date_time is not None and self.date_time <= timezone.now():
-            raise ValidationError("Невозможно создать событие в прошлом.")
+        if self.date_time is None:
+            raise ValidationError("Невозможно создать событие без указания даты и времени.")
         return super().clean()
 
 

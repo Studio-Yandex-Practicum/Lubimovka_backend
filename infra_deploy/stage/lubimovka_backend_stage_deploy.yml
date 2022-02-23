@@ -1,0 +1,58 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:13.3
+    container_name: postgres_stage
+    restart: always
+    volumes:
+      - postgres_data_stage:/var/lib/postgresql/data
+    env_file:
+      - .env-stage
+    networks:
+      - stage_db_network
+  backend:
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
+    container_name: backend_stage
+    restart: always
+    volumes:
+      - static_value_stage:/code/staticfiles/
+      - media_value_stage:/code/media/
+    depends_on:
+      - postgres
+    env_file:
+      - .env-stage
+    networks:
+      - stage_db_network
+      - stage_swag_network
+  migrations:
+    image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
+    container_name: migrations_stage
+    volumes:
+      - static_value_stage:/code/staticfiles/
+      - media_value_stage:/code/media/
+    command: >
+      sh -c "python manage.py migrate &&
+             python manage.py collectstatic --noinput"
+    depends_on:
+      - backend
+    env_file:
+      - .env-stage
+    networks:
+      - stage_db_network
+
+networks:
+  stage_db_network:
+    name: stage_db_network
+    external: true
+  stage_swag_network:
+    name: stage_swag_network
+    external: true
+
+volumes:
+  postgres_data_stage:
+    name: postgres_data_stage
+  static_value_stage:
+    name: static_value_stage
+  media_value_stage:
+    name: media_value_stage

@@ -15,7 +15,6 @@ handler404 = error404
 handler500 = error500
 
 apps_patterns = [
-    # path("", include("apps.users.urls")),
     path("", include("apps.content_pages.urls")),
     path("", include("apps.afisha.urls")),
     path("", include("apps.articles.urls")),

@@ -75,7 +75,7 @@ class FestivalTeam(BaseModel):
         verbose_name_plural = "Команды фестиваля"
         constraints = [
             UniqueConstraint(
-                fields=["person", "team"],
+                fields=("person", "team"),
                 name="unique_person_team",
             )
         ]
@@ -136,7 +136,10 @@ class Place(BaseModel):
         verbose_name = "Площадка"
         verbose_name_plural = "Площадки"
         constraints = [
-            models.UniqueConstraint(fields=["name", "city"], name="unique_place"),
+            models.UniqueConstraint(
+                fields=("name", "city"),
+                name="unique_place",
+            ),
         ]
 
     def __str__(self):
@@ -197,7 +200,11 @@ class Festival(BaseModel):
         max_length=10,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
     )  # При изменении - скорректировать фабрику в части создания данного поля
-    press_release_image = models.ImageField(verbose_name="Изображение для страницы пресс-релизов")
+    press_release_image = models.ImageField(
+        upload_to="images/info/press_releases",
+        blank=True,
+        verbose_name="Изображение для страницы пресс-релизов",
+    )
 
     class Meta:
         verbose_name = "Фестиваль"
@@ -249,9 +256,10 @@ class Volunteer(BaseModel):
     class Meta:
         verbose_name = "Волонтёр фестиваля"
         verbose_name_plural = "Волонтёры фестиваля"
+        ordering = ("person__last_name",)
         constraints = [
             UniqueConstraint(
-                fields=["person", "festival"],
+                fields=("person", "festival"),
                 name="unique_volunteer",
             )
         ]
@@ -269,6 +277,8 @@ class Volunteer(BaseModel):
                 raise ValidationError("Укажите email для волонтёра")
             if not self.person.image:
                 raise ValidationError("Для волонтёра необходимо выбрать его фото")
+            if not self.person.city:
+                raise ValidationError("Укажите город проживания волонтёра")
 
     def _has_person_before_saving(self):
         return self.person_id is not None
