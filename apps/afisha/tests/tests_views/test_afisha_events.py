@@ -64,7 +64,8 @@ def test_afisha_events_date_filter(client, freezer, dates_query_param, expected_
 
 @pytest.mark.freeze_time("2021-09-01")
 @pytest.mark.parametrize("expected_field", ("id", "type", "event_body", "date_time", "paid", "url", "place"))
-def test_afisha_events_fields(client, expected_field, four_events_october):
+def test_afisha_events_results_level_expected_fields(client, expected_field, four_events_october):
+    """Check all expected fields persists in `results`."""
     response_data = client.get(AFISHA_EVENTS_URL).data
     first_event = response_data.get("results")[0]
 
