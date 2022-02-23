@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from apps.library.utilities.play_status import play_status
 from apps.library.views import (
     AuthorsReadViewSet,
     ParticipationViewSet,
@@ -10,7 +11,6 @@ from apps.library.views import (
     PlayFiltersAPIView,
     PlayViewSet,
     SearchResultViewSet,
-    play_status,
 )
 
 router = DefaultRouter()

@@ -1,8 +1,8 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from apps.articles.utilities.articles_status import blog_status, news_status, project_status
 from apps.articles.views import BlogItemDetailAPI, BlogItemListAPI, NewsItemsViewSet, ProjectsViewSet
-from apps.articles.views.articles_status import blog_status, news_status, project_status
 
 router = DefaultRouter()
 router.register(
