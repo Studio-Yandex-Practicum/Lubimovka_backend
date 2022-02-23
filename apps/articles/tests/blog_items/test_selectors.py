@@ -6,7 +6,6 @@ from apps.articles.factories.blog_items import BlogPersonFactory
 from apps.articles.models import BlogItem
 from apps.articles.selectors import blog_item_detail_get
 from apps.core.factories import PersonFactory, RoleFactory
-from apps.core.models import Status
 
 pytestmark = [pytest.mark.django_db]
 
@@ -30,7 +29,7 @@ def role_translator():
 
 @pytest.fixture
 def blog_item_with_persons(three_persons, role_text, role_translator):
-    blog_item = BlogItemFactory(status=Status.objects.get(name="Опубликовано"))
+    blog_item = BlogItemFactory(status="PUBLISHED")
     first_person, second_person, third_person = three_persons
     BlogPersonFactory(blog=blog_item, person=first_person, role=role_text)
     BlogPersonFactory(blog=blog_item, person=second_person, role=role_text)

@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
-from apps.core.models import Status
 
 
 class BlogPersonInline(admin.TabularInline):
@@ -52,10 +51,10 @@ class BlogItemAdmin(BaseContentPageAdmin):
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         blog = BlogItem.objects.get(pk=object_id)
-        exclude_names = [blog.status.name]
-        if not blog.status.name == "Опубликовано":
-            exclude_names.append("Снято с публикации")
-        statuses = Status.objects.all().exclude(name__in=exclude_names)
+        statuses = dict(blog.STATUS_INFO)
+        statuses.pop(blog.status, None)
+        if not blog.status == "PUBLISHED":
+            statuses.pop("REMOVED_FROM_PUBLICATION", None)
         extra_context = {}
         extra_context["statuses"] = statuses
         return super().change_view(request, object_id, form_url, extra_context)

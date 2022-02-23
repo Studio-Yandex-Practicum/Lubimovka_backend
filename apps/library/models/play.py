@@ -1,7 +1,8 @@
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.utils.translation import gettext_lazy as _
 
-from apps.core.models import BaseModel, Status
+from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.info.models import Festival
 from apps.library.validators import year_validator
@@ -33,6 +34,21 @@ class ProgramType(BaseModel):
 
 
 class Play(BaseModel):
+    class PlayStatus(models.TextChoices):
+        IN_PROCESS = "IN_PROCESS", _("В работе")
+        REVIEW = "REVIEW", _("На проверке")
+        READY_FOR_PUBLICATION = "READY_FOR_PUBLICATION", _("Готово к публикации")
+        PUBLISHED = "PUBLISHED", _("Опубликовано")
+        REMOVED_FROM_PUBLICATION = "REMOVED_FROM_PUBLICATION", _("Снято с публикации")
+
+    STATUS_INFO = {
+        "IN_PROCESS": ("Вернуть в работу", False),
+        "REVIEW": ("Отправить на проверку", False),
+        "READY_FOR_PUBLICATION": ("Подготовить к публикации", False),
+        "PUBLISHED": ("ОПУБЛИКОВАТЬ", True),
+        "REMOVED_FROM_PUBLICATION": ("Снять с публикации", False),
+    }
+
     name = models.CharField(
         max_length=70,
         unique=True,
@@ -70,11 +86,11 @@ class Play(BaseModel):
         related_name="plays",
         verbose_name="Фестиваль",
     )
-    status = models.ForeignKey(
-        Status,
-        on_delete=models.PROTECT,
+    status = models.CharField(
+        choices=PlayStatus.choices,
+        default="IN_PROCESS",
+        max_length=35,
         verbose_name="Статус",
-        default=1,
     )
 
     class Meta:

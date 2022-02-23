@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
-from apps.core.models import Person, Role, Status
+from apps.core.models import Person, Role
 from apps.library.models import (
     Achievement,
     Author,
@@ -56,10 +56,10 @@ class PlayAdmin(admin.ModelAdmin):
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         play = Play.objects.get(pk=object_id)
-        exclude_names = [play.status.name]
-        if not play.status.name == "Опубликовано":
-            exclude_names.append("Снято с публикации")
-        statuses = Status.objects.all().exclude(name__in=exclude_names)
+        statuses = dict(play.STATUS_INFO)
+        statuses.pop(play.status, None)
+        if not play.status == "PUBLISHED":
+            statuses.pop("REMOVED_FROM_PUBLICATION", None)
         extra_context = {}
         extra_context["statuses"] = statuses
         return super().change_view(request, object_id, form_url, extra_context)

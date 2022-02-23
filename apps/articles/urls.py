@@ -1,10 +1,8 @@
-from django.urls import include, path, re_path
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from apps.articles.views import BlogItemDetailAPI, BlogItemListAPI, NewsItemsViewSet, ProjectsViewSet
-from apps.articles.views.blog_items import blog_status
-from apps.articles.views.news_items import news_status
-from apps.articles.views.projects import project_status
+from apps.articles.views.articles_status import blog_status, news_status, project_status
 
 router = DefaultRouter()
 router.register(
@@ -27,7 +25,7 @@ articles_urls = [
 
 urlpatterns = [
     path("v1/", include(articles_urls)),
-    re_path(r"^blog_status/(?P<object_pk>\d+)/(?P<status_pk>\d+)$", blog_status, name="blog_status"),
-    re_path(r"^news_status/(?P<object_pk>\d+)/(?P<status_pk>\d+)$", news_status, name="news_status"),
-    re_path(r"^project_status/(?P<object_pk>\d+)/(?P<status_pk>\d+)$", project_status, name="project_status"),
+    path("blog_status/<int:object_pk>/<str:status/", blog_status, name="blog_status"),
+    path("news_status/<int:object_pk>/<str:status/", news_status, name="news_status"),
+    path("project_status/<int:object_pk>/<str:status/", project_status, name="project_status"),
 ]

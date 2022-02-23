@@ -10,7 +10,6 @@ from apps.articles.models import BlogItem
 from apps.articles.serializers import BlogItemListSerializer, BlogItemRoleSerializer
 from apps.content_pages.serializers import BaseContentPageSerializer
 from apps.core.utils import get_paginated_response
-from apps.library.utilities import change_status
 
 
 class BlogItemListAPI(APIView):
@@ -82,9 +81,3 @@ class BlogItemDetailAPI(APIView):
         context = {"request": request}
         serializer = self.BlogItemDetailOutputSerializer(blog_item_detail, context=context)
         return Response(serializer.data)
-
-
-def blog_status(request, object_pk, status_pk):
-    return change_status(
-        request=request, object_pk=object_pk, status_pk=status_pk, object_model=BlogItem, view_name="articles_blogitem"
-    )

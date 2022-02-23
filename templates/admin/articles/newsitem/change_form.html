@@ -2,11 +2,11 @@
 {% load i18n %}
 {% block submit_buttons_bottom %}
     <div class="submit-row">
-        <strong> текущий статус новости: {{ original.status.get_upper_name }} </strong>
-        {% for status in statuses %}
-            {% if not status.protected or perms.articles.can_news_publish %}
-                <a href="{% url 'news_status' object_pk=original.pk status_pk=status.pk %}">
-                    <input type="button" value="{% trans status.button_name %}" name="news_status" />
+        <strong> текущий статус новости: {{ original.get_status_display }} </strong>
+        {% for status, info in statuses.items %}
+            {% if not info.1 or perms.articles.can_news_publish %}
+                <a href="{% url 'news_status' object_pk=original.pk status=status %}">
+                    <input type="button" value="{% trans info.0 %}" name="news_status" />
                 </a>
             {% endif %}
         {% endfor %}

@@ -1,4 +1,4 @@
-from django.urls import include, path, re_path
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from apps.library.views import (
@@ -10,8 +10,8 @@ from apps.library.views import (
     PlayFiltersAPIView,
     PlayViewSet,
     SearchResultViewSet,
+    play_status,
 )
-from apps.library.views.play import play_status
 
 router = DefaultRouter()
 router.register(
@@ -62,5 +62,5 @@ library_urls = [
 
 urlpatterns = [
     path("v1/", include(library_urls)),
-    re_path(r"^play_status/(?P<object_pk>\d+)/(?P<status_pk>\d+)$", play_status, name="play_status"),
+    path("play_status/(<int:object_pk>/<str:status>/", play_status, name="play_status"),
 ]

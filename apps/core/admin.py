@@ -4,7 +4,7 @@ from django.db import models
 from django.forms.widgets import CheckboxSelectMultiple
 
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
-from apps.core.models import Image, Role, RoleType, Status
+from apps.core.models import Image, Role, RoleType
 
 
 @admin.register(Image)
@@ -43,15 +43,6 @@ class RoleTypeAdmin(admin.ModelAdmin):
     def get_model_perms(self, request):
         """Return empty perms dict thus hiding the model from admin index."""
         return {}
-
-
-@admin.register(Status)
-class StatusAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "button_name",
-        "protected",
-    )
 
 
 admin.site.site_header = "Администрирование сайта"

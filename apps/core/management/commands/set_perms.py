@@ -72,7 +72,6 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_title")
                 | Q(codename__endswith="_videosblock")
                 | Q(codename__endswith="_volunteer")
-                | Q(codename__endswith="view_status")
             )
             admin_permissions = Permission.objects.all()
 

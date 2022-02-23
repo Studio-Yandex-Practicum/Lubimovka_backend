@@ -1,7 +1,6 @@
 import pytest
 
 from apps.articles.factories import BlogItemFactory
-from apps.core.models import Status
 
 pytestmark = [pytest.mark.django_db]
 
@@ -15,10 +14,10 @@ def simple_blog_item(persons):
 @pytest.fixture
 def simple_blog_item_not_published():
     """Create not published BlogItem."""
-    return BlogItemFactory(status=Status.objects.get(name="В работе"))
+    return BlogItemFactory(status="IN_PROCESS")
 
 
 @pytest.fixture
 def simple_blog_item_published():
     """Create published BlogItem."""
-    return BlogItemFactory(id=100, status=Status.objects.get(name="Опубликовано"))
+    return BlogItemFactory(id=100, status="PUBLISHED")

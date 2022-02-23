@@ -296,32 +296,3 @@ class Setting(BaseModel):
     def _check_related_settings(cls, setting):
         if setting.settings_key in cls.RELATED_SETTINGS and setting.boolean:
             cls._turn_off_setting(cls.RELATED_SETTINGS[setting.settings_key])
-
-
-class Status(models.Model):
-    name = models.CharField(
-        max_length=30,
-        verbose_name="Наименование",
-        unique=True,
-    )
-    button_name = models.CharField(
-        max_length=55,
-        blank=True,
-        null=True,
-        verbose_name="Название кнопки для статуса",
-    )
-    protected = models.BooleanField(
-        verbose_name="Требуются особые права для установки данного статуса",
-        default=False,
-    )
-
-    class Meta:
-        verbose_name = "Статус страницы"
-        verbose_name_plural = "Статусы страницы"
-
-    def __str__(self):
-        return self.name
-
-    @property
-    def get_upper_name(self):
-        return self.name.upper()
