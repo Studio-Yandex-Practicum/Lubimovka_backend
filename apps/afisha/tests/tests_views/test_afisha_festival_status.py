@@ -5,7 +5,7 @@ from apps.core.models import Setting
 
 pytestmark = [pytest.mark.django_db]
 
-AFISHA_FESTIVAL_STATUS_URL = reverse("afisha-festival-status")
+AFISHA_FESTIVAL_STATUS_URL = reverse("afisha-info")
 
 
 @pytest.fixture

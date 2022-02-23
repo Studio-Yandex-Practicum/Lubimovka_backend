@@ -5,7 +5,7 @@ pytestmark = [pytest.mark.django_db]
 
 
 def test_afisha_festival_status_smoke(client):
-    response = client.get("/api/v1/afisha/festival-status/")
+    response = client.get("/api/v1/afisha/info/")
     assert response.status_code == status.HTTP_200_OK
 
 

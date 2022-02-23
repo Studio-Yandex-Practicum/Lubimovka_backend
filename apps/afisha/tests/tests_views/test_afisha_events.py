@@ -9,7 +9,7 @@ from apps.afisha.factories import EventFactory
 pytestmark = [pytest.mark.django_db]
 
 
-AFISHA_EVENTS_URL = reverse("afisha-events")
+AFISHA_EVENTS_URL = reverse("afisha-event-list")
 
 
 @pytest.fixture
