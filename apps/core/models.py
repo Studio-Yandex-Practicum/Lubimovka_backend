@@ -1,3 +1,5 @@
+from typing import Sequence
+
 from django.contrib import admin
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -284,6 +286,16 @@ class Setting(BaseModel):
         if Setting.objects.filter(settings_key=settings_key).exists():
             setting = Setting.objects.get(settings_key=settings_key)
             return setting.value
+
+    @classmethod
+    def get_settings_dict(cls, settings_keys: Sequence[str]) -> dict[str, str]:
+        """Get iterable of setting keys and return dict with values."""
+        assert isinstance(settings_keys, Sequence), "The method allows only `Sequence`."
+        settings_qs = Setting.objects.filter(settings_key__in=settings_keys)
+        settings_dict = {
+            setting.settings_key: getattr(setting, cls.TYPES_AND_FIELDS[setting.field_type]) for setting in settings_qs
+        }
+        return settings_dict
 
     @classmethod
     def _turn_off_setting(cls, setting):
