@@ -95,7 +95,7 @@ class Person(BaseModel):
         ]
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.last_name} {self.first_name}"
 
     @property
     @admin.display(description="Имя и фамилия")
@@ -191,6 +191,7 @@ class Setting(BaseModel):
         FIRST_SCREEN = "FIRST_SCREEN", _("Первая страница")
         GENERAL = "GENERAL", _("Общие")
         AFISHA = "AFISHA", _("Афиша")
+        GOOGLE_EXPORT = "PLAY_SUPPLY", _("Подача пьес")
 
     class SettingFieldType(models.TextChoices):
         BOOLEAN = "BOOLEAN", _("Да/Нет")

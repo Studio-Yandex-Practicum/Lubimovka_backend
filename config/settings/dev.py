@@ -29,6 +29,21 @@ DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG,
 }
 
+INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
+
+# Add in INTERNAL_IPS internal IP of the docker container if DEGUG == True.
+if env("DEBUG"):
+    import socket
+
+    hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
+    INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
+    try:
+        _, _, ips = socket.gethostbyname_ex("node")
+        INTERNAL_IPS.extend(ips)
+    except socket.gaierror:
+        # The node container isn't started (yet?)
+        pass
+
 # Use PostgreSQL
 # ------------------------------------------------------------------------------
 DATABASES = {
@@ -59,11 +74,5 @@ ANYMAIL = {
 }
 
 # https://anymail.readthedocs.io/en/stable/installation/?highlight=SERVER_EMAIL#configuring-django-s-email-backend
-SERVER_EMAIL = env(
-    "SERVER_EMAIL",
-    default="service@lyubimovka.ru",
-)
-DEFAULT_FROM_EMAIL = env(
-    "DEFAULT_FROM_EMAIL",
-    default="lyubimovka@lyubimovka.ru",
-)
+SERVER_EMAIL = env("SERVER_EMAIL", default=None)
+DEFAULT_FROM_EMAIL = env("DEFAULT_FROM_EMAIL", default=None)
