@@ -22,7 +22,7 @@ def four_events_october(masterclasses, readings, performances):
 
 
 @pytest.mark.parametrize("paginator_field", ("count", "next", "previous", "results"))
-def test_afisha_events_is_paginated(client, paginator_field, random_events):
+def test_afisha_event_list_is_paginated(client, paginator_field, random_events):
     """Look for specific fields for paginated response."""
     response = client.get(AFISHA_EVENTS_URL)
     response_data = response.data
@@ -30,7 +30,7 @@ def test_afisha_events_is_paginated(client, paginator_field, random_events):
     assert paginator_field in response_data
 
 
-def test_afisha_events_doesnt_return_events_in_past(client, freezer, four_events_october):
+def test_afisha_event_list_doesnt_return_events_in_past(client, freezer, four_events_october):
     """Get events in response, move date to the future and check that event in past wasn't returned."""
     freezer.move_to("2021-09-01")
 
@@ -53,7 +53,7 @@ def test_afisha_events_doesnt_return_events_in_past(client, freezer, four_events
         ("2021-10-11,2021-10-05", 3),
     ),
 )
-def test_afisha_events_date_filter(client, freezer, dates_query_param, expected_count, four_events_october):
+def test_afisha_event_list_date_filter(client, freezer, dates_query_param, expected_count, four_events_october):
     """Compare events amount in responce with expected. Only one event has to be found."""
     query_params = {"dates": dates_query_param}
 
@@ -64,7 +64,7 @@ def test_afisha_events_date_filter(client, freezer, dates_query_param, expected_
 
 @pytest.mark.freeze_time("2021-09-01")
 @pytest.mark.parametrize("expected_field", ("id", "type", "event_body", "date_time", "paid", "url", "place"))
-def test_afisha_events_results_level_expected_fields(client, expected_field, four_events_october):
+def test_afisha_event_list_results_level_expected_fields(client, expected_field, four_events_october):
     """Check all expected fields persists in `results`."""
     response_data = client.get(AFISHA_EVENTS_URL).data
     first_event = response_data.get("results")[0]

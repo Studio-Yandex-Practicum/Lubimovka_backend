@@ -9,13 +9,17 @@ AFISHA_FESTIVAL_STATUS_URL = reverse("afisha-info")
 
 
 @pytest.fixture
-def expected_afisha_festival_status():
-    Setting.objects.filter(settings_key="festival_status").update(boolean=True)
+def afisha_info_settings():
     Setting.objects.filter(settings_key="afisha_description").update(text="some afisha description")
     Setting.objects.filter(settings_key="afisha_info_festival_text").update(text="some info description")
     Setting.objects.filter(settings_key="afisha_asterisk_text").update(text="some afisha asterisk text")
+    return None
 
-    return {
+
+def test_afisha_info_is_festival_response(client, is_festival_afisha, afisha_info_settings):
+    """Test case when `festival_status=True`. Compare returned JSON with expected one."""
+    response_data = client.get(AFISHA_FESTIVAL_STATUS_URL).data
+    assert response_data == {
         "festival_status": True,
         "description": "some afisha description",
         "info_registration": "some info description",
@@ -23,7 +27,10 @@ def expected_afisha_festival_status():
     }
 
 
-def test_afisha_festival_status_response(client, expected_afisha_festival_status):
-    """Compare returned JSON with expected one."""
+def test_afisha_info_is_not_festival_response(client, is_not_festival_afisha, afisha_info_settings):
+    """Test case when `festival_status=False`. Compare returned JSON with expected one."""
     response_data = client.get(AFISHA_FESTIVAL_STATUS_URL).data
-    assert response_data == expected_afisha_festival_status
+    assert response_data == {
+        "festival_status": False,
+        "description": "some afisha description",
+    }

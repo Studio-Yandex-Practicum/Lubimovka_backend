@@ -34,7 +34,7 @@ class AfishaEventListAPIView(APIView):
     def get(self, request):
         filters_serializer = self.AfishaEventListFilterSerializer(data=request.query_params)
         filters_serializer.is_valid(raise_exception=True)
-        filtered_events = selectors.afisha_events_get(filters=filters_serializer.data)
+        filtered_events = selectors.afisha_event_list_get(filters=filters_serializer.data)
 
         return get_paginated_response(
             pagination_class=self.pagination_class,
@@ -50,13 +50,24 @@ class AfishaInfoAPIView(APIView):
 
     class AfishaInfoOutputSerializer(serializers.Serializer):
         festival_status = serializers.BooleanField()
-        description = serializers.CharField(max_length=500)
-        info_registration = serializers.CharField(max_length=500)
-        asterisk_text = serializers.CharField(max_length=500)
+        description = serializers.CharField(
+            source="afisha_description",
+            max_length=500,
+        )
+        info_registration = serializers.CharField(
+            source="afisha_info_festival_text",
+            max_length=500,
+            required=False,
+        )
+        asterisk_text = serializers.CharField(
+            source="afisha_asterisk_text",
+            max_length=500,
+            required=False,
+        )
 
     @extend_schema(responses=AfishaInfoOutputSerializer)
     def get(self, request):
-        response_data = selectors.afisha_festival_status()
+        response_data = selectors.afisha_info_get()
         context = {"request": request}
         serializer = self.AfishaInfoOutputSerializer(response_data, context=context)
         return Response(serializer.data)

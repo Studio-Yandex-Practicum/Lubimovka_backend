@@ -4,6 +4,7 @@ from rest_framework.test import APIClient
 
 from apps.afisha.factories import EventFactory
 from apps.core.factories import ImageFactory, PersonFactory
+from apps.core.models import Setting
 from apps.info.factories import FestivalFactory
 from apps.library.factories import (
     MasterClassFactory,
@@ -24,6 +25,16 @@ def client():
 @pytest.fixture(autouse=True)
 def set_media_temp_folder(tmpdir):
     settings.MEDIA_ROOT = tmpdir.mkdir("media")
+
+
+@pytest.fixture
+def is_festival_afisha():
+    Setting.objects.filter(settings_key="festival_status").update(boolean=True)
+
+
+@pytest.fixture
+def is_not_festival_afisha():
+    Setting.objects.filter(settings_key="festival_status").update(boolean=False)
 
 
 @pytest.fixture
