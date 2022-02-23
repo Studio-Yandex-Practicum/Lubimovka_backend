@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Any, Union
 
 from django.contrib import admin
 from django.db import models
@@ -288,13 +288,21 @@ class Setting(BaseModel):
             return setting.value
 
     @classmethod
-    def get_settings_dict(cls, settings_keys: Sequence[str]) -> dict[str, str]:
-        """Get iterable of setting keys and return dict with values."""
-        assert isinstance(settings_keys, Sequence), "The method allows only `Sequence`."
+    def get_settings_dict(cls, settings_keys: Union[list[str], tuple[str]]) -> dict[str, Any]:
+        """Get list or tuple of setting keys and return dict with values."""
+        assert isinstance(settings_keys, tuple) or isinstance(
+            settings_keys, list
+        ), "The method allows only `tuple` or `list` of settings keys."
+
         settings_qs = Setting.objects.filter(settings_key__in=settings_keys)
         settings_dict = {
             setting.settings_key: getattr(setting, cls.TYPES_AND_FIELDS[setting.field_type]) for setting in settings_qs
         }
+
+        assert set(settings_keys).issubset(
+            settings_dict
+        ), f"Не все переданные ключи найдены. Нашлись {settings_dict.keys()}"
+
         return settings_dict
 
     @classmethod
