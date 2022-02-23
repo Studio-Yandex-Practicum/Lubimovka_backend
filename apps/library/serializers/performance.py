@@ -52,6 +52,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     def get_team(self, obj):
+        print(obj.team_members.values_list("role__slug", "person__first_name"))
         """Собираем команду в два этапа.
 
         Сначала отбираем роли и связанные с ролью и событием персоны.

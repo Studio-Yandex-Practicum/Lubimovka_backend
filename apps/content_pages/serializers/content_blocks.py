@@ -1,13 +1,11 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import ImagesBlock, PerformancesBlock, PersonsBlock, PlaysBlock, VideosBlock
-from apps.content_pages.serializers import (
-    ExtendedPersonSerializer,
-    OrderedImageSerializer,
-    OrderedVideoSerializer,
-    PerformanceSerializer,
-)
+from apps.afisha.models import Event
+from apps.afisha.serializers.event import EventRegularSerializer
+from apps.content_pages.models import EventsBlock, ImagesBlock, PersonsBlock, PlaysBlock, VideosBlock
+from apps.content_pages.serializers import ExtendedPersonSerializer, OrderedImageSerializer, OrderedVideoSerializer
 from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
+from apps.library.serializers.performance import EventPerformanceSerializer
 
 
 class SlugRelatedSerializerField(serializers.SlugRelatedField):
@@ -22,6 +20,37 @@ class SlugRelatedSerializerField(serializers.SlugRelatedField):
         item = getattr(obj, self.slug_field)
         serializer = self.serializer_class(item, context=self.context)
         return serializer.data
+
+
+class EventInBlockSerializer(EventRegularSerializer):
+    """Returns Performance in EventsBlock."""
+
+    event_body = EventPerformanceSerializer(source="common_event.target_model")
+
+    class Meta:
+        model = Event
+        fields = (
+            "id",
+            "type",
+            "event_body",
+            "date_time",
+            "paid",
+            "url",
+        )
+
+
+class EventsBlockSerializer(serializers.ModelSerializer):
+    items = EventInBlockSerializer(
+        many=True,
+        read_only=True,
+    )
+
+    class Meta:
+        model = EventsBlock
+        fields = (
+            "title",
+            "items",
+        )
 
 
 class VideosBlockSerializer(serializers.ModelSerializer):
@@ -48,23 +77,6 @@ class ImagesBlockSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ImagesBlock
-        fields = (
-            "title",
-            "items",
-        )
-
-
-class PerformancesBlockSerializer(serializers.ModelSerializer):
-    items = SlugRelatedSerializerField(
-        many=True,
-        read_only=True,
-        source="ordered_performances",
-        slug_field="item",
-        serializer_class=PerformanceSerializer,
-    )
-
-    class Meta:
-        model = PerformancesBlock
         fields = (
             "title",
             "items",

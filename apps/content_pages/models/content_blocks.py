@@ -2,9 +2,10 @@ from django.contrib import admin
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
+from apps.afisha.models import Event
 from apps.content_pages.models import AbstractItemWithTitle
 from apps.core.models import BaseModel, Person, Role
-from apps.library.models import Performance, Play
+from apps.library.models import Play
 
 
 class AbstractOrderedItemBase(BaseModel):
@@ -51,20 +52,6 @@ class OrderedImage(AbstractOrderedItemBase):
 
     def __str__(self):
         return f"Изображение {self.order}"
-
-
-class OrderedPerformance(AbstractOrderedItemBase):
-    item = models.ForeignKey(
-        Performance,
-        on_delete=models.CASCADE,
-        related_name="ordered_performances",
-        verbose_name="Спектакль",
-    )
-    block = models.ForeignKey(
-        "PerformancesBlock",
-        on_delete=models.CASCADE,
-        related_name="ordered_performances",
-    )
 
 
 class ContentPersonRole(BaseModel):
@@ -163,6 +150,20 @@ class OrderedPlay(AbstractOrderedItemBase):
     )
 
 
+class OrderedEvent(AbstractOrderedItemBase):
+    item = models.ForeignKey(
+        Event,
+        on_delete=models.CASCADE,
+        related_name="ordered_events",
+        verbose_name="Событие",
+    )
+    block = models.ForeignKey(
+        "EventsBlock",
+        on_delete=models.CASCADE,
+        related_name="ordered_events",
+    )
+
+
 class OrderedVideo(AbstractOrderedItemBase):
     title = models.CharField(
         max_length=250,
@@ -189,18 +190,6 @@ class ImagesBlock(AbstractItemWithTitle):
     class Meta:
         verbose_name = "Блок изображения"
         verbose_name_plural = "Блоки изображений"
-
-
-class PerformancesBlock(AbstractItemWithTitle):
-    items = models.ManyToManyField(
-        to=Performance,
-        through=OrderedPerformance,
-        related_name="performance_blocks",
-    )
-
-    class Meta:
-        verbose_name = "Блок спектаклей"
-        verbose_name_plural = "Блоки спектаклей"
 
 
 class PersonsBlock(AbstractItemWithTitle):
@@ -233,3 +222,15 @@ class VideosBlock(AbstractItemWithTitle):
     class Meta:
         verbose_name = "Блок видео"
         verbose_name_plural = "Блоки видео"
+
+
+class EventsBlock(AbstractItemWithTitle):
+    items = models.ManyToManyField(
+        to=Event,
+        through=OrderedEvent,
+        related_name="events_blocks",
+    )
+
+    class Meta:
+        verbose_name = "Блок спектаклей"
+        verbose_name_plural = "Блоки спектаклей"

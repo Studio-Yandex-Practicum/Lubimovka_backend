@@ -2,9 +2,9 @@ from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_fiel
 from rest_framework import serializers
 
 from apps.content_pages.models import (
+    EventsBlock,
     ImagesBlock,
     Link,
-    PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
     Preamble,
@@ -14,9 +14,9 @@ from apps.content_pages.models import (
     VideosBlock,
 )
 from apps.content_pages.serializers import (
+    EventsBlockSerializer,
     ImagesBlockSerializer,
     LinkSerializer,
-    PerformancesBlockSerializer,
     PersonsBlockSerializer,
     PlaysBlockSerializer,
     PreambleSerializer,
@@ -27,9 +27,9 @@ from apps.content_pages.serializers import (
 )
 
 CONTENT_OBJECT_SERIALIZER_PAIRS = {
+    EventsBlock: EventsBlockSerializer,
     ImagesBlock: ImagesBlockSerializer,
     Link: LinkSerializer,
-    PerformancesBlock: PerformancesBlockSerializer,
     PersonsBlock: PersonsBlockSerializer,
     PlaysBlock: PlaysBlockSerializer,
     Preamble: PreambleSerializer,
