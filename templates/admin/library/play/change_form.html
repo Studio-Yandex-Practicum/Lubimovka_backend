@@ -5,9 +5,7 @@
         <strong> текущий статус пьесы: {{ original.get_status_display }} </strong>
         {% for status, info in statuses.items %}
             {% if not info.1 or perms.library.can_play_publish %}
-                <a href="{% url 'play_status' object_pk=original.pk status=status %}">
-                    <input type="button" value="{% trans info.0 %}" name="play_status" />
-                </a>
+                <input type="submit" value="{% trans info.0 %}" name="{% trans status %}" />
             {% endif %}
         {% endfor %}
     </div>

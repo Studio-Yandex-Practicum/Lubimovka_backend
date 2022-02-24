@@ -1,7 +1,6 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.library.utilities.play_status import play_status
 from apps.library.views import (
     AuthorsReadViewSet,
     ParticipationViewSet,
@@ -62,5 +61,4 @@ library_urls = [
 
 urlpatterns = [
     path("v1/", include(library_urls)),
-    path("play_status/<int:object_pk>/<str:status>/", play_status, name="play_status"),
 ]

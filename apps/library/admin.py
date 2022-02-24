@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
+from django.http import HttpResponseRedirect
 
 from apps.core.models import Person, Role
 from apps.library.models import (
@@ -63,6 +64,15 @@ class PlayAdmin(admin.ModelAdmin):
         extra_context = {}
         extra_context["statuses"] = statuses
         return super().change_view(request, object_id, form_url, extra_context)
+
+    def response_change(self, request, obj):
+        for status in obj.STATUS_INFO:
+            if status in request.POST:
+                obj.status = status
+                obj.save()
+                self.message_user(request, "Статус успешно обновлён!")
+                return HttpResponseRedirect(".")
+        return super().response_change(request, obj)
 
 
 class AchievementAdmin(admin.ModelAdmin):

@@ -5,9 +5,7 @@
         <strong> текущий статус новости: {{ original.get_status_display }} </strong>
         {% for status, info in statuses.items %}
             {% if not info.1 or perms.articles.can_news_publish %}
-                <a href="{% url 'news_status' object_pk=original.pk status=status %}">
-                    <input type="button" value="{% trans info.0 %}" name="news_status" />
-                </a>
+                <input type="submit" value="{% trans info.0 %}" name="{% trans status %}" />
             {% endif %}
         {% endfor %}
     </div>
