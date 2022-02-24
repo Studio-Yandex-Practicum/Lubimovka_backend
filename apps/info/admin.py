@@ -219,8 +219,6 @@ class FestivalTeamAdmin(admin.ModelAdmin):
         if form.is_valid():
             if obj.is_pr_manager:
                 name_manager = form.cleaned_data["data_manager"]
-                if not name_manager:
-                    raise ValidationError("Укажите Имя Фамилия в дательном падеже")
                 FestivalTeam.objects.filter(is_pr_manager=True).update(is_pr_manager=False)
                 Setting.objects.filter(settings_key="pr_manager_name").update(text=name_manager)
             obj.save()

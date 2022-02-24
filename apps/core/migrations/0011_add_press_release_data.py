@@ -5,7 +5,7 @@ def add_press_release_setting(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
 
-    Setting.objects.create(
+    Setting.objects.get_or_create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="pr_manager_name",
