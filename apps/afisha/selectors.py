@@ -20,7 +20,7 @@ def afisha_info_get() -> dict[str, Union[str, Any]]:
         "afisha_info_festival_text",
         "afisha_asterisk_text",
     )
-    afisha_festival_status_data = Setting.get_settings_dict(settings_keys)
+    afisha_festival_status_data = Setting.get_settings(settings_keys)
 
     festival_status = afisha_festival_status_data.get("festival_status")
     if not festival_status:

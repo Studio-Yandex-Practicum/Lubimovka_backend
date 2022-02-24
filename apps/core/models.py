@@ -283,16 +283,21 @@ class Setting(BaseModel):
 
     @classmethod
     def get_setting(cls, settings_key):
-        if Setting.objects.filter(settings_key=settings_key).exists():
-            setting = Setting.objects.get(settings_key=settings_key)
-            return setting.value
+        is_settings_key_found = Setting.objects.filter(settings_key=settings_key).exists()
+        assert is_settings_key_found, f"Ключа настроек `{settings_key}` не найдено."
+
+        setting = Setting.objects.get(settings_key=settings_key)
+        return setting.value
 
     @classmethod
-    def get_settings_dict(cls, settings_keys: Union[list[str], tuple[str]]) -> dict[str, Any]:
+    def get_settings(cls, settings_keys: Union[list[str], tuple[str]]) -> dict[str, Any]:
         """Get list or tuple of setting keys and return dict with values."""
-        assert isinstance(settings_keys, tuple) or isinstance(
-            settings_keys, list
-        ), "The method allows only `tuple` or `list` of settings keys."
+        # fmt: off
+        assert (
+            (isinstance(settings_keys, tuple) or isinstance(settings_keys, list))
+            and len(settings_keys)
+        ), "Метод ожидает только непустые `tuple` или `list` из строк `settings_key`."
+        # fmt: on
 
         settings_qs = Setting.objects.filter(settings_key__in=settings_keys)
         settings_dict = {
