@@ -19,7 +19,7 @@ from apps.library.factories import (
     ParticipationApplicationFestivalFactory,
     PerformanceFactory,
     PlayFactory,
-    ProgramFactory,
+    ProgramTypeFactory,
     ReadingFactory,
 )
 from apps.main.factories import BannerFactory as MainBannerFactory
@@ -111,7 +111,7 @@ class Command(BaseCommand):
 
             # Library factories.
 
-            programtypes = ProgramFactory.create_batch(3)
+            programtypes = ProgramTypeFactory.create_batch(3)
             notification(self, programtypes, "программ")
 
             plays = PlayFactory.create_batch(10)
