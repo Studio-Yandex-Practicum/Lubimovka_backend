@@ -84,12 +84,12 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     dramatist_person = factory.RelatedFactory(
         TeamMemberFactory,
         factory_related_name="performance",
-        role__slug="dramatist",
+        set_role_with_slug="dramatist",
     )
     director_person = factory.RelatedFactory(
         TeamMemberFactory,
         factory_related_name="performance",
-        role__slug="director",
+        set_role_with_slug="director",
     )
 
     @factory.post_generation

@@ -49,7 +49,7 @@ class MasterClassFactory(factory.django.DjangoModelFactory):
     host_person = factory.RelatedFactory(
         TeamMemberFactory,
         factory_related_name="masterclass",
-        role__slug="host",
+        set_role_with_slug="host",
     )
 
     @factory.post_generation

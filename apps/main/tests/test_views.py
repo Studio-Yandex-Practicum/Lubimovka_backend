@@ -175,7 +175,7 @@ class TestMainAPIViews:
         self,
         client,
         news_items_with_content,
-        events,
+        events_pinned_on_main,
         banners,
         places,
     ):
@@ -191,7 +191,7 @@ class TestMainAPIViews:
         self,
         client,
         news_items_with_content,
-        events,
+        events_pinned_on_main,
     ):
         """Checks data["afisha"]["items"]["event_body"] in response."""
         fields = ["id", "name", "description", "team", "project_title"]
@@ -201,7 +201,7 @@ class TestMainAPIViews:
                 field in response.data["afisha"]["items"][0]["event_body"]
             ), f"Проверьте, что при GET запросе {MAIN_URL} data[afisha][items][0][event_body] содержит {field}"
 
-    def test_get_main_afisha_items_event_body_team_fields(self, client, news_items_with_content, events):
+    def test_get_main_afisha_items_event_body_team_fields(self, client, news_items_with_content, events_pinned_on_main):
         """Get `team` in response (response -> afisha -> items -> event_body -> team) and look for expected fields."""
         expected_fields_set = {
             "name",
@@ -229,7 +229,7 @@ class TestMainAPIViews:
         client,
         news_items_with_content,
         blog_items_with_content,
-        events,
+        events_pinned_on_main,
     ):
         """Checks that count afisha items in response matches count in db."""
         today = timezone.now()
