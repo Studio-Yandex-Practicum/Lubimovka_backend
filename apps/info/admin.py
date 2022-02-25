@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.form import FestivalTeamMemberForm
-from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
+from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Sponsor, Volunteer
 
 
 class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
@@ -175,7 +175,7 @@ class PressRealeaseAdmin(admin.ModelAdmin):
     search_fields = ("title",)
 
 
-class FestivalTeamAdmin(admin.ModelAdmin):
+class FestivalTeamMemberAdmin(admin.ModelAdmin):
     form = FestivalTeamMemberForm
     list_display = (
         "person",
@@ -219,7 +219,7 @@ class FestivalTeamAdmin(admin.ModelAdmin):
         if form.is_valid():
             if obj.is_pr_manager:
                 name_manager = form.cleaned_data["data_manager"]
-                FestivalTeam.objects.filter(is_pr_manager=True).update(is_pr_manager=False)
+                FestivalTeamMember.objects.filter(is_pr_manager=True).update(is_pr_manager=False)
                 Setting.objects.filter(settings_key="pr_manager_name").update(text=name_manager)
             obj.save()
         else:
@@ -243,6 +243,6 @@ admin.site.register(PressRelease, PressReleaseAdmin)
 admin.site.register(Partner, PartnerAdmin)
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Place, PlaceAdmin)
-admin.site.register(FestivalTeam, FestivalTeamAdmin)
+admin.site.register(FestivalTeamMember, FestivalTeamMemberAdmin)
 admin.site.register(Volunteer, VolunteerAdmin)
 admin.site.register(Sponsor, SponsorAdmin)
