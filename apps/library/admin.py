@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
-from django.http import HttpResponseRedirect
 
+from apps.core.mixins import StatusButtonMixin
 from apps.core.models import Person, Role
 from apps.library.models import (
     Achievement,
@@ -28,7 +28,7 @@ class AuthorInline(admin.TabularInline):
     verbose_name_plural = "Авторы"
 
 
-class PlayAdmin(admin.ModelAdmin):
+class PlayAdmin(StatusButtonMixin, admin.ModelAdmin):
     filter_horizontal = ("authors",)
     list_display = (
         "name",
@@ -54,25 +54,6 @@ class PlayAdmin(admin.ModelAdmin):
         "festival__year",
     )
     exclude = ("status",)
-
-    def change_view(self, request, object_id, form_url="", extra_context=None):
-        play = Play.objects.get(pk=object_id)
-        statuses = dict(play.STATUS_INFO)
-        statuses.pop(play.status, None)
-        if not play.status == "PUBLISHED":
-            statuses.pop("REMOVED_FROM_PUBLICATION", None)
-        extra_context = {}
-        extra_context["statuses"] = statuses
-        return super().change_view(request, object_id, form_url, extra_context)
-
-    def response_change(self, request, obj):
-        for status in obj.STATUS_INFO:
-            if status in request.POST:
-                obj.status = status
-                obj.save()
-                self.message_user(request, "Статус успешно обновлён!")
-                return HttpResponseRedirect(".")
-        return super().response_change(request, obj)
 
 
 class AchievementAdmin(admin.ModelAdmin):

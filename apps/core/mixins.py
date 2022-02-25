@@ -1,5 +1,30 @@
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 from django.utils.html import format_html
+
+
+class StatusButtonMixin:
+    """Mixin to add status-change buttons on page bottom."""
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        obj_class = self.model
+        obj = obj_class.objects.get(pk=object_id)
+        statuses = dict(obj.STATUS_INFO)
+        statuses.pop(obj.status, None)
+        if not obj.status == "PUBLISHED":
+            statuses.pop("REMOVED_FROM_PUBLICATION", None)
+        extra_context = {}
+        extra_context["statuses"] = statuses
+        return super().change_view(request, object_id, form_url, extra_context)
+
+    def response_change(self, request, obj):
+        for status in obj.STATUS_INFO:
+            if status in request.POST:
+                obj.status = status
+                obj.save()
+                self.message_user(request, "Статус успешно обновлён!")
+                return HttpResponseRedirect(".")
+        return super().response_change(request, obj)
 
 
 class AdminImagePreview:
