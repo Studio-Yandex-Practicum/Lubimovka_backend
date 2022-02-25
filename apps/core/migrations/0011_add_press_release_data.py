@@ -9,7 +9,7 @@ def add_press_release_setting(apps, schema_editor):
         field_type="TEXT",
         group="EMAIL",
         settings_key="pr_manager_name",
-        text="Имя Фамилия в дательном падеже (пример: Анне Загородниковой)",
+        text="Имя Фамилия в дателльном падеже (пример: Анне Загородниковой)",
         description="Имя PR менеджера на странице для прессы (в дательном падеже)",
     )
 
