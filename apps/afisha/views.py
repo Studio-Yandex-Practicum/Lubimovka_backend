@@ -64,6 +64,7 @@ class AfishaInfoAPIView(APIView):
             max_length=500,
             required=False,
         )
+        afisha_dates = serializers.ListField(child=serializers.DateField())
 
     @extend_schema(responses=AfishaInfoOutputSerializer)
     def get(self, request):

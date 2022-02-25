@@ -1,6 +1,6 @@
 from typing import Any, Union
 
-from django.db.models import QuerySet
+from django.db.models import F, QuerySet
 from django.utils import timezone
 
 from apps.afisha.filters import AfishaEventsDateInFilter
@@ -11,7 +11,10 @@ from apps.core.models import Setting
 def afisha_info_get() -> dict[str, Union[str, Any]]:
     """Return festival status and Afisha's page header data.
 
-    If `festival_status=False` only `festival_status` and `afisha_description`
+    If `festival_status=False` only
+    - `festival_status`
+    - `afisha_description`
+    - `afisha_dates`
     should be in response.
     """
     settings_keys = (
@@ -20,14 +23,22 @@ def afisha_info_get() -> dict[str, Union[str, Any]]:
         "afisha_info_festival_text",
         "afisha_asterisk_text",
     )
-    afisha_festival_status_data = Setting.get_settings(settings_keys)
+    afisha_info_data = Setting.get_settings(settings_keys)
 
-    festival_status = afisha_festival_status_data.get("festival_status")
+    festival_status = afisha_info_data.get("festival_status")
     if not festival_status:
-        afisha_festival_status_data.pop("afisha_info_festival_text")
-        afisha_festival_status_data.pop("afisha_asterisk_text")
+        afisha_info_data.pop("afisha_info_festival_text")
+        afisha_info_data.pop("afisha_asterisk_text")
 
-    return afisha_festival_status_data
+    afisha_dates = (
+        Event.objects.filter(date_time__gte=timezone.now())
+        .order_by("date_time")
+        .annotate(date=F("date_time__date"))
+        .distinct()
+        .values_list("date", flat=True)
+    )
+    afisha_info_data.update(afisha_dates=afisha_dates)
+    return afisha_info_data
 
 
 def afisha_event_list_get(filters: dict[str, str] = None) -> QuerySet:
