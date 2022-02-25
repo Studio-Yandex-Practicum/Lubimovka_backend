@@ -36,7 +36,7 @@ class Partner(BaseModel):
     in_footer_partner = models.BooleanField(
         default=False,
         verbose_name="Отображать внизу страницы",
-        help_text=("Поставьте галочку, чтобы показать логотип партнёра внизу страницы"),
+        help_text="Поставьте галочку, чтобы показать логотип партнёра внизу страницы",
     )
 
     class Meta:
@@ -69,6 +69,11 @@ class FestivalTeam(BaseModel):
         max_length=150,
         verbose_name="Должность",
     )
+    is_pr_manager = models.BooleanField(
+        default=False,
+        verbose_name="PR-менеджер",
+        help_text="Поставьте галочку, чтобы назначить человека PR-менеджером",
+    )
 
     class Meta:
         verbose_name = "Команда фестиваля"
@@ -92,6 +97,18 @@ class FestivalTeam(BaseModel):
             raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
+        if not self.is_pr_manager:
+            hasAnotherPrManager = FestivalTeam.objects.filter(Q(is_pr_manager=True) & Q(person=self.person)).exists()
+            if hasAnotherPrManager:
+                raise ValidationError(
+                    "Для того чтобы снять с должности PR-менеджера, "
+                    "нужно назначить другого человека на эту должность"
+                )
+
+    def delete(self, *args, **kwargs):
+        if self.is_pr_manager:
+            raise ValidationError("Перед удалением назначьте на должность PR-менеджера другого человека")
+        super().delete(*args, **kwargs)
 
 
 class Sponsor(BaseModel):

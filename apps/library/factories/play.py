@@ -4,21 +4,22 @@ import factory
 from faker import Faker
 
 from apps.core.decorators import restrict_factory
+from apps.core.utils import slugify
 from apps.info.models import Festival
 from apps.library.models import Play, ProgramType
 
 fake = Faker("ru_RU")
 
 
-class ProgramFactory(factory.django.DjangoModelFactory):
+class ProgramTypeFactory(factory.django.DjangoModelFactory):
     """Create ProgramType object."""
 
     class Meta:
         model = ProgramType
         django_get_or_create = ("name",)
 
-    name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
-    slug = factory.Faker("word", locale="en_US")
+    name = factory.Faker("text", max_nb_chars=50, locale="ru_RU")
+    slug = factory.LazyAttribute(lambda program_type: slugify(program_type.name)[:40])
 
 
 @restrict_factory(general=(Festival, ProgramType))
@@ -29,7 +30,7 @@ class PlayFactory(factory.django.DjangoModelFactory):
         model = Play
         django_get_or_create = ("name",)
 
-    name = factory.LazyFunction(lambda: fake.word().capitalize())
+    name = factory.Faker("text", max_nb_chars=60, locale="ru_RU")
     city = factory.Faker("city_name", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2021)
     url_download = factory.django.FileField()

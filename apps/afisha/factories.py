@@ -4,14 +4,19 @@ import factory
 from django.conf import settings
 
 from apps.afisha.models import CommonEvent, Event
+from apps.core.decorators.factory import restrict_factory
 
 
+@restrict_factory(general=(CommonEvent,))
 class EventFactory(factory.django.DjangoModelFactory):
     """Create Event.
 
     Parameters:
     1.`date_time_in_three_hours=True`: create event at random time but not
     more than 3 hours from now.
+    2. `masterclass=True`: bind event with random `master class`
+    3. `reading=True`: bind event with random `reading`
+    4. `performance=True`: bind event with random `performance`
     """
 
     class Meta:
@@ -23,6 +28,21 @@ class EventFactory(factory.django.DjangoModelFactory):
                 "future_datetime",
                 end_date="+3h",
                 tzinfo=ZoneInfo(settings.TIME_ZONE),
+            ),
+        )
+        masterclass = factory.Trait(
+            common_event=factory.LazyFunction(
+                lambda: CommonEvent.objects.exclude(masterclass__isnull=True).order_by("?").first()
+            ),
+        )
+        reading = factory.Trait(
+            common_event=factory.LazyFunction(
+                lambda: CommonEvent.objects.exclude(reading__isnull=True).order_by("?").first()
+            ),
+        )
+        performance = factory.Trait(
+            common_event=factory.LazyFunction(
+                lambda: CommonEvent.objects.exclude(performance__isnull=True).order_by("?").first()
             ),
         )
 
