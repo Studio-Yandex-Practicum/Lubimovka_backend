@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.afisha.models import Event
-from apps.afisha.serializers.event import EventRegularSerializer
+from apps.afisha.serializers import AfishaEventSerializer
 from apps.content_pages.models import EventsBlock, ImagesBlock, PersonsBlock, PlaysBlock, VideosBlock
 from apps.content_pages.serializers import ExtendedPersonSerializer, OrderedImageSerializer, OrderedVideoSerializer
 from apps.library.serializers import PlaySerializer as LibraryPlaySerializer
@@ -22,7 +22,7 @@ class SlugRelatedSerializerField(serializers.SlugRelatedField):
         return serializer.data
 
 
-class EventInBlockSerializer(EventRegularSerializer):
+class EventInBlockSerializer(AfishaEventSerializer):
     """Returns Performance in EventsBlock."""
 
     event_body = EventPerformanceSerializer(source="common_event.target_model")
