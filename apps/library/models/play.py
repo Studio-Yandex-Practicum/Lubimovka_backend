@@ -42,11 +42,46 @@ class Play(BaseModel):
         REMOVED_FROM_PUBLICATION = "REMOVED_FROM_PUBLICATION", _("Снято с публикации")
 
     STATUS_INFO = {
-        "IN_PROCESS": ("Вернуть в работу", False),
-        "REVIEW": ("Отправить на проверку", False),
-        "READY_FOR_PUBLICATION": ("Подготовить к публикации", False),
-        "PUBLISHED": ("ОПУБЛИКОВАТЬ", True),
-        "REMOVED_FROM_PUBLICATION": ("Снять с публикации", False),
+        "IN_PROCESS": {
+            "button_name": "Вернуть в работу",
+            "special_perms": False,
+            "possible_changes": (
+                "REVIEW",
+                "READY_FOR_PUBLICATION",
+            ),
+        },
+        "REVIEW": {
+            "button_name": "Отправить на проверку",
+            "special_perms": False,
+            "possible_changes": (
+                "IN_PROCESS",
+                "READY_FOR_PUBLICATION",
+            ),
+        },
+        "READY_FOR_PUBLICATION": {
+            "button_name": "Подготовить к публикации",
+            "special_perms": False,
+            "possible_changes": (
+                "IN_PROCESS",
+                "PUBLISHED",
+            ),
+        },
+        "PUBLISHED": {
+            "button_name": "ОПУБЛИКОВАТЬ",
+            "special_perms": True,
+            "possible_changes": (
+                "IN_PROCESS",
+                "REMOVED_FROM_PUBLICATION",
+            ),
+        },
+        "REMOVED_FROM_PUBLICATION": {
+            "button_name": "Снять с публикации",
+            "special_perms": True,
+            "possible_changes": (
+                "IN_PROCESS",
+                "PUBLISHED",
+            ),
+        },
     }
 
     name = models.CharField(

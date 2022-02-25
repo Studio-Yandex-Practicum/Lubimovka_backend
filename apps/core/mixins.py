@@ -7,14 +7,19 @@ class StatusButtonMixin:
     """Mixin to add status-change buttons on page bottom."""
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
+        extra_context = {}
         obj_class = self.model
         obj = obj_class.objects.get(pk=object_id)
-        statuses = dict(obj.STATUS_INFO)
-        statuses.pop(obj.status, None)
-        if not obj.status == "PUBLISHED":
-            statuses.pop("REMOVED_FROM_PUBLICATION", None)
-        extra_context = {}
-        extra_context["statuses"] = statuses
+        status_protected = obj.STATUS_INFO[obj.status]["special_perms"]
+        extra_context["status_protected"] = status_protected
+
+        possible_changes = obj.STATUS_INFO[obj.status]["possible_changes"]  # tuple of statuses
+        statuses = {}
+        for status in possible_changes:
+            statuses[status] = obj.STATUS_INFO[status]
+        # dict of dicts
+        extra_context["possible_statuses"] = statuses
+        print(statuses)
         return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
