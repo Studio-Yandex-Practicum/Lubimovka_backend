@@ -8,6 +8,7 @@ from apps.info.form import FestivalTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Sponsor, Volunteer
 
 
+@admin.register(Partner)
 class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
     """Class for registration Partner model in admin panel and expanded with JS script.
 
@@ -68,6 +69,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
         js = ("admin/info/js/PartnerInFooter.js",)
 
 
+@admin.register(Person)
 class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
         "full_name",
@@ -81,6 +83,7 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
+@admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
     list_display = (
         "person",
@@ -139,6 +142,7 @@ class FestivalImagesInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(Festival)
 class FestivalAdmin(admin.ModelAdmin):
     list_display = ("year",)
     inlines = (
@@ -153,6 +157,7 @@ class FestivalAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
+@admin.register(Place)
 class PlaceAdmin(admin.ModelAdmin):
     list_display = (
         "name",
@@ -164,6 +169,7 @@ class PlaceAdmin(admin.ModelAdmin):
     search_fields = ("name", "address")
 
 
+@admin.register(PressRelease)
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
     list_filter = ("festival",)
@@ -175,6 +181,7 @@ class PressRealeaseAdmin(admin.ModelAdmin):
     search_fields = ("title",)
 
 
+@admin.register(FestivalTeamMember)
 class FestivalTeamMemberAdmin(admin.ModelAdmin):
     form = FestivalTeamMemberForm
     list_display = (
@@ -231,18 +238,9 @@ class FestivalTeamMemberAdmin(admin.ModelAdmin):
         js = ("admin/info/js/FestivalTeamFooter.js",)
 
 
+@admin.register(Sponsor)
 class SponsorAdmin(admin.ModelAdmin):
     list_display = (
         "person",
         "position",
     )
-
-
-admin.site.register(Festival, FestivalAdmin)
-admin.site.register(PressRelease, PressReleaseAdmin)
-admin.site.register(Partner, PartnerAdmin)
-admin.site.register(Person, PersonAdmin)
-admin.site.register(Place, PlaceAdmin)
-admin.site.register(FestivalTeamMember, FestivalTeamMemberAdmin)
-admin.site.register(Volunteer, VolunteerAdmin)
-admin.site.register(Sponsor, SponsorAdmin)
