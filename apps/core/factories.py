@@ -40,7 +40,9 @@ class PersonFactory(factory.django.DjangoModelFactory):
             city=factory.Faker("city_name", locale="ru_RU"),
         )
         add_email = factory.Trait(
-            email=factory.LazyAttribute(lambda person: slugify(person.first_name + person.last_name) + "@lubimovka.ru"),
+            email=factory.LazyAttributeSequence(
+                lambda person, index: f"{slugify(person.first_name + person.last_name)}_{index:02d}@lubimovka.ru"
+            ),
         )
 
 

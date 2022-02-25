@@ -1,9 +1,10 @@
 from django.urls import include, path
 
-from apps.afisha.views import EventsAPIView
+from apps.afisha.views import AfishaEventListAPIView, AfishaInfoAPIView
 
 afisha_urls = [
-    path("afisha/events/", EventsAPIView.as_view(), name="events"),
+    path("afisha/events/", AfishaEventListAPIView.as_view(), name="afisha-event-list"),
+    path("afisha/info/", AfishaInfoAPIView.as_view(), name="afisha-info"),
 ]
 
 urlpatterns = [
