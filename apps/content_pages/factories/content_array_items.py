@@ -1,10 +1,11 @@
 import factory
 
+from apps.afisha.models import Event
 from apps.content_pages.models import (
     ContentPersonRole,
     ExtendedPerson,
+    OrderedEvent,
     OrderedImage,
-    OrderedPerformance,
     OrderedPlay,
     OrderedVideo,
     PersonsBlock,
@@ -12,7 +13,7 @@ from apps.content_pages.models import (
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
-from apps.library.models import Performance, Play
+from apps.library.models import Play
 
 
 @restrict_factory(general=(Role,))
@@ -88,21 +89,21 @@ class OrderedImageFactory(factory.django.DjangoModelFactory):
     order = factory.Sequence(lambda n: (n % 3 + 1))
 
 
-@restrict_factory(general=(Performance,))
-class OrderedPerformanceFactory(factory.django.DjangoModelFactory):
-    """Create Performance with order for block.
+@restrict_factory(general=(Event,))
+class OrderedEventFactory(factory.django.DjangoModelFactory):
+    """Create Events with order for block.
 
-    Order in factory assume that there are not more than 3 ordered performances in a block.
+    Order in factory assume that there are not more than 3 ordered events in a block.
     """
 
     class Meta:
-        model = OrderedPerformance
+        model = OrderedEvent
 
     order = factory.Sequence(lambda n: (n % 3 + 1))
 
     @factory.lazy_attribute
     def item(self):
-        return Performance.objects.order_by("?").first()
+        return Event.objects.order_by("?").filter(type="PERFORMANCE").first()
 
 
 @restrict_factory(general=(Play,))
