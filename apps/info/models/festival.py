@@ -1,6 +1,6 @@
 from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinLengthValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import F, Q, UniqueConstraint
 from django.utils import timezone
@@ -10,51 +10,7 @@ from apps.articles.utilities import сompressImage
 from apps.core.models import BaseModel, Image, Person
 
 
-class Partner(BaseModel):
-    class PartnerType(models.TextChoices):
-        GENERAL_PARTNER = "general", _("Генеральный партнер")
-        FESTIVAL_PARTNER = "festival", _("Партнер фестиваля")
-        INFO_PARTNER = "info", _("Информационный партнер")
-
-    name = models.CharField(
-        max_length=200,
-        verbose_name="Наименование",
-    )
-    type = models.CharField(
-        max_length=8,
-        choices=PartnerType.choices,
-        verbose_name="Тип",
-    )
-    url = models.URLField(
-        max_length=200,
-        verbose_name="Ссылка на сайт",
-    )
-    image = models.ImageField(
-        upload_to="images/info/partnerslogo",
-        verbose_name="Логотип",
-        help_text="Загрузите логотип партнёра",
-    )
-    in_footer_partner = models.BooleanField(
-        default=False,
-        verbose_name="Отображать внизу страницы",
-        help_text=("Поставьте галочку, чтобы показать логотип партнёра внизу страницы"),
-    )
-
-    class Meta:
-        verbose_name = "Партнер"
-        verbose_name_plural = "Партнеры"
-        ordering = ("type",)
-
-    def __str__(self):
-        return f"{self.name} - {self.type}"
-
-    def save(self, *args, **kwargs):
-        if self.image:
-            self.image = сompressImage(self.image)
-        super().save(*args, **kwargs)
-
-
-class FestivalTeam(BaseModel):
+class FestivalTeamMember(BaseModel):
     class TeamType(models.TextChoices):
         ART_DIRECTION = "art", _("Арт-дирекция фестиваля")
         FESTIVAL_TEAM = "fest", _("Команда фестиваля")
@@ -74,6 +30,11 @@ class FestivalTeam(BaseModel):
     position = models.CharField(
         max_length=150,
         verbose_name="Должность",
+    )
+    is_pr_manager = models.BooleanField(
+        default=False,
+        verbose_name="PR-менеджер",
+        help_text="Поставьте галочку, чтобы назначить человека PR-менеджером",
     )
 
     class Meta:
@@ -98,58 +59,20 @@ class FestivalTeam(BaseModel):
             raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
+        if not self.is_pr_manager:
+            hasAnotherPrManager = FestivalTeamMember.objects.filter(
+                Q(is_pr_manager=True) & Q(person=self.person)
+            ).exists()
+            if hasAnotherPrManager:
+                raise ValidationError(
+                    "Для того чтобы снять с должности PR-менеджера, "
+                    "нужно назначить другого человека на эту должность"
+                )
 
-
-class Sponsor(BaseModel):
-    person = models.OneToOneField(
-        Person,
-        on_delete=models.PROTECT,
-        verbose_name="Человек",
-    )
-    position = models.CharField(
-        max_length=150,
-        verbose_name="Должность",
-    )
-
-    class Meta:
-        verbose_name = "Попечитель фестиваля"
-        verbose_name_plural = "Попечители фестиваля"
-
-    def __str__(self):
-        return f"{self.person.first_name} {self.person.last_name}"
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
-
-    def clean(self, *args, **kwargs):
-        if self._has_person_before_saving() and not self.person.image:
-            raise ValidationError("Для спонсора должно быть выбрано фото")
-        return super().clean(*args, **kwargs)
-
-    def _has_person_before_saving(self):
-        return self.person_id is not None
-
-
-class Place(BaseModel):
-    name = models.CharField(max_length=50, verbose_name="Название")
-    description = models.TextField(max_length=255, verbose_name="Описание")
-    city = models.CharField(max_length=50, verbose_name="Город")
-    address = models.CharField(max_length=50, verbose_name="Адрес")
-    map_link = models.URLField(verbose_name="Ссылка на карту")
-
-    class Meta:
-        verbose_name = "Площадка"
-        verbose_name_plural = "Площадки"
-        constraints = [
-            models.UniqueConstraint(
-                fields=("name", "city"),
-                name="unique_place",
-            ),
-        ]
-
-    def __str__(self):
-        return self.name
+    def delete(self, *args, **kwargs):
+        if self.is_pr_manager:
+            raise ValidationError("Перед удалением назначьте на должность PR-менеджера другого человека")
+        super().delete(*args, **kwargs)
 
 
 class Festival(BaseModel):
@@ -236,83 +159,6 @@ class Festival(BaseModel):
         if self.end_date and self.start_date and self.end_date < self.start_date:
             raise ValidationError({"end_date": _("Дата окончания фестиваля не может быть раньше даты его начала.")})
         return super().clean()
-
-
-class Volunteer(BaseModel):
-    person = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT,
-        verbose_name="Человек",
-    )
-    festival = models.ForeignKey(
-        Festival,
-        on_delete=models.CASCADE,
-        related_name="volunteers",
-        verbose_name="Фестиваль",
-    )
-    review_title = models.CharField(
-        max_length=50,
-        blank=True,
-        verbose_name="Заголовок отзыва",
-    )
-    review_text = models.TextField(
-        max_length=2000,
-        blank=True,
-        verbose_name="Текст отзыва",
-    )
-
-    class Meta:
-        verbose_name = "Волонтёр фестиваля"
-        verbose_name_plural = "Волонтёры фестиваля"
-        ordering = ("person__last_name",)
-        constraints = [
-            UniqueConstraint(
-                fields=("person", "festival"),
-                name="unique_volunteer",
-            )
-        ]
-
-    def __str__(self):
-        return f"{self.person.first_name} {self.person.last_name} - волонтёр фестиваля {self.festival.year} года"
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
-
-    def clean(self):
-        if self._has_person_before_saving():
-            if not self.person.email:
-                raise ValidationError("Укажите email для волонтёра")
-            if not self.person.image:
-                raise ValidationError("Для волонтёра необходимо выбрать его фото")
-            if not self.person.city:
-                raise ValidationError("Укажите город проживания волонтёра")
-
-    def _has_person_before_saving(self):
-        return self.person_id is not None
-
-
-class Question(BaseModel):
-    question = models.TextField(
-        max_length=500,
-        validators=[MinLengthValidator(2, "Вопрос должен состоять более чем из 2 символов")],
-        verbose_name="Текст вопроса",
-    )
-    author_name = models.CharField(
-        max_length=50,
-        verbose_name="Имя",
-    )
-    author_email = models.EmailField(
-        max_length=50,
-        verbose_name="Электронная почта",
-    )
-
-    class Meta:
-        verbose_name = "Вопрос или предложение"
-        verbose_name_plural = "Вопросы или предложения"
-
-    def __str__(self):
-        return f"{self.name} {self.question}"
 
 
 class PressRelease(BaseModel):

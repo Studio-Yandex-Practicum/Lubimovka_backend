@@ -1,11 +1,14 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
-from apps.core.models import Person
-from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
+from apps.core.models import Person, Setting
+from apps.info.form import FestivalTeamMemberForm
+from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Sponsor, Volunteer
 
 
+@admin.register(Partner)
 class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
     """Class for registration Partner model in admin panel and expanded with JS script.
 
@@ -66,6 +69,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
         js = ("admin/info/js/PartnerInFooter.js",)
 
 
+@admin.register(Person)
 class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     list_display = (
         "full_name",
@@ -79,6 +83,7 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
+@admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
     list_display = (
         "person",
@@ -122,7 +127,7 @@ class VolunteerInline(admin.TabularInline):
     @admin.display(
         boolean=True,
         ordering="review_title",
-        description="ОТЗЫВ?",
+        description="Есть отзыв?",
     )
     def is_review(self, obj):
         if obj.review_text:
@@ -137,6 +142,7 @@ class FestivalImagesInline(admin.TabularInline):
     extra = 1
 
 
+@admin.register(Festival)
 class FestivalAdmin(admin.ModelAdmin):
     list_display = ("year",)
     inlines = (
@@ -151,6 +157,7 @@ class FestivalAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
 
+@admin.register(Place)
 class PlaceAdmin(admin.ModelAdmin):
     list_display = (
         "name",
@@ -162,6 +169,7 @@ class PlaceAdmin(admin.ModelAdmin):
     search_fields = ("name", "address")
 
 
+@admin.register(PressRelease)
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
     list_filter = ("festival",)
@@ -173,29 +181,66 @@ class PressRealeaseAdmin(admin.ModelAdmin):
     search_fields = ("title",)
 
 
-class FestivalTeamAdmin(admin.ModelAdmin):
+@admin.register(FestivalTeamMember)
+class FestivalTeamMemberAdmin(admin.ModelAdmin):
+    form = FestivalTeamMemberForm
     list_display = (
         "person",
         "team",
         "position",
+        "is_pr_manager",
     )
+    list_filter = (
+        "team",
+        "is_pr_manager",
+    )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "person",
+                    "team",
+                    "position",
+                ),
+            },
+        ),
+        (
+            None,
+            {
+                "fields": (
+                    "is_pr_manager",
+                    "data_manager",
+                ),
+                "classes": ("depended_on_team_type",),
+            },
+        ),
+    )
+
     ordering = ("person__last_name",)
-    list_filter = ("team",)
+
     search_fields = ("position", "person__first_name", "person__last_name")
 
+    def save_model(self, request, obj, form, change):
+        """Данные из поля 'data_manager' проверяются и сохраняются в модели 'Setting'."""
+        if form.is_valid():
+            if obj.is_pr_manager:
+                name_manager = form.cleaned_data["data_manager"]
+                FestivalTeamMember.objects.filter(is_pr_manager=True).update(is_pr_manager=False)
+                Setting.objects.filter(settings_key="pr_manager_name").update(text=name_manager)
+            obj.save()
+        else:
+            raise ValidationError("Заполните поля корректно")
 
+    class Media:
+        """Adds a script that displays the field ```is_pr_manager``` if the team art is selected."""
+
+        js = ("admin/info/js/FestivalTeamFooter.js",)
+
+
+@admin.register(Sponsor)
 class SponsorAdmin(admin.ModelAdmin):
     list_display = (
         "person",
         "position",
     )
-
-
-admin.site.register(Festival, FestivalAdmin)
-admin.site.register(PressRelease, PressReleaseAdmin)
-admin.site.register(Partner, PartnerAdmin)
-admin.site.register(Person, PersonAdmin)
-admin.site.register(Place, PlaceAdmin)
-admin.site.register(FestivalTeam, FestivalTeamAdmin)
-admin.site.register(Volunteer, VolunteerAdmin)
-admin.site.register(Sponsor, SponsorAdmin)
