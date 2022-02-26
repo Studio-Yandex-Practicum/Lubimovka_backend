@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
-from apps.core.mixins import StatusButtonMixin
+from apps.core.mixins import DeletePermissionsMixin, StatusButtonMixin
 from apps.core.models import Person, Role
 from apps.library.models import (
     Achievement,
@@ -28,7 +28,7 @@ class AuthorInline(admin.TabularInline):
     verbose_name_plural = "Авторы"
 
 
-class PlayAdmin(StatusButtonMixin, admin.ModelAdmin):
+class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
     filter_horizontal = ("authors",)
     list_display = (
         "name",

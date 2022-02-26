@@ -12,14 +12,13 @@ class StatusButtonMixin:
         obj = obj_class.objects.get(pk=object_id)
         status_protected = obj.STATUS_INFO[obj.status]["special_perms"]
         extra_context["status_protected"] = status_protected
-
         possible_changes = obj.STATUS_INFO[obj.status]["possible_changes"]  # tuple of statuses
         statuses = {}
         for status in possible_changes:
             statuses[status] = obj.STATUS_INFO[status]
         # dict of dicts
         extra_context["possible_statuses"] = statuses
-        print(statuses)
+        # print(statuses)
         return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
@@ -30,6 +29,18 @@ class StatusButtonMixin:
                 self.message_user(request, "Статус успешно обновлён!")
                 return HttpResponseRedirect(".")
         return super().response_change(request, obj)
+
+
+class DeletePermissionsMixin:
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        extra_context = {}
+        obj_class = self.model
+        obj = obj_class.objects.get(pk=object_id)
+        if request.user.is_editor and not (obj.status == "REVIEW" or obj.status == "IN_PROCESS"):
+            extra_context["show_delete"] = False
+        if request.user.is_journalist and not obj.status == "IN_PROCESS":
+            extra_context["show_delete"] = False
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 class AdminImagePreview:

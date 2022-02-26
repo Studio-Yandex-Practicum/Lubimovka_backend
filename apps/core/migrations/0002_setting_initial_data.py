@@ -7,6 +7,7 @@ def set_default_groups(apps, schema_editor):
         [
             Group(name="admin"),
             Group(name="editor"),
+            Group(name="journalist"),
         ]
     )
 

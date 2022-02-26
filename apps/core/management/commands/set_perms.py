@@ -74,11 +74,17 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_volunteer")
             )
             admin_permissions = Permission.objects.all()
+            journalist_permissions = Permission.objects.filter(
+                Q(codename__endswith="_play") & ~Q(codename__endswith="change_play")
+            )
 
             admin, created = Group.objects.get_or_create(name="admin")
             admin.permissions.set(admin_permissions)
             editor, created = Group.objects.get_or_create(name="editor")
             editor.permissions.set(editors_permissions)
+            journalist, created = Group.objects.get_or_create(name="journalist")
+            journalist.permissions.set(journalist_permissions)
+
             self.stdout.write(self.style.SUCCESS("Права для пользователей успешно установлены."))
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка установки прав."))
