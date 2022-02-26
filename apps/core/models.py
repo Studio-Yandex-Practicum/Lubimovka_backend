@@ -284,8 +284,6 @@ class Setting(BaseModel):
 
     def save(self, *args, **kwargs):
         self._check_related_settings(self)
-        if self.image:
-            self.image = сompressImage(self.image)
         return super().save(*args, **kwargs)
 
     @property
