@@ -1,8 +1,11 @@
+from typing import Any, Union
+
 from django.contrib import admin
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.utils import slugify
 from apps.core.validators import name_validator
 
@@ -35,7 +38,7 @@ class BaseModel(models.Model):
 
 class Image(BaseModel):
     image = models.ImageField(
-        upload_to="images/core/",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение",
         help_text="Загрузите фотографию",
     )
@@ -251,7 +254,7 @@ class Setting(BaseModel):
         verbose_name="Ссылка",
     )
     image = models.ImageField(
-        upload_to="core/",
+        upload_to=path_by_app_label_and_class_name,
         blank=True,
         verbose_name="Изображение",
     )
@@ -281,9 +284,32 @@ class Setting(BaseModel):
 
     @classmethod
     def get_setting(cls, settings_key):
-        if Setting.objects.filter(settings_key=settings_key).exists():
-            setting = Setting.objects.get(settings_key=settings_key)
-            return setting.value
+        is_settings_key_found = Setting.objects.filter(settings_key=settings_key).exists()
+        assert is_settings_key_found, f"Ключа настроек `{settings_key}` не найдено."
+
+        setting = Setting.objects.get(settings_key=settings_key)
+        return setting.value
+
+    @classmethod
+    def get_settings(cls, settings_keys: Union[list[str], tuple[str]]) -> dict[str, Any]:
+        """Get list or tuple of setting keys and return dict with values."""
+        # fmt: off
+        assert (
+            (isinstance(settings_keys, tuple) or isinstance(settings_keys, list))
+            and len(settings_keys)
+        ), "Метод ожидает только непустые `tuple` или `list` из строк `settings_key`."
+        # fmt: on
+
+        settings_qs = Setting.objects.filter(settings_key__in=settings_keys)
+        settings_dict = {
+            setting.settings_key: getattr(setting, cls.TYPES_AND_FIELDS[setting.field_type]) for setting in settings_qs
+        }
+
+        assert set(settings_keys).issubset(
+            settings_dict
+        ), f"Не все переданные ключи найдены. Нашлись {settings_dict.keys()}"
+
+        return settings_dict
 
     @classmethod
     def _turn_off_setting(cls, setting):

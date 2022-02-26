@@ -47,7 +47,7 @@ def test_blog_item_list_paginated(client, paginator_field, simple_blog_item_publ
 
 
 @pytest.mark.parametrize(
-    "blog_item_list_field",
+    "expected_field",
     (
         "id",
         "pub_date",
@@ -58,13 +58,13 @@ def test_blog_item_list_paginated(client, paginator_field, simple_blog_item_publ
         "image",
     ),
 )
-def test_blog_item_list_fields(client, blog_item_list_field, simple_blog_item_published):
-    """Take the first `BlogItem` representation and look for required fields."""
+def test_blog_item_list_fields(client, expected_field, simple_blog_item_published):
+    """Take the first `BlogItem` representation and look for expected fields."""
     response = client.get(BLOG_ITEM_LIST_URL)
     results = response.data.get("results")
     blog_item_data = results[0]
 
-    assert blog_item_list_field in blog_item_data
+    assert expected_field in blog_item_data
 
 
 def test_blog_item_list_not_draft_in_results(client, simple_blog_item_published, simple_blog_item_not_published):

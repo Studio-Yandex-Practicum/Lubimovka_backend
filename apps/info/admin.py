@@ -1,8 +1,10 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
-from apps.core.models import Person
+from apps.core.models import Person, Setting
+from apps.info.form import FestivalTeamMemberForm
 from apps.info.models import Festival, FestivalTeam, Partner, Place, PressRelease, Sponsor, Volunteer
 
 
@@ -122,7 +124,7 @@ class VolunteerInline(admin.TabularInline):
     @admin.display(
         boolean=True,
         ordering="review_title",
-        description="ОТЗЫВ?",
+        description="Есть отзыв?",
     )
     def is_review(self, obj):
         if obj.review_text:
@@ -174,14 +176,59 @@ class PressRealeaseAdmin(admin.ModelAdmin):
 
 
 class FestivalTeamAdmin(admin.ModelAdmin):
+    form = FestivalTeamMemberForm
     list_display = (
         "person",
         "team",
         "position",
+        "is_pr_manager",
     )
+    list_filter = (
+        "team",
+        "is_pr_manager",
+    )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "person",
+                    "team",
+                    "position",
+                ),
+            },
+        ),
+        (
+            None,
+            {
+                "fields": (
+                    "is_pr_manager",
+                    "data_manager",
+                ),
+                "classes": ("depended_on_team_type",),
+            },
+        ),
+    )
+
     ordering = ("person__last_name",)
-    list_filter = ("team",)
+
     search_fields = ("position", "person__first_name", "person__last_name")
+
+    def save_model(self, request, obj, form, change):
+        """Данные из поля 'data_manager' проверяются и сохраняются в модели 'Setting'."""
+        if form.is_valid():
+            if obj.is_pr_manager:
+                name_manager = form.cleaned_data["data_manager"]
+                FestivalTeam.objects.filter(is_pr_manager=True).update(is_pr_manager=False)
+                Setting.objects.filter(settings_key="pr_manager_name").update(text=name_manager)
+            obj.save()
+        else:
+            raise ValidationError("Заполните поля корректно")
+
+    class Media:
+        """Adds a script that displays the field ```is_pr_manager``` if the team art is selected."""
+
+        js = ("admin/info/js/FestivalTeamFooter.js",)
 
 
 class SponsorAdmin(admin.ModelAdmin):

@@ -25,7 +25,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     OneToOneField) is created by a signal in afisha app.
 
     Parameters:
-    1. `add_video`: if True sets random url link to video attribute.
+    1. `without_video`: if True sets video to `None`.
     2. `add_real_images`: if True, tries to create object with real
     `main_image` and `bottom_image` images.
     3. `add_images_in_block`: if True create random number of images (no more
@@ -53,15 +53,15 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("video",)
 
     class Params:
-        add_video = factory.Trait(
-            video=factory.Faker("url"),
+        without_video = factory.Trait(
+            video=None,
         )
         add_real_images = factory.Trait(
             main_image=factory.django.ImageField(from_func=get_picsum_image),
             bottom_image=factory.django.ImageField(from_func=get_picsum_image),
         )
 
-    name = factory.LazyFunction(lambda: fake.word().capitalize())
+    name = factory.Faker("text", max_nb_chars=150, locale="ru_RU")
     main_image = factory.django.ImageField(
         color=factory.Faker("color"),
         width=factory.Faker("random_int", min=10, max=1000),
@@ -75,7 +75,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     description = factory.Faker("text", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
     age_limit = factory.Faker("random_int", min=0, max=18)
-    video = None
+    video = factory.Faker("url")
 
     @factory.lazy_attribute
     def play(self):
@@ -84,12 +84,12 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     dramatist_person = factory.RelatedFactory(
         TeamMemberFactory,
         factory_related_name="performance",
-        role__slug="dramatist",
+        set_role_with_slug="dramatist",
     )
     director_person = factory.RelatedFactory(
         TeamMemberFactory,
         factory_related_name="performance",
-        role__slug="director",
+        set_role_with_slug="director",
     )
 
     @factory.post_generation
@@ -141,7 +141,6 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
         """
         return cls.create_batch(
             count,
-            add_video=True,
             add_images_in_block=True,
             add_review=True,
             add_media_review=True,
@@ -182,6 +181,7 @@ class PerformanceReviewFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = PerformanceReview
+        django_get_or_create = ("url",)
 
     reviewer_name = factory.Faker("name", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")

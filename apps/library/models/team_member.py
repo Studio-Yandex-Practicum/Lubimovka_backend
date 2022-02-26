@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 from apps.core.models import BaseModel, Person
 
@@ -73,6 +74,26 @@ class TeamMember(BaseModel):
                     "masterclass",
                 ),
                 name="unique_person_role_per_masterclass",
+            ),
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_only_one_of_reading_masterclass_performance",
+                check=(
+                    Q(
+                        performance__isnull=False,
+                        reading__isnull=True,
+                        masterclass__isnull=True,
+                    )
+                    | Q(
+                        performance__isnull=True,
+                        reading__isnull=False,
+                        masterclass__isnull=True,
+                    )
+                    | Q(
+                        performance__isnull=True,
+                        reading__isnull=True,
+                        masterclass__isnull=False,
+                    )
+                ),
             ),
         )
 

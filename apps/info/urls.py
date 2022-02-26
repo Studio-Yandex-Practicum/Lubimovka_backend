@@ -8,7 +8,6 @@ from apps.info.views import (
     FestivalYearsAPIView,
     PartnersAPIView,
     PressReleaseDownloadAPIView,
-    PressReleasePhotoGalleryLink,
     PressReleaseViewSet,
     PressReleaseYearsAPIView,
     QuestionCreateAPIView,
@@ -83,11 +82,6 @@ info_urls = [
         "press-releases/<int:festival__year>/download/",
         PressReleaseDownloadAPIView.as_view(),
         name="press-releases_download",
-    ),
-    path(
-        "press-releases/photo_gallery_link/",
-        PressReleasePhotoGalleryLink.as_view(),
-        name="press-release-photo-gallery-link",
     ),
 ]
 
