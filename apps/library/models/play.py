@@ -1,8 +1,8 @@
 from django.db import models
 from django.db.models import UniqueConstraint
-from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel
+from apps.core.status_source import Status
 from apps.core.utils import slugify
 from apps.info.models import Festival
 from apps.library.validators import year_validator
@@ -34,55 +34,6 @@ class ProgramType(BaseModel):
 
 
 class Play(BaseModel):
-    class PlayStatus(models.TextChoices):
-        IN_PROCESS = "IN_PROCESS", _("В работе")
-        REVIEW = "REVIEW", _("На проверке")
-        READY_FOR_PUBLICATION = "READY_FOR_PUBLICATION", _("Готово к публикации")
-        PUBLISHED = "PUBLISHED", _("Опубликовано")
-        REMOVED_FROM_PUBLICATION = "REMOVED_FROM_PUBLICATION", _("Снято с публикации")
-
-    STATUS_INFO = {
-        "IN_PROCESS": {
-            "button_name": "Вернуть в работу",
-            "special_perms": False,
-            "possible_changes": (
-                "REVIEW",
-                "READY_FOR_PUBLICATION",
-            ),
-        },
-        "REVIEW": {
-            "button_name": "Отправить на проверку",
-            "special_perms": False,
-            "possible_changes": (
-                "IN_PROCESS",
-                "READY_FOR_PUBLICATION",
-            ),
-        },
-        "READY_FOR_PUBLICATION": {
-            "button_name": "Подготовить к публикации",
-            "special_perms": False,
-            "possible_changes": (
-                "IN_PROCESS",
-                "PUBLISHED",
-            ),
-        },
-        "PUBLISHED": {
-            "button_name": "ОПУБЛИКОВАТЬ",
-            "special_perms": True,
-            "possible_changes": (
-                "IN_PROCESS",
-                "REMOVED_FROM_PUBLICATION",
-            ),
-        },
-        "REMOVED_FROM_PUBLICATION": {
-            "button_name": "Снять с публикации",
-            "special_perms": True,
-            "possible_changes": (
-                "IN_PROCESS",
-                "PUBLISHED",
-            ),
-        },
-    }
 
     name = models.CharField(
         max_length=70,
@@ -122,7 +73,7 @@ class Play(BaseModel):
         verbose_name="Фестиваль",
     )
     status = models.CharField(
-        choices=PlayStatus.choices,
+        choices=Status.choices,
         default="IN_PROCESS",
         max_length=35,
         verbose_name="Статус",
@@ -137,7 +88,11 @@ class Play(BaseModel):
         )
         verbose_name = "Пьеса"
         verbose_name_plural = "Пьесы"
-        permissions = (("can_play_publish", "Может опубликовать пьесу"),)
+        permissions = (
+            ("access_level_1", "Права журналиста"),
+            ("access_level_2", "Права редактора"),
+            ("access_level_3", "Права главреда"),
+        )
 
     def __str__(self):
         return self.name

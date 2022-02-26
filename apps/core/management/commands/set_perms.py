@@ -72,10 +72,13 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_title")
                 | Q(codename__endswith="_videosblock")
                 | Q(codename__endswith="_volunteer")
+                | Q(codename="access_level_2")
             )
-            admin_permissions = Permission.objects.all()
+            admin_permissions = Permission.objects.all().exclude(
+                Q(codename="access_level_2") & Q(codename="access_level_1")
+            )
             journalist_permissions = Permission.objects.filter(
-                Q(codename__endswith="_play") & ~Q(codename__endswith="change_play")
+                Q(codename__endswith="_play") & ~Q(codename__endswith="change_play") | Q(codename="access_level_1")
             )
 
             admin, created = Group.objects.get_or_create(name="admin")
