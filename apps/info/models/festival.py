@@ -6,47 +6,7 @@ from django.db.models import F, Q, UniqueConstraint
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Image, Person
-
-
-class Partner(BaseModel):
-    class PartnerType(models.TextChoices):
-        GENERAL_PARTNER = "general", _("Генеральный партнер")
-        FESTIVAL_PARTNER = "festival", _("Партнер фестиваля")
-        INFO_PARTNER = "info", _("Информационный партнер")
-
-    name = models.CharField(
-        max_length=200,
-        verbose_name="Наименование",
-    )
-    type = models.CharField(
-        max_length=8,
-        choices=PartnerType.choices,
-        verbose_name="Тип",
-    )
-    url = models.URLField(
-        max_length=200,
-        verbose_name="Ссылка на сайт",
-    )
-    image = models.ImageField(
-        upload_to=path_by_app_label_and_class_name,
-        verbose_name="Логотип",
-        help_text="Загрузите логотип партнёра",
-    )
-    in_footer_partner = models.BooleanField(
-        default=False,
-        verbose_name="Отображать внизу страницы",
-        help_text="Поставьте галочку, чтобы показать логотип партнёра внизу страницы",
-    )
-
-    class Meta:
-        verbose_name = "Партнер"
-        verbose_name_plural = "Партнеры"
-        ordering = ("type",)
-
-    def __str__(self):
-        return f"{self.name} - {self.type}"
 
 
 class FestivalTeamMember(BaseModel):

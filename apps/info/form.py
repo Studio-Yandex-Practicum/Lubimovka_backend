@@ -1,7 +1,7 @@
 from django import forms
 
 from apps.core.models import Setting
-from apps.info.models import FestivalTeam
+from apps.info.models import FestivalTeamMember
 
 
 class FestivalTeamMemberForm(forms.ModelForm):
@@ -24,7 +24,7 @@ class FestivalTeamMemberForm(forms.ModelForm):
     )
 
     class Meta:
-        model = FestivalTeam
+        model = FestivalTeamMember
         fields = (
             "person",
             "team",
