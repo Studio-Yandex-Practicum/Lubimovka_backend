@@ -149,6 +149,7 @@ STATICFILES_FINDERS = [
 
 # MEDIA
 # ------------------------------------------------------------------------------
+FILE_UPLOAD_MAX_MEMORY_SIZE = 3000000
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 MEDIA_ROOT = str(ROOT_DIR / "media")
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url

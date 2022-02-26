@@ -5,6 +5,7 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
+from apps.articles.utilities import сompressImage
 from apps.core.utils import slugify
 from apps.core.validators import name_validator
 
@@ -45,6 +46,11 @@ class Image(BaseModel):
     class Meta:
         verbose_name = "Изображение"
         verbose_name_plural = "Изображения"
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image = сompressImage(self.image)
+        return super().save(*args, **kwargs)
 
 
 class Person(BaseModel):
@@ -98,6 +104,11 @@ class Person(BaseModel):
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image = сompressImage(self.image)
+        return super().save(*args, **kwargs)
 
     @property
     @admin.display(description="Имя и фамилия")
@@ -272,7 +283,9 @@ class Setting(BaseModel):
 
     def save(self, *args, **kwargs):
         self._check_related_settings(self)
-        super().save(*args, **kwargs)
+        if self.image:
+            self.image = сompressImage(self.image)
+        return super().save(*args, **kwargs)
 
     @property
     def value(self):

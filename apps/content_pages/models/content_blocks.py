@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
+from apps.articles.utilities import сompressImage
 from apps.content_pages.models import AbstractItemWithTitle
 from apps.core.models import BaseModel, Person, Role
 from apps.library.models import Performance, Play
@@ -51,6 +52,11 @@ class OrderedImage(AbstractOrderedItemBase):
 
     def __str__(self):
         return f"Изображение {self.order}"
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image = сompressImage(self.image)
+        super().save(*args, **kwargs)
 
 
 class OrderedPerformance(AbstractOrderedItemBase):

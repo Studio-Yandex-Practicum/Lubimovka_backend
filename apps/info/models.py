@@ -6,6 +6,7 @@ from django.db.models import F, Q, UniqueConstraint
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from apps.articles.utilities import сompressImage
 from apps.core.models import BaseModel, Image, Person
 
 
@@ -46,6 +47,11 @@ class Partner(BaseModel):
 
     def __str__(self):
         return f"{self.name} - {self.type}"
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image = сompressImage(self.image)
+        super().save(*args, **kwargs)
 
 
 class FestivalTeam(BaseModel):
@@ -222,6 +228,8 @@ class Festival(BaseModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
+        if self.image:
+            self.image = сompressImage(self.image)
         return super().save(*args, **kwargs)
 
     def clean(self):

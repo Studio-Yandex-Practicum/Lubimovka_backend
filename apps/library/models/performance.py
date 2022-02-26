@@ -5,6 +5,7 @@ from django.db import models
 
 from apps.core.models import BaseModel, Image, Person
 
+from ...articles.utilities import сompressImage
 from .play import Play
 
 
@@ -127,6 +128,11 @@ class PerformanceMediaReview(BaseModel):
 
     def __str__(self):
         return self.media_name
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image = сompressImage(self.image)
+        return super().save(*args, **kwargs)
 
 
 class PerformanceReview(BaseModel):

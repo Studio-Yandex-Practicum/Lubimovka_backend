@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
+from apps.articles.utilities import сompressImage
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Person, Role
@@ -72,6 +73,11 @@ class BlogItem(AbstractContentPage):
 
     def __str__(self):
         return f"Запись блога {self.title}"
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image = сompressImage(self.image)
+        super().save(*args, **kwargs)
 
 
 class BlogItemContent(AbstractContent):

@@ -1,5 +1,6 @@
 from django.db import models
 
+from apps.articles.utilities import сompressImage
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 
 
@@ -21,6 +22,11 @@ class Project(AbstractContentPage):
         ordering = ("-pub_date",)
         verbose_name = "Проект"
         verbose_name_plural = "Проекты"
+
+    def save(self, *args, **kwargs):
+        if self.image:
+            self.image = сompressImage(self.image)
+        super().save(*args, **kwargs)
 
 
 class ProjectContent(AbstractContent):
