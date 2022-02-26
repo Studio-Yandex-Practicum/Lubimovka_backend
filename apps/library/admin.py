@@ -55,6 +55,12 @@ class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
     )
     exclude = ("status",)
 
+    def get_actions(self, request):
+        actions = super().get_actions(request)
+        if "delete_selected" in actions and not (request.user.is_admin or request.user.is_superuser):
+            del actions["delete_selected"]
+        return actions
+
 
 class AchievementAdmin(admin.ModelAdmin):
     list_display = ("tag",)

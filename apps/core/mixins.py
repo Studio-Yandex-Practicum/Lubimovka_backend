@@ -33,12 +33,12 @@ class StatusButtonMixin:
 
 class DeletePermissionsMixin:
     def change_view(self, request, object_id, form_url="", extra_context=None):
-        extra_context = {}
+        # extra_context = {}
         obj_class = self.model
         obj = obj_class.objects.get(pk=object_id)
         if request.user.is_editor and not (obj.status == "REVIEW" or obj.status == "IN_PROCESS"):
             extra_context["show_delete"] = False
-        if request.user.is_journalist and not obj.status == "IN_PROCESS":
+        if request.user.groups.filter(name="Журналист").exists() and not obj.status == "IN_PROCESS":
             extra_context["show_delete"] = False
         return super().change_view(request, object_id, form_url, extra_context)
 
