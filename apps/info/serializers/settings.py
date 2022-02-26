@@ -12,7 +12,7 @@ class ForPressSerializer(serializers.Serializer):
     photo_gallery_facebook_link = serializers.URLField()
 
 
-class FeedbackSerializer(serializers.Serializer):
+class SettingsSerializer(serializers.Serializer):
     email_on_project_page = serializers.EmailField()
     email_on_what_we_do_page = serializers.EmailField()
     email_on_trustees_page = serializers.EmailField()
@@ -20,3 +20,4 @@ class FeedbackSerializer(serializers.Serializer):
     email_on_acceptance_of_plays_page = serializers.EmailField()
     email_on_author_page = serializers.EmailField()
     for_press = ForPressSerializer()
+    plays_reception = serializers.BooleanField()
