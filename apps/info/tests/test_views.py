@@ -3,7 +3,7 @@ from datetime import datetime
 import pytest
 from django.urls import reverse
 
-from apps.info.models import FestivalTeam, Question
+from apps.info.models import FestivalTeamMember, Question
 from apps.info.tests.conftest import (
     FESTIVAL_URL_NAME,
     FESTIVAL_YEARS_URL,
@@ -108,15 +108,15 @@ class TestAboutFestivalAPIViews:
     @pytest.mark.parametrize(
         "teams_filter",
         (
-            FestivalTeam.TeamType.ART_DIRECTION,
-            FestivalTeam.TeamType.FESTIVAL_TEAM,
+            FestivalTeamMember.TeamType.ART_DIRECTION,
+            FestivalTeamMember.TeamType.FESTIVAL_TEAM,
         ),
     )
     def test_get_teams_with_filter(self, client, festival_teams, teams_filter):
         """Checks that we can get teams with filter."""
         url = TEAMS_URL_FILTER + teams_filter
         response = client.get(url)
-        count_teams_in_db = FestivalTeam.objects.filter(team=teams_filter).count()
+        count_teams_in_db = FestivalTeamMember.objects.filter(team=teams_filter).count()
         count_teams_in_response = len(response.json())
         assert (
             count_teams_in_db == count_teams_in_response
