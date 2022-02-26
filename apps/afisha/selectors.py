@@ -37,7 +37,7 @@ def afisha_info_get() -> dict[str, Union[str, Any]]:
         .distinct()
         .values_list("date", flat=True)
     )
-    afisha_info_data.update(afisha_dates=afisha_dates)
+    afisha_info_data["afisha_dates"] = afisha_dates
     return afisha_info_data
 
 
