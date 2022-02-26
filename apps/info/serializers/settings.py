@@ -20,4 +20,4 @@ class SettingsSerializer(serializers.Serializer):
     email_on_acceptance_of_plays_page = serializers.EmailField()
     email_on_author_page = serializers.EmailField()
     for_press = ForPressSerializer()
-    plays_reception = serializers.BooleanField()
+    plays_reception_is_open = serializers.BooleanField()

@@ -8,3 +8,4 @@ class SettingsPlayReceptionPermission(BasePermission):
     def has_permission(self, request, view):
         if not Setting.objects.get(settings_key="plays_reception_is_open").boolean:
             raise PermissionDenied("Приём пьес закрыт.")
+        return True
