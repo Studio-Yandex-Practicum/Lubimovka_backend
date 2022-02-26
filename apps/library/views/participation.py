@@ -20,7 +20,7 @@ gs = GoogleSpreadsheets()
     responses={
         201: ParticipationSerializer,
         400: ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
-        403: "Приём пьес закрыт.",
+        403: {"example": "Приём пьес закрыт."},
     }
 )
 class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
