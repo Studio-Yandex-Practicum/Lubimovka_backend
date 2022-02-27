@@ -1,7 +1,16 @@
+from typing import List, TypedDict
+
 from django.db.models.query import Prefetch
 
 from apps.core.models import Role
 from apps.library.serializers.role import RoleSerializer, RoleWithPluralPersonsSerializer
+
+
+class TeamTypedDict(TypedDict):
+    """Type hint for 'team' field in PerformanceSerializer."""
+
+    name: str
+    persons: List[str]
 
 
 def get_event_team_roles(obj, filters: dict = None):
@@ -14,7 +23,7 @@ def get_event_team_roles(obj, filters: dict = None):
     return roles.prefetch_related(Prefetch("team_members", team))
 
 
-def get_event_team_serialized_data(roles):
+def get_event_team_serialized_data(roles) -> List[TeamTypedDict]:
     """Формирует словарь со следующей структурой.
 
     [
