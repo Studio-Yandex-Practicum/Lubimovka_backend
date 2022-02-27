@@ -7,10 +7,8 @@ from rest_framework import mixins, viewsets
 from apps.library.schema.schema_extension import ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400
 from apps.library.serializers.participation import ParticipationSerializer
 from apps.library.services.spreadsheets import GoogleSpreadsheets
-from config.logging import LOGGING_CONFIG
 
-logging.config.dictConfig(LOGGING_CONFIG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("django")
 
 gs = GoogleSpreadsheets()
 
