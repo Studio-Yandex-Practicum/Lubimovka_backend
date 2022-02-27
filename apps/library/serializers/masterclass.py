@@ -8,17 +8,17 @@ from apps.library.serializers.utilities import TeamTypedDict, get_event_team_rol
 
 
 class EventMasterClassSerializer(serializers.ModelSerializer):
-    """Сериализатор мастер-класса на странице афиши."""
+    """Master-class serializer for afisha page."""
 
     team = serializers.SerializerMethodField()
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     @extend_schema_field(List[TeamTypedDict])
     def get_team(self, obj):
-        """Собираем команду в два этапа.
+        """Collect team in two stages.
 
-        Сначала отбираем роли и связанные с ролью и событием персоны.
-        Затем формируем словарь с правильной структурой.
+        First select roles and persons related with role and event.
+        Then pack it to the dictionary and add to list.
         """
         roles = get_event_team_roles(obj, {"team_members__masterclass": obj, "slug__in": ["host"]})
         return get_event_team_serialized_data(roles)
