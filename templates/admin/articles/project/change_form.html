@@ -1,13 +1,5 @@
 {% extends "admin/change_form.html" %}
-{% load i18n %}
 {% block submit_buttons_bottom %}
-    <div class="submit-row">
-        <strong> текущий статус проекта: {{ original.get_status_display }} </strong>
-        {% for status, info in statuses.items %}
-            {% if not info.1 or perms.articles.can_project_publish %}
-                <input type="submit" value="{% trans info.0 %}" name="{% trans status %}" />
-            {% endif %}
-        {% endfor %}
-    </div>
-    {{ block.super }}
+  {% include "admin/includes/status_buttons.html" with access_level=access_level possible_statuses=possible_statuses %}
+  {{ block.super }}
 {% endblock %}

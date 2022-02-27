@@ -4,12 +4,12 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils import timezone
-from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.querysets import ContenPageQuerySet
 from apps.content_pages.services import content_delete_generic_related_items
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel
+from apps.core.status_source import Status
 
 
 class AbstractContentPage(BaseModel):
@@ -26,20 +26,6 @@ class AbstractContentPage(BaseModel):
     записи)
     """
 
-    class ContentStatus(models.TextChoices):
-        IN_PROCESS = "IN_PROCESS", _("В работе")
-        REVIEW = "REVIEW", _("На проверке")
-        READY_FOR_PUBLICATION = "READY_FOR_PUBLICATION", _("Готово к публикации")
-        PUBLISHED = "PUBLISHED", _("Опубликовано")
-        REMOVED_FROM_PUBLICATION = "REMOVED_FROM_PUBLICATION", _("Снято с публикации")
-
-    STATUS_INFO = {
-        "IN_PROCESS": ("Вернуть в работу", False),
-        "REVIEW": ("Отправить на проверку", False),
-        "READY_FOR_PUBLICATION": ("Подготовить к публикации", False),
-        "PUBLISHED": ("ОПУБЛИКОВАТЬ", True),
-        "REMOVED_FROM_PUBLICATION": ("Снять с публикации", False),
-    }
     description = models.TextField(
         max_length=500,
         verbose_name="Описание",
@@ -50,7 +36,7 @@ class AbstractContentPage(BaseModel):
         verbose_name="Заглавная картинка",
     )
     status = models.CharField(
-        choices=ContentStatus.choices,
+        choices=Status.choices,
         default="IN_PROCESS",
         max_length=35,
         verbose_name="Статус",

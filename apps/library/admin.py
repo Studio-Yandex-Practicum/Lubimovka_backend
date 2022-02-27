@@ -53,7 +53,7 @@ class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
         "program__name",
         "festival__year",
     )
-    exclude = ("status",)
+    readonly_fields = ("status",)
 
     def get_actions(self, request):
         actions = super().get_actions(request)

@@ -8,6 +8,7 @@ from apps.articles.models import Project, ProjectContent
 from apps.content_pages.factories import AbstractContentFactory
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
+from apps.core.status_source import Status
 from apps.library.models.play import Play
 
 
@@ -56,7 +57,7 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     intro = factory.Faker("sentence", locale="ru_RU", nb_words=12)
     pub_date = factory.Faker("date_time", tzinfo=ZoneInfo(settings.TIME_ZONE))
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
-    status = factory.LazyFunction(lambda: random.choice(list(Project.ContentStatus)))
+    status = factory.LazyFunction(lambda: random.choice(list(Status)))
 
     @factory.post_generation
     def add_several_imagesblock(self, created, count, **kwargs):

@@ -69,7 +69,11 @@ class BlogItem(AbstractContentPage):
         ordering = ("-pub_date",)
         verbose_name = "Запись блога"
         verbose_name_plural = "Блог"
-        permissions = (("can_blog_publish", "Может опубликовать блог"),)
+        permissions = (
+            ("access_level_1", "Права журналиста"),
+            ("access_level_2", "Права редактора"),
+            ("access_level_3", "Права главреда"),
+        )
 
     def __str__(self):
         return f"Запись блога {self.title}"

@@ -78,7 +78,11 @@ class Command(BaseCommand):
                 Q(codename="access_level_2") & Q(codename="access_level_1")
             )
             journalist_permissions = Permission.objects.filter(
-                Q(codename__endswith="_play") & ~Q(codename__endswith="change_play") | Q(codename="access_level_1")
+                Q(codename__endswith="_play") & ~Q(codename__endswith="change_play")
+                | Q(codename__endswith="_blogitem") & ~Q(codename__endswith="change_blogitem")
+                | Q(codename__endswith="_newsitem") & ~Q(codename__endswith="change_newsitem")
+                | Q(codename__endswith="_project") & ~Q(codename__endswith="change_project")
+                | Q(codename="access_level_1")
             )
 
             admin, created = Group.objects.get_or_create(name="admin")
