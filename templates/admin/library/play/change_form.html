@@ -1,19 +1,5 @@
 {% extends "admin/change_form.html" %}
-{% load i18n %}
 {% block submit_buttons_bottom %}
-    <div class="submit-row">
-        <strong> текущий статус пьесы: {{ original.get_status_display }} </strong>
-        {% for perm in access_level %}
-            {% if perm in perms %}
-                {% for status, info in possible_statuses.items %}
-                    {% for perm in info.access_level %}
-                        {% if perm in perms %}
-                            <input type="submit" value="{% trans info.button_name %}" name="{% trans status %}" />
-                        {% endif %}
-                    {% endfor %}
-                {% endfor %}
-            {% endif%}
-        {% endfor %}
-    </div>
-    {{ block.super }}
+  {% include "admin/includes/status_buttons.html" with access_level=access_level possible_statuses=possible_statuses %}
+  {{ block.super }}
 {% endblock %}

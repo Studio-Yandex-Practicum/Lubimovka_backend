@@ -35,6 +35,12 @@ class StatusButtonMixin:
 
 
 class DeletePermissionsMixin:
+    """Mixin hides button Delete.
+
+    Button Delete removed from change_view page if
+    user doesn't have perm to delete in object's status.
+    """
+
     def change_view(self, request, object_id, form_url="", extra_context=None):
         obj_class = self.model
         obj = obj_class.objects.get(pk=object_id)
