@@ -14,9 +14,9 @@ class TeamTypedDict(TypedDict):
 
 
 def get_event_team_roles(obj, filters: dict = None):
-    """Получает все используемые в событии роли.
+    """Return all roles used in event.
 
-    С помощью Prefetch собирает связанные с ролью и событием персоны.
+    Collects persons related with role using Prefetch.
     """
     roles = Role.objects.filter(**filters).distinct()
     team = obj.team_members.all()
@@ -24,7 +24,7 @@ def get_event_team_roles(obj, filters: dict = None):
 
 
 def get_event_team_serialized_data(roles) -> List[TeamTypedDict]:
-    """Формирует словарь со следующей структурой.
+    """Return list of dictionary with next structure.
 
     [
       {
@@ -32,8 +32,7 @@ def get_event_team_serialized_data(roles) -> List[TeamTypedDict]:
         "persons": ["Антип Аксенова"]
         }
       ]
-    В зависимости от количества персон у каждой роли
-    используются разные сериализаторы.
+    Which serializer will be used depends on person's number of each role.
     """
     data = []
     for role in roles:
