@@ -1,9 +1,12 @@
+from typing import List
+
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.afisha.models import Event
 from apps.core.serializers import ImageSerializer
 from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
-from apps.library.serializers.utilities import get_event_team_roles, get_event_team_serialized_data
+from apps.library.serializers.utilities import TeamTypedDict, get_event_team_roles, get_event_team_serialized_data
 
 from .play import PlaySerializer
 
@@ -22,9 +25,9 @@ class PerformanceSerializer(serializers.ModelSerializer):
     play = PlaySerializer()
     team = serializers.SerializerMethodField()
     images_in_block = ImageSerializer(many=True)
-    events = serializers.SerializerMethodField()
     events = LocalEventSerializer(source="events.body", many=True)
 
+    @extend_schema_field(List[TeamTypedDict])
     def get_team(self, obj):
         """Собираем команду в два этапа.
 
