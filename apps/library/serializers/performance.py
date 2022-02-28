@@ -1,12 +1,9 @@
-from typing import List
-
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.afisha.models import Event
 from apps.core.serializers import ImageSerializer
 from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
-from apps.library.serializers.utilities import TeamTypedDict, get_event_team_roles, get_event_team_serialized_data
+from apps.library.serializers.role import RoleSerializer
 
 from .play import PlaySerializer
 
@@ -23,19 +20,9 @@ class PerformanceSerializer(serializers.ModelSerializer):
     """Performance serializer for performance page."""
 
     play = PlaySerializer()
-    team = serializers.SerializerMethodField()
+    team = RoleSerializer(many=True)
     images_in_block = ImageSerializer(many=True)
     events = LocalEventSerializer(source="events.body", many=True)
-
-    @extend_schema_field(List[TeamTypedDict])
-    def get_team(self, obj):
-        """Collect team in two stages.
-
-        First select roles and persons related with role and event.
-        Then pack it to the dictionary and add to list.
-        """
-        roles = get_event_team_roles(obj, {"team_members__performance": obj})
-        return get_event_team_serialized_data(roles)
 
     class Meta:
         exclude = (
@@ -50,18 +37,9 @@ class PerformanceSerializer(serializers.ModelSerializer):
 class EventPerformanceSerializer(serializers.ModelSerializer):
     """Performance serializer for afisha page."""
 
-    team = serializers.SerializerMethodField()
+    team = RoleSerializer(source="event_team", many=True)
     image = serializers.ImageField(source="main_image")
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
-
-    def get_team(self, obj):
-        """Collect team in two stages.
-
-        First select roles and persons related with role and event.
-        Then pack it to the dictionary and add to list.
-        """
-        roles = get_event_team_roles(obj, {"team_members__performance": obj, "slug__in": ["director", "dramatist"]})
-        return get_event_team_serialized_data(roles)
 
     class Meta:
         model = Performance
