@@ -6,6 +6,7 @@ from django.conf import settings
 from apps.afisha.models import Event
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.factories import AbstractContentFactory
+from apps.core.constants import Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.library.models.play import Play

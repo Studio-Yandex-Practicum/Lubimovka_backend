@@ -3,6 +3,7 @@ import random
 import factory
 from faker import Faker
 
+from apps.core.constants import Status
 from apps.core.decorators import restrict_factory
 from apps.core.utils import slugify
 from apps.info.models import Festival

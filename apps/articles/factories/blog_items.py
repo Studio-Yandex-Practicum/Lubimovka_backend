@@ -5,6 +5,7 @@ from django.conf import settings
 
 from apps.articles.models import BlogItem, BlogItemContent, BlogPerson
 from apps.content_pages.factories import AbstractContentFactory
+from apps.core.constants import Status
 from apps.core.decorators.factory import restrict_factory
 from apps.core.models import Person, Role
 from apps.library.models import Play
