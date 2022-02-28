@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo
 import factory
 from django.conf import settings
 
+from apps.afisha.models import Event
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.factories import AbstractContentFactory
 from apps.core.decorators import restrict_factory
@@ -28,6 +29,7 @@ class ProjectContentModuleFactory(AbstractContentFactory):
 
 
 @restrict_factory(
+    add_several_events=(Event,),
     add_several_playsblock=(Play,),
     add_several_personsblock=(Person,),
 )
