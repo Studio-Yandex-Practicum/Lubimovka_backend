@@ -1,6 +1,7 @@
 import factory
 from django.contrib.contenttypes.models import ContentType
 
+from apps.afisha.models import Event
 from apps.content_pages.factories import (
     EventsBlockFactory,
     ImagesBlockFactory,
@@ -20,6 +21,7 @@ from apps.library.models import Play
 
 
 @restrict_factory(
+    array_event=(Event,),
     array_person=(Person, Role),
     array_play=(Play,),
 )
