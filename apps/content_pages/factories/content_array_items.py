@@ -103,7 +103,7 @@ class OrderedEventFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def item(self):
-        return Event.objects.order_by("?").filter(type="PERFORMANCE").first()
+        return Event.objects.filter(type="PERFORMANCE").order_by("?").first()
 
 
 @restrict_factory(general=(Play,))
