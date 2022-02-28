@@ -18,6 +18,7 @@ services:
       - prod_swag_network
     volumes:
       - ./swag/swag_nginx_prod.conf:/config/nginx/site-confs/default
+      - swag_volume_prod:/config
       - static_value_prod:/config/prod/static/
       - media_value_prod:/config/prod/media/
     ports:
@@ -48,3 +49,5 @@ volumes:
     name: static_value_prod
   media_value_prod:
     name: media_value_prod
+  swag_volume_prod:
+    name: swag_volume_prod
