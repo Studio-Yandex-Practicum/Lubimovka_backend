@@ -11,7 +11,7 @@ def set_default_groups(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("core", "0011_add_press_release_data"),
+        ("core", "0012_auto_20220226_0242"),
     ]
 
     operations = [
