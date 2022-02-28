@@ -4,6 +4,7 @@ from django.db.models.constraints import UniqueConstraint
 
 from apps.afisha.models import Event
 from apps.content_pages.models import AbstractItemWithTitle
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Person, Role
 from apps.library.models import Play
 
@@ -41,7 +42,7 @@ class OrderedImage(AbstractOrderedItemBase):
         help_text="Заголовок/подпись для картинки. Может быть пустым",
     )
     image = models.ImageField(
-        upload_to="content_images",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение",
     )
     block = models.ForeignKey(

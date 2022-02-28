@@ -16,7 +16,7 @@ def afisha_info_settings():
     return None
 
 
-def test_afisha_info_is_festival_response(client, is_festival_afisha, afisha_info_settings):
+def test_afisha_info_is_festival_response(client, is_festival_afisha, afisha_info_settings, four_events_october):
     """Test case when `festival_status=True`. Compare returned JSON with expected one."""
     response_data = client.get(AFISHA_FESTIVAL_STATUS_URL).data
     assert response_data == {
@@ -24,13 +24,20 @@ def test_afisha_info_is_festival_response(client, is_festival_afisha, afisha_inf
         "description": "some afisha description",
         "info_registration": "some info description",
         "asterisk_text": "some afisha asterisk text",
+        "afisha_dates": ["2021-10-05", "2021-10-11", "2021-10-17"],
     }
 
 
-def test_afisha_info_is_not_festival_response(client, is_not_festival_afisha, afisha_info_settings):
+def test_afisha_info_is_not_festival_response(
+    client,
+    is_not_festival_afisha,
+    afisha_info_settings,
+    four_events_october,
+):
     """Test case when `festival_status=False`. Compare returned JSON with expected one."""
     response_data = client.get(AFISHA_FESTIVAL_STATUS_URL).data
     assert response_data == {
         "festival_status": False,
         "description": "some afisha description",
+        "afisha_dates": ["2021-10-05", "2021-10-11", "2021-10-17"],
     }
