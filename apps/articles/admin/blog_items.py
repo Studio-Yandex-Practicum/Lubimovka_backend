@@ -28,8 +28,12 @@ class BlogItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAd
         "title",
         "description",
         "pub_date",
-        # "image_preview_list_page",
+        "image_preview_list_page",
         "status",
+    )
+    readonly_fields = (
+        "status",
+        "image_preview_change_page",
     )
     inlines = (
         BlogPersonInline,
@@ -52,11 +56,11 @@ class BlogItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAd
                         "image_preview_change_page",
                         "image",
                     ),
+                    "status",
                 )
             },
         ),
     )
-    readonly_fields = ("status",)
 
     def get_actions(self, request):
         actions = super().get_actions(request)

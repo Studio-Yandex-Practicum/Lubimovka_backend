@@ -8,8 +8,8 @@ from django.utils import timezone
 from apps.content_pages.querysets import ContenPageQuerySet
 from apps.content_pages.services import content_delete_generic_related_items
 from apps.content_pages.utilities import path_by_app_label_and_class_name
+from apps.core.constants import Status
 from apps.core.models import BaseModel
-from apps.core.status_source import Status
 
 
 class AbstractContentPage(BaseModel):

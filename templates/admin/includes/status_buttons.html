@@ -1,15 +1,11 @@
 {% load i18n %}
 <div class="submit-row">
     <strong> текущий статус: {{ original.get_status_display }} </strong>
-    {% for perm in access_level %}
-        {% if perm in perms %}
-            {% for status, info in possible_statuses.items %}
-                {% for perm in info.access_level %}
-                    {% if perm in perms %}
-                        <input type="submit" value="{% trans info.button_name %}" name="{% trans status %}" />
-                    {% endif %}
-                {% endfor %}
-            {% endfor %}
-        {% endif%}
-    {% endfor %}
+    {% if user_level >= current_status_level %}
+        {% for status, params in possible_statuses.items %}
+            {% if user_level >= params.min_access_level %}
+                <input type="submit" value="{% trans params.button_name %}" name="{% trans status %}" />
+            {% endif %}
+        {% endfor %}
+    {% endif%}
 </div>

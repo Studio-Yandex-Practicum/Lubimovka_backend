@@ -1,5 +1,5 @@
 {% extends "admin/change_form.html" %}
 {% block submit_buttons_bottom %}
-  {% include "admin/includes/status_buttons.html" with access_level=access_level possible_statuses=possible_statuses %}
+  {% include "admin/includes/status_buttons.html" with user_level=user_level possible_statuses=possible_statuses current_status_level=current_status_level %}
   {{ block.super }}
 {% endblock %}

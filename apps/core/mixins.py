@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
-from apps.core.status_source import get_status_info_for_app
+from apps.core.constants import STATUS_INFO
+from apps.core.utils import get_user_perms_level
 
 
 class StatusButtonMixin:
@@ -13,19 +14,17 @@ class StatusButtonMixin:
         obj_class = self.model
         obj = obj_class.objects.get(pk=object_id)
         app_name = obj._meta.app_label
-        status_info = get_status_info_for_app(app_name)
-        extra_context["access_level"] = status_info[obj.status]["access_level"]
-        possible_changes = status_info[obj.status]["possible_changes"]
+        extra_context["user_level"] = get_user_perms_level(request, app_name)
+        extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
+        possible_changes = STATUS_INFO[obj.status]["possible_changes"]
         statuses = {}
         for status in possible_changes:
-            statuses[status] = status_info[status]
+            statuses[status] = STATUS_INFO[status]
         extra_context["possible_statuses"] = statuses
         return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
-        app_name = obj._meta.app_label
-        status_info = get_status_info_for_app(app_name)
-        for status in status_info:
+        for status in STATUS_INFO:
             if status in request.POST:
                 obj.status = status
                 obj.save()
@@ -45,13 +44,9 @@ class DeletePermissionsMixin:
         obj_class = self.model
         obj = obj_class.objects.get(pk=object_id)
         app_name = obj._meta.app_label
-        status_info = get_status_info_for_app(app_name)
-        access_to_delete = status_info[obj.status]["access_to_delete"]
-        flag = False
-        for perm in access_to_delete:
-            if request.user.has_perm(perm):
-                flag = True
-        if not flag:
+        access_to_delete = STATUS_INFO[obj.status]["min_access_to_delete"]
+        user_level = get_user_perms_level(request, app_name)
+        if user_level < access_to_delete:
             extra_context["show_delete"] = False
         return super().change_view(request, object_id, form_url, extra_context)
 

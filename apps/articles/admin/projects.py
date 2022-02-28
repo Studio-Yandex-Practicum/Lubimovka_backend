@@ -40,11 +40,15 @@ class ProjectAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAdm
                         "image_preview_change_page",
                         "image",
                     ),
+                    "status",
                 )
             },
         ),
     )
-    readonly_fields = ("status",)
+    readonly_fields = (
+        "status",
+        "image_preview_change_page",
+    )
     inlines = (ProjectContentInline,)
 
     def get_actions(self, request):
