@@ -2,7 +2,6 @@ from django.urls import include, path
 
 from apps.info.views import (
     ContactsAPIView,
-    FeedbackAPIView,
     FestivalAPIView,
     FestivalTeamsAPIView,
     FestivalYearsAPIView,
@@ -11,6 +10,7 @@ from apps.info.views import (
     PressReleaseViewSet,
     PressReleaseYearsAPIView,
     QuestionCreateAPIView,
+    SettingsAPIView,
     SponsorsAPIView,
     VolunteersAPIView,
 )
@@ -59,9 +59,9 @@ info_urls = [
         name="contacts",
     ),
     path(
-        "feedback/",
-        FeedbackAPIView.as_view(),
-        name="feedback",
+        "settings/",
+        SettingsAPIView.as_view(),
+        name="settings",
     ),
     path(
         "questions/",
