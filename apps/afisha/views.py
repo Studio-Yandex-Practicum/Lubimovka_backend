@@ -49,20 +49,29 @@ class AfishaInfoAPIView(APIView):
     """Return afisha (affiche) headers and festival status."""
 
     class AfishaInfoOutputSerializer(serializers.Serializer):
-        festival_status = serializers.BooleanField()
+        festival_status = serializers.BooleanField(
+            help_text="Статус фестиваля. Идёт или нет.",
+        )
         description = serializers.CharField(
             source="afisha_description",
             max_length=500,
+            help_text="Текст под заголовком афиши.",
         )
         info_registration = serializers.CharField(
             source="afisha_info_festival_text",
             max_length=500,
             required=False,
+            help_text="Текст под заголовком афиши о регистрации. Есть в выдаче только когда `festival_status=true`.",
         )
         asterisk_text = serializers.CharField(
             source="afisha_asterisk_text",
             max_length=500,
             required=False,
+            help_text="Текст под знаком `*`. Есть в выдаче только когда `festival_status=true`.",
+        )
+        afisha_dates = serializers.ListField(
+            child=serializers.DateField(),
+            help_text="Список дат на которые есть хотя бы одно событие.",
         )
 
     @extend_schema(responses=AfishaInfoOutputSerializer)

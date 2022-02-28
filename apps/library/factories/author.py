@@ -4,7 +4,8 @@ import factory
 from faker import Faker
 
 from apps.core.decorators import restrict_factory
-from apps.info.models import Festival, Person
+from apps.core.models import Person
+from apps.info.models import Festival
 from apps.library.models import Achievement, Author, OtherLink, OtherPlay, Play, ProgramType, SocialNetworkLink
 
 fake = Faker("ru_RU")

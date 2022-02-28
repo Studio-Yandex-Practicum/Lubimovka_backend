@@ -1,3 +1,6 @@
+from datetime import datetime
+from zoneinfo import ZoneInfo
+
 import pytest
 from django.conf import settings
 from rest_framework.test import APIClient
@@ -78,6 +81,10 @@ def performances(persons_email_city_image, plays):
 
 
 @pytest.fixture
-def random_events(freezer, masterclasses, readings, performances):
-    freezer.move_to("2022-02-23 10:00")
-    return EventFactory.create_batch(10)
+def four_events_october(freezer, masterclasses, readings, performances):
+    freezer.move_to("2021-09-01")
+    event_oct_17 = EventFactory(date_time=datetime(2021, 10, 17, 23, 43, tzinfo=ZoneInfo("Europe/Moscow")))
+    event_oct_5 = EventFactory(date_time=datetime(2021, 10, 5, 17, 43, tzinfo=ZoneInfo("Europe/Moscow")))
+    first_event_oct_11 = EventFactory(date_time=datetime(2021, 10, 11, 18, 43, tzinfo=ZoneInfo("Europe/Moscow")))
+    second_event_oct_11 = EventFactory(date_time=datetime(2021, 10, 11, 18, 43, tzinfo=ZoneInfo("Europe/Moscow")))
+    return event_oct_17, event_oct_5, first_event_oct_11, second_event_oct_11
