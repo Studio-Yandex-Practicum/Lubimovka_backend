@@ -44,9 +44,9 @@ class DeletePermissionsMixin:
         obj_class = self.model
         obj = obj_class.objects.get(pk=object_id)
         app_name = obj._meta.app_label
-        access_to_delete = STATUS_INFO[obj.status]["min_access_to_delete"]
+        right_to_delete = STATUS_INFO[obj.status]["min_level_to_delete"]
         user_level = get_user_perms_level(request, app_name)
-        if user_level < access_to_delete:
+        if user_level < right_to_delete:
             extra_context["show_delete"] = False
         return super().change_view(request, object_id, form_url, extra_context)
 
