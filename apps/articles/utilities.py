@@ -33,4 +33,4 @@ def сompressImage(image, target=5120000):
         )
         return new_image
     else:
-        raise ValueError("No acceptable quality factor found")
+        print("ERROR: No acceptble quality factor found")
