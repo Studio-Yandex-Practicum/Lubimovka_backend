@@ -3,10 +3,10 @@ from datetime import timedelta
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from apps.articles.utilities import сompressImage
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Image, Person
 
-from ...articles.utilities import сompressImage
-from ...content_pages.utilities import path_by_app_label_and_class_name
 from .play import Play
 
 
