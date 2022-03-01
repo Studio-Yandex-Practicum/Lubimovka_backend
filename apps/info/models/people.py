@@ -42,6 +42,15 @@ class Partner(BaseModel):
         verbose_name_plural = "Партнеры"
         ordering = ("type",)
 
+    def save(self, *args, **kwargs):
+        try:
+            this = Partner.objects.get(id=self.id)
+            if this.image != self.image:
+                this.image.delete(save=False)
+        except BaseException:
+            pass
+        super(Partner, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.name} - {self.type}"
 
