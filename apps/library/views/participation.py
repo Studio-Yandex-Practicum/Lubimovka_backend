@@ -4,7 +4,11 @@ from drf_spectacular.utils import extend_schema
 from googleapiclient.errors import HttpError
 from rest_framework import mixins, viewsets
 
-from apps.library.schema.schema_extension import ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400
+from apps.library.permissions import SettingsPlayReceptionPermission
+from apps.library.schema.schema_extension import (
+    ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
+    ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403,
+)
 from apps.library.serializers.participation import ParticipationSerializer
 from apps.library.services.spreadsheets import GoogleSpreadsheets
 from config.logging import LOGGING_CONFIG
@@ -19,9 +23,11 @@ gs = GoogleSpreadsheets()
     responses={
         201: ParticipationSerializer,
         400: ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
+        403: ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403,
     }
 )
 class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
+    permission_classes = [SettingsPlayReceptionPermission]
     serializer_class = ParticipationSerializer
 
     def perform_create(self, serializer):
