@@ -56,7 +56,7 @@ class Author(BaseModel):
         verbose_name_plural = "Авторы"
 
     def __str__(self):
-        return f"{self.person.first_name} {self.person.last_name}"
+        return f"{self.person.last_name} {self.person.first_name}"
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -64,8 +64,6 @@ class Author(BaseModel):
 
     def clean(self):
         if self._has_person_before_saving():
-            if not self.person.email:
-                raise ValidationError("Для автора необходимо указать email")
             if not self.person.city:
                 raise ValidationError("Для автора необходимо указать город")
 

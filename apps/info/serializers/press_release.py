@@ -4,11 +4,18 @@ from apps.info.models import PressRelease
 
 
 class PressReleaseSerializer(serializers.ModelSerializer):
+    """Сериализатор для станицы fo-press."""
+
     image = serializers.ImageField(source="festival.press_release_image")
 
     class Meta:
         model = PressRelease
-        fields = ("id", "image", "title", "text")
+        fields = (
+            "id",
+            "image",
+            "title",
+            "text",
+        )
 
 
 class YearsSerializer(serializers.Serializer):

@@ -6,7 +6,9 @@ from apps.articles.services import get_latest_four_published_items_data
 from apps.content_pages.serializers import BaseContentPageSerializer
 
 
-class NewsItemBaseSerializer(serializers.ModelSerializer):
+class NewsItemListSerializer(serializers.ModelSerializer):
+    pub_date = serializers.DateTimeField(required=True)
+
     class Meta:
         model = NewsItem
         fields = (
@@ -18,18 +20,12 @@ class NewsItemBaseSerializer(serializers.ModelSerializer):
         )
 
 
-class NewsItemListSerializer(NewsItemBaseSerializer):
-    pass
-
-
-class NewsItemDetailedSerializer(
-    BaseContentPageSerializer,
-    serializers.ModelSerializer,
-):
+class NewsItemDetailedSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
 
     other_news = serializers.SerializerMethodField()
+    pub_date = serializers.DateTimeField(required=True)
 
-    @extend_schema_field(NewsItemBaseSerializer(many=True))
+    @extend_schema_field(NewsItemListSerializer(many=True))
     def get_other_news(self, obj):
         """Return latest four `NewsItem` except the object itself."""
         serialized_data = get_latest_four_published_items_data(

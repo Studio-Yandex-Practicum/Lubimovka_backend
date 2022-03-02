@@ -1,6 +1,4 @@
-import django.contrib.auth.validators
 from django.db import migrations
-import django.utils.timezone
 
 
 def set_default_groups(apps, schema_editor):
@@ -11,6 +9,7 @@ def set_default_groups(apps, schema_editor):
             Group(name="editor"),
         ]
     )
+
 
 def create_roles(apps, schema_editor):
     Role = apps.get_model("core", "Role")
@@ -65,6 +64,7 @@ def create_roles(apps, schema_editor):
         role_obj, _ = Role.objects.get_or_create(**role)
         role_obj.save()
 
+
 def create_role_types(apps, schema_editor):
     RoleType = apps.get_model("core", "RoleType")
     role_types = [
@@ -87,6 +87,7 @@ def create_role_types(apps, schema_editor):
     for type in role_types:
         type_obj, _ = RoleType.objects.get_or_create(**type)
         type_obj.save()
+
 
 def add_types_to_roles(apps, schema_editor):
     Role = apps.get_model("core", "Role")
@@ -164,6 +165,7 @@ def add_types_to_roles(apps, schema_editor):
         role_obj.types.add(type_of_role)
         role_obj.save()
 
+
 def add_email_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
@@ -172,21 +174,21 @@ def add_email_settings(apps, schema_editor):
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_question_template_id",
-        text="3420599",
+        text="3482754",
         description="Id шаблона письма с вопросом",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_send_from",
-        text="questions@lyubimovka.ru",
+        text="lubimovka-2021@yandex.ru",
         description="Почта для отправки вопроса",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_send_to",
-        text="admin@lyubimovka.ru",
+        text="lubimovka-2021@yandex.ru",
         description="Почта для приёма вопроса",
     )
     Setting.objects.create(
@@ -196,18 +198,19 @@ def add_email_settings(apps, schema_editor):
         text="Вопрос Любимовке",
         description="Тема письма для вопроса",
     )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="EMAIL",
+        settings_key="pr_manager_name",
+        text="Имя Фамилия в дателльном падеже (пример: Анне Загородниковой)",
+        description="Имя PR менеджера на странице для прессы (в дательном падеже)",
+    )
+
 
 def add_afisha_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
 
-    Setting.objects.create(
-        field_type="TEXT",
-        group="AFISHA",
-        settings_key="afisha_description_regular",
-        text="На все читки и мастер-классы фестиваля вход свободный по предварительной регистрации.",
-        description="Описание под заголовком регулярное",
-    )
     Setting.objects.create(
         field_type="TEXT",
         group="AFISHA",
@@ -225,24 +228,11 @@ def add_afisha_settings(apps, schema_editor):
     Setting.objects.create(
         field_type="TEXT",
         group="AFISHA",
-        settings_key="afisha_title_festival",
-        text="Афиша фестиваля",
-        description="Заголовок афиши во время фестиваля",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="AFISHA",
-        settings_key="afisha_title_regular",
-        text="Афиша событий",
-        description="Заголовок афиши регулярный",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="AFISHA",
-        settings_key="afisha_description_festival",
+        settings_key="afisha_description",
         text="На все читки и мастер-классы фестиваля вход свободный по предварительной регистрации.",
-        description="Описание под заголовком во время фестиваля",
+        description="Описание под заголовком",
     )
+
 
 def add_first_screen_settings(apps, schema_editor):
 
@@ -274,15 +264,16 @@ def add_first_screen_settings(apps, schema_editor):
         group="FIRST_SCREEN",
         settings_key="main_first_screen_url_title",
         text="Заголовок для ссылки для первой страницы",
-        description="Заголовок для первой страницы",
+        description="Заголовок для ссылки для первой страницы",
     )
     Setting.objects.create(
         field_type="URL",
         group="FIRST_SCREEN",
         settings_key="main_first_screen_url",
         url="https://lubimovks.url.ru",
-        description="Ссылка для первой страницы страницы",
+        description="Ссылка для первой страницы",
     )
+
 
 def add_general_settings(apps, schema_editor):
 
@@ -303,12 +294,20 @@ def add_general_settings(apps, schema_editor):
         description="Цвет сайта",
     )
     Setting.objects.create(
-        field_type="BOOLEAN",
+        field_type="URL",
         group="GENERAL",
-        settings_key="form_to_submit_a_play",
-        boolean=True,
-        description="Форма для отправки пьесы",
+        settings_key="url_to_privacy_policy",
+        url="privacy-policy",
+        description="Ссылка на обработку персональных данных",
     )
+    Setting.objects.create(
+        field_type="URL",
+        group="GENERAL",
+        settings_key="photo_gallery_facebook",
+        url="https://www.facebook.com/festival.lubimovka/photos",
+        description="Ссылка на фотоальбомы в Facebook на странице для прессы",
+    )
+
 
 def add_main_settings(apps, schema_editor):
 
@@ -319,70 +318,70 @@ def add_main_settings(apps, schema_editor):
         group="MAIN",
         settings_key="main_add_afisha",
         boolean=True,
-        description="Отображение афиши на главной страницы",
+        description="Отображение афиши на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_banners",
         boolean=True,
-        description="Отображение банера на главной страницы",
+        description="Отображение банера на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_blog",
         boolean=True,
-        description="Отображение дневника на главной страницы",
+        description="Отображение дневника на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_news",
         boolean=True,
-        description="Отображение новостей на главной страницы",
+        description="Отображение новостей на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_places",
         boolean=True,
-        description="Отображение площадок на главной страницы",
+        description="Отображение площадок на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_short_list",
         boolean=True,
-        description="Отображение шорт-листа на главной страницы",
+        description="Отображение шорт-листа на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
         group="MAIN",
         settings_key="main_add_video_archive",
         boolean=True,
-        description="Отображение видео-архива на главной страницы",
+        description="Отображение видео-архива на главной странице",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="MAIN",
         settings_key="main_blog_title",
         text="Дневник фестиваля",
-        description="Заголовок для дневника на главной страницы",
+        description="Заголовок для дневника на главной странице",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="MAIN",
         settings_key="main_news_title",
         text="Новости",
-        description="Заголовок для новостей на главной страницы",
+        description="Заголовок для новостей на главной странице",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="MAIN",
         settings_key="main_short_list_title",
         text="Шорт-лист 2020 года",
-        description="Заголовок для шорт-листа на главной страницы",
+        description="Заголовок для шорт-листа на главной странице",
     )
     Setting.objects.create(
         field_type="BOOLEAN",
@@ -396,29 +395,60 @@ def add_main_settings(apps, schema_editor):
         group="MAIN",
         settings_key="main_video_archive_photo",
         image="core/2021-09-30_14.37.56.jpg",
-        description="Фото для видео-архива на главной страницы",
+        description="Фото для видео-архива на главной странице",
     )
     Setting.objects.create(
         field_type="URL",
         group="MAIN",
         settings_key="main_video_archive_url",
         url="https://lubimovks.url.ru",
-        description="Ссылка на youtube видео-архива на главной страницы",
+        description="Ссылка на youtube видео-архива на главной странице",
     )
 
+
+def add_playsupply_settings(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
+    Setting.objects.create(
+        field_type="TEXT",
+        group="PLAY_SUPPLY",
+        settings_key="SPREADSHEET_ID",
+        text="1PB-Rzd46wHpldZptqc7CEn9VNkv3iRJuo9e87Xtpgb4",
+        description="id Google таблицы",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="PLAY_SUPPLY",
+        settings_key="SHEET",
+        text="Лист1",
+        description="Наименование листа Google таблицы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="PLAY_SUPPLY",
+        settings_key="form_to_submit_a_play",
+        boolean=True,
+        description="Форма для отправки пьесы",
+    )
+
+
 def add_short_list_program(apps, schema_editor):
-    Program = apps.get_model('library', 'ProgramType')
+    Program = apps.get_model(
+        "library",
+        "ProgramType",
+    )
     Program.objects.create(
         name="Шорт-лист",
-        slug="short-list"
+        slug="short-list",
     )
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0001_initial'),
-        ('sites', '0002_alter_domain_unique'),
+        ("core", "0001_initial"),
+        ("sites", "0002_alter_domain_unique"),
     ]
 
     operations = [
@@ -452,4 +482,7 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             add_short_list_program,
         ),
+        migrations.RunPython(
+            add_playsupply_settings,
+        )
     ]

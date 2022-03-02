@@ -1,5 +1,5 @@
 from django.db import models
-from django.db.models import UniqueConstraint
+from django.db.models import Q
 
 from apps.core.models import BaseModel, Person
 
@@ -51,7 +51,7 @@ class TeamMember(BaseModel):
         verbose_name = "Член команды"
         verbose_name_plural = "Члены команды"
         constraints = (
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=(
                     "person",
                     "role",
@@ -59,7 +59,7 @@ class TeamMember(BaseModel):
                 ),
                 name="unique_person_role_per_performance",
             ),
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=(
                     "person",
                     "role",
@@ -67,13 +67,33 @@ class TeamMember(BaseModel):
                 ),
                 name="unique_person_role_per_reading",
             ),
-            UniqueConstraint(
+            models.UniqueConstraint(
                 fields=(
                     "person",
                     "role",
                     "masterclass",
                 ),
                 name="unique_person_role_per_masterclass",
+            ),
+            models.CheckConstraint(
+                name="%(app_label)s_%(class)s_only_one_of_reading_masterclass_performance",
+                check=(
+                    Q(
+                        performance__isnull=False,
+                        reading__isnull=True,
+                        masterclass__isnull=True,
+                    )
+                    | Q(
+                        performance__isnull=True,
+                        reading__isnull=False,
+                        masterclass__isnull=True,
+                    )
+                    | Q(
+                        performance__isnull=True,
+                        reading__isnull=True,
+                        masterclass__isnull=False,
+                    )
+                ),
             ),
         )
 

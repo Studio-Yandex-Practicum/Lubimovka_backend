@@ -2,10 +2,9 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.afisha.tests.factories import EventFactory
-from apps.content_pages.tests.factories import ImageForContentFactory, VideoFactory
-from apps.core.tests.factories import ImageFactory, PersonFactory, UserFactory
-from apps.info.tests.factories import (
+from apps.afisha.factories import EventFactory
+from apps.core.factories import ImageFactory, PersonFactory
+from apps.info.factories import (
     FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
@@ -14,16 +13,17 @@ from apps.info.tests.factories import (
     SponsorFactory,
     VolunteerFactory,
 )
-from apps.library.tests.factories import (
+from apps.library.factories import (
     AuthorFactory,
     MasterClassFactory,
     ParticipationApplicationFestivalFactory,
     PerformanceFactory,
     PlayFactory,
-    ProgramFactory,
+    ProgramTypeFactory,
     ReadingFactory,
 )
-from apps.main.tests.factories import BannerFactory as MainBannerFactory
+from apps.main.factories import BannerFactory as MainBannerFactory
+from apps.users.factories import AdminUserFactory, EditorUserFactory
 
 
 def notification(command, objects, text):
@@ -61,29 +61,25 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:
             persons_base = PersonFactory.create_batch(30)
-            persons_with_image = []
-            persons_with_image_email_city = []
-            for _ in range(50):
-                persons_with_image.append(PersonFactory.create(add_image=True))
-                persons_with_image_email_city.append(
-                    PersonFactory(
-                        add_image=True,
-                        add_email=True,
-                        add_city=True,
-                    )
-                )
             notification(self, persons_base, "базовых персон")
+
+            persons_with_image = PersonFactory.create_batch(30, add_real_image=True)
             notification(self, persons_with_image, "персоны с фото")
-            notification(
-                self,
-                persons_with_image_email_city,
-                "персон с фото, городом, email",
+
+            persons_with_image_email_city = PersonFactory.create_batch(
+                30,
+                add_real_image=True,
+                add_email=True,
+                add_city=True,
             )
+            notification(self, persons_with_image_email_city, "персон с фото, городом, email")
+
             partners = PartnerFactory.create_batch(30)
             notification(self, partners, "партнёров")
 
             in_footer_partners = PartnerFactory.create_batch(
                 5,
+                add_real_image=True,
                 type="general",
                 in_footer_partner=True,
             )
@@ -107,32 +103,24 @@ class Command(BaseCommand):
             press_releases = PressReleaseFactory.create_batch(10)
             notification(self, press_releases, "пресс-релизов")
 
-            images_for_content = ImageForContentFactory.create_batch(10)
-            notification(self, images_for_content, "контент-изображений")
-
-            videos_url = VideoFactory.create_batch(5)
-            notification(self, videos_url, "видео")
-
-            users_editors = []
-            users_admins = []
-            for index in range(1, 6):
-                users_editors.append(UserFactory.create(username=f"editor_{index}", add_role_editor=True))
-                users_admins.append(UserFactory.create(username=f"admin_{index}", add_role_admin=True))
+            users_editors = AdminUserFactory.create_batch(5)
             notification(self, users_editors, "редакторов")
+
+            users_admins = EditorUserFactory.create_batch(5)
             notification(self, users_admins, "админов")
 
-            # <Library factories>
+            # Library factories.
 
-            programtypes = ProgramFactory.create_batch(3)
+            programtypes = ProgramTypeFactory.create_batch(3)
             notification(self, programtypes, "программ")
 
             plays = PlayFactory.create_batch(10)
             notification(self, plays, "пьес")
 
-            perfomances = [PerformanceFactory.complex_create() for _ in range(6)]
+            perfomances = PerformanceFactory.complex_create(6)
             notification(self, perfomances, "спектаклей")
 
-            authors = [AuthorFactory.complex_create() for _ in range(15)]
+            authors = AuthorFactory.complex_create(15)
             notification(self, authors, "авторов")
 
             masterclasses = MasterClassFactory.create_batch(10)

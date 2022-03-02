@@ -1,25 +1,35 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
-from django.contrib.auth.models import Group
 
 from .forms import GroupAdminForm, UserAdminForm
-from .models import ProxyUser
+from .models import ProxyGroup
 
 User = get_user_model()
 
 
+@admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     form = UserAdminForm
     list_display = (
+        "full_name",
         "username",
         "is_active",
         "role",
+        "get_last_login",
     )
     list_filter = (
-        "email",
-        "username",
+        "groups",
+        "is_active",
     )
+
+    @admin.display(description="Последний визит")
+    def get_last_login(self, obj):
+        return obj.last_login
+
+    @admin.display(description="Имя и фамилия")
+    def full_name(self, obj):
+        return f"{obj.first_name} {obj.last_name}"
 
     def get_readonly_fields(self, request, obj=None):
         """Only superusers can edit `is_superuser` field."""
@@ -39,6 +49,4 @@ class GroupAdmin(admin.ModelAdmin):
     filter_horizontal = ("permissions",)
 
 
-admin.site.unregister(Group)
-admin.site.register(Group, GroupAdmin)
-admin.site.register(ProxyUser, UserAdmin)
+admin.site.register(ProxyGroup, GroupAdmin)

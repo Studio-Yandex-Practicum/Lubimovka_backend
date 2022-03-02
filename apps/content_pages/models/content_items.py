@@ -1,5 +1,6 @@
 from ckeditor.fields import RichTextField
 from django.db import models
+from django.utils.html import strip_tags
 
 from apps.core.models import BaseModel
 
@@ -17,19 +18,6 @@ class AbstractItemWithTitle(BaseModel):
 
     def __str__(self):
         return self.title
-
-
-class Image(AbstractItemWithTitle):
-    """Image with title for `content` blocks."""
-
-    image = models.ImageField(
-        upload_to="content_images",
-        verbose_name="Изображение",
-    )
-
-    class Meta:
-        verbose_name = "Изображение"
-        verbose_name_plural = "Изображения"
 
 
 class Link(AbstractItemWithTitle):
@@ -88,7 +76,7 @@ class Text(BaseModel):
         verbose_name_plural = "Тексты"
 
     def __str__(self):
-        return self.text
+        return strip_tags(self.text)
 
 
 class Title(BaseModel):
@@ -105,18 +93,3 @@ class Title(BaseModel):
 
     def __str__(self):
         return self.title
-
-
-class Video(AbstractItemWithTitle):
-    """Video with title for `content` blocks."""
-
-    description = models.TextField(
-        max_length=500,
-        blank=True,
-        verbose_name="Описание видео",
-    )
-    url = models.URLField()
-
-    class Meta:
-        verbose_name = "Видео"
-        verbose_name_plural = "Видео"
