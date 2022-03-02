@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  swag:
+    image: ghcr.io/linuxserver/swag:1.22.0
+    container_name: swag_test
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - TZ=Europe/Moscow
+      - VALIDATION=http
+      - SUBDOMAINS=${DEV_SUBDOMAIN}
+      - ONLY_SUBDOMAINS=true
+      - CERTPROVIDER=zerossl
+    env_file:
+      - .env-test
+    networks:
+      - test_swag_network
+    volumes:
+      - ./swag/swag_nginx_test.conf:/config/nginx/site-confs/default
+      - swag_volume_test:/config
+      - static_value_test:/config/test/static/
+      - media_value_test:/config/test/media/
+    ports:
+      - 443:443
+      - 80:80
+    restart: unless-stopped
+  frontend_test:
+    image: "${IMAGE_FRONT}:${IMAGE_FRONT_TAG}"
+    container_name: frontend_test
+    environment:
+      BASE_URL: ${FRONT_BASE_URL}
+      API_BASE_URL: ${DEVELOP_API_BASE_URL}
+    networks:
+      - test_swag_network
+    ports:
+      - "3005:3000"
+    restart: always
+    depends_on:
+      - swag
+
+networks:
+  test_swag_network:
+    name: test_swag_network
+    external: true
+
+volumes:
+  static_value_test:
+    name: static_value_test
+  media_value_test:
+    name: media_value_test
+  swag_volume_test:
+    name: swag_volume_test

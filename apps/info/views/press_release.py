@@ -4,10 +4,9 @@ from rest_framework import mixins, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.core.models import Setting
 from apps.info.models import PressRelease
 from apps.info.serializers.festival import YearsSerializer
-from apps.info.serializers.press_release import PhotoGalleryLinkSerializer, PressReleaseSerializer
+from apps.info.serializers.press_release import PressReleaseSerializer
 from apps.info.utils import get_pdf_response
 
 
@@ -33,11 +32,3 @@ class PressReleaseDownloadAPIView(APIView):
         press_release = get_object_or_404(PressRelease, festival__year=festival__year)
         path_to_font = f"{settings.STATIC_ROOT}/fonts/NeueMachinaRegular/PPNeueMachina-Regular.ttf"
         return get_pdf_response(press_release, path_to_font)
-
-
-class PressReleasePhotoGalleryLink(APIView):
-    def get(self, request):
-        link = Setting.get_setting("photo_gallery_facebook")
-        photo_gallery_facebook_link = {"photo_gallery_facebook_link": link}
-        url_serializer = PhotoGalleryLinkSerializer(photo_gallery_facebook_link)
-        return Response(url_serializer.data)

@@ -5,12 +5,12 @@ from apps.afisha.models import Event
 
 class EventAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
-        qs = super(EventAdmin, self).get_queryset(request)
+        qs = super().get_queryset(request)
         qs = qs.select_related(
             "common_event__masterclass",
             "common_event__reading",
             "common_event__performance",
-        )
+        ).order_by("-date_time")
         return qs
 
     list_display = (

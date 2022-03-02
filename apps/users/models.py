@@ -22,7 +22,8 @@ class User(AbstractUser):
 
     def save(self, *args, **kwargs):
         """Set "is_staff" for each user."""
-        self.is_staff = True
+        if self._state.adding:
+            self.is_staff = True
         super().save(*args, **kwargs)
 
 

@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Setting
 
 
@@ -24,7 +25,7 @@ class Banner(BaseModel):
         verbose_name="Ссылка",
     )
     image = models.ImageField(
-        upload_to="images/main/banner",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Картинка",
     )
     button = models.CharField(
@@ -98,3 +99,13 @@ class SettingAfishaScreen(Setting):
         proxy = True
         verbose_name = "Настройки афиши"
         verbose_name_plural = "Настройки афиши"
+
+
+class SettingPlaySupply(Setting):
+    objects = SettingGroupManager()
+    group_name = "PLAY_SUPPLY"
+
+    class Meta:
+        proxy = True
+        verbose_name = "Настройки подачи пьес"
+        verbose_name_plural = "Настройки подачи пьес"

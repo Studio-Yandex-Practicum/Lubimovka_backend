@@ -1,14 +1,9 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.articles.views import BlogItemsViewSet, NewsItemsViewSet, ProjectsViewSet
+from apps.articles.views import BlogItemDetailAPI, BlogItemListAPI, NewsItemsViewSet, ProjectsViewSet
 
 router = DefaultRouter()
-router.register(
-    prefix="blog",
-    viewset=BlogItemsViewSet,
-    basename="blog_item",
-)
 router.register(
     prefix="news",
     viewset=NewsItemsViewSet,
@@ -23,6 +18,8 @@ router.register(
 
 articles_urls = [
     path("", include(router.urls)),
+    path(route="blog/", view=BlogItemListAPI.as_view(), name="blog-item-list"),
+    path(route="blog/<int:id>/", view=BlogItemDetailAPI.as_view(), name="blog-item-detail"),
 ]
 
 urlpatterns = [

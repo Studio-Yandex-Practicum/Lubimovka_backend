@@ -1,6 +1,12 @@
-from apps.info.models import Festival
+from django.utils import timezone
 
 
-def generate_class_name_path(instance, filename):
-    festival = Festival.objects.last()
-    return f"{instance.__class__.__name__}/{festival.year}/{filename}"
+def get_festival_year():
+    if 7 <= timezone.now().month <= 12:
+        return timezone.now().year + 1
+    return timezone.now().year
+
+
+def generate_upload_path(instance, filename):
+    festival_year = get_festival_year()
+    return f"{instance.__class__.__name__}/{festival_year}/{filename}"

@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
-from apps.content_pages.models import AbstractItemWithTitle, Image, Video
+from apps.content_pages.models import AbstractItemWithTitle
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Person, Role
 from apps.library.models import Performance, Play
 
@@ -33,10 +34,14 @@ class AbstractOrderedItemBase(BaseModel):
 
 
 class OrderedImage(AbstractOrderedItemBase):
-    item = models.ForeignKey(
-        Image,
-        on_delete=models.CASCADE,
-        related_name="ordered_images",
+    title = models.CharField(
+        max_length=250,
+        blank=True,
+        verbose_name="Заголовок",
+        help_text="Заголовок/подпись для картинки. Может быть пустым",
+    )
+    image = models.ImageField(
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение",
     )
     block = models.ForeignKey(
@@ -44,6 +49,9 @@ class OrderedImage(AbstractOrderedItemBase):
         on_delete=models.CASCADE,
         related_name="ordered_images",
     )
+
+    def __str__(self):
+        return f"Изображение {self.order}"
 
 
 class OrderedPerformance(AbstractOrderedItemBase):
@@ -157,11 +165,14 @@ class OrderedPlay(AbstractOrderedItemBase):
 
 
 class OrderedVideo(AbstractOrderedItemBase):
-    item = models.ForeignKey(
-        Video,
-        on_delete=models.CASCADE,
-        related_name="ordered_videos",
-        verbose_name="Видео",
+    title = models.CharField(
+        max_length=250,
+        blank=True,
+        verbose_name="Заголовок",
+        help_text="Заголовок/подпись для видео. Может быть пустым",
+    )
+    url = models.URLField(
+        verbose_name="Ссылка на видео",
     )
     block = models.ForeignKey(
         "VideosBlock",
@@ -169,13 +180,12 @@ class OrderedVideo(AbstractOrderedItemBase):
         related_name="ordered_videos",
     )
 
+    def __str__(self):
+        return f"Видео {self.order}"
+
 
 class ImagesBlock(AbstractItemWithTitle):
-    items = models.ManyToManyField(
-        to=Image,
-        through=OrderedImage,
-        related_name="image_blocks",
-    )
+    """Model to store and organize OrderedImages objects."""
 
     class Meta:
         verbose_name = "Блок изображения"
@@ -219,11 +229,7 @@ class PlaysBlock(AbstractItemWithTitle):
 
 
 class VideosBlock(AbstractItemWithTitle):
-    items = models.ManyToManyField(
-        to=Video,
-        through=OrderedVideo,
-        related_name="video_blocks",
-    )
+    """Model to store and organize OrderedVideos objects."""
 
     class Meta:
         verbose_name = "Блок видео"

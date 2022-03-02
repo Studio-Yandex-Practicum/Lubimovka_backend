@@ -5,6 +5,7 @@ from django.db import models
 
 from apps.core.models import BaseModel, Image, Person
 
+from ...content_pages.utilities import path_by_app_label_and_class_name
 from .play import Play
 
 
@@ -26,11 +27,11 @@ class Performance(BaseModel):
         verbose_name="События",
     )
     main_image = models.ImageField(
-        upload_to="performances/",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Главное изображение",
     )
     bottom_image = models.ImageField(
-        upload_to="performances/",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение внизу страницы",
     )
     images_in_block = models.ManyToManyField(
@@ -50,7 +51,7 @@ class Performance(BaseModel):
         verbose_name="Краткое описание",
     )
     text = models.TextField(
-        max_length=500,
+        max_length=2000,
         verbose_name="Полное описание",
     )
     age_limit = models.PositiveSmallIntegerField(
@@ -94,11 +95,11 @@ class PerformanceMediaReview(BaseModel):
         verbose_name="Название медиа ресурса",
     )
     text = models.TextField(
-        max_length=500,
+        max_length=2000,
         verbose_name="Текст отзыва",
     )
     image = models.ImageField(
-        upload_to="reviews/",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение",
     )
     performance = models.ForeignKey(
@@ -135,7 +136,7 @@ class PerformanceReview(BaseModel):
         verbose_name="Имя зрителя",
     )
     text = models.TextField(
-        max_length=500,
+        max_length=2000,
         verbose_name="Текст отзыва",
     )
     performance = models.ForeignKey(
