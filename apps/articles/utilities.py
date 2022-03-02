@@ -35,6 +35,6 @@ def сompressImage(image, target=5120000):
             )
             return new_image
         else:
-            print("ERROR: No acceptable quality factor found")
+            raise Exception("ERROR: No acceptable quality factor found")
     except Exception as e:
         return f"Проблема с загрузкой изображения, ошибка:{e}"
