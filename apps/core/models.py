@@ -95,7 +95,7 @@ class Person(BaseModel):
     class Meta:
         verbose_name = "Человек"
         verbose_name_plural = "Люди"
-        ordering = ("last_name",)
+        ordering = ("last_name", "first_name")
         constraints = [
             UniqueConstraint(
                 fields=["first_name", "last_name", "middle_name", "email"],
