@@ -122,7 +122,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
-    ordering = ("person__last_name",)
+    ordering = ("person__last_name", "person__first_name")
 
     @admin.display(
         boolean=True,
@@ -217,7 +217,7 @@ class FestivalTeamMemberAdmin(admin.ModelAdmin):
         ),
     )
 
-    ordering = ("person__last_name",)
+    ordering = ("person__last_name", "person__first_name")
 
     search_fields = ("position", "person__first_name", "person__last_name")
 
