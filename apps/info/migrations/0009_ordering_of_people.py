@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('info', '0007_renaming_table'),
+        ('info', '0008_alter_partner_image'),
     ]
 
     operations = [
