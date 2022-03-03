@@ -2,9 +2,9 @@ from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_fiel
 from rest_framework import serializers
 
 from apps.content_pages.models import (
+    EventsBlock,
     ImagesBlock,
     Link,
-    PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
     Preamble,
@@ -14,9 +14,9 @@ from apps.content_pages.models import (
     VideosBlock,
 )
 from apps.content_pages.serializers import (
+    EventsBlockSerializer,
     ImagesBlockSerializer,
     LinkSerializer,
-    PerformancesBlockSerializer,
     PersonsBlockSerializer,
     PlaysBlockSerializer,
     PreambleSerializer,
@@ -27,9 +27,9 @@ from apps.content_pages.serializers import (
 )
 
 CONTENT_OBJECT_SERIALIZER_PAIRS = {
+    EventsBlock: EventsBlockSerializer,
     ImagesBlock: ImagesBlockSerializer,
     Link: LinkSerializer,
-    PerformancesBlock: PerformancesBlockSerializer,
     PersonsBlock: PersonsBlockSerializer,
     PlaysBlock: PlaysBlockSerializer,
     Preamble: PreambleSerializer,
@@ -58,12 +58,12 @@ class ContentObjectRelatedField(serializers.RelatedField):
         content_item_serializers = CONTENT_OBJECT_SERIALIZER_PAIRS
 
         content_item_class = obj._meta.model
-        serializer = content_item_serializers.get(content_item_class, None)
+        serializer_class = content_item_serializers.get(content_item_class, None)
 
-        if not serializer:
+        if not serializer_class:
             raise Exception("Unexpected type of content object block.")
 
-        serializer = serializer(obj, context=self.context)
+        serializer = serializer_class(obj, context=self.context)
         return serializer.data
 
 

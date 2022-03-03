@@ -42,11 +42,13 @@ class Play(BaseModel):
         max_length=200,
         verbose_name="Город",
         blank=True,
+        null=True,
     )
     year = models.PositiveSmallIntegerField(
         validators=[year_validator],
         verbose_name="Год написания пьесы",
         blank=True,
+        null=True,
     )
     url_download = models.FileField(
         max_length=200,

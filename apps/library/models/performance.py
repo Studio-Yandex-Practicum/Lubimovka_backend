@@ -4,7 +4,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from apps.core.models import BaseModel, Image, Person
+from apps.library.utilities import get_team_roles
 
+from ...content_pages.utilities import path_by_app_label_and_class_name
 from .play import Play
 
 
@@ -26,11 +28,11 @@ class Performance(BaseModel):
         verbose_name="События",
     )
     main_image = models.ImageField(
-        upload_to="performances/",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Главное изображение",
     )
     bottom_image = models.ImageField(
-        upload_to="performances/",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение внизу страницы",
     )
     images_in_block = models.ManyToManyField(
@@ -87,6 +89,16 @@ class Performance(BaseModel):
     def __str__(self):
         return self.name
 
+    @property
+    def team(self):
+        """Return all team members."""
+        return get_team_roles(self, {"team_members__performance": self})
+
+    @property
+    def event_team(self):
+        """Return directors and dramatists related with Performance."""
+        return get_team_roles(self, {"team_members__performance": self, "slug__in": ["director", "dramatist"]})
+
 
 class PerformanceMediaReview(BaseModel):
     media_name = models.CharField(
@@ -98,7 +110,7 @@ class PerformanceMediaReview(BaseModel):
         verbose_name="Текст отзыва",
     )
     image = models.ImageField(
-        upload_to="reviews/",
+        upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение",
     )
     performance = models.ForeignKey(

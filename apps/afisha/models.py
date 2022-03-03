@@ -64,10 +64,6 @@ class Event(BaseModel):
     date_time = models.DateTimeField(
         verbose_name="Дата и время",
     )
-    date = models.DateField(
-        null=True,
-        verbose_name="Дата",
-    )
     paid = models.BooleanField(
         verbose_name="Платное",
         default=False,
@@ -92,10 +88,10 @@ class Event(BaseModel):
 
     def __str__(self):
         event_name = self.common_event.target_model
-        event_type_cyrillic = str(dict(self.EventType.choices)[self.type])
+        event_label = self.EventType(self.type).label
         event_date = self.date_time.date().strftime("%d.%m.%Y")
         event_time = self.date_time.time().strftime("%H:%M")
-        return f'{event_type_cyrillic} - "{event_name}". Дата: {event_date}. Время: {event_time}.'
+        return f'{event_label} - "{event_name}". Дата: {event_date}. Время: {event_time}'
 
     def save(self, *args, **kwargs):
         allowed_event_types = {
@@ -104,7 +100,6 @@ class Event(BaseModel):
             Reading: self.EventType.READING,
         }
         self.type = allowed_event_types[type(self.common_event.target_model)]
-        self.date = self.date_time.date()
         super().save(*args, **kwargs)
 
     def clean(self):

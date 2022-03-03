@@ -198,6 +198,13 @@ def add_email_settings(apps, schema_editor):
         text="Вопрос Любимовке",
         description="Тема письма для вопроса",
     )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="EMAIL",
+        settings_key="pr_manager_name",
+        text="Имя Фамилия в дателльном падеже (пример: Анне Загородниковой)",
+        description="Имя PR менеджера на странице для прессы (в дательном падеже)",
+    )
 
 
 def add_afisha_settings(apps, schema_editor):
@@ -287,20 +294,12 @@ def add_general_settings(apps, schema_editor):
         description="Цвет сайта",
     )
     Setting.objects.create(
-        field_type="BOOLEAN",
-        group="GENERAL",
-        settings_key="form_to_submit_a_play",
-        boolean=True,
-        description="Форма для отправки пьесы",
-    )
-    Setting.objects.create(
         field_type="URL",
         group="GENERAL",
         settings_key="url_to_privacy_policy",
         url="privacy-policy",
         description="Ссылка на обработку персональных данных",
     )
-
     Setting.objects.create(
         field_type="URL",
         group="GENERAL",
@@ -407,6 +406,33 @@ def add_main_settings(apps, schema_editor):
     )
 
 
+def add_playsupply_settings(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
+    Setting.objects.create(
+        field_type="TEXT",
+        group="PLAY_SUPPLY",
+        settings_key="SPREADSHEET_ID",
+        text="1PB-Rzd46wHpldZptqc7CEn9VNkv3iRJuo9e87Xtpgb4",
+        description="id Google таблицы",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="PLAY_SUPPLY",
+        settings_key="SHEET",
+        text="Лист1",
+        description="Наименование листа Google таблицы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="PLAY_SUPPLY",
+        settings_key="form_to_submit_a_play",
+        boolean=True,
+        description="Форма для отправки пьесы",
+    )
+
+
 def add_short_list_program(apps, schema_editor):
     Program = apps.get_model(
         "library",
@@ -456,4 +482,7 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             add_short_list_program,
         ),
+        migrations.RunPython(
+            add_playsupply_settings,
+        )
     ]

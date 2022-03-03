@@ -5,7 +5,6 @@ from pathlib import Path
 import environ
 
 env = environ.Env()
-
 # Root folder of the project
 # ------------------------------------------------------------------------------
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
@@ -20,6 +19,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#root-urlconf
 ROOT_URLCONF = "config.urls"
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#wsgi-application
 WSGI_APPLICATION = "config.wsgi.application"
 
@@ -130,7 +130,6 @@ REST_FRAMEWORK = {
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 LANGUAGE_CODE = "ru-Ru"
-# TIME_ZONE = "W-SU"
 TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
 USE_L10N = True
@@ -184,14 +183,16 @@ EMAIL_TIMEOUT = 5
 # Use CKEditor (Configuration)
 # ------------------------------------------------------------------------------
 CKEDITOR_CONFIGS = {
-    'default': {
+    "default": {
         "removePlugins": "elementspath",
-        "removeDialogTabs": 'dialog:advanced',
-        'toolbar': 'Custom',
-        'toolbar_Custom': [
-            ['Undo', 'Redo'],
-            ['Bold', 'Italic', 'Underline', 'Strike'],
-            ['Link', 'Unlink'],
-        ]
+        "removeDialogTabs": "dialog:advanced",
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            ["Undo", "Redo"],
+            ["Bold", "Italic", "Underline", "Strike"],
+            ["Link", "Unlink"],
+        ],
     }
 }
+GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
+GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
