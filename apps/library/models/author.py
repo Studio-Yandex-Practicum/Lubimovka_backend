@@ -52,8 +52,8 @@ class Author(BaseModel):
     )
     slug = models.SlugField(
         "Транслит фамилии для формирования адресной строки",
-        blank=True,
         unique=True,
+        blank=True,
         db_index=True,
         help_text="Если не заполнено, будет сформировано автоматически",
     )
