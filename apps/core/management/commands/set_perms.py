@@ -83,6 +83,7 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_newsitem") & ~Q(codename__endswith="change_newsitem")
                 | Q(codename__endswith="_project") & ~Q(codename__endswith="change_project")
                 | Q(codename__endswith="access_level_1")
+                | Q(codename__icontains="view_")
             )
 
             admin, created = Group.objects.get_or_create(name="admin")
