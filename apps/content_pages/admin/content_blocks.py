@@ -1,15 +1,16 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 
+from apps.afisha.models import Event
 from apps.content_pages.models import (
     ContentPersonRole,
+    EventsBlock,
     ExtendedPerson,
     ImagesBlock,
+    OrderedEvent,
     OrderedImage,
-    OrderedPerformance,
     OrderedPlay,
     OrderedVideo,
-    PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
     VideosBlock,
@@ -27,6 +28,15 @@ class OrderedInline(SortableInlineAdminMixin, admin.TabularInline):
     extra = 0
 
 
+class OrderedEventInline(OrderedInline):
+    model = OrderedEvent
+    max_num = 3
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = Event.objects.filter(common_event__performance__isnull=False)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
 class OrderedImageInline(AdminImagePreview, OrderedInline):
     readonly_fields = ("image_preview_change_page",)
     model = OrderedImage
@@ -35,10 +45,6 @@ class OrderedImageInline(AdminImagePreview, OrderedInline):
 
 class OrderedVideoInline(OrderedInline):
     model = OrderedVideo
-
-
-class OrderedPerformanceInline(OrderedInline):
-    model = OrderedPerformance
 
 
 class OrderedPlayInline(OrderedInline):
@@ -74,14 +80,15 @@ class ImagesBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
     inlines = (OrderedImageInline,)
 
 
+@admin.register(EventsBlock)
+class EventsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
+    list_display = ("title",)
+    inlines = (OrderedEventInline,)
+
+
 @admin.register(PersonsBlock)
 class PersonsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
     inlines = (ExtendedPersonInline,)
-
-
-@admin.register(PerformancesBlock)
-class PerformancesBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
-    inlines = (OrderedPerformanceInline,)
 
 
 @admin.register(PlaysBlock)

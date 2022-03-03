@@ -1,11 +1,11 @@
 from .content_blocks import (
+    EventsBlockAdmin,
     ExtendedPersonInline,
     ImagesBlockAdmin,
+    OrderedEventInline,
     OrderedImageInline,
-    OrderedPerformanceInline,
     OrderedPlayInline,
     OrderedVideoInline,
-    PerformancesBlockAdmin,
     PersonsBlockAdmin,
     PlaysBlockAdmin,
     VideosBlockAdmin,
