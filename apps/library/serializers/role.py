@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.core.models import Role
@@ -12,6 +13,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
     persons = serializers.SerializerMethodField()
 
+    @extend_schema_field(list)
     def get_persons(self, obj):
         persons = []
         for team_member in obj.team_members.all():
