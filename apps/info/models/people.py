@@ -43,7 +43,7 @@ class Partner(BaseModel):
         ordering = ("type",)
 
     def save(self, *args, **kwargs):
-        this = Partner.objects.get(id=self.id)
+        this = Partner.objects.filter(id=self.id).first()
         if this:
             if this.image != self.image:
                 this.image.delete(save=False)
