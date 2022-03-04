@@ -98,7 +98,7 @@ class Person(BaseModel):
         ]
 
     def save(self, *args, **kwargs):
-        this = Person.objects.get(id=self.id)
+        this = Person.objects.filter(id=self.id).first()
         if this:
             if this.image != self.image:
                 this.image.delete(save=False)
