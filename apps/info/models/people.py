@@ -43,12 +43,10 @@ class Partner(BaseModel):
         ordering = ("type",)
 
     def save(self, *args, **kwargs):
-        try:
-            this = Partner.objects.get(id=self.id)
+        this = Partner.objects.get(id=self.id)
+        if this:
             if this.image != self.image:
                 this.image.delete(save=False)
-        except BaseException:
-            pass
         super(Partner, self).save(*args, **kwargs)
 
     def __str__(self):

@@ -98,12 +98,10 @@ class Person(BaseModel):
         ]
 
     def save(self, *args, **kwargs):
-        try:
-            this = Person.objects.get(id=self.id)
+        this = Person.objects.get(id=self.id)
+        if this:
             if this.image != self.image:
                 this.image.delete(save=False)
-        except BaseException:
-            pass
         super(Person, self).save(*args, **kwargs)
 
     def __str__(self):
