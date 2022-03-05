@@ -51,7 +51,7 @@ class Author(BaseModel):
         verbose_name="Пьесы автора",
     )
     slug = models.SlugField(
-        "Транслит фамилии для формирования адресной строки",
+        "Транслит имени_фамилии для формирования адресной строки",
         unique=True,
         blank=True,
         help_text="Если не заполнено, будет сформировано автоматически",
@@ -74,9 +74,11 @@ class Author(BaseModel):
             if not self.person.city:
                 raise ValidationError("Для автора необходимо указать город")
         if not self.slug:
-            self.slug = utils.slugify(self.person.last_name)
+            self.slug = utils.slugify(self.person.full_name)
             if Author.objects.filter(slug=self.slug).exists():
-                raise ValidationError("Автоматическое формирование транслита фамилии невозможно из-за дублирования")
+                raise ValidationError(
+                    "Автоматическое формирование транслита имени-фамилии невозможно из-за дублирования"
+                )
 
     def _has_person_before_saving(self):
         return self.person_id is not None
