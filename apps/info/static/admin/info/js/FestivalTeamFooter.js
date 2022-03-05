@@ -8,6 +8,24 @@
 jQuery(document).ready(function ($) {
     let teamTypeSelectField = $("#id_team");
     let divDependedOnTeamType = $(".depended_on_team_type");
+    let idIsPrManager = $("#id_is_pr_manager");
+    let divHideDatePrManager = $('#festivalteammember_form > div > fieldset.module.aligned.depended_on_team_type > div.form-row.field-data_manager');
+
+    function toggleCheckUndefined(someType, someFunction) {
+        if (typeof someType === "undefined") {
+            return false;
+        } else {
+            someFunction(teamTypeSelectField.val());
+        }
+    }
+
+    function toggleDivDependedOnIsPrManager(inputType) {
+        if (inputType === true) {
+            divHideDatePrManager.slideDown();
+        } else {
+        divHideDatePrManager.slideUp();
+        }
+    }
 
     function toggleDivDependedOnTeamType(teamType) {
         if (teamType === "art") {
@@ -18,10 +36,16 @@ jQuery(document).ready(function ($) {
     }
 
     // show/hide on load based on existing value of teamTypeSelectField
-    toggleDivDependedOnTeamType(teamTypeSelectField.val(), true);
+    toggleCheckUndefined(teamTypeSelectField.val(), toggleDivDependedOnTeamType)
 
+    // show/hide on load based on existing value of idIsPrManager
+    toggleDivDependedOnIsPrManager(idIsPrManager.is(":checked"));
     // show/hide on change
     teamTypeSelectField.change(function () {
-        toggleDivDependedOnTeamType($(this).val(), false);
+        toggleDivDependedOnTeamType($(this).val());
+    });
+    // show/hide on change
+    idIsPrManager.change(function() {
+        toggleDivDependedOnIsPrManager(idIsPrManager.is(":checked"));
     });
 });

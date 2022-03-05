@@ -13,8 +13,8 @@ class FestivalTeamMemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FestivalTeamMemberForm, self).__init__(*args, **kwargs)
         if self["is_pr_manager"].value():
-            pr_manager_name = Setting.objects.filter(settings_key="pr_manager_name").first()
-            self.fields["data_manager"].initial = pr_manager_name.text
+            pr_manager_name = Setting.get_setting("pr_manager_name")
+            self.fields["data_manager"].initial = pr_manager_name
 
     data_manager = forms.CharField(
         label="Данные о PR-менеджере (в дательном падеже)",
