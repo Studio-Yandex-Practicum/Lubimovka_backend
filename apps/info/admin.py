@@ -122,6 +122,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
+    classes = ["collapse"]
     ordering = ("person__last_name", "person__first_name")
 
     @admin.display(
@@ -140,6 +141,7 @@ class FestivalImagesInline(admin.TabularInline):
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1
+    classes = ["collapse"]
 
 
 @admin.register(Festival)
