@@ -32,6 +32,7 @@ class ProjectAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAdm
             None,
             {
                 "fields": (
+                    "status",
                     "title",
                     "intro",
                     "pub_date",
@@ -40,7 +41,6 @@ class ProjectAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAdm
                         "image_preview_change_page",
                         "image",
                     ),
-                    "status",
                 )
             },
         ),

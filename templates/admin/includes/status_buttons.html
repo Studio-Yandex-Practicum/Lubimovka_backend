@@ -1,4 +1,5 @@
 {% load i18n %}
+{% if original.status %}
 <div class="submit-row">
     <strong> текущий статус: {{ original.get_status_display }} </strong>
     {% if user_level >= current_status_level %}
@@ -9,3 +10,4 @@
         {% endfor %}
     {% endif%}
 </div>
+{% endif %}

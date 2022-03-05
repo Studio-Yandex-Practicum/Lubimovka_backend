@@ -37,6 +37,7 @@ class NewsItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAd
             None,
             {
                 "fields": (
+                    "status",
                     "title",
                     "pub_date",
                     "description",
@@ -44,7 +45,6 @@ class NewsItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAd
                         "image_preview_change_page",
                         "image",
                     ),
-                    "status",
                 )
             },
         ),

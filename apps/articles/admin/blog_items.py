@@ -45,6 +45,7 @@ class BlogItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAd
             None,
             {
                 "fields": (
+                    "status",
                     "title",
                     (
                         "author_url_title",
@@ -56,7 +57,6 @@ class BlogItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAd
                         "image_preview_change_page",
                         "image",
                     ),
-                    "status",
                 )
             },
         ),

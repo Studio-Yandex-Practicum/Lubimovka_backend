@@ -54,6 +54,16 @@ class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
         "festival__year",
     )
     readonly_fields = ("status",)
+    fields = (
+        "status",
+        "name",
+        "city",
+        "year",
+        "url_download",
+        "url_reading",
+        "program",
+        "festival",
+    )
 
     def get_actions(self, request):
         actions = super().get_actions(request)
@@ -119,6 +129,8 @@ class AuthorAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
+        if request.user.has_perm("library.access_level_1"):
+            return form
         if obj:
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
         else:
