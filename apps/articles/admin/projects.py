@@ -8,9 +8,9 @@ class ProjectContentInline(BaseContentInline):
     model = ProjectContent
 
     content_type_model = (
+        "eventsblock",
         "imagesblock",
         "link",
-        "performancesblock",
         "personsblock",
         "playsblock",
         "text",

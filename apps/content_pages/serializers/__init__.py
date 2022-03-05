@@ -3,7 +3,6 @@ from .content_items import (
     LinkSerializer,
     OrderedImageSerializer,
     OrderedVideoSerializer,
-    PerformanceSerializer,
     PreambleSerializer,
     QuoteSerializer,
     TextSerializer,
@@ -14,8 +13,8 @@ from .content_items import (
 # isort: split
 
 from .content_blocks import (
+    EventsBlockSerializer,
     ImagesBlockSerializer,
-    PerformancesBlockSerializer,
     PersonsBlockSerializer,
     PlaysBlockSerializer,
     VideosBlockSerializer,
