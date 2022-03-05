@@ -7,7 +7,8 @@ def set_slug(apps, schema_editor):
     Author = apps.get_model("library", "Author")
     qs = Author.objects.all()
     for author in qs:
-        author.slug = utils.slugify(author.person.full_name)
+        full_name = author.person.first_name + "_" + author.person.last_name
+        author.slug = utils.slugify(full_name)
         author.save()
 
 class Migration(migrations.Migration):

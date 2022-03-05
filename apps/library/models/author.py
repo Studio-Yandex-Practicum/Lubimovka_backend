@@ -74,7 +74,8 @@ class Author(BaseModel):
             if not self.person.city:
                 raise ValidationError("Для автора необходимо указать город")
         if not self.slug:
-            self.slug = utils.slugify(self.person.full_name)
+            full_name = self.person.first_name + "_" + self.person.last_name
+            self.slug = utils.slugify(full_name)
             if Author.objects.filter(slug=self.slug).exists():
                 raise ValidationError(
                     "Автоматическое формирование транслита имени-фамилии невозможно из-за дублирования"
