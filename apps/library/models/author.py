@@ -2,8 +2,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core import utils
 from apps.core.models import BaseModel, Person
-from apps.core.utils import slugify
 
 from .play import Play
 
@@ -54,7 +54,6 @@ class Author(BaseModel):
         "Транслит фамилии для формирования адресной строки",
         unique=True,
         blank=True,
-        db_index=True,
         help_text="Если не заполнено, будет сформировано автоматически",
     )
 
@@ -75,7 +74,7 @@ class Author(BaseModel):
             if not self.person.city:
                 raise ValidationError("Для автора необходимо указать город")
         if not self.slug:
-            self.slug = self.get_unique_slug(self.person)
+            self.slug = utils.slugify(self.person.last_name)
             if Author.objects.filter(slug=self.slug).exists():
                 raise ValidationError("Автоматическое формирование транслита фамилии невозможно из-за дублирования")
 
@@ -85,9 +84,6 @@ class Author(BaseModel):
     @property
     def image(self):
         return self.person.image
-
-    def get_unique_slug(self, value):
-        return slugify(value.last_name)
 
 
 class SocialNetworkLink(BaseModel):
