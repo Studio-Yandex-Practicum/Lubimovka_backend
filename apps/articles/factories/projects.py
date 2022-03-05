@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo
 import factory
 from django.conf import settings
 
+from apps.afisha.models import Event
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.factories import AbstractContentFactory
 from apps.core.decorators import restrict_factory
@@ -28,6 +29,7 @@ class ProjectContentModuleFactory(AbstractContentFactory):
 
 
 @restrict_factory(
+    add_several_events=(Event,),
     add_several_playsblock=(Play,),
     add_several_personsblock=(Person,),
 )
@@ -70,10 +72,10 @@ class ProjectFactory(factory.django.DjangoModelFactory):
             ProjectContentModuleFactory.create_batch(count, content_page=self, unit_link=True)
 
     @factory.post_generation
-    def add_several_performancesblock(self, created, count, **kwargs):
-        """Add specified count of content block with Performances to Project."""
+    def add_several_eventsblock(self, created, count, **kwargs):
+        """Add specified count of content block with Events to Project."""
         if created and count:
-            ProjectContentModuleFactory.create_batch(count, content_page=self, array_performance=True)
+            ProjectContentModuleFactory.create_batch(count, content_page=self, array_event=True)
 
     @factory.post_generation
     def add_several_personsblock(self, created, count, **kwargs):
@@ -110,5 +112,5 @@ class ProjectFactory(factory.django.DjangoModelFactory):
             add_several_imagesblock=1,
             add_several_personsblock=1,
             add_several_videosblock=1,
-            add_several_performancesblock=1,
+            add_several_eventsblock=1,
         )

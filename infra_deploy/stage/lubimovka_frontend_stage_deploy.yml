@@ -18,6 +18,7 @@ services:
       - stage_swag_network
     volumes:
       - ./swag/swag_nginx_stage.conf:/config/nginx/site-confs/default
+      - swag_volume_stage:/config
       - static_value_stage:/config/stage/static/
       - media_value_stage:/config/stage/media/
     ports:
@@ -48,3 +49,5 @@ volumes:
     name: static_value_stage
   media_value_stage:
     name: media_value_stage
+  swag_volume_stage:
+    name: swag_volume_stage

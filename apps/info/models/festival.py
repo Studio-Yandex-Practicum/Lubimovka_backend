@@ -39,6 +39,7 @@ class FestivalTeamMember(BaseModel):
     class Meta:
         verbose_name = "Команда фестиваля"
         verbose_name_plural = "Команды фестиваля"
+        ordering = ("person__last_name", "person__first_name")
         constraints = [
             UniqueConstraint(
                 fields=("person", "team"),

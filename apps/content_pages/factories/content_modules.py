@@ -1,10 +1,11 @@
 import factory
 from django.contrib.contenttypes.models import ContentType
 
+from apps.afisha.models import Event
 from apps.content_pages.factories import (
+    EventsBlockFactory,
     ImagesBlockFactory,
     LinkFactory,
-    PerformancesBlockFactory,
     PersonsBlockFactory,
     PlaysBlockFactory,
     PreambleFactory,
@@ -16,12 +17,12 @@ from apps.content_pages.factories import (
 from apps.content_pages.models import AbstractContent
 from apps.core.decorators.factory import restrict_factory
 from apps.core.models import Person, Role
-from apps.library.models import Performance, Play
+from apps.library.models import Play
 
 
 @restrict_factory(
+    array_event=(Event,),
     array_person=(Person, Role),
-    array_performance=(Performance,),
     array_play=(Play,),
 )
 class AbstractContentFactory(factory.django.DjangoModelFactory):
@@ -34,7 +35,7 @@ class AbstractContentFactory(factory.django.DjangoModelFactory):
     class Params:
         array_image = factory.Trait(item=factory.SubFactory(ImagesBlockFactory))
         array_person = factory.Trait(item=factory.SubFactory(PersonsBlockFactory))
-        array_performance = factory.Trait(item=factory.SubFactory(PerformancesBlockFactory))
+        array_event = factory.Trait(item=factory.SubFactory(EventsBlockFactory))
         array_play = factory.Trait(item=factory.SubFactory(PlaysBlockFactory))
         array_video = factory.Trait(item=factory.SubFactory(VideosBlockFactory))
         unit_link = factory.Trait(item=factory.SubFactory(LinkFactory))

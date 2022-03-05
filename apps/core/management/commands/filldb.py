@@ -138,6 +138,9 @@ class Command(BaseCommand):
             places = PlaceFactory.create_batch(3)
             notification(self, places, "мест")
 
+            events_of_performances = EventFactory.create_batch(5, performance=True)
+            notification(self, events_of_performances, "событий спектакля")
+
             events = EventFactory.create_batch(10)
             notification(self, events, "событий")
 

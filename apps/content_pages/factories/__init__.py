@@ -2,13 +2,12 @@ from .content_array_items import (
     ContentPersonRoleFactory,
     ExtendedPersonFactory,
     OrderedImageFactory,
-    OrderedPerformanceFactory,
     OrderedPlayFactory,
     OrderedVideoFactory,
 )
 from .content_arrays import (
+    EventsBlockFactory,
     ImagesBlockFactory,
-    PerformancesBlockFactory,
     PersonsBlockFactory,
     PlaysBlockFactory,
     VideosBlockFactory,
