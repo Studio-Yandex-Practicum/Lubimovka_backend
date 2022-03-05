@@ -1,0 +1,145 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-02-26 22:26+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n"
+"%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: apps/core/models.py:166
+msgid "Роль в блоге"
+msgstr ""
+
+#: apps/core/models.py:167
+msgid "Роль в спектаклях"
+msgstr ""
+
+#: apps/core/models.py:168
+msgid "Роль в пьесах"
+msgstr ""
+
+#: apps/core/models.py:169
+msgid "Роль в мастер классах"
+msgstr ""
+
+#: apps/core/models.py:170
+msgid "Роль в читках"
+msgstr ""
+
+#: apps/core/models.py:192
+msgid "Почта"
+msgstr ""
+
+#: apps/core/models.py:193
+msgid "Главная"
+msgstr ""
+
+#: apps/core/models.py:194
+msgid "Первая страница"
+msgstr ""
+
+#: apps/core/models.py:195
+msgid "Общие"
+msgstr ""
+
+#: apps/core/models.py:196
+msgid "Афиша"
+msgstr ""
+
+#: apps/core/models.py:197
+msgid "Подача пьес"
+msgstr ""
+
+#: apps/core/models.py:200
+msgid "Да/Нет"
+msgstr ""
+
+#: apps/core/models.py:201
+msgid "Текст"
+msgstr ""
+
+#: apps/core/models.py:202
+msgid "URL"
+msgstr ""
+
+#: apps/core/models.py:203
+msgid "Картинка"
+msgstr ""
+
+#: apps/core/models.py:204
+msgid "EMAIL"
+msgstr "Почта"
+
+#: apps/info/models/festival.py:14
+msgid "Арт-дирекция фестиваля"
+msgstr ""
+
+#: apps/info/models/festival.py:15
+msgid "Команда фестиваля"
+msgstr ""
+
+#: apps/info/models/festival.py:157
+msgid "Дата окончания фестиваля не может быть раньше даты его начала."
+msgstr ""
+
+#: apps/info/models/people.py:12
+msgid "Генеральный партнер"
+msgstr ""
+
+#: apps/info/models/people.py:13
+msgid "Партнер фестиваля"
+msgstr ""
+
+#: apps/info/models/people.py:14
+msgid "Информационный партнер"
+msgstr ""
+
+#: apps/library/models/author.py:80
+msgid "Facebook"
+msgstr ""
+
+#: apps/library/models/author.py:81
+msgid "Instagram"
+msgstr ""
+
+#: apps/library/models/author.py:82
+msgid "YouTube"
+msgstr ""
+
+#: apps/library/models/author.py:83
+msgid "Telegram"
+msgstr ""
+
+#: apps/library/models/author.py:84
+msgid "Вконтакте"
+msgstr ""
+
+#: apps/main/models.py:11
+msgid "Билеты"
+msgstr ""
+
+#: apps/main/models.py:12
+msgid "Подробнее"
+msgstr ""
+
+#: apps/main/models.py:13
+msgid "Читать"
+msgstr ""
+
+#: templates/admin/base_site.html:7
+msgid "Django administration"
+msgstr ""
