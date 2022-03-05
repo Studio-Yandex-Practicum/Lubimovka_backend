@@ -3,6 +3,7 @@ import os
 from pathlib import Path
 
 import environ
+from django.utils.translation import gettext_lazy as _
 
 env = environ.Env()
 # Root folder of the project
@@ -27,6 +28,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
     "django.contrib.sites",
+    "admin_interface",  # internationalization admin Interface
+    "colorfield",
+    "modeltranslation",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -68,6 +72,7 @@ SITE_ID = 1
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.locale.LocaleMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -130,10 +135,21 @@ REST_FRAMEWORK = {
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 LANGUAGE_CODE = "ru-Ru"
+
 TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
+
+# gettext = lambda s: s
+# LANGUAGES = (
+#     ('ru', gettext('Russian')),
+#     ('en', gettext('English')),
+# )
+
+LOCALE_PATHS = (
+    os.path.join(ROOT_DIR, 'locale/'),
+)
 
 # STATIC
 # ------------------------------------------------------------------------------
@@ -196,3 +212,7 @@ CKEDITOR_CONFIGS = {
 }
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
+
+# django-admin-interface
+X_FRAME_OPTIONS = "SAMEORIGIN"
+SILENCED_SYSTEM_CHECKS = ["security.W019"]
