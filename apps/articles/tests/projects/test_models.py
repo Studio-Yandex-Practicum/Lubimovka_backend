@@ -16,14 +16,14 @@ def simple_project():
     params=(
         {"array_image": True},
         {"unit_link": True},
-        {"array_performance": True},
+        {"array_event": True},
         {"array_person": True},
         {"array_play": True},
         {"unit_text": True},
         {"array_video": True},
     )
 )
-def project_content_module(request, simple_project, plays, persons, performances):
+def project_content_module(request, simple_project, plays, persons, events):
     content_module_param = request.param
     return ProjectContentModuleFactory.create(content_page=simple_project, **content_module_param)
 

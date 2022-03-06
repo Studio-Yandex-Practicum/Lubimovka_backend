@@ -42,6 +42,13 @@ class Partner(BaseModel):
         verbose_name_plural = "Партнеры"
         ordering = ("type",)
 
+    def save(self, *args, **kwargs):
+        this = Partner.objects.filter(id=self.id).first()
+        if this:
+            if this.image != self.image:
+                this.image.delete(save=False)
+        super(Partner, self).save(*args, **kwargs)
+
     def __str__(self):
         return f"{self.name} - {self.type}"
 
@@ -103,7 +110,7 @@ class Volunteer(BaseModel):
     class Meta:
         verbose_name = "Волонтёр фестиваля"
         verbose_name_plural = "Волонтёры фестиваля"
-        ordering = ("person__last_name",)
+        ordering = ("person__last_name", "person__first_name")
         constraints = [
             UniqueConstraint(
                 fields=("person", "festival"),

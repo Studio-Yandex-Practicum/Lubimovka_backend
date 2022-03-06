@@ -1,24 +1,31 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.core.models import Role
 
 
 class RoleSerializer(serializers.ModelSerializer):
-    """Сериализатор для роли.
+    """Role serializer.
 
-    Используется в сериализаторе спектакля,
-    мастер-класса и читки на странице афиши,
-    сериализаторе спектакля на странице отдельного спектакля.
-    Применяется в случае, когда у роли только одна персона.
+    Used in Performance, Reading and Master-class serializers for afisha page
+    and for individual Performance page.
     """
 
     persons = serializers.SerializerMethodField()
 
+    @extend_schema_field(list[str])
     def get_persons(self, obj):
         persons = []
         for team_member in obj.team_members.all():
             persons.append(team_member.person.full_name)
         return persons
+
+    def to_representation(self, instance):
+        if instance.team_members.count() > 1:
+            self.fields["name"] = serializers.CharField(source="name_plural")
+        else:
+            self.fields["name"] = serializers.CharField()
+        return super().to_representation(instance)
 
     class Meta:
         model = Role
@@ -26,15 +33,3 @@ class RoleSerializer(serializers.ModelSerializer):
             "name",
             "persons",
         )
-
-
-class RoleWithPluralPersonsSerializer(RoleSerializer):
-    """Сериализатор для роли.
-
-    Используется в сериализаторе спектакля,
-    мастер-класса и читки на странице афиши,
-    сериализаторе спектакля на странице отдельного спектакля.
-    Применяется в случае, когда у роли больше одной персоны.
-    """
-
-    name = serializers.CharField(source="name_plural")
