@@ -139,6 +139,7 @@ class PerformanceMediaReviewAdmin(admin.ModelAdmin):
         "performance__name",
         "pub_date",
     )
+    readonly_fields = ("pub_date",)
 
 
 class PerformanceReviewAdmin(admin.ModelAdmin):
@@ -157,6 +158,7 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
         "performance__name",
         "pub_date",
     )
+    readonly_fields = ("pub_date",)
 
 
 class ProgramTypeAdmin(admin.ModelAdmin):
