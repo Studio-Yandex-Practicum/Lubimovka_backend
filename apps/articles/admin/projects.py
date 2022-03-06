@@ -26,7 +26,8 @@ class ProjectAdmin(BaseContentPageAdmin):
                 "fields": (
                     "title",
                     "intro",
-                    "pub_date",
+                    # The pub_date field is disabled until the publication delay is implemented
+                    # "pub_date",
                     "description",
                     (
                         "image_preview_change_page",

@@ -39,7 +39,8 @@ class BlogItemAdmin(BaseContentPageAdmin):
                         "author_url_title",
                         "author_url",
                     ),
-                    "pub_date",
+                    # The pub_date field is disabled until the publication delay is implemented
+                    # "pub_date",
                     "description",
                     (
                         "image_preview_change_page",
