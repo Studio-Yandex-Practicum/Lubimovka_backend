@@ -60,8 +60,7 @@ class BaseContentPageAdmin(AdminImagePreview, admin.ModelAdmin):
             {
                 "fields": (
                     "title",
-                    # The pub_date field is disabled until the publication delay is implemented
-                    # "pub_date",
+                    "pub_date",
                     "description",
                     (
                         "image_preview_change_page",
@@ -72,4 +71,4 @@ class BaseContentPageAdmin(AdminImagePreview, admin.ModelAdmin):
             },
         ),
     )
-    readonly_fields = ("image_preview_change_page",)
+    readonly_fields = ("image_preview_change_page", "pub_date")
