@@ -27,6 +27,7 @@ class BaseContentInline(SortableInlineAdminMixin, admin.TabularInline):
 
     model = AbstractContent
     extra = 0
+    classes = ["collapse"]
     raw_id_fields = ("content_type",)
     content_type_model = tuple()
     formfield_overrides = {

@@ -103,13 +103,17 @@ class Person(BaseModel):
             )
         ]
 
-    def __str__(self):
-        return f"{self.last_name} {self.first_name}"
-
     def save(self, *args, **kwargs):
         if self.image:
             self.image = сompressImage(self.image)
-        return super().save(*args, **kwargs)
+        this = Person.objects.filter(id=self.id).first()
+        if this:
+            if this.image != self.image:
+                this.image.delete(save=False)
+        super(Person, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.last_name} {self.first_name}"
 
     @property
     @admin.display(description="Имя и фамилия")
