@@ -4,7 +4,7 @@
 {% block branding %}
     <h1 id="site-name">
         <img src="{% static 'logo.png' %}" alt="logo" width="70px" height="58px">
-        <span class="badge badge-info">{{ environment }}</span>
         <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+        <a style="color:rgb(232, 240, 240);">Environment: <span class="badge badge-pill badge-info" style="color:rgb(232, 240, 240)";>{{ environment }}</span></a>
     </h1>
 {% endblock %}

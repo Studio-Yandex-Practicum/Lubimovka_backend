@@ -3,7 +3,6 @@ import os
 import git
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from django.shortcuts import render
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
@@ -13,22 +12,13 @@ from apps.info.models import Festival, FestivalTeamMember, Partner, Place, Press
 
 
 class MyAdminSite(admin.AdminSite):
-    def get_urls(self):
-        from django.urls import path
-
-        urls = super().get_urls()
-        urls += [path("versation/", self.admin_view(self.versation))]
-        return urls
-
-    def versation(self, request):
+    def each_context(self, request):
+        context = super().each_context(request)
         repo = git.Repo(os.getcwd())
         master = repo.head.reference
         environment = str(master).split("/")[0]
-
-        return render(request, "admin/base_site.html", {"environment": environment})
-
-
-admin_site = MyAdminSite()
+        context.update({"environment": environment})
+        return context
 
 
 @admin.register(Partner)
