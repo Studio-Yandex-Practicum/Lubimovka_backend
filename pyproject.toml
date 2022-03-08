@@ -48,7 +48,6 @@ django-anymail = {extras = ["mailjet"], version = "^8.4"}
 flake8-docstrings = "^1.6.0"
 xhtml2pdf = "^0.2.5"
 google-api-python-client = "^2.36.0"
-six = "^1.16.0"
 django-utils-six = "^2.0"
 
 [tool.poetry.dev-dependencies]

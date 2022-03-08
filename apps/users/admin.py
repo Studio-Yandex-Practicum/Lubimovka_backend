@@ -11,6 +11,7 @@ User = get_user_model()
 
 
 def permissions_new_unicode(self):
+    # Translate default permissions
     class_name = six.text_type(self.content_type)
     permissions_name = six.text_type(self.name)
     if "Can delete log entry" in permissions_name:
