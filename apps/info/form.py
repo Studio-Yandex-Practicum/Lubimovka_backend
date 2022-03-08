@@ -4,14 +4,33 @@ from apps.core.models import Setting
 from apps.info.models import FestivalTeamMember
 
 
-class FestivalTeamMemberForm(forms.ModelForm):
-    """Форма для команды-фестиваля.
+class FestTeamMemberForm(forms.ModelForm):
+    """Форма для команды-фестиваля."""
+
+    class Meta:
+        model = FestivalTeamMember
+        exclude = (
+            "team",
+            "is_pr_manager",
+        )
+        fields = (
+            "person",
+            "position",
+        )
+
+    def clean(self):
+        cleaned_data = super().clean()
+        cleaned_data["team"] = "fest"
+
+
+class ArtTeamMemberForm(forms.ModelForm):
+    """Форма для Арт дирекции фестиваля.
 
     Плюс дополнительное поле о данных о PR-менеджере.
     """
 
     def __init__(self, *args, **kwargs):
-        super(FestivalTeamMemberForm, self).__init__(*args, **kwargs)
+        super(ArtTeamMemberForm, self).__init__(*args, **kwargs)
         if self["is_pr_manager"].value():
             pr_manager_name = Setting.objects.filter(settings_key="pr_manager_name").first()
             self.fields["data_manager"].initial = pr_manager_name.text
@@ -25,9 +44,9 @@ class FestivalTeamMemberForm(forms.ModelForm):
 
     class Meta:
         model = FestivalTeamMember
+        exclude = ("team",)
         fields = (
             "person",
-            "team",
             "position",
             "is_pr_manager",
             "data_manager",
@@ -35,6 +54,7 @@ class FestivalTeamMemberForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
+        cleaned_data["team"] = "art"
         is_pr_manager = cleaned_data["is_pr_manager"]
         data_manager = cleaned_data["data_manager"]
 

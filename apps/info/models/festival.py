@@ -75,6 +75,20 @@ class FestivalTeamMember(BaseModel):
         super().delete(*args, **kwargs)
 
 
+class ArtTeamMember(FestivalTeamMember):
+    class Meta:
+        proxy = True
+        verbose_name = "Арт-дирекция фестиваля"
+        verbose_name_plural = "Арт-дирекция фестиваля"
+
+
+class FestTeamMember(FestivalTeamMember):
+    class Meta:
+        proxy = True
+        verbose_name = "Команда фестиваля"
+        verbose_name_plural = "Команда фестиваля"
+
+
 class Festival(BaseModel):
     start_date = models.DateField(
         verbose_name="Дата начала фестиваля",
