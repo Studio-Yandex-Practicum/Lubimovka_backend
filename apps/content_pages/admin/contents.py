@@ -71,4 +71,4 @@ class BaseContentPageAdmin(AdminImagePreview, admin.ModelAdmin):
             },
         ),
     )
-    readonly_fields = ("image_preview_change_page",)
+    readonly_fields = ("image_preview_change_page", "pub_date")
