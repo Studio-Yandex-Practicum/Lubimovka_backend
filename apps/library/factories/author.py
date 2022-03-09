@@ -3,6 +3,7 @@ from typing import Iterable
 import factory
 from faker import Faker
 
+from apps.core import utils
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.info.models import Festival
@@ -105,6 +106,12 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         queryset = Person.objects.filter(email__isnull=False).exclude(city__exact="").exclude(image__exact="")
         person = queryset.order_by("?").first()
         return person
+
+    @factory.lazy_attribute
+    def slug(self):
+        full_name = self.person.first_name + "_" + self.person.last_name
+        slug = utils.slugify(full_name)
+        return slug
 
     @classmethod
     def _generate(cls, strategy, params):

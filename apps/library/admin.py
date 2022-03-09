@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 
 from apps.core.models import Person, Role
+from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
     Achievement,
     Author,
@@ -93,6 +94,7 @@ class OtherPlayInline(admin.StackedInline):
 
 
 class AuthorAdmin(admin.ModelAdmin):
+    form = AuthorForm
     list_display = (
         "person",
         "quote",
