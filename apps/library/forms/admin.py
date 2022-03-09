@@ -5,9 +5,10 @@ from apps.core.utils import slugify
 
 class AuthorForm(forms.ModelForm):
     def clean(self):
+        slug = self.cleaned_data.get("slug")
         person = self.cleaned_data.get("person")
-        full_name = person.first_name + "_" + person.last_name
-        slug = slugify(full_name)
+        if not slug:
+            slug = slugify(person.last_name)
         self.fields["slug"].error_messages = {
             "unique": f"Tранслит '{slug}' уже используется, необходимо ввести оригинальный вручную",
         }
