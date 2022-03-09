@@ -4,7 +4,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.form import ArtTeamMemberForm, FestTeamMemberForm
+from apps.info.form import ArtTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
@@ -220,9 +220,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset().filter(team="art")
-        ordering = self.get_ordering(request)
-        if ordering:
-            qs = qs.order_by(*ordering)
         return qs
 
     def save_model(self, request, obj, form, change):
@@ -247,7 +244,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
 
 @admin.register(FestTeamMember)
 class FestTeamMemberAdmin(admin.ModelAdmin):
-    form = FestTeamMemberForm
 
     list_display = (
         "person",
@@ -282,9 +278,6 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset().filter(team="fest")
-        ordering = self.get_ordering(request)
-        if ordering:
-            qs = qs.order_by(*ordering)
         return qs
 
 

@@ -4,25 +4,6 @@ from apps.core.models import Setting
 from apps.info.models import FestivalTeamMember
 
 
-class FestTeamMemberForm(forms.ModelForm):
-    """Форма для команды-фестиваля."""
-
-    class Meta:
-        model = FestivalTeamMember
-        exclude = (
-            "team",
-            "is_pr_manager",
-        )
-        fields = (
-            "person",
-            "position",
-        )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        cleaned_data["team"] = "fest"
-
-
 class ArtTeamMemberForm(forms.ModelForm):
     """Форма для Арт дирекции фестиваля.
 
@@ -54,7 +35,6 @@ class ArtTeamMemberForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super().clean()
-        cleaned_data["team"] = "art"
         is_pr_manager = cleaned_data["is_pr_manager"]
         data_manager = cleaned_data["data_manager"]
 
