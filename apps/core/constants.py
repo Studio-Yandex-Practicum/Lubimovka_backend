@@ -22,7 +22,7 @@ STATUS_INFO = {
     },
     "REVIEW": {
         "button_name": "Отправить на проверку",
-        "min_access_level": 2,
+        "min_access_level": 1,
         "min_level_to_delete": 2,
         "possible_changes": (
             "IN_PROCESS",

@@ -41,4 +41,4 @@ def get_user_perms_level(request, app_name):
         return 2
     if f"{app_name}.access_level_1" in perms:
         return 1
-    return None
+    return 0
