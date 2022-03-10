@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 
 from apps.core.models import Person, Role
+from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
     Achievement,
     Author,
@@ -93,10 +94,12 @@ class OtherPlayInline(admin.StackedInline):
 
 
 class AuthorAdmin(admin.ModelAdmin):
+    form = AuthorForm
     list_display = (
         "person",
         "quote",
         "biography",
+        "slug",
     )
     inlines = (
         AchievementInline,
@@ -139,6 +142,7 @@ class PerformanceMediaReviewAdmin(admin.ModelAdmin):
         "performance__name",
         "pub_date",
     )
+    readonly_fields = ("pub_date",)
 
 
 class PerformanceReviewAdmin(admin.ModelAdmin):
@@ -157,6 +161,7 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
         "performance__name",
         "pub_date",
     )
+    readonly_fields = ("pub_date",)
 
 
 class ProgramTypeAdmin(admin.ModelAdmin):
