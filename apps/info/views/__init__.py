@@ -7,7 +7,6 @@ from .press_release import PressReleaseDownloadAPIView, PressReleaseViewSet, Pre
 from .question import QuestionCreateAPIView
 from .settings import SettingsAPIView
 from .sponsors import SponsorsAPIView
-from .version import VersionAPIView
 from .volunteers import VolunteersAPIView
 
 __all__ = (
@@ -23,5 +22,4 @@ __all__ = (
     VolunteersAPIView,
     ContactsAPIView,
     SettingsAPIView,
-    VersionAPIView,
 )

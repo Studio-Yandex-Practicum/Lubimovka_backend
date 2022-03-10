@@ -1,6 +1,3 @@
-import os
-
-import git
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
@@ -9,16 +6,6 @@ from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.form import FestivalTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Sponsor, Volunteer
-
-
-class MyAdminSite(admin.AdminSite):
-    def each_context(self, request):
-        context = super().each_context(request)
-        repo = git.Repo(os.getcwd())
-        master = repo.head.reference
-        environment = str(master).split("/")[0]
-        context.update({"environment": environment})
-        return context
 
 
 @admin.register(Partner)

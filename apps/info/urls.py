@@ -12,7 +12,6 @@ from apps.info.views import (
     QuestionCreateAPIView,
     SettingsAPIView,
     SponsorsAPIView,
-    VersionAPIView,
     VolunteersAPIView,
 )
 
@@ -58,11 +57,6 @@ info_urls = [
         "contacts/",
         ContactsAPIView.as_view(),
         name="contacts",
-    ),
-    path(
-        "version/",
-        VersionAPIView.as_view(),
-        name="version",
     ),
     path(
         "settings/",

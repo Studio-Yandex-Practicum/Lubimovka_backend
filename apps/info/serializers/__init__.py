@@ -6,7 +6,6 @@ from .press_release import PressReleaseSerializer
 from .question import QuestionSerializer
 from .settings import SettingsSerializer
 from .sponsors import SponsorSerializer
-from .version import VersionSerializer
 from .volunteers import VolunteersSerializer
 
 __all__ = (
@@ -20,5 +19,4 @@ __all__ = (
     YearsSerializer,
     ContactsSerializer,
     SettingsSerializer,
-    VersionSerializer,
 )
