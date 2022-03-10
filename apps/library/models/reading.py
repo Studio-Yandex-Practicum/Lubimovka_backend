@@ -1,6 +1,7 @@
 from django.db import models
 
 from apps.core.models import BaseModel, Person
+from apps.library.utilities import get_team_roles
 
 from .play import Play
 
@@ -48,3 +49,8 @@ class Reading(BaseModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def event_team(self):
+        """Return directors and dramatists related with Reading."""
+        return get_team_roles(self, {"team_members__reading": self, "slug__in": ["director", "dramatist"]})

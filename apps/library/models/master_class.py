@@ -1,6 +1,7 @@
 from django.db import models
 
 from apps.core.models import BaseModel, Person
+from apps.library.utilities import get_team_roles
 
 
 class MasterClass(BaseModel):
@@ -40,3 +41,8 @@ class MasterClass(BaseModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def event_team(self):
+        """Return hosts related with MasterClass."""
+        return get_team_roles(self, {"team_members__masterclass": self, "slug__in": ["host"]})

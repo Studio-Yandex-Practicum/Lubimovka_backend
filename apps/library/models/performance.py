@@ -4,6 +4,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from apps.core.models import BaseModel, Image, Person
+from apps.library.utilities import get_team_roles
 
 from ...content_pages.utilities import path_by_app_label_and_class_name
 from .play import Play
@@ -87,6 +88,16 @@ class Performance(BaseModel):
 
     def __str__(self):
         return self.name
+
+    @property
+    def team(self):
+        """Return all team members."""
+        return get_team_roles(self, {"team_members__performance": self})
+
+    @property
+    def event_team(self):
+        """Return directors and dramatists related with Performance."""
+        return get_team_roles(self, {"team_members__performance": self, "slug__in": ["director", "dramatist"]})
 
 
 class PerformanceMediaReview(BaseModel):

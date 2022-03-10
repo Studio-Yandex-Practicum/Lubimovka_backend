@@ -2,7 +2,6 @@ from rest_framework import serializers
 
 from apps.content_pages.models import Link, OrderedImage, OrderedVideo, Preamble, Quote, Text, Title
 from apps.core.serializers import RoleSerializer
-from apps.library.models import Performance
 
 
 class ExtendedPersonSerializer(serializers.Serializer):
@@ -50,15 +49,6 @@ class LinkSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "url",
-        )
-
-
-class PerformanceSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Performance
-        exclude = (
-            "created",
-            "modified",
         )
 
 

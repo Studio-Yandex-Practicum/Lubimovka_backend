@@ -89,13 +89,20 @@ class Person(BaseModel):
     class Meta:
         verbose_name = "Человек"
         verbose_name_plural = "Люди"
-        ordering = ("last_name",)
+        ordering = ("last_name", "first_name")
         constraints = [
             UniqueConstraint(
                 fields=["first_name", "last_name", "middle_name", "email"],
                 name="unique_person",
             )
         ]
+
+    def save(self, *args, **kwargs):
+        this = Person.objects.filter(id=self.id).first()
+        if this:
+            if this.image != self.image:
+                this.image.delete(save=False)
+        super(Person, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"

@@ -8,6 +8,7 @@ from apps.core.mixins import DeletePermissionsMixin, StatusButtonMixin
 class BlogPersonInline(admin.TabularInline):
     model = BlogItem.roles.through
     extra = 0
+    classes = ["collapse"]
 
 
 class BlogItemContentInline(BaseContentInline):

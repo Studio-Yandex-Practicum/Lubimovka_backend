@@ -85,13 +85,20 @@ class Command(BaseCommand):
                 | Q(codename__endswith="access_level_1")
                 | Q(codename__icontains="view_")
             )
+            admin_permissions = Permission.objects.all()
+            observer_permissions = Permission.objects.filter(Q(codename__icontains="view_"))
 
             admin, created = Group.objects.get_or_create(name="admin")
             admin.permissions.set(admin_permissions)
+
             editor, created = Group.objects.get_or_create(name="editor")
             editor.permissions.set(editors_permissions)
+
             journalist, created = Group.objects.get_or_create(name="journalist")
             journalist.permissions.set(journalist_permissions)
+
+            observer, created = Group.objects.get_or_create(name="observer")
+            observer.permissions.set(observer_permissions)
 
             self.stdout.write(self.style.SUCCESS("Права для пользователей успешно установлены."))
         except CommandError:

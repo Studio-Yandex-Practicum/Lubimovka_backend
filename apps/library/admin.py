@@ -3,6 +3,7 @@ from django.contrib.sites.models import Site
 
 from apps.core.mixins import DeletePermissionsMixin, StatusButtonMixin
 from apps.core.models import Person, Role
+from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
     Achievement,
     Author,
@@ -26,6 +27,7 @@ class AuthorInline(admin.TabularInline):
     extra = 1
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
+    classes = ["collapse"]
 
 
 class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
@@ -81,6 +83,7 @@ class AchievementInline(admin.TabularInline):
     extra = 1
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
+    classes = ["collapse"]
 
 
 class PlayInline(admin.TabularInline):
@@ -88,16 +91,19 @@ class PlayInline(admin.TabularInline):
     extra = 1
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
+    classes = ["collapse"]
 
 
 class SocialNetworkLinkInline(admin.TabularInline):
     model = SocialNetworkLink
     extra = 1
+    classes = ["collapse"]
 
 
 class OtherLinkInline(admin.TabularInline):
     model = OtherLink
     extra = 1
+    classes = ["collapse"]
 
 
 class OtherPlayInline(admin.StackedInline):
@@ -106,10 +112,12 @@ class OtherPlayInline(admin.StackedInline):
 
 
 class AuthorAdmin(admin.ModelAdmin):
+    form = AuthorForm
     list_display = (
         "person",
         "quote",
         "biography",
+        "slug",
     )
     inlines = (
         AchievementInline,
@@ -129,7 +137,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        if request.user.has_perm("library.access_level_1"):
+        if not request.user.has_perm("library.can_change_author"):
             return form
         if obj:
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
@@ -154,6 +162,7 @@ class PerformanceMediaReviewAdmin(admin.ModelAdmin):
         "performance__name",
         "pub_date",
     )
+    readonly_fields = ("pub_date",)
 
 
 class PerformanceReviewAdmin(admin.ModelAdmin):
@@ -172,6 +181,7 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
         "performance__name",
         "pub_date",
     )
+    readonly_fields = ("pub_date",)
 
 
 class ProgramTypeAdmin(admin.ModelAdmin):
@@ -190,12 +200,14 @@ class PerformanceReviewInline(admin.TabularInline):
     model = PerformanceReview
     extra = 0
     max_num = 8
+    classes = ["collapse"]
 
 
 class PerformanceMediaReviewInline(admin.TabularInline):
     model = PerformanceMediaReview
     extra = 0
     max_num = 8
+    classes = ["collapse"]
 
 
 class TeamMemberInline(admin.TabularInline):
@@ -205,6 +217,7 @@ class TeamMemberInline(admin.TabularInline):
         "role",
     )
     extra = 0
+    classes = ["collapse"]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Restricts role types for the model where inline is used."""
@@ -226,6 +239,7 @@ class ImagesInBlockInline(admin.TabularInline):
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
     max_num = 8
+    classes = ["collapse"]
 
 
 class PerformanceAdmin(admin.ModelAdmin):
