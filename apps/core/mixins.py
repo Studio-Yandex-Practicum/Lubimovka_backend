@@ -9,18 +9,6 @@ from apps.core.utils import get_object, get_user_perms_level
 class StatusButtonMixin:
     """Mixin to add status-change buttons on page bottom."""
 
-    def change_view(self, request, object_id, form_url="", extra_context=None):
-        obj = get_object(self, object_id)
-        extra_context = {}
-        extra_context["user_level"] = get_user_perms_level(request, obj)
-        extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
-        possible_changes = STATUS_INFO[obj.status]["possible_changes"]
-        statuses = {}
-        for status in possible_changes:
-            statuses[status] = STATUS_INFO[status]
-        extra_context["possible_statuses"] = statuses
-        return super().change_view(request, object_id, form_url, extra_context)
-
     def has_change_permission(self, request, obj=None):
         if obj:
             user_level = get_user_perms_level(request, obj)
@@ -28,6 +16,19 @@ class StatusButtonMixin:
             if user_level < right_to_change:
                 return False
         return True
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        obj = get_object(self, object_id)
+        extra_context = {}
+        if self.has_change_permission(request, obj):
+            extra_context["user_level"] = get_user_perms_level(request, obj)
+            extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
+            possible_changes = STATUS_INFO[obj.status]["possible_changes"]
+            statuses = {}
+            for status in possible_changes:
+                statuses[status] = STATUS_INFO[status]
+            extra_context["possible_statuses"] = statuses
+        return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
         for status in STATUS_INFO:
