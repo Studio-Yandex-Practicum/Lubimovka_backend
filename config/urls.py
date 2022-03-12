@@ -50,6 +50,7 @@ urlpatterns = [
         route="api/",
         view=include(apps_patterns),
     ),
+    path(route="auth/", view=include("django.contrib.auth.urls")),
     path(
         route="api/v1/schema/",
         view=include(api_schema_patterns),
