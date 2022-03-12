@@ -51,11 +51,5 @@ class ProjectAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAdm
     )
     inlines = (ProjectContentInline,)
 
-    def get_actions(self, request):
-        actions = super().get_actions(request)
-        if "delete_selected" in actions and not request.user.has_perm("articles.access_level_3"):
-            del actions["delete_selected"]
-        return actions
-
 
 admin.site.register(Project, ProjectAdmin)

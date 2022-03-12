@@ -37,7 +37,7 @@ class AbstractContentPage(BaseModel):
     )
     status = models.CharField(
         choices=Status.choices,
-        default="IN_PROCESS",
+        default=Status.IN_PROCESS,
         max_length=35,
         verbose_name="Статус",
     )

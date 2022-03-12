@@ -2,6 +2,8 @@
 
 from django.db import migrations, models
 
+from apps.core.constants import Status
+
 
 class Migration(migrations.Migration):
 
@@ -37,16 +39,16 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='blogitem',
             name='status',
-            field=models.CharField(choices=[('IN_PROCESS', 'В работе'), ('REVIEW', 'На проверке'), ('READY_FOR_PUBLICATION', 'Готово к публикации'), ('PUBLISHED', 'Опубликовано'), ('REMOVED_FROM_PUBLICATION', 'Снято с публикации')], default='IN_PROCESS', max_length=35, verbose_name='Статус'),
+            field=models.CharField(choices=[('IN_PROCESS', 'В работе'), ('REVIEW', 'На проверке'), ('READY_FOR_PUBLICATION', 'Готово к публикации'), ('PUBLISHED', 'Опубликовано'), ('REMOVED_FROM_PUBLICATION', 'Снято с публикации')], default=Status.IN_PROCESS, max_length=35, verbose_name='Статус'),
         ),
         migrations.AddField(
             model_name='newsitem',
             name='status',
-            field=models.CharField(choices=[('IN_PROCESS', 'В работе'), ('REVIEW', 'На проверке'), ('READY_FOR_PUBLICATION', 'Готово к публикации'), ('PUBLISHED', 'Опубликовано'), ('REMOVED_FROM_PUBLICATION', 'Снято с публикации')], default='IN_PROCESS', max_length=35, verbose_name='Статус'),
+            field=models.CharField(choices=[('IN_PROCESS', 'В работе'), ('REVIEW', 'На проверке'), ('READY_FOR_PUBLICATION', 'Готово к публикации'), ('PUBLISHED', 'Опубликовано'), ('REMOVED_FROM_PUBLICATION', 'Снято с публикации')], default=Status.IN_PROCESS, max_length=35, verbose_name='Статус'),
         ),
         migrations.AddField(
             model_name='project',
             name='status',
-            field=models.CharField(choices=[('IN_PROCESS', 'В работе'), ('REVIEW', 'На проверке'), ('READY_FOR_PUBLICATION', 'Готово к публикации'), ('PUBLISHED', 'Опубликовано'), ('REMOVED_FROM_PUBLICATION', 'Снято с публикации')], default='IN_PROCESS', max_length=35, verbose_name='Статус'),
+            field=models.CharField(choices=[('IN_PROCESS', 'В работе'), ('REVIEW', 'На проверке'), ('READY_FOR_PUBLICATION', 'Готово к публикации'), ('PUBLISHED', 'Опубликовано'), ('REMOVED_FROM_PUBLICATION', 'Снято с публикации')], default=Status.IN_PROCESS, max_length=35, verbose_name='Статус'),
         ),
     ]

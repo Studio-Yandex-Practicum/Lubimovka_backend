@@ -32,8 +32,15 @@ def get_paginated_response(pagination_class, serializer_class, queryset, request
     return Response(data=serializer.data)
 
 
-def get_user_perms_level(request, app_name):
+def get_object(admin_object, object_id):
+    obj_class = admin_object.model
+    obj = obj_class.objects.get(pk=object_id)
+    return obj
+
+
+def get_user_perms_level(request, obj):
     """Return user's access level for using in StatusButtonMixin."""
+    app_name = obj._meta.app_label
     perms = request.user.get_all_permissions()
     if f"{app_name}.access_level_3" in perms:
         return 3
