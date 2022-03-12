@@ -6,26 +6,15 @@
         <img src="{% static 'logo.png' %}" alt="logo" width="70px" height="58px">
         <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
     </h1>
-    {% if type == "master" %}
-        <h3>
-            {% if tag %}
-                tag: {{ tag }}<br>
-            {% endif %}
-            commit_date: {{ commit_date }}<br>
-            last_commit: {{ last_commit }}<br>
-        </h3>
-    {% endif %}
-    {% if type == "develop" %}
-        <h3>
-            commit_date: {{ commit_date }}<br>
-            last_commit: {{ last_commit }}<br>
-        </h3>
-    {% endif %}
-    {% if type == "test" %}
-        <h3>
-            environment: {{ environment }}<br>
-            commit_date: {{ commit_date }}<br>
-            last_commit: {{ last_commit }}<br>
-        </h3>
-    {% endif %}
+    <h3>
+        environment: {{ environment }}<br>
+        {% if branch %}
+            branch: {{ branch }}<br>
+        {% endif %}
+        {% if tag %}
+            tag: {{ tag }}<br>
+        {% endif %}
+        commit_date: {{ commit_date }}<br>
+        last_commit: {{ last_commit }}<br>
+    </h3>
 {% endblock %}
