@@ -23,7 +23,7 @@ from apps.library.factories import (
     ReadingFactory,
 )
 from apps.main.factories import BannerFactory as MainBannerFactory
-from apps.users.factories import AdminUserFactory, EditorUserFactory
+from apps.users.factories import AdminUserFactory, EditorUserFactory, ObserverUserFactory
 
 
 def notification(command, objects, text):
@@ -48,6 +48,7 @@ class Command(BaseCommand):
         " - Видео (ссылки с описанием)"
         " - Пользователи-админы"
         " - Пользователи-редакторы"
+        " - Пользователи-наблюдатели"
         " - Программы"
         " - Авторы"
         " - Пьесы"
@@ -108,6 +109,9 @@ class Command(BaseCommand):
 
             users_admins = EditorUserFactory.create_batch(5)
             notification(self, users_admins, "админов")
+
+            users_observers = ObserverUserFactory.create_batch(2)
+            notification(self, users_observers, "наблюдателя")
 
             # Library factories.
 
