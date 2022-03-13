@@ -2,16 +2,16 @@ from django.contrib import admin
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
-from apps.core.mixins import DeletePermissionsMixin, StatusButtonMixin
+from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
 
 
-class BlogPersonInline(admin.TabularInline):
+class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
     model = BlogItem.roles.through
     extra = 0
     classes = ["collapse"]
 
 
-class BlogItemContentInline(BaseContentInline):
+class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = BlogItemContent
     content_type_model = (
         "imagesblock",
@@ -61,6 +61,16 @@ class BlogItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAd
                 )
             },
         ),
+    )
+    other_readonly_fields = (
+        "status",
+        "title",
+        "author_url_title",
+        "author_url",
+        "pub_date",
+        "description",
+        "image_preview_change_page",
+        "image",
     )
 
 

@@ -2,10 +2,10 @@ from django.contrib import admin
 
 from apps.articles.models import NewsItem, NewsItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
-from apps.core.mixins import DeletePermissionsMixin, StatusButtonMixin
+from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
 
 
-class NewsItemContentInline(BaseContentInline):
+class NewsItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = NewsItemContent
 
     content_type_model = (
@@ -48,6 +48,14 @@ class NewsItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAd
                 )
             },
         ),
+    )
+    other_readonly_fields = (
+        "status",
+        "title",
+        "pub_date",
+        "description",
+        "image_preview_change_page",
+        "image",
     )
 
 

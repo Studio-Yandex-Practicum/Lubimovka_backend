@@ -2,10 +2,10 @@ from django.contrib import admin
 
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
-from apps.core.mixins import DeletePermissionsMixin, StatusButtonMixin
+from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
 
 
-class ProjectContentInline(BaseContentInline):
+class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = ProjectContent
 
     content_type_model = (
@@ -50,6 +50,15 @@ class ProjectAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAdm
         "image_preview_change_page",
     )
     inlines = (ProjectContentInline,)
+    other_readonly_fields = (
+        "status",
+        "title",
+        "intro",
+        "pub_date",
+        "description",
+        "image_preview_change_page",
+        "image",
+    )
 
 
 admin.site.register(Project, ProjectAdmin)

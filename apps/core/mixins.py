@@ -7,27 +7,39 @@ from apps.core.utils import get_object, get_user_perms_level
 
 
 class StatusButtonMixin:
-    """Mixin to add status-change buttons on page bottom."""
+    """Mixin to add status-change buttons on page bottom.
 
-    def has_change_permission(self, request, obj=None):
+    Prevent changing and saving page if user do not have permission
+    to change object in current Status.
+    """
+
+    def get_readonly_fields(self, request, obj=None):
         if obj:
             user_level = get_user_perms_level(request, obj)
             right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
             if user_level < right_to_change:
-                return False
-        return True
+                return self.other_readonly_fields
+        return super().get_readonly_fields(request, obj=obj)
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         obj = get_object(self, object_id)
+        user_level = get_user_perms_level(request, obj)
         extra_context = {}
-        if self.has_change_permission(request, obj):
-            extra_context["user_level"] = get_user_perms_level(request, obj)
-            extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
-            possible_changes = STATUS_INFO[obj.status]["possible_changes"]
-            statuses = {}
-            for status in possible_changes:
-                statuses[status] = STATUS_INFO[status]
-            extra_context["possible_statuses"] = statuses
+        extra_context["user_level"] = user_level
+        extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
+        possible_changes = STATUS_INFO[obj.status]["possible_changes"]
+        statuses = {}
+        for status in possible_changes:
+            statuses[status] = STATUS_INFO[status]
+
+        # hide buttons SAVE if user doesnt have permissions to change in current status
+        # used to prevent inlines changing
+        extra_context["possible_statuses"] = statuses
+        right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
+        if user_level < right_to_change:
+            extra_context["show_save"] = False
+            extra_context["show_save_and_continue"] = False
+            extra_context["show_save_and_add_another"] = False
         return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
@@ -45,6 +57,8 @@ class DeletePermissionsMixin:
 
     Button Delete removed from change_view page if
     user doesn't have perm to delete in object's status.
+    Also it restricts delete_selected for users which don't have
+    highest level permissions.
     """
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
@@ -61,6 +75,34 @@ class DeletePermissionsMixin:
         if "delete_selected" in actions and not request.user.has_perm(f"{app_name}.access_level_3"):
             del actions["delete_selected"]
         return actions
+
+
+class InlineReadOnlyMixin:
+    """Makes Inlines read-only depends on status and user's permissions."""
+
+    def has_add_permission(self, request, obj=None):
+        if obj:
+            user_level = get_user_perms_level(request, obj)
+            right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
+            if user_level < right_to_change:
+                return False
+        return True
+
+    def has_change_permission(self, request, obj=None):
+        if obj:
+            user_level = get_user_perms_level(request, obj)
+            right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
+            if user_level < right_to_change:
+                return False
+        return True
+
+    def has_delete_permission(self, request, obj=None):
+        if obj:
+            user_level = get_user_perms_level(request, obj)
+            right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
+            if user_level < right_to_change:
+                return False
+        return True
 
 
 class AdminImagePreview:
