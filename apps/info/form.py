@@ -12,6 +12,7 @@ class ArtTeamMemberForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ArtTeamMemberForm, self).__init__(*args, **kwargs)
+        # self.fields["data_manager"].widget.attrs.update({"style": "display:none"})
         if self["is_pr_manager"].value():
             pr_manager_name = Setting.objects.filter(settings_key="pr_manager_name").first()
             self.fields["data_manager"].initial = pr_manager_name.text
