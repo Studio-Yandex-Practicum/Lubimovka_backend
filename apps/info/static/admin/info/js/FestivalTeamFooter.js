@@ -24,7 +24,7 @@ jQuery(document).ready(function ($) {
      }
 
     // show/hide on load based on existing value of idIsPrManager
-    //toggleDivDependedOnIsPrManager(idIsPrManager.is(":checked"));
+    toggleDivDependedOnIsPrManager(idIsPrManager.is(":checked"));
 
     // show/hide on change
     idIsPrManager.change(function() {
