@@ -33,11 +33,11 @@ def test_blog_item_delete_related_content_module(blog_item_content_module, plays
 
 
 def test_blog_item_queryset_published(simple_blog_item_not_published, simple_blog_item_published):
-    """Check published queryset retrun only `BlogItem` with `is_draft=False`."""
+    """Check published queryset retrun only `BlogItem` with status`Опубликовано`."""
     qs = BlogItem.ext_objects.published()
 
     is_not_published_in_qs = qs.filter(id=simple_blog_item_not_published.id).exists()
-    assert is_not_published_in_qs is False, "Проверьте что блог с `is_draft=True` не отдается в queryset."
+    assert is_not_published_in_qs is False, "Проверьте что блог со статусом `В работе` не отдается в queryset."
 
     is_published_in_qs = qs.filter(id=simple_blog_item_published.id).exists()
-    assert is_published_in_qs is True, "Проверьте что блог с `is_draft=False` есть в queryset."
+    assert is_published_in_qs is True, "Проверьте что блог со статусом `Опубликовано` есть в queryset."

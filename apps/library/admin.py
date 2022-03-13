@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
+from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Person, Role
 from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
@@ -21,7 +22,7 @@ from apps.library.models import (
 )
 
 
-class AuthorInline(admin.TabularInline):
+class AuthorInline(InlineReadOnlyMixin, admin.TabularInline):
     model = Author.plays.through
     extra = 1
     verbose_name = "Автор"
@@ -29,14 +30,14 @@ class AuthorInline(admin.TabularInline):
     classes = ["collapse"]
 
 
-class PlayAdmin(admin.ModelAdmin):
+class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
     filter_horizontal = ("authors",)
     list_display = (
         "name",
         "city",
         "program",
         "festival",
-        "is_draft",
+        "status",
     )
     inlines = (AuthorInline,)
     list_filter = (
@@ -44,7 +45,7 @@ class PlayAdmin(admin.ModelAdmin):
         "city",
         "program",
         "festival",
-        "is_draft",
+        "status",
     )
     search_fields = (
         "authors__person__first_name",
@@ -53,6 +54,27 @@ class PlayAdmin(admin.ModelAdmin):
         "city",
         "program__name",
         "festival__year",
+    )
+    readonly_fields = ("status",)
+    fields = (
+        "status",
+        "name",
+        "city",
+        "year",
+        "url_download",
+        "url_reading",
+        "program",
+        "festival",
+    )
+    other_readonly_fields = (
+        "status",
+        "name",
+        "city",
+        "year",
+        "url_download",
+        "url_reading",
+        "program",
+        "festival",
     )
 
 

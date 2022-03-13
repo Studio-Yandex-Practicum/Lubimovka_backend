@@ -43,6 +43,7 @@ class UserFactory(factory.django.DjangoModelFactory):
         allowed_group_types = (
             "editor",
             "admin",
+            "journalist",
             "observer",
         )
         role_type = kwargs.get("role_type", None)
@@ -55,6 +56,23 @@ class UserFactory(factory.django.DjangoModelFactory):
         if created:
             group = Group.objects.get(name=role_type)
             self.groups.add(group)
+
+
+class JournalistUserFactory(UserFactory):
+    """Create Journalist User objects.
+
+    Do two things:
+    1. The username in format `journalist_{sequence_number}`
+    2. Add user to `journalist` group.
+    """
+
+    class Params:
+        username_prefix = "journalist"
+
+    @classmethod
+    def create(cls, **kwargs):
+        kwargs["role_type"] = "journalist"
+        return super().create(**kwargs)
 
 
 class EditorUserFactory(UserFactory):
