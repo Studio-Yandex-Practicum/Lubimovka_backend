@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
 from apps.core.constants import STATUS_INFO
-from apps.core.utils import get_object, get_user_perms_level
+from apps.core.utils import get_object, get_user_perm, get_user_perms_level
 
 
 class StatusButtonMixin:
@@ -31,10 +31,9 @@ class StatusButtonMixin:
         statuses = {}
         for status in possible_changes:
             statuses[status] = STATUS_INFO[status]
+        extra_context["possible_statuses"] = statuses
 
         # hide buttons SAVE if user doesnt have permissions to change in current status
-        # used to prevent inlines changing
-        extra_context["possible_statuses"] = statuses
         right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
         if user_level < right_to_change:
             extra_context["show_save"] = False
@@ -81,28 +80,13 @@ class InlineReadOnlyMixin:
     """Makes Inlines read-only depends on status and user's permissions."""
 
     def has_add_permission(self, request, obj=None):
-        if obj:
-            user_level = get_user_perms_level(request, obj)
-            right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
-            if user_level < right_to_change:
-                return False
-        return True
+        return get_user_perm(request, obj)
 
     def has_change_permission(self, request, obj=None):
-        if obj:
-            user_level = get_user_perms_level(request, obj)
-            right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
-            if user_level < right_to_change:
-                return False
-        return True
+        return get_user_perm(request, obj)
 
     def has_delete_permission(self, request, obj=None):
-        if obj:
-            user_level = get_user_perms_level(request, obj)
-            right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
-            if user_level < right_to_change:
-                return False
-        return True
+        return get_user_perm(request, obj)
 
 
 class AdminImagePreview:

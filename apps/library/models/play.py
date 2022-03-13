@@ -1,7 +1,6 @@
 from django.db import models
 from django.db.models import UniqueConstraint
 
-from apps.core.constants import Status
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.info.models import Festival
@@ -76,11 +75,9 @@ class Play(BaseModel):
         related_name="plays",
         verbose_name="Фестиваль",
     )
-    status = models.CharField(
-        choices=Status.choices,
-        default=Status.IN_PROCESS,
-        max_length=35,
-        verbose_name="Статус",
+    in_draft = models.BooleanField(
+        verbose_name="Черновик",
+        default=True,
     )
 
     class Meta:
@@ -92,11 +89,6 @@ class Play(BaseModel):
         )
         verbose_name = "Пьеса"
         verbose_name_plural = "Пьесы"
-        permissions = (
-            ("access_level_1", "Права журналиста"),
-            ("access_level_2", "Права редактора"),
-            ("access_level_3", "Права главреда"),
-        )
 
     def __str__(self):
         return self.name
