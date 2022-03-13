@@ -1,3 +1,7 @@
 window.onload = function() {
-    document.getElementById("searchbar").placeholder = "Введите данные для поиска";
+    document.getElementsByClassName("current-app")[0].scrollIntoView();
+    var searchbar = document.getElementById("searchbar");
+    if (searchbar) {
+        searchbar.placeholder = "Введите данные для поиска";
+    }
 };
