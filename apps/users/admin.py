@@ -23,7 +23,7 @@ class UserAdmin(DjangoUserAdmin):
         "is_active",
     )
 
-    @admin.display(description="Последний визит")
+    @admin.display(description="Дата последней авторизации")
     def get_last_login(self, obj):
         return obj.last_login
 
