@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.sites.models import Site
 
 from apps.core.models import Person, Role
+from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
     Achievement,
     Author,
@@ -93,10 +94,12 @@ class OtherPlayInline(admin.StackedInline):
 
 
 class AuthorAdmin(admin.ModelAdmin):
+    form = AuthorForm
     list_display = (
         "person",
         "quote",
         "biography",
+        "slug",
     )
     inlines = (
         AchievementInline,
@@ -116,6 +119,8 @@ class AuthorAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
+        if not request.user.has_perm("library.can_change_author"):
+            return form
         if obj:
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
         else:
