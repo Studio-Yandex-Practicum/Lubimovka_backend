@@ -9,7 +9,7 @@ jQuery(document).ready(function ($) {
     let divHideDatePrManager = $("#artteammember_form > div > fieldset:nth-child(2) > div.form-row.field-data_manager");
 
     // exit from function if there isn't selector
-    if (idIsPrManager.length === 0) {
+    if (!idIsPrManager.length) {
         return false
     }
     // hide the field `data_manager`.
