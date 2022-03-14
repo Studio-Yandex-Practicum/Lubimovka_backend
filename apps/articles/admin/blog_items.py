@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
-from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 
 
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
@@ -24,7 +24,7 @@ class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     )
 
 
-class BlogItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAdmin):
+class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
         "description",

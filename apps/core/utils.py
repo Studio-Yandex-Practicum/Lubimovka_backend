@@ -51,9 +51,9 @@ def get_user_perms_level(request, obj):
     return 0
 
 
-def get_user_perm(request, obj):
+def get_user_change_perms_for_status(request, obj):
     """Return user can change object."""
-    if obj:
+    if obj and hasattr(obj, "status"):
         user_level = get_user_perms_level(request, obj)
         right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
         if user_level < right_to_change:

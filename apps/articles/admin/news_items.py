@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from apps.articles.models import NewsItem, NewsItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
-from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 
 
 class NewsItemContentInline(InlineReadOnlyMixin, BaseContentInline):
@@ -19,7 +19,7 @@ class NewsItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     )
 
 
-class NewsItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAdmin):
+class NewsItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
         "description",

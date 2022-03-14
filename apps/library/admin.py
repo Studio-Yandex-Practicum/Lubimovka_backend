@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
-from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Person, Role
 from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
@@ -235,30 +235,35 @@ class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline):
     classes = ["collapse"]
 
 
-class PerformanceAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
+class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
     list_display = (
         "name",
         "play",
         "status",
     )
-    exclude = (
-        "events",
-        "images_in_block",
+    fields = (
+        "status",
+        "name",
+        "play",
+        "main_image",
+        "bottom_image",
+        "video",
+        "description",
+        "text",
+        "age_limit",
+        "project",
+        "duration",
     )
-    list_filter = ("age_limit",)
+    list_filter = (
+        "age_limit",
+        "status",
+    )
     search_fields = (
         "play__name",
         "name",
         "text",
-        "status",
     )
     readonly_fields = ("status",)
-    inlines = (
-        ImagesInBlockInline,
-        PerformanceReviewInline,
-        PerformanceMediaReviewInline,
-        TeamMemberInline,
-    )
     other_readonly_fields = (
         "status",
         "name",
@@ -271,6 +276,12 @@ class PerformanceAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdm
         "age_limit",
         "project",
         "duration",
+    )
+    inlines = (
+        ImagesInBlockInline,
+        PerformanceReviewInline,
+        PerformanceMediaReviewInline,
+        TeamMemberInline,
     )
 
 

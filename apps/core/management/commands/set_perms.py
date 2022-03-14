@@ -91,7 +91,6 @@ class Command(BaseCommand):
                 & ~Q(codename__icontains="permission")
                 & ~Q(codename__icontains="setting")
                 # permissions for content
-                | Q(codename__endswith="change_author")
                 | Q(codename__endswith="_blogitemcontent")
                 | Q(codename__endswith="_blogperson")
                 | Q(codename__endswith="_contentpersonrole")
@@ -108,8 +107,6 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_orderedvideo")
                 | Q(codename__endswith="_otherlink")
                 | Q(codename__endswith="_performancesblock")
-                | Q(codename__endswith="_performancemediareview")
-                | Q(codename__endswith="_performancereview")
                 | Q(codename__endswith="_personsblock")
                 | Q(codename__endswith="_playsblock")
                 | Q(codename__endswith="_preamble")
