@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from apps.core.constants import Status
 from apps.core.models import BaseModel, Image, Person
 from apps.library.utilities import get_team_roles
 
@@ -11,6 +12,12 @@ from .play import Play
 
 
 class Performance(BaseModel):
+    status = models.CharField(
+        choices=Status.choices,
+        default=Status.IN_PROCESS,
+        max_length=35,
+        verbose_name="Статус",
+    )
     name = models.CharField(
         max_length=200,
         verbose_name="Название спектакля",
@@ -85,6 +92,11 @@ class Performance(BaseModel):
         ordering = ("-created",)
         verbose_name = "Спектакль"
         verbose_name_plural = "Спектакли"
+        permissions = (
+            ("access_level_1", "Права журналиста"),
+            ("access_level_2", "Права редактора"),
+            ("access_level_3", "Права главреда"),
+        )
 
     def __str__(self):
         return self.name

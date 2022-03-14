@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
+from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Person, Role
 from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
@@ -188,21 +189,21 @@ class ProgramTypeAdmin(admin.ModelAdmin):
         return super().get_readonly_fields(request, obj)
 
 
-class PerformanceReviewInline(admin.TabularInline):
+class PerformanceReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceReview
     extra = 0
     max_num = 8
     classes = ["collapse"]
 
 
-class PerformanceMediaReviewInline(admin.TabularInline):
+class PerformanceMediaReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceMediaReview
     extra = 0
     max_num = 8
     classes = ["collapse"]
 
 
-class TeamMemberInline(admin.TabularInline):
+class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
     model = TeamMember
     fields = (
         "person",
@@ -225,7 +226,7 @@ class TeamMemberInline(admin.TabularInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class ImagesInBlockInline(admin.TabularInline):
+class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline):
     model = Performance.images_in_block.through
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
@@ -234,10 +235,11 @@ class ImagesInBlockInline(admin.TabularInline):
     classes = ["collapse"]
 
 
-class PerformanceAdmin(admin.ModelAdmin):
+class PerformanceAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
     list_display = (
         "name",
         "play",
+        "status",
     )
     exclude = (
         "events",
@@ -248,12 +250,27 @@ class PerformanceAdmin(admin.ModelAdmin):
         "play__name",
         "name",
         "text",
+        "status",
     )
+    readonly_fields = ("status",)
     inlines = (
         ImagesInBlockInline,
         PerformanceReviewInline,
         PerformanceMediaReviewInline,
         TeamMemberInline,
+    )
+    other_readonly_fields = (
+        "status",
+        "name",
+        "play",
+        "main_image",
+        "bottom_image",
+        "video",
+        "description",
+        "text",
+        "age_limit",
+        "project",
+        "duration",
     )
 
 

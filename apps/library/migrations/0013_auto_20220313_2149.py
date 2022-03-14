@@ -23,4 +23,13 @@ class Migration(migrations.Migration):
             name='in_draft',
             field=models.BooleanField(default=True, verbose_name='Черновик'),
         ),
+        migrations.AlterModelOptions(
+            name='performance',
+            options={'ordering': ('-created',), 'permissions': (('access_level_1', 'Права журналиста'), ('access_level_2', 'Права редактора'), ('access_level_3', 'Права главреда')), 'verbose_name': 'Спектакль', 'verbose_name_plural': 'Спектакли'},
+        ),
+        migrations.AddField(
+            model_name='performance',
+            name='status',
+            field=models.CharField(choices=[('IN_PROCESS', 'В работе'), ('REVIEW', 'На проверке'), ('READY_FOR_PUBLICATION', 'Готово к публикации'), ('PUBLISHED', 'Опубликовано'), ('REMOVED_FROM_PUBLICATION', 'Снято с публикации')], default='IN_PROCESS', max_length=35, verbose_name='Статус'),
+        ),
     ]
