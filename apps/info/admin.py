@@ -4,8 +4,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-
-from apps.info.form import FestivalTeamMemberForm, ArtTeamMemberForm
+from apps.info.form import ArtTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Question, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
