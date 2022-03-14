@@ -7,6 +7,7 @@ from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 class BlogPersonInline(admin.TabularInline):
     model = BlogItem.roles.through
     extra = 0
+    classes = ["collapse"]
 
 
 class BlogItemContentInline(BaseContentInline):
