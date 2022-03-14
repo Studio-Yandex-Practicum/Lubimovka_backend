@@ -115,6 +115,15 @@ class AuthorAdmin(admin.ModelAdmin):
         "other_links",
         "other_plays_links",
     )
+    list_filter = ("achievements",)
+    search_fields = (
+        "biography",
+        "slug",
+        "person__first_name",
+        "person__last_name",
+        "person__middle_name",
+        "person__email",
+    )
     empty_value_display = "-пусто-"
 
     def get_form(self, request, obj=None, **kwargs):
