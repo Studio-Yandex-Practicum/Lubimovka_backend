@@ -244,7 +244,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
 
 @admin.register(FestTeamMember)
 class FestTeamMemberAdmin(admin.ModelAdmin):
-
     list_display = (
         "person",
         "team",
@@ -295,6 +294,6 @@ class QuestionAdmin(admin.ModelAdmin):
     list_filter = ("sent",)
 
     def has_module_permission(self, request):
-        if request.user.is_admin or request.user.is_superuser:
+        if request.user.is_authenticated and (request.user.is_admin or request.user.is_superuser):
             return True
         return False
