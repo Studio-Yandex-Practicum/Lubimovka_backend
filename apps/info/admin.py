@@ -123,6 +123,7 @@ class VolunteerInline(admin.TabularInline):
         "review_text",
     )
     ordering = ("person__last_name", "person__first_name")
+    classes = ["collapse"]
 
     @admin.display(
         boolean=True,
