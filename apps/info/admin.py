@@ -5,7 +5,7 @@ from django.utils.html import format_html
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.form import FestivalTeamMemberForm
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Sponsor, Volunteer
+from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Question, Sponsor, Volunteer
 
 
 @admin.register(Partner)
@@ -246,3 +246,14 @@ class SponsorAdmin(admin.ModelAdmin):
         "person",
         "position",
     )
+
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ("id", "author_name", "author_email", "question", "sent")
+    list_filter = ("sent",)
+
+    def has_module_permission(self, request):
+        if request.user.is_admin or request.user.is_superuser:
+            return True
+        return False
