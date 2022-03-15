@@ -162,7 +162,7 @@ class AuthorAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super().get_urls()
         ajax_urls = [
-            re_path(r"\S*/ajax_author_slug/", self.admin_site.admin_view(self.author_slug, cacheable=True)),
+            re_path(r"\S*/ajax_author_slug/", self.author_slug),
         ]
         return ajax_urls + urls
 
