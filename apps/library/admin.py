@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
+from django.http import JsonResponse
+from django.urls import path
 
+from apps.core import utils
 from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Person, Role
-from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
     Achievement,
     Author,
@@ -116,7 +118,6 @@ class OtherPlayInline(admin.StackedInline):
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    form = AuthorForm
     list_display = (
         "person",
         "quote",
@@ -157,6 +158,23 @@ class AuthorAdmin(admin.ModelAdmin):
         else:
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
         return form
+
+    def get_urls(self):
+        urls = super().get_urls()
+        my_urls = [
+            path("add/ajax_author_slug/", self.admin_site.admin_view(self.author_slug, cacheable=True)),
+        ]
+        return my_urls + urls
+
+    def author_slug(self, request):
+        person_id = request.GET.get("person")
+        person = Person.objects.get(id=person_id)
+        slug = utils.slugify(person.last_name)
+        response = {"slug": slug}
+        return JsonResponse(response)
+
+    class Media:
+        js = ("admin/author_slug.js",)
 
 
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
