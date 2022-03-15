@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from apps.core.models import BaseModel, Image, Person
@@ -11,6 +10,36 @@ from .play import Play
 
 
 class Performance(BaseModel):
+    class AgeLimit(models.IntegerChoices):
+        NO_LIMIT = (
+            0,
+            "0+",
+        )
+        CHILD_LIMIT = (
+            6,
+            "6+",
+        )
+        TEENAGE_LIMIT = (
+            12,
+            "12+",
+        )
+        TEENAGE_LIMIT_USA = (
+            13,
+            "13+",
+        )
+        YOUNG_LIMIT = (
+            16,
+            "16+",
+        )
+        YOUNG_LIMIT_USA = (
+            17,
+            "17+",
+        )
+        ADULTS_ONLY = (
+            18,
+            "18+",
+        )
+
     name = models.CharField(
         max_length=200,
         verbose_name="Название спектакля",
@@ -55,12 +84,10 @@ class Performance(BaseModel):
         max_length=2000,
         verbose_name="Полное описание",
     )
-    age_limit = models.PositiveSmallIntegerField(
-        validators=[
-            MinValueValidator(0),
-            MaxValueValidator(18),
-        ],
+    age_limit = models.IntegerField(
         verbose_name="Возрастное ограничение",
+        choices=AgeLimit.choices,
+        default=AgeLimit.NO_LIMIT,
     )
     persons = models.ManyToManyField(
         Person,
