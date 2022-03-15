@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.http import JsonResponse
-from django.urls import path
+from django.urls import re_path
 
 from apps.core import utils
 from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
@@ -161,12 +161,12 @@ class AuthorAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super().get_urls()
-        my_urls = [
-            path("add/ajax_author_slug/", self.admin_site.admin_view(self.author_slug, cacheable=True)),
+        ajax_urls = [
+            re_path(r"\S*/ajax_author_slug/", self.admin_site.admin_view(self.author_slug, cacheable=True)),
         ]
-        return my_urls + urls
+        return ajax_urls + urls
 
-    def author_slug(self, request):
+    def author_slug(self, request, obj_id=None):
         person_id = request.GET.get("person")
         person = Person.objects.get(id=person_id)
         slug = utils.slugify(person.last_name)
