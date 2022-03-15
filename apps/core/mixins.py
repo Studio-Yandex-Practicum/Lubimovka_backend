@@ -9,8 +9,10 @@ from apps.core.utils import get_object, get_user_change_perms_for_status, get_us
 class StatusButtonMixin:
     """Mixin to add status-change buttons on page bottom.
 
-    Prevent changing and saving page if user do not have permission
-    to change object in current Status.
+    Prevent deleting selected objects on list page if user is not admin or superuser.
+    Make all fields readonly and hide buttons Save if user has no permission to change
+    according to object's status.
+    Hide button Delete if user has no permission according to object's status.
     """
 
     def get_actions(self, request):
@@ -41,14 +43,14 @@ class StatusButtonMixin:
         extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
         extra_context["possible_statuses"] = statuses
 
-        # hide buttons SAVE if user doesnt have permissions to change in current status
+        # hide buttons SAVE if user doesnt have permission to change in current status
         right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
         if user_level < right_to_change:
             extra_context["show_save"] = False
             extra_context["show_save_and_continue"] = False
             extra_context["show_save_and_add_another"] = False
 
-        # hide button DELETE if user doesnt have permissions to delete in current status
+        # hide button DELETE if user doesnt have permission to delete in current status
         right_to_delete = STATUS_INFO[obj.status]["min_level_to_delete"]
         if user_level < right_to_delete:
             extra_context["show_delete"] = False
