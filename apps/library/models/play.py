@@ -34,15 +34,6 @@ class ProgramType(BaseModel):
 
 
 class Play(BaseModel):
-    class AgeLimit(models.IntegerChoices):
-        NO_LIMIT = 0
-        CHILD_LIMIT = 6
-        TEENAGE_LIMIT = 12
-        TEENAGE_LIMIT_USA = 13
-        YOUNG_LIMIT = 16
-        YOUNG_LIMIT_USA = 17
-        ADULTS_ONLY = 18
-
     name = models.CharField(
         max_length=70,
         unique=True,
