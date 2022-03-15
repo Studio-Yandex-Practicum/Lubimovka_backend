@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.db import models
 
+from apps.core.constants import AgeLimit
 from apps.core.models import BaseModel, Image, Person
 from apps.library.utilities import get_team_roles
 
@@ -10,36 +11,6 @@ from .play import Play
 
 
 class Performance(BaseModel):
-    class AgeLimit(models.IntegerChoices):
-        NO_LIMIT = (
-            0,
-            "0+",
-        )
-        CHILD_LIMIT = (
-            6,
-            "6+",
-        )
-        TEENAGE_LIMIT = (
-            12,
-            "12+",
-        )
-        TEENAGE_LIMIT_USA = (
-            13,
-            "13+",
-        )
-        YOUNG_LIMIT = (
-            16,
-            "16+",
-        )
-        YOUNG_LIMIT_USA = (
-            17,
-            "17+",
-        )
-        ADULTS_ONLY = (
-            18,
-            "18+",
-        )
-
     name = models.CharField(
         max_length=200,
         verbose_name="Название спектакля",
