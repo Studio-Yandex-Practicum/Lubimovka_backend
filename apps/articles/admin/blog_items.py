@@ -2,15 +2,16 @@ from django.contrib import admin
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
+from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
 
 
-class BlogPersonInline(admin.TabularInline):
+class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
     model = BlogItem.roles.through
     extra = 0
     classes = ["collapse"]
 
 
-class BlogItemContentInline(BaseContentInline):
+class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = BlogItemContent
     content_type_model = (
         "imagesblock",
@@ -23,7 +24,18 @@ class BlogItemContentInline(BaseContentInline):
     )
 
 
-class BlogItemAdmin(BaseContentPageAdmin):
+class BlogItemAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAdmin):
+    list_display = (
+        "title",
+        "description",
+        "pub_date",
+        "image_preview_list_page",
+        "status",
+    )
+    readonly_fields = (
+        "status",
+        "image_preview_change_page",
+    )
     inlines = (
         BlogPersonInline,
         BlogItemContentInline,
@@ -34,6 +46,7 @@ class BlogItemAdmin(BaseContentPageAdmin):
             None,
             {
                 "fields": (
+                    "status",
                     "title",
                     (
                         "author_url_title",
@@ -45,10 +58,19 @@ class BlogItemAdmin(BaseContentPageAdmin):
                         "image_preview_change_page",
                         "image",
                     ),
-                    "is_draft",
                 )
             },
         ),
+    )
+    other_readonly_fields = (
+        "status",
+        "title",
+        "author_url_title",
+        "author_url",
+        "pub_date",
+        "description",
+        "image_preview_change_page",
+        "image",
     )
 
 

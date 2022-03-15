@@ -31,7 +31,7 @@ def role_translator():
 def complex_blog_item(three_persons, role_text, role_translator, festivals, plays, persons, performances):
     blog_item = BlogItemFactory(
         id=100,
-        is_draft=False,
+        status="PUBLISHED",
     )
 
     BlogItemContentModuleFactory(unit_title=True, order=0, content_page=blog_item)
