@@ -137,7 +137,7 @@ class AuthorAdmin(admin.ModelAdmin):
         "other_links",
         "other_plays_links",
     )
-    list_filter = ("achievements",)
+    list_filter = ("plays__name",)
     search_fields = (
         "biography",
         "slug",
