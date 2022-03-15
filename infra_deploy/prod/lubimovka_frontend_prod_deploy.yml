@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   swag:
-    image: ghcr.io/linuxserver/swag:1.22.0
+    image: linuxserver/swag:1.22.0
     container_name: swag_prod
     cap_add:
       - NET_ADMIN
