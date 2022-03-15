@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='author',
             name='slug',
-            field=models.SlugField(blank=True, error_messages={'unique': 'Такой транслит уже используется, введите иной'}, help_text='Будет сформирован автоматически, может быть изменено вручную', unique=True, verbose_name='Транслит фамилии для формирования адресной строки'),
+            field=models.SlugField(blank=True, error_messages={'unique': 'Такой транслит уже используется, введите иной'}, help_text='Будет сформирован автоматически, может быть изменен вручную', unique=True, verbose_name='Транслит фамилии для формирования адресной строки'),
         ),
     ]
