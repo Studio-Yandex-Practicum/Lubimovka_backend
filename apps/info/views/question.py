@@ -24,11 +24,9 @@ class QuestionCreateAPIView(generics.CreateAPIView):
             if result:
                 instance.sent = True
                 instance.save()
-        # Если в settings не указаны настройки ANYMAIL,
-        # то нам выбрасывается AnymailConfigurationError
-        # если в settings не прописаны SERVER_EMAIL и DEFAULT_FROM_EMAIL
-        # и не указан from_email в EmailMessage ловим AnymailRequestsAPIError
         except AnymailConfigurationError:
             raise ValidationError("Неверные настройки Mailjet.")
         except AnymailRequestsAPIError:
             raise ValidationError("Не указан адрес электронной почты.")
+        except ValueError:
+            raise ValidationError("Неверный ID шаблона Mailjet.")
