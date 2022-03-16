@@ -258,6 +258,7 @@ class ImagesInBlockInline(admin.TabularInline):
 class PerformanceAdmin(admin.ModelAdmin):
     list_display = (
         "name",
+        "description",
         "play",
     )
     exclude = (
