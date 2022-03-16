@@ -37,7 +37,7 @@ class PlayAdmin(admin.ModelAdmin):
         "city",
         "program",
         "festival",
-        "in_draft",
+        "published",
     )
     inlines = (AuthorInline,)
     list_filter = (
@@ -45,7 +45,7 @@ class PlayAdmin(admin.ModelAdmin):
         "city",
         "program",
         "festival",
-        "in_draft",
+        "published",
     )
     search_fields = (
         "authors__person__first_name",
@@ -63,7 +63,7 @@ class PlayAdmin(admin.ModelAdmin):
         "url_reading",
         "program",
         "festival",
-        "in_draft",
+        "published",
     )
 
 

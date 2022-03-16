@@ -29,9 +29,9 @@ class StatusButtonMixin:
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         obj = get_object(self, object_id)
-        user_level = get_user_perms_level(request, obj)
         if not hasattr(obj, "status"):
             return super().change_view(request, object_id, form_url, extra_context)
+        user_level = get_user_perms_level(request, obj)
 
         # making Status buttons context for template
         possible_changes = STATUS_INFO[obj.status]["possible_changes"]

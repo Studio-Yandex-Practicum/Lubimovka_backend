@@ -33,7 +33,7 @@ class PlayFactory(factory.django.DjangoModelFactory):
     year = factory.Faker("random_int", min=1990, max=2021)
     url_download = factory.django.FileField()
     url_reading = factory.LazyAttribute(lambda play: f"www.plays-reading/{play.name}")
-    in_draft = factory.Faker("boolean", chance_of_getting_true=50)
+    published = factory.Faker("boolean", chance_of_getting_true=50)
 
     @factory.lazy_attribute
     def program(self):

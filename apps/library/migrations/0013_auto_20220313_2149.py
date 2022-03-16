@@ -20,8 +20,8 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='play',
-            name='in_draft',
-            field=models.BooleanField(default=True, verbose_name='Черновик'),
+            name='published',
+            field=models.BooleanField(default=True, verbose_name='Опубликовано'),
         ),
         migrations.AlterModelOptions(
             name='performance',
