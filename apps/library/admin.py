@@ -137,7 +137,6 @@ class AuthorAdmin(admin.ModelAdmin):
         "other_links",
         "other_plays_links",
     )
-    list_filter = ("plays__name",)
     search_fields = (
         "biography",
         "slug",
@@ -145,6 +144,7 @@ class AuthorAdmin(admin.ModelAdmin):
         "person__last_name",
         "person__middle_name",
         "person__email",
+        "plays__name",
     )
     empty_value_display = "-пусто-"
 
