@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from django.urls import re_path
 
 from apps.core import utils
@@ -168,7 +169,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
     def author_slug(self, request, obj_id=None):
         person_id = request.GET.get("person")
-        person = Person.objects.get(id=person_id)
+        person = get_object_or_404(Person, id=person_id)
         slug = utils.slugify(person.last_name)
         response = {"slug": slug}
         return JsonResponse(response)

@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from apps.core import utils
 from apps.core.models import BaseModel, Person
 
 from .play import Play
@@ -73,6 +74,10 @@ class Author(BaseModel):
         if self._has_person_before_saving():
             if not self.person.city:
                 raise ValidationError("Для автора необходимо указать город")
+            if not self.slug:
+                self.slug = utils.slugify(self.person.last_name)
+            if Author.objects.filter(slug=self.slug).exists():
+                raise ValidationError("Автоматическое формирование транслита фамилии невозможно из-за дублирования")
 
     def _has_person_before_saving(self):
         return self.person_id is not None
