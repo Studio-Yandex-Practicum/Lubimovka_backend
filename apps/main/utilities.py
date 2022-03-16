@@ -86,7 +86,7 @@ class MainObject:
             items = Play.objects.filter(
                 program=program,
                 festival=festival,
-                status="PUBLISHED",
+                published=True,
             )[:4]
             title = Setting.get_setting("main_short_list_title")
             self.short_list = {
