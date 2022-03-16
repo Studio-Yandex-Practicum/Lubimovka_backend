@@ -1,5 +1,6 @@
 import urllib
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify as django_slugify
 from rest_framework.response import Response
@@ -49,3 +50,31 @@ def get_user_perms_level(request, obj):
     if f"{app_name}.access_level_1" in perms:
         return 1
     return 0
+
+
+def get_app_list(self, request):
+    admin_site_order = settings.ADMIN_SITE_ORDER
+    app_dict = self._build_app_dict(request)
+
+    app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
+
+    for app in app_list:
+        if app["name"] in admin_site_order:
+            ordered_models = []
+            models = app["models"]
+            for model_name in admin_site_order[app["name"]]:
+                index = -1
+                for i, model in enumerate(models):
+                    if model["name"] == model_name:
+                        index = i
+                        break
+                if index == -1:
+                    raise ValueError("Ошибка в описании порядка моделей в админке.")
+                ordered_models.append(models.pop(index))
+            ordered_models.extend(models)
+            app["models"] = ordered_models
+            continue
+
+        app["models"].sort(key=lambda x: x["name"])
+
+    return app_list

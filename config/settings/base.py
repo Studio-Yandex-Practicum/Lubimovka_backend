@@ -196,3 +196,7 @@ CKEDITOR_CONFIGS = {
 }
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
+
+ADMIN_SITE_ORDER = {
+    "Библиотека": ["Авторы", "Мастер-классы", "Пьесы", "Спектакли", "Читки"]
+}
