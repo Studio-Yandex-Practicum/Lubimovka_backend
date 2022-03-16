@@ -98,8 +98,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           passphrase: ${{ secrets.PASSPHRASE }}
           script: |
-            ssh ${{ secrets.USERNAME }}@${{ secrets.HOST }} mkdir -p ${{ env.DEPLOY_PATH }}
-            scp -r infra_deploy/stage/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
+            mkdir -p ${{ env.DEPLOY_PATH }}
+            cp -r infra_deploy/stage/ ${{ env.DEPLOY_PATH }}
             cd ${{ env.DEPLOY_PATH }}/stage/
 
             # GitHub variables
