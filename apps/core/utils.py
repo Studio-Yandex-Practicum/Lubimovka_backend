@@ -5,7 +5,7 @@ from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify as django_slugify
 from rest_framework.response import Response
 
-from apps.core.constants import ALPHABET
+from apps.core.constants import ALPHABET, STATUS_INFO
 
 
 def slugify(name):
@@ -50,6 +50,16 @@ def get_user_perms_level(request, obj):
     if f"{app_name}.access_level_1" in perms:
         return 1
     return 0
+
+
+def get_user_change_perms_for_status(request, obj):
+    """Return user can change object."""
+    if obj and hasattr(obj, "status"):
+        user_level = get_user_perms_level(request, obj)
+        right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
+        if user_level < right_to_change:
+            return False
+    return True
 
 
 def get_app_list(self, request):
