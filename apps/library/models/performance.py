@@ -1,8 +1,8 @@
 from datetime import timedelta
 
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
+from apps.core.constants import AgeLimit
 from apps.core.models import BaseModel, Image, Person
 from apps.library.utilities import get_team_roles
 
@@ -55,12 +55,10 @@ class Performance(BaseModel):
         max_length=2000,
         verbose_name="Полное описание",
     )
-    age_limit = models.PositiveSmallIntegerField(
-        validators=[
-            MinValueValidator(0),
-            MaxValueValidator(18),
-        ],
+    age_limit = models.IntegerField(
         verbose_name="Возрастное ограничение",
+        choices=AgeLimit.choices,
+        default=AgeLimit.NO_LIMIT,
     )
     persons = models.ManyToManyField(
         Person,

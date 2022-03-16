@@ -6,6 +6,7 @@ import factory
 from django.conf import settings
 from faker import Faker
 
+from apps.core.constants import AgeLimit
 from apps.core.decorators import restrict_factory
 from apps.core.factories import ImageFactory
 from apps.core.models import Person, Role
@@ -74,7 +75,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     )
     description = factory.Faker("text", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
-    age_limit = factory.Faker("random_int", min=0, max=18)
+    age_limit = factory.LazyFunction(lambda: random.choice(list(AgeLimit)))
     video = factory.Faker("url")
 
     @factory.lazy_attribute
