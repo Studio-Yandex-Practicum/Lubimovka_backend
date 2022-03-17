@@ -1,3 +1,4 @@
+from os import name
 from django.db import migrations
 
 
@@ -7,6 +8,8 @@ def set_default_groups(apps, schema_editor):
         [
             Group(name="admin"),
             Group(name="editor"),
+            Group(name="journalist"),
+            Group(name="observer"),
         ]
     )
 
@@ -449,6 +452,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("core", "0001_initial"),
         ("sites", "0002_alter_domain_unique"),
+        ("library", "0001_initial"),
     ]
 
     operations = [

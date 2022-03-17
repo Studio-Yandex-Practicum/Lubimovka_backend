@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
+from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Person, Role
+from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
     Achievement,
     Author,
@@ -35,7 +37,7 @@ class PlayAdmin(admin.ModelAdmin):
         "city",
         "program",
         "festival",
-        "is_draft",
+        "published",
     )
     inlines = (AuthorInline,)
     list_filter = (
@@ -43,7 +45,7 @@ class PlayAdmin(admin.ModelAdmin):
         "city",
         "program",
         "festival",
-        "is_draft",
+        "published",
     )
     search_fields = (
         "authors__person__first_name",
@@ -52,6 +54,16 @@ class PlayAdmin(admin.ModelAdmin):
         "city",
         "program__name",
         "festival__year",
+    )
+    fields = (
+        "name",
+        "city",
+        "year",
+        "url_download",
+        "url_reading",
+        "program",
+        "festival",
+        "published",
     )
 
 
@@ -93,10 +105,12 @@ class OtherPlayInline(admin.StackedInline):
 
 
 class AuthorAdmin(admin.ModelAdmin):
+    form = AuthorForm
     list_display = (
         "person",
         "quote",
         "biography",
+        "slug",
     )
     inlines = (
         AchievementInline,
@@ -112,10 +126,21 @@ class AuthorAdmin(admin.ModelAdmin):
         "other_links",
         "other_plays_links",
     )
+    search_fields = (
+        "biography",
+        "slug",
+        "person__first_name",
+        "person__last_name",
+        "person__middle_name",
+        "person__email",
+        "plays__name",
+    )
     empty_value_display = "-пусто-"
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
+        if not request.user.has_perm("library.can_change_author"):
+            return form
         if obj:
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
         else:
@@ -173,21 +198,21 @@ class ProgramTypeAdmin(admin.ModelAdmin):
         return super().get_readonly_fields(request, obj)
 
 
-class PerformanceReviewInline(admin.TabularInline):
+class PerformanceReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceReview
     extra = 0
     max_num = 8
     classes = ["collapse"]
 
 
-class PerformanceMediaReviewInline(admin.TabularInline):
+class PerformanceMediaReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceMediaReview
     extra = 0
     max_num = 8
     classes = ["collapse"]
 
 
-class TeamMemberInline(admin.TabularInline):
+class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
     model = TeamMember
     fields = (
         "person",
@@ -210,7 +235,7 @@ class TeamMemberInline(admin.TabularInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class ImagesInBlockInline(admin.TabularInline):
+class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline):
     model = Performance.images_in_block.through
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
@@ -219,20 +244,47 @@ class ImagesInBlockInline(admin.TabularInline):
     classes = ["collapse"]
 
 
-class PerformanceAdmin(admin.ModelAdmin):
+class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
     list_display = (
         "name",
         "play",
+        "status",
     )
-    exclude = (
-        "events",
-        "images_in_block",
+    fields = (
+        "status",
+        "name",
+        "play",
+        "main_image",
+        "bottom_image",
+        "video",
+        "description",
+        "text",
+        "age_limit",
+        "project",
+        "duration",
     )
-    list_filter = ("age_limit",)
+    list_filter = (
+        "age_limit",
+        "status",
+    )
     search_fields = (
         "play__name",
         "name",
         "text",
+    )
+    readonly_fields = ("status",)
+    other_readonly_fields = (
+        "status",
+        "name",
+        "play",
+        "main_image",
+        "bottom_image",
+        "video",
+        "description",
+        "text",
+        "age_limit",
+        "project",
+        "duration",
     )
     inlines = (
         ImagesInBlockInline,

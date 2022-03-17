@@ -22,6 +22,11 @@ class Project(AbstractContentPage):
         ordering = ("-pub_date",)
         verbose_name = "Проект"
         verbose_name_plural = "Проекты"
+        permissions = (
+            ("access_level_1", "Права журналиста"),
+            ("access_level_2", "Права редактора"),
+            ("access_level_3", "Права главреда"),
+        )
 
 
 class ProjectContent(AbstractContent):
