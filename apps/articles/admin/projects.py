@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
-from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 
 
 class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
@@ -19,7 +19,7 @@ class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
     )
 
 
-class ProjectAdmin(StatusButtonMixin, DeletePermissionsMixin, BaseContentPageAdmin):
+class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
         "description",

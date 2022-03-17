@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
 
-from apps.core.mixins import DeletePermissionsMixin, InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Person, Role
 from apps.library.forms.admin import AuthorForm
 from apps.library.models import (
@@ -22,7 +22,7 @@ from apps.library.models import (
 )
 
 
-class AuthorInline(InlineReadOnlyMixin, admin.TabularInline):
+class AuthorInline(admin.TabularInline):
     model = Author.plays.through
     extra = 1
     verbose_name = "Автор"
@@ -30,14 +30,14 @@ class AuthorInline(InlineReadOnlyMixin, admin.TabularInline):
     classes = ["collapse"]
 
 
-class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
+class PlayAdmin(admin.ModelAdmin):
     filter_horizontal = ("authors",)
     list_display = (
         "name",
         "city",
         "program",
         "festival",
-        "status",
+        "published",
     )
     inlines = (AuthorInline,)
     list_filter = (
@@ -45,7 +45,7 @@ class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
         "city",
         "program",
         "festival",
-        "status",
+        "published",
     )
     search_fields = (
         "authors__person__first_name",
@@ -55,9 +55,7 @@ class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
         "program__name",
         "festival__year",
     )
-    readonly_fields = ("status",)
     fields = (
-        "status",
         "name",
         "city",
         "year",
@@ -65,16 +63,7 @@ class PlayAdmin(StatusButtonMixin, DeletePermissionsMixin, admin.ModelAdmin):
         "url_reading",
         "program",
         "festival",
-    )
-    other_readonly_fields = (
-        "status",
-        "name",
-        "city",
-        "year",
-        "url_download",
-        "url_reading",
-        "program",
-        "festival",
+        "published",
     )
 
 
@@ -137,7 +126,6 @@ class AuthorAdmin(admin.ModelAdmin):
         "other_links",
         "other_plays_links",
     )
-    list_filter = ("achievements",)
     search_fields = (
         "biography",
         "slug",
@@ -145,6 +133,7 @@ class AuthorAdmin(admin.ModelAdmin):
         "person__last_name",
         "person__middle_name",
         "person__email",
+        "plays__name",
     )
     empty_value_display = "-пусто-"
 
@@ -209,21 +198,21 @@ class ProgramTypeAdmin(admin.ModelAdmin):
         return super().get_readonly_fields(request, obj)
 
 
-class PerformanceReviewInline(admin.TabularInline):
+class PerformanceReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceReview
     extra = 0
     max_num = 8
     classes = ["collapse"]
 
 
-class PerformanceMediaReviewInline(admin.TabularInline):
+class PerformanceMediaReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceMediaReview
     extra = 0
     max_num = 8
     classes = ["collapse"]
 
 
-class TeamMemberInline(admin.TabularInline):
+class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
     model = TeamMember
     fields = (
         "person",
@@ -246,7 +235,7 @@ class TeamMemberInline(admin.TabularInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class ImagesInBlockInline(admin.TabularInline):
+class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline):
     model = Performance.images_in_block.through
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
@@ -255,20 +244,47 @@ class ImagesInBlockInline(admin.TabularInline):
     classes = ["collapse"]
 
 
-class PerformanceAdmin(admin.ModelAdmin):
+class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
     list_display = (
         "name",
         "play",
+        "status",
     )
-    exclude = (
-        "events",
-        "images_in_block",
+    fields = (
+        "status",
+        "name",
+        "play",
+        "main_image",
+        "bottom_image",
+        "video",
+        "description",
+        "text",
+        "age_limit",
+        "project",
+        "duration",
     )
-    list_filter = ("age_limit",)
+    list_filter = (
+        "age_limit",
+        "status",
+    )
     search_fields = (
         "play__name",
         "name",
         "text",
+    )
+    readonly_fields = ("status",)
+    other_readonly_fields = (
+        "status",
+        "name",
+        "play",
+        "main_image",
+        "bottom_image",
+        "video",
+        "description",
+        "text",
+        "age_limit",
+        "project",
+        "duration",
     )
     inlines = (
         ImagesInBlockInline,

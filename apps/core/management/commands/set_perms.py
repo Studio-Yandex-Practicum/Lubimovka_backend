@@ -80,7 +80,7 @@ class Command(BaseCommand):
             )
 
             journalist_permissions = Permission.objects.filter(
-                Q(codename__endswith="_play")
+                Q(codename__endswith="_performance")
                 | Q(codename__endswith="_blogitem")
                 | Q(codename__endswith="_newsitem")
                 | Q(codename__endswith="_project")
@@ -91,12 +91,12 @@ class Command(BaseCommand):
                 & ~Q(codename__icontains="permission")
                 & ~Q(codename__icontains="setting")
                 # permissions for content
-                | Q(codename__endswith="change_author")
                 | Q(codename__endswith="_blogitemcontent")
                 | Q(codename__endswith="_blogperson")
                 | Q(codename__endswith="_contentpersonrole")
                 | Q(codename__endswith="_eventsblock")
                 | Q(codename__endswith="_extendedperson")
+                | Q(codename__endswith="_image")
                 | Q(codename__endswith="_imagesblock")
                 | Q(codename__endswith="_link")
                 | Q(codename__endswith="_newsitemcontent")
@@ -112,6 +112,7 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_preamble")
                 | Q(codename__endswith="_projectcontent")
                 | Q(codename__endswith="_quote")
+                | Q(codename__endswith="_teammember")
                 | Q(codename__endswith="_text")
                 | Q(codename__endswith="_title")
                 | Q(codename__endswith="_videosblock")
