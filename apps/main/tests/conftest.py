@@ -31,13 +31,13 @@ def festival(images):
 
 @pytest.fixture
 def play(festival):
-    return PlayFactory(is_draft=False)
+    return PlayFactory(published=True)
 
 
 @pytest.fixture
 def play_in_short_list(festival):
     short_list_program_type = ProgramType.objects.get(slug="short-list")
-    return PlayFactory(is_draft=False, program=short_list_program_type)
+    return PlayFactory(published=True, program=short_list_program_type)
 
 
 @pytest.fixture
@@ -71,7 +71,7 @@ def news_items_with_content(plays, images_block):
         add_several_playsblock=1,
         add_several_imagesblock=1,
         add_several_personsblock=1,
-        is_draft=False,
+        status="PUBLISHED",
     )
 
 
