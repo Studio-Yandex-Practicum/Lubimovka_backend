@@ -19,15 +19,19 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
 
     def doRollover(self):
         super().doRollover()
-        log_dir = os.path.dirname(self.baseFilename)
-        to_compress = [
-            os.path.join(log_dir, log_file)
-            for log_file in os.listdir(log_dir)
-            if log_file.startswith(os.path.basename(os.path.splitext(self.baseFilename)[0]))
-            and not log_file.endswith((".gz", ".log"))
-        ]
-        for log_file in to_compress:
-            if os.path.exists(log_file):
+        log_path = pathlib.Path(self.baseFilename)
+        log_directory = log_path.parent
+        log_filename = log_path.stem
+        files_in_directory = os.listdir(log_directory)
+        log_file_prefix = (".gz", ".log")
+        to_compress_list = []
+
+        for log_file_to_compress in files_in_directory:
+            if log_file_to_compress.startswith(log_filename) and not log_file_to_compress.endswith(log_file_prefix):
+                to_compress_list.append(os.path.join(log_directory, log_file_to_compress))
+
+        for log_file in to_compress_list:
+            if pathlib.Path(log_file).exists():
                 with open(log_file, "rb") as _old, gzip.open(log_file + ".gz", "wb") as _new:
                     shutil.copyfileobj(_old, _new)
                 os.remove(log_file)
