@@ -484,5 +484,5 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             add_playsupply_settings,
-        )
+        ),
     ]
