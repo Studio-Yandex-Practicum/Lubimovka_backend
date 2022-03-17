@@ -38,6 +38,7 @@ class OtherPlayInline(admin.StackedInline):
     extra = 1
 
 
+@admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
     form = AuthorForm
     list_display = (
@@ -80,6 +81,3 @@ class AuthorAdmin(admin.ModelAdmin):
         else:
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
         return form
-
-
-admin.site.register(Author, AuthorAdmin)

@@ -3,6 +3,7 @@ from django.contrib import admin
 from apps.library.models import ParticipationApplicationFestival
 
 
+@admin.register(ParticipationApplicationFestival)
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = (
         "title",
@@ -25,6 +26,3 @@ class ParticipationAdmin(admin.ModelAdmin):
         "city",
         "year",
     )
-
-
-admin.site.register(ParticipationApplicationFestival, ParticipationAdmin)

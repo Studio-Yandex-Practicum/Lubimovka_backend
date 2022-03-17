@@ -3,6 +3,7 @@ from django.contrib import admin
 from apps.library.models import PerformanceReview
 
 
+@admin.register(PerformanceReview)
 class PerformanceReviewAdmin(admin.ModelAdmin):
     list_display = (
         "reviewer_name",
@@ -20,6 +21,3 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
         "pub_date",
     )
     readonly_fields = ("pub_date",)
-
-
-admin.site.register(PerformanceReview, PerformanceReviewAdmin)

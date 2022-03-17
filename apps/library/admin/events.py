@@ -59,6 +59,7 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+@admin.register(MasterClass)
 class MasterClassAdmin(admin.ModelAdmin):
     list_display = ("name",)
     exclude = ("events",)
@@ -69,9 +70,11 @@ class MasterClassAdmin(admin.ModelAdmin):
     inlines = (TeamMemberInline,)
 
 
+@admin.register(Performance)
 class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
     list_display = (
         "name",
+        "description",
         "play",
         "status",
     )
@@ -119,6 +122,7 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
     )
 
 
+@admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
     list_display = (
         "play",
@@ -130,8 +134,3 @@ class ReadingAdmin(admin.ModelAdmin):
         "name",
     )
     inlines = (TeamMemberInline,)
-
-
-admin.site.register(MasterClass, MasterClassAdmin)
-admin.site.register(Performance, PerformanceAdmin)
-admin.site.register(Reading, ReadingAdmin)

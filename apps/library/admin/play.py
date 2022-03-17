@@ -11,6 +11,7 @@ class AuthorInline(admin.TabularInline):
     classes = ["collapse"]
 
 
+@admin.register(Play)
 class PlayAdmin(admin.ModelAdmin):
     filter_horizontal = ("authors",)
     list_display = (
@@ -46,6 +47,3 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "published",
     )
-
-
-admin.site.register(Play, PlayAdmin)

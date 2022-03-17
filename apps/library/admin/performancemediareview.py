@@ -3,6 +3,7 @@ from django.contrib import admin
 from apps.library.models import PerformanceMediaReview
 
 
+@admin.register(PerformanceMediaReview)
 class PerformanceMediaReviewAdmin(admin.ModelAdmin):
     list_display = (
         "media_name",
@@ -20,6 +21,3 @@ class PerformanceMediaReviewAdmin(admin.ModelAdmin):
         "pub_date",
     )
     readonly_fields = ("pub_date",)
-
-
-admin.site.register(PerformanceMediaReview, PerformanceMediaReviewAdmin)
