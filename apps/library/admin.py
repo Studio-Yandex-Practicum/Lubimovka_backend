@@ -247,6 +247,7 @@ class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline):
 class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
     list_display = (
         "name",
+        "description",
         "play",
         "status",
     )
