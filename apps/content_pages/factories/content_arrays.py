@@ -2,12 +2,12 @@ import factory
 
 from apps.content_pages.factories.content_array_items import (
     ExtendedPersonFactory,
+    OrderedEventFactory,
     OrderedImageFactory,
-    OrderedPerformanceFactory,
     OrderedPlayFactory,
     OrderedVideoFactory,
 )
-from apps.content_pages.models import ImagesBlock, PerformancesBlock, PersonsBlock, PlaysBlock, VideosBlock
+from apps.content_pages.models import EventsBlock, ImagesBlock, PersonsBlock, PlaysBlock, VideosBlock
 
 
 class ImagesBlockFactory(factory.django.DjangoModelFactory):
@@ -27,21 +27,21 @@ class ImagesBlockFactory(factory.django.DjangoModelFactory):
             OrderedImageFactory.create_batch(3, block=self)
 
 
-class PerformancesBlockFactory(factory.django.DjangoModelFactory):
-    """Create content block Performance for projects.
+class EventsBlockFactory(factory.django.DjangoModelFactory):
+    """Create content block Event for projects.
 
-    Block creates with 3 ordered performances.
+    Block creates with 3 ordered events.
     """
 
     class Meta:
-        model = PerformancesBlock
+        model = EventsBlock
 
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=20)
 
     @factory.post_generation
-    def add_performance(self, created, extracted, **kwargs):
+    def add_event(self, created, extracted, **kwargs):
         if created:
-            OrderedPerformanceFactory.create_batch(3, block=self)
+            OrderedEventFactory.create_batch(3, block=self)
 
 
 class PersonsBlockFactory(factory.django.DjangoModelFactory):

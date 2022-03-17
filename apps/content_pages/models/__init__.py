@@ -6,13 +6,13 @@ from .contents import AbstractContent, AbstractContentPage
 
 from .content_blocks import (
     ContentPersonRole,
+    EventsBlock,
     ExtendedPerson,
     ImagesBlock,
+    OrderedEvent,
     OrderedImage,
-    OrderedPerformance,
     OrderedPlay,
     OrderedVideo,
-    PerformancesBlock,
     PersonsBlock,
     PlaysBlock,
     VideosBlock,

@@ -2,15 +2,16 @@ from django.contrib import admin
 
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
+from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 
 
-class ProjectContentInline(BaseContentInline):
+class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = ProjectContent
 
     content_type_model = (
+        "eventsblock",
         "imagesblock",
         "link",
-        "performancesblock",
         "personsblock",
         "playsblock",
         "text",
@@ -18,12 +19,20 @@ class ProjectContentInline(BaseContentInline):
     )
 
 
-class ProjectAdmin(BaseContentPageAdmin):
+class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
+    list_display = (
+        "title",
+        "description",
+        "pub_date",
+        "image_preview_list_page",
+        "status",
+    )
     fieldsets = (
         (
             None,
             {
                 "fields": (
+                    "status",
                     "title",
                     "intro",
                     "pub_date",
@@ -32,13 +41,24 @@ class ProjectAdmin(BaseContentPageAdmin):
                         "image_preview_change_page",
                         "image",
                     ),
-                    "is_draft",
                 )
             },
         ),
     )
-
+    readonly_fields = (
+        "status",
+        "image_preview_change_page",
+    )
     inlines = (ProjectContentInline,)
+    other_readonly_fields = (
+        "status",
+        "title",
+        "intro",
+        "pub_date",
+        "description",
+        "image_preview_change_page",
+        "image",
+    )
 
 
 admin.site.register(Project, ProjectAdmin)

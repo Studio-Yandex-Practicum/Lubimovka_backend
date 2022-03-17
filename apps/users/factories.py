@@ -40,7 +40,12 @@ class UserFactory(factory.django.DjangoModelFactory):
     @classmethod
     def create(cls, **kwargs):
         """Verify that `role_type` is provided and the value is allowed type."""
-        allowed_group_types = ("editor", "admin")
+        allowed_group_types = (
+            "editor",
+            "admin",
+            "journalist",
+            "observer",
+        )
         role_type = kwargs.get("role_type", None)
         assert role_type in allowed_group_types, f"`role_type` should be in {allowed_group_types}."
         return super().create(**kwargs)
@@ -51,6 +56,23 @@ class UserFactory(factory.django.DjangoModelFactory):
         if created:
             group = Group.objects.get(name=role_type)
             self.groups.add(group)
+
+
+class JournalistUserFactory(UserFactory):
+    """Create Journalist User objects.
+
+    Do two things:
+    1. The username in format `journalist_{sequence_number}`
+    2. Add user to `journalist` group.
+    """
+
+    class Params:
+        username_prefix = "journalist"
+
+    @classmethod
+    def create(cls, **kwargs):
+        kwargs["role_type"] = "journalist"
+        return super().create(**kwargs)
 
 
 class EditorUserFactory(UserFactory):
@@ -84,4 +106,21 @@ class AdminUserFactory(UserFactory):
     @classmethod
     def create(cls, **kwargs):
         kwargs["role_type"] = "admin"
+        return super().create(**kwargs)
+
+
+class ObserverUserFactory(UserFactory):
+    """Create Observer User objects.
+
+    Do two things:
+    1. The username in format `observer_{sequence_number}`
+    2. Add user to `observer` group.
+    """
+
+    class Params:
+        username_prefix = "observer"
+
+    @classmethod
+    def create(cls, **kwargs):
+        kwargs["role_type"] = "observer"
         return super().create(**kwargs)

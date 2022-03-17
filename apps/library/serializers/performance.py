@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.afisha.models import Event
 from apps.core.serializers import ImageSerializer
 from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
-from apps.library.serializers.utilities import get_event_team_roles, get_event_team_serialized_data
+from apps.library.serializers.role import RoleSerializer
 
 from .play import PlaySerializer
 
@@ -17,22 +17,12 @@ class LocalEventSerializer(serializers.ModelSerializer):
 
 
 class PerformanceSerializer(serializers.ModelSerializer):
-    """Сериализатор Спектакля для отображения на странице Спектакля."""
+    """Performance serializer for performance page."""
 
     play = PlaySerializer()
-    team = serializers.SerializerMethodField()
+    team = RoleSerializer(many=True)
     images_in_block = ImageSerializer(many=True)
-    events = serializers.SerializerMethodField()
     events = LocalEventSerializer(source="events.body", many=True)
-
-    def get_team(self, obj):
-        """Собираем команду в два этапа.
-
-        Сначала отбираем роли и связанные с ролью и событием персоны.
-        Затем формируем словарь с правильной структурой.
-        """
-        roles = get_event_team_roles(obj, {"team_members__performance": obj})
-        return get_event_team_serialized_data(roles)
 
     class Meta:
         exclude = (
@@ -45,20 +35,11 @@ class PerformanceSerializer(serializers.ModelSerializer):
 
 
 class EventPerformanceSerializer(serializers.ModelSerializer):
-    """Сериализатор Спектакля для отображения на странице Афиши."""
+    """Performance serializer for afisha page."""
 
-    team = serializers.SerializerMethodField()
+    team = RoleSerializer(source="event_team", many=True)
     image = serializers.ImageField(source="main_image")
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
-
-    def get_team(self, obj):
-        """Собираем команду в два этапа.
-
-        Сначала отбираем роли и связанные с ролью и событием персоны.
-        Затем формируем словарь с правильной структурой.
-        """
-        roles = get_event_team_roles(obj, {"team_members__performance": obj, "slug__in": ["director", "dramatist"]})
-        return get_event_team_serialized_data(roles)
 
     class Meta:
         model = Performance

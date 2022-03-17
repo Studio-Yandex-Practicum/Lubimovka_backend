@@ -1,10 +1,13 @@
+import random
 from zoneinfo import ZoneInfo
 
 import factory
 from django.conf import settings
 
+from apps.afisha.models import Event
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.factories import AbstractContentFactory
+from apps.core.constants import Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.library.models.play import Play
@@ -28,6 +31,7 @@ class ProjectContentModuleFactory(AbstractContentFactory):
 
 
 @restrict_factory(
+    add_several_events=(Event,),
     add_several_playsblock=(Play,),
     add_several_personsblock=(Person,),
 )
@@ -53,9 +57,9 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     )
     image = factory.django.ImageField(color=factory.Faker("color"))
     intro = factory.Faker("sentence", locale="ru_RU", nb_words=12)
-    is_draft = factory.Faker("boolean", chance_of_getting_true=25)
     pub_date = factory.Faker("date_time", tzinfo=ZoneInfo(settings.TIME_ZONE))
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
+    status = factory.LazyFunction(lambda: random.choice(list(Status)))
 
     @factory.post_generation
     def add_several_imagesblock(self, created, count, **kwargs):
@@ -70,10 +74,10 @@ class ProjectFactory(factory.django.DjangoModelFactory):
             ProjectContentModuleFactory.create_batch(count, content_page=self, unit_link=True)
 
     @factory.post_generation
-    def add_several_performancesblock(self, created, count, **kwargs):
-        """Add specified count of content block with Performances to Project."""
+    def add_several_eventsblock(self, created, count, **kwargs):
+        """Add specified count of content block with Events to Project."""
         if created and count:
-            ProjectContentModuleFactory.create_batch(count, content_page=self, array_performance=True)
+            ProjectContentModuleFactory.create_batch(count, content_page=self, array_event=True)
 
     @factory.post_generation
     def add_several_personsblock(self, created, count, **kwargs):
@@ -110,5 +114,5 @@ class ProjectFactory(factory.django.DjangoModelFactory):
             add_several_imagesblock=1,
             add_several_personsblock=1,
             add_several_videosblock=1,
-            add_several_performancesblock=1,
+            add_several_eventsblock=1,
         )
