@@ -14,10 +14,10 @@ def simple_blog_item(persons):
 @pytest.fixture
 def simple_blog_item_not_published():
     """Create not published BlogItem."""
-    return BlogItemFactory(is_draft=True)
+    return BlogItemFactory(status="IN_PROCESS")
 
 
 @pytest.fixture
 def simple_blog_item_published():
     """Create published BlogItem."""
-    return BlogItemFactory(id=100, is_draft=False)
+    return BlogItemFactory(id=100, status="PUBLISHED")

@@ -53,7 +53,7 @@ class BaseContentPageAdmin(AdminImagePreview, admin.ModelAdmin):
         "pub_date",
         "image_preview_list_page",
     )
-    list_filter = ("is_draft",)
+    list_filter = ("status",)
     fieldsets = (
         (
             None,
@@ -66,9 +66,13 @@ class BaseContentPageAdmin(AdminImagePreview, admin.ModelAdmin):
                         "image_preview_change_page",
                         "image",
                     ),
-                    "is_draft",
+                    "status",
                 )
             },
         ),
     )
-    readonly_fields = ("image_preview_change_page",)
+    search_fields = (
+        "title",
+        "description",
+    )
+    readonly_fields = ("image_preview_change_page", "pub_date")

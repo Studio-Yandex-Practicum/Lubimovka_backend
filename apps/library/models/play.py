@@ -74,9 +74,9 @@ class Play(BaseModel):
         related_name="plays",
         verbose_name="Фестиваль",
     )
-    is_draft = models.BooleanField(
+    published = models.BooleanField(
+        verbose_name="Опубликовано",
         default=True,
-        verbose_name="Черновик",
     )
 
     class Meta:
