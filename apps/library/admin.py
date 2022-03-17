@@ -24,7 +24,7 @@ from apps.library.models import (
 
 class AuthorInline(admin.TabularInline):
     model = Author.plays.through
-    # extra = 0
+    extra = 0
     min_num = 1
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
