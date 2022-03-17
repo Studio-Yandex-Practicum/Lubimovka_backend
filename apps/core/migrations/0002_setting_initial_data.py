@@ -1,4 +1,5 @@
 from os import name
+
 from django.db import migrations
 
 

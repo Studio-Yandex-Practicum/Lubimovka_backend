@@ -8,21 +8,40 @@ from apps.core.constants import Status
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0011_alter_author_slug'),
+        ("library", "0011_alter_author_slug"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='play',
-            options={'permissions': (('access_level_1', 'Права журналиста'), ('access_level_2', 'Права редактора'), ('access_level_3', 'Права главреда')), 'verbose_name': 'Пьеса', 'verbose_name_plural': 'Пьесы'},
+            name="play",
+            options={
+                "permissions": (
+                    ("access_level_1", "Права журналиста"),
+                    ("access_level_2", "Права редактора"),
+                    ("access_level_3", "Права главреда"),
+                ),
+                "verbose_name": "Пьеса",
+                "verbose_name_plural": "Пьесы",
+            },
         ),
         migrations.RemoveField(
-            model_name='play',
-            name='is_draft',
+            model_name="play",
+            name="is_draft",
         ),
         migrations.AddField(
-            model_name='play',
-            name='status',
-            field=models.CharField(choices=[('IN_PROCESS', 'В работе'), ('REVIEW', 'На проверке'), ('READY_FOR_PUBLICATION', 'Готово к публикации'), ('PUBLISHED', 'Опубликовано'), ('REMOVED_FROM_PUBLICATION', 'Снято с публикации')], default=Status.IN_PROCESS, max_length=35, verbose_name='Статус'),
+            model_name="play",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("IN_PROCESS", "В работе"),
+                    ("REVIEW", "На проверке"),
+                    ("READY_FOR_PUBLICATION", "Готово к публикации"),
+                    ("PUBLISHED", "Опубликовано"),
+                    ("REMOVED_FROM_PUBLICATION", "Снято с публикации"),
+                ],
+                default=Status.IN_PROCESS,
+                max_length=35,
+                verbose_name="Статус",
+            ),
         ),
     ]
