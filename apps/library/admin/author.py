@@ -1,7 +1,6 @@
 from django.contrib import admin
 
 from apps.core.models import Person
-from apps.library.forms.admin import AuthorForm
 from apps.library.models import Author, OtherLink, OtherPlay, SocialNetworkLink
 
 
@@ -40,7 +39,6 @@ class OtherPlayInline(admin.StackedInline):
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    form = AuthorForm
     list_display = (
         "person",
         "quote",
