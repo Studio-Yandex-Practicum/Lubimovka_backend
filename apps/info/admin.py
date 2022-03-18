@@ -80,6 +80,10 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
         "image",
         "image_preview_list_page",
     )
+    search_fields = (
+        "first_name",
+        "last_name",
+    )
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
 
