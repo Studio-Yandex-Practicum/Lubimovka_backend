@@ -1,5 +1,6 @@
-from anymail.exceptions import AnymailConfigurationError, AnymailRequestsAPIError
+from anymail.exceptions import AnymailConfigurationError, AnymailInvalidAddress, AnymailRequestsAPIError
 from drf_spectacular.utils import extend_schema
+from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import generics
 
@@ -20,15 +21,16 @@ class QuestionCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         instance = serializer.save()
         try:
-            result = send_question(serializer)
-            if result:
+            response = send_question(serializer)
+            if (
+                hasattr(response, "anymail_status")
+                and response.anymail_status.esp_response.status_code == status.HTTP_200_OK
+            ):
                 instance.sent = True
                 instance.save()
-        # Если в settings не указаны настройки ANYMAIL,
-        # то нам выбрасывается AnymailConfigurationError
-        # если в settings не прописаны SERVER_EMAIL и DEFAULT_FROM_EMAIL
-        # и не указан from_email в EmailMessage ловим AnymailRequestsAPIError
         except AnymailConfigurationError:
             raise ValidationError("Неверные настройки Mailjet.")
-        except AnymailRequestsAPIError:
-            raise ValidationError("Не указан адрес электронной почты.")
+        except (AnymailRequestsAPIError, AnymailInvalidAddress):
+            raise ValidationError("Не указан адрес электронной почты отправителя.")
+        except ValueError:
+            raise ValidationError("Неверный ID шаблона Mailjet.")
