@@ -229,6 +229,10 @@ class TeamMemberInline(admin.TabularInline):
         "person",
         "role",
     )
+    search_fields = (
+        "person",
+        "role",
+    )
     extra = 0
     classes = ["collapse"]
 
@@ -295,6 +299,7 @@ class MasterClassAdmin(admin.ModelAdmin):
     list_display = ("name",)
     exclude = ("events",)
     search_fields = (
+        "project",
         "play__name",
         "name",
     )
