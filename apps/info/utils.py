@@ -26,7 +26,8 @@ def send_question(serializer):
         "author_name": serializer.validated_data["author_name"],
         "author_email": serializer.validated_data["author_email"],
     }
-    message.send()
+    result = message.send()
+    return result
 
 
 def get_pdf_response(press_release_instance, path_to_font):

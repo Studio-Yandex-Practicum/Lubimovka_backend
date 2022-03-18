@@ -1,3 +1,4 @@
+import random
 from zoneinfo import ZoneInfo
 
 import factory
@@ -5,6 +6,7 @@ from django.conf import settings
 
 from apps.articles.models import BlogItem, BlogItemContent, BlogPerson
 from apps.content_pages.factories import AbstractContentFactory
+from apps.core.constants import Status
 from apps.core.decorators.factory import restrict_factory
 from apps.core.models import Person, Role
 from apps.library.models import Play
@@ -75,9 +77,9 @@ class BlogItemFactory(factory.django.DjangoModelFactory):
         variable_nb_sentences=False,
     )
     image = factory.django.ImageField(color=factory.Faker("color"))
-    is_draft = factory.Faker("boolean", chance_of_getting_true=25)
     pub_date = factory.Faker("date_time", tzinfo=ZoneInfo(settings.TIME_ZONE))
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
+    status = factory.LazyFunction(lambda: random.choice(list(Status)))
 
     @factory.post_generation
     def add_several_co_author(self, created, count, **kwargs):

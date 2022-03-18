@@ -4,8 +4,9 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.form import FestivalTeamMemberForm
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Sponsor, Volunteer
+from apps.info.form import ArtTeamMemberForm
+from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Question, Sponsor, Volunteer
+from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
 @admin.register(Partner)
@@ -183,38 +184,32 @@ class PressRealeaseAdmin(admin.ModelAdmin):
     search_fields = ("title",)
 
 
-@admin.register(FestivalTeamMember)
-class FestivalTeamMemberAdmin(admin.ModelAdmin):
-    form = FestivalTeamMemberForm
+@admin.register(ArtTeamMember)
+class ArtTeamMemberAdmin(admin.ModelAdmin):
+    form = ArtTeamMemberForm
     list_display = (
         "person",
         "team",
         "position",
         "is_pr_manager",
     )
-    list_filter = (
-        "team",
-        "is_pr_manager",
-    )
+    list_filter = ("is_pr_manager",)
     fieldsets = (
         (
             None,
             {
                 "fields": (
                     "person",
-                    "team",
                     "position",
+                    "is_pr_manager",
                 ),
             },
         ),
         (
             None,
             {
-                "fields": (
-                    "is_pr_manager",
-                    "data_manager",
-                ),
-                "classes": ("depended_on_team_type",),
+                "fields": ("data_manager",),
+                "classes": ("form-row field-data_manager",),
             },
         ),
     )
@@ -223,13 +218,20 @@ class FestivalTeamMemberAdmin(admin.ModelAdmin):
 
     search_fields = ("position", "person__first_name", "person__last_name")
 
+    def get_queryset(self, request):
+        qs = self.model._default_manager.get_queryset().filter(team="art")
+        return qs
+
     def save_model(self, request, obj, form, change):
         """Данные из поля 'data_manager' проверяются и сохраняются в модели 'Setting'."""
         if form.is_valid():
+            team = "art"
             if obj.is_pr_manager:
                 name_manager = form.cleaned_data["data_manager"]
                 FestivalTeamMember.objects.filter(is_pr_manager=True).update(is_pr_manager=False)
                 Setting.objects.filter(settings_key="pr_manager_name").update(text=name_manager)
+            obj = form.save(commit=False)
+            obj.team = team
             obj.save()
         else:
             raise ValidationError("Заполните поля корректно")
@@ -240,9 +242,58 @@ class FestivalTeamMemberAdmin(admin.ModelAdmin):
         js = ("admin/info/js/FestivalTeamFooter.js",)
 
 
+@admin.register(FestTeamMember)
+class FestTeamMemberAdmin(admin.ModelAdmin):
+    list_display = (
+        "person",
+        "team",
+        "position",
+    )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": (
+                    "person",
+                    "position",
+                ),
+            },
+        ),
+    )
+
+    ordering = ("person__last_name", "person__first_name")
+
+    search_fields = ("position", "person__first_name", "person__last_name")
+
+    def save_model(self, request, obj, form, change):
+        """Устанваливается поле "team" на значение "fest"."""
+        if form.is_valid():
+            team = "fest"
+            obj = form.save(commit=False)
+            obj.team = team
+            obj.save()
+        else:
+            raise ValidationError("Заполните поля корректно")
+
+    def get_queryset(self, request):
+        qs = self.model._default_manager.get_queryset().filter(team="fest")
+        return qs
+
+
 @admin.register(Sponsor)
 class SponsorAdmin(admin.ModelAdmin):
     list_display = (
         "person",
         "position",
     )
+
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ("id", "author_name", "author_email", "question", "sent")
+    list_filter = ("sent",)
+
+    def has_module_permission(self, request):
+        if request.user.is_authenticated and (request.user.is_admin or request.user.is_superuser):
+            return True
+        return False

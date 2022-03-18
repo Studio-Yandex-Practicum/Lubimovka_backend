@@ -18,10 +18,11 @@ class Question(BaseModel):
         max_length=50,
         verbose_name="Электронная почта",
     )
+    sent = models.BooleanField(verbose_name="Отправлено", default=False)
 
     class Meta:
         verbose_name = "Вопрос или предложение"
         verbose_name_plural = "Вопросы или предложения"
 
     def __str__(self):
-        return f"{self.name} {self.question}"
+        return f"{self.author_name} {self.question}"
