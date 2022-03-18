@@ -17,6 +17,9 @@ class PlaySerializer(serializers.ModelSerializer):
     """Сериализатор Пьесы."""
 
     authors = AuthorForPlaySerializer(many=True)
+    city = serializers.CharField(required=False, max_length=200, label="Город")
+    year = serializers.IntegerField(required=False, min_value=0, max_value=32767, label="Год написания пьесы")
+    url_reading = serializers.URLField(required=False)
 
     class Meta:
         fields = (
