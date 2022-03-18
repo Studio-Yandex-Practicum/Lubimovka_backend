@@ -2,6 +2,16 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 
+class AgeLimit(models.IntegerChoices):
+    NO_LIMIT = (0, "0+")
+    CHILD_LIMIT = (6, "6+")
+    TEENAGE_LIMIT = (12, "12+")
+    TEENAGE_LIMIT_USA = (13, "13+")
+    YOUNG_LIMIT = (16, "16+")
+    YOUNG_LIMIT_USA = (17, "17+")
+    ADULTS_ONLY = (18, "18+")
+
+
 class Status(models.TextChoices):
     IN_PROCESS = "IN_PROCESS", _("В работе")
     REVIEW = "REVIEW", _("На проверке")
