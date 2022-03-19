@@ -42,6 +42,7 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
         "person",
         "role",
     )
+    autocomplete_fields = ("person",)
     extra = 0
     classes = ["collapse"]
 

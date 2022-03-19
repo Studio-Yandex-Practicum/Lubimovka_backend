@@ -1,12 +1,18 @@
 from django.contrib import admin
 
 from apps.core.models import Person
-from apps.library.forms.admin import AuthorForm
-from apps.library.models import Author, OtherLink, OtherPlay, SocialNetworkLink
+from apps.library.forms.admin import AuthorForm, OtherLinkForm
+from apps.library.models import Achievement, Author, OtherLink, OtherPlay, SocialNetworkLink
+
+
+@admin.register(Achievement)
+class AchievementAdmin(admin.ModelAdmin):
+    search_fields = ("tag",)
 
 
 class AchievementInline(admin.TabularInline):
     model = Author.achievements.through
+    autocomplete_fields = ("achievement",)
     extra = 1
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
@@ -15,6 +21,7 @@ class AchievementInline(admin.TabularInline):
 
 class PlayInline(admin.TabularInline):
     model = Author.plays.through
+    autocomplete_fields = ("play",)
     extra = 1
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
@@ -28,6 +35,7 @@ class SocialNetworkLinkInline(admin.TabularInline):
 
 
 class OtherLinkInline(admin.TabularInline):
+    form = OtherLinkForm
     model = OtherLink
     extra = 1
     classes = ["collapse"]

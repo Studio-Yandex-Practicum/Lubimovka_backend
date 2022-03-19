@@ -10,6 +10,7 @@ from apps.core.models import Image, Role, RoleType
 @admin.register(Image)
 class ImageAdmin(HideOnNavPanelAdminModelMixin, AdminImagePreview, admin.ModelAdmin):
     list_display = ("image_preview_list_page",)
+    search_fields = ("image",)
     readonly_fields = ("image_preview_change_page",)
 
 
@@ -19,6 +20,7 @@ class RoleAdmin(admin.ModelAdmin):
         "name",
         "slug",
     )
+    search_fields = ("role",)
     formfield_overrides = {
         models.ManyToManyField: {"widget": CheckboxSelectMultiple},
     }

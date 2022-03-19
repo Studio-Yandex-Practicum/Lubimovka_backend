@@ -13,3 +13,10 @@ class AuthorForm(forms.ModelForm):
             "unique": f"Tранслит '{slug}' уже используется, необходимо ввести оригинальный вручную",
         }
         return super().clean()
+
+
+class OtherLinkForm(forms.ModelForm):
+    class Meta:
+        widgets = {
+            "link": forms.TextInput(attrs={"size": 30}),
+        }

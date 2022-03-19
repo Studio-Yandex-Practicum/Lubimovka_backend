@@ -38,5 +38,4 @@ $(document).ready(function() {
         allowClear: true,
         width: "180px",
     });
-
 });
