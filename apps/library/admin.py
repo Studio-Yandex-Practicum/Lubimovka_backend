@@ -1,7 +1,9 @@
 from django.contrib import admin
 from django.contrib.sites.models import Site
+from django.db import models
 
 from apps.core.models import Person, Role
+from apps.core.widgets import FkSelect
 from apps.library.models import (
     Achievement,
     Author,
@@ -240,6 +242,7 @@ class PerformanceAdmin(admin.ModelAdmin):
         PerformanceMediaReviewInline,
         TeamMemberInline,
     )
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 
 class ReadingAdmin(admin.ModelAdmin):
