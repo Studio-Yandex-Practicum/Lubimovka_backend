@@ -1,3 +1,4 @@
+from os import name
 from django.db import migrations
 
 
@@ -7,6 +8,8 @@ def set_default_groups(apps, schema_editor):
         [
             Group(name="admin"),
             Group(name="editor"),
+            Group(name="journalist"),
+            Group(name="observer"),
         ]
     )
 
@@ -170,13 +173,6 @@ def add_email_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
 
-    Setting.objects.create(
-        field_type="TEXT",
-        group="EMAIL",
-        settings_key="email_question_template_id",
-        text="3482754",
-        description="Id шаблона письма с вопросом",
-    )
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
@@ -449,6 +445,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ("core", "0001_initial"),
         ("sites", "0002_alter_domain_unique"),
+        ("library", "0001_initial"),
     ]
 
     operations = [

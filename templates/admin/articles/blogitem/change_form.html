@@ -1,0 +1,5 @@
+{% extends "admin/change_form.html" %}
+{% block submit_buttons_bottom %}
+  {% include "admin/includes/status_buttons.html" %}
+  {{ block.super }}
+{% endblock %}
