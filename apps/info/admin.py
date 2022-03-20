@@ -295,5 +295,5 @@ class QuestionAdmin(admin.ModelAdmin):
 
     def has_module_permission(self, request):
         if request.user.is_authenticated and (request.user.is_admin or request.user.is_superuser):
-            return True
+            return super().has_module_permission(request)
         return False

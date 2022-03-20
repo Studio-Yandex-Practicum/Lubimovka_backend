@@ -1,5 +1,6 @@
 import urllib
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify as django_slugify
 from rest_framework.response import Response
@@ -59,3 +60,30 @@ def get_user_change_perms_for_status(request, obj):
         if user_level < right_to_change:
             return False
     return True
+
+
+def get_app_list(self, request):
+    admin_site_order = settings.ADMIN_SITE_ORDER
+    app_dict = self._build_app_dict(request)
+
+    app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
+
+    for app in app_list:
+        if app["name"] in admin_site_order:
+            ordered_models = []
+            models = app["models"]
+            for model_name in admin_site_order[app["name"]]:
+                index = next((index for index, model in enumerate(models) if model["name"] == model_name), None)
+                if index is not None:
+                    ordered_models.append(models.pop(index))
+                else:
+                    raise ValueError(
+                        f"Модуль: {__name__} (index = {index}). Ошибка в описании порядка моделей в админке."
+                    )
+            ordered_models.extend(models)
+            app["models"] = ordered_models
+            continue
+
+        app["models"].sort(key=lambda x: x["name"])
+
+    return app_list

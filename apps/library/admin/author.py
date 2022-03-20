@@ -1,7 +1,10 @@
 from django.contrib import admin
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.urls import re_path
 
+from apps.core import utils
 from apps.core.models import Person
-from apps.library.forms.admin import AuthorForm
 from apps.library.models import Author, OtherLink, OtherPlay, SocialNetworkLink
 
 
@@ -40,7 +43,6 @@ class OtherPlayInline(admin.StackedInline):
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
-    form = AuthorForm
     list_display = (
         "person",
         "quote",
@@ -74,10 +76,27 @@ class AuthorAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        if not request.user.has_perm("library.can_change_author"):
+        if not request.user.has_perm("library.change_author"):
             return form
         if obj:
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
         else:
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
         return form
+
+    def get_urls(self):
+        urls = super().get_urls()
+        ajax_urls = [
+            re_path(r"\S*/ajax_author_slug/", self.author_slug),
+        ]
+        return ajax_urls + urls
+
+    def author_slug(self, request, obj_id=None):
+        person_id = request.GET.get("person")
+        person = get_object_or_404(Person, id=person_id)
+        slug = utils.slugify(person.last_name)
+        response = {"slug": slug}
+        return JsonResponse(response)
+
+    class Media:
+        js = ("admin/author_slug.js",)
