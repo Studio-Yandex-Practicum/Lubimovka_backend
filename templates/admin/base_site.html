@@ -1,17 +1,26 @@
 {% extends "admin/base_site.html" %}
 {% load static %}
+{% load cache %}
 
-{% block branding %}
-    <h1 id="site-name">
-        <img src="{% static 'logo.png' %}" alt="logo" width="70px" height="58px">
-        <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
-    </h1>
-    <h3>
-        branch: {{ branch }}<br>
-        {% if tag %}
-            tag: {{ tag }}<br>
-        {% endif %}
-        commit_date: {{ commit_date }}<br>
-        last_commit: {{ last_commit }}<br>
-    </h3>
-{% endblock %}
+<head>
+    <link rel="stylesheet" href="{% static 'admin_versioning.css'%}" type="text/css">
+</head>
+
+{% cache 500 branding %}
+    {% block branding %}
+        <h1 id="site-name">
+            <img src="{% static 'logo.png' %}" alt="logo" width="70px" height="58px">
+            <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+        </h1>
+        <div class="some admin_versioning">
+            <h3>
+                branch: {{ branch }}<br>
+                {% if tag %}
+                    tag: {{ tag }}<br>
+                {% endif %}
+                commit_date: {{ commit_date }}<br>
+                last_commit: {{ last_commit }}<br>
+            </h3>
+        </div>
+    {% endblock %}
+{% endcache %}

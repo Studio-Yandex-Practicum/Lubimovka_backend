@@ -4,7 +4,7 @@ import os
 import git
 
 
-def admin_index(request):
+def admin_versioning(request):
     extra_context = {}
     if request.path[1:6] == "admin":
         repo = git.Repo(os.getcwd())
