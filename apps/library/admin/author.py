@@ -1,5 +1,9 @@
 from django.contrib import admin
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.urls import re_path
 
+from apps.core import utils
 from apps.core.models import Person
 from apps.library.models import Author, OtherLink, OtherPlay, SocialNetworkLink
 
@@ -79,3 +83,20 @@ class AuthorAdmin(admin.ModelAdmin):
         else:
             form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
         return form
+
+    def get_urls(self):
+        urls = super().get_urls()
+        ajax_urls = [
+            re_path(r"\S*/ajax_author_slug/", self.author_slug),
+        ]
+        return ajax_urls + urls
+
+    def author_slug(self, request, obj_id=None):
+        person_id = request.GET.get("person")
+        person = get_object_or_404(Person, id=person_id)
+        slug = utils.slugify(person.last_name)
+        response = {"slug": slug}
+        return JsonResponse(response)
+
+    class Media:
+        js = ("admin/author_slug.js",)
