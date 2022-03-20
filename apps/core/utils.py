@@ -73,14 +73,13 @@ def get_app_list(self, request):
             ordered_models = []
             models = app["models"]
             for model_name in admin_site_order[app["name"]]:
-                index = -1
-                for i, model in enumerate(models):
-                    if model["name"] == model_name:
-                        index = i
-                        break
-                if index == -1:
-                    raise ValueError("Ошибка в описании порядка моделей в админке.")
-                ordered_models.append(models.pop(index))
+                index = next((index for index, model in enumerate(models) if model["name"] == model_name), None)
+                if index is not None:
+                    ordered_models.append(models.pop(index))
+                else:
+                    raise ValueError(
+                        f"Модуль: {__name__} (index = {index}). Ошибка в описании порядка моделей в админке."
+                    )
             ordered_models.extend(models)
             app["models"] = ordered_models
             continue
