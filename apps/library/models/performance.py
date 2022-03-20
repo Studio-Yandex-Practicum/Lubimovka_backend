@@ -24,6 +24,7 @@ class Performance(BaseModel):
     play = models.ForeignKey(
         Play,
         on_delete=models.PROTECT,
+        limit_choices_to={'published': True},
         related_name="performances",
         verbose_name="Пьеса",
     )
