@@ -65,8 +65,11 @@ class ParticipationApplicationFestival(BaseModel):
         validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PARTICIPATION),),
         verbose_name="Файл",
         upload_to=generate_upload_path,
-        max_length=256,
         help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
+    )
+    file_in_storage = models.URLField(
+        verbose_name="Ссылка для скачивания файла с Диска",
+        max_length=512,
     )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
@@ -99,5 +102,12 @@ class ParticipationApplicationFestival(BaseModel):
 
     def save(self, *args, **kwargs):
         """Save generated filename."""
-        self.file.name = self.generate_filename()
+        if self.file:
+            self.file.name = self.generate_filename()
         super().save(*args, **kwargs)
+
+    @property
+    def file_url(self):
+        if self.file:
+            return self.file.url
+        return self.file_in_storage

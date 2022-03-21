@@ -38,21 +38,6 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         domain = self.request.build_absolute_uri()
 
         yandex_disk_export(y, instance)
-        # cwd = str(os.getcwd())
-        # name = str(instance.file).split("/")[-1]
-        # name = name.replace("\\", '_').replace("/", '_')
-        # try:
-        #     y.mkdir(f"/{str(instance.year)}")
-        # except yadisk.exceptions.PathExistsError:
-        #     pass
-        # to_dir = f"/{str(instance.year)}/{name}"
-        # from_dir = cwd.replace("\\", '/') + "/media/" + str(instance.file)
-        # try:
-        #     y.upload(from_dir, to_dir)
-        # except yadisk.exceptions.PathExistsError:
-        #     pass
-        # print(y.exists(f"/{str(instance.year)}"))
-        # print(y.copy(f"/{str(instance.year)}"))
 
         try:
             export_success = gs.export(instance=instance, domain=domain)

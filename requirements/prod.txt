@@ -68,3 +68,4 @@ uritemplate==4.1.1; python_version >= "3.6"
 urllib3==1.26.8; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version < "4" and python_version >= "3.5"
 webencodings==0.5.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
 xhtml2pdf==0.2.5
+yadisk==1.2.15; python_version >= "3"

@@ -44,6 +44,7 @@ def yandex_disk_export(y, instance):
         pass
     if y.exists(to_dir):
         download_link = y.get_download_link(to_dir)
-        print(instance.file.url)
-        instance.file.url = download_link
+        instance.file.delete()
+        instance.file_in_storage = download_link
+        instance.saved_to_storage = True
         instance.save()

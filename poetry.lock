@@ -1247,10 +1247,21 @@ python-bidi = ">=0.4.2"
 reportlab = ">=3.3.0"
 six = "*"
 
+[[package]]
+name = "yadisk"
+version = "1.2.15"
+description = "Библиотека-клиент REST API Яндекс.Диска / Yandex.Disk REST API client library"
+category = "main"
+optional = false
+python-versions = ">=3"
+
+[package.dependencies]
+requests = "*"
+
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "dfe488a4ce4ca1b820cb032f3af4a7517b8c09fa7671754926c41ea5a893c579"
+content-hash = "34bc7c6536060bdf1ad37e2e5ae08db1c23b568cb313c9588e627408761c9b79"
 
 [metadata.files]
 appnope = [
@@ -1951,4 +1962,8 @@ werkzeug = [
 ]
 xhtml2pdf = [
     {file = "xhtml2pdf-0.2.5.tar.gz", hash = "sha256:6797e974fac66f0efbe927c1539a2756ca4fe8777eaa5882bac132fc76b39421"},
+]
+yadisk = [
+    {file = "yadisk-1.2.15-py3-none-any.whl", hash = "sha256:ea45dc57dc9a91795e08849fb07d39ce04f2130f09af55dc4980e75786dcba49"},
+    {file = "yadisk-1.2.15.tar.gz", hash = "sha256:73312c1263d660ac79401400e65c7b7a93d90f132d33107e25c8ac88ebf01110"},
 ]
