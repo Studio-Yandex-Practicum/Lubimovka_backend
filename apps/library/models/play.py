@@ -1,5 +1,7 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
@@ -33,10 +35,20 @@ class ProgramType(BaseModel):
 
 
 class Play(BaseModel):
+    class PlayType(models.TextChoices):
+        MAIN = "MAIN", _("Пьесы Любимовки")
+        OTHER = "OTHER", _("Другие пьесы")
+
     name = models.CharField(
         max_length=70,
         unique=True,
         verbose_name="Название пьесы",
+    )
+    play_type = models.CharField(
+        choices=PlayType.choices,
+        default=PlayType.MAIN,
+        max_length=15,
+        verbose_name="Тип пьесы",
     )
     city = models.CharField(
         max_length=200,
@@ -54,6 +66,7 @@ class Play(BaseModel):
         max_length=200,
         upload_to="plays",
         verbose_name="Текст пьесы",
+        blank=True,
     )
     url_reading = models.URLField(
         max_length=200,
@@ -67,16 +80,25 @@ class Play(BaseModel):
         on_delete=models.PROTECT,
         related_name="plays",
         verbose_name="Программа",
+        blank=True,
+        null=True,
     )
     festival = models.ForeignKey(
         Festival,
         on_delete=models.PROTECT,
         related_name="plays",
         verbose_name="Фестиваль",
+        blank=True,
+        null=True,
     )
     published = models.BooleanField(
         verbose_name="Опубликовано",
         default=True,
+    )
+    link = models.URLField(
+        max_length=500,
+        verbose_name="Ссылка",
+        blank=True,
     )
 
     class Meta:
@@ -91,3 +113,16 @@ class Play(BaseModel):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self):
+        if self.play_type == self.PlayType.MAIN:
+            self.link = ""
+        if self.play_type == self.PlayType.OTHER:
+            if self.link == "":
+                raise ValidationError("Необходимо указать ссылку на другую пьесу")
+            self.published = False
+        return super().clean()
