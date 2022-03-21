@@ -35,9 +35,10 @@ LOGGING_SETTINGS = {
             "filters": ["require_debug_true"],
             "class": "config.logging.logger_handler.TimedRotatingFileHandlerWithZip",
             "filename": os.path.join(DEBUG_LOGS_DIR, "debug.log"),
-            "when": "S",
-            "interval": 10,
-            "backupCount": 3,
+            "when": "midnight",
+            "interval": 1,
+            "backupCount": 5,
+            "oldbackupCount": 60,
             "formatter": "verbose",
         },
         "errors_to_file": {
@@ -46,7 +47,8 @@ LOGGING_SETTINGS = {
             "filename": os.path.join(ERROR_LOGS_DIR, "error.log"),
             "when": "midnight",
             "interval": 1,
-            "backupCount": 15,
+            "backupCount": 5,
+            "oldbackupCount": 60,
             "formatter": "verbose",
         },
         "console": {
