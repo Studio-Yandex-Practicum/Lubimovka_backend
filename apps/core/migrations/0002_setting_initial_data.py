@@ -177,13 +177,6 @@ def add_email_settings(apps, schema_editor):
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
-        settings_key="email_question_template_id",
-        text="3482754",
-        description="Id шаблона письма с вопросом",
-    )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="EMAIL",
         settings_key="email_send_from",
         text="lubimovka-2021@yandex.ru",
         description="Почта для отправки вопроса",
