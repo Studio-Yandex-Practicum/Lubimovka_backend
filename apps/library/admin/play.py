@@ -5,11 +5,15 @@ from apps.library.models import Author, Play
 
 class AuthorInline(admin.TabularInline):
     model = Author.plays.through
+    search_fields = ("author__person__last_name",)
     autocomplete_fields = ("author",)
     extra = 1
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
     classes = ["collapse"]
+
+    def get_ordering(self, request):
+        return ["author__person__last_name"]
 
 
 @admin.register(Play)
