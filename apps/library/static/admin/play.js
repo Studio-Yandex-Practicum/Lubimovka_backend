@@ -10,27 +10,23 @@ $(document).ready(function(jQuery) {
         let festivalField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-festival');
         let publishedCheckBox = $('#play_form > div > fieldset.module.aligned > div.form-row.field-published');
 
-        linkField.hide(1);
+        var mainFieldsArray = [cityField, yearField, urlDownloadField, urlReadingField, programField, festivalField, publishedCheckBox]
+
+        var duration = 1
+
+        linkField.hide(duration);
 
         function toggleLink(inputType) {
             if (inputType == "MAIN") {
-                cityField.slideDown(1);
-                yearField.slideDown(1);
-                urlDownloadField.slideDown(1);
-                urlReadingField.slideDown(1);
-                programField.slideDown(1);
-                festivalField.slideDown(1);
-                publishedCheckBox.slideDown(1);
-                linkField.slideUp(1);
+                mainFieldsArray.forEach(function(item) {
+                    item.slideDown(duration);
+                });
+                linkField.slideUp(duration);
             } else {
-            cityField.slideUp(1);
-            yearField.slideUp(1);
-            urlDownloadField.slideUp(1);
-            urlReadingField.slideUp(1);
-            programField.slideUp(1);
-            festivalField.slideUp(1);
-            publishedCheckBox.slideUp(1);
-            linkField.slideDown(1);
+                mainFieldsArray.forEach(function(item) {
+                    item.slideUp(duration);
+                });
+            linkField.slideDown(duration);
             }
         }
 
