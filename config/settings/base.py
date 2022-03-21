@@ -196,3 +196,33 @@ CKEDITOR_CONFIGS = {
 }
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
+
+MAILJET_TEMPLATE_ID = env("MAILJET_TEMPLATE_ID", default="0000000")
+
+ADMIN_SITE_ORDER = {
+    "Библиотека": [
+        "Авторы",
+        "Пьесы",
+        "Программы",
+        "Спектакли",
+        "Мастер-классы",
+        "Читки",
+    ],
+    "Информация": [
+        "Фестивали",
+        "Пресс-релизы",
+        "Волонтёры фестиваля",
+        "Команда фестиваля",
+        "Попечители фестиваля",
+        "Арт-дирекция фестиваля",
+        "Партнеры",
+        "Площадки",
+        "Вопросы или предложения",
+    ],
+    "Общие ресурсы приложений": [
+        "Люди",
+    ],
+    "Пользователи": [
+        "Пользователи",
+    ]
+}

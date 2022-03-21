@@ -2,6 +2,7 @@ import pytest
 from django.conf import settings
 from rest_framework.test import APIClient
 
+from apps.afisha.factories import EventFactory
 from apps.core.factories import ImageFactory, PersonFactory
 from apps.info.factories import FestivalFactory
 from apps.library.factories import PerformanceFactory, PlayFactory
@@ -42,3 +43,8 @@ def persons():
 @pytest.fixture
 def performances(persons, plays):
     return PerformanceFactory.complex_create(3)
+
+
+@pytest.fixture
+def events(performances):
+    return EventFactory.create_batch(3)

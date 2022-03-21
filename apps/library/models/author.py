@@ -49,6 +49,12 @@ class Author(BaseModel):
         blank=True,
         verbose_name="Пьесы автора",
     )
+    slug = models.SlugField(
+        "Транслит фамилии для формирования адресной строки",
+        unique=True,
+        help_text="Формируется автоматически, может быть изменен вручную",
+        error_messages={"unique": "Такой транслит уже используется, введите иной"},
+    )
 
     class Meta:
         ordering = ("person__last_name",)
