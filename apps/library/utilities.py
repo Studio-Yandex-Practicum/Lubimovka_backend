@@ -42,5 +42,8 @@ def yandex_disk_export(y, instance):
         y.upload(from_dir, to_dir)
     except yadisk.exceptions.PathExistsError:
         pass
-    print(y.exists(f"/{str(instance.year)}"))
-    print(y.copy(f"/{str(instance.year)}"))
+    if y.exists(to_dir):
+        download_link = y.get_download_link(to_dir)
+        print(instance.file.url)
+        instance.file.url = download_link
+        instance.save()

@@ -65,6 +65,7 @@ class ParticipationApplicationFestival(BaseModel):
         validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PARTICIPATION),),
         verbose_name="Файл",
         upload_to=generate_upload_path,
+        max_length=256,
         help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
     )
 
