@@ -7,10 +7,8 @@ from django.template.defaultfilters import slugify as django_slugify
 from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
-from config.logging import LOGGING_CONFIG
 
-logging.config.dictConfig(LOGGING_CONFIG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("django")
 
 
 def slugify(name):
