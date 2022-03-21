@@ -29,7 +29,7 @@ def role_translator():
 
 @pytest.fixture
 def blog_item_with_persons(three_persons, role_text, role_translator):
-    blog_item = BlogItemFactory(is_draft=False)
+    blog_item = BlogItemFactory(status="PUBLISHED")
     first_person, second_person, third_person = three_persons
     BlogPersonFactory(blog=blog_item, person=first_person, role=role_text)
     BlogPersonFactory(blog=blog_item, person=second_person, role=role_text)

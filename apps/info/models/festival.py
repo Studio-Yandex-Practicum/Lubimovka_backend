@@ -39,6 +39,7 @@ class FestivalTeamMember(BaseModel):
     class Meta:
         verbose_name = "Команда фестиваля"
         verbose_name_plural = "Команды фестиваля"
+        ordering = ("person__last_name", "person__first_name")
         constraints = [
             UniqueConstraint(
                 fields=("person", "team"),
@@ -72,6 +73,20 @@ class FestivalTeamMember(BaseModel):
         if self.is_pr_manager:
             raise ValidationError("Перед удалением назначьте на должность PR-менеджера другого человека")
         super().delete(*args, **kwargs)
+
+
+class ArtTeamMember(FestivalTeamMember):
+    class Meta:
+        proxy = True
+        verbose_name = "Арт-дирекция фестиваля"
+        verbose_name_plural = "Арт-дирекция фестиваля"
+
+
+class FestTeamMember(FestivalTeamMember):
+    class Meta:
+        proxy = True
+        verbose_name = "Команда фестиваля"
+        verbose_name_plural = "Команда фестиваля"
 
 
 class Festival(BaseModel):
@@ -125,8 +140,9 @@ class Festival(BaseModel):
         verbose_name="Ссылка на видео о фестивале",
     )
     blog_entries = models.CharField(
-        max_length=10,
+        max_length=100,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
+        blank=True,
     )  # При изменении - скорректировать фабрику в части создания данного поля
     press_release_image = models.ImageField(
         upload_to="images/info/press_releases",
@@ -153,8 +169,8 @@ class Festival(BaseModel):
         return super().save(*args, **kwargs)
 
     def clean(self):
-        if self.end_date and self.start_date and self.end_date < self.start_date:
-            raise ValidationError({"end_date": _("Дата окончания фестиваля не может быть раньше даты его начала.")})
+        if self.end_date and self.start_date and self.end_date <= self.start_date:
+            raise ValidationError({"end_date": _("Дата окончания фестиваля должна быть позже даты его начала.")})
         return super().clean()
 
 

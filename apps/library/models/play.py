@@ -41,10 +41,14 @@ class Play(BaseModel):
     city = models.CharField(
         max_length=200,
         verbose_name="Город",
+        blank=True,
+        null=True,
     )
     year = models.PositiveSmallIntegerField(
         validators=[year_validator],
         verbose_name="Год написания пьесы",
+        blank=True,
+        null=True,
     )
     url_download = models.FileField(
         max_length=200,
@@ -70,9 +74,9 @@ class Play(BaseModel):
         related_name="plays",
         verbose_name="Фестиваль",
     )
-    is_draft = models.BooleanField(
+    published = models.BooleanField(
+        verbose_name="Опубликовано",
         default=True,
-        verbose_name="Черновик",
     )
 
     class Meta:
