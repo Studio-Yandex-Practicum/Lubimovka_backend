@@ -63,16 +63,20 @@ def get_user_change_perms_for_status(request, obj):
 
 
 def get_app_list(self, request):
-    admin_site_order = settings.ADMIN_SITE_ORDER
+    # try:
+    #     admin_site_apps_order = settings.ADMIN_SITE_APPS_ORDER
+    # except AttributeError:
+    #     print("no")
+    admin_site_models_order = settings.ADMIN_SITE_MODELS_ORDER
     app_dict = self._build_app_dict(request)
 
     app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
 
     for app in app_list:
-        if app["name"] in admin_site_order:
+        if app["name"] in admin_site_models_order:
             ordered_models = []
             models = app["models"]
-            for model_name in admin_site_order[app["name"]]:
+            for model_name in admin_site_models_order[app["name"]]:
                 index = next((index for index, model in enumerate(models) if model["name"] == model_name), None)
                 if index is not None:
                     ordered_models.append(models.pop(index))
