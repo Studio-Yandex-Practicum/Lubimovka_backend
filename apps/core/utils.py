@@ -74,15 +74,18 @@ def get_app_list(self, request):
     app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
 
     for app in app_list:
-        if app["name"] in admin_site_order:
+        app_name = app["name"]
+        if app_name in admin_site_order:
             ordered_models = []
             models = app["models"]
-            for model_name in admin_site_order[app["name"]]:
+            for model_name in admin_site_order[app_name]:
                 index = next((index for index, model in enumerate(models) if model["name"] == model_name), None)
                 if index is not None:
                     ordered_models.append(models.pop(index))
                 else:
-                    logger.critical(f"Ошибка в описании порядка моделей в админке. {model_name} не найден.")
+                    logger.critical(
+                        f"Ошибка в описании порядка моделей в админке. {model_name} не найдено в {app_name}"
+                    )
             ordered_models.extend(models)
             app["models"] = ordered_models
             continue
