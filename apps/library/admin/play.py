@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from apps.library.models import Author, Play
 from apps.library.forms import RequiredInlineFormSet
+from apps.library.models import Author, Play
 
 
 class AuthorInline(admin.TabularInline):
