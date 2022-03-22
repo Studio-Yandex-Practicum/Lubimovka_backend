@@ -10,12 +10,16 @@
         <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
     </h1>
     <div style="position: fixed; right: 20px; bottom: 20px; color: #00000024;">
-        <h3>branch: {{ branch }}<br>
-        {% if tag %}
+        <h3>
+            {% if branch != "develop" or branch != "master" %}
+                branch: {{ branch }}<br>
+            {% endif %}
+            {% if tag %}
                 tag: {{ tag }}<br>
             {% endif %}
-        commit_date: {{ commit_date }}<br>
-        last_commit: {{ last_commit }}</h3>
+            commit_date: {{ commit_date }}<br>
+            last_commit: {{ last_commit }}
+        </h3>
     </div>
 {% endblock %}
 {% endcache %}
