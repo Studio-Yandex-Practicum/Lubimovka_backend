@@ -120,6 +120,12 @@ class Play(BaseModel):
 
     def clean(self):
         if self.play_type == self.PlayType.MAIN:
+            if not self.url_download.name:
+                raise ValidationError("Для пьесы Любимовки неоходимо загрузить файл")
+            if self.program is None:
+                raise ValidationError("У пьесы Любимовки должна быть выбрана программа")
+            if self.festival is None:
+                raise ValidationError("У пьесы Любимовки должен быть фестиваль")
             self.link = ""
         if self.play_type == self.PlayType.OTHER:
             if self.link == "":

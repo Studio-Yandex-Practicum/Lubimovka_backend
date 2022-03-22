@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from apps.core.models import Person
-from apps.library.models import Author, OtherLink, OtherPlay, SocialNetworkLink
+from apps.library.models import Author, OtherLink, SocialNetworkLink
 
 
 class AchievementInline(admin.TabularInline):
@@ -18,6 +18,12 @@ class PlayInline(admin.TabularInline):
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ["collapse"]
+    readonly_fields = ("play_type",)
+
+    def play_type(self, obj):
+        return obj.play.get_play_type_display()
+
+    play_type.short_description = "Тип пьесы"
 
 
 class SocialNetworkLinkInline(admin.TabularInline):
@@ -30,11 +36,6 @@ class OtherLinkInline(admin.TabularInline):
     model = OtherLink
     extra = 1
     classes = ["collapse"]
-
-
-class OtherPlayInline(admin.StackedInline):
-    model = OtherPlay
-    extra = 1
 
 
 @admin.register(Author)
@@ -50,14 +51,12 @@ class AuthorAdmin(admin.ModelAdmin):
         PlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
-        OtherPlayInline,
     )
     exclude = (
         "achievements",
         "plays",
         "social_network_links",
         "other_links",
-        "other_plays_links",
     )
     search_fields = (
         "biography",

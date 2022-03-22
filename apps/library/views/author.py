@@ -20,7 +20,6 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "social_networks",
                 "other_links",
                 "plays",
-                "other_plays",
             ),
             slug=self.kwargs["slug"],
         )
