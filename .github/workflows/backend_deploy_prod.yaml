@@ -158,6 +158,8 @@ jobs:
             echo URL=${{ secrets.URL }} >> .env-prod
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-prod
 
+            echo YNDX_DISK=${{ secrets.YNDX_DISK }} >> .env-prod
+
             docker network create prod_db_network || true
             docker network create prod_swag_network || true
 

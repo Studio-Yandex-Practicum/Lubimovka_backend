@@ -158,6 +158,8 @@ jobs:
             echo URL=${{ secrets.URL }} >> .env-stage
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-stage
 
+            echo YNDX_DISK=${{ secrets.YNDX_DISK }} >> .env-stage
+
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create stage_db_network || true
             docker network create stage_swag_network || true
