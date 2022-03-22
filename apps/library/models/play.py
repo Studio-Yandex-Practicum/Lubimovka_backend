@@ -4,6 +4,7 @@ from django.db.models import UniqueConstraint
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.info.models import Festival
+from apps.library.models import Author
 from apps.library.validators import year_validator
 
 
@@ -62,8 +63,9 @@ class Play(BaseModel):
         verbose_name="Ссылка на читку",
         unique=True,
     )
-    program = models.ForeignKey(
-        ProgramType,
+    program = models.ManyToManyField(
+        to=Author,
+        through="ProgramType",
         on_delete=models.PROTECT,
         related_name="plays",
         verbose_name="Программа",

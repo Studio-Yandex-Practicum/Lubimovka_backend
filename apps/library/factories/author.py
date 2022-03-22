@@ -7,18 +7,9 @@ from apps.core import utils
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.info.models import Festival
-from apps.library.models import Achievement, Author, OtherLink, OtherPlay, Play, ProgramType, SocialNetworkLink
+from apps.library.models import Author, OtherLink, OtherPlay, Play, ProgramType, SocialNetworkLink
 
 fake = Faker("ru_RU")
-
-
-class AchievementFactory(factory.django.DjangoModelFactory):
-    """Create Achievement object."""
-
-    class Meta:
-        model = Achievement
-
-    tag = factory.Faker("word", locale="ru_RU")
 
 
 @restrict_factory(general=(Author,))
@@ -76,12 +67,11 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     """Create Author object.
 
     Parameters:
-    1. `add_several_achievement`: create <int> `Achievement` objects, link to `Author`.
-    2. `add_several_social_network_link`:  create <int> `SocialNetworkLink` objects, link to `Author`.
-    3. `add_several_other_link`: create <int> `OtherLink` objects, link to `Author`.
-    4. `add_several_other_play`: create <int> `OtherPlay` objects, link to `Author`.
-    5. `plays`: wait for Iterable[Play]. Link the `Play` objects to `Author`.
-    6. `plays__num`: select <num> `Play` objects and link them to `Author`.
+    1. `add_several_social_network_link`:  create <int> `SocialNetworkLink` objects, link to `Author`.
+    2. `add_several_other_link`: create <int> `OtherLink` objects, link to `Author`.
+    3. `add_several_other_play`: create <int> `OtherPlay` objects, link to `Author`.
+    4. `plays`: wait for Iterable[Play]. Link the `Play` objects to `Author`.
+    5. `plays__num`: select <num> `Play` objects and link them to `Author`.
 
     Class methods:
     1. `complex_create`:  shortcut. Create `Author` with fully populated fields.
@@ -89,7 +79,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     The fields `city`, `email`, `image` has to be filled in the `Person` object.
     Otherwise, it should not be associated with the `Author`.
 
-    Author object is linked to `Achievement`, `SocialNetworkLink`, `OtherLink`,
+    Author object is linked to `SocialNetworkLink`, `OtherLink`,
     `OtherPlay` objects with m2m connection. These models aren't used elsewhere.
     It's ok to create these objects with `Author`.
     """
@@ -124,16 +114,6 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             "`Author` has to have these fields filled in."
         )
         return super()._generate(strategy, params)
-
-    @factory.post_generation
-    def add_achievement(self, created: bool, count: int, **kwargs):
-        """Create an Achievement object and link to self."""
-        if not created:
-            return
-        if count:
-            achievement_count = count
-            achievements = AchievementFactory.create_batch(achievement_count)
-            self.achievements.add(*achievements)
 
     @factory.post_generation
     def add_social_network_link(self, created: bool, count: int, **kwargs):
@@ -193,7 +173,6 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         """Create Author object with fully populated fields."""
         return cls.create_batch(
             count,
-            add_achievement=3,
             add_social_network_link=3,
             add_other_link=3,
             add_other_play=3,

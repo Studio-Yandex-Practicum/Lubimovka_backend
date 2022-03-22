@@ -91,7 +91,7 @@ jobs:
         with:
           ref: master
       -
-        name: Create SSH key 
+        name: Create SSH key
         # (SSH_KNOWN_HOSTS=ssh-keyscan -H сервер, SSH_PRIVATE_KEY - ключ с ПК, которому разрешен вход)
         run: |
           mkdir -p ~/.ssh

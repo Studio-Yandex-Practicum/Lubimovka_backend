@@ -11,8 +11,7 @@ class Command(BaseCommand):
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:
             editors_permissions = Permission.objects.filter(
-                Q(codename__endswith="_achievement")
-                | Q(codename__endswith="_author")
+                Q(codename__endswith="_author")
                 | Q(codename__endswith="_banner")
                 | Q(codename__endswith="_blogitem")
                 | Q(codename__endswith="_blogitemcontent")

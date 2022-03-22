@@ -1,4 +1,4 @@
-from .author import Achievement, Author, OtherLink, OtherPlay, SocialNetworkLink
+from .author import Author, OtherLink, OtherPlay, SocialNetworkLink
 from .master_class import MasterClass
 from .participation_application import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION, ParticipationApplicationFestival
 from .performance import Performance, PerformanceMediaReview, PerformanceReview
@@ -7,7 +7,6 @@ from .reading import Reading
 from .team_member import TeamMember
 
 __all__ = (
-    Achievement,
     Author,
     MasterClass,
     OtherLink,

@@ -1,32 +1,29 @@
-from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import viewsets
+from drf_spectacular.utils import extend_schema
+from rest_framework import mixins, viewsets
+from rest_framework.generics import get_object_or_404
+from rest_framework.response import Response
+from rest_framework.settings import api_settings
+from rest_framework.views import APIView
 
 from apps.library.filters import AuthorFilter
 from apps.library.models import Author
 from apps.library.serializers import AuthorListSerializer, AuthorRetrieveSerializer
 
 
-class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Author.objects.select_related("person").all()
+class AuthorViewSet(mixins.ListModelMixin, APIView, viewsets.GenericViewSet):
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
+    queryset = Author.objects.select_related("person")
+    serializer = AuthorListSerializer(queryset, many=True)
     filter_backends = (DjangoFilterBackend,)
     filterset_class = AuthorFilter
-    lookup_field = "slug"
 
-    def get_object(self):
-        author = get_object_or_404(
-            Author.objects.prefetch_related(
-                "achievements",
-                "social_networks",
-                "other_links",
-                "plays",
-                "other_plays",
-            ),
-            slug=self.kwargs["slug"],
-        )
-        return author
 
-    def get_serializer_class(self):
-        if self.action == "retrieve":
-            return AuthorRetrieveSerializer
-        return AuthorListSerializer
+class AuthorRetrieveViewSet(APIView):
+    """Returns a list of authors."""
+
+    @extend_schema(responses=AuthorRetrieveSerializer)
+    def get(self, request, *args, pk, **kwargs):
+        author = get_object_or_404(Author, pk=pk)
+        author_serializer = AuthorRetrieveSerializer(author, many=True)
+        return Response(author_serializer.data)

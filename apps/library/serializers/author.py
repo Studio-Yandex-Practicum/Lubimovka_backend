@@ -37,7 +37,6 @@ class SocialNetworkSerializer(serializers.ModelSerializer):
 class AuthorRetrieveSerializer(serializers.ModelSerializer):
     name = serializers.SlugRelatedField(source="person", slug_field="full_name", read_only=True)
     city = serializers.SlugRelatedField(source="person", slug_field="city", read_only=True)
-    achievements = serializers.SlugRelatedField(slug_field="tag", read_only=True, many=True)
     social_networks = SocialNetworkSerializer(many=True)
     email = serializers.SlugRelatedField(source="person", slug_field="email", read_only=True)
     other_links = OtherLinkSerializer(many=True)
@@ -53,7 +52,6 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
             "city",
             "quote",
             "biography",
-            "achievements",
             "social_networks",
             "email",
             "other_links",
