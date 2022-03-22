@@ -1,3 +1,4 @@
+import logging
 import urllib
 
 from django.conf import settings
@@ -6,6 +7,10 @@ from django.template.defaultfilters import slugify as django_slugify
 from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
+from config.logging import LOGGING_CONFIG
+
+logging.config.dictConfig(LOGGING_CONFIG)
+logger = logging.getLogger(__name__)
 
 
 def slugify(name):
@@ -62,32 +67,69 @@ def get_user_change_perms_for_status(request, obj):
     return True
 
 
+def manual_order_app_list(app_dict, admin_site_apps_order):
+    app_list = []
+    apps = list(app_dict.values())
+    for app_name in admin_site_apps_order:
+        index = next((index for index, app in enumerate(apps) if app["name"] == app_name), None)
+        if index is not None:
+            app_list.append(apps.pop(index))
+        else:
+            log_apps = [app["name"] for app in apps]
+            logger.critical(
+                f'Ошибка в описании порядка категорий в админке. "{app_name}" не найдено'
+                f"\nДоступные категории: {log_apps}"
+            )
+
+    app_list.extend(apps)
+    return app_list
+
+
+def manual_order_model_list(app, admin_site_models_order):
+    app_name = app["name"]
+    if app_name in admin_site_models_order:
+        ordered_models = []
+        models = app["models"]
+        for model_name in admin_site_models_order[app_name]:
+            index = next((index for index, model in enumerate(models) if model["name"] == model_name), None)
+            if index is not None:
+                ordered_models.append(models.pop(index))
+            else:
+                log_models = [model["name"] for model in models]
+                logger.critical(
+                    f"Ошибка в описании порядка моделей в админке. "
+                    f'"{model_name}" не найдено в "{app_name}"'
+                    f'\nДоступные модели категории "{app_name}": {log_models}'
+                )
+        ordered_models.extend(models)
+        return ordered_models
+
+    app["models"].sort(key=lambda x: x["name"])
+    return app["models"]
+
+
 def get_app_list(self, request):
-    # try:
-    #     admin_site_apps_order = settings.ADMIN_SITE_APPS_ORDER
-    # except AttributeError:
-    #     print("no")
-    admin_site_models_order = settings.ADMIN_SITE_MODELS_ORDER
+    try:
+        admin_site_apps_order = settings.ADMIN_SITE_APPS_ORDER
+    except AttributeError:
+        admin_site_apps_order = None
+
+    try:
+        admin_site_models_order = settings.ADMIN_SITE_MODELS_ORDER
+    except AttributeError:
+        admin_site_models_order = None
+
     app_dict = self._build_app_dict(request)
 
-    app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
+    if admin_site_apps_order is None:
+        app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
+    else:
+        app_list = manual_order_app_list(app_dict, admin_site_apps_order)
 
     for app in app_list:
-        if app["name"] in admin_site_models_order:
-            ordered_models = []
-            models = app["models"]
-            for model_name in admin_site_models_order[app["name"]]:
-                index = next((index for index, model in enumerate(models) if model["name"] == model_name), None)
-                if index is not None:
-                    ordered_models.append(models.pop(index))
-                else:
-                    raise ValueError(
-                        f"Модуль: {__name__} (index = {index}). Ошибка в описании порядка моделей в админке."
-                    )
-            ordered_models.extend(models)
-            app["models"] = ordered_models
-            continue
-
-        app["models"].sort(key=lambda x: x["name"])
+        if admin_site_models_order is None:
+            app["models"].sort(key=lambda x: x["name"])
+        else:
+            app["models"] = manual_order_model_list(app, admin_site_models_order)
 
     return app_list
