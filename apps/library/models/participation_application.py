@@ -67,7 +67,7 @@ class ParticipationApplicationFestival(BaseModel):
         upload_to=generate_upload_path,
         help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
     )
-    file_in_storage = models.URLField(
+    url_file_in_storage = models.URLField(
         verbose_name="Ссылка для скачивания файла с Диска",
         max_length=512,
     )
@@ -110,4 +110,4 @@ class ParticipationApplicationFestival(BaseModel):
     def file_url(self):
         if self.file:
             return self.file.url
-        return self.file_in_storage
+        return self.url_file_in_storage

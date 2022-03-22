@@ -12,14 +12,14 @@ from apps.library.schema.schema_extension import (
 )
 from apps.library.serializers.participation import ParticipationSerializer
 from apps.library.services.spreadsheets import GoogleSpreadsheets
-from apps.library.utilities import yandex_disk_export
+from apps.library.services.yandex_disk_export import yandex_disk_export
 from config.logging import LOGGING_CONFIG
 
 logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 gs = GoogleSpreadsheets()
-y = yadisk.YaDisk(token="AQAAAAAoiXEIAAfBYfQtH0Dmg05Zpw0i8B-_1_Y")
+yndx = yadisk.YaDisk(token="AQAAAABd9Kl7AAfB0fMaFfzwSkZRlPYfF3vu2f4")  # жду пока в акшнс добавят
 
 
 @extend_schema(
@@ -37,7 +37,7 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         instance = serializer.save()
         domain = self.request.build_absolute_uri()
 
-        yandex_disk_export(y, instance)
+        yandex_disk_export(yndx, instance)
 
         try:
             export_success = gs.export(instance=instance, domain=domain)

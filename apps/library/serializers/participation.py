@@ -17,8 +17,7 @@ class ParticipationSerializer(serializers.ModelSerializer):
         max_value=timezone.now().year,
         label="Год рождения",
     )
-    file_in_storage = serializers.URLField(required=False)
-    file = serializers.FileField(required=False)
+    url_file_in_storage = serializers.URLField(read_only=True)
 
     class Meta:
         model = ParticipationApplicationFestival
