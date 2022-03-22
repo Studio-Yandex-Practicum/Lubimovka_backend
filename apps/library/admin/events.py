@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Role
@@ -15,11 +16,19 @@ from apps.library.models import (
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline):
     model = Performance.images_in_block.through
+    readonly_fields = ("preview",)
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
     max_num = 8
     classes = ["collapse"]
+
+    def preview(self, obj):
+        url = obj.image.image.url
+        return format_html(f'<img src="{url}" width="200" height="100" style="object-fit: contain;" />')
+
+    preview.short_description = "Превью"
+    Performance.images_in_block.through.__str__ = lambda self: ""
 
 
 class PerformanceMediaReviewInline(InlineReadOnlyMixin, admin.TabularInline):
