@@ -5,6 +5,9 @@ from django.forms.widgets import CheckboxSelectMultiple
 
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 from apps.core.models import Image, Role, RoleType
+from apps.core.utils import get_app_list
+
+admin.AdminSite.get_app_list = get_app_list
 
 
 @admin.register(Image)
