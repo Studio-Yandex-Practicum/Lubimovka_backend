@@ -44,6 +44,7 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
         "person",
         "role",
     )
+    autocomplete_fields = ("person",)
     extra = 0
     classes = ["collapse"]
 
@@ -66,6 +67,7 @@ class MasterClassAdmin(admin.ModelAdmin):
     list_display = ("name",)
     exclude = ("events",)
     search_fields = (
+        "project",
         "play__name",
         "name",
     )

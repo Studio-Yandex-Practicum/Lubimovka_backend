@@ -80,6 +80,10 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
         "image",
         "image_preview_list_page",
     )
+    search_fields = (
+        "first_name",
+        "last_name",
+    )
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
 
@@ -115,6 +119,7 @@ class VolunteerAdmin(admin.ModelAdmin):
 
 class VolunteerInline(admin.TabularInline):
     model = Volunteer
+    autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
     verbose_name = "Волонтёр"
     verbose_name_plural = "Волонтёры"
@@ -139,6 +144,7 @@ class VolunteerInline(admin.TabularInline):
 
 class FestivalImagesInline(admin.TabularInline):
     model = Festival.images.through
+    autocomplete_fields = ("image",)
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1

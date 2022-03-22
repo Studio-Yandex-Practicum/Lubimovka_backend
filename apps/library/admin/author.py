@@ -5,11 +5,18 @@ from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
-from apps.library.models import Author, OtherLink, OtherPlay, SocialNetworkLink
+from apps.library.forms.admin import OtherLinkForm
+from apps.library.models import Achievement, Author, OtherLink, OtherPlay, SocialNetworkLink
+
+
+@admin.register(Achievement)
+class AchievementAdmin(admin.ModelAdmin):
+    search_fields = ("tag",)
 
 
 class AchievementInline(admin.TabularInline):
     model = Author.achievements.through
+    autocomplete_fields = ("achievement",)
     extra = 1
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
@@ -18,6 +25,7 @@ class AchievementInline(admin.TabularInline):
 
 class PlayInline(admin.TabularInline):
     model = Author.plays.through
+    autocomplete_fields = ("play",)
     extra = 1
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
@@ -31,6 +39,7 @@ class SocialNetworkLinkInline(admin.TabularInline):
 
 
 class OtherLinkInline(admin.TabularInline):
+    form = OtherLinkForm
     model = OtherLink
     extra = 1
     classes = ["collapse"]
@@ -66,13 +75,19 @@ class AuthorAdmin(admin.ModelAdmin):
     search_fields = (
         "biography",
         "slug",
-        "person__first_name",
-        "person__last_name",
+        "person__first_name__istartswith",
+        "person__last_name__istartswith",
         "person__middle_name",
         "person__email",
         "plays__name",
     )
     empty_value_display = "-пусто-"
+
+    def get_ordering(self, request):
+        return [
+            "person__first_name",
+            "person__last_name",
+        ]
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
