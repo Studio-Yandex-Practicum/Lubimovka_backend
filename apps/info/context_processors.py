@@ -16,11 +16,8 @@ def admin_versioning(request):
         extra_context["last_commit"] = last_commit
         extra_context["branch"] = str(branch)
         if repo.tags:
-            print(repo.tags)
             last_tag = repo.tags[-1]
-            print(last_tag)
             tag = str(last_tag) if branch.commit == last_tag.commit else None
-            print(branch.commit, last_tag.commit)
             if tag:
                 extra_context["tag"] = tag
 
