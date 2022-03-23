@@ -21,4 +21,4 @@ def admin_versioning(request):
             if tag:
                 extra_context["tag"] = tag
 
-        return extra_context
+    return extra_context

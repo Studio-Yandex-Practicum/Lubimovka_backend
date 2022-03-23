@@ -3,23 +3,23 @@
 {% load cache %}
 
 
-{% cache 500 versioning %}
 {% block branding %}
-    <h1 id="site-name">
-        <img src="{% static 'logo.png' %}" alt="logo" width="70px" height="58px">
-        <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
-    </h1>
-    <div style="position: fixed; right: 20px; bottom: 20px; color: #00000024;">
-        <h3>
-            {% if branch != "develop" or branch != "master" %}
-                branch: {{ branch }}<br>
-            {% endif %}
-            {% if tag %}
-                tag: {{ tag }}<br>
-            {% endif %}
-            commit_date: {{ commit_date }}<br>
-            last_commit: {{ last_commit }}
-        </h3>
-    </div>
+    {% cache 500 branding %}
+        <h1 id="site-name">
+            <img src="{% static 'logo.png' %}" alt="logo" width="70px" height="58px">
+            <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+        </h1>
+        <div style="position: fixed; right: 20px; bottom: 20px; color: #00000024;">
+            <h3>
+                {% if branch != "develop" or branch != "master" %}
+                    branch: {{ branch }}<br>
+                {% endif %}
+                {% if tag %}
+                    tag: {{ tag }}<br>
+                {% endif %}
+                commit_date: {{ commit_date }}<br>
+                last_commit: {{ last_commit }}
+            </h3>
+        </div>
+    {% endcache %}
 {% endblock %}
-{% endcache %}
