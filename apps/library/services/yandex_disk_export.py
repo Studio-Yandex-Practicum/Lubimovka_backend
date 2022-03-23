@@ -2,19 +2,19 @@ import os
 
 import yadisk
 
+from config.settings.base import YNDX_DISK
 
-def yandex_disk_export(yndx, instance):
+
+def yandex_disk_export(instance):
+    yndx = yadisk.YaDisk(token=YNDX_DISK)
     cwd = os.getcwd()
     name = str(instance.file).split("/")[-1]
     name = name.replace("\\", "_").replace("/", "_")
-    try:
-        yndx.mkdir(f"/{str(instance.year)}")
-    except yadisk.exceptions.PathExistsError:
-        pass
     to_dir = f"/{str(instance.year)}/{name}"
     from_dir = cwd.replace("\\", "/") + "/media/" + str(instance.file)
     try:
         yndx.upload(from_dir, to_dir)
+        yndx.mkdir(f"/{str(instance.year)}")
     except yadisk.exceptions.PathExistsError:
         pass
     if yndx.exists(to_dir):

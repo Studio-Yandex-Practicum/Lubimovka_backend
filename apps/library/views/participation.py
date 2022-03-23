@@ -1,6 +1,5 @@
 import logging
 
-import yadisk
 from drf_spectacular.utils import extend_schema
 from googleapiclient.errors import HttpError
 from rest_framework import mixins, viewsets
@@ -19,7 +18,6 @@ logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
 gs = GoogleSpreadsheets()
-yndx = yadisk.YaDisk(token="AQAAAABd9Kl7AAfB0fMaFfzwSkZRlPYfF3vu2f4")  # жду пока в акшнс добавят
 
 
 @extend_schema(
@@ -37,7 +35,7 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         instance = serializer.save()
         domain = self.request.build_absolute_uri()
 
-        yandex_disk_export(yndx, instance)
+        yandex_disk_export(instance)
 
         try:
             export_success = gs.export(instance=instance, domain=domain)
