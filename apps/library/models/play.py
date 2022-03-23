@@ -1,8 +1,8 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
-from django.utils.translation import gettext_lazy as _
 
+from apps.core.constants import PlayType
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.info.models import Festival
@@ -35,10 +35,6 @@ class ProgramType(BaseModel):
 
 
 class Play(BaseModel):
-    class PlayType(models.TextChoices):
-        MAIN = "MAIN", _("Пьесы Любимовки")
-        OTHER = "OTHER", _("Другие пьесы")
-
     name = models.CharField(
         max_length=70,
         unique=True,
@@ -119,7 +115,7 @@ class Play(BaseModel):
         return super().save(*args, **kwargs)
 
     def clean(self):
-        if self.play_type == self.PlayType.MAIN:
+        if self.play_type == PlayType.MAIN:
             if not self.url_download.name:
                 raise ValidationError("Для пьесы Любимовки неоходимо загрузить файл")
             if self.program is None:
@@ -127,7 +123,7 @@ class Play(BaseModel):
             if self.festival is None:
                 raise ValidationError("У пьесы Любимовки должен быть фестиваль")
             self.link = ""
-        if self.play_type == self.PlayType.OTHER:
+        if self.play_type == PlayType.OTHER:
             if self.link == "":
                 raise ValidationError("Необходимо указать ссылку на другую пьесу")
             self.published = False

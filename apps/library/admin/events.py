@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from apps.core.constants import PlayType
 from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Role
 from apps.library.models import (
@@ -121,6 +122,11 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         TeamMemberInline,
     )
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["play"].queryset = Play.objects.filter(play_type=PlayType.MAIN)
+        return form
+
 
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
@@ -134,3 +140,8 @@ class ReadingAdmin(admin.ModelAdmin):
         "name",
     )
     inlines = (TeamMemberInline,)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["play"].queryset = Play.objects.filter(play_type=PlayType.MAIN)
+        return form

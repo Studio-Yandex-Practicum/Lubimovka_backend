@@ -16,6 +16,7 @@ from apps.info.factories import (
 from apps.library.factories import (
     AuthorFactory,
     MasterClassFactory,
+    OtherPlayFactory,
     ParticipationApplicationFestivalFactory,
     PerformanceFactory,
     PlayFactory,
@@ -53,6 +54,7 @@ class Command(BaseCommand):
         " - Программы"
         " - Авторы"
         " - Пьесы"
+        " - Другие пьесы"
         " - Спектакли"
         " - Мастер-классы"
         " - Читки"
@@ -124,6 +126,9 @@ class Command(BaseCommand):
 
             plays = PlayFactory.create_batch(10)
             notification(self, plays, "пьес")
+
+            other_plays = OtherPlayFactory.create_batch(10)
+            notification(self, other_plays, "других пьес")
 
             perfomances = PerformanceFactory.complex_create(6)
             notification(self, perfomances, "спектаклей")

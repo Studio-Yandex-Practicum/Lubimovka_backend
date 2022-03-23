@@ -36,4 +36,7 @@ class Migration(migrations.Migration):
             name='url_download',
             field=models.FileField(blank=True, max_length=200, upload_to='plays', verbose_name='Текст пьесы'),
         ),
+        migrations.DeleteModel(
+            name='OtherPlay',
+        ),
     ]

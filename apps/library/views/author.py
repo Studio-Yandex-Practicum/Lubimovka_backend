@@ -1,9 +1,11 @@
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
 
+from apps.core.constants import PlayType
 from apps.library.filters import AuthorFilter
-from apps.library.models import Author
+from apps.library.models import Author, Play
 from apps.library.serializers import AuthorListSerializer, AuthorRetrieveSerializer
 
 
@@ -19,7 +21,7 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "achievements",
                 "social_networks",
                 "other_links",
-                "plays",
+                Prefetch("plays", queryset=Play.objects.filter(play_type=PlayType.MAIN)),
             ),
             slug=self.kwargs["slug"],
         )

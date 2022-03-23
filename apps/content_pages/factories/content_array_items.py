@@ -10,6 +10,7 @@ from apps.content_pages.models import (
     OrderedVideo,
     PersonsBlock,
 )
+from apps.core.constants import PlayType
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
@@ -120,7 +121,7 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def item(self):
-        return Play.objects.order_by("?").first()
+        return Play.objects.filter(play_type=PlayType.MAIN).order_by("?").first()
 
 
 class OrderedVideoFactory(factory.django.DjangoModelFactory):

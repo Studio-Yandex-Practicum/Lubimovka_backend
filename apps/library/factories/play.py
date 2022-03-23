@@ -1,6 +1,7 @@
 import factory
 from faker import Faker
 
+from apps.core.constants import PlayType
 from apps.core.decorators import restrict_factory
 from apps.core.utils import slugify
 from apps.info.models import Festival
@@ -29,11 +30,16 @@ class PlayFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("name",)
 
     name = factory.Faker("text", max_nb_chars=60, locale="ru_RU")
+    play_type = PlayType.MAIN
     city = factory.Faker("city_name", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2021)
     url_download = factory.django.FileField()
-    url_reading = factory.LazyAttribute(lambda play: f"www.plays-reading/{play.name}")
     published = factory.Faker("boolean", chance_of_getting_true=50)
+
+    @factory.lazy_attribute
+    def url_reading(self):
+        name = slugify(self.name)
+        return f"https://www.plays-reading.ru/{name}"
 
     @factory.lazy_attribute
     def program(self):
@@ -42,3 +48,19 @@ class PlayFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def festival(self):
         return Festival.objects.order_by("?").first()
+
+
+class OtherPlayFactory(factory.django.DjangoModelFactory):
+    """Create other Play object."""
+
+    class Meta:
+        model = Play
+        django_get_or_create = ("name",)
+
+    name = factory.Faker("text", max_nb_chars=60, locale="ru_RU")
+    play_type = PlayType.OTHER
+
+    @factory.lazy_attribute
+    def link(self):
+        name = slugify(self.name)
+        return f"https://www.plays-reading.{name}.ru"

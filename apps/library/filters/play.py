@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
 
+from apps.core.constants import PlayType
 from apps.library.models import Play
 
 
@@ -42,9 +43,9 @@ class PlayTypeFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() == "other":
-            return Play.objects.filter(play_type="OTHER")
+            return Play.objects.filter(play_type=PlayType.OTHER)
         if self.value() is None:
-            return Play.objects.filter(play_type="MAIN")
+            return Play.objects.filter(play_type=PlayType.MAIN)
 
     def choices(self, changelist):
         for lookup, title in self.lookup_choices:

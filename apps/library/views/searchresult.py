@@ -3,6 +3,7 @@ from drf_multiple_model.viewsets import ObjectMultipleModelAPIViewSet
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import serializers
 
+from apps.core.constants import PlayType
 from apps.library.models import Author, Play
 from apps.library.serializers import AuthorSearchSerializer, PlaySerializer
 
@@ -39,7 +40,7 @@ class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
         """
         q = self.request.query_params.get("q", "")
         if q:
-            plays_queryset = Play.objects.filter(name__icontains=q)
+            plays_queryset = Play.objects.filter(name__icontains=q, play_type=PlayType.MAIN)
             authors_queryset = Author.objects.filter(
                 Q(person__first_name__icontains=q) | Q(person__last_name__icontains=q)
             )

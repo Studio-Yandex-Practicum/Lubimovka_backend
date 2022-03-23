@@ -15,7 +15,9 @@ from apps.content_pages.models import (
     PlaysBlock,
     VideosBlock,
 )
+from apps.core.constants import PlayType
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
+from apps.library.models import Play
 
 
 class ContentPersonRoleInline(admin.TabularInline):
@@ -51,6 +53,10 @@ class OrderedVideoInline(OrderedInline):
 
 class OrderedPlayInline(OrderedInline):
     model = OrderedPlay
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = Play.objects.filter(play_type=PlayType.MAIN)
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class ExtendedPersonInline(OrderedInline):

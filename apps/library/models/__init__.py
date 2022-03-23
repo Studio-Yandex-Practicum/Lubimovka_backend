@@ -1,6 +1,6 @@
 from .author import Achievement, Author, OtherLink, SocialNetworkLink
 from .master_class import MasterClass
-from .participation_application import ParticipationApplicationFestival
+from .participation_application import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION, ParticipationApplicationFestival
 from .performance import Performance, PerformanceMediaReview, PerformanceReview
 from .play import Play, ProgramType
 from .reading import Reading
