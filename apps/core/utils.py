@@ -1,3 +1,4 @@
+import logging
 import urllib
 
 from django.conf import settings
@@ -6,6 +7,10 @@ from django.template.defaultfilters import slugify as django_slugify
 from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
+from config.logging import LOGGING_CONFIG
+
+logging.config.dictConfig(LOGGING_CONFIG)
+logger = logging.getLogger(__name__)
 
 
 def slugify(name):
@@ -69,16 +74,17 @@ def get_app_list(self, request):
     app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
 
     for app in app_list:
-        if app["name"] in admin_site_order:
+        app_name = app["name"]
+        if app_name in admin_site_order:
             ordered_models = []
             models = app["models"]
-            for model_name in admin_site_order[app["name"]]:
+            for model_name in admin_site_order[app_name]:
                 index = next((index for index, model in enumerate(models) if model["name"] == model_name), None)
                 if index is not None:
                     ordered_models.append(models.pop(index))
                 else:
-                    raise ValueError(
-                        f"Модуль: {__name__} (index = {index}). Ошибка в описании порядка моделей в админке."
+                    logger.critical(
+                        f"Ошибка в описании порядка моделей в админке. {model_name} не найдено в {app_name}"
                     )
             ordered_models.extend(models)
             app["models"] = ordered_models
