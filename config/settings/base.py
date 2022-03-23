@@ -54,7 +54,6 @@ LOCAL_APPS = [
     "apps.articles",
     "apps.info",
     "apps.content_pages",
-
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -76,7 +75,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.locale.LocaleMiddleware",
 ]
 
 TEMPLATES_DIR = os.path.join(ROOT_DIR, "templates")
@@ -136,8 +134,6 @@ TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
-
-LOCALE_PATHS = [os.path.join(ROOT_DIR, 'locale')]
 
 # STATIC
 # ------------------------------------------------------------------------------
