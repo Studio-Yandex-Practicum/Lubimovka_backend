@@ -20,7 +20,7 @@ class PlayFilter(filters.FilterSet):
     )
     published = filters.BooleanFilter(
         field_name="published",
-        label="Отображать только опубликованные/неопубликованные пьесы?",
+        label="Отображать только опубликованные пьесы?",
     )
 
     class Meta:
