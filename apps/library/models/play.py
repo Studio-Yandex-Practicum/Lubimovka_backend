@@ -37,7 +37,6 @@ class ProgramType(BaseModel):
 class Play(BaseModel):
     name = models.CharField(
         max_length=70,
-        unique=True,
         verbose_name="Название пьесы",
     )
     play_type = models.CharField(
@@ -63,6 +62,7 @@ class Play(BaseModel):
         upload_to="plays",
         verbose_name="Текст пьесы",
         blank=True,
+        help_text="Для пьес Любимовки должен быть загружен файл",
     )
     url_reading = models.URLField(
         max_length=200,
@@ -78,6 +78,7 @@ class Play(BaseModel):
         verbose_name="Программа",
         blank=True,
         null=True,
+        help_text="Для пьес Любимовки должна быть выбрана Программа",
     )
     festival = models.ForeignKey(
         Festival,
@@ -86,6 +87,7 @@ class Play(BaseModel):
         verbose_name="Фестиваль",
         blank=True,
         null=True,
+        help_text="Для пьес Любимовки должен быть выбран Фестиваль",
     )
     published = models.BooleanField(
         verbose_name="Опубликовано",

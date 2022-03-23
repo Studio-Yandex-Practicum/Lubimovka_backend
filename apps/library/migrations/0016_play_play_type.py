@@ -23,18 +23,23 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterField(
             model_name='play',
+            name='name',
+            field=models.CharField(max_length=70, verbose_name='Название пьесы'),
+        ),
+        migrations.AlterField(
+            model_name='play',
             name='festival',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='plays', to='info.festival', verbose_name='Фестиваль'),
+            field=models.ForeignKey(blank=True, help_text='Для пьес Любимовки должен быть выбран Фестиваль', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='plays', to='info.festival', verbose_name='Фестиваль'),
         ),
         migrations.AlterField(
             model_name='play',
             name='program',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='plays', to='library.programtype', verbose_name='Программа'),
+            field=models.ForeignKey(blank=True, help_text='Для пьес Любимовки должна быть выбрана Программа', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='plays', to='library.programtype', verbose_name='Программа'),
         ),
         migrations.AlterField(
             model_name='play',
             name='url_download',
-            field=models.FileField(blank=True, max_length=200, upload_to='plays', verbose_name='Текст пьесы'),
+            field=models.FileField(blank=True, help_text='Для пьес Любимовки должен быть загружен файл', max_length=200, upload_to='plays', verbose_name='Текст пьесы'),
         ),
         migrations.DeleteModel(
             name='OtherPlay',

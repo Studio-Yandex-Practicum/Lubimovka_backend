@@ -63,4 +63,4 @@ class OtherPlayFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def link(self):
         name = slugify(self.name)
-        return f"https://www.plays-reading.{name}.ru"
+        return f"https://www.plays-reading.ru/{name}"
