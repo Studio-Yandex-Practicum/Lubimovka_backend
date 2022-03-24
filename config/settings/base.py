@@ -199,7 +199,17 @@ GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
 
 MAILJET_TEMPLATE_ID = env("MAILJET_TEMPLATE_ID", default="0000000")
 
-ADMIN_SITE_ORDER = {
+ADMIN_SITE_APPS_ORDER = (
+    "Библиотека",
+    "Новости, Проекты, Блог",
+    "Афиша",
+    "Информация",
+    "Общие ресурсы приложений",
+    "Настройки приложения",
+    "Пользователи",
+)
+
+ADMIN_SITE_MODELS_ORDER = {
     "Библиотека": [
         "Авторы",
         "Пьесы",
