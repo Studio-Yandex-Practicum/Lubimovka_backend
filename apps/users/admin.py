@@ -42,11 +42,27 @@ class UserAdmin(DjangoUserAdmin):
     def role(self, obj):
         return obj.groups.first()
 
+    def get_form(self, request, obj=None, **kwargs):
+        # Get form from original UserAdmin.
+        form = super(UserAdmin, self).get_form(request, obj, **kwargs)
+        if "user_permissions" in form.base_fields:
+            permissions = form.base_fields["user_permissions"]
+            permissions.queryset = permissions.queryset.exclude(content_type__app_label__in=["sites", "sessions"])
+        return form
+
 
 class GroupAdmin(admin.ModelAdmin):
     form = GroupAdminForm
     list_display = ["name"]
     filter_horizontal = ("permissions",)
+
+    def get_form(self, request, obj=None, **kwargs):
+        # Get form from original GroupAdmin.
+        form = super(GroupAdmin, self).get_form(request, obj, **kwargs)
+        if "permissions" in form.base_fields:
+            permissions = form.base_fields["permissions"]
+            permissions.queryset = permissions.queryset.exclude(content_type__app_label__in=["sites", "sessions"])
+        return form
 
 
 admin.site.register(ProxyGroup, GroupAdmin)
