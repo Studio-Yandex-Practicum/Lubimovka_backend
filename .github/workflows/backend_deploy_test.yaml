@@ -88,7 +88,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Create SSH key 
+        name: Create SSH key
         # (SSH_KNOWN_HOSTS=ssh-keyscan -H сервер, SSH_PRIVATE_KEY - ключ с ПК, которому разрешен вход)
         run: |
           mkdir -p ~/.ssh
@@ -155,6 +155,8 @@ jobs:
             echo PGID=${{ secrets.PGID }} >> .env-test
             echo URL=${{ secrets.URL }} >> .env-test
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
+
+            echo YNDX_DISK=${{ secrets.YNDX_DISK }} >> .env-test
 
             # Уделение старых данных
             systemctl stop lubimovka-frontend.service

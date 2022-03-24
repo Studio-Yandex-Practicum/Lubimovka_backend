@@ -90,4 +90,4 @@ class Play(BaseModel):
         verbose_name_plural = "Пьесы"
 
     def __str__(self):
-        return self.name
+        return self.name + "" if self.published else " <— не опубликована —>"
