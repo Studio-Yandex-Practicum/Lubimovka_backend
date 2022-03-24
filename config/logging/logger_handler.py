@@ -18,42 +18,51 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
     """
 
     def __init__(self, filename, when, interval, backupCount, oldbackupCount):
-        pathlib.Path(os.path.dirname(filename)).mkdir(parents=True, exist_ok=True)
+        self.oldbackupCount = int(oldbackupCount)
+        self.file_path = pathlib.Path(filename)
+        self.file_path.parent.mkdir(parents=True, exist_ok=True)
         super().__init__(
             filename=str(filename),
             when=str(when),
             interval=int(interval),
             backupCount=int(backupCount),
         )
-        self.oldbackupCount = oldbackupCount
 
     def getFilesToMoving(self):
-        dirName, baseName = os.path.split(self.baseFilename)
-        fileNames = os.listdir(dirName)
+        dir_name = self.file_path.parent
+        base_name = self.file_path.name
+        filenames_in_dir = os.listdir(dir_name)
+
         result = []
 
-        name, ending = os.path.splitext(baseName)
+        name = self.file_path.stem
+        ending = self.file_path.suffix
         prefix = name + "."
         plen = len(prefix)
-        for fileName in fileNames:
+
+        for filename in filenames_in_dir:
             if self.namer is None:
-                if not fileName.startswith(baseName):
+                # Our files will always start with baseName.
+                if not filename.startswith(base_name):
                     continue
             else:
+                # Our files could be just about anything after custom naming, but
+                # likely candidates are of the form
+                # foo.log.DATETIME_SUFFIX or foo.DATETIME_SUFFIX.log
                 if (
-                    not fileName.startswith(baseName)
-                    and fileName.endswith(ending)
-                    and len(fileName) > (plen + 1)
-                    and not fileName[plen + 1].isdigit()
+                    not filename.startswith(base_name)
+                    and filename.endswith(ending)
+                    and len(filename) > (plen + 1)
+                    and not filename[plen + 1].isdigit()
                 ):
                     continue
 
-            if fileName[:plen] == prefix:
-                suffix = fileName[plen:]
+            if filename[:plen] == prefix:
+                suffix = filename[plen:]
                 parts = suffix.split(".")
                 for part in parts:
                     if self.extMatch.match(part):
-                        result.append(os.path.join(dirName, fileName))
+                        result.append(str(pathlib.PurePath.joinpath(dir_name, filename)))
                         break
         if len(result) < self.backupCount:
             result = []
@@ -85,33 +94,29 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
             self.stream.close()
             self.stream = None
 
-        currentTime = int(time.time())
+        currentTime = int(time.time())  # Get the time that this sequence started at and make it a TimeTuple.
         dstNow = time.localtime(currentTime)[-1]
         time_point = self.rolloverAt - self.interval
-        if self.utc:
-            timeTuple = time.gmtime(time_point)
-        else:
-            timeTuple = time.localtime(time_point)
-            dstThen = timeTuple[-1]
-            if dstNow != dstThen:
-                if dstNow:
-                    addend = 3600
-                else:
-                    addend = -3600
-                timeTuple = time.localtime(time_point + addend)
+        timeTuple = time.localtime(time_point)
+        dstThen = timeTuple[-1]
+        if dstNow != dstThen:
+            if dstNow:
+                addend = 3600
+            else:
+                addend = -3600
+            timeTuple = time.localtime(time_point + addend)
+
         dfn = self.rotation_filename(self.baseFilename + "." + time.strftime(self.suffix, timeTuple))
-        if os.path.exists(dfn):
+        if pathlib.Path(dfn).exists():
             os.remove(dfn)
         self.rotate(self.baseFilename, dfn)
 
-        if self.backupCount > 0:
-            for file_path in self.getFilesToMoving():
-                filename = file_path.split("/")[-1]
-                new_file_path = self.old_logs_directory + filename
-                shutil.move(file_path, new_file_path)
+        for file_path in self.getFilesToMoving():  # Moving old log files to the old's path.
+            filename = file_path.split("/")[-1]
+            new_file_path = self.old_logs_directory + filename
+            shutil.move(file_path, new_file_path)
 
-        if self.oldbackupCount > 0:
-            self.getFilesToDelete()
+        self.getFilesToDelete()  # Delete the oldest log files in the old's path.
 
         if not self.delay:
             self.stream = self._open()
@@ -119,12 +124,13 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
         while newRolloverAt <= currentTime:
             newRolloverAt = newRolloverAt + self.interval
 
-        if (self.when == "MIDNIGHT" or self.when.startswith("W")) and not self.utc:
+        # If DST changes and midnight or weekly rollover, adjust for this.
+        if self.when == "MIDNIGHT" or self.when.startswith("W"):
             dstAtRollover = time.localtime(newRolloverAt)[-1]
             if dstNow != dstAtRollover:
                 if not dstNow:
-                    addend = -3600
+                    addend = -3600  # DST kicks in before next rollover, so we need to deduct an hour
                 else:
-                    addend = 3600
+                    addend = 3600  # DST bows out before next rollover, so we need to add an hour
                 newRolloverAt += addend
         self.rolloverAt = newRolloverAt

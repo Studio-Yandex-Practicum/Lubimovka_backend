@@ -1,5 +1,4 @@
-import os
-from pathlib import Path
+from pathlib import Path, PurePath
 
 import environ
 
@@ -34,17 +33,16 @@ LOGGING_SETTINGS = {
             "level": "DEBUG",
             "filters": ["require_debug_true"],
             "class": "config.logging.logger_handler.TimedRotatingFileHandlerWithZip",
-            "filename": os.path.join(DEBUG_LOGS_DIR, "debug.log"),
+            "filename": PurePath.joinpath(DEBUG_LOGS_DIR, "debug.log"),
             "when": "midnight",
             "interval": 1,
             "backupCount": 5,
             "oldbackupCount": 60,
-            "formatter": "verbose",
         },
         "errors_to_file": {
             "level": "ERROR",
             "class": "config.logging.logger_handler.TimedRotatingFileHandlerWithZip",
-            "filename": os.path.join(ERROR_LOGS_DIR, "error.log"),
+            "filename": PurePath.joinpath(ERROR_LOGS_DIR, "error.log"),
             "when": "midnight",
             "interval": 1,
             "backupCount": 5,
