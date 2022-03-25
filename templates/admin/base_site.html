@@ -9,17 +9,15 @@
             <img src="{% static 'logo.png' %}" alt="logo" width="70px" height="58px">
             <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
         </h1>
-        <div style="position: fixed; right: 20px; bottom: 20px; color: #00000024;">
-            <h3>
-                {% if branch != "develop" or branch != "master" %}
-                    branch: {{ branch }}<br>
-                {% endif %}
-                {% if tag %}
-                    tag: {{ tag }}<br>
-                {% endif %}
-                commit_date: {{ commit_date }}<br>
-                last_commit: {{ last_commit }}
-            </h3>
+        <div style="position: fixed;right: 20px;bottom: 20px;color: #bbbbbb ;display: grid;font-weight: bold;">
+            {% if branch != "develop" or branch != "master" %}
+                <span>branch: {{ branch }}<br></span>
+            {% endif %}
+            {% if tag %}
+                <span>tag: {{ tag }}<br></span>
+            {% endif %}
+            <span>commit_date: {{ commit_date }}<br></span>
+            <span>last_commit: {{ last_commit }}</span>
         </div>
     {% endcache %}
 {% endblock %}
