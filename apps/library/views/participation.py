@@ -3,6 +3,7 @@ import logging
 from drf_spectacular.utils import extend_schema
 from googleapiclient.errors import HttpError
 from rest_framework import mixins, viewsets
+from yadisk.exceptions import YaDiskError
 
 from apps.library.permissions import SettingsPlayReceptionPermission
 from apps.library.schema.schema_extension import (
@@ -35,7 +36,10 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         instance = serializer.save()
         domain = self.request.build_absolute_uri()
 
-        yandex_disk_export(instance)
+        try:
+            yandex_disk_export(instance)
+        except (YaDiskError) as error:
+            logger.critical(error, exc_info=True)
 
         try:
             export_success = gs.export(instance=instance, domain=domain)
