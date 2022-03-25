@@ -90,6 +90,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.core.context_processors.admin_versioning",
             ],
         },
     },
@@ -200,7 +201,17 @@ YNDX_DISK = env("YNDX_DISK")
 
 MAILJET_TEMPLATE_ID = env("MAILJET_TEMPLATE_ID", default="0000000")
 
-ADMIN_SITE_ORDER = {
+ADMIN_SITE_APPS_ORDER = (
+    "Библиотека",
+    "Новости, Проекты, Блог",
+    "Афиша",
+    "Информация",
+    "Общие ресурсы приложений",
+    "Настройки приложения",
+    "Пользователи",
+)
+
+ADMIN_SITE_MODELS_ORDER = {
     "Библиотека": [
         "Авторы",
         "Пьесы",
