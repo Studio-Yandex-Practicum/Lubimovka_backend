@@ -1,8 +1,11 @@
+import logging
 import os
 
 import yadisk
 
 from config.settings.base import YNDX_DISK
+
+logger = logging.getLogger("django")
 
 
 def yandex_disk_export(instance):
@@ -13,8 +16,8 @@ def yandex_disk_export(instance):
     to_dir = f"/{str(instance.year)}/{name}"
     from_dir = cwd.replace("\\", "/") + "/media/" + str(instance.file)
     try:
-        yndx.upload(from_dir, to_dir)
         yndx.mkdir(f"/{str(instance.year)}")
+        yndx.upload(from_dir, to_dir)
     except yadisk.exceptions.PathExistsError:
         pass
     if yndx.exists(to_dir):
