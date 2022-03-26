@@ -24,7 +24,7 @@ class AfishaEventSerializer(serializers.ModelSerializer):
         PolymorphicProxySerializer(
             component_name="Event Type objects",
             serializers=AFISHA_EVENTS_SERIALIZER_PAIRS.values(),
-            resource_type_field_name="type",
+            resource_type_field_name=None,
         )
     )
     def get_event_body(self, obj):
