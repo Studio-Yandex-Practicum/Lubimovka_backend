@@ -6,15 +6,13 @@ from django.conf import settings
 
 def yandex_disk_export(instance):
     yndx = yadisk.YaDisk(token=settings.YNDX_DISK_TOKEN)
-    cwd = str(settings.ROOT_DIR)
+    cwd = str(Path(settings.ROOT_DIR))
     name = Path(str(instance.file)).name
-    year = str(Path(str(instance.file)).parent).split("\\")[-1]
+    year = Path(str(instance.file)).parts[1]
     to_dir = f"{year}/{name}"
     from_dir = cwd.replace("\\", "/") + "/media/" + str(instance.file)
-    try:
-        yndx.mkdir(f"/{year}")
-    except yadisk.exceptions.PathExistsError:
-        pass
+    if yndx.is_dir({year}) is False:
+        yndx.mkdir({year})
     yndx.upload(from_dir, to_dir)
     if yndx.exists(to_dir):
         download_link = yndx.get_download_link(to_dir)

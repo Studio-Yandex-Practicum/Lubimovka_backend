@@ -197,7 +197,7 @@ CKEDITOR_CONFIGS = {
 }
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
-YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN")
+YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="AQAAAABd9Kl7AAfB0fMaFfzwSkZRlPYfF3vu2f4")
 
 MAILJET_TEMPLATE_ID = env("MAILJET_TEMPLATE_ID", default="0000000")
 
