@@ -76,6 +76,7 @@ class ParticipationApplicationFestival(BaseModel):
     )
     exported_to_google = models.BooleanField(default=False, verbose_name="Выгружена в Google-таблицу", editable=False)
     saved_to_storage = models.BooleanField(default=False, verbose_name="Файл сохранен на Диске", editable=False)
+    sent_to_email = models.BooleanField(default=False, verbose_name="Отправлена на почту", editable=False)
 
     class Meta:
         verbose_name_plural = "Заявки на участие"

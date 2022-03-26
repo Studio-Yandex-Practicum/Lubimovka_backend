@@ -1,8 +1,14 @@
 import logging
 
+from anymail.exceptions import (
+    AnymailConfigurationError,
+    AnymailInvalidAddress,
+    AnymailRequestsAPIError,
+    AnymailSerializationError,
+)
 from drf_spectacular.utils import extend_schema
 from googleapiclient.errors import HttpError
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 
 from apps.library.permissions import SettingsPlayReceptionPermission
 from apps.library.schema.schema_extension import (
@@ -11,6 +17,7 @@ from apps.library.schema.schema_extension import (
 )
 from apps.library.serializers.participation import ParticipationSerializer
 from apps.library.services.spreadsheets import GoogleSpreadsheets
+from apps.library.utilities import send_play_email
 from config.logging import LOGGING_CONFIG
 
 logging.config.dictConfig(LOGGING_CONFIG)
@@ -39,4 +46,21 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
                 instance.exported_to_google = True
                 instance.save()
         except (ValueError, HttpError) as error:
+            logger.critical(error, exc_info=True)
+
+        try:
+            response = send_play_email(serializer)
+            if (
+                hasattr(response, "anymail_status")
+                and response.anymail_status.esp_response.status_code == status.HTTP_200_OK
+            ):
+                instance.sent_to_email = True
+                instance.save()
+        except (
+            AnymailConfigurationError,
+            AnymailRequestsAPIError,
+            AnymailInvalidAddress,
+            ValueError,
+            AnymailSerializationError,
+        ) as error:
             logger.critical(error, exc_info=True)
