@@ -247,7 +247,7 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
             None,
             {
                 "fields": ("data_manager",),
-                "classes": ("form-row field-data_manager",),  # ?
+                "classes": ("form-row field-data_manager",),
             },
         ),
     )

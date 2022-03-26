@@ -6,7 +6,8 @@
 
 jQuery(document).ready(function ($) {
     let idIsPrManager = $("#id_is_pr_manager");
-    let divHideDatePrManager = $("#festteammember_form > div > fieldset.module.aligned.form-row.field-data_manager")
+    let divHideDatePrManager = $(".form-row .field-data_manager")
+
     // exit from function if there isn't selector
     if (!idIsPrManager.length) {
         return false
