@@ -12,7 +12,7 @@ POPUP_SUFFIX = "?_popup=1"
 
 @extend_schema(
     responses={
-        200: {"example": {"url": "url"}},
+        200: {"example": {"url": "string"}},
     }
 )
 class GetContentTypeLink(APIView):

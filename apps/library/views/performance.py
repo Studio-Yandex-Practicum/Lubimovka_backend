@@ -17,12 +17,12 @@ class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 
 @extend_schema_view(
     list=extend_schema(
-        parameters=[OpenApiParameter("performance_id", int, OpenApiParameter.PATH, description="performance id")],
+        parameters=[OpenApiParameter("performance_id", type=int, location="path")],
     ),
     retrieve=extend_schema(
         parameters=[
-            OpenApiParameter("performance_id", int, OpenApiParameter.PATH, description="performance id"),
-            OpenApiParameter("id", int, OpenApiParameter.PATH, description="review id"),
+            OpenApiParameter("performance_id", type=int, location="path"),
+            OpenApiParameter("id", type=int, location="path"),
         ],
     ),
 )
@@ -30,9 +30,10 @@ class PerformanceReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
     """Get all performance reviews."""
 
     serializer_class = PerformanceReviewSerializer
-    queryset = Performance.objects.none()
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Performance.objects.none()
         performance = get_object_or_404(
             Performance,
             pk=self.kwargs.get("performance_id"),
@@ -42,12 +43,12 @@ class PerformanceReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
 
 @extend_schema_view(
     list=extend_schema(
-        parameters=[OpenApiParameter("performance_id", int, OpenApiParameter.PATH, description="performance id")],
+        parameters=[OpenApiParameter("performance_id", type=int, location="path")],
     ),
     retrieve=extend_schema(
         parameters=[
-            OpenApiParameter("performance_id", int, OpenApiParameter.PATH, description="performance id"),
-            OpenApiParameter("id", int, OpenApiParameter.PATH, description="review id"),
+            OpenApiParameter("performance_id", type=int, location="path"),
+            OpenApiParameter("id", type=int, location="path"),
         ],
     ),
 )
@@ -55,9 +56,10 @@ class PerformanceMediaReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelM
     """Get all performance media reviews."""
 
     serializer_class = PerformanceMediaReviewSerializer
-    queryset = Performance.objects.none()
 
     def get_queryset(self):
+        if getattr(self, "swagger_fake_view", False):
+            return Performance.objects.none()
         performance = get_object_or_404(
             Performance,
             pk=self.kwargs.get("performance_id"),
