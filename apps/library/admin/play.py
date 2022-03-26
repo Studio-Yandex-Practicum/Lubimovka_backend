@@ -1,12 +1,11 @@
 from django.contrib import admin
 
-from apps.library.forms import RequiredInlineFormSet
 from apps.library.models import Author, Play
 
 
 class AuthorInline(admin.TabularInline):
     model = Author.plays.through
-    formset = RequiredInlineFormSet
+    min_num = 1
     extra = 1
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
