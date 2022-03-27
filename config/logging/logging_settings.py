@@ -1,4 +1,4 @@
-from pathlib import Path, PurePath
+from pathlib import Path
 
 import environ
 
@@ -8,6 +8,8 @@ ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 LOGS_DIR = ROOT_DIR / "logs"
 DEBUG_LOGS_DIR = LOGS_DIR / "debug"
 ERROR_LOGS_DIR = LOGS_DIR / "errors"
+
+DJANGO_LOG_LEVEL = env("DJANGO_LOG_LEVEL", default="DEBUG")
 
 
 LOGGING_SETTINGS = {
@@ -33,7 +35,7 @@ LOGGING_SETTINGS = {
             "level": "DEBUG",
             "filters": ["require_debug_true"],
             "class": "config.logging.logger_handler.TimedRotatingFileHandlerWithZip",
-            "filename": PurePath.joinpath(DEBUG_LOGS_DIR, "debug.log"),
+            "filename": DEBUG_LOGS_DIR / "debug.log",
             "when": "midnight",
             "interval": 1,
             "backupCount": 5,
@@ -43,7 +45,7 @@ LOGGING_SETTINGS = {
         "errors_to_file": {
             "level": "ERROR",
             "class": "config.logging.logger_handler.TimedRotatingFileHandlerWithZip",
-            "filename": PurePath.joinpath(ERROR_LOGS_DIR, "error.log"),
+            "filename": ERROR_LOGS_DIR / "error.log",
             "when": "midnight",
             "interval": 1,
             "backupCount": 5,
@@ -60,7 +62,7 @@ LOGGING_SETTINGS = {
     "loggers": {
         "django": {
             "handlers": ["debug_to_file", "errors_to_file", "console"],
-            "level": env("DJANGO_LOG_LEVEL", default="DEBUG"),
+            "level": DJANGO_LOG_LEVEL,
         },
     },
 }
