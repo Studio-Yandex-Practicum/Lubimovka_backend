@@ -91,7 +91,7 @@ jobs:
         with:
           ref: master
       -
-        name: Create SSH key 
+        name: Create SSH key
         # (SSH_KNOWN_HOSTS=ssh-keyscan -H сервер, SSH_PRIVATE_KEY - ключ с ПК, которому разрешен вход)
         run: |
           mkdir -p ~/.ssh
@@ -157,6 +157,8 @@ jobs:
             echo PGID=${{ secrets.PGID }} >> .env-prod
             echo URL=${{ secrets.URL }} >> .env-prod
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-prod
+
+            echo YNDX_DISK=${{ secrets.YNDX_DISK }} >> .env-prod
 
             docker network create prod_db_network || true
             docker network create prod_swag_network || true

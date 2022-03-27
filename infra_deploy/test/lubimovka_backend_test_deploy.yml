@@ -32,7 +32,7 @@ services:
       - static_value_test:/code/staticfiles/
       - media_value_test:/code/media/
     command: >
-      sh -c "python manage.py migrate &&
+      sh -c "sleep 5; python manage.py migrate &&
              python manage.py collectstatic --noinput &&
              python manage.py createsuperuser --noinput &&
              python manage.py filldb &&
