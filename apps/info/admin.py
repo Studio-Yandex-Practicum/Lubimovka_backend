@@ -137,20 +137,14 @@ class VolunteerInline(admin.TabularInline):
         return False
 
 
-class FestivalImagesInline(admin.TabularInline):
+class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     model = Festival.images.through
-    readonly_fields = ("preview",)
+    readonly_fields = ("image_preview_change_page",)
     verbose_name = "Изображение фестиваля"
     verbose_name_plural = "Изображения фестиваля"
     extra = 1
     classes = ["collapse"]
-
-    def preview(self, obj):
-        url = obj.image.image.url
-        return format_html(f'<img src="{url}" width="200" height="100" style="object-fit: contain;" />')
-
-    preview.short_description = "Превью"
-    Festival.images.through.__str__ = lambda self: ""
+    model.__str__ = lambda self: ""
 
 
 @admin.register(Festival)

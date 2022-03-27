@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.db.models.fields.files import ImageFieldFile
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
@@ -89,8 +90,13 @@ class AdminImagePreview:
 
     @admin.display(description="Превью")
     def image_preview_change_page(self, obj):
+        if type(obj.image) is ImageFieldFile:  # obj.image is an image
+            return format_html(
+                '<img src="{}" width="600" height="300" style="object-fit: contain;" />'.format(obj.image.url)
+            )
+        # obj.image is a model with image field
         return format_html(
-            '<img src="{}" width="600" height="300" style="object-fit: contain;" />'.format(obj.image.url)
+            '<img src="{}" width="100" height="50" style="object-fit: contain;" />'.format(obj.image.image.url)
         )
 
     @admin.display(description="Превью")
