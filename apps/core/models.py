@@ -47,6 +47,9 @@ class Image(BaseModel):
         verbose_name = "Изображение"
         verbose_name_plural = "Изображения"
 
+    def __str__(self):
+        return self.image.url
+
 
 class Person(BaseModel):
     first_name = models.CharField(

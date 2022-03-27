@@ -137,12 +137,14 @@ class VolunteerInline(admin.TabularInline):
         return False
 
 
-class FestivalImagesInline(admin.TabularInline):
+class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     model = Festival.images.through
-    verbose_name = "Изображение"
-    verbose_name_plural = "Изображения"
+    readonly_fields = ("inline_image_preview",)
+    verbose_name = "Изображение фестиваля"
+    verbose_name_plural = "Изображения фестиваля"
     extra = 1
     classes = ["collapse"]
+    model.__str__ = lambda self: ""
 
 
 @admin.register(Festival)
