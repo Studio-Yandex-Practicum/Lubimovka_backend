@@ -92,3 +92,7 @@ class AuthorSearchSerializer(serializers.ModelSerializer):
             "name",
             "first_letter",
         )
+
+
+class AuthorLettersSerializer(serializers.Serializer):
+    letters = serializers.ListField(child=serializers.CharField())
