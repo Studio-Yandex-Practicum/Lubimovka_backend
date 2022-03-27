@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import mixins, viewsets
 
-from apps.library.models import Performance
+from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
 from apps.library.serializers import (
     PerformanceMediaReviewSerializer,
     PerformanceReviewSerializer,
@@ -29,11 +29,10 @@ class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 class PerformanceReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     """Get all performance reviews."""
 
+    queryset = PerformanceReview.objects.none()  # this needs only for schema generation
     serializer_class = PerformanceReviewSerializer
 
     def get_queryset(self):
-        if getattr(self, "swagger_fake_view", False):
-            return Performance.objects.none()
         performance = get_object_or_404(
             Performance,
             pk=self.kwargs.get("performance_id"),
@@ -55,11 +54,10 @@ class PerformanceReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
 class PerformanceMediaReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
     """Get all performance media reviews."""
 
+    queryset = PerformanceMediaReview.objects.none()  # this needs only for schema generation
     serializer_class = PerformanceMediaReviewSerializer
 
     def get_queryset(self):
-        if getattr(self, "swagger_fake_view", False):
-            return Performance.objects.none()
         performance = get_object_or_404(
             Performance,
             pk=self.kwargs.get("performance_id"),
