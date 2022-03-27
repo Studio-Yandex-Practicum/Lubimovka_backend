@@ -8,7 +8,7 @@ from anymail.exceptions import (
 )
 from drf_spectacular.utils import extend_schema
 from googleapiclient.errors import HttpError
-from rest_framework import mixins, status, viewsets
+from rest_framework import mixins, viewsets
 
 from apps.library.permissions import SettingsPlayReceptionPermission
 from apps.library.schema.schema_extension import (
@@ -16,8 +16,8 @@ from apps.library.schema.schema_extension import (
     ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403,
 )
 from apps.library.serializers.participation import ParticipationSerializer
+from apps.library.services.email import send_application_email
 from apps.library.services.spreadsheets import GoogleSpreadsheets
-from apps.library.utilities import send_play_email
 from config.logging import LOGGING_CONFIG
 
 logging.config.dictConfig(LOGGING_CONFIG)
@@ -49,11 +49,8 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             logger.critical(error, exc_info=True)
 
         try:
-            response = send_play_email(serializer)
-            if (
-                hasattr(response, "anymail_status")
-                and response.anymail_status.esp_response.status_code == status.HTTP_200_OK
-            ):
+            send_success = send_application_email(serializer)
+            if send_success:
                 instance.sent_to_email = True
                 instance.save()
         except (
