@@ -139,7 +139,7 @@ class VolunteerInline(admin.TabularInline):
 
 class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     model = Festival.images.through
-    readonly_fields = ("image_preview_change_page",)
+    readonly_fields = ("inline_image_preview",)
     verbose_name = "Изображение фестиваля"
     verbose_name_plural = "Изображения фестиваля"
     extra = 1

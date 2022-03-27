@@ -15,7 +15,7 @@ from apps.library.models import (
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
     model = Performance.images_in_block.through
-    readonly_fields = ("image_preview_change_page",)
+    readonly_fields = ("inline_image_preview",)
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
