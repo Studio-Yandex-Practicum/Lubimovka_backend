@@ -18,47 +18,42 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
     """
 
     def __init__(self, filename, when, interval, backupCount, oldbackupCount):
-        self.oldbackupCount = int(oldbackupCount)
-        self.file_path = pathlib.Path(filename)
-        self.file_path.parent.mkdir(parents=True, exist_ok=True)
+
+        pathlib.Path(filename).parent.mkdir(parents=True, exist_ok=True)
+
         super().__init__(
             filename=str(filename),
             when=str(when),
             interval=int(interval),
             backupCount=int(backupCount),
         )
+        self.oldbackupCount = int(oldbackupCount)
 
     def getFilesToMoving(self):
         dir_name = self.file_path.parent
-        base_name = self.file_path.name
+        base_name = self.baseFilename
         filenames_in_dir = os.listdir(dir_name)
 
         result = []
 
-        name = self.file_path.stem
         ending = self.file_path.suffix
-        prefix = name + "."
-        plen = len(prefix)
+        prefix = self.file_path.stem + "_"
+        prefix_len = len(prefix)
 
         for filename in filenames_in_dir:
-            if self.namer is None:
-                # Our files will always start with baseName.
-                if not filename.startswith(base_name):
-                    continue
-            else:
-                # Our files could be just about anything after custom naming, but
-                # likely candidates are of the form
-                # foo.log.DATETIME_SUFFIX or foo.DATETIME_SUFFIX.log
-                if (
-                    not filename.startswith(base_name)
-                    and filename.endswith(ending)
-                    and len(filename) > (plen + 1)
-                    and not filename[plen + 1].isdigit()
-                ):
-                    continue
+            # Our files could be just about anything after custom naming, but
+            # likely candidates are of the form
+            # foo.log.DATETIME_SUFFIX or foo.DATETIME_SUFFIX.log
+            if (
+                not filename.startswith(base_name)
+                and filename.endswith(ending)
+                and len(filename) > (prefix_len + 1)
+                and not filename[prefix_len + 1].isdigit()
+            ):
+                continue
 
-            if filename[:plen] == prefix:
-                suffix = filename[plen:]
+            if filename[:prefix_len] == prefix:
+                suffix = filename[prefix_len:]
                 parts = suffix.split(".")
                 for part in parts:
                     if self.extMatch.match(part):
@@ -80,12 +75,12 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
                 os.remove(old_log_path)
 
     @property
-    def logs_directory(self):
-        return str(pathlib.Path(self.baseFilename).parent)
+    def file_path(self):
+        return pathlib.Path(self.baseFilename)
 
     @property
     def old_logs_directory(self):
-        path = self.logs_directory + "/old/"
+        path = str(self.file_path.parent) + "/old/"
         pathlib.Path(path).mkdir(parents=True, exist_ok=True)
         return path
 
@@ -106,10 +101,17 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
                 addend = -3600
             timeTuple = time.localtime(time_point + addend)
 
-        dfn = self.rotation_filename(self.baseFilename + "." + time.strftime(self.suffix, timeTuple))
-        if pathlib.Path(dfn).exists():
-            os.remove(dfn)
-        self.rotate(self.baseFilename, dfn)
+        rotation_file_name = self.rotation_filename(
+            str(self.file_path.parent)
+            + "/"
+            + self.file_path.stem
+            + "_"
+            + time.strftime(self.suffix, timeTuple)
+            + self.file_path.suffix
+        )
+        if pathlib.Path(rotation_file_name).exists():
+            os.remove(rotation_file_name)
+        self.rotate(self.baseFilename, rotation_file_name)
 
         for file_path in self.getFilesToMoving():  # Moving old log files to the old's path.
             filename = file_path.split("/")[-1]
