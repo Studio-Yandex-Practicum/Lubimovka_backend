@@ -8,8 +8,6 @@ from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
 
-CACHE_USER_DICT = dict()
-
 
 def slugify(name):
     """Return "slug" formated string. It's an ordinary `django_slugify` with cyrillic support."""
@@ -94,15 +92,17 @@ def manual_order_model_list(app, admin_site_models_order):
     return app["models"]
 
 
-def cache_user(foo):
-    @wraps(foo)
+def cache_user(func):
+    cache_user_dict = {"": list()}
+
+    @wraps(func)
     def wrapper(self, request, *args, **kwargs):
         user = request.user.username
-        if user in CACHE_USER_DICT:
-            return CACHE_USER_DICT[user]
+        if user in cache_user_dict:
+            return cache_user_dict[user]
 
-        result = foo(self, request, *args, **kwargs)
-        CACHE_USER_DICT[user] = result
+        result = func(self, request, *args, **kwargs)
+        cache_user_dict[user] = result
         return result
 
     return wrapper
