@@ -9,7 +9,7 @@ from apps.core.models import Setting
 from config.settings.base import MAILJET_TEMPLATE_ID
 
 
-def send_question(serializer):
+def send_question(instance):
     """Transmit question parameters in the template.
 
     For more information please read the documentation:
@@ -23,12 +23,15 @@ def send_question(serializer):
 
     message.template_id = MAILJET_TEMPLATE_ID
     message.merge_global_data = {
-        "question": serializer.validated_data["question"],
-        "author_name": serializer.validated_data["author_name"],
-        "author_email": serializer.validated_data["author_email"],
+        "question": instance.question,
+        "author_name": instance.author_name,
+        "author_email": instance.author_email,
     }
     message.send()
-    return message
+
+    if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
+        return True
+    return False
 
 
 def get_pdf_response(press_release_instance, path_to_font):

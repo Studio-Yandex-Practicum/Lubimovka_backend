@@ -1,11 +1,6 @@
 import logging
 
-from anymail.exceptions import (
-    AnymailConfigurationError,
-    AnymailInvalidAddress,
-    AnymailRequestsAPIError,
-    AnymailSerializationError,
-)
+from anymail.exceptions import AnymailConfigurationError, AnymailError
 from drf_spectacular.utils import extend_schema
 from googleapiclient.errors import HttpError
 from rest_framework import mixins, viewsets
@@ -49,15 +44,14 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             logger.critical(error, exc_info=True)
 
         try:
-            send_success = send_application_email(serializer)
+            send_success = send_application_email(instance)
             if send_success:
                 instance.sent_to_email = True
                 instance.save()
         except (
             AnymailConfigurationError,
-            AnymailRequestsAPIError,
-            AnymailInvalidAddress,
+            AnymailError,
             ValueError,
-            AnymailSerializationError,
         ) as error:
-            logger.critical(error, exc_info=True)
+            msg = f"Не удалось отправить заявку id = {instance.id} на почту.\n{error}"
+            logger.critical(msg, exc_info=True)

@@ -5,7 +5,7 @@ from apps.core.models import Setting
 from config.settings.base import MAILJET_TEMPLATE_ID_PLAY
 
 
-def send_application_email(serializer):
+def send_application_email(instance):
     message = EmailMessage(
         subject="Подана заявка на участие",
         from_email=Setting.get_setting("email_send_from"),
@@ -13,21 +13,18 @@ def send_application_email(serializer):
     )
     message.template_id = MAILJET_TEMPLATE_ID_PLAY
     message.merge_global_data = {
-        "year": serializer.validated_data["year"],
-        "birth_year": serializer.validated_data["birth_year"],
-        "first_name": serializer.validated_data["last_name"],
-        "last_name": serializer.validated_data["last_name"],
-        "city": serializer.validated_data["city"],
-        "phone_number": serializer.validated_data["phone_number"],
-        "email": serializer.validated_data["email"],
-        "title": serializer.validated_data["title"],
+        "year": instance.year,
+        "birth_year": instance.birth_year,
+        "first_name": instance.last_name,
+        "last_name": instance.last_name,
+        "city": instance.city,
+        "phone_number": instance.phone_number.as_international,
+        "email": instance.email,
+        "title": instance.title,
     }
 
     # attach file
-    filename = serializer.validated_data["file"].name
-    data = serializer.validated_data["file"].open().read()
-    content_type = serializer.validated_data["file"].content_type
-    message.attach(filename, data, content_type)
+    message.attach_file(instance.file.path)
 
     message.send()
 
