@@ -65,10 +65,7 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
 class MasterClassAdmin(admin.ModelAdmin):
     list_display = ("name",)
     exclude = ("events",)
-    search_fields = (
-        "play__name",
-        "name",
-    )
+    search_fields = ("name",)
     inlines = (TeamMemberInline,)
 
 
