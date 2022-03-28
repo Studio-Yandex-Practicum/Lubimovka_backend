@@ -15,7 +15,7 @@ __all__ = (
     AuthorListSerializer,
     AuthorRetrieveSerializer,
     AuthorSearchSerializer,
-    AuthorSearchSerializer,
+    AuthorLettersSerializer,
     AuthorForPlaySerializer,
     EventMasterClassSerializer,
     EventPerformanceSerializer,
