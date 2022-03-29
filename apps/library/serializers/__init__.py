@@ -1,4 +1,4 @@
-from .author import AuthorListSerializer, AuthorRetrieveSerializer, AuthorSearchSerializer
+from .author import AuthorLettersSerializer, AuthorListSerializer, AuthorRetrieveSerializer, AuthorSearchSerializer
 from .masterclass import EventMasterClassSerializer
 from .performance import (
     EventPerformanceSerializer,
@@ -15,6 +15,7 @@ __all__ = (
     AuthorListSerializer,
     AuthorRetrieveSerializer,
     AuthorSearchSerializer,
+    AuthorLettersSerializer,
     AuthorForPlaySerializer,
     EventMasterClassSerializer,
     EventPerformanceSerializer,

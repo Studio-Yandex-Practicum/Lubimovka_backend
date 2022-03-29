@@ -1,4 +1,4 @@
-from .author import AuthorsReadViewSet
+from .author import AuthorLettersAPIView, AuthorsReadViewSet
 from .participation import ParticipationViewSet
 from .performance import PerformanceMediaReviewViewSet, PerformanceReviewViewSet, PerformanceViewSet
 from .play import PlayViewSet
@@ -14,4 +14,5 @@ __all__ = (
     SearchResultViewSet,
     PerformanceReviewViewSet,
     PerformanceMediaReviewViewSet,
+    AuthorLettersAPIView,
 )
