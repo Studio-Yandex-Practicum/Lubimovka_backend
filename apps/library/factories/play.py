@@ -41,8 +41,7 @@ class PlayFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def program(self):
-        qs = ProgramType.objects.exclude(slug="other_plays")
-        return qs.order_by("?").first()
+        return ProgramType.objects.exclude(slug="other_plays").order_by("?").first()
 
     @factory.lazy_attribute
     def festival(self):
@@ -65,5 +64,4 @@ class OtherPlayFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def program(self):
-        program = ProgramTypeFactory(name="Другие пьесы", slug="other_plays")
-        return program
+        return ProgramTypeFactory(name="Другие пьесы", slug="other_plays")

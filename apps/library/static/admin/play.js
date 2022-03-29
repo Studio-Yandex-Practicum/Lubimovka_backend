@@ -39,5 +39,15 @@ $(document).ready(function(jQuery) {
                 },
             });
         });
+        $('select#id_program').each(function() {
+            $.ajax({
+                data: $(this).serialize(),
+                url: "ajax_play_program/",
+                success: function (response) {
+                    let slug = response.slug
+                    toggleLink(slug);
+                },
+            });
+        });
     });
 });
