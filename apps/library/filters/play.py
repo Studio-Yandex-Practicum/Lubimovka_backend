@@ -1,8 +1,5 @@
-from django.contrib import admin
-from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
 
-from apps.core.constants import PlayType
 from apps.library.models import Play
 
 
@@ -28,34 +25,3 @@ class PlayFilter(filters.FilterSet):
             "program",
             "festival",
         )
-
-
-class PlayTypeFilter(admin.SimpleListFilter):
-    title = _("Тип пьесы")
-    parameter_name = "play_type"
-
-    def lookups(self, request, model_admin):
-        return (
-            (None, _("Пьесы Любимовки")),
-            ("other", _("Показать другие пьесы")),
-            ("all", _("Показать все")),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == "other":
-            return Play.objects.filter(play_type=PlayType.OTHER)
-        if self.value() is None:
-            return Play.objects.filter(play_type=PlayType.MAIN)
-
-    def choices(self, changelist):
-        for lookup, title in self.lookup_choices:
-            yield {
-                "selected": self.value() == lookup,
-                "query_string": changelist.get_query_string(
-                    {
-                        self.parameter_name: lookup,
-                    },
-                    [],
-                ),
-                "display": title,
-            }

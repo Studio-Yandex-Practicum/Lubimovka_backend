@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from apps.library.filters.play import PlayTypeFilter
 from apps.library.models import Author, Play
 
 
@@ -21,11 +20,9 @@ class PlayAdmin(admin.ModelAdmin):
         "program",
         "festival",
         "published",
-        "play_type",
     )
     inlines = (AuthorInline,)
     list_filter = (
-        PlayTypeFilter,
         "authors",
         "city",
         "program",
@@ -42,7 +39,6 @@ class PlayAdmin(admin.ModelAdmin):
     )
     fields = (
         "name",
-        "play_type",
         "city",
         "year",
         "url_download",
@@ -52,6 +48,3 @@ class PlayAdmin(admin.ModelAdmin):
         "published",
         "link",
     )
-
-    class Media:
-        js = ("admin/play.js",)

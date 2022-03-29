@@ -22,12 +22,24 @@ class PlayInline(admin.TabularInline):
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ["collapse"]
-    readonly_fields = ("play_type",)
 
-    def play_type(self, obj):
-        return obj.play.get_play_type_display()
+    def get_queryset(self, request):
+        return Author.plays.through.objects.filter()
 
-    play_type.short_description = "Тип пьесы"
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = Author.plays.through.objects.exclude(program__slug="other_plays")
+
+
+class OtherPlayInline(admin.TabularInline):
+    model = Author.plays.through
+    extra = 1
+    verbose_name = "Другая пьеса"
+    verbose_name_plural = "Другие пьесы"
+    classes = ["collapse"]
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        qs = Author.plays.through
+        kwargs["queryset"] = qs.filter(program__slug="other_plays")
 
 
 class SocialNetworkLinkInline(admin.TabularInline):
@@ -53,6 +65,7 @@ class AuthorAdmin(admin.ModelAdmin):
     inlines = (
         AchievementInline,
         PlayInline,
+        OtherPlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
     )

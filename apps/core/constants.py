@@ -12,11 +12,6 @@ class AgeLimit(models.IntegerChoices):
     ADULTS_ONLY = (18, "18+")
 
 
-class PlayType(models.TextChoices):
-    MAIN = "MAIN", _("Пьесы Любимовки")
-    OTHER = "OTHER", _("Другие пьесы")
-
-
 class Status(models.TextChoices):
     IN_PROCESS = "IN_PROCESS", _("В работе")
     REVIEW = "REVIEW", _("На проверке")

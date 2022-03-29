@@ -2,7 +2,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
 
-from apps.core.constants import PlayType
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.info.models import Festival
@@ -39,12 +38,6 @@ class Play(BaseModel):
         max_length=70,
         verbose_name="Название пьесы",
     )
-    play_type = models.CharField(
-        choices=PlayType.choices,
-        default=PlayType.MAIN,
-        max_length=15,
-        verbose_name="Тип пьесы",
-    )
     city = models.CharField(
         max_length=200,
         verbose_name="Город",
@@ -76,9 +69,6 @@ class Play(BaseModel):
         on_delete=models.PROTECT,
         related_name="plays",
         verbose_name="Программа",
-        blank=True,
-        null=True,
-        help_text="Для пьес Любимовки должна быть выбрана Программа",
     )
     festival = models.ForeignKey(
         Festival,
@@ -117,7 +107,7 @@ class Play(BaseModel):
         return super().save(*args, **kwargs)
 
     def clean(self):
-        if self.play_type == PlayType.MAIN:
+        if self.program.slug != "other_plays":
             if not self.url_download.name:
                 raise ValidationError("Для пьесы Любимовки неоходимо загрузить файл")
             if self.program is None:
@@ -125,7 +115,7 @@ class Play(BaseModel):
             if self.festival is None:
                 raise ValidationError("У пьесы Любимовки должен быть фестиваль")
             self.link = ""
-        if self.play_type == PlayType.OTHER:
+        if self.program.slug == "other_plays":
             if self.link == "":
                 raise ValidationError("Необходимо указать ссылку на другую пьесу")
             self.published = False

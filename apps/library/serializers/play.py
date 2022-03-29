@@ -13,6 +13,17 @@ class AuthorForPlaySerializer(serializers.ModelSerializer):
         fields = ("name", "slug")
 
 
+class OtherPlaySerializer(serializers.ModelSerializer):
+    """Сериализатор Пьесы с программой 'Другие пьесы'."""
+
+    class Meta:
+        model = Play
+        fields = (
+            "name",
+            "link",
+        )
+
+
 class PlaySerializer(serializers.ModelSerializer):
     """Сериализатор Пьесы."""
 
