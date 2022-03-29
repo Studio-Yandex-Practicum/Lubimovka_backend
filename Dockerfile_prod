@@ -4,4 +4,4 @@ COPY .  .
 COPY requirements/ requirements/
 RUN python -m pip install --upgrade pip
 RUN pip install -r requirements/prod.txt
-CMD gunicorn config.wsgi:application --bind 0.0.0.0:8000
+CMD gunicorn config.wsgi:application -c /code/gunicorn.conf.py
