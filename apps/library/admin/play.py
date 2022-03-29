@@ -1,6 +1,11 @@
 from django.contrib import admin
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.urls import re_path
 
+from apps.library.filters.play import PlayProgramFilter
 from apps.library.models import Author, Play
+from apps.library.models.play import ProgramType
 
 
 class AuthorInline(admin.TabularInline):
@@ -24,9 +29,9 @@ class PlayAdmin(admin.ModelAdmin):
     )
     inlines = (AuthorInline,)
     list_filter = (
+        PlayProgramFilter,
         "authors",
         "city",
-        "program",
         "festival",
         "published",
     )
@@ -39,13 +44,31 @@ class PlayAdmin(admin.ModelAdmin):
         "festival__year",
     )
     fields = (
+        "program",
         "name",
         "city",
         "year",
         "url_download",
         "url_reading",
-        "program",
         "festival",
         "published",
         "link",
     )
+
+    def get_urls(self):
+        urls = super().get_urls()
+        ajax = [
+            re_path(r"\S*/ajax_play_program/", self.play_program),
+        ]
+        return ajax + urls
+
+    def play_program(self, request, obj_id=None):
+        program_id = request.GET.get("program")
+        program = get_object_or_404(ProgramType, id=program_id)
+        slug = program.slug
+        print(slug)
+        response = {"slug": slug}
+        return JsonResponse(response)
+
+    class Media:
+        js = ("admin/play.js",)
