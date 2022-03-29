@@ -316,6 +316,7 @@ class SelectorAdmin(admin.ModelAdmin):
     list_display = (
         "person",
         "get_year",
+        "position",
     )
 
     @admin.display(

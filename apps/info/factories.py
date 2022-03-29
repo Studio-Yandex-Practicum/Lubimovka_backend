@@ -72,6 +72,7 @@ class SelectorFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("person", "festival")
 
     festival = factory.Iterator(Festival.objects.all())
+    position = factory.Faker("job", locale="ru_RU")
 
     @factory.lazy_attribute
     def person(self):

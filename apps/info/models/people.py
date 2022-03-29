@@ -150,6 +150,10 @@ class Selector(BaseModel):
         related_name="selectors",
         verbose_name="Фестиваль",
     )
+    position = models.CharField(
+        max_length=150,
+        verbose_name="Должность",
+    )
 
     class Meta:
         verbose_name = "Отборщик фестиваля"

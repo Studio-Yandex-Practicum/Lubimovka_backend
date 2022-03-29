@@ -14,4 +14,5 @@ class SelectorsSerializer(serializers.ModelSerializer):
             "id",
             "person",
             "year",
+            "position",
         )
