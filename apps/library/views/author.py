@@ -26,7 +26,7 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
         }
     )
     def list(self, request):
-        if self.action == "list" and not request.query_params.get("letter"):
+        if not request.query_params.get("letter"):
             raise PermissionDenied("Укажите параметр - letter.")
         return super().list(self, request)
 
@@ -55,7 +55,7 @@ class AuthorLettersAPIView(APIView):
     @extend_schema(responses=AuthorLettersSerializer)
     def get(self, request):
         authors_list = Author.objects.annotate(letter=Substr("person__last_name", pos=1, length=1)).values("letter")
-        letters_values_list = sorted(list({author.get("letter") for author in authors_list}))
+        letters_values_list = list({author.get("letter") for author in authors_list})
         letters_instance = {"letters": letters_values_list}
         serializer = AuthorLettersSerializer(instance=letters_instance)
         return Response(serializer.data)
