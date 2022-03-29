@@ -1,7 +1,8 @@
 from django import forms
+from django_select2 import forms as s2forms
 
 from apps.core.models import Setting
-from apps.info.models import FestivalTeamMember
+from apps.info.models import FestivalTeamMember, Volunteer
 
 
 class ArtTeamMemberForm(forms.ModelForm):
@@ -41,3 +42,30 @@ class ArtTeamMemberForm(forms.ModelForm):
         if is_pr_manager and not data_manager:
             msg = "Дополните данные о менеджере. Укажите Имя Фамилия в дательном падеже."
             self.add_error("data_manager", msg)
+
+
+class VolunteerForm(forms.ModelForm):
+    """Add autocomplete fields."""
+
+    class Meta:
+        model = Volunteer
+        fields = (
+            "person",
+            "festival",
+            "review_title",
+            "review_text",
+        )
+        widgets = {
+            "person": s2forms.Select2Widget(
+                attrs={
+                    "data-placeholder": "Выберите человека",
+                    "data-allow-clear": "true",
+                }
+            ),
+            "festival": s2forms.Select2Widget(
+                attrs={
+                    "data-placeholder": "Выберите фестиваль",
+                    "data-allow-clear": "true",
+                }
+            ),
+        }
