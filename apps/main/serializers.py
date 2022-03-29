@@ -12,7 +12,7 @@ from apps.main.schema.schema_extension import MAIN_SCHEMA_SUCCESS_MESSAGE
 class BannerSerializer(serializers.ModelSerializer):
     button = serializers.SerializerMethodField()
 
-    def get_button(self, obj):
+    def get_button(self, obj) -> str:
         return obj.get_button_display()
 
     class Meta:

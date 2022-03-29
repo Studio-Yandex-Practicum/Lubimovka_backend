@@ -38,6 +38,7 @@ class PlaySerializer(serializers.ModelSerializer):
             "name",
             "authors",
             "city",
+            "published",
             "year",
             "url_download",
             "url_reading",
