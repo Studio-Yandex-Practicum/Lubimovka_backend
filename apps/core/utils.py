@@ -93,7 +93,7 @@ def manual_order_model_list(app, admin_site_models_order):
 
 
 def cache_user(func):
-    cache_user_dict = {"": list()}
+    cache_user_dict = dict()
 
     @wraps(func)
     def wrapper(self, request, *args, **kwargs):
@@ -115,15 +115,15 @@ def get_app_list(self, request):
 
     app_dict = self._build_app_dict(request)
 
-    if admin_site_apps_order is None:
-        app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
-    else:
+    if admin_site_apps_order:
         app_list = manual_order_app_list(app_dict, admin_site_apps_order)
+    else:
+        app_list = sorted(app_dict.values(), key=lambda x: x["name"].lower())
 
     for app in app_list:
-        if admin_site_models_order is None:
-            app["models"].sort(key=lambda x: x["name"])
-        else:
+        if admin_site_models_order:
             app["models"] = manual_order_model_list(app, admin_site_models_order)
+        else:
+            app["models"].sort(key=lambda x: x["name"])
 
     return app_list
