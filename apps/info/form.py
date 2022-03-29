@@ -33,14 +33,6 @@ class FestTeamMemberForm(forms.ModelForm):
             "is_pr_manager",
             "data_manager",
         )
-        widgets = {
-            "person": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите человека",
-                    "data-allow-clear": "true",
-                }
-            ),
-        }
 
     def clean(self):
         cleaned_data = super().clean()

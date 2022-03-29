@@ -287,6 +287,16 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
     ordering = ("person__last_name", "person__first_name")
 
     search_fields = ("position", "person__first_name", "person__last_name")
+    formfield_overrides = {
+        models.ForeignKey: {
+            "widget": s2forms.Select2Widget(
+                attrs={
+                    "data-placeholder": "Выберите человека",
+                    "data-allow-clear": "true",
+                }
+            )
+        }
+    }
 
     def save_model(self, request, obj, form, change):
         """Данные из поля 'data_manager' проверяются и сохраняются в модели 'Setting'."""
