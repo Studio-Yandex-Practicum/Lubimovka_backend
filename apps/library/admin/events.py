@@ -122,7 +122,7 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        form.base_fields["play"].queryset = Play.objects.all().exclude(program__slug="other_plays")
+        form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
         return form
 
 
@@ -141,5 +141,5 @@ class ReadingAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        form.base_fields["play"].queryset = Play.objects.all().exclude(program__slug="other_plays")
+        form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
         return form

@@ -120,7 +120,7 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def item(self):
-        return Play.objects.all().exclude(program__slug="other_plays").order_by("?").first()
+        return Play.objects.exclude(program__slug="other_plays").order_by("?").first()
 
 
 class OrderedVideoFactory(factory.django.DjangoModelFactory):
