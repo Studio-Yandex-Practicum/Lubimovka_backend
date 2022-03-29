@@ -10,13 +10,8 @@ class SelectorsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Selector
-        fields = ("id", "person", "year", "review_title", "review_text")
-
-
-class SelectorsInFestivalSerializer(serializers.ModelSerializer):
-    person = serializers.IntegerField(source="person.id")
-    year = serializers.IntegerField(source="festival.year")
-
-    class Meta:
-        model = Selector
-        fields = ("id", "year", "review_title", "review_text", "person")
+        fields = (
+            "id",
+            "person",
+            "year",
+        )

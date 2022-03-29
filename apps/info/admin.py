@@ -316,20 +316,7 @@ class SelectorAdmin(admin.ModelAdmin):
     list_display = (
         "person",
         "get_year",
-        "is_review",
     )
-    readonly_fields = ("is_review",)
-
-    @admin.display(
-        boolean=True,
-        ordering="review_title",
-        description="Есть отзыв?",
-    )
-    def is_review(self, obj):
-        """Возвращает: есть ли отзыв."""
-        if obj.review_text:
-            return True
-        return False
 
     @admin.display(
         ordering="festival",

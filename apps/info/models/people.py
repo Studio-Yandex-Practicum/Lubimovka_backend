@@ -150,16 +150,6 @@ class Selector(BaseModel):
         related_name="selectors",
         verbose_name="Фестиваль",
     )
-    review_title = models.CharField(
-        max_length=50,
-        blank=True,
-        verbose_name="Заголовок отзыва",
-    )
-    review_text = models.TextField(
-        max_length=2000,
-        blank=True,
-        verbose_name="Текст отзыва",
-    )
 
     class Meta:
         verbose_name = "Отборщик фестиваля"
@@ -181,12 +171,8 @@ class Selector(BaseModel):
 
     def clean(self):
         if self._has_person_before_saving():
-            if not self.person.email:
-                raise ValidationError("Укажите email для отборщика")
             if not self.person.image:
                 raise ValidationError("Для отборщика необходимо выбрать его фото")
-            if not self.person.city:
-                raise ValidationError("Укажите город проживания отборщика")
 
     def _has_person_before_saving(self):
         return self.person_id is not None
