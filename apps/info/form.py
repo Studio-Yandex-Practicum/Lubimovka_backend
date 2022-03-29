@@ -1,18 +1,17 @@
 from django import forms
-from django_select2 import forms as s2forms
 
 from apps.core.models import Setting
-from apps.info.models import FestivalTeamMember, Volunteer
+from apps.info.models import FestivalTeamMember
 
 
-class FestTeamMemberForm(forms.ModelForm):
+class ArtTeamMemberForm(forms.ModelForm):
     """Форма для Арт дирекции фестиваля.
 
     Плюс дополнительное поле о данных о PR-менеджере.
     """
 
     def __init__(self, *args, **kwargs):
-        super(FestTeamMemberForm, self).__init__(*args, **kwargs)
+        super(ArtTeamMemberForm, self).__init__(*args, **kwargs)
         if self["is_pr_manager"].value():
             pr_manager_name = Setting.objects.filter(settings_key="pr_manager_name").first()
             self.fields["data_manager"].initial = pr_manager_name.text
@@ -42,30 +41,3 @@ class FestTeamMemberForm(forms.ModelForm):
         if is_pr_manager and not data_manager:
             msg = "Дополните данные о PR-директоре. Укажите Имя Фамилия в дательном падеже."
             self.add_error("data_manager", msg)
-
-
-class VolunteerForm(forms.ModelForm):
-    """Add autocomplete fields."""
-
-    class Meta:
-        model = Volunteer
-        fields = (
-            "person",
-            "festival",
-            "review_title",
-            "review_text",
-        )
-        widgets = {
-            "person": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите человека",
-                    "data-allow-clear": "true",
-                }
-            ),
-            "festival": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите фестиваль",
-                    "data-allow-clear": "true",
-                }
-            ),
-        }

@@ -1,12 +1,10 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
-from django.db import models
 from django.utils.html import format_html
-from django_select2 import forms as s2forms
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.form import FestTeamMemberForm, VolunteerForm
+from apps.info.form import ArtTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Question, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
@@ -92,7 +90,6 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
 
 @admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
-    form = VolunteerForm
     list_display = (
         "person",
         "get_year",
@@ -188,17 +185,6 @@ class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
     list_filter = ("festival",)
 
-    formfield_overrides = {
-        models.OneToOneField: {
-            "widget": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите фестиваль",
-                    "data-allow-clear": "true",
-                }
-            )
-        }
-    }
-
 
 class PressRealeaseAdmin(admin.ModelAdmin):
     list_display = ("title",)
@@ -208,6 +194,7 @@ class PressRealeaseAdmin(admin.ModelAdmin):
 
 @admin.register(ArtTeamMember)
 class ArtTeamMemberAdmin(admin.ModelAdmin):
+    form = ArtTeamMemberForm
     list_display = (
         "person",
         "team",
@@ -228,16 +215,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
     ordering = ("person__last_name", "person__first_name")
 
     search_fields = ("position", "person__first_name", "person__last_name")
-    formfield_overrides = {
-        models.ForeignKey: {
-            "widget": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите человека",
-                    "data-allow-clear": "true",
-                }
-            )
-        }
-    }
 
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset().filter(team="art")
@@ -256,7 +233,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
 
 @admin.register(FestTeamMember)
 class FestTeamMemberAdmin(admin.ModelAdmin):
-    form = FestTeamMemberForm
     list_display = (
         "person",
         "team",
@@ -287,16 +263,6 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
     ordering = ("person__last_name", "person__first_name")
 
     search_fields = ("position", "person__first_name", "person__last_name")
-    formfield_overrides = {
-        models.ForeignKey: {
-            "widget": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите человека",
-                    "data-allow-clear": "true",
-                }
-            )
-        }
-    }
 
     def save_model(self, request, obj, form, change):
         """Данные из поля 'data_manager' проверяются и сохраняются в модели 'Setting'."""
@@ -328,16 +294,6 @@ class SponsorAdmin(admin.ModelAdmin):
         "person",
         "position",
     )
-    formfield_overrides = {
-        models.OneToOneField: {
-            "widget": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите человека",
-                    "data-allow-clear": "true",
-                }
-            )
-        }
-    }
 
 
 @admin.register(Question)

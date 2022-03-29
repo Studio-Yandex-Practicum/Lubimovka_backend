@@ -1,10 +1,7 @@
 from django.contrib import admin
-from django.db import models
-from django_select2 import forms as s2forms
 
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Role
-from apps.library.forms.admin import PerformanceAdminForm, ReadingAdminForm
 from apps.library.models import (
     MasterClass,
     Performance,
@@ -18,8 +15,6 @@ from apps.library.models import (
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
     model = Performance.images_in_block.through
-    readonly_fields = ("inline_image_preview",)
-    autocomplete_fields = ("image",)
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
@@ -48,10 +43,7 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
         "person",
         "role",
     )
-    autocomplete_fields = (
-        "person",
-        "role",
-    )
+    autocomplete_fields = ("person",)
     extra = 0
     classes = ["collapse"]
 
@@ -79,21 +71,10 @@ class MasterClassAdmin(admin.ModelAdmin):
         "name",
     )
     inlines = (TeamMemberInline,)
-    formfield_overrides = {
-        models.ForeignKey: {
-            "widget": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите проект",
-                    "data-allow-clear": "true",
-                }
-            )
-        }
-    }
 
 
 @admin.register(Performance)
 class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
-    form = PerformanceAdminForm
     list_display = (
         "name",
         "description",
@@ -146,7 +127,6 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
 
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
-    form = ReadingAdminForm
     list_display = (
         "play",
         "name",

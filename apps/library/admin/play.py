@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from apps.library.forms.admin import PlayAdminForm
 from apps.library.models import Author, Play
 
 
@@ -16,7 +15,6 @@ class AuthorInline(admin.TabularInline):
 
 @admin.register(Play)
 class PlayAdmin(admin.ModelAdmin):
-    form = PlayAdminForm
     filter_horizontal = ("authors",)
     list_display = (
         "name",

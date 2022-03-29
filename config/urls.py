@@ -42,7 +42,6 @@ api_schema_patterns = [
 ]
 
 urlpatterns = [
-    path("select2/", include("django_select2.urls")),
     path(
         route="admin/",
         view=admin.site.urls,

@@ -1,6 +1,4 @@
 from django.contrib import admin
-from django.db import models
-from django_select2 import forms as s2forms
 
 from apps.afisha.models import Event
 
@@ -26,16 +24,6 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ("type",)
     search_fields = ("common_event",)
     empty_value_display = "-пусто-"
-    formfield_overrides = {
-        models.ForeignKey: {
-            "widget": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите событие",
-                    "data-allow-clear": "true",
-                }
-            )
-        }
-    }
 
 
 admin.site.register(Event, EventAdmin)

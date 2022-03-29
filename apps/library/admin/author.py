@@ -1,9 +1,7 @@
 from django.contrib import admin
-from django.db import models
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import re_path
-from django_select2 import forms as s2forms
 
 from apps.core import utils
 from apps.core.models import Person
@@ -19,7 +17,6 @@ class AchievementAdmin(admin.ModelAdmin):
 class AchievementInline(admin.TabularInline):
     model = Author.achievements.through
     autocomplete_fields = ("achievement",)
-    search_fields = ("tag",)
     extra = 1
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
@@ -87,21 +84,10 @@ class AuthorAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
     def get_ordering(self, request):
-        return (
+        return [
             "person__first_name",
             "person__last_name",
-        )
-
-    formfield_overrides = {
-        models.OneToOneField: {
-            "widget": s2forms.Select2Widget(
-                attrs={
-                    "data-placeholder": "Выберите человека",
-                    "data-allow-clear": "true",
-                }
-            )
-        }
-    }
+        ]
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
