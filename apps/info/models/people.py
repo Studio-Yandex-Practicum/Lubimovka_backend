@@ -136,3 +136,57 @@ class Volunteer(BaseModel):
 
     def _has_person_before_saving(self):
         return self.person_id is not None
+
+
+class Selector(BaseModel):
+    person = models.ForeignKey(
+        Person,
+        on_delete=models.PROTECT,
+        verbose_name="Человек",
+    )
+    festival = models.ForeignKey(
+        Festival,
+        on_delete=models.CASCADE,
+        related_name="selectors",
+        verbose_name="Фестиваль",
+    )
+    review_title = models.CharField(
+        max_length=50,
+        blank=True,
+        verbose_name="Заголовок отзыва",
+    )
+    review_text = models.TextField(
+        max_length=2000,
+        blank=True,
+        verbose_name="Текст отзыва",
+    )
+
+    class Meta:
+        verbose_name = "Отборщик фестиваля"
+        verbose_name_plural = "Отборщики фестиваля"
+        ordering = ("person__last_name", "person__first_name")
+        constraints = [
+            UniqueConstraint(
+                fields=("person", "festival"),
+                name="unique_selector",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.person.first_name} {self.person.last_name} - Отборщик фестиваля {self.festival.year} года"
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def clean(self):
+        if self._has_person_before_saving():
+            if not self.person.email:
+                raise ValidationError("Укажите email для отборщика")
+            if not self.person.image:
+                raise ValidationError("Для отборщика необходимо выбрать его фото")
+            if not self.person.city:
+                raise ValidationError("Укажите город проживания отборщика")
+
+    def _has_person_before_saving(self):
+        return self.person_id is not None

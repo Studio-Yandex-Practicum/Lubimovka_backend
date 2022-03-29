@@ -5,7 +5,17 @@ from django.utils.html import format_html
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.form import FestTeamMemberForm
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Question, Sponsor, Volunteer
+from apps.info.models import (
+    Festival,
+    FestivalTeamMember,
+    Partner,
+    Place,
+    PressRelease,
+    Question,
+    Selector,
+    Sponsor,
+    Volunteer,
+)
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
@@ -299,3 +309,32 @@ class QuestionAdmin(admin.ModelAdmin):
         if request.user.is_authenticated and (request.user.is_admin or request.user.is_superuser):
             return super().has_module_permission(request)
         return False
+
+
+@admin.register(Selector)
+class SelectorAdmin(admin.ModelAdmin):
+    list_display = (
+        "person",
+        "get_year",
+        "is_review",
+    )
+    readonly_fields = ("is_review",)
+
+    @admin.display(
+        boolean=True,
+        ordering="review_title",
+        description="Есть отзыв?",
+    )
+    def is_review(self, obj):
+        """Возвращает: есть ли отзыв."""
+        if obj.review_text:
+            return True
+        return False
+
+    @admin.display(
+        ordering="festival",
+        description="Год фестиваля",
+    )
+    def get_year(self, obj):
+        """Возвращает год фестиваля."""
+        return obj.festival.year

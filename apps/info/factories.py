@@ -6,7 +6,7 @@ from faker import Faker
 from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person
 from apps.core.utils import get_picsum_image
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Sponsor, Volunteer
+from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
 
 fake = Faker(locale="en_US")
 
@@ -52,6 +52,23 @@ class SponsorFactory(factory.django.DjangoModelFactory):
 class VolunteerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Volunteer
+        django_get_or_create = ("person", "festival")
+
+    festival = factory.Iterator(Festival.objects.all())
+    review_title = factory.Faker("text", max_nb_chars=50, locale="ru_RU")
+    review_text = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
+
+    @factory.lazy_attribute
+    def person(self):
+        queryset = Person.objects.filter(email__isnull=False).exclude(image__exact="")
+        person = queryset.order_by("?").first()
+        return person
+
+
+@restrict_factory(general=(Festival, Person))
+class SelectorFactory(factory.django.DjangoModelFactory):
+    class Meta:
+        model = Selector
         django_get_or_create = ("person", "festival")
 
     festival = factory.Iterator(Festival.objects.all())
