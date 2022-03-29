@@ -53,6 +53,7 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
                 continue
 
             if filename[:prefix_len] == prefix:
+                print(self.extMatch.pattern)
                 suffix = filename[prefix_len:]
                 parts = suffix.split(".")
                 for part in parts:
@@ -61,9 +62,9 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
                         break
         if len(result) < self.backupCount:
             result = []
-        else:
-            result.sort()
-            result = result[: len(result) - self.backupCount]
+            return result
+        result.sort()
+        result = result[: len(result) - self.backupCount]
         return result
 
     def getFilesToDelete(self):
