@@ -34,7 +34,7 @@ services:
       - media_value_prod:/code/media/
       - /LUBIMOVKA/prod/backend_logs/:/code/logs/
     command: >
-      sh -c "python manage.py migrate &&
+      sh -c "sleep 5; python manage.py migrate &&
              python manage.py collectstatic --noinput"
     depends_on:
       - backend

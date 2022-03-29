@@ -29,6 +29,10 @@ class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
 
     pagination_class = None
 
+    def get_queryset(self):  # this needs only for schema generation
+        if getattr(self, "swagger_fake_view", False):
+            return Author.objects.none()
+
     def get_querylist(self):
         """
         Возвращает переменную querylist.

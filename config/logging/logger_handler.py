@@ -1,6 +1,6 @@
 import os
 import pathlib
-import shutil
+import re
 import time
 from logging.handlers import TimedRotatingFileHandler
 
@@ -18,8 +18,12 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
     """
 
     def __init__(self, filename, when, interval, backupCount, oldbackupCount):
+        self.oldbackupCount = int(oldbackupCount)
+        self.base_name = pathlib.Path(filename)
+        self.logs_dir_name = self.base_name.parent
+        self.old_logs_dir_name = self.logs_dir_name.joinpath("old")
 
-        pathlib.Path(filename).parent.mkdir(parents=True, exist_ok=True)
+        pathlib.Path(self.old_logs_dir_name).mkdir(parents=True, exist_ok=True)
 
         super().__init__(
             filename=str(filename),
@@ -27,63 +31,33 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
             interval=int(interval),
             backupCount=int(backupCount),
         )
-        self.oldbackupCount = int(oldbackupCount)
+        self.file_path = pathlib.Path(self.baseFilename)
 
     def getFilesToMoving(self):
-        dir_name = self.file_path.parent
-        base_name = self.baseFilename
-        filenames_in_dir = os.listdir(dir_name)
-
         result = []
 
-        ending = self.file_path.suffix
-        prefix = self.file_path.stem + "_"
-        prefix_len = len(prefix)
+        regex = f"^(debug|error)_{self.extMatch.pattern[1:-1]}.log$"
+        compile_pattern = re.compile(regex, re.ASCII)
 
-        for filename in filenames_in_dir:
+        for filename in self.logs_dir_name.iterdir():
             # Our files could be just about anything after custom naming, but
             # likely candidates are of the form
             # foo.log.DATETIME_SUFFIX or foo.DATETIME_SUFFIX.log
-            if (
-                not filename.startswith(base_name)
-                and filename.endswith(ending)
-                and len(filename) > (prefix_len + 1)
-                and not filename[prefix_len + 1].isdigit()
-            ):
+            if not compile_pattern.match(filename.name):
                 continue
-
-            if filename[:prefix_len] == prefix:
-                print(self.extMatch.pattern)
-                suffix = filename[prefix_len:]
-                parts = suffix.split(".")
-                for part in parts:
-                    if self.extMatch.match(part):
-                        result.append(str(pathlib.PurePath.joinpath(dir_name, filename)))
-                        break
+            result.append(pathlib.PurePath.joinpath(self.logs_dir_name, filename))
         if len(result) < self.backupCount:
             result = []
             return result
-        result.sort()
-        result = result[: len(result) - self.backupCount]
+        result = sorted(result[: len(result) - self.backupCount])
         return result
 
     def getFilesToDelete(self):
-        old_logs = os.listdir(self.old_logs_directory)
+        old_logs = [log for log in self.old_logs_dir_name.iterdir()]
         if len(old_logs) > self.oldbackupCount:
             logs_to_delete = sorted(old_logs)[: len(old_logs) - self.oldbackupCount]
             for old_log in logs_to_delete:
-                old_log_path = self.old_logs_directory + old_log
-                os.remove(old_log_path)
-
-    @property
-    def file_path(self):
-        return pathlib.Path(self.baseFilename)
-
-    @property
-    def old_logs_directory(self):
-        path = str(self.file_path.parent) + "/old/"
-        pathlib.Path(path).mkdir(parents=True, exist_ok=True)
-        return path
+                os.remove(old_log)
 
     def doRollover(self):  # Noqa
         if self.stream:
@@ -102,22 +76,17 @@ class TimedRotatingFileHandlerWithZip(TimedRotatingFileHandler):
                 addend = -3600
             timeTuple = time.localtime(time_point + addend)
 
-        rotation_file_name = self.rotation_filename(
-            str(self.file_path.parent)
-            + "/"
-            + self.file_path.stem
-            + "_"
-            + time.strftime(self.suffix, timeTuple)
-            + self.file_path.suffix
-        )
-        if pathlib.Path(rotation_file_name).exists():
-            os.remove(rotation_file_name)
-        self.rotate(self.baseFilename, rotation_file_name)
+        rotated_filename = f"{self.base_name.stem}_{time.strftime(self.suffix, timeTuple)}{self.base_name.suffix}"
 
-        for file_path in self.getFilesToMoving():  # Moving old log files to the old's path.
-            filename = file_path.split("/")[-1]
-            new_file_path = self.old_logs_directory + filename
-            shutil.move(file_path, new_file_path)
+        rotated_filepath = self.rotation_filename(self.logs_dir_name.joinpath(rotated_filename))
+        if rotated_filepath.exists():
+            os.remove(rotated_filepath)
+        self.rotate(self.baseFilename, rotated_filepath)
+
+        for file_path in self.getFilesToMoving():
+            # Moving old log files to the old's path.
+            new_file_path = self.old_logs_dir_name.joinpath(file_path.name)
+            os.replace(file_path, new_file_path)
 
         self.getFilesToDelete()  # Delete the oldest log files in the old's path.
 
