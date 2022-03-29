@@ -91,6 +91,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "apps.core.context_processors.admin_versioning",
             ],
         },
     },
@@ -236,6 +237,12 @@ ADMIN_SITE_MODELS_ORDER = {
     "Пользователи": [
         "Пользователи",
     ]
+}
+SPECTACULAR_SETTINGS = {
+    "ENUM_NAME_OVERRIDES": {
+        "event_type": "apps.afisha.models.Event.EventType",
+        "partner_type": "apps.info.models.people.Partner.PartnerType"
+    }
 }
 
 CACHES = {

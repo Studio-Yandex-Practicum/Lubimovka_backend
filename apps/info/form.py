@@ -5,20 +5,20 @@ from apps.core.models import Setting
 from apps.info.models import FestivalTeamMember, Volunteer
 
 
-class ArtTeamMemberForm(forms.ModelForm):
+class FestTeamMemberForm(forms.ModelForm):
     """Форма для Арт дирекции фестиваля.
 
     Плюс дополнительное поле о данных о PR-менеджере.
     """
 
     def __init__(self, *args, **kwargs):
-        super(ArtTeamMemberForm, self).__init__(*args, **kwargs)
+        super(FestTeamMemberForm, self).__init__(*args, **kwargs)
         if self["is_pr_manager"].value():
             pr_manager_name = Setting.objects.filter(settings_key="pr_manager_name").first()
             self.fields["data_manager"].initial = pr_manager_name.text
 
     data_manager = forms.CharField(
-        label="Данные о PR-менеджере (в дательном падеже)",
+        label="Данные о PR-директоре (в дательном падеже)",
         required=False,
         help_text="пример: Ивану Иванову",
         max_length=60,
@@ -40,7 +40,7 @@ class ArtTeamMemberForm(forms.ModelForm):
         data_manager = cleaned_data["data_manager"]
 
         if is_pr_manager and not data_manager:
-            msg = "Дополните данные о менеджере. Укажите Имя Фамилия в дательном падеже."
+            msg = "Дополните данные о PR-директоре. Укажите Имя Фамилия в дательном падеже."
             self.add_error("data_manager", msg)
 
 

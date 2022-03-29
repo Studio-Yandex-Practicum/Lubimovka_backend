@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db import models
 from django_select2 import forms as s2forms
 
-from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Role
 from apps.library.forms.admin import PerformanceAdminForm, ReadingAdminForm
 from apps.library.models import (
@@ -16,14 +16,16 @@ from apps.library.models import (
 )
 
 
-class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline):
+class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
     model = Performance.images_in_block.through
+    readonly_fields = ("inline_image_preview",)
     autocomplete_fields = ("image",)
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
     max_num = 8
     classes = ["collapse"]
+    model.__str__ = lambda self: ""
 
 
 class PerformanceMediaReviewInline(InlineReadOnlyMixin, admin.TabularInline):
