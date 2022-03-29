@@ -11,9 +11,7 @@ class PressReleaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PressRelease
         fields = (
-            "id",
             "image",
-            "title",
             "text",
         )
 
