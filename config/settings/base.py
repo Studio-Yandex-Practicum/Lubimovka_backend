@@ -237,3 +237,9 @@ ADMIN_SITE_MODELS_ORDER = {
         "Пользователи",
     ]
 }
+SPECTACULAR_SETTINGS = {
+    "ENUM_NAME_OVERRIDES": {
+        "event_type": "apps.afisha.models.Event.EventType",
+        "partner_type": "apps.info.models.people.Partner.PartnerType"
+    }
+}
