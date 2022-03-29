@@ -1,13 +1,16 @@
 arabic-reshaper==2.1.3
 asgiref==3.5.0; python_version >= "3.7"
+async-timeout==4.0.2; python_version >= "3.6"
 atomicwrites==1.4.0; python_version >= "3.6" and python_full_version < "3.0.0" and sys_platform == "win32" or sys_platform == "win32" and python_version >= "3.6" and python_full_version >= "3.4.0"
 attrs==21.4.0; python_version >= "3.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.7"
 cachetools==5.0.0; python_version >= "3.7" and python_version < "4.0" and (python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6")
 certifi==2021.10.8; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.5"
 charset-normalizer==2.0.12; python_full_version >= "3.6.0" and python_version >= "3.5"
 colorama==0.4.4; python_version >= "3.6" and python_full_version < "3.0.0" and sys_platform == "win32" or sys_platform == "win32" and python_version >= "3.6" and python_full_version >= "3.5.0"
+deprecated==1.2.13; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.4.0" and python_version >= "3.6"
 django-admin-sortable2==1.0.4
 django-anymail==8.5; python_version >= "3.5"
+django-appconf==1.0.5; python_version >= "3.6"
 django-ckeditor==6.2.0
 django-cors-headers==3.11.0; python_version >= "3.7"
 django-environ==0.7.0; python_version >= "3.4" and python_version < "4"
@@ -15,6 +18,7 @@ django-filter==2.4.0; python_version >= "3.5"
 django-js-asset==2.0.0; python_version >= "3.6"
 django-phonenumber-field==5.2.0; python_version >= "3.6"
 django-rest-multiple-models==2.1.3
+django-select2==7.10.0
 django==3.2.12; python_version >= "3.6"
 djangorestframework==3.13.1; python_version >= "3.6"
 drf-spectacular==0.18.2; python_version >= "3.6"
@@ -59,6 +63,7 @@ python-bidi==0.4.2
 python-dateutil==2.8.2; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.3.0" and python_version >= "3.6"
 pytz==2021.3; python_version >= "3.7"
 pyyaml==6.0; python_version >= "3.6"
+redis==4.2.0; python_version >= "3.6"
 reportlab==3.6.6; python_version >= "3.6" and python_version < "4"
 requests==2.27.1; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6"
 rsa==4.8; python_version >= "3.6" and python_version < "4" and (python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version >= "3.6")
@@ -67,7 +72,9 @@ smmap==5.0.0; python_version >= "3.7"
 snowballstemmer==2.2.0; python_version >= "3.6"
 sqlparse==0.4.2; python_version >= "3.7"
 tomli==1.2.3; python_version >= "3.6"
+typing-extensions==4.1.1; python_version >= "3.6"
 uritemplate==4.1.1; python_version >= "3.6"
 urllib3==1.26.8; python_version >= "3.5" and python_full_version < "3.0.0" or python_full_version >= "3.6.0" and python_version < "4" and python_version >= "3.5"
 webencodings==0.5.1; python_version >= "2.7" and python_full_version < "3.0.0" or python_full_version >= "3.5.0"
+wrapt==1.14.0; python_version >= "3.6" and python_full_version < "3.0.0" or python_full_version >= "3.5.0" and python_version >= "3.6"
 xhtml2pdf==0.2.5
