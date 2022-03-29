@@ -10,12 +10,7 @@ class PressReleaseSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = PressRelease
-        fields = (
-            "id",
-            "image",
-            "title",
-            "text",
-        )
+        fields = ("id", "image")
 
 
 class YearsSerializer(serializers.Serializer):
