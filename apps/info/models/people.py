@@ -165,10 +165,6 @@ class Selector(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - Отборщик фестиваля {self.festival.year} года"
 
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
-
     def clean(self):
         if self._has_person_before_saving():
             if not self.person.image:

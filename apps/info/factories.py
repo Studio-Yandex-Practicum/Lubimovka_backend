@@ -72,8 +72,6 @@ class SelectorFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("person", "festival")
 
     festival = factory.Iterator(Festival.objects.all())
-    review_title = factory.Faker("text", max_nb_chars=50, locale="ru_RU")
-    review_text = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
 
     @factory.lazy_attribute
     def person(self):
