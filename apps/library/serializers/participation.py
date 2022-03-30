@@ -18,6 +18,12 @@ class ParticipationSerializer(serializers.ModelSerializer):
         label="Год рождения",
     )
 
+    festival_year = serializers.IntegerField(
+        min_value=1900,
+        max_value=timezone.now().year,
+        label="Год фестиваля",
+    )
+
     class Meta:
         model = ParticipationApplicationFestival
         exclude = [
