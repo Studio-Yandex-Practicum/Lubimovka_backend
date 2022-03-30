@@ -4,14 +4,14 @@ from apps.core.models import Setting
 from apps.info.models import FestivalTeamMember
 
 
-class ArtTeamMemberForm(forms.ModelForm):
-    """Форма для Арт дирекции фестиваля.
+class FestTeamMemberForm(forms.ModelForm):
+    """Форма для Коианды фестиваля.
 
-    Плюс дополнительное поле о данных о PR-менеджере.
+    Плюс дополнительное поле о данных о PR-директоре.
     """
 
     def __init__(self, *args, **kwargs):
-        super(ArtTeamMemberForm, self).__init__(*args, **kwargs)
+        super(FestTeamMemberForm, self).__init__(*args, **kwargs)
         if self["is_pr_manager"].value():
             pr_manager_name = Setting.objects.filter(settings_key="pr_manager_name").first()
             self.fields["data_manager"].initial = pr_manager_name.text

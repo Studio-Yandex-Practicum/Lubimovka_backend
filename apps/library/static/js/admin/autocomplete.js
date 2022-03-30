@@ -31,4 +31,12 @@ $(document).ready(function() {
         allowClear: true,
         width: "180px",
     });
+    $("#id_type").select2({
+        placeholder: "Выберите тип",
+        allowClear: true,
+    });$("#id_button").select2({
+        placeholder: "Выберите тип кнопки",
+        allowClear: true,
+        width: "180px",
+    });
 });

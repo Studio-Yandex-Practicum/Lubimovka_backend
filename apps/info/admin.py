@@ -4,7 +4,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.form import ArtTeamMemberForm
+from apps.info.form import FestTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Question, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
@@ -194,7 +194,6 @@ class PressRealeaseAdmin(admin.ModelAdmin):
 
 @admin.register(ArtTeamMember)
 class ArtTeamMemberAdmin(admin.ModelAdmin):
-    form = ArtTeamMemberForm
     list_display = (
         "person",
         "team",
@@ -233,6 +232,7 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
 
 @admin.register(FestTeamMember)
 class FestTeamMemberAdmin(admin.ModelAdmin):
+    form = FestTeamMemberForm
     list_display = (
         "person",
         "team",
