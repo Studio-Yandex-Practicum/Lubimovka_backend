@@ -7,7 +7,7 @@ from apps.library.models.participation_application import UNIQUE_CONSTRAINT_FIEL
 
 
 class ParticipationSerializer(serializers.ModelSerializer):
-    year = serializers.IntegerField(
+    festival_year = serializers.IntegerField(
         min_value=1900,
         max_value=timezone.now().year,
         label="Год написания",

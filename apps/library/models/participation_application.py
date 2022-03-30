@@ -1,11 +1,10 @@
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
-from apps.library.utilities import generate_upload_path
+from apps.library.utilities import generate_upload_path, get_festival_year
 from apps.library.validators import year_validator
 
 UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION = (
@@ -16,7 +15,7 @@ UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION = (
     "phone_number",
     "email",
     "title",
-    "year",
+    "festival_year",
 )
 ALLOWED_FORMATS_FILE_FOR_PARTICIPATION = (
     "doc",  #
@@ -58,9 +57,8 @@ class ParticipationApplicationFestival(BaseModel):
         max_length=200,
         verbose_name="Название пьесы",
     )
-    year = models.PositiveSmallIntegerField(
-        validators=(year_validator,),
-        verbose_name="Год написания",
+    festival_year = models.PositiveSmallIntegerField(
+        validators=(year_validator,), verbose_name="Год написания", default=get_festival_year()
     )
     file = models.FileField(
         validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PARTICIPATION),),
@@ -77,8 +75,6 @@ class ParticipationApplicationFestival(BaseModel):
     )
     exported_to_google = models.BooleanField(default=False, verbose_name="Выгружена в Google-таблицу", editable=False)
     saved_to_storage = models.BooleanField(default=False, verbose_name="Файл сохранен на Диске", editable=False)
-
-    get_festival_year = models.PositiveSmallIntegerField(verbose_name="Год написания", default=timezone.now().year)
 
     class Meta:
         verbose_name_plural = "Заявки на участие"
