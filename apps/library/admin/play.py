@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.forms import ValidationError
+from django.forms.models import BaseInlineFormSet
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import re_path
@@ -8,9 +10,24 @@ from apps.library.models import Author, Play
 from apps.library.models.play import ProgramType
 
 
+class AuthorRequiredInlineFormset(BaseInlineFormSet):
+    def clean(self):
+        super(AuthorRequiredInlineFormset, self).clean()
+        authors_count = 0
+        deleting_count = 0
+        for form in self.forms:
+            if form.cleaned_data:
+                authors_count += 1
+                data = form.cleaned_data
+                if data.get("DELETE"):
+                    deleting_count += 1
+        if deleting_count == authors_count or authors_count == 0:
+            raise ValidationError("У пьесы должен быть автор")
+
+
 class AuthorInline(admin.TabularInline):
     model = Author.plays.through
-    min_num = 1
+    formset = AuthorRequiredInlineFormset
     extra = 1
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
@@ -52,7 +69,6 @@ class PlayAdmin(admin.ModelAdmin):
         "url_reading",
         "festival",
         "published",
-        "link",
     )
 
     def get_urls(self):
@@ -66,7 +82,6 @@ class PlayAdmin(admin.ModelAdmin):
         program_id = request.GET.get("program")
         program = get_object_or_404(ProgramType, id=program_id)
         slug = program.slug
-        print(slug)
         response = {"slug": slug}
         return JsonResponse(response)
 

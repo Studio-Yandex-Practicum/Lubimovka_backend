@@ -56,11 +56,8 @@ class OtherPlayFactory(factory.django.DjangoModelFactory):
         django_get_or_create = ("name",)
 
     name = factory.Faker("text", max_nb_chars=60, locale="ru_RU")
-
-    @factory.lazy_attribute
-    def link(self):
-        name = slugify(self.name)
-        return f"https://www.plays-reading.ru/{name}"
+    published = factory.Faker("boolean", chance_of_getting_true=50)
+    url_download = factory.django.FileField()
 
     @factory.lazy_attribute
     def program(self):

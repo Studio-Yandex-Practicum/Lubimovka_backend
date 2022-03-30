@@ -22,11 +22,6 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             add_program_type
         ),
-        migrations.AddField(
-            model_name='play',
-            name='link',
-            field=models.URLField(blank=True, max_length=500, verbose_name='Ссылка'),
-        ),
         migrations.AlterField(
             model_name='play',
             name='name',
@@ -36,11 +31,6 @@ class Migration(migrations.Migration):
             model_name='play',
             name='festival',
             field=models.ForeignKey(blank=True, help_text='Для пьес Любимовки должен быть выбран Фестиваль', null=True, on_delete=django.db.models.deletion.PROTECT, related_name='plays', to='info.festival', verbose_name='Фестиваль'),
-        ),
-        migrations.AlterField(
-            model_name='play',
-            name='url_download',
-            field=models.FileField(blank=True, help_text='Для пьес Любимовки должен быть загружен файл', max_length=200, upload_to='plays', verbose_name='Текст пьесы'),
         ),
         migrations.DeleteModel(
             name='OtherPlay',

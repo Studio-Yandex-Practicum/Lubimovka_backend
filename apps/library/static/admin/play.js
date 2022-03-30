@@ -1,31 +1,23 @@
 $(document).ready(function(jQuery) {
     jQuery(function($) {
-        let linkField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-link');
         let cityField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-city');
         let yearField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-year');
-        let urlDownloadField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-url_download');
         let urlReadingField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-url_reading');
         let festivalField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-festival');
-        let publishedCheckBox = $('#play_form > div > fieldset.module.aligned > div.form-row.field-published');
 
-        var mainFieldsArray = [cityField, yearField, urlDownloadField, urlReadingField, festivalField, publishedCheckBox]
+        var mainFieldsArray = [cityField, yearField, urlReadingField, festivalField]
 
-        var duration = 1
-
-        linkField.hide(duration);
+        var duration = 1;
 
         function toggleLink(slug) {
             if (slug == "other_plays") {
                 mainFieldsArray.forEach(function(item) {
                     item.slideUp(duration);
                 });
-                linkField.slideDown(duration);
             } else {
                 mainFieldsArray.forEach(function(item) {
                     item.slideDown(duration);
                 });
-                linkField.slideUp(duration);
-
             }
         };
 

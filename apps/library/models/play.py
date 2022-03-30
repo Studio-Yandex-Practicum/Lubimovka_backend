@@ -54,8 +54,6 @@ class Play(BaseModel):
         max_length=200,
         upload_to="plays",
         verbose_name="Текст пьесы",
-        blank=True,
-        help_text="Для пьес Любимовки должен быть загружен файл",
     )
     url_reading = models.URLField(
         max_length=200,
@@ -83,11 +81,6 @@ class Play(BaseModel):
         verbose_name="Опубликовано",
         default=True,
     )
-    link = models.URLField(
-        max_length=500,
-        verbose_name="Ссылка",
-        blank=True,
-    )
 
     class Meta:
         constraints = (
@@ -100,21 +93,14 @@ class Play(BaseModel):
         verbose_name_plural = "Пьесы"
 
     def __str__(self):
-        return self.name + ("" if self.published else " <— не опубликована —>")
-
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
+        return (
+            self.name
+            + ("" if self.published else " <— не опубликована —>")
+            + ("" if self.program.slug != "other_plays" else " <— Другая пьеса —>")
+        )
 
     def clean(self):
-        if self.program.slug != "other_plays":
-            if not self.url_download.name:
-                raise ValidationError("Для пьесы Любимовки неоходимо загрузить файл")
-            if self.festival is None:
+        if hasattr(self, "program"):
+            if self.program.slug != "other_plays" and self.festival is None:
                 raise ValidationError("У пьесы Любимовки должен быть фестиваль")
-            self.link = ""
-        if self.program.slug == "other_plays":
-            if self.link == "":
-                raise ValidationError("Необходимо указать ссылку на другую пьесу")
-            self.published = False
         return super().clean()
