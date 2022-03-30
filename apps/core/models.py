@@ -113,7 +113,7 @@ class Person(BaseModel):
     @property
     @admin.display(description="Имя и фамилия")
     def full_name(self) -> str:
-        return self.first_name + " " + self.last_name
+        return self.last_name + " " + self.first_name
 
     @property
     def reversed_full_name(self):
