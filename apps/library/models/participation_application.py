@@ -1,5 +1,6 @@
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
@@ -76,6 +77,8 @@ class ParticipationApplicationFestival(BaseModel):
     )
     exported_to_google = models.BooleanField(default=False, verbose_name="Выгружена в Google-таблицу", editable=False)
     saved_to_storage = models.BooleanField(default=False, verbose_name="Файл сохранен на Диске", editable=False)
+
+    get_festival_year = models.PositiveSmallIntegerField(verbose_name="Год написания", default=timezone.now().year)
 
     class Meta:
         verbose_name_plural = "Заявки на участие"
