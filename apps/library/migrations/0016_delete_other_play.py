@@ -15,7 +15,7 @@ def add_program_type(apps, schema_editor):
 def delete_other_play_perms(apps, schema_editor):
     Permission = apps.get_model("auth", "Permission")
     other_play_permission = Permission.objects.filter(codename__endswith="_otherplay")
-    del other_play_permission
+    other_play_permission.delete()
 
 
 class Migration(migrations.Migration):
