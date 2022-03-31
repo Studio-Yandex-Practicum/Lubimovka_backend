@@ -3,7 +3,7 @@ from django.forms import ValidationError
 from django.forms.models import BaseInlineFormSet
 
 from apps.library.filters.play import PlayProgramFilter
-from apps.library.forms.admin import PlayForm
+from apps.library.forms.admin.play import PlayForm
 from apps.library.models import Author, Play
 
 
