@@ -47,7 +47,7 @@ class Partner(BaseModel):
         if this:
             if this.image != self.image:
                 this.image.delete(save=False)
-        super(Partner, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} - {self.type}"
@@ -71,17 +71,11 @@ class Sponsor(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name}"
 
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
-
     def clean(self, *args, **kwargs):
-        if self._has_person_before_saving() and not self.person.image:
+        if not self.person:
+            return
+        if not self.person.image:
             raise ValidationError("Для спонсора должно быть выбрано фото")
-        return super().clean(*args, **kwargs)
-
-    def _has_person_before_saving(self):
-        return self.person_id is not None
 
 
 class Volunteer(BaseModel):
@@ -121,21 +115,18 @@ class Volunteer(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - волонтёр фестиваля {self.festival.year} года"
 
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
-
     def clean(self):
-        if self._has_person_before_saving():
-            if not self.person.email:
-                raise ValidationError("Укажите email для волонтёра")
-            if not self.person.image:
-                raise ValidationError("Для волонтёра необходимо выбрать его фото")
-            if not self.person.city:
-                raise ValidationError("Укажите город проживания волонтёра")
-
-    def _has_person_before_saving(self):
-        return self.person_id is not None
+        errors = []
+        if not self.person:
+            return
+        if not self.person.email:
+            errors.append("Укажите email для волонтёра")
+        if not self.person.image:
+            errors.append("Для волонтёра необходимо выбрать его фото")
+        if not self.person.city:
+            errors.append("Укажите город проживания волонтёра")
+        if errors:
+            raise ValidationError(errors)
 
 
 class Selector(BaseModel):
@@ -170,9 +161,7 @@ class Selector(BaseModel):
         return f"{self.person.first_name} {self.person.last_name} - Отборщик фестиваля {self.festival.year} года"
 
     def clean(self):
-        if self._has_person_before_saving():
-            if not self.person.image:
-                raise ValidationError("Для отборщика необходимо выбрать его фото")
-
-    def _has_person_before_saving(self):
-        return self.person_id is not None
+        if not self.person:
+            return
+        if not self.person.image:
+            raise ValidationError("Для отборщика необходимо выбрать его фото")
