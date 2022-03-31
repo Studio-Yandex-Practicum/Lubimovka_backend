@@ -1,13 +1,10 @@
 from django.contrib import admin
 from django.forms import ValidationError
 from django.forms.models import BaseInlineFormSet
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.urls import re_path
 
 from apps.library.filters.play import PlayProgramFilter
+from apps.library.forms.admin import PlayForm
 from apps.library.models import Author, Play
-from apps.library.models.play import ProgramType
 
 
 class AuthorRequiredInlineFormset(BaseInlineFormSet):
@@ -36,6 +33,7 @@ class AuthorInline(admin.TabularInline):
 
 @admin.register(Play)
 class PlayAdmin(admin.ModelAdmin):
+    form = PlayForm
     filter_horizontal = ("authors",)
     list_display = (
         "name",
@@ -70,20 +68,6 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "published",
     )
-
-    def get_urls(self):
-        urls = super().get_urls()
-        ajax = [
-            re_path(r"\S*/ajax_play_program/", self.play_program),
-        ]
-        return ajax + urls
-
-    def play_program(self, request, obj_id=None):
-        program_id = request.GET.get("program")
-        program = get_object_or_404(ProgramType, id=program_id)
-        slug = program.slug
-        response = {"slug": slug}
-        return JsonResponse(response)
 
     class Media:
         js = ("admin/play.js",)

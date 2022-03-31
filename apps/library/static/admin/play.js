@@ -20,26 +20,13 @@ $(document).ready(function(jQuery) {
                 });
             }
         };
-
+        // slide up and down fields when select program changed by user
         $('select#id_program').on('change', function() {
-            $.ajax({
-                data: $(this).serialize(),
-                url: "ajax_play_program/",
-                success: function (response) {
-                    let slug = response.slug
-                    toggleLink(slug);
-                },
-            });
+            toggleLink($('#id_program').val());
         });
+        // slide up and down fields when program is already selected (when page was reload, e.g. validation errors)
         $('select#id_program').each(function() {
-            $.ajax({
-                data: $(this).serialize(),
-                url: "ajax_play_program/",
-                success: function (response) {
-                    let slug = response.slug
-                    toggleLink(slug);
-                },
-            });
+            toggleLink($('#id_program').val());
         });
     });
 });
