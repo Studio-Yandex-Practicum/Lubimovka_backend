@@ -20,7 +20,7 @@ def delete_other_play_perms(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0015_alter_author_slug'),
+        ('library', '0016_participationapplicationfestival_festival_year'),
     ]
 
     operations = [

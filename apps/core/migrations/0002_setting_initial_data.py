@@ -440,6 +440,16 @@ def add_short_list_program(apps, schema_editor):
         slug="short-list",
     )
 
+def add_other_plays_program(apps, schema_editor):
+    Program = apps.get_model(
+        "library",
+        "ProgramType",
+    )
+    Program.objects.create(
+        name="Другие пьесы",
+        slug="other_plays",
+    )
+
 
 class Migration(migrations.Migration):
 
@@ -479,6 +489,9 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             add_short_list_program,
+        ),
+        migrations.RunPython(
+            add_other_plays_program,
         ),
         migrations.RunPython(
             add_playsupply_settings,
