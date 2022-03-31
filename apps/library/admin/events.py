@@ -47,6 +47,7 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
     autocomplete_fields = ("person",)
     extra = 0
     classes = ["collapse"]
+    # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Restricts role types for the model where inline is used."""
@@ -125,6 +126,13 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         TeamMemberInline,
     )
     formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
+
+    # def formfield_for_foreignkey(self, db_field, request, **kwargs):
+    #     if request.user.is_admin or request.user.is_superuser:
+    #         kwargs["widget"] = FkSelectForAdmin
+    #     else:
+    #         kwargs["widget"] = FkSelect
+    #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Reading)

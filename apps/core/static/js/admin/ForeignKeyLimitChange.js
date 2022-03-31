@@ -15,47 +15,54 @@ function removeLinks($, $object) {
     });
 };
 
-function appendLink($, $object) {
-    const objectIdValue = $object.val();
-    const objectId = $object.attr("id");
-
-    if (objectIdValue != "") {
-        var linkId = "change_" + objectId;
-        var imageSrc = "/static/admin/img/icon-changelink.svg";
-        var imageAlt = "Изменить";
-        var linkClass = "related-widget-wrapper-link change-related";
+function setAttributes(el, attrs) {
+    for(var key in attrs) {
+        el.setAttribute(key, attrs[key]);
     };
+};
 
-    let $image = $("<img>", { src: imageSrc, alt: imageAlt });
-    let $link = $("<a>", { id: linkId, href: "#", class: linkClass });
+function appendLink(object) {
+    var lable = object.getAttribute('aria-labelledby')
+    const foreignKeyFieldId = lable.split("-")[1]
+    const parentSpan = object.parentElement.parentElement
 
-    $link = $image.wrap($link).parent();
-    $object.after($link);
+    var linkId = "change_" + foreignKeyFieldId;
+    var imageSrc = "/static/admin/img/icon-changelink.svg";
+    var imageAlt = "Изменить";
+    var linkClass = "related-widget-wrapper-link change-related";
 
-    $link.click(function (event) {
+    let image = document.createElement('img')
+    setAttributes(image, {"src": imageSrc, "alt": imageAlt})
+    let link = document.createElement('a');
+    setAttributes(link, {"id": linkId, "href": "#", 'class': linkClass});
+    link.insertAdjacentElement("beforeend", image)
+
+    parentSpan.after(link);
+
+    link.onclick = function (event) {
         event.preventDefault();
         event.stopPropagation();
-        $object.prop("disabled", false);
-        $object.css({
-            "pointer-events": "auto",
-            "touch-action": "auto",
-            "background": "",
-        });
-    });
+        object.style.cssText = 'pointer-events:auto;touch-action:auto;background:""';
+    };
 };
+
+
+function getLableName($object) {
+    // Return lable attribute for select2 <span>
+    const objectId = $object.attr("id");
+    return '[aria-labelledby="select2-' + objectId + '-container"]';
+}
 
 jQuery(document).ready(function ($) {
     const foreignKeyClass = $(".foreign-key-field");
 
     foreignKeyClass.each(function () {
-        if ($( this ).val() != "") {
-            $( this ).css({
-                "pointer-events": "none",
-                "touch-action": "none",
-                "background": "#eee"
-            });
-        };
+        let lable = getLableName($( this ))
+        let element = document.querySelector(lable)
         removeLinks($, $( this ));
-        appendLink($, $( this ));
+        if ($( this ).val() != "") {
+            element.style.cssText = "pointer-events:none;touch-action:none;background:rgb(238, 238, 238)";
+            appendLink(element);
+        };
     });
 });
