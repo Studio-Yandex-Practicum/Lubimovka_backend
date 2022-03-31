@@ -10,6 +10,7 @@ from apps.info.factories import (
     PartnerFactory,
     PlaceFactory,
     PressReleaseFactory,
+    SelectorFactory,
     SponsorFactory,
     VolunteerFactory,
 )
@@ -101,6 +102,9 @@ class Command(BaseCommand):
 
             volunteers = VolunteerFactory.create_batch(50)
             notification(self, volunteers, "волонтёров")
+
+            selectors = SelectorFactory.create_batch(30)
+            notification(self, selectors, "отборщиков")
 
             press_releases = PressReleaseFactory.create_batch(10)
             notification(self, press_releases, "пресс-релизов")
