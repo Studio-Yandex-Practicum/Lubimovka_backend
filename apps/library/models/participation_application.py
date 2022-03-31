@@ -77,7 +77,7 @@ class ParticipationApplicationFestival(BaseModel):
     exported_to_google = models.BooleanField(default=False, verbose_name="Выгружена в Google-таблицу", editable=False)
     saved_to_storage = models.BooleanField(default=False, verbose_name="Файл сохранен на Диске", editable=False)
     festival_year = models.PositiveSmallIntegerField(
-        default=get_festival_year(),
+        default=get_festival_year,
         verbose_name="Год фестиваля",
     )
 
