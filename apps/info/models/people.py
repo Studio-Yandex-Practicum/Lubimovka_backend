@@ -72,9 +72,7 @@ class Sponsor(BaseModel):
         return f"{self.person.first_name} {self.person.last_name}"
 
     def clean(self, *args, **kwargs):
-        if not self.person:
-            return
-        if not self.person.image:
+        if not (self.person and self.person.image):
             raise ValidationError("Для спонсора должно быть выбрано фото")
 
 
@@ -161,7 +159,5 @@ class Selector(BaseModel):
         return f"{self.person.first_name} {self.person.last_name} - Отборщик фестиваля {self.festival.year} года"
 
     def clean(self):
-        if not self.person:
-            return
-        if not self.person.image:
+        if not (self.person and self.person.image):
             raise ValidationError("Для отборщика необходимо выбрать его фото")
