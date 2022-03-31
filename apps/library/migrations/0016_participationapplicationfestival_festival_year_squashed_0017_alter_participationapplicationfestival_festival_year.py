@@ -6,12 +6,6 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
 
-    replaces = [('library', '0016_participationapplicationfestival_festival_year'), ('library', '0017_alter_participationapplicationfestival_festival_year')]
-
-    dependencies = [
-        ('library', '0015_alter_author_slug'),
-    ]
-
     operations = [
         migrations.AddField(
             model_name='participationapplicationfestival',
