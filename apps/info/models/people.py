@@ -72,7 +72,7 @@ class Sponsor(BaseModel):
         return f"{self.person.first_name} {self.person.last_name}"
 
     def clean(self, *args, **kwargs):
-        if not (self.person and self.person.image):
+        if self.person_id and not self.person.image:
             raise ValidationError("Для спонсора должно быть выбрано фото")
 
 
@@ -115,7 +115,7 @@ class Volunteer(BaseModel):
 
     def clean(self):
         errors = []
-        if not self.person:
+        if not self.person_id:
             return
         if not self.person.email:
             errors.append("Укажите email для волонтёра")
@@ -159,5 +159,5 @@ class Selector(BaseModel):
         return f"{self.person.first_name} {self.person.last_name} - Отборщик фестиваля {self.festival.year} года"
 
     def clean(self):
-        if not (self.person and self.person.image):
+        if self.person_id and not self.person.image:
             raise ValidationError("Для отборщика необходимо выбрать его фото")
