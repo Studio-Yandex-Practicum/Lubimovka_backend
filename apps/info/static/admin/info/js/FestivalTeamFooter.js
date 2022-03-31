@@ -2,10 +2,10 @@
 // The field has to be extended in admin with CSS class `form-row field-data_manager`.
 //
 // The logic:
-//  - show the field if boolean field `is_pr_manager` is `true`
+//  - show the field if boolean field `is_pr_director` is `true`
 
 jQuery(document).ready(function ($) {
-    let idIsPrManager = $("#id_is_pr_manager");
+    let idIsPrManager = $("#id_is_pr_director");
     let divHideDatePrManager = $(".form-row .field-data_manager")
 
     // exit from function if there isn't selector

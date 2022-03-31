@@ -30,7 +30,7 @@ class FestivalTeamMember(BaseModel):
         max_length=150,
         verbose_name="Должность",
     )
-    is_pr_manager = models.BooleanField(
+    is_pr_director = models.BooleanField(
         default=False,
         verbose_name="PR-директор",
         help_text="Поставьте галочку, чтобы назначить человека PR-директором",
@@ -61,9 +61,9 @@ class FestivalTeamMember(BaseModel):
             raise ValidationError("Для члена команды необходимо выбрать фото")
         if not FestivalTeamMember.objects.filter(Q(team=self.team) & Q(person=self.person)).exists():
             raise ValidationError("Этот человек уже в составе команды.")
-        if not self.is_pr_manager:
+        if not self.is_pr_director:
             hasAnotherPrManager = FestivalTeamMember.objects.filter(
-                Q(is_pr_manager=True) & Q(person=self.person)
+                Q(is_pr_director=True) & Q(person=self.person)
             ).exists()
             if hasAnotherPrManager:
                 raise ValidationError(
@@ -72,7 +72,7 @@ class FestivalTeamMember(BaseModel):
                 )
 
     def delete(self, *args, **kwargs):
-        if self.is_pr_manager:
+        if self.is_pr_director:
             raise ValidationError("Перед удалением назначьте на должность PR-директора другого человека")
         super().delete(*args, **kwargs)
 
