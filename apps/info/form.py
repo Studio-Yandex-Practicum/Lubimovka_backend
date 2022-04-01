@@ -14,7 +14,6 @@ class FestTeamMemberForm(forms.ModelForm):
         super(FestTeamMemberForm, self).__init__(*args, **kwargs)
         if self["is_pr_director"].value():
             pr_director_name = Setting.get_setting("pr_director_name")
-            # Setting.objects.filter(settings_key="pr_director_name").first()
             self.fields["data_director"].initial = pr_director_name
 
     data_director = forms.CharField(
