@@ -1,5 +1,5 @@
 from .festival import Festival, FestivalTeamMember, PressRelease
-from .people import Partner, Sponsor, Volunteer
+from .people import Partner, Selector, Sponsor, Volunteer
 from .place import Place
 from .question import Question
 
@@ -12,4 +12,5 @@ __all__ = (
     Volunteer,
     Question,
     PressRelease,
+    Selector,
 )

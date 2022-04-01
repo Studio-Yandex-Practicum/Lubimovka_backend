@@ -18,6 +18,7 @@ services:
     volumes:
       - static_value_stage:/code/staticfiles/
       - media_value_stage:/code/media/
+      - /LUBIMOVKA/stage/backend_logs/:/code/logs/
     depends_on:
       - postgres
     env_file:
@@ -31,6 +32,7 @@ services:
     volumes:
       - static_value_stage:/code/staticfiles/
       - media_value_stage:/code/media/
+      - /LUBIMOVKA/stage/backend_logs/:/code/logs/
     command: >
       sh -c "sleep 5; python manage.py migrate &&
              python manage.py collectstatic --noinput"

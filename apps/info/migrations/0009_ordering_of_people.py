@@ -6,21 +6,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('info', '0008_alter_partner_image'),
+        ("info", "0008_alter_partner_image"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='festivalteammember',
-            options={'ordering': ('person__last_name', 'person__first_name'), 'verbose_name': 'Команда фестиваля', 'verbose_name_plural': 'Команды фестиваля'},
+            name="festivalteammember",
+            options={
+                "ordering": ("person__last_name", "person__first_name"),
+                "verbose_name": "Команда фестиваля",
+                "verbose_name_plural": "Команды фестиваля",
+            },
         ),
         migrations.AlterModelOptions(
-            name='volunteer',
-            options={'ordering': ('person__last_name', 'person__first_name'), 'verbose_name': 'Волонтёр фестиваля', 'verbose_name_plural': 'Волонтёры фестиваля'},
+            name="volunteer",
+            options={
+                "ordering": ("person__last_name", "person__first_name"),
+                "verbose_name": "Волонтёр фестиваля",
+                "verbose_name_plural": "Волонтёры фестиваля",
+            },
         ),
         migrations.AlterField(
-            model_name='partner',
-            name='image',
-            field=models.ImageField(help_text='Загрузите логотип партнёра', upload_to='images/info/partnerslogo', verbose_name='Логотип'),
+            model_name="partner",
+            name="image",
+            field=models.ImageField(
+                help_text="Загрузите логотип партнёра", upload_to="images/info/partnerslogo", verbose_name="Логотип"
+            ),
         ),
     ]
