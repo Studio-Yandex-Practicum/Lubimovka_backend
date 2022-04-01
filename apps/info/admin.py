@@ -258,8 +258,8 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ("data_manager",),
-                "classes": ("form-row field-data_manager",),
+                "fields": ("data_director",),
+                "classes": ("form-row field-data_director",),
             },
         ),
     )
@@ -269,13 +269,13 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
     search_fields = ("position", "person__first_name", "person__last_name")
 
     def save_model(self, request, obj, form, change):
-        """Данные из поля 'data_manager' проверяются и сохраняются в модели 'Setting'."""
+        """Данные из поля 'data_director' проверяются и сохраняются в модели 'Setting'."""
         if form.is_valid():
             team = "fest"
             if obj.is_pr_director:
-                name_manager = form.cleaned_data["data_manager"]
+                name_director = form.cleaned_data["data_director"]
                 FestivalTeamMember.objects.filter(is_pr_director=True).update(is_pr_director=False)
-                Setting.objects.filter(settings_key="pr_director_name").update(text=name_manager)
+                Setting.objects.filter(settings_key="pr_director_name").update(text=name_director)
             obj = form.save(commit=False)
             obj.team = team
             obj.save()
@@ -287,7 +287,7 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
         return qs
 
     class Media:
-        """Adds a script that displays the field ```data_manager``` if ```is_pr_director``` is selected."""
+        """Adds a script that displays the field ```data_director``` if ```is_pr_director``` is selected."""
 
         js = ("admin/info/js/FestivalTeamFooter.js",)
 

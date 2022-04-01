@@ -1,14 +1,14 @@
 from rest_framework import serializers
 
 
-class PRManagerSerializer(serializers.Serializer):
+class PRDirectorSerializer(serializers.Serializer):
     pr_director_name = serializers.CharField(max_length=60)
     pr_director_email = serializers.EmailField()
     pr_director_photo_link = serializers.ImageField()
 
 
 class ForPressSerializer(serializers.Serializer):
-    pr_director = PRManagerSerializer()
+    pr_director = PRDirectorSerializer()
     photo_gallery_facebook_link = serializers.URLField()
 
 

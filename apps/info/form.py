@@ -13,10 +13,11 @@ class FestTeamMemberForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FestTeamMemberForm, self).__init__(*args, **kwargs)
         if self["is_pr_director"].value():
-            pr_director_name = Setting.objects.filter(settings_key="pr_director_name").first()
-            self.fields["data_manager"].initial = pr_director_name.text
+            pr_director_name = Setting.get_setting("pr_director_name")
+            # Setting.objects.filter(settings_key="pr_director_name").first()
+            self.fields["data_director"].initial = pr_director_name
 
-    data_manager = forms.CharField(
+    data_director = forms.CharField(
         label="Данные о PR-директоре (в дательном падеже)",
         required=False,
         help_text="пример: Ивану Иванову",
@@ -30,14 +31,14 @@ class FestTeamMemberForm(forms.ModelForm):
             "person",
             "position",
             "is_pr_director",
-            "data_manager",
+            "data_director",
         )
 
     def clean(self):
         cleaned_data = super().clean()
         is_pr_director = cleaned_data["is_pr_director"]
-        data_manager = cleaned_data["data_manager"]
+        data_director = cleaned_data["data_director"]
 
-        if is_pr_director and not data_manager:
+        if is_pr_director and not data_director:
             msg = "Дополните данные о PR-директоре. Укажите Имя Фамилия в дательном падеже."
-            self.add_error("data_manager", msg)
+            self.add_error("data_director", msg)

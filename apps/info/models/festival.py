@@ -62,10 +62,10 @@ class FestivalTeamMember(BaseModel):
         if not FestivalTeamMember.objects.filter(Q(team=self.team) & Q(person=self.person)).exists():
             raise ValidationError("Этот человек уже в составе команды.")
         if not self.is_pr_director:
-            hasAnotherPrManager = FestivalTeamMember.objects.filter(
+            hasAnotherPrDirector = FestivalTeamMember.objects.filter(
                 Q(is_pr_director=True) & Q(person=self.person)
             ).exists()
-            if hasAnotherPrManager:
+            if hasAnotherPrDirector:
                 raise ValidationError(
                     "Для того чтобы снять с должности PR-директора, "
                     "нужно назначить другого человека на эту должность"

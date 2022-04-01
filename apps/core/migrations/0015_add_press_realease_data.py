@@ -12,7 +12,7 @@ def add_press_release_setting(apps, schema_editor):
         text="Имя Фамилия в дательном падеже (пример: Анне Загородниковой)",
         description="Имя PR деректора на странице для прессы (в дательном падеже)",
     )
-
+    Setting.objects.get(settings_key="pr_manager_name").delete()
 
 class Migration(migrations.Migration):
 
