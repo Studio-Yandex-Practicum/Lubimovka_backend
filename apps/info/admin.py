@@ -241,9 +241,9 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
         "person",
         "team",
         "position",
-        "is_pr_manager",
+        "is_pr_director",
     )
-    list_filter = ("is_pr_manager",)
+    list_filter = ("is_pr_director",)
     fieldsets = (
         (
             None,
@@ -251,15 +251,15 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
                 "fields": (
                     "person",
                     "position",
-                    "is_pr_manager",
+                    "is_pr_director",
                 ),
             },
         ),
         (
             None,
             {
-                "fields": ("data_manager",),
-                "classes": ("form-row field-data_manager",),
+                "fields": ("pr_director_name",),
+                "classes": ("form-row field-pr_director_name",),
             },
         ),
     )
@@ -269,13 +269,13 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
     search_fields = ("position", "person__first_name", "person__last_name")
 
     def save_model(self, request, obj, form, change):
-        """Данные из поля 'data_manager' проверяются и сохраняются в модели 'Setting'."""
+        """Данные из поля 'pr_director_name' проверяются и сохраняются в модели 'Setting'."""
         if form.is_valid():
             team = "fest"
-            if obj.is_pr_manager:
-                name_manager = form.cleaned_data["data_manager"]
-                FestivalTeamMember.objects.filter(is_pr_manager=True).update(is_pr_manager=False)
-                Setting.objects.filter(settings_key="pr_manager_name").update(text=name_manager)
+            if obj.is_pr_director:
+                name_director = form.cleaned_data["pr_director_name"]
+                FestivalTeamMember.objects.filter(is_pr_director=True).update(is_pr_director=False)
+                Setting.objects.filter(settings_key="pr_director_name").update(text=name_director)
             obj = form.save(commit=False)
             obj.team = team
             obj.save()
@@ -287,7 +287,7 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
         return qs
 
     class Media:
-        """Adds a script that displays the field ```data_manager``` if ```is_pr_manager``` is selected."""
+        """Adds a script that displays the field ```pr_director_name``` if ```is_pr_director``` is selected."""
 
         js = ("admin/info/js/FestivalTeamFooter.js",)
 
