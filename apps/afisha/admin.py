@@ -20,9 +20,40 @@ class EventAdmin(admin.ModelAdmin):
         "paid",
         "pinned_on_main",
     )
-    fields = ("common_event", "date_time", "paid", "url", "place", "pinned_on_main")
     list_filter = ("type",)
+    # fields = ("type", "common_event", "date_time", "paid", "url", "place", "pinned_on_main")
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": ("type",),
+            },
+        ),
+        (
+            None,
+            {
+                "fields": ("common_event",),
+                "classes": ("depended_on_common_event",),
+            },
+        ),
+        (
+            None,
+            {
+                "fields": (
+                    "date_time",
+                    "paid",
+                    "url",
+                    "place",
+                    "pinned_on_main",
+                ),
+            },
+        ),
+    )
     empty_value_display = "-пусто-"
+
+    class Media:
+
+        js = ("admin/afisha/js/AfishaGetEvent.js",)
 
 
 admin.site.register(Event, EventAdmin)

@@ -51,14 +51,12 @@ class Event(BaseModel):
         on_delete=models.CASCADE,
         related_name="body",
         verbose_name="Событие",
-        help_text=(
-            "Создайте спектакль, читку или мастер-класс чтобы получить возможность создать соответствующее событие"
-        ),
     )
     type = models.CharField(
         choices=EventType.choices,
         max_length=50,
         verbose_name="Тип события",
+        help_text=("Выберите тип события"),
     )
     date_time = models.DateTimeField(
         verbose_name="Дата и время",
