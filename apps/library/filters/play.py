@@ -40,16 +40,16 @@ class PlayProgramFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         programs_list = [
-            (None, _("Все программы Любимовки")),
-            ("all", _("Показать все пьесы")),
+            (None, _("Все программы Любимовки")),  # default lookup which is used instead of 'All ('Все')
+            ("all", _("Показать все пьесы")),  # add lookup to see all Lubimovka programs
         ]
         queryset = ProgramType.objects.all()
         for program_type in queryset:
-            programs_list.append((str(program_type.id), program_type.name))
+            programs_list.append((str(program_type.id), program_type.name))  # all others possible lookups
         return programs_list
 
     def queryset(self, request, queryset):
-        if self.value() is None:
+        if self.value() is None:  # get qs for new default lookup
             return Play.objects.exclude(program__slug="other_plays")
         if self.value() != "all":
             return Play.objects.filter(program__id=self.value())

@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
 
@@ -97,3 +98,12 @@ class Play(BaseModel):
             + ("" if self.published else " <— не опубликована —>")
             + ("" if self.program.slug != "other_plays" else " <— Другая пьеса —>")
         )
+
+    def clean(self):
+        if self._has_program_before_saving():
+            if self.program.slug != "other_plays" and not self.festival:
+                raise ValidationError("У пьесы Любимовки должен быть фестиваль")
+        return super().clean()
+
+    def _has_program_before_saving(self):
+        return self.program_id is not None
