@@ -120,6 +120,11 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         TeamMemberInline,
     )
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
+        return form
+
 
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
@@ -133,3 +138,8 @@ class ReadingAdmin(admin.ModelAdmin):
         "name",
     )
     inlines = (TeamMemberInline,)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
+        return form
