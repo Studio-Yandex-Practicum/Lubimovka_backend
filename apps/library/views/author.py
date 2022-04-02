@@ -38,7 +38,7 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "social_networks",
                 "other_links",
                 Prefetch("plays", queryset=Play.objects.exclude(program__slug="other_plays")),
-                Prefetch("other_plays", queryset=Play.objects.filter(program__slug="other_plays")),
+                Prefetch("plays", queryset=Play.objects.filter(program__slug="other_plays"), to_attr="other_plays"),
             ),
             slug=self.kwargs["slug"],
         )

@@ -100,10 +100,6 @@ class Play(BaseModel):
         )
 
     def clean(self):
-        if self._has_program_before_saving():
-            if self.program.slug != "other_plays" and not self.festival:
-                raise ValidationError("У пьесы Любимовки должен быть фестиваль")
+        if self.program.slug != "other_plays" and not self.festival:
+            raise ValidationError("У пьесы Любимовки должен быть фестиваль")
         return super().clean()
-
-    def _has_program_before_saving(self):
-        return self.program_id is not None
