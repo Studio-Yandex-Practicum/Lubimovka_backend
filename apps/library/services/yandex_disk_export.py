@@ -7,8 +7,8 @@ from django.conf import settings
 def yandex_disk_export(instance):
     yndx = yadisk.YaDisk(token=settings.YNDX_DISK_TOKEN)
     cwd = str(Path(settings.ROOT_DIR))
-    name = Path(str(instance.file)).name
-    year = Path(str(instance.file)).parts[1]
+    _, year, name = Path(str(instance.file)).parts
+    print(_)
     to_dir = f"{year}/{name}"
     from_dir = cwd.replace("\\", "/") + "/media/" + str(instance.file)
     if yndx.is_dir({year}) is False:
