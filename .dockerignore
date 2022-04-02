@@ -1,0 +1,6 @@
+.git
+.github
+infra_deploy/*
+.gitignore
+.pre-commit-config.yaml
+
