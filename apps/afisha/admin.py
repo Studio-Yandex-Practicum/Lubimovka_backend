@@ -21,7 +21,6 @@ class EventAdmin(admin.ModelAdmin):
         "pinned_on_main",
     )
     list_filter = ("type",)
-    # fields = ("type", "common_event", "date_time", "paid", "url", "place", "pinned_on_main")
     fieldsets = (
         (
             None,
