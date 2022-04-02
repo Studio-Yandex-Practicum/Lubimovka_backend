@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.content_pages.models import Link, OrderedImage, OrderedVideo, Preamble, Quote, Text, Title
-from apps.core.serializers import RoleSerializer
+from apps.core.serializers import PersonRoleSerializer
 
 
 class ExtendedPersonSerializer(serializers.Serializer):
@@ -39,7 +39,7 @@ class ExtendedPersonSerializer(serializers.Serializer):
         source="person.image",
         read_only=True,
     )
-    roles = RoleSerializer(many=True)
+    roles = PersonRoleSerializer(many=True)
 
 
 class LinkSerializer(serializers.ModelSerializer):

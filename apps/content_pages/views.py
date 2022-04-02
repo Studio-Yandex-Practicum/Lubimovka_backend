@@ -1,6 +1,7 @@
 from django.contrib.contenttypes.models import ContentType
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
+from drf_spectacular.utils import extend_schema
 from rest_framework import serializers, status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.response import Response
@@ -9,8 +10,13 @@ from rest_framework.views import APIView
 POPUP_SUFFIX = "?_popup=1"
 
 
+@extend_schema(
+    responses={
+        200: {"example": {"url": "string"}},
+    }
+)
 class GetContentTypeLink(APIView):
-    """Retrun URL link to add or change based on `model_id` and `object_id`."""
+    """Return URL link to add or change based on `model_id` and `object_id`."""
 
     permission_classes = [IsAdminUser]
 

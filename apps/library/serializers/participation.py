@@ -21,9 +21,7 @@ class ParticipationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ParticipationApplicationFestival
-        exclude = [
-            "verified",
-        ]
+        exclude = ["verified", "festival_year"]
         validators = [
             UniqueTogetherValidator(
                 queryset=ParticipationApplicationFestival.objects.all(),
