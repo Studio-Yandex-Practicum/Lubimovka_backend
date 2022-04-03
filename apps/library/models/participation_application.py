@@ -69,8 +69,8 @@ class ParticipationApplicationFestival(BaseModel):
     )
     url_file_in_storage = models.URLField(
         verbose_name="Ссылка для скачивания файла с Диска",
-        max_length=512,
         blank=True,
+        max_length=512,
     )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
