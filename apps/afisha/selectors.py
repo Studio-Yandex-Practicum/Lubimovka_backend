@@ -32,10 +32,10 @@ def afisha_info_get() -> dict[str, Union[str, Any]]:
 
     afisha_dates = (
         Event.objects.filter(date_time__gte=timezone.now())
-        .order_by("date_time")
         .annotate(date=F("date_time__date"))
-        .distinct()
+        .order_by("date")
         .values_list("date", flat=True)
+        .distinct()
     )
     afisha_info_data["afisha_dates"] = afisha_dates
     return afisha_info_data
