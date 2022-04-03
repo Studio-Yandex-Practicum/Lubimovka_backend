@@ -1,3 +1,4 @@
+from django.db.models import Prefetch
 from django.db.models.functions import Substr
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
@@ -8,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.library.filters import AuthorFilter
-from apps.library.models import Author
+from apps.library.models import Author, Play
 from apps.library.schema.schema_extension import ERROR_MESSAGES_FOR_AUTHOR_FOR_403
 from apps.library.serializers import AuthorLettersSerializer, AuthorListSerializer, AuthorRetrieveSerializer
 
@@ -36,8 +37,8 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "achievements",
                 "social_networks",
                 "other_links",
-                "plays",
-                "other_plays",
+                Prefetch("plays", queryset=Play.objects.exclude(program__slug="other_plays")),
+                Prefetch("plays", queryset=Play.objects.filter(program__slug="other_plays"), to_attr="other_plays"),
             ),
             slug=self.kwargs["slug"],
         )
