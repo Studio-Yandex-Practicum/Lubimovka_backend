@@ -1,19 +1,3 @@
-// Get CSRF Token for the POST request.
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-
 jQuery(document).ready(function ($) {
     let EventTypeSelectField = $('#id_type');
     let CommonEventField = $("#id_common_event");
@@ -31,8 +15,7 @@ jQuery(document).ready(function ($) {
             }
         };
         $.ajax({
-            url: "/api/v1/afisha/get-common-events-admin/",
-            type: "POST",
+            url: "get-common-events-admin/",
             data: { type: EventType, },
             success: function (result) {
                 cols = document.getElementById('id_common_event');
@@ -41,11 +24,9 @@ jQuery(document).ready(function ($) {
                     cols.options.add(new Option(event, result[event]));
                 }
             },
-            headers: {
-                "X-CSRFToken": getCookie("csrftoken")
-            },
             error: function (e) {
-                console.error(JSON.stringify(e));
+                console.log(e);
+                alert("Не удалось обработать запрос 😞");
             },
         });
     }

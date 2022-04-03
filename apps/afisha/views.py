@@ -1,15 +1,17 @@
-from django.shortcuts import get_object_or_404
-from django.urls import reverse
+# from django.shortcuts import get_object_or_404
+# from django.urls import reverse
 from drf_spectacular.utils import extend_schema
-from rest_framework import serializers, status
-from rest_framework.permissions import IsAdminUser
-from rest_framework.renderers import JSONRenderer
+from rest_framework import serializers
+
+# from rest_framework.permissions import IsAdminUser
+# from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
 from apps.afisha import selectors
-from apps.afisha.models import CommonEvent, Event
+
+# from apps.afisha.models import CommonEvent, Event
 from apps.afisha.serializers import AfishaEventSerializer
 from apps.core.fields import CharacterSeparatedSerializerField
 from apps.core.utils import get_paginated_response
@@ -89,58 +91,33 @@ class AfishaInfoAPIView(APIView):
         return Response(serializer.data)
 
 
-class GetCommonEventsAdmin(APIView):
-    """Return common events for the event type."""
+# @extend_schema(exclude=True)
+# class GetCommonEventLink(APIView):
+#     """Return URL link to add or change based on `model_id` and `object_id`."""
 
-    permission_classes = [IsAdminUser]
-    renderer_classes = [JSONRenderer]
+#     permission_classes = [IsAdminUser]
 
-    class AdminCommonEventSerializer(serializers.Serializer):
-        type = serializers.CharField(required=False)
+#     class QueryParamSerializer(serializers.Serializer):
+#         common_event_id = serializers.IntegerField()
 
-    @extend_schema(exclude=True)
-    def post(self, request):
-        data_type_serializer = self.AdminCommonEventSerializer(data=request.data)
-        data_type_serializer.is_valid(raise_exception=True)
-        data = data_type_serializer.validated_data
-        common_event_type = data.get("type")
-        common_events = {}
-        if common_event_type:
-            common_events_queryset = Event.objects.filter(type=common_event_type)
-            common_events = {
-                event.common_event.target_model.name: event.common_event.target_model.id
-                for event in common_events_queryset
-            }
-        return Response(common_events)
+#     def get(self, request):
+#         query_params_serializer = self.QueryParamSerializer(data=request.query_params)
+#         query_params_serializer.is_valid(raise_exception=True)
+#         data = query_params_serializer.validated_data
 
+#         common_event_id = data.get("common_event_id")
+#         response_url_data = {}
+#         link_types = ["add", "change"]
 
-@extend_schema(exclude=True)
-class GetCommonEventLink(APIView):
-    """Return URL link to add or change based on `model_id` and `object_id`."""
+#         common_event = get_object_or_404(CommonEvent, id=common_event_id)
+#         common_event_model = common_event.target_model
 
-    permission_classes = [IsAdminUser]
-
-    class QueryParamSerializer(serializers.Serializer):
-        common_event_id = serializers.IntegerField()
-
-    def get(self, request):
-        query_params_serializer = self.QueryParamSerializer(data=request.query_params)
-        query_params_serializer.is_valid(raise_exception=True)
-        data = query_params_serializer.validated_data
-
-        common_event_id = data.get("common_event_id")
-        response_url_data = {}
-        link_types = ["add", "change"]
-
-        common_event = get_object_or_404(CommonEvent, id=common_event_id)
-        common_event_model = common_event.target_model
-
-        for link_type in link_types:
-            reverse_args = (common_event_id,) if link_type == "change" and common_event_id else None
-            url = reverse(
-                f"admin:{common_event_model._meta.app_label}_{(common_event_model._meta.object_name).lower()}_{link_type}",  # Noqa
-                args=reverse_args,
-            )
-            url += POPUP_SUFFIX
-            response_url_data["url_" + link_type] = url
-        return Response(data=response_url_data, status=status.HTTP_200_OK)
+#         for link_type in link_types:
+#             reverse_args = (common_event_id,) if link_type == "change" and common_event_id else None
+#             url = reverse(
+#                 f"admin:{common_event_model._meta.app_label}_{(common_event_model._meta.object_name).lower()}_{link_type}",  # Noqa
+#                 args=reverse_args,
+#             )
+#             url += POPUP_SUFFIX
+#             response_url_data["url_" + link_type] = url
+#         return Response(data=response_url_data, status=status.HTTP_200_OK)
