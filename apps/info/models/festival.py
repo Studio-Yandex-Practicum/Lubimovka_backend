@@ -151,6 +151,7 @@ class Festival(BaseModel):
         blank=True,
         verbose_name="Изображение для страницы пресс-релизов",
     )
+    test = models.CharField(max_length=100)
 
     class Meta:
         verbose_name = "Фестиваль"
