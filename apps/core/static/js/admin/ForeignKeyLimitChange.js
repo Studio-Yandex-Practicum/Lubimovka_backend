@@ -55,6 +55,7 @@ function getLableName($object) {
 
 jQuery(document).ready(function ($) {
     const foreignKeyClass = $(".foreign-key-field");
+    const add_edit_button = $("#change_button_for_foreign_key").attr("value") === "true"
 
     foreignKeyClass.each(function () {
         let lable = getLableName($( this ))
@@ -62,7 +63,9 @@ jQuery(document).ready(function ($) {
         removeLinks($, $( this ));
         if ($( this ).val() != "") {
             element.style.cssText = "pointer-events:none;touch-action:none;background:rgb(238, 238, 238)";
-            appendLink(element);
+            if (add_edit_button) {
+                appendLink(element);
+            };
         };
     });
 });
