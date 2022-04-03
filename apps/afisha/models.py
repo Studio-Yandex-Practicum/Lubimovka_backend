@@ -51,6 +51,9 @@ class Event(BaseModel):
         on_delete=models.CASCADE,
         related_name="body",
         verbose_name="Событие",
+        help_text=(
+            "Создайте спектакль, читку или мастер-класс чтобы получить возможность создать соответствующее событие"
+        ),
     )
     type = models.CharField(
         choices=EventType.choices,

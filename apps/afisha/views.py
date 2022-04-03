@@ -1,22 +1,13 @@
-# from django.shortcuts import get_object_or_404
-# from django.urls import reverse
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers
-
-# from rest_framework.permissions import IsAdminUser
-# from rest_framework.renderers import JSONRenderer
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
 from apps.afisha import selectors
-
-# from apps.afisha.models import CommonEvent, Event
 from apps.afisha.serializers import AfishaEventSerializer
 from apps.core.fields import CharacterSeparatedSerializerField
 from apps.core.utils import get_paginated_response
-
-POPUP_SUFFIX = "?_popup=1"
 
 
 class AfishaEventListAPIView(APIView):
@@ -89,35 +80,3 @@ class AfishaInfoAPIView(APIView):
         context = {"request": request}
         serializer = self.AfishaInfoOutputSerializer(response_data, context=context)
         return Response(serializer.data)
-
-
-# @extend_schema(exclude=True)
-# class GetCommonEventLink(APIView):
-#     """Return URL link to add or change based on `model_id` and `object_id`."""
-
-#     permission_classes = [IsAdminUser]
-
-#     class QueryParamSerializer(serializers.Serializer):
-#         common_event_id = serializers.IntegerField()
-
-#     def get(self, request):
-#         query_params_serializer = self.QueryParamSerializer(data=request.query_params)
-#         query_params_serializer.is_valid(raise_exception=True)
-#         data = query_params_serializer.validated_data
-
-#         common_event_id = data.get("common_event_id")
-#         response_url_data = {}
-#         link_types = ["add", "change"]
-
-#         common_event = get_object_or_404(CommonEvent, id=common_event_id)
-#         common_event_model = common_event.target_model
-
-#         for link_type in link_types:
-#             reverse_args = (common_event_id,) if link_type == "change" and common_event_id else None
-#             url = reverse(
-#                 f"admin:{common_event_model._meta.app_label}_{(common_event_model._meta.object_name).lower()}_{link_type}",  # Noqa
-#                 args=reverse_args,
-#             )
-#             url += POPUP_SUFFIX
-#             response_url_data["url_" + link_type] = url
-#         return Response(data=response_url_data, status=status.HTTP_200_OK)

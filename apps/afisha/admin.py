@@ -17,7 +17,6 @@ class EventAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super().get_urls()
-        print(urls)
         ajax_urls = [
             re_path(r"\S*/get-common-events-admin/", self.get_common_event),
         ]
