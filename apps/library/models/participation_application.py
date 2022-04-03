@@ -1,8 +1,5 @@
-import pathlib
-
 from django.core.validators import FileExtensionValidator
 from django.db import models
-from django.dispatch import receiver
 from phonenumber_field.modelfields import PhoneNumberField
 
 from apps.core.models import BaseModel
@@ -73,6 +70,7 @@ class ParticipationApplicationFestival(BaseModel):
     url_file_in_storage = models.URLField(
         verbose_name="Ссылка для скачивания файла с Диска",
         max_length=512,
+        blank=True,
     )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
@@ -118,10 +116,3 @@ class ParticipationApplicationFestival(BaseModel):
         if self.saved_to_storage:
             return self.url_file_in_storage
         return self.file.url
-
-
-@receiver(models.signals.post_delete, sender=ParticipationApplicationFestival)
-def auto_delete_file_on_delete(sender, instance, **kwargs):
-    if instance.file:
-        if pathlib.path.isfile(instance.file.path):
-            pathlib.remove(instance.file.path)
