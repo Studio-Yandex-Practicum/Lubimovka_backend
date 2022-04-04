@@ -162,36 +162,3 @@ class OtherLink(BaseModel):
 
     def __str__(self):
         return self.name
-
-
-class OtherPlay(BaseModel):
-    author = models.ForeignKey(
-        Author,
-        on_delete=models.CASCADE,
-        related_name="other_plays",
-        verbose_name="Автор",
-    )
-    name = models.CharField(
-        max_length=70,
-        verbose_name="Название",
-    )
-    link = models.URLField(
-        max_length=1000,
-        verbose_name="Ссылка на скачивание файла",
-    )
-
-    class Meta:
-        verbose_name = "Другая пьеса"
-        verbose_name_plural = "Другие пьесы"
-        constraints = (
-            models.UniqueConstraint(
-                fields=(
-                    "author",
-                    "name",
-                ),
-                name="unique_other_play",
-            ),
-        )
-
-    def __str__(self):
-        return self.name

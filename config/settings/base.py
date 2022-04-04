@@ -4,6 +4,8 @@ from pathlib import Path
 
 import environ
 
+from config.logging.logging_settings import LOGGING_SETTINGS
+
 env = environ.Env()
 # Root folder of the project
 # ------------------------------------------------------------------------------
@@ -199,6 +201,9 @@ CKEDITOR_CONFIGS = {
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
 
+# https://docs.djangoproject.com/en/4.0/topics/logging/#configuring-logging
+LOGGING = LOGGING_SETTINGS
+
 MAILJET_TEMPLATE_ID = env("MAILJET_TEMPLATE_ID", default="0000000")
 
 ADMIN_SITE_APPS_ORDER = (
@@ -236,7 +241,7 @@ ADMIN_SITE_MODELS_ORDER = {
     ],
     "Пользователи": [
         "Пользователи",
-    ]
+    ],
 }
 SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
