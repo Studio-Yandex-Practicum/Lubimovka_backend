@@ -97,7 +97,7 @@ class AdminImagePreview:
     @admin.display(description="Превью")
     def inline_image_preview(self, obj):
         return format_html(
-            '<img src="{}" width="100" height="50" style="object-fit: contain;" />'.format(obj.image.image.url)
+            '<img src="{}" width="300" height="150" style="object-fit: contain;" />'.format(obj.image.image.url)
         )
 
     @admin.display(description="Превью")
