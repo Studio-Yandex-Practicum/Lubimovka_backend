@@ -102,4 +102,7 @@ class Play(BaseModel):
     def clean(self):
         if self.program.slug != "other_plays" and not self.festival:
             raise ValidationError("У пьесы Любимовки должен быть фестиваль")
+        if self.program.slug == "other_plays":
+            self.festival = None
+            self.url_reading = None
         return super().clean()
