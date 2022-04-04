@@ -7,10 +7,6 @@ from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
     model = BlogItem.roles.through
-    autocomplete_fields = (
-        "person",
-        "role",
-    )
     extra = 0
     classes = ["collapse"]
 

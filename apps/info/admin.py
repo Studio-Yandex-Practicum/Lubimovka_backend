@@ -119,7 +119,6 @@ class VolunteerAdmin(admin.ModelAdmin):
 
 class VolunteerInline(admin.TabularInline):
     model = Volunteer
-    autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
     verbose_name = "Волонтёр"
     verbose_name_plural = "Волонтёры"
@@ -144,7 +143,6 @@ class VolunteerInline(admin.TabularInline):
 
 class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     model = Festival.images.through
-    autocomplete_fields = ("image",)
     readonly_fields = ("inline_image_preview",)
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"

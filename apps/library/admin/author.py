@@ -16,7 +16,6 @@ class AchievementAdmin(admin.ModelAdmin):
 
 class AchievementInline(admin.TabularInline):
     model = Author.achievements.through
-    # autocomplete_fields = ("achievement",)
     extra = 1
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
@@ -25,7 +24,6 @@ class AchievementInline(admin.TabularInline):
 
 class PlayInline(admin.TabularInline):
     model = Author.plays.through
-    # autocomplete_fields = ("play",)
     extra = 1
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"

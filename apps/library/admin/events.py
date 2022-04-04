@@ -17,7 +17,6 @@ class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePr
     model = Performance.images_in_block.through
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
-    autocomplete_fields = ("image",)
     extra = 0
     max_num = 8
     classes = ["collapse"]
@@ -41,10 +40,6 @@ class PerformanceReviewInline(InlineReadOnlyMixin, admin.TabularInline):
 class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
     model = TeamMember
     fields = (
-        "person",
-        "role",
-    )
-    autocomplete_fields = (
         "person",
         "role",
     )
