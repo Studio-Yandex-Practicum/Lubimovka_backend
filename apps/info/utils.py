@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from xhtml2pdf import pisa
 
 from apps.core.models import Setting
-from config.settings.base import MAILJET_TEMPLATE_ID
+from config.settings.base import MAILJET_TEMPLATE_ID_QUESTION
 
 
 def send_question(instance):
@@ -21,7 +21,7 @@ def send_question(instance):
         to=(Setting.get_setting("email_send_to"),),
     )
 
-    message.template_id = MAILJET_TEMPLATE_ID
+    message.template_id = MAILJET_TEMPLATE_ID_QUESTION
     message.merge_global_data = {
         "question": instance.question,
         "author_name": instance.author_name,

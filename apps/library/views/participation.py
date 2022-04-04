@@ -5,6 +5,7 @@ from drf_spectacular.utils import extend_schema
 from googleapiclient.errors import HttpError
 from rest_framework import mixins, viewsets
 
+from apps.core.models import Setting
 from apps.library.permissions import SettingsPlayReceptionPermission
 from apps.library.schema.schema_extension import (
     ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
@@ -53,5 +54,6 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             AnymailError,
             ValueError,
         ) as error:
-            msg = f"Не удалось отправить заявку id = {instance.id} на почту.\n{error}"
-            logger.critical(msg, exc_info=True)
+            email = Setting.get_setting("email_on_acceptance_of_plays_page")
+            msg = f"Не удалось отправить заявку на участие в фестивали id = {instance.id} на почту {email}."
+            logger.critical(msg, error, exc_info=True)

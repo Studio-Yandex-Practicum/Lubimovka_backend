@@ -198,8 +198,11 @@ CKEDITOR_CONFIGS = {
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
 
-MAILJET_TEMPLATE_ID = env("MAILJET_TEMPLATE_ID", default="0000000")
-MAILJET_TEMPLATE_ID_PLAY = env("MAILJET_TEMPLATE_ID_PLAY", default="0000000")
+# Templates for mailjet
+# https://anymail.dev/en/stable/esps/mailjet/
+# ------------------------------------------------------------------------------
+MAILJET_TEMPLATE_ID_QUESTION = env("MAILJET_TEMPLATE_ID_QUESTION", default="0000000")
+MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION = env("MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION", default="0000000")
 
 ADMIN_SITE_APPS_ORDER = (
     "Библиотека",
