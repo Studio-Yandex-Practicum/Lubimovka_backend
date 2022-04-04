@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0015_alter_author_slug'),
+        ('library', '0017_delete_other_play'),
     ]
 
     operations = [
