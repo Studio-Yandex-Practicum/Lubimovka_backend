@@ -52,6 +52,8 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
             AnymailError,
             ValueError,
         ) as error:
-            email = Setting.get_setting("email_on_acceptance_of_plays_page")
-            msg = f"Не удалось отправить заявку на участие в фестивали id = {instance.id} на почту {email}."
+            msg = (
+                f"Не удалось отправить заявку на участие в фестивали id = {instance.id} "
+                f"на почту {Setting.get_setting('email_on_acceptance_of_plays_page')}."
+            )
             logger.critical(msg, error, exc_info=True)

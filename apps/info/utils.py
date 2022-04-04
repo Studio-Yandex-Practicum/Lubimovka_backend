@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from xhtml2pdf import pisa
 
 from apps.core.models import Setting
+from apps.core.utils import send_email
 from config.settings.base import MAILJET_TEMPLATE_ID_QUESTION
 
 
@@ -27,11 +28,8 @@ def send_question(instance):
         "author_name": instance.author_name,
         "author_email": instance.author_email,
     }
-    message.send()
 
-    if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
-        return True
-    return False
+    return send_email(message)
 
 
 def get_pdf_response(press_release_instance, path_to_font):

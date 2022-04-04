@@ -1,7 +1,7 @@
 from django.core.mail import EmailMessage
-from rest_framework import status
 
 from apps.core.models import Setting
+from apps.core.utils import send_email
 from config.settings.base import MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
 
 
@@ -25,8 +25,4 @@ def send_application_email(instance):
     # attach file
     message.attach_file(instance.file.path)
 
-    message.send()
-
-    if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
-        return True
-    return False
+    return send_email(message)

@@ -18,5 +18,6 @@ class ParticipationAdmin(admin.ModelAdmin):
         "exported_to_google",
         "saved_to_storage",
         "festival_year",
+        "sent_to_email",
     )
     search_fields = ("title", "first_name", "last_name", "city", "year")
