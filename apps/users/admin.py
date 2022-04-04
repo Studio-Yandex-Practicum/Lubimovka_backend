@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Permission
 
-from .forms import GroupAdminForm, UserAdminForm
+from .forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm
 from .models import ProxyGroup
 
 User = get_user_model()
@@ -15,6 +15,7 @@ class UserAdmin(DjangoUserAdmin):
     list_display = (
         "full_name",
         "username",
+        "email",
         "is_active",
         "role",
         "get_last_login",
@@ -22,6 +23,26 @@ class UserAdmin(DjangoUserAdmin):
     list_filter = (
         "groups",
         "is_active",
+    )
+    add_form = UserAdminCreationForm
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "username",
+                    "email",
+                ),
+            },
+        ),
+    )
+    search_fields = (
+        "email",
+        "username",
+        "full_name",
     )
 
     @admin.display(description="Дата последней авторизации")

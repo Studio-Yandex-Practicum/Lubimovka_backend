@@ -1,0 +1,13 @@
+{% load i18n %}
+{% autoescape off %}Уважаемый {{ user.username }},
+Вы получили данное письмо, потому что были зарегистрированы на сайте {{ site_name }}.
+Ваш логин на сайте - {{ user.username }}
+
+Чтобы установить пароль, пожалуйста, перейдите на эту страницу:
+{% block reset_link %}
+{{ protocol }}://{{ domain }}{% url 'password_reset_confirm' uidb64=uid token=token %} {% endblock %}
+Спасибо за помощь в развитии нашего фестиваля!
+С уважением,
+
+Команда сайта {{ site_name }}.
+{% endautoescape %}

@@ -9,7 +9,7 @@ User = get_user_model()
 
 
 class UserFactory(factory.django.DjangoModelFactory):
-    """Create User objects with username and password. Required keyword parameter: `role_type`.
+    """Create User objects with email, first_name, last_name and password. Required keyword parameter: `role_type`.
 
     Behavior and available paremeters:
     1. `role_type` is required paramater. Allowed values are `editor` or `admin`.
@@ -24,6 +24,9 @@ class UserFactory(factory.django.DjangoModelFactory):
     class Params:
         username_prefix = None
 
+    first_name = factory.LazyAttribute(lambda _: fake.first_name())
+    last_name = factory.LazyAttribute(lambda _: fake.last_name())
+    email = factory.LazyAttribute(lambda _: fake.unique.email())
     password = factory.PostGenerationMethodCall("set_password", "pass")
 
     @factory.lazy_attribute_sequence
