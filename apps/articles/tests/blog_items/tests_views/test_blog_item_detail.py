@@ -73,7 +73,7 @@ def test_blog_item_detail_first_level_attributes(client, first_level_field, comp
 
 
 def test_blog_item_detail_contents_and_order(client, complex_blog_item):
-    """Get `contents` array and look for created `ContentModule` attributes. Order is important."""
+    """Get `contents` array and look for created `ContentModule` attributes. Order is matter."""
     response = client.get(BLOG_ITEM_DETAIL_URL)
     response_contents = response.data.get("contents")
     expected_content_in_order = (
@@ -86,8 +86,32 @@ def test_blog_item_detail_contents_and_order(client, complex_blog_item):
         "personsblock",
     )
 
-    assert len(response_contents) == 7, "В созданном объекте должно быть 7 блоков контентаю"
+    assert len(response_contents) == 7, "В созданном объекте должно быть 7 блоков контента."
 
     for order in range(7):
         content_type = response_contents[order].get("content_type")
         assert content_type == expected_content_in_order[order], "Проверьте порядок следования контента."
+
+
+def test_blog_item_detail_plays_block_content_fields(client, complex_blog_item):
+    """Get `contents` -> `playsblock` item and look for expected fields."""
+    response = client.get(BLOG_ITEM_DETAIL_URL)
+    response_contents = response.data.get("contents")
+    playsblock_content = response_contents[4]
+    playsblock_content_item = playsblock_content.get("content_item")
+
+    assert playsblock_content_item.get("title"), "У блока с пьесами должен быть заголовок."
+    assert playsblock_content_item.get("items"), "У блока с пьесами должен быть массив элементов (пьес)."
+    assert len(playsblock_content_item.get("items")) == 3, "Ожидалось 3 пьесы в блоке с пьесами."
+
+    first_play = playsblock_content_item.get("items")[0]
+    expected_play_fields_in_order = (
+        "id",
+        "name",
+        "authors",
+        "city",
+        "year",
+    )
+
+    for order, field in enumerate(first_play):
+        assert field == expected_play_fields_in_order[order], "Проверьте fields и их порядок в элементе пьесы"
