@@ -1,4 +1,4 @@
-from .author import Achievement, Author, OtherLink, OtherPlay, SocialNetworkLink
+from .author import Achievement, Author, OtherLink, SocialNetworkLink
 from .master_class import MasterClass
 from .participation_application import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION, ParticipationApplicationFestival
 from .performance import Performance, PerformanceMediaReview, PerformanceReview
@@ -11,7 +11,6 @@ __all__ = (
     Author,
     MasterClass,
     OtherLink,
-    OtherPlay,
     ParticipationApplicationFestival,
     Performance,
     PerformanceMediaReview,

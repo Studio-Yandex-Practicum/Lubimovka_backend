@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.info.models import Festival
@@ -7,6 +8,7 @@ from apps.info.serializers.volunteers import VolunteerInFestivalSerializer
 class FestivalSerializer(serializers.ModelSerializer):
     volunteers = serializers.SerializerMethodField()
 
+    @extend_schema_field(VolunteerInFestivalSerializer(many=True))
     def get_volunteers(self, obj):
         serializer = VolunteerInFestivalSerializer
         volunteers = obj.volunteers.all()

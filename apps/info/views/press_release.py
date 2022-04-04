@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import OpenApiTypes, extend_schema
 from rest_framework import mixins, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -17,6 +18,7 @@ class PressReleaseViewSet(viewsets.GenericViewSet, mixins.RetrieveModelMixin):
     pagination_class = None
 
 
+@extend_schema(responses={200: YearsSerializer})
 class PressReleaseYearsAPIView(APIView):
     def get(self, request):
         """Get a list of years for which there are press releases."""
@@ -26,6 +28,11 @@ class PressReleaseYearsAPIView(APIView):
         return Response(years_serializer.data)
 
 
+@extend_schema(
+    responses={
+        (200, "application/pdf"): OpenApiTypes.NONE,
+    }
+)
 class PressReleaseDownloadAPIView(APIView):
     def get(self, request, festival__year):
         """Get a press-release pdf file."""

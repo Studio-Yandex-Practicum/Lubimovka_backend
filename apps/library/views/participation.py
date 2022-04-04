@@ -14,10 +14,8 @@ from apps.library.schema.schema_extension import (
 from apps.library.serializers.participation import ParticipationSerializer
 from apps.library.services.email import send_application_email
 from apps.library.services.spreadsheets import GoogleSpreadsheets
-from config.logging import LOGGING_CONFIG
 
-logging.config.dictConfig(LOGGING_CONFIG)
-logger = logging.getLogger(__name__)
+logger = logging.getLogger("django")
 
 gs = GoogleSpreadsheets()
 

@@ -160,6 +160,9 @@ jobs:
 
             echo YNDX_DISK=${{ secrets.YNDX_DISK }} >> .env-stage
 
+            # Очистка неиспользуемых контейнеров, образов, сетей
+            docker system prune --force
+
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create stage_db_network || true
             docker network create stage_swag_network || true
