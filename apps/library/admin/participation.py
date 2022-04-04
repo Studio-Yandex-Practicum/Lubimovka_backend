@@ -13,7 +13,6 @@ class ParticipationAdmin(admin.ModelAdmin):
         "exported_to_google",
         "saved_to_storage",
         "sent_to_email",
-        "festival_year",
     )
     list_filter = (
         "exported_to_google",
