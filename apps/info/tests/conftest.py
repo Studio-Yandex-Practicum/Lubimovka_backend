@@ -3,7 +3,14 @@ from django.conf import settings
 from django.urls import reverse
 
 from apps.core.factories import ImageFactory, PersonFactory
-from apps.info.factories import FestivalFactory, FestivalTeamFactory, PartnerFactory, SponsorFactory, VolunteerFactory
+from apps.info.factories import (
+    FestivalFactory,
+    FestivalTeamFactory,
+    PartnerFactory,
+    SelectorFactory,
+    SponsorFactory,
+    VolunteerFactory,
+)
 
 FESTIVAL_URL_NAME = "festivals"
 FESTIVAL_YEARS_URL = reverse("festivals-years")
@@ -68,6 +75,16 @@ def volunteer(persons_with_image_email_city, festival):
 @pytest.fixture
 def volunteers(persons_with_image_email_city, festival):
     return VolunteerFactory.create_batch(5)
+
+
+@pytest.fixture
+def selector(persons_with_image_email_city, festival):
+    return SelectorFactory()
+
+
+@pytest.fixture
+def selectors(persons_with_image_email_city, festival):
+    return SelectorFactory.create_batch(5)
 
 
 @pytest.fixture

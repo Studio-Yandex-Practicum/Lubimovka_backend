@@ -88,7 +88,7 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
       -
-        name: Create SSH key 
+        name: Create SSH key
         # (SSH_KNOWN_HOSTS=ssh-keyscan -H сервер, SSH_PRIVATE_KEY - ключ с ПК, которому разрешен вход)
         run: |
           mkdir -p ~/.ssh
@@ -156,10 +156,15 @@ jobs:
             echo URL=${{ secrets.URL }} >> .env-test
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
 
+            # Token for yandex disk
+            echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK_TOKEN }} >> .env-test
+
             # Уделение старых данных
             systemctl stop lubimovka-frontend.service
             systemctl stop lubimovka-backend.service
             docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
+            # Очистка неиспользуемых контейнеров, образов, сетей
+            docker system prune --force
 
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create test_db_network || true

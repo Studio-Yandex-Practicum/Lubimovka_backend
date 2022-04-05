@@ -86,5 +86,5 @@ def four_events_october(freezer, masterclasses, readings, performances):
     event_oct_17 = EventFactory(date_time=datetime(2021, 10, 17, 23, 43, tzinfo=ZoneInfo("Europe/Moscow")))
     event_oct_5 = EventFactory(date_time=datetime(2021, 10, 5, 17, 43, tzinfo=ZoneInfo("Europe/Moscow")))
     first_event_oct_11 = EventFactory(date_time=datetime(2021, 10, 11, 18, 43, tzinfo=ZoneInfo("Europe/Moscow")))
-    second_event_oct_11 = EventFactory(date_time=datetime(2021, 10, 11, 18, 43, tzinfo=ZoneInfo("Europe/Moscow")))
+    second_event_oct_11 = EventFactory(date_time=datetime(2021, 10, 11, 10, 43, tzinfo=ZoneInfo("Europe/Moscow")))
     return event_oct_17, event_oct_5, first_event_oct_11, second_event_oct_11

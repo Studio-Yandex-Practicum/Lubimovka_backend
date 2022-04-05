@@ -4,7 +4,7 @@ from pathlib import Path
 import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-environ.Env.read_env(ROOT_DIR / '.env')
+environ.Env.read_env(ROOT_DIR / ".env")
 
 from .base import *  # noqa
 
@@ -41,7 +41,6 @@ INTERNAL_IPS = [
 # ------------------------------------------------------------------------------
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
 INSTALLED_APPS += ["django_extensions"]  # noqa: F405
-
 
 # Use PostgreSQL
 # ------------------------------------------------------------------------------

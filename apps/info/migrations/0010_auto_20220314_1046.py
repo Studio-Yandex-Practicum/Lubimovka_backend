@@ -6,18 +6,18 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('info', '0009_ordering_of_people'),
+        ("info", "0009_ordering_of_people"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='question',
-            name='sent',
-            field=models.BooleanField(default=False, verbose_name='Отправлено'),
+            model_name="question",
+            name="sent",
+            field=models.BooleanField(default=False, verbose_name="Отправлено"),
         ),
         migrations.AlterField(
-            model_name='festival',
-            name='blog_entries',
-            field=models.CharField(blank=True, max_length=100, verbose_name='Записи в блоге о фестивале'),
+            model_name="festival",
+            name="blog_entries",
+            field=models.CharField(blank=True, max_length=100, verbose_name="Записи в блоге о фестивале"),
         ),
     ]

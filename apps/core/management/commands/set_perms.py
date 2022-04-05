@@ -38,7 +38,6 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_orderedplay")
                 | Q(codename__endswith="_orderedvideo")
                 | Q(codename__endswith="_otherlink")
-                | Q(codename__endswith="_otherplay")
                 | Q(codename__endswith="_participationapplicationfestival")
                 | Q(codename__endswith="_partner")
                 | Q(codename__endswith="_performance")
