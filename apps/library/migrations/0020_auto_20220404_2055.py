@@ -12,19 +12,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.SeparateDatabaseAndState(
+            database_operations=[
+                migrations.RunSQL(
+                    sql='ALTER TABLE core_book_authors RENAME TO core_authorbook',
+                    reverse_sql='ALTER TABLE core_authorbook RENAME TO core_book_authors',
+                ),
+            ],
             state_operations=[
                 migrations.CreateModel(
                     name='AuthorPlays',
                     fields=[
                         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('order', models.PositiveIntegerField(default=0, verbose_name='Порядковый номер пьесы у автора')),
                         ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.author', verbose_name='Пьесы автора')),
                         ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.play', verbose_name='Пьесы автора')),
                     ],
-                ),
-                migrations.AlterModelTable(
-                    name='authorplays',
-                    table='library_author_plays',
                 ),
                 migrations.AlterField(
                     model_name='author',
@@ -33,17 +34,13 @@ class Migration(migrations.Migration):
                 ),
             ],
         ),
-        migrations.AlterModelOptions(
-            name='authorplays',
-            options={'ordering': ('order',)},
-        ),
         migrations.AddField(
             model_name='AuthorPlays',
             name='order',
             field=models.PositiveIntegerField(default=0, verbose_name='Порядковый номер пьесы у автора'),
         ),
-        migrations.AlterModelTable(
+        migrations.AlterModelOptions(
             name='authorplays',
-            table=None,
+            options={'ordering': ('order',)},
         ),
     ]
