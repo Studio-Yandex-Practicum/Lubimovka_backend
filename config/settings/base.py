@@ -204,7 +204,11 @@ YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
 # https://docs.djangoproject.com/en/4.0/topics/logging/#configuring-logging
 LOGGING = LOGGING_SETTINGS
 
-MAILJET_TEMPLATE_ID = env("MAILJET_TEMPLATE_ID", default="0000000")
+# Templates for mailjet
+# https://anymail.dev/en/stable/esps/mailjet/
+# ------------------------------------------------------------------------------
+MAILJET_TEMPLATE_ID_QUESTION = env("MAILJET_TEMPLATE_ID_QUESTION", default="0000000")
+MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION = env("MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION", default="0000000")
 
 ADMIN_SITE_APPS_ORDER = (
     "Библиотека",
@@ -243,6 +247,7 @@ ADMIN_SITE_MODELS_ORDER = {
         "Пользователи",
     ],
 }
+
 SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
         "event_type": "apps.afisha.models.Event.EventType",

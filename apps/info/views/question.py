@@ -1,6 +1,5 @@
 from anymail.exceptions import AnymailConfigurationError, AnymailInvalidAddress, AnymailRequestsAPIError
 from drf_spectacular.utils import extend_schema
-from rest_framework import status
 from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import generics
 
@@ -21,11 +20,8 @@ class QuestionCreateAPIView(generics.CreateAPIView):
     def perform_create(self, serializer):
         instance = serializer.save()
         try:
-            response = send_question(serializer)
-            if (
-                hasattr(response, "anymail_status")
-                and response.anymail_status.esp_response.status_code == status.HTTP_200_OK
-            ):
+            response_success = send_question(instance)
+            if response_success:
                 instance.sent = True
                 instance.save()
         except AnymailConfigurationError:
