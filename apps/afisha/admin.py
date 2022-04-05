@@ -14,7 +14,7 @@ class EventAdmin(admin.ModelAdmin):
         return qs
 
     list_display = (
-        "common_event",
+        "short_common_event",
         "type",
         "date_time",
         "paid",
@@ -23,6 +23,11 @@ class EventAdmin(admin.ModelAdmin):
     fields = ("common_event", "date_time", "paid", "url", "place", "pinned_on_main")
     list_filter = ("type",)
     empty_value_display = "-пусто-"
+
+    def short_common_event(self, obj):
+        return str(obj.common_event)[:25] + "..."
+
+    short_common_event.short_description = "Событие"
 
 
 admin.site.register(Event, EventAdmin)
