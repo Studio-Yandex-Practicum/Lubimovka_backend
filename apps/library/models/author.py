@@ -48,6 +48,7 @@ class Author(BaseModel):
         related_name="authors",
         blank=True,
         verbose_name="Пьесы автора",
+        through="AuthorPlays",
     )
     slug = models.SlugField(
         "Транслит фамилии для формирования адресной строки",
@@ -79,6 +80,33 @@ class Author(BaseModel):
     @property
     def image(self):
         return self.person.image
+
+
+class AuthorPlays(models.Model):
+    author = models.ForeignKey(
+        Author,
+        on_delete=models.CASCADE,
+        related_name="author_plays",
+        verbose_name="Пьесы автора",
+    )
+    play = models.ForeignKey(
+        Play,
+        on_delete=models.CASCADE,
+        related_name="author_plays",
+        verbose_name="Пьесы автора",
+    )
+    order = models.PositiveIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядковый номер пьесы у автора",
+    )
+
+    class Meta:
+        ordering = ("order",)
+
+    def __str__(self):
+        return f"Пьеса {self.play} - автор {self.author}"
 
 
 class SocialNetworkLink(BaseModel):

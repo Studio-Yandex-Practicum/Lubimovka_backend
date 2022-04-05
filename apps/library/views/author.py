@@ -9,7 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.library.filters import AuthorFilter
-from apps.library.models import Author, Play
+from apps.library.models import Author, AuthorPlays, Play
 from apps.library.schema.schema_extension import ERROR_MESSAGES_FOR_AUTHOR_FOR_403
 from apps.library.serializers import AuthorLettersSerializer, AuthorListSerializer, AuthorRetrieveSerializer
 
@@ -37,11 +37,12 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "achievements",
                 "social_networks",
                 "other_links",
-                Prefetch("plays", queryset=Play.objects.exclude(program__slug="other_plays")),
+                Prefetch("author_plays", queryset=AuthorPlays.objects.exclude(play__program__slug="other_plays")),
                 Prefetch("plays", queryset=Play.objects.filter(program__slug="other_plays"), to_attr="other_plays"),
             ),
             slug=self.kwargs["slug"],
         )
+        print(author.__dict__)
         return author
 
     def get_serializer_class(self):
