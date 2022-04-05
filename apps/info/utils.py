@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.template.loader import get_template
@@ -6,10 +7,10 @@ from rest_framework.response import Response
 from xhtml2pdf import pisa
 
 from apps.core.models import Setting
-from config.settings.base import MAILJET_TEMPLATE_ID
+from apps.core.utils import send_email
 
 
-def send_question(serializer):
+def send_question(instance):
     """Transmit question parameters in the template.
 
     For more information please read the documentation:
@@ -21,14 +22,14 @@ def send_question(serializer):
         to=(Setting.get_setting("email_send_to"),),
     )
 
-    message.template_id = MAILJET_TEMPLATE_ID
+    message.template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
     message.merge_global_data = {
-        "question": serializer.validated_data["question"],
-        "author_name": serializer.validated_data["author_name"],
-        "author_email": serializer.validated_data["author_email"],
+        "question": instance.question,
+        "author_name": instance.author_name,
+        "author_email": instance.author_email,
     }
-    message.send()
-    return message
+
+    return send_email(message)
 
 
 def get_pdf_response(press_release_instance, path_to_font):

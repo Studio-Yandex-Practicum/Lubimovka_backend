@@ -153,7 +153,7 @@ STATICFILES_FINDERS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(ROOT_DIR / "media")
+MEDIA_ROOT = ROOT_DIR / "media"
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
@@ -199,13 +199,18 @@ CKEDITOR_CONFIGS = {
 }
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
+YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
 
 # https://docs.djangoproject.com/en/4.0/topics/logging/#configuring-logging
 LOGGING = LOGGING_SETTINGS
 
-LOGIN_URL = '/admin/login/'
+LOGIN_URL = "/admin/login/"
 
-MAILJET_TEMPLATE_ID = env("MAILJET_TEMPLATE_ID", default="0000000")
+# Templates for mailjet
+# https://anymail.dev/en/stable/esps/mailjet/
+# ------------------------------------------------------------------------------
+MAILJET_TEMPLATE_ID_QUESTION = env("MAILJET_TEMPLATE_ID_QUESTION", default="0000000")
+MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION = env("MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION", default="0000000")
 
 ADMIN_SITE_APPS_ORDER = (
     "Библиотека",
@@ -244,9 +249,10 @@ ADMIN_SITE_MODELS_ORDER = {
         "Пользователи",
     ],
 }
+
 SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
         "event_type": "apps.afisha.models.Event.EventType",
-        "partner_type": "apps.info.models.people.Partner.PartnerType"
+        "partner_type": "apps.info.models.people.Partner.PartnerType",
     }
 }
