@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0017_delete_other_play'),
+        ('library', '0018_participationapplicationfestival_url_file_in_storage'),
     ]
 
     operations = [
