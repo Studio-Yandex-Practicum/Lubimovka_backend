@@ -36,7 +36,7 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
 
         try:
             yandex_disk_export(instance)
-        except (YaDiskError) as error:
+        except YaDiskError as error:
             logger.critical(error, exc_info=True)
 
         try:
