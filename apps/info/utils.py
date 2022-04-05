@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
 from django.template.loader import get_template
@@ -7,7 +8,6 @@ from xhtml2pdf import pisa
 
 from apps.core.models import Setting
 from apps.core.utils import send_email
-from config.settings.base import MAILJET_TEMPLATE_ID_QUESTION
 
 
 def send_question(instance):
@@ -22,7 +22,7 @@ def send_question(instance):
         to=(Setting.get_setting("email_send_to"),),
     )
 
-    message.template_id = MAILJET_TEMPLATE_ID_QUESTION
+    message.template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
     message.merge_global_data = {
         "question": instance.question,
         "author_name": instance.author_name,
