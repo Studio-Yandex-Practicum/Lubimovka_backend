@@ -42,7 +42,6 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
             ),
             slug=self.kwargs["slug"],
         )
-        print(author.__dict__)
         return author
 
     def get_serializer_class(self):
