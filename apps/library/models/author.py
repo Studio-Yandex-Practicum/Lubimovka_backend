@@ -102,9 +102,6 @@ class AuthorPlays(models.Model):
         verbose_name="Порядковый номер пьесы у автора",
     )
 
-    class Meta:
-        ordering = ("order",)
-
     def __str__(self):
         return f"Пьеса {self.play} - автор {self.author}"
 

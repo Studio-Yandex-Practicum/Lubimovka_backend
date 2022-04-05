@@ -17,7 +17,7 @@ class AchievementInline(admin.TabularInline):
 
 
 class PlayInline(admin.TabularInline):
-    model = Author.plays.through
+    model = AuthorPlays
     extra = 1
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
@@ -25,7 +25,6 @@ class PlayInline(admin.TabularInline):
     fields = ("order", "play")
 
     def get_queryset(self, request):
-        print(AuthorPlays.objects.all())
         return AuthorPlays.objects.exclude(play__program__slug="other_plays")
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -34,7 +33,7 @@ class PlayInline(admin.TabularInline):
 
 
 class OtherPlayInline(admin.TabularInline):
-    model = AuthorPlays
+    model = Author.plays.through
     extra = 1
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"

@@ -12,12 +12,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.SeparateDatabaseAndState(
-            database_operations=[
-                migrations.RunSQL(
-                    sql='ALTER TABLE library_author_plays RENAME TO library_authorplays',
-                    reverse_sql='ALTER TABLE library_authorplays RENAME TO library_author_plays',
-                ),
-            ],
             state_operations=[
                 migrations.CreateModel(
                     name='AuthorPlays',
@@ -25,7 +19,12 @@ class Migration(migrations.Migration):
                         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                         ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Author', verbose_name='Пьесы автора')),
                         ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Play', verbose_name='Пьесы автора')),
+                        ('order', models.PositiveIntegerField(default=0, verbose_name='Порядковый номер пьесы у автора')),
                     ],
+                ),
+                migrations.AlterModelTable(
+                    name='authorplays',
+                    table='library_author_plays',
                 ),
                 migrations.AlterField(
                     model_name='author',
@@ -39,8 +38,8 @@ class Migration(migrations.Migration):
             name='order',
             field=models.PositiveIntegerField(default=0, verbose_name='Порядковый номер пьесы у автора'),
         ),
-        migrations.AlterModelOptions(
+        migrations.AlterModelTable(
             name='authorplays',
-            options={'ordering': ('order',)},
+            table=None,
         ),
     ]
