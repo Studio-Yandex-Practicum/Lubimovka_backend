@@ -14,8 +14,8 @@ class Migration(migrations.Migration):
         migrations.SeparateDatabaseAndState(
             database_operations=[
                 migrations.RunSQL(
-                    sql='ALTER TABLE core_book_authors RENAME TO core_authorbook',
-                    reverse_sql='ALTER TABLE core_authorbook RENAME TO core_book_authors',
+                    sql='ALTER TABLE library_author_plays RENAME TO library_authorplays',
+                    reverse_sql='ALTER TABLE library_authorplays RENAME TO library_author_plays',
                 ),
             ],
             state_operations=[
