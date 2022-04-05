@@ -153,7 +153,7 @@ STATICFILES_FINDERS = [
 # MEDIA
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
-MEDIA_ROOT = str(ROOT_DIR / "media")
+MEDIA_ROOT = ROOT_DIR / "media"
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 
@@ -199,6 +199,7 @@ CKEDITOR_CONFIGS = {
 }
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
+YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
 
 # https://docs.djangoproject.com/en/4.0/topics/logging/#configuring-logging
 LOGGING = LOGGING_SETTINGS

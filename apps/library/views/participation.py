@@ -4,6 +4,7 @@ from anymail.exceptions import AnymailConfigurationError, AnymailError
 from drf_spectacular.utils import extend_schema
 from googleapiclient.errors import HttpError
 from rest_framework import mixins, viewsets
+from yadisk.exceptions import YaDiskError
 
 from apps.core.models import Setting
 from apps.library.permissions import SettingsPlayReceptionPermission
@@ -14,6 +15,7 @@ from apps.library.schema.schema_extension import (
 from apps.library.serializers.participation import ParticipationSerializer
 from apps.library.services.email import send_application_email
 from apps.library.services.spreadsheets import GoogleSpreadsheets
+from apps.library.services.yandex_disk_export import yandex_disk_export
 
 logger = logging.getLogger("django")
 
@@ -34,6 +36,12 @@ class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     def perform_create(self, serializer):
         instance = serializer.save()
         domain = self.request.build_absolute_uri()
+
+        try:
+            yandex_disk_export(instance)
+        except YaDiskError as error:
+            logger.critical(error, exc_info=True)
+
         try:
             export_success = gs.export(instance=instance, domain=domain)
             if export_success:
