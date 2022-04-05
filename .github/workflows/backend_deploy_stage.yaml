@@ -159,7 +159,7 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-stage
 
             # Token for yandex disk
-            echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK }} >> .env-stage
+            echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK_TOKEN }} >> .env-stage
 
             # Очистка неиспользуемых контейнеров, образов, сетей
             docker system prune --force

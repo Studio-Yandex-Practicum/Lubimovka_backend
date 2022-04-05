@@ -157,7 +157,7 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
 
             # Token for yandex disk
-            echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK }} >> .env-test
+            echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK_TOKEN }} >> .env-test
 
             # Уделение старых данных
             systemctl stop lubimovka-frontend.service

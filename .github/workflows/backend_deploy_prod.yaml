@@ -159,7 +159,7 @@ jobs:
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-prod
 
             # Token for yandex disk
-            echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK }} >> .env-prod
+            echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK_TOKEN }} >> .env-prod
 
             # Очистка неиспользуемых контейнеров, образов, сетей
             docker system prune --force
