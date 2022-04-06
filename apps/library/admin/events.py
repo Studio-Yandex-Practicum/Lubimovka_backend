@@ -47,7 +47,7 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
     autocomplete_fields = ("person",)
     extra = 0
     classes = ["collapse"]
-    # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Restricts role types for the model where inline is used."""
