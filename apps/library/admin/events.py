@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.db import models
 
-from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Role
 from apps.core.widgets import FkSelect
 from apps.library.models import (
@@ -15,13 +15,14 @@ from apps.library.models import (
 )
 
 
-class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline):
+class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
     model = Performance.images_in_block.through
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
     max_num = 8
     classes = ["collapse"]
+    model.__str__ = lambda self: ""
 
 
 class PerformanceMediaReviewInline(InlineReadOnlyMixin, admin.TabularInline):
@@ -44,7 +45,6 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
         "person",
         "role",
     )
-    autocomplete_fields = ("person",)
     extra = 0
     classes = ["collapse"]
     formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
@@ -134,6 +134,11 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
     #         kwargs["widget"] = FkSelect
     #     return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
+        return form
+
 
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
@@ -147,3 +152,8 @@ class ReadingAdmin(admin.ModelAdmin):
         "name",
     )
     inlines = (TeamMemberInline,)
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
+        return form

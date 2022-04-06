@@ -160,6 +160,9 @@ jobs:
 
             echo YNDX_DISK=${{ secrets.YNDX_DISK }} >> .env-prod
 
+            # Очистка неиспользуемых контейнеров, образов, сетей
+            docker system prune --force
+
             docker network create prod_db_network || true
             docker network create prod_swag_network || true
 

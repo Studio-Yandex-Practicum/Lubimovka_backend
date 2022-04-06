@@ -6,7 +6,7 @@ from django.urls import re_path
 from apps.core import utils
 from apps.core.models import Person
 from apps.library.forms.admin import OtherLinkForm
-from apps.library.models import Achievement, Author, OtherLink, OtherPlay, SocialNetworkLink
+from apps.library.models import Achievement, Author, OtherLink, Play, SocialNetworkLink
 
 
 @admin.register(Achievement)
@@ -16,7 +16,6 @@ class AchievementAdmin(admin.ModelAdmin):
 
 class AchievementInline(admin.TabularInline):
     model = Author.achievements.through
-    autocomplete_fields = ("achievement",)
     extra = 1
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
@@ -25,11 +24,32 @@ class AchievementInline(admin.TabularInline):
 
 class PlayInline(admin.TabularInline):
     model = Author.plays.through
-    autocomplete_fields = ("play",)
     extra = 1
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ["collapse"]
+
+    def get_queryset(self, request):
+        return Author.plays.through.objects.exclude(play__program__slug="other_plays")
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = Play.objects.exclude(program__slug="other_plays")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class OtherPlayInline(admin.TabularInline):
+    model = Author.plays.through
+    extra = 1
+    verbose_name = "Другая пьеса"
+    verbose_name_plural = "Другие пьесы"
+    classes = ["collapse"]
+
+    def get_queryset(self, request):
+        return Author.plays.through.objects.filter(play__program__slug="other_plays")
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = Play.objects.filter(program__slug="other_plays")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class SocialNetworkLinkInline(admin.TabularInline):
@@ -45,11 +65,6 @@ class OtherLinkInline(admin.TabularInline):
     classes = ["collapse"]
 
 
-class OtherPlayInline(admin.StackedInline):
-    model = OtherPlay
-    extra = 1
-
-
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = (
@@ -61,16 +76,15 @@ class AuthorAdmin(admin.ModelAdmin):
     inlines = (
         AchievementInline,
         PlayInline,
+        OtherPlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
-        OtherPlayInline,
     )
     exclude = (
         "achievements",
         "plays",
         "social_network_links",
         "other_links",
-        "other_plays_links",
     )
     search_fields = (
         "biography",
@@ -112,6 +126,3 @@ class AuthorAdmin(admin.ModelAdmin):
         slug = utils.slugify(person.last_name)
         response = {"slug": slug}
         return JsonResponse(response)
-
-    class Media:
-        js = ("admin/author_slug.js",)

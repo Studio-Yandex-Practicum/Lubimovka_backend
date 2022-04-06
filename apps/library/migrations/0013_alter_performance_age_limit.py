@@ -5,6 +5,7 @@ from django.db import migrations, models
 
 from apps.core.constants import AgeLimit
 
+
 def set_age_limit(apps, schema_editor):
     Performance = apps.get_model("library", "Performance")
     qs = Performance.objects.all()
@@ -16,16 +17,20 @@ def set_age_limit(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0012_auto_20220228_2041'),
+        ("library", "0012_auto_20220228_2041"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='performance',
-            name='age_limit',
-            field=models.IntegerField(choices=[(0, '0+'), (6, '6+'), (12, '12+'), (13, '13+'), (16, '16+'), (17, '17+'), (18, '18+')], default=0, verbose_name='Возрастное ограничение'),
+            model_name="performance",
+            name="age_limit",
+            field=models.IntegerField(
+                choices=[(0, "0+"), (6, "6+"), (12, "12+"), (13, "13+"), (16, "16+"), (17, "17+"), (18, "18+")],
+                default=0,
+                verbose_name="Возрастное ограничение",
+            ),
         ),
         migrations.RunPython(
             set_age_limit,
-        )
+        ),
     ]

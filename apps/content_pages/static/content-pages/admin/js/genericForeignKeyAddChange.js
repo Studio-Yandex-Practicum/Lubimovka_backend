@@ -128,5 +128,4 @@ jQuery(document).ready(function ($) {
         removeAddLink($, $objectId);
         appendLink($, $contentTypeId, $objectId);
     });
-
 });
