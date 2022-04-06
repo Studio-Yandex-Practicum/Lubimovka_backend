@@ -51,6 +51,9 @@ class Migration(migrations.Migration):
             name='authorplays',
             options={'ordering': ('order',)},
         ),
+        migrations.RunPython(
+            set_order,
+        ),
         migrations.AddConstraint(
             model_name='authorplays',
             constraint=models.UniqueConstraint(fields=('author', 'play'), name='unique_play_to_author'),
@@ -58,9 +61,6 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name='authorplays',
             constraint=models.UniqueConstraint(fields=('author', 'order'), name='unique_order_to_author'),
-        ),
-        migrations.RunPython(
-            set_order,
         ),
         migrations.AlterField(
             model_name='authorplays',
