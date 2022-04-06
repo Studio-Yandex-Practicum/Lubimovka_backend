@@ -25,7 +25,7 @@ class AuthorRequiredInlineFormset(BaseInlineFormSet):
 class AuthorInline(admin.TabularInline):
     model = AuthorPlays
     formset = AuthorRequiredInlineFormset
-    extra = 1
+    extra = 0
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
     classes = ["collapse"]

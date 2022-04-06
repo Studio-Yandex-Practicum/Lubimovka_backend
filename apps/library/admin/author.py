@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -16,13 +17,12 @@ class AchievementInline(admin.TabularInline):
     classes = ["collapse"]
 
 
-class PlayInline(admin.TabularInline):
+class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     model = AuthorPlays
-    extra = 1
+    extra = 0
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ["collapse"]
-    fields = ("order", "play")
 
     def get_queryset(self, request):
         return AuthorPlays.objects.exclude(play__program__slug="other_plays")
@@ -32,13 +32,12 @@ class PlayInline(admin.TabularInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class OtherPlayInline(admin.TabularInline):
+class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     model = AuthorPlays
-    extra = 1
+    extra = 0
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
     classes = ["collapse"]
-    fields = ("play",)
 
     def get_queryset(self, request):
         return AuthorPlays.objects.filter(play__program__slug="other_plays")
