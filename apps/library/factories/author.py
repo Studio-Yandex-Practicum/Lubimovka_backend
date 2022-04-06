@@ -7,7 +7,7 @@ from apps.core import utils
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.info.models import Festival
-from apps.library.models import Achievement, Author, OtherLink, Play, ProgramType, SocialNetworkLink
+from apps.library.models import Achievement, Author, AuthorPlays, OtherLink, Play, ProgramType, SocialNetworkLink
 
 fake = Faker("ru_RU")
 
@@ -53,6 +53,30 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def author(self):
         return Author.objects.order_by("?").first()
+
+
+@restrict_factory(
+    general=(
+        Author,
+        Play,
+    )
+)
+class AuthorPlaysFactory(factory.django.DjangoModelFactory):
+    """Create link m2m Author-Play with through model."""
+
+    class Meta:
+        model = AuthorPlays
+        django_get_or_create = ("author", "play")
+
+    order = factory.Sequence(lambda index: index)
+
+    @factory.lazy_attribute
+    def author(self):
+        return Author.objects.order_by("?").first()
+
+    @factory.lazy_attribute
+    def play(self):
+        return Play.objects.order_by("?").first()
 
 
 @restrict_factory(general=(Play, Person, Festival, ProgramType))
@@ -149,7 +173,8 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             return
         if extracted:
             plays = extracted
-            self.plays.add(*plays)
+            for play in plays:
+                AuthorPlaysFactory.create(play=play, author=self)
             return
 
         at_least = 1
@@ -160,7 +185,8 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         how_many = min(plays_count, how_many)
 
         plays = Play.objects.order_by("?")[:how_many]
-        self.plays.add(*plays)
+        for play in plays:
+            AuthorPlaysFactory.create(play=play, author=self)
 
     @classmethod
     def complex_create(cls, count=1):

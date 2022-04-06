@@ -87,23 +87,41 @@ class AuthorPlays(models.Model):
         Author,
         on_delete=models.CASCADE,
         related_name="author_plays",
-        verbose_name="Пьесы автора",
+        verbose_name="Автор",
     )
     play = models.ForeignKey(
         Play,
         on_delete=models.CASCADE,
         related_name="author_plays",
-        verbose_name="Пьесы автора",
+        verbose_name="Пьеса",
     )
-    order = models.PositiveIntegerField(
-        default=0,
-        blank=False,
-        null=False,
+    order = models.PositiveSmallIntegerField(
         verbose_name="Порядковый номер пьесы у автора",
     )
 
+    class Meta:
+        ordering = ("order",)
+        constraints = (
+            models.UniqueConstraint(
+                fields=("author", "play"),
+                name="unique_play_to_author",
+            ),
+            models.UniqueConstraint(
+                fields=("author", "order"),
+                name="unique_order_to_author",
+            ),
+        )
+
     def __str__(self):
         return f"Пьеса {self.play} - автор {self.author}"
+
+    def unique_error_message(self, model_class, unique_check):
+        if model_class == type(self) and unique_check == ("author", "play"):
+            return "У автора уже есть данная пьеса."
+        if model_class == type(self) and unique_check == ("author", "order"):
+            return "Такой порядковый номер уже есть."
+        else:
+            return super(AuthorPlays, self).unique_error_message(model_class, unique_check)
 
 
 class SocialNetworkLink(BaseModel):

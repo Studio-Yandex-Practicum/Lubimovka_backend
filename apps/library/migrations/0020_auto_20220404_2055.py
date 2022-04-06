@@ -4,6 +4,14 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
+def set_order(apps, schema_editor):
+    AuthorPlays = apps.get_model("library", "AuthorPlays")
+    qs = AuthorPlays.objects.all()
+    for object in qs:
+        object.order = object.play.id
+        object.save()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -12,19 +20,20 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.SeparateDatabaseAndState(
+            database_operations=[
+                migrations.RunSQL(
+                    sql='ALTER TABLE library_author_plays RENAME TO library_authorplays',
+                    reverse_sql='ALTER TABLE library_authorplays RENAME TO library_author_plays',
+                ),
+            ],
             state_operations=[
                 migrations.CreateModel(
                     name='AuthorPlays',
                     fields=[
                         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Author', verbose_name='Пьесы автора')),
-                        ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Play', verbose_name='Пьесы автора')),
-                        ('order', models.PositiveIntegerField(default=0, verbose_name='Порядковый номер пьесы у автора')),
+                        ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Author', verbose_name='Автор')),
+                        ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Play', verbose_name='Пьеса')),
                     ],
-                ),
-                migrations.AlterModelTable(
-                    name='authorplays',
-                    table='library_author_plays',
                 ),
                 migrations.AlterField(
                     model_name='author',
@@ -34,12 +43,28 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.AddField(
-            model_name='AuthorPlays',
+            model_name='authorplays',
             name='order',
-            field=models.PositiveIntegerField(default=0, verbose_name='Порядковый номер пьесы у автора'),
+            field=models.PositiveSmallIntegerField(default=0, verbose_name='Порядковый номер пьесы у автора'),
         ),
-        migrations.AlterModelTable(
+        migrations.AlterModelOptions(
             name='authorplays',
-            table=None,
+            options={'ordering': ('order',)},
+        ),
+        migrations.AddConstraint(
+            model_name='authorplays',
+            constraint=models.UniqueConstraint(fields=('author', 'play'), name='unique_play_to_author'),
+        ),
+        migrations.AddConstraint(
+            model_name='authorplays',
+            constraint=models.UniqueConstraint(fields=('author', 'order'), name='unique_order_to_author'),
+        ),
+        migrations.RunPython(
+            set_order,
+        ),
+        migrations.AlterField(
+            model_name='authorplays',
+            name='order',
+            field=models.PositiveSmallIntegerField(verbose_name='Порядковый номер пьесы у автора'),
         ),
     ]
