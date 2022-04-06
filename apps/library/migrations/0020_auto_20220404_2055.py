@@ -4,14 +4,6 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
-def set_order(apps, schema_editor):
-    AuthorPlays = apps.get_model("library", "AuthorPlays")
-    qs = AuthorPlays.objects.all()
-    for object in qs:
-        object.order = object.play.id
-        object.save()
-
-
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -51,20 +43,8 @@ class Migration(migrations.Migration):
             name='authorplays',
             options={'ordering': ('order',)},
         ),
-        migrations.RunPython(
-            set_order,
-        ),
         migrations.AddConstraint(
             model_name='authorplays',
             constraint=models.UniqueConstraint(fields=('author', 'play'), name='unique_play_to_author'),
-        ),
-        migrations.AddConstraint(
-            model_name='authorplays',
-            constraint=models.UniqueConstraint(fields=('author', 'order'), name='unique_order_to_author'),
-        ),
-        migrations.AlterField(
-            model_name='authorplays',
-            name='order',
-            field=models.PositiveSmallIntegerField(verbose_name='Порядковый номер пьесы у автора'),
         ),
     ]

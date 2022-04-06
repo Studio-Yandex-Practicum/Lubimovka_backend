@@ -96,6 +96,7 @@ class AuthorPlays(models.Model):
         verbose_name="Пьеса",
     )
     order = models.PositiveSmallIntegerField(
+        default=0,
         verbose_name="Порядковый номер пьесы у автора",
     )
 
@@ -106,10 +107,6 @@ class AuthorPlays(models.Model):
                 fields=("author", "play"),
                 name="unique_play_to_author",
             ),
-            models.UniqueConstraint(
-                fields=("author", "order"),
-                name="unique_order_to_author",
-            ),
         )
 
     def __str__(self):
@@ -118,8 +115,6 @@ class AuthorPlays(models.Model):
     def unique_error_message(self, model_class, unique_check):
         if model_class == type(self) and unique_check == ("author", "play"):
             return "У автора уже есть данная пьеса."
-        if model_class == type(self) and unique_check == ("author", "order"):
-            return "Такой порядковый номер уже есть."
         else:
             return super(AuthorPlays, self).unique_error_message(model_class, unique_check)
 

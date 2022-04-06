@@ -33,7 +33,7 @@ class PlayInline(admin.TabularInline):
 
 
 class OtherPlayInline(admin.TabularInline):
-    model = Author.plays.through
+    model = AuthorPlays
     extra = 1
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
