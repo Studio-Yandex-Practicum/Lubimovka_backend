@@ -14,37 +14,37 @@ class Migration(migrations.Migration):
         migrations.SeparateDatabaseAndState(
             database_operations=[
                 migrations.RunSQL(
-                    sql='ALTER TABLE library_author_plays RENAME TO library_authorplays',
-                    reverse_sql='ALTER TABLE library_authorplays RENAME TO library_author_plays',
+                    sql='ALTER TABLE library_author_plays RENAME TO library_authorplay',
+                    reverse_sql='ALTER TABLE library_authorplay RENAME TO library_author_plays',
                 ),
             ],
             state_operations=[
                 migrations.CreateModel(
-                    name='AuthorPlays',
+                    name='AuthorPlay',
                     fields=[
                         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Author', verbose_name='Автор')),
-                        ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Play', verbose_name='Пьеса')),
+                        ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_play', to='library.Author', verbose_name='Автор')),
+                        ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_play', to='library.Play', verbose_name='Пьеса')),
                     ],
                 ),
                 migrations.AlterField(
                     model_name='author',
                     name='plays',
-                    field=models.ManyToManyField(blank=True, related_name='authors', through='library.AuthorPlays', to='library.Play', verbose_name='Пьесы автора'),
+                    field=models.ManyToManyField(blank=True, related_name='authors', through='library.AuthorPlay', to='library.Play', verbose_name='Пьесы автора'),
                 ),
             ],
         ),
         migrations.AddField(
-            model_name='authorplays',
+            model_name='authorplay',
             name='order',
             field=models.PositiveSmallIntegerField(default=0, verbose_name='Порядковый номер пьесы у автора'),
         ),
         migrations.AlterModelOptions(
-            name='authorplays',
-            options={'ordering': ('order',)},
+            name='authorplay',
+            options={'ordering': ('order',), 'verbose_name': 'Отношение Автор-Пьеса', 'verbose_name_plural': 'Отношения Автор-Пьеса'},
         ),
         migrations.AddConstraint(
-            model_name='authorplays',
+            model_name='authorplay',
             constraint=models.UniqueConstraint(fields=('author', 'play'), name='unique_play_to_author'),
         ),
     ]

@@ -48,7 +48,7 @@ class Author(BaseModel):
         related_name="authors",
         blank=True,
         verbose_name="Пьесы автора",
-        through="AuthorPlays",
+        through="AuthorPlay",
     )
     slug = models.SlugField(
         "Транслит фамилии для формирования адресной строки",
@@ -82,17 +82,17 @@ class Author(BaseModel):
         return self.person.image
 
 
-class AuthorPlays(models.Model):
+class AuthorPlay(models.Model):
     author = models.ForeignKey(
         Author,
         on_delete=models.CASCADE,
-        related_name="author_plays",
+        related_name="author_play",
         verbose_name="Автор",
     )
     play = models.ForeignKey(
         Play,
         on_delete=models.CASCADE,
-        related_name="author_plays",
+        related_name="author_play",
         verbose_name="Пьеса",
     )
     order = models.PositiveSmallIntegerField(
@@ -101,6 +101,8 @@ class AuthorPlays(models.Model):
     )
 
     class Meta:
+        verbose_name = "Отношение Автор-Пьеса"
+        verbose_name_plural = "Отношения Автор-Пьеса"
         ordering = ("order",)
         constraints = (
             models.UniqueConstraint(
@@ -111,12 +113,6 @@ class AuthorPlays(models.Model):
 
     def __str__(self):
         return f"Пьеса {self.play} - автор {self.author}"
-
-    def unique_error_message(self, model_class, unique_check):
-        if model_class == type(self) and unique_check == ("author", "play"):
-            return "У автора уже есть данная пьеса."
-        else:
-            return super(AuthorPlays, self).unique_error_message(model_class, unique_check)
 
 
 class SocialNetworkLink(BaseModel):

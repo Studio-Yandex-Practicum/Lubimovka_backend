@@ -4,7 +4,7 @@ from django.forms.models import BaseInlineFormSet
 
 from apps.library.filters.play import PlayProgramFilter
 from apps.library.forms.admin.play import PlayForm
-from apps.library.models import AuthorPlays, Play
+from apps.library.models import AuthorPlay, Play
 
 
 class AuthorRequiredInlineFormset(BaseInlineFormSet):
@@ -23,7 +23,7 @@ class AuthorRequiredInlineFormset(BaseInlineFormSet):
 
 
 class AuthorInline(admin.TabularInline):
-    model = AuthorPlays
+    model = AuthorPlay
     formset = AuthorRequiredInlineFormset
     extra = 0
     verbose_name = "Автор"

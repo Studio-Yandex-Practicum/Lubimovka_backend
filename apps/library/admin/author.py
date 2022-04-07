@@ -6,7 +6,7 @@ from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
-from apps.library.models import Author, AuthorPlays, OtherLink, Play, SocialNetworkLink
+from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
 
 
 class AchievementInline(admin.TabularInline):
@@ -18,14 +18,14 @@ class AchievementInline(admin.TabularInline):
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
-    model = AuthorPlays
+    model = AuthorPlay
     extra = 0
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ["collapse"]
 
     def get_queryset(self, request):
-        return AuthorPlays.objects.exclude(play__program__slug="other_plays")
+        return AuthorPlay.objects.exclude(play__program__slug="other_plays")
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         kwargs["queryset"] = Play.objects.exclude(program__slug="other_plays")
@@ -33,14 +33,14 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
 
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
-    model = AuthorPlays
+    model = AuthorPlay
     extra = 0
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
     classes = ["collapse"]
 
     def get_queryset(self, request):
-        return AuthorPlays.objects.filter(play__program__slug="other_plays")
+        return AuthorPlay.objects.filter(play__program__slug="other_plays")
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         kwargs["queryset"] = Play.objects.filter(program__slug="other_plays")

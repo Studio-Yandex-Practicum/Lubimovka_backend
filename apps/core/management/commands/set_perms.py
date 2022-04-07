@@ -14,7 +14,7 @@ class Command(BaseCommand):
                 Q(codename__endswith="_achievement")
                 | Q(codename__endswith="_artteammember")
                 | Q(codename__endswith="_author")
-                | Q(codename__endswith="_authorplays")
+                | Q(codename__endswith="_authorplay")
                 | Q(codename__endswith="_banner")
                 | Q(codename__endswith="_blogitem")
                 | Q(codename__endswith="_blogitemcontent")
