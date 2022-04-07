@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.library.models import Author, AuthorPlay, Play
+from apps.library.models import Author, Play
 
 
 class AuthorForPlaySerializer(serializers.ModelSerializer):
@@ -35,7 +35,7 @@ class PlaySerializer(serializers.ModelSerializer):
         model = Play
 
 
-class AuthorPlaySerializer(serializers.ModelSerializer):
+class AuthorPlaySerializer(serializers.Serializer):
     """Сериализатор Пьесы из промежуточной модели м2м Автор-Пьеса.
 
     Используется для сортировки выдачи пьес.
@@ -51,16 +51,3 @@ class AuthorPlaySerializer(serializers.ModelSerializer):
     )
     url_download = serializers.URLField(source="play.url_download")
     url_reading = serializers.URLField(source="play.url_reading", required=False)
-
-    class Meta:
-        fields = (
-            "id",
-            "name",
-            "authors",
-            "city",
-            "published",
-            "year",
-            "url_download",
-            "url_reading",
-        )
-        model = AuthorPlay

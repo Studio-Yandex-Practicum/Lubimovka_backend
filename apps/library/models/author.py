@@ -86,13 +86,13 @@ class AuthorPlay(models.Model):
     author = models.ForeignKey(
         Author,
         on_delete=models.CASCADE,
-        related_name="author_play",
+        related_name="author_play_set",
         verbose_name="Автор",
     )
     play = models.ForeignKey(
         Play,
         on_delete=models.CASCADE,
-        related_name="author_play",
+        related_name="author_play_set",
         verbose_name="Пьеса",
     )
     order = models.PositiveSmallIntegerField(

@@ -28,7 +28,7 @@ class AuthorInline(admin.TabularInline):
     extra = 0
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
-    classes = ["collapse"]
+    classes = ("collapse",)
     fields = ("author",)
 
 

@@ -23,8 +23,8 @@ class Migration(migrations.Migration):
                     name='AuthorPlay',
                     fields=[
                         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_play', to='library.Author', verbose_name='Автор')),
-                        ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_play', to='library.Play', verbose_name='Пьеса')),
+                        ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_play_set', to='library.Author', verbose_name='Автор')),
+                        ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_play_set', to='library.Play', verbose_name='Пьеса')),
                     ],
                 ),
                 migrations.AlterField(
