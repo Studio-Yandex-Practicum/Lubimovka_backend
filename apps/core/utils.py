@@ -4,6 +4,7 @@ from functools import wraps
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify as django_slugify
+from rest_framework import status
 from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
@@ -127,3 +128,10 @@ def get_app_list(self, request):
             app["models"].sort(key=lambda x: x["name"])
 
     return app_list
+
+
+def send_email(message):
+    message.send()
+    if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
+        return True
+    return False

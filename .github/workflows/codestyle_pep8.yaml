@@ -1,4 +1,4 @@
-name: codestyle with PEP8 and tests
+name: codestyle with PEP8
 
 on:
   pull_request:
@@ -30,6 +30,3 @@ jobs:
     -
       name: Codestyle by black
       run: black --check .
-    -
-      name: Test with pytest
-      run: pytest
