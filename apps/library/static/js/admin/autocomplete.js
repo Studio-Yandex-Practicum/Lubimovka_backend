@@ -1,8 +1,15 @@
 // function adds select2
 function setSelect2($, $objectId, $placeHolder) {
     const $addAllowClear = true;
-    const $addWidth = "180px";
+    const $addWidth = "250px";
+    //const $excludeSelect = $(".form-row.empty-form select").attr('id');
+    //const $exSelect = $('select').not("[id!="+$excludeSelect+"]")
+
+    //return $($objectId+$exSelect).select2({
     return $($objectId).select2({
+        sorter: function(results) {
+            return results.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()))
+        },
         placeholder: $placeHolder,
         allowClear: $addAllowClear,
         width: $addWidth,
@@ -10,24 +17,20 @@ function setSelect2($, $objectId, $placeHolder) {
 };
 
 $(document).ready(function() {
-    setSelect2($, "select#id_project", "Выберите проект");
-    setSelect2($, "select#id_person", "Выберите человека");
+
+    setSelect2($, ".field-achievement select", "Выберите достижение");
+    setSelect2($, ".field-play select", "Выберите пьесу");
+    setSelect2($, ".field-name select", "Выберите соцсеть");
+    setSelect2($, ".field-author select", "Выберите человека");
+    setSelect2($, ".field-image select", "Выберите изображение");
+    setSelect2($, ".field-person select", "Выберите человека");
+    setSelect2($, ".field-role select", "Выберите роль");
+    setSelect2($, ".field-content_type select", "Выберите тип");
     setSelect2($, "select#id_performance", "Выберите спектакль");
     setSelect2($, "select#id_program", "Выберите программу");
     setSelect2($, "select#id_festival", "Выберите фестиваль");
-    setSelect2($, "select#id_play", "Выберите пьесу");
-    setSelect2($, "select#id_type", "Выберите тип");
     setSelect2($, "select#id_button", "Выберите тип кнопки");
-    setSelect2($, "#id_common_event", "Выберите событие");
-    setSelect2($, "#id_Author_achievements-0-achievement", "Выберите достижение");
-    setSelect2($, "select#id_Author_plays-0-play", "Выберите пьесу");
-    setSelect2($, "select#id_Author_plays-2-0-play", "Выберите пьесу");
-    setSelect2($, "select#id_social_networks-0-name", "Выберите соцсеть");
-    setSelect2($, "select#id_Author_plays-0-author", "Выберите человека");
-    setSelect2($, "select#id_Author_plays-1-author", "Выберите человека");
-    setSelect2($, "select#id_volunteers-0-person", "Выберите человека");
-    setSelect2($, "select#id_Performance_images_in_block-0-image", "Выберите изображение");
-    setSelect2($, "select#id_Festival_images-0-image", "Выберите изображение");
+    setSelect2($, "select#id_common_event", "Выберите событие");
 
     // trigger to add new elements to tree house
     $('tbody').bind("DOMNodeInserted",function(event){
@@ -55,7 +58,7 @@ $(document).ready(function() {
                 $("select#"+element.id).select2({
                     placeholder: "Выберите " + placeHolderWord,
                     allowClear: true,
-                    width: "180px",
+                    width: "250px",
                 });
             }
         }

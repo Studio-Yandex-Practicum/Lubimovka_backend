@@ -29,7 +29,6 @@ WSGI_APPLICATION = "config.wsgi.application"
 # ------------------------------------------------------------------------------
 DJANGO_APPS = [
     "django.contrib.sites",
-    # "suit",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

@@ -98,10 +98,10 @@ class AuthorAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
     def get_ordering(self, request):
-        return [
-            "person__first_name",
+        return (
             "person__last_name",
-        ]
+            "person__first_name",
+        )
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
