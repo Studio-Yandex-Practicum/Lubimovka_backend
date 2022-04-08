@@ -4,7 +4,7 @@ import pytz
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
-from apps.afisha.filters import StateOfEvent
+from apps.afisha.filters import StatusOfEvent
 from apps.afisha.models import Event
 
 
@@ -21,14 +21,13 @@ class EventAdmin(admin.ModelAdmin):
     list_display = (
         "status",
         "short_common_event",
-        "type",
         "date_time",
         "paid",
         "pinned_on_main",
     )
     fields = ("common_event", "date_time", "paid", "url", "place", "pinned_on_main")
     list_filter = (
-        StateOfEvent,
+        StatusOfEvent,
         "type",
     )
     empty_value_display = "-пусто-"
@@ -46,7 +45,7 @@ class EventAdmin(admin.ModelAdmin):
             return mark_safe('<b style="background:{};color:{};">{}</b>'.format("#B22222", "#F8F8FF", "Прошедшее"))
         return mark_safe('<b style="background:{};color:{};">{}</b>'.format("#1E90FF", "#F8F8FF", "Сегодня"))
 
-    status.short_description = "Статус"
+    status.short_description = "Состояние"
 
 
 admin.site.register(Event, EventAdmin)

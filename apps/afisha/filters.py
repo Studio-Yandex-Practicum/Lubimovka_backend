@@ -14,7 +14,7 @@ class AfishaEventsDateInFilter(django_filters.FilterSet):
     dates = DateInFilter(field_name="date_time", lookup_expr="date__in")
 
 
-class StateOfEvent(admin.SimpleListFilter):
+class StatusOfEvent(admin.SimpleListFilter):
     title = _("Состояние события")
 
     parameter_name = "state"
@@ -22,7 +22,7 @@ class StateOfEvent(admin.SimpleListFilter):
     def lookups(self, request, model_admin):
         return (
             ("all", _("Все")),
-            (None, _("Предстоящие")),
+            ("upcoming", _("Предстоящие")),
             ("today", _("Сегодня")),
             ("past", _("Прошедшие")),
         )
@@ -31,16 +31,12 @@ class StateOfEvent(admin.SimpleListFilter):
         date_now = datetime.today().replace(tzinfo=pytz.UTC).date()
         date_tomorrow = date_now + timedelta(days=1)
         if self.value() is None or self.value() == "upcoming":
-            queryset = queryset.filter(date_time__gt=date_now).exclude(date_time__range=[date_now, date_tomorrow])
-            return queryset
+            return queryset.filter(date_time__gt=date_now).exclude(date_time__range=[date_now, date_tomorrow])
         if self.value() == "all":
             return queryset
         if self.value() == "past":
-            queryset = queryset.filter(date_time__lt=date_now)
-            return queryset
-        if self.value() == "today":
-            queryset = queryset.filter(date_time__range=[date_now, date_tomorrow])
-            return queryset
+            return queryset.filter(date_time__lt=date_now)
+        return queryset.filter(date_time__range=[date_now, date_tomorrow])
 
     def choices(self, changelist):
         for lookup, title in self.lookup_choices:
