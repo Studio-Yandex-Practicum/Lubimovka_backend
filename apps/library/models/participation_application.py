@@ -67,6 +67,11 @@ class ParticipationApplicationFestival(BaseModel):
         upload_to=generate_upload_path,
         help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
     )
+    url_file_in_storage = models.URLField(
+        verbose_name="Ссылка для скачивания файла с Диска",
+        blank=True,
+        max_length=512,
+    )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
     verified = models.BooleanField(
@@ -76,6 +81,7 @@ class ParticipationApplicationFestival(BaseModel):
     )
     exported_to_google = models.BooleanField(default=False, verbose_name="Выгружена в Google-таблицу", editable=False)
     saved_to_storage = models.BooleanField(default=False, verbose_name="Файл сохранен на Диске", editable=False)
+    sent_to_email = models.BooleanField(default=False, verbose_name="Отправлена на почту", editable=False)
     festival_year = models.PositiveSmallIntegerField(
         default=get_festival_year,
         verbose_name="Год фестиваля",
@@ -102,5 +108,12 @@ class ParticipationApplicationFestival(BaseModel):
 
     def save(self, *args, **kwargs):
         """Save generated filename."""
-        self.file.name = self.generate_filename()
+        if self.file:
+            self.file.name = self.generate_filename()
         super().save(*args, **kwargs)
+
+    @property
+    def file_url(self):
+        if self.saved_to_storage:
+            return self.url_file_in_storage
+        return self.file.url
