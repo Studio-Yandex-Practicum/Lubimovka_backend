@@ -7,6 +7,7 @@ function setSelect2($, $objectId, $lastWord) {
     var $obj = {
         "author": "человека",
         "achievement": "достижение",
+        "performance": "спектакль",
         "play": "пьесу",
         "name": "соцсеть",
         "image": "изображение",
@@ -17,11 +18,12 @@ function setSelect2($, $objectId, $lastWord) {
         "event": "событие",
         "festival": "фестиваль",
         "program": "программу",
+        "limit": "возраст",
     };
     if ($lastWord in $obj) {
         $placeHolderWord = $obj[$lastWord];
     }
-    if (!($objectId.includes("__prefix__"))) {
+    if (!($objectId.includes("__prefix__") || $objectId.includes("id_project"))) {
         $("select#"+$objectId).select2({
             sorter: function(results) {
                 return results.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()))
