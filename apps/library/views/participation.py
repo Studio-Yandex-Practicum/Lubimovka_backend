@@ -3,7 +3,8 @@ import logging
 from anymail.exceptions import AnymailConfigurationError, AnymailError
 from drf_spectacular.utils import extend_schema
 from googleapiclient.errors import HttpError
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
+from rest_framework.response import Response
 from yadisk.exceptions import YaDiskError
 
 from apps.core.models import Setting
@@ -32,6 +33,13 @@ gs = GoogleSpreadsheets()
 class ParticipationViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     permission_classes = [SettingsPlayReceptionPermission]
     serializer_class = ParticipationSerializer
+
+    def create(self, request):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            return Response(status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def perform_create(self, serializer):
         instance = serializer.save()
