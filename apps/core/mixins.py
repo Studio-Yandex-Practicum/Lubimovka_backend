@@ -57,12 +57,14 @@ class StatusButtonMixin:
         return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
-        for status in STATUS_INFO:
-            if status in request.POST:
-                obj.status = status
-                obj.save()
-                self.message_user(request, "Статус успешно обновлён!")
-                return HttpResponseRedirect(".")
+        user_level = get_user_perms_level(request, obj)
+        if user_level >= STATUS_INFO[obj.status]["min_level_to_change"]:
+            for status in STATUS_INFO:
+                if status in request.POST:
+                    obj.status = status
+                    obj.save()
+                    self.message_user(request, "Статус успешно обновлён!")
+                    return HttpResponseRedirect(".")
         return super().response_change(request, obj)
 
 
