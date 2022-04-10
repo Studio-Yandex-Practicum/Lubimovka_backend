@@ -127,27 +127,7 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         PerformanceReviewInline,
         TeamMemberInline,
     )
-    # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
-    fields_with_overridden_fk_widget = (
-        "play",
-        "project",
-    )
-
-    def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):
-        if db_field.name in self.fields_with_overridden_fk_widget:
-            kwargs["widget"] = FkSelect
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
-
-    # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
-    fields_with_overridden_fk_widget = (
-        "play",
-        "project",
-    )
-
-    def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):
-        if db_field.name in self.fields_with_overridden_fk_widget:
-            kwargs["widget"] = FkSelect
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
