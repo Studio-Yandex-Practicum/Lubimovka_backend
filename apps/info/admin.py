@@ -1,9 +1,11 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from django.db import models
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
+from apps.core.widgets import FkSelect
 from apps.info.form import FestTeamMemberForm
 from apps.info.models import (
     Festival,
@@ -106,6 +108,7 @@ class VolunteerAdmin(admin.ModelAdmin):
         "is_review",
     )
     readonly_fields = ("is_review",)
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     @admin.display(
         boolean=True,
@@ -139,6 +142,7 @@ class VolunteerInline(admin.TabularInline):
     )
     classes = ["collapse"]
     ordering = ("person__last_name", "person__first_name")
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     @admin.display(
         boolean=True,
@@ -192,12 +196,12 @@ class PlaceAdmin(admin.ModelAdmin):
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
     list_filter = ("festival",)
+    fields_with_overridden_fk_widget = ("festival",)
 
-
-class PressRealeaseAdmin(admin.ModelAdmin):
-    list_display = ("title",)
-    list_filter = ("title",)
-    search_fields = ("title",)
+    def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):
+        if db_field.name in self.fields_with_overridden_fk_widget:
+            kwargs["widget"] = FkSelect
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
 @admin.register(ArtTeamMember)
@@ -218,10 +222,9 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
     ordering = ("person__last_name", "person__first_name")
-
     search_fields = ("position", "person__first_name", "person__last_name")
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset().filter(team="art")
@@ -267,10 +270,9 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
     ordering = ("person__last_name", "person__first_name")
-
     search_fields = ("position", "person__first_name", "person__last_name")
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def save_model(self, request, obj, form, change):
         """Данные из поля 'pr_director_name' проверяются и сохраняются в модели 'Setting'."""
@@ -302,6 +304,7 @@ class SponsorAdmin(admin.ModelAdmin):
         "person",
         "position",
     )
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 
 @admin.register(Question)
@@ -322,6 +325,7 @@ class SelectorAdmin(admin.ModelAdmin):
         "get_year",
         "position",
     )
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     @admin.display(
         ordering="festival",

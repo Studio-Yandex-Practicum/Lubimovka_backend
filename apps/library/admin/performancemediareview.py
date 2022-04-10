@@ -1,5 +1,7 @@
 from django.contrib import admin
+from django.db import models
 
+from apps.core.widgets import FkSelect
 from apps.library.models import PerformanceMediaReview
 
 
@@ -21,3 +23,4 @@ class PerformanceMediaReviewAdmin(admin.ModelAdmin):
         "pub_date",
     )
     readonly_fields = ("pub_date",)
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}

@@ -1,5 +1,6 @@
 from django import forms
 
+from apps.core.widgets import FkSelect
 from apps.library.models import ProgramType
 
 
@@ -20,8 +21,5 @@ class ProgramChoiceField(forms.ModelChoiceField):
 
 class PlayForm(forms.ModelForm):
     program = ProgramChoiceField(
-        queryset=ProgramType.objects.all(),
-        to_field_name="slug",
-        label="Программа",
-        empty_label=None,
+        queryset=ProgramType.objects.all(), to_field_name="slug", label="Программа", empty_label=None, widget=FkSelect
     )

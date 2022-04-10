@@ -25,7 +25,7 @@ function setAttributes(el, attrs) {
     };
 };
 
-function appendLink($, $object) {
+function appendChangeButton($, $object) {
     const objectId = $object.attr("id");
 
     var linkId = "change_" + objectId;
@@ -47,7 +47,7 @@ function appendLink($, $object) {
     });
 };
 
-function appendLinkForSelect2(object) {
+function appendChangeButtonForSelect2(object) {
     var lable = object.getAttribute('aria-labelledby')
     const foreignKeyFieldId = lable.split("-")[1]
     const parentSpan = object.parentElement.parentElement
@@ -98,9 +98,9 @@ jQuery(document).ready(function ($) {
             }
             if (add_edit_button) {
                 if (is_selec2) {
-                    appendLinkForSelect2(element);
+                    appendChangeButtonForSelect2(element);
                 } else {
-                    appendLink($, $( this ));
+                    appendChangeButton($, $( this ));
                 }
             };
         };

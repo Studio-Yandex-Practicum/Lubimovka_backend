@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.db import models
 
 from apps.afisha.models import Event
+from apps.core.widgets import FkSelect
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -24,6 +26,7 @@ class EventAdmin(admin.ModelAdmin):
     list_filter = ("type",)
     search_fields = ("common_event",)
     empty_value_display = "-пусто-"
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 
 admin.site.register(Event, EventAdmin)
