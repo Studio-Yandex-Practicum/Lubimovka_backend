@@ -1,10 +1,12 @@
 from django.contrib import admin
+from django.db import models
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
+from apps.core.widgets import FkSelect
 from apps.library.forms.admin import OtherLinkForm
 from apps.library.models import Achievement, Author, OtherLink, Play, SocialNetworkLink
 
@@ -20,6 +22,7 @@ class AchievementInline(admin.TabularInline):
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
     classes = ["collapse"]
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 
 class PlayInline(admin.TabularInline):
@@ -28,6 +31,7 @@ class PlayInline(admin.TabularInline):
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ["collapse"]
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_queryset(self, request):
         return Author.plays.through.objects.exclude(play__program__slug="other_plays")
@@ -43,6 +47,7 @@ class OtherPlayInline(admin.TabularInline):
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
     classes = ["collapse"]
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_queryset(self, request):
         return Author.plays.through.objects.filter(play__program__slug="other_plays")
@@ -56,6 +61,12 @@ class SocialNetworkLinkInline(admin.TabularInline):
     model = SocialNetworkLink
     extra = 1
     classes = ["collapse"]
+    fields_with_overridden_fk_widget = ("name",)
+
+    def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):
+        if db_field.name in self.fields_with_overridden_fk_widget:
+            kwargs["widget"] = FkSelect
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
 class OtherLinkInline(admin.TabularInline):
@@ -96,6 +107,12 @@ class AuthorAdmin(admin.ModelAdmin):
         "plays__name",
     )
     empty_value_display = "-пусто-"
+    fields_with_overridden_fk_widget = ("person",)
+
+    def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):
+        if db_field.name in self.fields_with_overridden_fk_widget:
+            kwargs["widget"] = FkSelect
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     def get_ordering(self, request):
         return (

@@ -1,14 +1,17 @@
 from django.contrib import admin
+from django.db import models
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.widgets import FkSelect
 
 
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
     model = BlogItem.roles.through
     extra = 0
     classes = ["collapse"]
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 
 class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):

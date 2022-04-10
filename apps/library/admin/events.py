@@ -74,6 +74,7 @@ class MasterClassAdmin(admin.ModelAdmin):
         "name",
     )
     inlines = (TeamMemberInline,)
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 
 @admin.register(Performance)
@@ -157,6 +158,7 @@ class ReadingAdmin(admin.ModelAdmin):
         "name",
     )
     inlines = (TeamMemberInline,)
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

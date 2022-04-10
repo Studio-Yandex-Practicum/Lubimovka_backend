@@ -1,7 +1,9 @@
 from django.contrib import admin
+from django.db import models
 from django.forms import ValidationError
 from django.forms.models import BaseInlineFormSet
 
+from apps.core.widgets import FkSelect
 from apps.library.filters.play import PlayProgramFilter
 from apps.library.forms.play import PlayForm
 from apps.library.models import Author, Play
@@ -30,6 +32,7 @@ class AuthorInline(admin.TabularInline):
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
     classes = ["collapse"]
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 
 @admin.register(Play)
@@ -69,3 +72,5 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "published",
     )
+    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
+    # FkSelect widget explicitly applied to program field in ../forms/play.py
