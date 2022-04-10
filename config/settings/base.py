@@ -65,6 +65,11 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 
+# https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#specifying-authentication-backends
+AUTHENTICATION_BACKENDS = [
+    "apps.users.backends.admin_user.AdminUserModelBackend",
+]
+
 SITE_ID = 1
 
 MIDDLEWARE = [
@@ -206,11 +211,14 @@ LOGGING = LOGGING_SETTINGS
 
 LOGIN_URL = "/admin/login/"
 
+DOMAIN_URL = env("DOMAIN_URL", default="localhost")
+
 # Templates for mailjet
 # https://anymail.dev/en/stable/esps/mailjet/
 # ------------------------------------------------------------------------------
 MAILJET_TEMPLATE_ID_QUESTION = env("MAILJET_TEMPLATE_ID_QUESTION", default="0000000")
 MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION = env("MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION", default="0000000")
+MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER = env("MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER", default="0000000")
 
 ADMIN_SITE_APPS_ORDER = (
     "Библиотека",

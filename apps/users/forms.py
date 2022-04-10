@@ -1,15 +1,21 @@
 from django import forms
+from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import PasswordResetForm, UserCreationForm
+from django.contrib.auth.forms import PasswordResetForm, UserChangeForm, UserCreationForm
 from django.contrib.auth.models import Group
+from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
 from django.utils.crypto import get_random_string
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+
+from apps.core.utils import send_email
 
 User = get_user_model()
 
 
-class UserAdminForm(forms.ModelForm):
+class UserAdminForm(UserChangeForm):
     def clean(self):
         groups = self.cleaned_data["groups"]
 
@@ -17,7 +23,30 @@ class UserAdminForm(forms.ModelForm):
             raise ValidationError("Выбрать можно только одну группу.")
 
 
-class UserAdminCreationForm(UserCreationForm, PasswordResetForm):
+class UserAdminPasswordResetForm(PasswordResetForm):
+    def send_email_to_user(self, from_email, template_id, domain):
+        email = self.cleaned_data["email"]
+        email_field_name = User.get_email_field_name()
+
+        for user in self.get_users(email):
+            user_email = getattr(user, email_field_name)
+            context = {
+                "full_name": user.get_full_name(),
+                "username": user.get_username(),
+                "email": user_email,
+                "domain": domain,
+                "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                "token": default_token_generator.make_token(user),
+            }
+            send_email(
+                from_email=from_email,
+                to_emails=(user_email,),
+                template_id=template_id,
+                context=context,
+            )
+
+
+class UserAdminCreationForm(UserCreationForm):
     email = forms.EmailField(
         label="Email",
         help_text="Обязательное поле." " На данную почту будет выслана пользователю ссылка для смены пароля.",
@@ -27,23 +56,23 @@ class UserAdminCreationForm(UserCreationForm, PasswordResetForm):
     last_name = forms.CharField(label="Фамилия", help_text="Обязательное поле")
 
     def __init__(self, *args, **kwargs):
-        super(UserAdminCreationForm, self).__init__(*args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.fields["password1"].required = False
         self.fields["password2"].required = False
 
     def save(self, commit=True):
-        user = super(UserAdminCreationForm, self).save(commit=False)
+        user = super().save(commit=False)
         user.email = self.cleaned_data["email"]
         if not user.username:
             user.username = user.email
         user.set_password(get_random_string(length=8))
         user.save()
-        reset_form = PasswordResetForm({"email": user.email})
+        reset_form = UserAdminPasswordResetForm({"email": user.email})
         if reset_form.is_valid():
-            reset_form.save(
-                from_email="lubimovka-2021@yandex.ru",
-                subject_template_name="registration/invitation_subject.txt",
-                email_template_name="registration/invitation_email.html",
+            reset_form.send_email_to_user(
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                template_id=settings.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER,
+                domain=settings.DOMAIN_URL,
             )
         return user
 

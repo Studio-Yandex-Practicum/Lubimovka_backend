@@ -1,11 +1,11 @@
-from anymail.exceptions import AnymailConfigurationError, AnymailInvalidAddress, AnymailRequestsAPIError
+from django.conf import settings
 from drf_spectacular.utils import extend_schema
-from rest_framework.exceptions import ValidationError
 from rest_framework.viewsets import generics
 
+from apps.core.models import Setting
+from apps.core.utils import send_email
 from apps.info.schema.schema_extension import ERROR_MESSAGES_FOR_QUESTION_FOR_400
 from apps.info.serializers.question import QuestionSerializer
-from apps.info.utils import send_question
 
 
 @extend_schema(
@@ -19,14 +19,15 @@ class QuestionCreateAPIView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         instance = serializer.save()
-        try:
-            response_success = send_question(instance)
-            if response_success:
-                instance.sent = True
-                instance.save()
-        except AnymailConfigurationError:
-            raise ValidationError("Неверные настройки Mailjet.")
-        except (AnymailRequestsAPIError, AnymailInvalidAddress):
-            raise ValidationError("Не указан адрес электронной почты отправителя.")
-        except ValueError:
-            raise ValidationError("Неверный ID шаблона Mailjet.")
+        from_email = Setting.get_setting("email_send_from")
+        to_emails = (Setting.get_setting("email_to_send_questions"),)
+        template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
+        context = {
+            "question": instance.question,
+            "author_name": instance.author_name,
+            "author_email": instance.author_email,
+        }
+        response_success = send_email(from_email, to_emails, template_id, context)
+        if response_success:
+            instance.sent = True
+            instance.save()

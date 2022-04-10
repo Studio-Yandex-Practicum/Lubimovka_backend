@@ -36,9 +36,8 @@ class GoogleSpreadsheets:
         self.sheet = SettingPlaySupply.get_setting("SHEET")
         self.range = self.sheet + "!A1"
 
-    def _get_instance_values(self, instance, domain) -> dict:
+    def _get_instance_values(self, instance, file_url) -> dict:
         instance_created = dt.now().strftime("%Y-%m-%d %H:%M:%S")
-        instance_file_path = domain + str(instance.file.url)
         return {
             "values": [
                 [
@@ -51,7 +50,7 @@ class GoogleSpreadsheets:
                     instance.email,
                     instance.year,
                     instance.title,
-                    instance_file_path,
+                    file_url,
                 ]
             ]
         }
@@ -190,9 +189,9 @@ class GoogleSpreadsheets:
         )
         request.execute()
 
-    def _export_new_object(self, instance, service, domain) -> Optional[bool]:
+    def _export_new_object(self, instance, service, file_url) -> Optional[bool]:
         value_input_option = "USER_ENTERED"
-        body = self._get_instance_values(instance, domain)
+        body = self._get_instance_values(instance, file_url)
         request = (
             service.spreadsheets()
             .values()
@@ -213,7 +212,7 @@ class GoogleSpreadsheets:
         response = request.execute()
         return response.get("values") is not None
 
-    def export(self, instance, domain) -> Optional[bool]:
+    def export(self, instance, file_url) -> Optional[bool]:
         self._get_settings()
         service = self._build_service()
         if service is None:
@@ -222,4 +221,4 @@ class GoogleSpreadsheets:
         if not header_exists:
             self._set_borders(service=service)
             self._set_header(service=service)
-        return self._export_new_object(instance, service=service, domain=domain)
+        return self._export_new_object(instance, service=service, file_url=file_url)
