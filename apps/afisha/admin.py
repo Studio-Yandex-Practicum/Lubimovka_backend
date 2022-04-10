@@ -39,11 +39,12 @@ class EventAdmin(admin.ModelAdmin):
 
     def status(self, obj):
         date_now = datetime.today().replace(tzinfo=pytz.UTC).date()
+        icon = "<img src='/static/admin/img/{}.svg' title='{}'/>"
         if obj.date_time.date() > date_now:
-            return mark_safe('<b style="background:{};color:{};">{}</b>'.format("#008000", "#F8F8FF", "Предстоящее"))
+            return mark_safe(icon.format("upcoming", "Предстоящее"))
         elif obj.date_time.date() < date_now:
-            return mark_safe('<b style="background:{};color:{};">{}</b>'.format("#B22222", "#F8F8FF", "Прошедшее"))
-        return mark_safe('<b style="background:{};color:{};">{}</b>'.format("#1E90FF", "#F8F8FF", "Сегодня"))
+            return mark_safe(icon.format("past", "Прошедшее"))
+        return mark_safe(icon.format("today", "Cегодняшнее"))
 
     status.short_description = "Состояние"
 
