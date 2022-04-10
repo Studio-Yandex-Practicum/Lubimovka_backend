@@ -147,6 +147,10 @@ jobs:
             echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-prod
             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-prod
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-prod
+            echo MAILJET_TEMPLATE_ID_QUESTION=${{ secrets.MAILJET_TEMPLATE_ID_QUESTION }} >> .env-prod
+            echo MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER=${{ secrets.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER }} >> .env-prod
+            echo MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION=${{ secrets.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION }} >> .env-prod
+            echo DOMAIN_URL=${{ secrets.DOMAIN_URL }} >> .env-prod
 
             # Secrets variables for google sheets in Django:
             echo GOOGLE_PRIVATE_KEY_ID=${{ secrets.GOOGLE_PRIVATE_KEY_ID }} >> .env-prod
