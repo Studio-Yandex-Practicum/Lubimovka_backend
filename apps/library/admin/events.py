@@ -1,8 +1,10 @@
 from django.contrib import admin
+from django.db import models
 
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Role
 from apps.core.utils import get_user_change_perms_for_status
+from apps.core.widgets import FkSelect
 from apps.library.models import (
     MasterClass,
     Performance,
@@ -125,6 +127,16 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         PerformanceReviewInline,
         TeamMemberInline,
     )
+    # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
+    fields_with_overridden_fk_widget = (
+        "play",
+        "project",
+    )
+
+    def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):
+        if db_field.name in self.fields_with_overridden_fk_widget:
+            kwargs["widget"] = FkSelect
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
     fields_with_overridden_fk_widget = (
