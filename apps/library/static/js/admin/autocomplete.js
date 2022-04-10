@@ -3,27 +3,19 @@
 function setSelect2($, $objectId, $lastWord) {
     let $placeHolderWord = "..."
     const $addAllowClear = true;
-    const $addWidth = "250px";
+    const $addWidth = "400px";
+    // for connect new autocomplete: add to dir $obj last word of your select id
     var $obj = {
         "author": "человека",
-        "achievement": "достижение",
         "performance": "спектакль",
         "play": "пьесу",
-        "name": "соцсеть",
-        "image": "изображение",
         "person": "человека",
-        "role": "роль",
-        "type": "тип объкта",
-        "button": "тип кнопки",
         "event": "событие",
-        "festival": "фестиваль",
-        "program": "программу",
-        "limit": "возраст",
     };
     if ($lastWord in $obj) {
         $placeHolderWord = $obj[$lastWord];
     }
-    if (!($objectId.includes("__prefix__") || $objectId.includes("id_project"))) {
+    if ($lastWord in $obj && !($objectId.includes("__prefix__"))) {
         $("select#"+$objectId).select2({
             sorter: function(results) {
                 return results.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()))
