@@ -3,6 +3,7 @@ from django.db import models
 
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Role
+from apps.core.utils import get_user_change_perms_for_status
 from apps.core.widgets import FkSelect
 from apps.library.models import (
     MasterClass,
@@ -138,7 +139,9 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
+        change_permission = get_user_change_perms_for_status(request, obj)
+        if change_permission:
+            form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
         return form
 
 
