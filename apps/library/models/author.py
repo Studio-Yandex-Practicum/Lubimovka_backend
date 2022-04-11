@@ -86,13 +86,13 @@ class AuthorPlay(models.Model):
     author = models.ForeignKey(
         Author,
         on_delete=models.CASCADE,
-        related_name="author_play_set",
+        related_name="author_plays",
         verbose_name="Автор",
     )
     play = models.ForeignKey(
         Play,
         on_delete=models.CASCADE,
-        related_name="author_play_set",
+        related_name="author_plays",
         verbose_name="Пьеса",
     )
     order = models.PositiveSmallIntegerField(
@@ -104,15 +104,14 @@ class AuthorPlay(models.Model):
         verbose_name = "Отношение Автор-Пьеса"
         verbose_name_plural = "Отношения Автор-Пьеса"
         ordering = ("order",)
-        constraints = (
-            models.UniqueConstraint(
-                fields=("author", "play"),
-                name="unique_play_to_author",
-            ),
-        )
 
     def __str__(self):
         return f"Пьеса {self.play} - автор {self.author}"
+
+    def save(self):
+        if AuthorPlay.objects.filter(author=self.author, play=self.play).exists():
+            return
+        return super().save()
 
 
 class SocialNetworkLink(BaseModel):

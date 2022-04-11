@@ -23,8 +23,8 @@ class Migration(migrations.Migration):
                     name='AuthorPlay',
                     fields=[
                         ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                        ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_play_set', to='library.Author', verbose_name='Автор')),
-                        ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_play_set', to='library.Play', verbose_name='Пьеса')),
+                        ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Author', verbose_name='Автор')),
+                        ('play', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author_plays', to='library.Play', verbose_name='Пьеса')),
                     ],
                 ),
                 migrations.AlterField(
@@ -42,9 +42,5 @@ class Migration(migrations.Migration):
         migrations.AlterModelOptions(
             name='authorplay',
             options={'ordering': ('order',), 'verbose_name': 'Отношение Автор-Пьеса', 'verbose_name_plural': 'Отношения Автор-Пьеса'},
-        ),
-        migrations.AddConstraint(
-            model_name='authorplay',
-            constraint=models.UniqueConstraint(fields=('author', 'play'), name='unique_play_to_author'),
         ),
     ]
