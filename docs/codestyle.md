@@ -71,13 +71,16 @@
     class AuthorAdmin(admin.ModelAdmin):
         pass
     ```
-2. При добавлении вычисляемых полей используем декоратор ([документация](https://docs.djangoproject.com/en/4.0/ref/contrib/admin/#django.contrib.admin.display)) \
+
+
+### Правила регистрации вычисляемых свойств на списке объектов в админке
+1. При добавлении вычисляемых полей используем декоратор ([документация](https://docs.djangoproject.com/en/4.0/ref/contrib/admin/#django.contrib.admin.display)) \
     T.e **так плохо**
     ```python
     def countable_field(self, obj):
         return True
 
-    status.short_description = "Поле"
+    countable_field.short_description = "Поле"
     ```
     Так **хорошо**
     ```python
