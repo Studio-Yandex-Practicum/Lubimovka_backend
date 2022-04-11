@@ -40,7 +40,6 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 Prefetch(
                     "author_plays",
                     queryset=AuthorPlay.objects.exclude(play__program__slug="other_plays"),
-                    to_attr="plays",
                 ),
                 Prefetch(
                     "author_plays",
