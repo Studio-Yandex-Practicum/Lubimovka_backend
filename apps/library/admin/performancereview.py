@@ -10,11 +10,6 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
         "performance",
         "pub_date",
     )
-    list_filter = (
-        "reviewer_name",
-        "performance__name",
-        "pub_date",
-    )
     search_fields = (
         "reviewer_name",
         "performance__name",
