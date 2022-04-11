@@ -109,7 +109,7 @@ class AuthorPlay(models.Model):
         return f"Пьеса {self.play} - автор {self.author}"
 
     def save(self):
-        if AuthorPlay.objects.filter(author=self.author, play=self.play).exists():
+        if AuthorPlay.objects.filter(author=self.author, play=self.play) and self.id is None:
             return
         return super().save()
 

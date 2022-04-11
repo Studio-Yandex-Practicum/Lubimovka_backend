@@ -37,7 +37,11 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "achievements",
                 "social_networks",
                 "other_links",
-                Prefetch("author_plays", queryset=AuthorPlay.objects.exclude(play__program__slug="other_plays")),
+                Prefetch(
+                    "author_plays",
+                    queryset=AuthorPlay.objects.exclude(play__program__slug="other_plays"),
+                    to_attr="plays",
+                ),
                 Prefetch(
                     "author_plays",
                     queryset=AuthorPlay.objects.filter(play__program__slug="other_plays"),
@@ -46,7 +50,6 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
             ),
             slug=self.kwargs["slug"],
         )
-        print(author.__dict__)
         return author
 
     def get_serializer_class(self):
