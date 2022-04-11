@@ -1,6 +1,5 @@
 from datetime import datetime
 
-import pytz
 from django.contrib import admin
 from django.utils.safestring import mark_safe
 
@@ -19,13 +18,14 @@ class EventAdmin(admin.ModelAdmin):
         return qs
 
     list_display = (
-        "status",
         "short_common_event",
+        "status",
         "date_time",
         "paid",
         "pinned_on_main",
     )
     fields = ("common_event", "date_time", "paid", "url", "place", "pinned_on_main")
+    date_hierarchy = "date_time"
     list_filter = (
         StatusOfEvent,
         "type",
@@ -37,16 +37,20 @@ class EventAdmin(admin.ModelAdmin):
 
     short_common_event.short_description = "Событие"
 
+    @admin.display(
+        description="Состояние",
+    )
     def status(self, obj):
-        date_now = datetime.today().replace(tzinfo=pytz.UTC).date()
-        icon = "<img src='/static/admin/img/{}.svg' title='{}'/>"
-        if obj.date_time.date() > date_now:
-            return mark_safe(icon.format("upcoming", "Предстоящее"))
-        elif obj.date_time.date() < date_now:
-            return mark_safe(icon.format("past", "Прошедшее"))
-        return mark_safe(icon.format("today", "Cегодняшнее"))
+        date_now = datetime.today().date()
 
-    status.short_description = "Состояние"
+        def icon(status, lable):
+            return mark_safe(f"<img src='/static/admin/img/{status}.svg' title='{lable}'/>")
+
+        if obj.date_time.date() > date_now:
+            return icon("upcoming", "Предстоящее")
+        elif obj.date_time.date() < date_now:
+            return icon("past", "Прошедшее")
+        return icon("today", "Cегодняшнее")
 
 
 admin.site.register(Event, EventAdmin)

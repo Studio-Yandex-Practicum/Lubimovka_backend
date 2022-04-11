@@ -71,6 +71,24 @@
     class AuthorAdmin(admin.ModelAdmin):
         pass
     ```
+2. При добавлении вычисляемых полей используем декоратор ([документация](https://docs.djangoproject.com/en/4.0/ref/contrib/admin/#django.contrib.admin.display)) \
+    T.e **так плохо**
+    ```python
+    def countable_field(self, obj):
+        return True
+
+    status.short_description = "Поле"
+    ```
+    Так **хорошо**
+    ```python
+    @admin.display(
+        boolean=True,
+        ordering='-publish_date',
+        description='Поле',
+    )
+    def countable_field(self, obj):
+        return True
+    ```
 
 
 ### Правило для получения настроек из settings

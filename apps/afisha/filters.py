@@ -21,7 +21,8 @@ class StatusOfEvent(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         return (
-            ("all", _("Все")),
+            (None, _("Актуальные события")),
+            ("all", _("Все события")),
             ("upcoming", _("Предстоящие")),
             ("today", _("Сегодня")),
             ("past", _("Прошедшие")),
@@ -30,10 +31,12 @@ class StatusOfEvent(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         date_now = datetime.today().replace(tzinfo=pytz.UTC).date()
         date_tomorrow = date_now + timedelta(days=1)
-        if self.value() is None or self.value() == "upcoming":
-            return queryset.filter(date_time__gt=date_now).exclude(date_time__range=[date_now, date_tomorrow])
+        if self.value() is None:
+            return queryset.filter(date_time__gt=date_now)
         if self.value() == "all":
             return queryset
+        if self.value() == "upcoming":
+            return queryset.filter(date_time__gt=date_now).exclude(date_time__range=[date_now, date_tomorrow])
         if self.value() == "past":
             return queryset.filter(date_time__lt=date_now)
         return queryset.filter(date_time__range=[date_now, date_tomorrow])
