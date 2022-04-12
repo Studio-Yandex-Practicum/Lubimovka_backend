@@ -1291,7 +1291,7 @@ requests = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "34bc7c6536060bdf1ad37e2e5ae08db1c23b568cb313c9588e627408761c9b79"
+content-hash = "bdd3e4021867ee0dcfe2e38ddc14e9cea7505d1953ee0133ce6d44162da4c885"
 
 [metadata.files]
 appnope = [
