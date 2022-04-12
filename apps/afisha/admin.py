@@ -32,11 +32,11 @@ class EventAdmin(admin.ModelAdmin):
     )
     empty_value_display = "-пусто-"
 
-    @admin.display(
-        description="Событие",
-    )
-    def short_common_event(self, obj):
-        return str(obj.common_event)[:25] + "..."
+    # @admin.display(
+    #     description="Событие",
+    # )
+    # def short_common_event(self, obj):
+    #     return str(obj.common_event)[:25] + "..."
 
     @admin.display(
         description="Состояние",
