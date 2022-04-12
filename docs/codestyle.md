@@ -71,3 +71,19 @@
     class AuthorAdmin(admin.ModelAdmin):
         pass
     ```
+
+
+### Правило для получения настроек из settings
+1. Для получения глобальных настроек из settings к полям обращаемся через сам settings\
+    T.e **так плохо**
+    ```python
+   from config.settings.base import MAILJET_TEMPLATE_ID_PLAY
+
+   message.template_id = MAILJET_TEMPLATE_ID_QUESTION
+    ```
+    Так **хорошо**
+    ```python
+   from django.conf import settings
+
+   message.template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
+    ```

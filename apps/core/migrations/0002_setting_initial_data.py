@@ -195,13 +195,6 @@ def add_email_settings(apps, schema_editor):
         text="Вопрос Любимовке",
         description="Тема письма для вопроса",
     )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="EMAIL",
-        settings_key="pr_manager_name",
-        text="Имя Фамилия в дателльном падеже (пример: Анне Загородниковой)",
-        description="Имя PR менеджера на странице для прессы (в дательном падеже)",
-    )
 
 
 def add_afisha_settings(apps, schema_editor):
@@ -440,6 +433,16 @@ def add_short_list_program(apps, schema_editor):
         slug="short-list",
     )
 
+def add_other_plays_program(apps, schema_editor):
+    Program = apps.get_model(
+        "library",
+        "ProgramType",
+    )
+    Program.objects.create(
+        name="Другие пьесы",
+        slug="other_plays",
+    )
+
 
 class Migration(migrations.Migration):
 
@@ -479,6 +482,9 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             add_short_list_program,
+        ),
+        migrations.RunPython(
+            add_other_plays_program,
         ),
         migrations.RunPython(
             add_playsupply_settings,

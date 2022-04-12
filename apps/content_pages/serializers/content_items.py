@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.content_pages.models import Link, OrderedImage, OrderedVideo, Preamble, Quote, Text, Title
 from apps.core.serializers import PersonRoleSerializer
+from apps.library.serializers import AuthorForPlaySerializer as LibraryPlayAuthorSerializer
 
 
 class ExtendedPersonSerializer(serializers.Serializer):
@@ -83,6 +84,34 @@ class OrderedImageSerializer(serializers.ModelSerializer):
             "title",
             "image",
         )
+
+
+class OrderedPlaySerializer(serializers.Serializer):
+    id = serializers.IntegerField(
+        source="item.id",
+        label="ID",
+        read_only=True,
+    )
+    name = serializers.CharField(
+        source="item.name",
+        label="Название пьесы",
+        max_length=70,
+    )
+    authors = LibraryPlayAuthorSerializer(
+        source="item.authors",
+        many=True,
+    )
+    city = serializers.CharField(
+        source="item.city",
+        label="Город",
+        max_length=200,
+        required=False,
+    )
+    year = serializers.IntegerField(
+        source="item.year",
+        required=False,
+        label="Год написания пьесы",
+    )
 
 
 class OrderedVideoSerializer(serializers.ModelSerializer):

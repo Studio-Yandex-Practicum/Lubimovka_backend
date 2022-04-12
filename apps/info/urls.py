@@ -10,6 +10,7 @@ from apps.info.views import (
     PressReleaseViewSet,
     PressReleaseYearsAPIView,
     QuestionCreateAPIView,
+    SelectorsAPIView,
     SettingsAPIView,
     SponsorsAPIView,
     VolunteersAPIView,
@@ -30,6 +31,11 @@ about_festival_urls = [
         "volunteers/",
         VolunteersAPIView.as_view(),
         name="volunteers",
+    ),
+    path(
+        "selectors/",
+        SelectorsAPIView.as_view(),
+        name="selectors",
     ),
 ]
 

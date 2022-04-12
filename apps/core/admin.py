@@ -22,6 +22,7 @@ class RoleAdmin(admin.ModelAdmin):
         "name",
         "slug",
     )
+    list_filter = ("types",)
     formfield_overrides = {
         models.ManyToManyField: {"widget": CheckboxSelectMultiple},
     }

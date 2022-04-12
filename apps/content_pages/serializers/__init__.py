@@ -2,6 +2,7 @@ from .content_items import (
     ExtendedPersonSerializer,
     LinkSerializer,
     OrderedImageSerializer,
+    OrderedPlaySerializer,
     OrderedVideoSerializer,
     PreambleSerializer,
     QuoteSerializer,
