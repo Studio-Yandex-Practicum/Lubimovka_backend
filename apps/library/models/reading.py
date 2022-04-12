@@ -48,6 +48,8 @@ class Reading(BaseModel):
         verbose_name_plural = "Читки"
 
     def __str__(self):
+        if len(self.name) >= 25:
+            return self.name[:25] + "..."
         return self.name
 
     @property
