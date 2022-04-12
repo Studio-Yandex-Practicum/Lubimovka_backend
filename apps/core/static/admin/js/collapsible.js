@@ -20,22 +20,20 @@
         }
         // Add toggle to hide/show anchor tag
         const toggleFunc = function(ev) {
-            if (ev.target.matches('.collapse-toggle')) {
-                ev.preventDefault();
-                ev.stopPropagation();
-                const fieldset = ev.target.closest('fieldset');
-                if (fieldset.classList.contains('collapsed')) {
-                    // Show
-                    ev.target.textContent = gettext('Hide');
-                    fieldset.classList.remove('collapsed');
-                } else {
-                    // Hide
-                    ev.target.textContent = gettext('Show');
-                    fieldset.classList.add('collapsed');
-                }
+            ev.preventDefault();
+            ev.stopPropagation();
+            const fieldset = ev.target.closest('fieldset');
+            if (fieldset.classList.contains('collapsed')) {
+                // Show
+                ev.target.textContent = gettext('Hide');
+                fieldset.classList.remove('collapsed');
+            } else {
+                // Hide
+                ev.target.textContent = gettext('Show');
+                fieldset.classList.add('collapsed');
             }
         };
-        document.querySelectorAll('fieldset.module').forEach(function(el) {
+        document.querySelectorAll('fieldset.module .collapse-toggle').forEach(function(el) {
             el.addEventListener('click', toggleFunc);
         });
     });
