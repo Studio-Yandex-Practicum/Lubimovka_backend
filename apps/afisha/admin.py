@@ -18,7 +18,7 @@ class EventAdmin(admin.ModelAdmin):
         return qs
 
     list_display = (
-        "short_common_event",
+        "common_event",
         "status",
         "date_time",
         "paid",
@@ -32,10 +32,11 @@ class EventAdmin(admin.ModelAdmin):
     )
     empty_value_display = "-пусто-"
 
+    @admin.display(
+        description="Событие",
+    )
     def short_common_event(self, obj):
         return str(obj.common_event)[:25] + "..."
-
-    short_common_event.short_description = "Событие"
 
     @admin.display(
         description="Состояние",
