@@ -20,6 +20,7 @@ articles_urls = [
     path("", include(router.urls)),
     path(route="blog/", view=BlogItemListAPI.as_view(), name="blog-item-list"),
     path(route="blog/<int:id>/", view=BlogItemDetailAPI.as_view(), name="blog-item-detail"),
+    path(route="blog/preview/<int:id>/", view=BlogItemDetailAPI.as_view(), name="blog-item-detail-preview"),
 ]
 
 urlpatterns = [
