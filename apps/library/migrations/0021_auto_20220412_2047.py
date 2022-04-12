@@ -8,7 +8,7 @@ def set_type_to_other_plays(apps, schema_editor):
     Plays = apps.get_model("library", "Play")
     other_plays = Plays.objects.filter(program__slug="other_plays")
     for play in other_plays:
-        play.type = False
+        play.related = False
         play.program = None
         play.save()
 
