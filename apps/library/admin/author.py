@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -5,7 +6,7 @@ from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
-from apps.library.models import Author, OtherLink, OtherPlay, SocialNetworkLink
+from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
 
 
 class AchievementInline(admin.TabularInline):
@@ -13,32 +14,49 @@ class AchievementInline(admin.TabularInline):
     extra = 1
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
-    classes = ["collapse"]
+    classes = ("collapsible",)
 
 
-class PlayInline(admin.TabularInline):
-    model = Author.plays.through
-    extra = 1
+class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = AuthorPlay
+    extra = 0
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
-    classes = ["collapse"]
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return AuthorPlay.objects.exclude(play__program__slug="other_plays")
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = Play.objects.exclude(program__slug="other_plays")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = AuthorPlay
+    extra = 0
+    verbose_name = "Другая пьеса"
+    verbose_name_plural = "Другие пьесы"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return AuthorPlay.objects.filter(play__program__slug="other_plays")
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = Play.objects.filter(program__slug="other_plays")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class SocialNetworkLinkInline(admin.TabularInline):
     model = SocialNetworkLink
     extra = 1
-    classes = ["collapse"]
+    classes = ("collapsible",)
 
 
 class OtherLinkInline(admin.TabularInline):
     model = OtherLink
     extra = 1
-    classes = ["collapse"]
-
-
-class OtherPlayInline(admin.StackedInline):
-    model = OtherPlay
-    extra = 1
+    classes = ("collapsible",)
 
 
 @admin.register(Author)
@@ -52,16 +70,15 @@ class AuthorAdmin(admin.ModelAdmin):
     inlines = (
         AchievementInline,
         PlayInline,
+        OtherPlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
-        OtherPlayInline,
     )
     exclude = (
         "achievements",
         "plays",
         "social_network_links",
         "other_links",
-        "other_plays_links",
     )
     search_fields = (
         "biography",

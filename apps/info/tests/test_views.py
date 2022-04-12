@@ -241,12 +241,6 @@ class TestQuestionsAPIViews:
         }
         url = QUESTIONS_URL
         response = client.post(url, data=data)
-        for field, value in data.items():
-            question = Question.objects.get(id=response.json().get("id"))
-            question_value = getattr(question, field)
-            data_value = value
-            assert question_value == data_value, (
-                f"Проверьте, что при POST запросе {url} "
-                f"в базу данных добавляется объект c корректным"
-                f"значением поля {field}"
-            )
+        question = Question.objects.filter(question=data["question"])
+        assert 201 == response.status_code
+        assert question.exists() is True

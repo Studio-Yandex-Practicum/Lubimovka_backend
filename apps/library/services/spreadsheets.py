@@ -1,18 +1,18 @@
 from datetime import datetime as dt
 from typing import Optional
 
+from django.conf import settings
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 from apps.main.models import SettingPlaySupply
-from config.settings.base import GOOGLE_PRIVATE_KEY, GOOGLE_PRIVATE_KEY_ID
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 URL = "https://www.googleapis.com/robot/v1/metadata/x509/lubimovka%40swift-area-340613.iam.gserviceaccount.com"
 KEYS = {
     "type": "service_account",
-    "private_key": GOOGLE_PRIVATE_KEY,
-    "private_key_id": GOOGLE_PRIVATE_KEY_ID,
+    "private_key": settings.GOOGLE_PRIVATE_KEY,
+    "private_key_id": settings.GOOGLE_PRIVATE_KEY_ID,
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
     "token_uri": "https://oauth2.googleapis.com/token",
     "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",

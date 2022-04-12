@@ -90,6 +90,7 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
         "image",
         "image_preview_list_page",
     )
+    list_filter = ("city",)
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
 
@@ -133,7 +134,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
-    classes = ["collapse"]
+    classes = ["collapsible"]
     ordering = ("person__last_name", "person__first_name")
 
     @admin.display(
@@ -153,7 +154,7 @@ class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     verbose_name = "Изображение фестиваля"
     verbose_name_plural = "Изображения фестиваля"
     extra = 1
-    classes = ["collapse"]
+    classes = ["collapsible"]
     model.__str__ = lambda self: ""
 
 
@@ -187,7 +188,6 @@ class PlaceAdmin(admin.ModelAdmin):
 @admin.register(PressRelease)
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
-    list_filter = ("festival",)
 
 
 class PressRealeaseAdmin(admin.ModelAdmin):

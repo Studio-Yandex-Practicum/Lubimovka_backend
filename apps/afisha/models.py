@@ -59,7 +59,7 @@ class Event(BaseModel):
         choices=EventType.choices,
         max_length=50,
         verbose_name="Тип события",
-        help_text=("Выберите тип события"),
+        help_text="Выберите тип события",
     )
     date_time = models.DateTimeField(
         verbose_name="Дата и время",

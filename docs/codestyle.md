@@ -71,3 +71,40 @@
     class AuthorAdmin(admin.ModelAdmin):
         pass
     ```
+
+
+### Правила регистрации вычисляемых свойств на списке объектов в админке
+1. При добавлении вычисляемых полей используем декоратор ([документация](https://docs.djangoproject.com/en/4.0/ref/contrib/admin/#django.contrib.admin.display)) \
+    T.e **так плохо**
+    ```python
+    def countable_field(self, obj):
+        return True
+
+    countable_field.short_description = "Поле"
+    ```
+    Так **хорошо**
+    ```python
+    @admin.display(
+        boolean=True,
+        ordering='-publish_date',
+        description='Поле',
+    )
+    def countable_field(self, obj):
+        return True
+    ```
+
+
+### Правило для получения настроек из settings
+1. Для получения глобальных настроек из settings к полям обращаемся через сам settings\
+    T.e **так плохо**
+    ```python
+   from config.settings.base import MAILJET_TEMPLATE_ID_PLAY
+
+   message.template_id = MAILJET_TEMPLATE_ID_QUESTION
+    ```
+    Так **хорошо**
+    ```python
+   from django.conf import settings
+
+   message.template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
+    ```
