@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
@@ -112,6 +113,11 @@ class AuthorPlay(models.Model):
         if AuthorPlay.objects.filter(author=self.author, play=self.play) and self.id is None:
             return
         return super().save()
+
+    def clean(self):
+        if AuthorPlay.objects.filter(~Q(id=self.id), author=self.author, play=self.play) and self.id is not None:
+            raise ValidationError("Такая Пьеса уже есть у данного Автора")
+        return super().clean()
 
 
 class SocialNetworkLink(BaseModel):
