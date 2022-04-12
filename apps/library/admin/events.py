@@ -46,7 +46,6 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
         "role",
     )
     extra = 0
-    classes = ["collapsible"]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Restricts role types for the model where inline is used."""
@@ -60,6 +59,10 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
             if self.parent_model in LIMIT_ROLES.keys():
                 kwargs["queryset"] = Role.objects.filter(types__role_type=LIMIT_ROLES[self.parent_model])
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class TeamMemberInlineCollapsible(TeamMemberInline):
+    classes = ["collapsible"]
 
 
 @admin.register(MasterClass)
@@ -118,7 +121,7 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         ImagesInBlockInline,
         PerformanceMediaReviewInline,
         PerformanceReviewInline,
-        TeamMemberInline,
+        TeamMemberInlineCollapsible,
     )
 
     def get_form(self, request, obj=None, **kwargs):

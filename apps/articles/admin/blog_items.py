@@ -8,7 +8,6 @@ from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
     model = BlogItem.roles.through
     extra = 0
-    classes = ["collapsible"]
 
 
 class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
@@ -22,7 +21,6 @@ class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
         "text",
         "title",
     )
-    classes = ["collapsible"]
 
 
 class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):

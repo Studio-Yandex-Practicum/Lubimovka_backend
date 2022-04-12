@@ -28,7 +28,6 @@ class AuthorInline(admin.TabularInline):
     extra = 1
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
-    classes = ["collapsible"]
 
 
 @admin.register(Play)

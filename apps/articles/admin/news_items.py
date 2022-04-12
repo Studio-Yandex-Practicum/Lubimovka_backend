@@ -17,7 +17,6 @@ class NewsItemContentInline(InlineReadOnlyMixin, BaseContentInline):
         "text",
         "title",
     )
-    classes = ["collapsible"]
 
 
 class NewsItemAdmin(StatusButtonMixin, BaseContentPageAdmin):

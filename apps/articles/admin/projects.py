@@ -17,7 +17,6 @@ class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
         "text",
         "videosblock",
     )
-    classes = ["collapsible"]
 
 
 class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
