@@ -67,6 +67,9 @@ class Play(BaseModel):
         on_delete=models.PROTECT,
         related_name="plays",
         verbose_name="Программа",
+        blank=True,
+        null=True,
+        help_text="Для пьес Любимовки должна быть выбрана Программа",
     )
     festival = models.ForeignKey(
         Festival,
@@ -79,6 +82,11 @@ class Play(BaseModel):
     )
     published = models.BooleanField(
         verbose_name="Опубликовано",
+        default=True,
+    )
+    related = models.BooleanField(
+        verbose_name="Пьеса Любимовки",
+        help_text="Да/нет",
         default=True,
     )
 
@@ -96,13 +104,16 @@ class Play(BaseModel):
         return (
             self.name
             + ("" if self.published else " <— не опубликована —>")
-            + ("" if self.program.slug != "other_plays" else " <— Другая пьеса —>")
+            + ("" if self.related else " <— Другая пьеса —>")
         )
 
     def clean(self):
-        if self.program.slug != "other_plays" and not self.festival:
-            raise ValidationError("У пьесы Любимовки должен быть фестиваль")
-        if self.program.slug == "other_plays":
+        if self.related and not self.program:
+            raise ValidationError({"program": "У пьесы Любимовки должна быть программа"})
+        if self.related and not self.festival:
+            raise ValidationError({"festival": "У пьесы Любимовки должен быть фестиваль"})
+        if not self.related:
             self.festival = None
+            self.program = None
             self.url_reading = None
         return super().clean()

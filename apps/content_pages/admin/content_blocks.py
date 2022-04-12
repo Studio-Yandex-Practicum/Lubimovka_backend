@@ -52,7 +52,7 @@ class OrderedPlayInline(OrderedInline):
     model = OrderedPlay
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Play.objects.exclude(program__slug="other_plays")
+        kwargs["queryset"] = Play.objects.filter(related=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
