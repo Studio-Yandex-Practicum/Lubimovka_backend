@@ -21,7 +21,7 @@ class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePr
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
     max_num = 8
-    classes = ["collapse"]
+    classes = ["collapsible"]
     model.__str__ = lambda self: ""
 
 
@@ -29,14 +29,14 @@ class PerformanceMediaReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceMediaReview
     extra = 0
     max_num = 8
-    classes = ["collapse"]
+    classes = ["collapsible"]
 
 
 class PerformanceReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceReview
     extra = 0
     max_num = 8
-    classes = ["collapse"]
+    classes = ["collapsible"]
 
 
 class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
@@ -46,7 +46,7 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
         "role",
     )
     extra = 0
-    classes = ["collapse"]
+    classes = ["collapsible"]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Restricts role types for the model where inline is used."""

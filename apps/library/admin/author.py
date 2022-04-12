@@ -13,7 +13,7 @@ class AchievementInline(admin.TabularInline):
     extra = 1
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
-    classes = ["collapse"]
+    classes = ["collapsible"]
 
 
 class PlayInline(admin.TabularInline):
@@ -21,7 +21,7 @@ class PlayInline(admin.TabularInline):
     extra = 1
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
-    classes = ["collapse"]
+    classes = ["collapsible"]
 
     def get_queryset(self, request):
         return Author.plays.through.objects.exclude(play__program__slug="other_plays")
@@ -36,7 +36,7 @@ class OtherPlayInline(admin.TabularInline):
     extra = 1
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
-    classes = ["collapse"]
+    classes = ["collapsible"]
 
     def get_queryset(self, request):
         return Author.plays.through.objects.filter(play__program__slug="other_plays")
@@ -49,13 +49,13 @@ class OtherPlayInline(admin.TabularInline):
 class SocialNetworkLinkInline(admin.TabularInline):
     model = SocialNetworkLink
     extra = 1
-    classes = ["collapse"]
+    classes = ["collapsible"]
 
 
 class OtherLinkInline(admin.TabularInline):
     model = OtherLink
     extra = 1
-    classes = ["collapse"]
+    classes = ["collapsible"]
 
 
 @admin.register(Author)
