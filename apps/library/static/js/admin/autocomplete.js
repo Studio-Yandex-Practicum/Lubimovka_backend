@@ -10,7 +10,7 @@ function setSelect2($, $objectId, $lastWord) {
     })
 };
 // for connect new autocomplete: add to dir object last word of your select id
-function filterSelect(element) {
+function filterSetSelect(element) {
     var object = {
         "author": "человека",
         "performance": "спектакль",
@@ -18,13 +18,12 @@ function filterSelect(element) {
         "person": "человека",
         "event": "событие",
     };
+    // splits a word by two characters "_", "-" and selects the last one
     let lastWord = element.id.split(/_|-/).slice(-1);
+    // if not exclude id contain "prefix" after adding field appears a dummy
     if (lastWord in object && !(element.id.includes("__prefix__"))) {
-        return [
-            element.id,
-            object[lastWord]
-            ];
-        };
+        return setSelect2($, element.id, object[lastWord]);
+        }
     }
 
 $(document).ready(function() {
@@ -32,20 +31,14 @@ $(document).ready(function() {
     const hasCollapse = document.getElementsByClassName("js-inline-admin-formset inline-group");
     if (elementsSelect.length && elementsSelect[0].id || hasCollapse.length) {
         for (element of elementsSelect) {
-            let remainElement = filterSelect(element);
-            if (remainElement) {
-                setSelect2($, remainElement[0], remainElement[1]);
-            }
+            filterSetSelect(element);
         }
         // trigger to add new elements to tree house
         $('tbody').bind("DOMNodeInserted",function(event){
             let elements = event.target.querySelectorAll("select");
             if (elements) {
                 for (element of elements) {
-                    let remainElement = filterSelect(element);
-                    if (remainElement) {
-                        setSelect2($, remainElement[0], remainElement[1]);
-                    }
+                    filterSetSelect(element);
                 }
             }
         });
