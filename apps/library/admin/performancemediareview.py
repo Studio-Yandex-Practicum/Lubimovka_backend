@@ -10,10 +10,10 @@ class PerformanceMediaReviewAdmin(admin.ModelAdmin):
         "performance",
         "pub_date",
     )
-    list_filter = (
+    list_filter = ("pub_date",)
+    search_fields = (
         "media_name",
         "performance__name",
         "pub_date",
     )
-    search_fields = ("pub_date",)
     readonly_fields = ("pub_date",)

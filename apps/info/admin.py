@@ -95,7 +95,7 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
-class IsReviewFilter(admin.SimpleListFilter):
+class HasReviewFilter(admin.SimpleListFilter):
     title = "Есть отзыв?"
     parameter_name = "volunteer"
 
@@ -121,7 +121,7 @@ class VolunteerAdmin(admin.ModelAdmin):
     readonly_fields = ("is_review",)
     list_filter = (
         "festival",
-        IsReviewFilter,
+        HasReviewFilter,
     )
 
     @admin.display(
