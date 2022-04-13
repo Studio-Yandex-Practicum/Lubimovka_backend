@@ -19,7 +19,7 @@ def delete_program(apps, shema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0020_auto_20220404_2055'),
+        ('library', '0021_alter_play_options'),
     ]
 
     operations = [
