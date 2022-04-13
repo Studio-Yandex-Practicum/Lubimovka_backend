@@ -6,7 +6,7 @@ from django.urls import re_path
 from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
-from apps.afisha.models import Event
+from apps.afisha.models import CommonEvent, Event
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -69,13 +69,17 @@ class EventAdmin(admin.ModelAdmin):
 
     def get_common_event(self, request, obj_id=None):
         common_event_type = request.GET.get("type")
+        d = {
+            "READING": CommonEvent.reading,
+            "PERFORMANCE": CommonEvent.performance,
+            "MASTERCLASS": CommonEvent.masterclass,
+        }
+        print(common_event_type)
         common_events = {}
         if common_event_type:
-            common_events_queryset = Event.objects.filter(type=common_event_type)
-            common_events = {
-                event.common_event.target_model.name: event.common_event.target_model.id
-                for event in common_events_queryset
-            }
+            # common_events_queryset = Event.objects.filter(type=common_event_type).order_by("date_time")
+            common_events_queryset = d[common_event_type].get_queryset()
+            common_events = {event.name: event.id for event in common_events_queryset}
         return JsonResponse(common_events)
 
     @admin.display(
