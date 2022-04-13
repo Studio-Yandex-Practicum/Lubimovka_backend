@@ -21,10 +21,11 @@ $(document).ready(function(jQuery) {
                 });
             }
         };
-
-        toggleLink($('#id_type').is(':checked'));
-        $('#id_type').change(function() {
-            toggleLink($('#id_type').is(':checked'));
+        // show/hide on load
+        toggleLink($('#id_related').is(':checked'));
+        // show/hide on change
+        $('#id_related').change(function() {
+            toggleLink($('#id_related').is(':checked'));
         });
     });
 });
