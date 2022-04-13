@@ -91,6 +91,7 @@ class Play(BaseModel):
         )
         verbose_name = "Пьеса"
         verbose_name_plural = "Пьесы"
+        ordering = ("-year", "name")
 
     def __str__(self):
         return (
