@@ -20,10 +20,6 @@ class PlayFilter(filters.FilterSet):
         label="Год фестиваля",
         lookup_expr="in",
     )
-    published = filters.BooleanFilter(
-        field_name="published",
-        label="Отображать только опубликованные пьесы?",
-    )
 
     class Meta:
         model = Play

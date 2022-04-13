@@ -6,7 +6,13 @@ from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
-from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
+from apps.library.forms.admin import OtherLinkForm
+from apps.library.models import Achievement, Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
+
+
+@admin.register(Achievement)
+class AchievementAdmin(admin.ModelAdmin):
+    search_fields = ("tag",)
 
 
 class AchievementInline(admin.TabularInline):
@@ -54,6 +60,7 @@ class SocialNetworkLinkInline(admin.TabularInline):
 
 
 class OtherLinkInline(admin.TabularInline):
+    form = OtherLinkForm
     model = OtherLink
     extra = 1
     classes = ("collapsible",)
@@ -114,6 +121,3 @@ class AuthorAdmin(admin.ModelAdmin):
         slug = utils.slugify(person.last_name)
         response = {"slug": slug}
         return JsonResponse(response)
-
-    class Media:
-        js = ("admin/author_slug.js",)

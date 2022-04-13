@@ -68,6 +68,3 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "published",
     )
-
-    class Media:
-        js = ("admin/play.js",)
