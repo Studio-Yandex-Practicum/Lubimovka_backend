@@ -6,13 +6,14 @@ from .performance import (
     PerformanceReviewSerializer,
     PerformanceSerializer,
 )
-from .play import AuthorForPlaySerializer, PlaySerializer
+from .play import AuthorForPlaySerializer, AuthorPlaySerializer, PlaySerializer
 from .playfilters import PlayFiltersSerializer
 from .reading import EventReadingSerializer
 from .role import RoleSerializer
 
 __all__ = (
     AuthorListSerializer,
+    AuthorPlaySerializer,
     AuthorRetrieveSerializer,
     AuthorSearchSerializer,
     AuthorLettersSerializer,
