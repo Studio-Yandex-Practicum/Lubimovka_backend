@@ -210,12 +210,6 @@ class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
 
 
-class PressRealeaseAdmin(admin.ModelAdmin):
-    list_display = ("title",)
-    list_filter = ("title",)
-    search_fields = ("title",)
-
-
 @admin.register(ArtTeamMember)
 class ArtTeamMemberAdmin(admin.ModelAdmin):
     list_display = (
