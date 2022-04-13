@@ -30,6 +30,7 @@ class EventAdmin(admin.ModelAdmin):
         StatusOfEvent,
         "type",
     )
+    search_fields = ("common_event",)
     empty_value_display = "-пусто-"
 
     # @admin.display(

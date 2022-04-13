@@ -39,7 +39,6 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         BlogPersonInline,
         BlogItemContentInline,
     )
-
     fieldsets = (
         (
             None,

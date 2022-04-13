@@ -3,7 +3,7 @@ from django.forms import ValidationError
 from django.forms.models import BaseInlineFormSet
 
 from apps.library.filters.play import PlayProgramFilter
-from apps.library.forms.admin.play import PlayForm
+from apps.library.forms.play import PlayForm
 from apps.library.models import AuthorPlay, Play
 
 
@@ -68,6 +68,3 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "published",
     )
-
-    class Media:
-        js = ("admin/play.js",)

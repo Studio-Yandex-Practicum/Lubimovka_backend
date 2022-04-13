@@ -16,7 +16,6 @@ from apps.library.models import (
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
     model = Performance.images_in_block.through
-    readonly_fields = ("inline_image_preview",)
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
@@ -69,7 +68,11 @@ class TeamMemberInlineCollapsible(TeamMemberInline):
 class MasterClassAdmin(admin.ModelAdmin):
     list_display = ("name",)
     exclude = ("events",)
-    search_fields = ("name",)
+    search_fields = (
+        "project",
+        "play__name",
+        "name",
+    )
     inlines = (TeamMemberInline,)
 
 
