@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.constraints import UniqueConstraint
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 from apps.content_pages.utilities import path_by_app_label_and_class_name
@@ -19,6 +20,12 @@ class Project(AbstractContentPage):
         return f"Проект {self.title}"
 
     class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=("intro", "description", "title"),
+                name="unique_project",
+            ),
+        ]
         ordering = ("-pub_date",)
         verbose_name = "Проект"
         verbose_name_plural = "Проекты"

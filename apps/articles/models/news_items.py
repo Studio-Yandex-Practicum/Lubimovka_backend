@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.constraints import UniqueConstraint
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 
@@ -8,6 +9,12 @@ class NewsItem(AbstractContentPage):
         return f"Новость {self.title}"
 
     class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=("description", "title"),
+                name="unique_news",
+            ),
+        ]
         ordering = ("-pub_date",)
         verbose_name = "Новость"
         verbose_name_plural = "Новости"

@@ -66,6 +66,12 @@ class BlogItem(AbstractContentPage):
     )
 
     class Meta:
+        constraints = [
+            UniqueConstraint(
+                fields=("author_url", "author_url_title", "description"),
+                name="unique_blog_entry",
+            ),
+        ]
         ordering = ("-pub_date",)
         verbose_name = "Запись блога"
         verbose_name_plural = "Блог"
