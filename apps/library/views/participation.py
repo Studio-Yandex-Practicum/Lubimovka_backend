@@ -11,7 +11,7 @@ from rest_framework.views import APIView
 from yadisk.exceptions import YaDiskError
 
 from apps.core.models import Setting
-from apps.core.utils import send_email
+from apps.core.utils import get_domain, send_email
 from apps.library.models import ParticipationApplicationFestival
 from apps.library.models.participation_application import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION
 from apps.library.permissions import SettingsPlayReceptionPermission
@@ -65,7 +65,7 @@ class ParticipationViewSet(APIView):
         serializer = self.ParticipationSerializer(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()
-            domain = settings.DOMAIN_URL
+            domain = get_domain(request)
 
             try:
                 from_email = Setting.get_setting("email_send_from")
@@ -86,12 +86,14 @@ class ParticipationViewSet(APIView):
                 send_email_success = send_email(from_email, to_emails, template_id, context, attach_file=True)
                 if send_email_success:
                     instance.sent_to_email = True
+                    instance.save()
 
                 download_link_in_yandex_disk = yandex_disk_export(instance)
                 if download_link_in_yandex_disk:
                     instance.url_file_in_storage = download_link_in_yandex_disk
                     instance.file.delete()
                     instance.saved_to_storage = True
+                    instance.save()
 
                 file_url = (
                     download_link_in_yandex_disk if download_link_in_yandex_disk else domain + str(instance.file.url)
@@ -100,8 +102,7 @@ class ParticipationViewSet(APIView):
                 export_to_google_sheets_success = gs.export(instance, file_url)
                 if export_to_google_sheets_success:
                     instance.exported_to_google = True
-
-                instance.save()
+                    instance.save()
 
             except YaDiskError as error:
                 msg = f"Не удалось загрузить пьесу {instance.title} от {instance.email} на Яндекс диск."

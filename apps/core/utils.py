@@ -150,7 +150,8 @@ def send_email(from_email: str, to_emails: tuple, template_id: str, context: dic
         if attach_file:
             file_path = context.get("file_path")
             message.attach_file(file_path)
-        message.send()
+        answer = message.send()
+        print(f"{answer} = answer")
         if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
             return True
         return False
@@ -170,5 +171,5 @@ def send_email(from_email: str, to_emails: tuple, template_id: str, context: dic
 
 def get_domain(request):
     server_protocol = "".join(filter(str.isalpha, request.META["SERVER_PROTOCOL"])).lower()
-    domain = server_protocol + "://" + request.META["DOMAIN_URL"]
+    domain = server_protocol + "://" + request.META["HTTP_HOST"]
     return domain
