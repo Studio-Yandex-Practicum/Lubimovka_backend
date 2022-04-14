@@ -2,6 +2,13 @@
 
 from django.db import migrations, models
 
+def set_email(apps, schema_editor):
+    User = apps.get_model("users", "User")
+    for user in User.objects.all():
+        if not user.email:
+            user.email = f"{user.id}_{user.first_name}_{user.last_name}@here_should_be_real_email.ru"
+            user.save()
+
 
 class Migration(migrations.Migration):
 
@@ -10,6 +17,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        migrations.RunPython(
+            set_email,
+        ),
         migrations.AlterModelManagers(
             name='user',
             managers=[

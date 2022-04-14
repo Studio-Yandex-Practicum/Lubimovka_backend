@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Permission
 
+from apps.core.utils import get_domain
+
 from .forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm
 from .models import ProxyGroup
 
@@ -44,6 +46,13 @@ class UserAdmin(DjangoUserAdmin):
         "username",
         "full_name",
     )
+
+    def get_form(self, request, obj=None, **kwargs):
+        domain = get_domain(request)
+        form = super().get_form(request, obj, **kwargs)
+        if obj is None:
+            form.domain = domain
+        return form
 
     @admin.display(description="Дата последней авторизации")
     def get_last_login(self, obj):

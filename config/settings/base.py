@@ -211,8 +211,6 @@ LOGGING = LOGGING_SETTINGS
 
 LOGIN_URL = "/admin/login/"
 
-DOMAIN_URL = env("DOMAIN_URL", default="localhost")
-
 # Templates for mailjet
 # https://anymail.dev/en/stable/esps/mailjet/
 # ------------------------------------------------------------------------------

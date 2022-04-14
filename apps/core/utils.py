@@ -166,3 +166,9 @@ def send_email(from_email: str, to_emails: tuple, template_id: str, context: dic
     except ValueError as error:
         msg = f"Неверный ID шаблона Mailjet. Не удалось отправить письмо на почтовые адреса - {to_emails}."
         logger.critical(msg, error, exc_info=True)
+
+
+def get_domain(request):
+    server_protocol = "".join(filter(str.isalpha, request.META["SERVER_PROTOCOL"])).lower()
+    domain = server_protocol + "://" + request.META["DOMAIN_URL"]
+    return domain

@@ -9,7 +9,7 @@ def yandex_disk_export(instance) -> Optional[bool]:
     yndx = yadisk.YaDisk(token=settings.YNDX_DISK_TOKEN)
     _, year, name = Path(str(instance.file)).parts
     to_dir = f"{year}/{name}"
-    from_dir = Path(settings.MEDIA_ROOT / instance.file.name).as_posix()
+    from_dir = (settings.MEDIA_ROOT / instance.file.name).as_posix()
 
     if not yndx.is_dir(year):
         yndx.mkdir(year)

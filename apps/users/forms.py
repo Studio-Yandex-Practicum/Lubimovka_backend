@@ -10,6 +10,7 @@ from django.utils.crypto import get_random_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
+from apps.core.models import Setting
 from apps.core.utils import send_email
 
 User = get_user_model()
@@ -70,9 +71,9 @@ class UserAdminCreationForm(UserCreationForm):
         reset_form = UserAdminPasswordResetForm({"email": user.email})
         if reset_form.is_valid():
             reset_form.send_email_to_user(
-                from_email=settings.DEFAULT_FROM_EMAIL,
+                from_email=Setting.get_setting("email_send_from"),
                 template_id=settings.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER,
-                domain=settings.DOMAIN_URL,
+                domain=self.domain,
             )
         return user
 
