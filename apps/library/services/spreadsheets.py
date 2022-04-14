@@ -1,11 +1,15 @@
+import logging
 from datetime import datetime as dt
 from typing import Optional
 
 from django.conf import settings
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 
 from apps.main.models import SettingPlaySupply
+
+logger = logging.getLogger("django")
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 URL = "https://www.googleapis.com/robot/v1/metadata/x509/lubimovka%40swift-area-340613.iam.gserviceaccount.com"
@@ -36,7 +40,7 @@ class GoogleSpreadsheets:
         self.sheet = SettingPlaySupply.get_setting("SHEET")
         self.range = self.sheet + "!A1"
 
-    def _get_instance_values(self, instance, file_url) -> dict:
+    def _get_instance_values(self, instance, file_link) -> dict:
         instance_created = dt.now().strftime("%Y-%m-%d %H:%M:%S")
         return {
             "values": [
@@ -50,7 +54,7 @@ class GoogleSpreadsheets:
                     instance.email,
                     instance.year,
                     instance.title,
-                    file_url,
+                    file_link,
                 ]
             ]
         }
@@ -213,12 +217,16 @@ class GoogleSpreadsheets:
         return response.get("values") is not None
 
     def export(self, instance, file_url) -> Optional[bool]:
-        self._get_settings()
-        service = self._build_service()
-        if service is None:
-            return
-        header_exists = self._check_header_exists(service=service)
-        if not header_exists:
-            self._set_borders(service=service)
-            self._set_header(service=service)
-        return self._export_new_object(instance, service=service, file_url=file_url)
+        try:
+            self._get_settings()
+            service = self._build_service()
+            if service is None:
+                return
+            header_exists = self._check_header_exists(service=service)
+            if not header_exists:
+                self._set_borders(service=service)
+                self._set_header(service=service)
+            return self._export_new_object(instance, service=service, file_url=file_url)
+        except (ValueError, HttpError) as error:
+            msg = f"Не удалось выгрузить данные заявки от {instance.email} на Google Sheets."
+            logger.critical(msg, error, exc_info=True)

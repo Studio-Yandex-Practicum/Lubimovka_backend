@@ -3,12 +3,10 @@ import logging
 from django.conf import settings
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
-from googleapiclient.errors import HttpError
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.views import APIView
-from yadisk.exceptions import YaDiskError
 
 from apps.core.models import Setting
 from apps.core.utils import get_domain, send_email
@@ -65,50 +63,40 @@ class ParticipationViewSet(APIView):
         serializer = self.ParticipationSerializer(data=request.data)
         if serializer.is_valid():
             instance = serializer.save()
-            domain = get_domain(request)
+            file_link = get_domain(request) + str(instance.file.url)
 
-            try:
-                from_email = Setting.get_setting("email_send_from")
-                to_emails = (Setting.get_setting("email_to_send_participations"),)
-                template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
+            from_email = Setting.get_setting("email_send_from")
+            to_emails = (Setting.get_setting("email_to_send_participations"),)
+            template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
 
-                context = {
-                    "year": instance.year,
-                    "birth_year": instance.birth_year,
-                    "first_name": instance.first_name,
-                    "last_name": instance.last_name,
-                    "city": instance.city,
-                    "phone_number": instance.phone_number.as_international,
-                    "email": instance.email,
-                    "title": instance.title,
-                    "file_path": instance.file.path,
-                }
-                send_email_success = send_email(from_email, to_emails, template_id, context, attach_file=True)
-                if send_email_success:
-                    instance.sent_to_email = True
-                    instance.save()
+            context = {
+                "year": instance.year,
+                "birth_year": instance.birth_year,
+                "first_name": instance.first_name,
+                "last_name": instance.last_name,
+                "city": instance.city,
+                "phone_number": instance.phone_number.as_international,
+                "email": instance.email,
+                "title": instance.title,
+                "file_path": instance.file.path,
+            }
+            send_email_success = send_email(from_email, to_emails, template_id, context, attach_file=True)
+            if send_email_success:
+                instance.sent_to_email = True
+                instance.save()
 
-                download_link_in_yandex_disk = yandex_disk_export(instance)
-                if download_link_in_yandex_disk:
-                    instance.url_file_in_storage = download_link_in_yandex_disk
-                    instance.file.delete()
-                    instance.saved_to_storage = True
-                    instance.save()
+            download_link_in_yandex_disk = yandex_disk_export(instance)
+            if download_link_in_yandex_disk:
+                instance.url_file_in_storage = download_link_in_yandex_disk
+                instance.file.delete()
+                instance.saved_to_storage = True
+                instance.save()
+                file_link = download_link_in_yandex_disk
 
-                file_url = (
-                    download_link_in_yandex_disk if download_link_in_yandex_disk else domain + str(instance.file.url)
-                )
+            export_to_google_sheets_success = gs.export(instance, file_link)
+            if export_to_google_sheets_success:
+                instance.exported_to_google = True
+                instance.save()
 
-                export_to_google_sheets_success = gs.export(instance, file_url)
-                if export_to_google_sheets_success:
-                    instance.exported_to_google = True
-                    instance.save()
-
-            except YaDiskError as error:
-                msg = f"Не удалось загрузить пьесу {instance.title} от {instance.email} на Яндекс диск."
-                logger.critical(msg, error, exc_info=True)
-            except (ValueError, HttpError) as error:
-                msg = f"Не удалось выгрузить данные заявки от {instance.email} на Google Sheets."
-                logger.critical(msg, error, exc_info=True)
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

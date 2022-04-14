@@ -65,8 +65,8 @@ class UserAdmin(DjangoUserAdmin):
     def get_readonly_fields(self, request, obj=None):
         """Only superusers can edit `is_superuser` field."""
         if not request.user.is_superuser:
-            return ("is_superuser",)
-        return super().get_readonly_fields(request, obj)
+            return ("is_superuser", "date_joined", "last_login")
+        return ("date_joined", "last_login")
 
     @admin.display(description="Роль")
     def role(self, obj):
