@@ -45,14 +45,18 @@ router.register(
     AuthorsReadViewSet,
     basename="authors",
 )
-router.register(
-    "participation",
-    ParticipationViewSet,
-    basename="participation",
-)
+
+participation_url = [
+    path(
+        "participation/",
+        ParticipationViewSet.as_view(),
+        name="participation",
+    ),
+]
 
 library_urls = [
     path("library/", include(router.urls)),
+    path("library/", include(participation_url)),
     path(
         "library/author_letters/",
         AuthorLettersAPIView.as_view(),

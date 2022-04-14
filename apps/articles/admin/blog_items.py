@@ -10,7 +10,6 @@ from apps.core.widgets import FkSelect
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
     model = BlogItem.roles.through
     extra = 0
-    classes = ["collapse"]
     formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 

@@ -17,9 +17,6 @@ function setSelect2($, $objectId, $lastWord) {
     }
     if ($lastWord in $obj && !($objectId.includes("__prefix__"))) {
         $("select#"+$objectId).select2({
-            sorter: function(results) {
-                return results.sort((a, b) => a.text.toLowerCase().localeCompare(b.text.toLowerCase()))
-            },
             placeholder: "Выберите " + $placeHolderWord,
             allowClear: $addAllowClear,
             width: $addWidth,

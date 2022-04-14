@@ -22,13 +22,11 @@ from apps.library.models import Play
 class ContentPersonRoleInline(admin.TabularInline):
     model = ContentPersonRole
     extra = 0
-    classes = ["collapse"]
 
 
 class OrderedInline(SortableInlineAdminMixin, admin.TabularInline):
     min_num = 1
     extra = 0
-    classes = ["collapse"]
 
 
 class OrderedEventInline(OrderedInline):

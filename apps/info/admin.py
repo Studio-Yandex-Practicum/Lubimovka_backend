@@ -40,6 +40,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
         "image_preview_list_page",
     )
     list_filter = ("type",)
+    search_fields = ("name",)
     fieldsets = (
         (
             None,
@@ -96,8 +97,25 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
         "first_name",
         "last_name",
     )
+    list_filter = ("city",)
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
+
+
+class HasReviewFilter(admin.SimpleListFilter):
+    title = "Есть отзыв?"
+    parameter_name = "volunteer"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("True", "Да"),
+            ("False", "Нет"),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == "True":
+            return Volunteer.objects.exclude(review_text__exact="")
+        return Volunteer.objects.filter(review_text__exact="")
 
 
 @admin.register(Volunteer)
@@ -108,6 +126,10 @@ class VolunteerAdmin(admin.ModelAdmin):
         "is_review",
     )
     readonly_fields = ("is_review",)
+    list_filter = (
+        "festival",
+        HasReviewFilter,
+    )
     formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     @admin.display(
@@ -140,7 +162,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
-    classes = ["collapse"]
+    classes = ["collapsible"]
     ordering = ("person__last_name", "person__first_name")
     formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
@@ -161,7 +183,7 @@ class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1
-    classes = ["collapse"]
+    classes = ["collapsible"]
     model.__str__ = lambda self: ""
 
 
@@ -195,7 +217,6 @@ class PlaceAdmin(admin.ModelAdmin):
 @admin.register(PressRelease)
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
-    list_filter = ("festival",)
     fields_with_overridden_fk_widget = ("festival",)
 
     def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):

@@ -1,0 +1,4 @@
+/* height for autocomplete window */
+.select2-results__options {
+   max-height: 450px !important;
+}

@@ -12,7 +12,7 @@ class ProgramChoiceField(forms.ModelChoiceField):
             else:
                 return value.pk
         if self.to_field_name:
-            #  this part needs to show correctly alreade selected and saved value
+            #  this part needs to show correctly already selected and saved value
             selected_value = [_ for _ in self.queryset if _.pk == value]
             if selected_value:
                 return getattr(selected_value[0], self.to_field_name)
