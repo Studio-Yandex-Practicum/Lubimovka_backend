@@ -185,20 +185,49 @@ EMAIL_TIMEOUT = 5
 
 # Use CKEditor (Configuration)
 # ------------------------------------------------------------------------------
+
+CKEDITOR_BASIC_HTML_TOOLBAR = [
+    ("Undo", "Redo",),
+    ("Bold", "Italic", "Link", "Unlink", "RemoveFormat",),
+    ("Styles",),
+    ("Blockquote", "Source", "BulletedList",),
+]
+
 CKEDITOR_CONFIGS = {
     "default": {
-        "removePlugins": "elementspath",
-        "removeDialogTabs": "dialog:advanced",
-        "toolbar": "Custom",
-        "toolbar_Custom": [
-            ["Undo", "Redo"],
-            ["Bold", "Italic", "Underline", "Strike"],
-            ["Link", "Unlink"],
+        "height": 300,
+        "autoGrow_bottomSpace": 30,
+        "autoGrow_minHeight": 300,
+        "autoGrow_maxHeight": 500,
+        "extraPlugins": (",").join((
+            "autogrow",
+        )),
+        "basicEntities": False,
+        "stylesSet": [
+            {
+                "name": "Заголовок",
+                "element": "h4",
+            },
+            {
+                "name": "Подзаголовок",
+                "element": "h6",
+            }
         ],
+        "contentsCss": (
+            # "/static/ckeditor/ckeditor/contents.css",
+            "/static/core/ckeditor/contents.css",
+        ),
+        "toolbar": "basic_html",
+        "toolbar_basic_html": CKEDITOR_BASIC_HTML_TOOLBAR,
     }
 }
+
+# Google Sheets Export integration keys
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
+
+
+# Export to Yandex.Disk integration key
 YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
 
 # https://docs.djangoproject.com/en/4.0/topics/logging/#configuring-logging
@@ -251,7 +280,7 @@ ADMIN_SITE_MODELS_ORDER = {
 SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
         "event_type": "apps.afisha.models.Event.EventType",
-        "partner_type": "apps.info.models.people.Partner.PartnerType"
+        "partner_type": "apps.info.models.people.Partner.PartnerType",
     }
 }
 

@@ -1,0 +1,82 @@
+@font-face {
+    font-display: swap;
+    font-family: PP Neue Machina;
+    font-style: normal;
+    font-weight: 400;
+    src: url(/static/fonts/PPNeueMachina/PPNeueMachina-Regular.woff2) format("woff2"), url(/static/fonts/PPNeueMachina/PPNeueMachina-Regular.woff) format("woff")
+}
+
+
+@font-face {
+    font-display: swap;
+    font-family: Formular;
+    font-style: normal;
+    font-weight: 300;
+    src: url(/static/fonts/Formular/Formular-Light.woff2) format("woff2"), url(/static/fonts/Formular/Formular-Light.woff) format("woff")
+}
+
+
+.cke_editable {
+	font-size: 20px;
+    color: #242424;
+}
+
+
+p {
+    /* Style from figma */
+    /* font-family: "Formular"; */
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.01em;
+    font-feature-settings: 'ss01' on;
+
+
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+
+
+h4 {
+    font-family: "PP Neue Machina";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 40px;
+    line-height: 40px;
+    letter-spacing: -0.01em;
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+
+h6 {
+    padding: 0px;
+    font-family: "PP Neue Machina";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+    /* margin-block-start: 0.5em;
+    margin-block-end: 0.5em; */
+}
+
+blockquote
+{
+	font-family: "PP Neue Machina";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 28px;
+    line-height: 32px;
+    letter-spacing: -0.01em;
+
+	border-style: solid;
+	border-color: #ccc;
+	border-width: 0 0 0 5px;
+    padding: 0 12px 0 8px;
+}
+
+a
+{
+	color: #242424;
+}
