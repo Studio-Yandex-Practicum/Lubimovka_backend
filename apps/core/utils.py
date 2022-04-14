@@ -150,8 +150,7 @@ def send_email(from_email: str, to_emails: tuple, template_id: str, context: dic
         if attach_file:
             file_path = context.get("file_path")
             message.attach_file(file_path)
-        answer = message.send()
-        print(f"{answer} = answer")
+        message.send()
         if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
             return True
         return False
