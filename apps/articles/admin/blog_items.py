@@ -3,11 +3,21 @@ from django.contrib import admin
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
+from apps.library.utilities import CustomAutocompleteSelect
 
 
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
     model = BlogItem.roles.through
+    autocomplete_fields = ("person",)
     extra = 0
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "person":
+            db = kwargs.get("using")
+            kwargs["widget"] = CustomAutocompleteSelect(
+                db_field, self.admin_site, using=db, placeholder="Выберите человека"
+            )
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):

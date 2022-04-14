@@ -4,7 +4,11 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
-from apps.afisha.models import Event
+from apps.afisha.models import CommonEvent, Event
+
+
+class CommonEventAdmin(admin.ModelAdmin):
+    search_fields = ("created",)
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -30,7 +34,8 @@ class EventAdmin(admin.ModelAdmin):
         StatusOfEvent,
         "type",
     )
-    search_fields = ("common_event",)
+    autocomplete_fields = ("common_event",)
+    # search_fields = ("common_event",)
     empty_value_display = "-пусто-"
 
     # @admin.display(
@@ -56,3 +61,4 @@ class EventAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Event, EventAdmin)
+admin.site.register(CommonEvent, CommonEventAdmin)
