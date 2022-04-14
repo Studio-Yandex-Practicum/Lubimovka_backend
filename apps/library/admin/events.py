@@ -131,7 +131,7 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         change_permission = get_user_change_perms_for_status(request, obj)
         if change_permission:
-            form.base_fields["play"].queryset = Play.objects.filter(rother_play=False)
+            form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
         return form
 
 

@@ -109,9 +109,9 @@ class Play(BaseModel):
         )
 
     def clean(self):
-        if not (self.other_play and self.program):
+        if not self.other_play and not self.program:
             raise ValidationError({"program": "У пьесы Любимовки должна быть программа"})
-        if not (self.other_play and self.festival):
+        if not self.other_play and not self.festival:
             raise ValidationError({"festival": "У пьесы Любимовки должен быть фестиваль"})
         if self.other_play:
             self.festival = None
