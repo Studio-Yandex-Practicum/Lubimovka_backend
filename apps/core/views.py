@@ -22,4 +22,4 @@ def error404(request, exception, *args, **kwargs):
 
 
 def csrf_failure(request, reason=""):
-    return redirect("/")
+    return redirect("/admin/")
