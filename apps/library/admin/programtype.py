@@ -6,7 +6,6 @@ from apps.library.models import ProgramType
 @admin.register(ProgramType)
 class ProgramTypeAdmin(admin.ModelAdmin):
     list_display = ("name",)
-    list_filter = ("name",)
     search_fields = ("name",)
 
     def get_readonly_fields(self, request, obj=None):

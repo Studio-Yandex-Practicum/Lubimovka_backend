@@ -91,6 +91,11 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
         "image",
         "image_preview_list_page",
     )
+    search_fields = (
+        "first_name",
+        "last_name",
+    )
+    list_filter = ("city",)
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
 
@@ -154,7 +159,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
-    classes = ["collapse"]
+    classes = ["collapsible"]
     ordering = ("person__last_name", "person__first_name")
 
     @admin.display(
@@ -171,10 +176,10 @@ class VolunteerInline(admin.TabularInline):
 class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     model = Festival.images.through
     readonly_fields = ("inline_image_preview",)
-    verbose_name = "Изображение фестиваля"
-    verbose_name_plural = "Изображения фестиваля"
+    verbose_name = "Изображение"
+    verbose_name_plural = "Изображения"
     extra = 1
-    classes = ["collapse"]
+    classes = ["collapsible"]
     model.__str__ = lambda self: ""
 
 
