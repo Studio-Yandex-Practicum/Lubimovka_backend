@@ -31,7 +31,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
     social_networks = SocialNetworkSerializer(many=True)
     email = serializers.SlugRelatedField(source="person", slug_field="email", read_only=True)
     other_links = OtherLinkSerializer(many=True)
-    plays = AuthorPlaySerializer(source="author_play_set", many=True)
+    plays = AuthorPlaySerializer(source="author_plays", many=True)
     other_plays = AuthorPlaySerializer(many=True)
     image = serializers.ImageField()
 

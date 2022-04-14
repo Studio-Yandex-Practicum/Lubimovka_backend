@@ -37,9 +37,12 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "achievements",
                 "social_networks",
                 "other_links",
-                Prefetch("author_play_set", queryset=AuthorPlay.objects.exclude(play__program__slug="other_plays")),
                 Prefetch(
-                    "author_play_set",
+                    "author_plays",
+                    queryset=AuthorPlay.objects.exclude(play__program__slug="other_plays"),
+                ),
+                Prefetch(
+                    "author_plays",
                     queryset=AuthorPlay.objects.filter(play__program__slug="other_plays"),
                     to_attr="other_plays",
                 ),

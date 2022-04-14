@@ -6,7 +6,13 @@ from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
-from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
+from apps.library.forms.admin import OtherLinkForm
+from apps.library.models import Achievement, Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
+
+
+@admin.register(Achievement)
+class AchievementAdmin(admin.ModelAdmin):
+    search_fields = ("tag",)
 
 
 class AchievementInline(admin.TabularInline):
@@ -14,7 +20,7 @@ class AchievementInline(admin.TabularInline):
     extra = 1
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
-    classes = ("collapse",)
+    classes = ("collapsible",)
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -22,7 +28,7 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     extra = 0
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
-    classes = ("collapse",)
+    classes = ("collapsible",)
 
     def get_queryset(self, request):
         return AuthorPlay.objects.exclude(play__program__slug="other_plays")
@@ -37,7 +43,7 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     extra = 0
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
-    classes = ("collapse",)
+    classes = ("collapsible",)
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__program__slug="other_plays")
@@ -50,13 +56,14 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
 class SocialNetworkLinkInline(admin.TabularInline):
     model = SocialNetworkLink
     extra = 1
-    classes = ("collapse",)
+    classes = ("collapsible",)
 
 
 class OtherLinkInline(admin.TabularInline):
+    form = OtherLinkForm
     model = OtherLink
     extra = 1
-    classes = ("collapse",)
+    classes = ("collapsible",)
 
 
 @admin.register(Author)
@@ -114,6 +121,3 @@ class AuthorAdmin(admin.ModelAdmin):
         slug = utils.slugify(person.last_name)
         response = {"slug": slug}
         return JsonResponse(response)
-
-    class Media:
-        js = ("admin/author_slug.js",)
