@@ -40,7 +40,7 @@ class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
         """
         q = self.request.query_params.get("q", "")
         if q:
-            plays_queryset = Play.objects.filter(related=True).filter(name__icontains=q)
+            plays_queryset = Play.objects.filter(other_play=False).filter(name__icontains=q)
             authors_queryset = Author.objects.filter(
                 Q(person__first_name__icontains=q) | Q(person__last_name__icontains=q)
             )

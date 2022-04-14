@@ -37,7 +37,7 @@ class ReadingFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def play(self):
-        return Play.objects.filter(related=True).order_by("?").first()
+        return Play.objects.filter(other_play=False).order_by("?").first()
 
     dramatist_person = factory.RelatedFactory(
         TeamMemberFactory,

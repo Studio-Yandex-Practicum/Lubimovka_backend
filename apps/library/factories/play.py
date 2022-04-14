@@ -33,7 +33,7 @@ class PlayFactory(factory.django.DjangoModelFactory):
     year = factory.Faker("random_int", min=1990, max=2021)
     url_download = factory.django.FileField()
     published = factory.Faker("boolean", chance_of_getting_true=50)
-    related = True
+    other_play = False
 
     @factory.lazy_attribute
     def url_reading(self):
@@ -59,4 +59,4 @@ class OtherPlayFactory(factory.django.DjangoModelFactory):
     name = factory.Faker("text", max_nb_chars=60, locale="ru_RU")
     published = factory.Faker("boolean", chance_of_getting_true=50)
     url_download = factory.django.FileField()
-    related = False
+    other_play = True

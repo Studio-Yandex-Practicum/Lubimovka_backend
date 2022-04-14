@@ -8,7 +8,7 @@ def set_type_to_other_plays(apps, schema_editor):
     Plays = apps.get_model("library", "Play")
     other_plays = Plays.objects.filter(program__slug="other_plays")
     for play in other_plays:
-        play.related = False
+        play.other_play = True
         play.program = None
         play.save()
 
@@ -25,8 +25,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='play',
-            name='related',
-            field=models.BooleanField(default=True, help_text='Да/нет', verbose_name='Пьеса Любимовки'),
+            name='other_play',
+            field=models.BooleanField(default=False, help_text='Да/нет', verbose_name='Сторонняя пьеса'),
         ),
         migrations.AlterField(
             model_name='play',

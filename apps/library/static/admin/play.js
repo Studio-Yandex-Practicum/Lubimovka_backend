@@ -13,19 +13,19 @@ $(document).ready(function(jQuery) {
         function toggleLink(type) {
             if (type) {
                 mainFieldsArray.forEach(function(item) {
-                    item.slideDown(duration);
+                    item.slideUp(duration);
                 });
             } else {
                 mainFieldsArray.forEach(function(item) {
-                    item.slideUp(duration);
+                    item.slideDown(duration);
                 });
             }
         };
         // show/hide on load
-        toggleLink($('#id_related').is(':checked'));
+        toggleLink($('#id_other_play').is(':checked'));
         // show/hide on change
-        $('#id_related').change(function() {
-            toggleLink($('#id_related').is(':checked'));
+        $('#id_other_play').change(function() {
+            toggleLink($('#id_other_play').is(':checked'));
         });
     });
 });

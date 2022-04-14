@@ -31,7 +31,7 @@ class PlayFilter(filters.FilterSet):
 
 class PlayTypeFilter(admin.SimpleListFilter):
     title = _("Тип пьесы")
-    parameter_name = "related"
+    parameter_name = "other_play"
 
     def lookups(self, request, model_admin):
         programs_list = [
@@ -43,9 +43,9 @@ class PlayTypeFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() is None:  # get qs for new default lookup
-            return Play.objects.filter(related=True)
+            return Play.objects.filter(other_play=False)
         if self.value() == "others":
-            return Play.objects.filter(related=False)
+            return Play.objects.filter(other_play=True)
 
     def choices(self, changelist):
         for lookup, title in self.lookup_choices:

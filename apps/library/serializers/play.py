@@ -51,3 +51,16 @@ class AuthorPlaySerializer(serializers.Serializer):
     )
     url_download = serializers.URLField(source="play.url_download")
     url_reading = serializers.URLField(source="play.url_reading", required=False)
+
+
+class AuthorOtherPlaySerializer(serializers.Serializer):
+    """Сериализатор Пьесы из промежуточной модели м2м Автор-Пьеса.
+
+    Используется для сортировки выдачи других пьес (не пьес Любимовки).
+    """
+
+    id = serializers.IntegerField(source="play.id")
+    name = serializers.CharField(source="play.name")
+    authors = AuthorForPlaySerializer(source="play.authors", many=True)
+    published = serializers.BooleanField(source="play.published")
+    url_download = serializers.URLField(source="play.url_download")

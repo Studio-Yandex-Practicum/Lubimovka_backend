@@ -84,10 +84,10 @@ class Play(BaseModel):
         verbose_name="Опубликовано",
         default=True,
     )
-    related = models.BooleanField(
-        verbose_name="Пьеса Любимовки",
+    other_play = models.BooleanField(
+        verbose_name="Сторонняя пьеса",
         help_text="Да/нет",
-        default=True,
+        default=False,
     )
 
     class Meta:
@@ -105,15 +105,15 @@ class Play(BaseModel):
         return (
             self.name
             + ("" if self.published else " <— не опубликована —>")
-            + ("" if self.related else " <— Другая пьеса —>")
+            + ("" if not self.other_play else " <— Другая пьеса —>")
         )
 
     def clean(self):
-        if self.related and not self.program:
+        if not (self.other_play and self.program):
             raise ValidationError({"program": "У пьесы Любимовки должна быть программа"})
-        if self.related and not self.festival:
+        if not (self.other_play and self.festival):
             raise ValidationError({"festival": "У пьесы Любимовки должен быть фестиваль"})
-        if not self.related:
+        if self.other_play:
             self.festival = None
             self.program = None
             self.url_reading = None

@@ -58,7 +58,7 @@ class PlayAdmin(admin.ModelAdmin):
         "festival__year",
     )
     fields = (
-        "related",
+        "other_play",
         "name",
         "program",
         "city",
