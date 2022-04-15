@@ -63,7 +63,7 @@ class Play(BaseModel):
         verbose_name="Ссылка на читку",
         unique=True,
     )
-    program = models.ManyToManyField(
+    programs = models.ManyToManyField(
         to=Author,
         through="ProgramType",
         on_delete=models.PROTECT,
