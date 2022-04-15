@@ -214,6 +214,18 @@ dev = ["flake8", "sphinx", "sphinx-rtd-theme", "tox", "twine", "wheel"]
 postal = ["cryptography"]
 
 [[package]]
+name = "django-background-tasks"
+version = "1.2.5"
+description = "Database backed asynchronous task queue"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+django-compat = ">=1.0.13"
+six = "*"
+
+[[package]]
 name = "django-ckeditor"
 version = "6.2.0"
 description = "Django admin CKEditor integration."
@@ -223,6 +235,17 @@ python-versions = "*"
 
 [package.dependencies]
 django-js-asset = ">=1.2.2"
+
+[[package]]
+name = "django-compat"
+version = "1.0.15"
+description = "For- and backwards compatibility layer for Django 1.4, 1.7, 1.8, 1.9, 1.10, and 1.11"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+six = ">=1.10.0"
 
 [[package]]
 name = "django-cors-headers"
@@ -1291,7 +1314,7 @@ requests = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "bdd3e4021867ee0dcfe2e38ddc14e9cea7505d1953ee0133ce6d44162da4c885"
+content-hash = "22458556f1576703f1f9bb3b541109e493834fdf16534e623ee0d56584b6ac9c"
 
 [metadata.files]
 appnope = [
@@ -1421,9 +1444,15 @@ django-anymail = [
     {file = "django-anymail-8.5.tar.gz", hash = "sha256:677e937dc9e2671ca7631abb1d94ddc6b840beb3d53c0fbf699e866a6a9ba92f"},
     {file = "django_anymail-8.5-py3-none-any.whl", hash = "sha256:2325932f56f914d96e0a54db850f2b246ed2277b753f75319620d051a51551e2"},
 ]
+django-background-tasks = [
+    {file = "django-background-tasks-1.2.5.tar.gz", hash = "sha256:e1b19e8d495a276c9d64c5a1ff8b41132f75d2f58e45be71b78650dad59af9de"},
+]
 django-ckeditor = [
     {file = "django-ckeditor-6.2.0.tar.gz", hash = "sha256:df64dc9e62790ef824f609605d31be847bdbce1cc7aa94e49bd5ca60d7aa79bb"},
     {file = "django_ckeditor-6.2.0-py2.py3-none-any.whl", hash = "sha256:9f66420907e41f5b4e698fa5671a00a86995776735f2c4696174aed4640fcbd8"},
+]
+django-compat = [
+    {file = "django-compat-1.0.15.tar.gz", hash = "sha256:3ac9a3bedc56b9365d9eb241bc5157d0c193769bf995f9a78dc1bc24e7c2331b"},
 ]
 django-cors-headers = [
     {file = "django-cors-headers-3.11.0.tar.gz", hash = "sha256:eb98389bf7a2afc5d374806af4a9149697e3a6955b5a2dc2bf049f7d33647456"},
