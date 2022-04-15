@@ -6,15 +6,11 @@ import django.db.models.deletion
 
 def set_type_to_other_plays(apps, schema_editor):
     Plays = apps.get_model("library", "Play")
-    other_plays = Plays.objects.filter(program__slug="other_plays")
-    for play in other_plays:
-        play.other_play = True
-        play.program = None
-        play.save()
+    Plays.objects.filter(program__slug="other_plays").update(other_play=True, program=None)
 
 def delete_program(apps, shema_editor):
     ProgramType = apps.get_model("library", "ProgramType")
-    ProgramType.objects.get(slug="other_plays").delete()
+    ProgramType.objects.filter(slug="other_plays").delete()
 
 class Migration(migrations.Migration):
 
