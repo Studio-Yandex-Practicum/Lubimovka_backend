@@ -100,7 +100,6 @@ TEMPLATES = [
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -183,43 +182,37 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
-# Use CKEditor (Configuration)
+# DJANGO-CKEDITOR
 # ------------------------------------------------------------------------------
-
-CKEDITOR_BASIC_HTML_TOOLBAR = [
-    ("Undo", "Redo",),
-    ("Bold", "Italic", "Link", "Unlink", "RemoveFormat",),
+# https://django-ckeditor.readthedocs.io/en/latest/#
+CKEDITOR_BASE = {
+    "height": 300,
+    "autoGrow_bottomSpace": 30,
+    "autoGrow_minHeight": 300,
+    "autoGrow_maxHeight": 500,
+    "extraPlugins": (",").join(("autogrow",)),
+    "basicEntities": False,
+    "stylesSet": (
+        {"name": "Заголовок", "element": "h4"},
+        {"name": "Подзаголовок", "element": "h6"},
+    ),
+    "contentsCss": "/static/core/ckeditor/lubimovka_styles.css",
+}
+CKEDITOR_TOOLBAR_BASE = (
+    ("Undo", "Redo"),
+    ("Bold", "Italic", "Link", "Unlink", "RemoveFormat"),
     ("Styles",),
-    ("Blockquote", "Source", "BulletedList",),
-]
-
+    ("Blockquote",),
+)
 CKEDITOR_CONFIGS = {
-    "default": {
-        "height": 300,
-        "autoGrow_bottomSpace": 30,
-        "autoGrow_minHeight": 300,
-        "autoGrow_maxHeight": 500,
-        "extraPlugins": (",").join((
-            "autogrow",
-        )),
-        "basicEntities": False,
-        "stylesSet": [
-            {
-                "name": "Заголовок",
-                "element": "h4",
-            },
-            {
-                "name": "Подзаголовок",
-                "element": "h6",
-            }
-        ],
-        "contentsCss": (
-            # "/static/ckeditor/ckeditor/contents.css",
-            "/static/core/ckeditor/contents.css",
-        ),
-        "toolbar": "basic_html",
-        "toolbar_basic_html": CKEDITOR_BASIC_HTML_TOOLBAR,
-    }
+    "default": CKEDITOR_BASE | {
+        "toolbar": "base",
+        "toolbar_base": CKEDITOR_TOOLBAR_BASE,
+    },
+    "press_releases": CKEDITOR_BASE | {
+        "toolbar": "base_bulleted_list",
+        "toolbar_base_bulleted_list": CKEDITOR_TOOLBAR_BASE + (("BulletedList",),),
+    },
 }
 
 # Google Sheets Export integration keys

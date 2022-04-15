@@ -16,15 +16,9 @@
 }
 
 
-.cke_editable {
-	font-size: 20px;
-    color: #242424;
-}
-
-
 p {
     /* Style from figma */
-    /* font-family: "Formular"; */
+    font-family: "Formular";
     font-style: normal;
     font-weight: 300;
     font-size: 20px;
@@ -32,24 +26,28 @@ p {
     letter-spacing: -0.01em;
     font-feature-settings: 'ss01' on;
 
-
+    /* Adjust block margin */
     margin-block-start: 0.5em;
     margin-block-end: 0.5em;
 }
 
 
 h4 {
+    /* Style from figma */
     font-family: "PP Neue Machina";
     font-style: normal;
     font-weight: 400;
     font-size: 40px;
     line-height: 40px;
     letter-spacing: -0.01em;
+
+    /* Adjust block margin */
     margin-block-start: 0.5em;
     margin-block-end: 0.5em;
 }
 
 h6 {
+    /* Style from figma */
     padding: 0px;
     font-family: "PP Neue Machina";
     font-style: normal;
@@ -57,12 +55,14 @@ h6 {
     font-size: 28px;
     line-height: 32px;
     letter-spacing: -0.01em;
-    /* margin-block-start: 0.5em;
-    margin-block-end: 0.5em; */
+
+    /* Adjust block margin */
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
 }
 
-blockquote
-{
+blockquote {
+    /* Style from figma */
 	font-family: "PP Neue Machina";
     font-style: normal;
     font-weight: 400;
@@ -70,13 +70,20 @@ blockquote
     line-height: 32px;
     letter-spacing: -0.01em;
 
+    /* Adjust block style */
 	border-style: solid;
 	border-color: #ccc;
 	border-width: 0 0 0 5px;
     padding: 0 12px 0 8px;
 }
 
-a
-{
+a {
+    /* Adjust link color */
 	color: #242424;
+}
+
+ol,ul,dl {
+    /* Adjust block style */
+    font-family: "Formular";
+    font-size: 20px;
 }
