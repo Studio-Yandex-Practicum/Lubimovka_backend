@@ -15,7 +15,7 @@ from apps.library.schema.schema_extension import ERROR_MESSAGES_FOR_AUTHOR_FOR_4
 from apps.library.serializers import AuthorLettersSerializer, AuthorListSerializer, AuthorRetrieveSerializer
 
 
-class AuthorViewSet(mixins.ListModelMixin, APIView, viewsets.GenericViewSet):
+class AuthorViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
     queryset = Author.objects.select_related("person")
     serializer = AuthorListSerializer(queryset, many=True)
@@ -29,7 +29,7 @@ class AuthorRetrieveViewSet(APIView):
     @extend_schema(responses=AuthorRetrieveSerializer)
     def get(self, request, *args, pk, **kwargs):
         author = get_object_or_404(Author, pk=pk)
-        author_serializer = AuthorRetrieveSerializer(author, many=True)
+        author_serializer = AuthorRetrieveSerializer(author)
         return Response(author_serializer.data)
 
     @extend_schema(
