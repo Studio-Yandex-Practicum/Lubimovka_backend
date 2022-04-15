@@ -20,6 +20,22 @@ class AbstractItemWithTitle(BaseModel):
         return self.title
 
 
+class ContentUnitRichText(BaseModel):
+    """HTML text item for `content` block."""
+
+    rich_text = RichTextField(
+        verbose_name="Форматированный текст",
+    )
+
+    class Meta:
+        verbose_name = "Форматированный текст"
+        verbose_name_plural = "Форматированные тексты"
+
+    def __str__(self):
+        text = strip_tags(self.rich_text)
+        return text if len(text) <= 100 else text[:97] + "..."
+
+
 class Link(AbstractItemWithTitle):
     """Link with title for `content` blocks."""
 

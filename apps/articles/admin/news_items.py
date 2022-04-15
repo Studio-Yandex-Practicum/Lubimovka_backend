@@ -9,6 +9,7 @@ class NewsItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = NewsItemContent
 
     content_type_model = (
+        "contentunitrichtext",
         "imagesblock",
         "personsblock",
         "playsblock",
@@ -19,6 +20,7 @@ class NewsItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     )
 
 
+@admin.register(NewsItem)
 class NewsItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
@@ -57,6 +59,3 @@ class NewsItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "image_preview_change_page",
         "image",
     )
-
-
-admin.site.register(NewsItem, NewsItemAdmin)

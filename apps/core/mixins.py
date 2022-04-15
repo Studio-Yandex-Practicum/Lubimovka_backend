@@ -43,14 +43,14 @@ class StatusButtonMixin:
         extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
         extra_context["possible_statuses"] = statuses
 
-        # hide buttons SAVE if user doesnt have permission to change in current status
+        # hide buttons SAVE if user doesn't have permission to change in current status
         right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
         if user_level < right_to_change:
             extra_context["show_save"] = False
             extra_context["show_save_and_continue"] = False
             extra_context["show_save_and_add_another"] = False
 
-        # hide button DELETE if user doesnt have permission to delete in current status
+        # hide button DELETE if user doesn't have permission to delete in current status
         right_to_delete = STATUS_INFO[obj.status]["min_level_to_delete"]
         if user_level < right_to_delete:
             extra_context["show_delete"] = False

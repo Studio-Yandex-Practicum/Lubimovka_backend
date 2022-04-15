@@ -13,6 +13,7 @@ class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
 class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = BlogItemContent
     content_type_model = (
+        "contentunitrichtext",
         "imagesblock",
         "personsblock",
         "playsblock",
@@ -23,6 +24,7 @@ class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     )
 
 
+@admin.register(BlogItem)
 class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
@@ -70,6 +72,3 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "image_preview_change_page",
         "image",
     )
-
-
-admin.site.register(BlogItem, BlogItemAdmin)

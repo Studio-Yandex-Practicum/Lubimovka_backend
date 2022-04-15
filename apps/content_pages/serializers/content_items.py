@@ -1,8 +1,23 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import Link, OrderedImage, OrderedVideo, Preamble, Quote, Text, Title
+from apps.content_pages.models import (
+    ContentUnitRichText,
+    Link,
+    OrderedImage,
+    OrderedVideo,
+    Preamble,
+    Quote,
+    Text,
+    Title,
+)
 from apps.core.serializers import PersonRoleSerializer
 from apps.library.serializers import AuthorForPlaySerializer as LibraryPlayAuthorSerializer
+
+
+class ContentUnitRichTextSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContentUnitRichText
+        fields = ("rich_text",)
 
 
 class ExtendedPersonSerializer(serializers.Serializer):

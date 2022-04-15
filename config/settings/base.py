@@ -216,19 +216,24 @@ CKEDITOR_CONFIGS = {
 }
 
 # Google Sheets Export integration keys
+# ------------------------------------------------------------------------------
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
 
 
 # Export to Yandex.Disk integration key
+# ------------------------------------------------------------------------------
 YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
 
+
+# Logging settings
+# ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/4.0/topics/logging/#configuring-logging
 LOGGING = LOGGING_SETTINGS
 
 # Templates for mailjet
-# https://anymail.dev/en/stable/esps/mailjet/
 # ------------------------------------------------------------------------------
+# https://anymail.dev/en/stable/esps/mailjet/
 MAILJET_TEMPLATE_ID_QUESTION = env("MAILJET_TEMPLATE_ID_QUESTION", default="0000000")
 MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION = env("MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION", default="0000000")
 
