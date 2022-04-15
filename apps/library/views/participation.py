@@ -1,5 +1,3 @@
-import logging
-
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers, status
@@ -14,12 +12,7 @@ from apps.library.schema.schema_extension import (
     ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
     ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403,
 )
-from apps.library.services.spreadsheets import GoogleSpreadsheets
-from apps.library.utilities import participation_services
-
-logger = logging.getLogger("django")
-
-gs = GoogleSpreadsheets()
+from apps.library.services.participation_services import participation_services
 
 
 class ParticipationViewSet(APIView):
@@ -60,8 +53,9 @@ class ParticipationViewSet(APIView):
         if serializer.is_valid():
             instance = serializer.save()
             domain = self.request.build_absolute_uri()
+            instance.save()
 
-            participation_services(instance, domain, gs, logger)
+            participation_services(instance.id, domain)
 
             return Response(status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
