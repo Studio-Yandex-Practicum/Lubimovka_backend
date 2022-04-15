@@ -55,7 +55,7 @@ class ParticipationViewSet(APIView):
 
     @extend_schema(
         responses={
-            201: ParticipationSerializer,
+            201: None,
             400: ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
             403: ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403,
         }
