@@ -12,6 +12,8 @@ class Command(BaseCommand):
         try:
             editors_permissions = Permission.objects.filter(
                 Q(codename__endswith="_author")
+                | Q(codename__endswith="_artteammember")
+                | Q(codename__endswith="_authorplay")
                 | Q(codename__endswith="_banner")
                 | Q(codename__endswith="_blogitem")
                 | Q(codename__endswith="_blogitemcontent")
@@ -25,6 +27,7 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_festival")
                 | Q(codename__endswith="_festivalteam")
                 | Q(codename__endswith="_festivalteammember")
+                | Q(codename__endswith="_festteammember")
                 | Q(codename__endswith="_image")
                 | Q(codename__endswith="_imagesblock")
                 | Q(codename__endswith="_link")
@@ -37,7 +40,6 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_orderedplay")
                 | Q(codename__endswith="_orderedvideo")
                 | Q(codename__endswith="_otherlink")
-                | Q(codename__endswith="_otherplay")
                 | Q(codename__endswith="_participationapplicationfestival")
                 | Q(codename__endswith="_partner")
                 | Q(codename__endswith="_performance")
@@ -59,6 +61,7 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_reading")
                 | Q(codename__endswith="_role")
                 | Q(codename__endswith="_roletype")
+                | Q(codename__endswith="_selector")
                 | Q(codename__endswith="_setting")
                 | Q(codename__endswith="_settingafishascreen")
                 | Q(codename__endswith="_settingemail")

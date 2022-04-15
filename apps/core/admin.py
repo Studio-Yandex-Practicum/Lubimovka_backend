@@ -5,11 +5,15 @@ from django.forms.widgets import CheckboxSelectMultiple
 
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 from apps.core.models import Image, Role, RoleType
+from apps.core.utils import get_app_list
+
+admin.AdminSite.get_app_list = get_app_list
 
 
 @admin.register(Image)
 class ImageAdmin(HideOnNavPanelAdminModelMixin, AdminImagePreview, admin.ModelAdmin):
     list_display = ("image_preview_list_page",)
+    search_fields = ("image",)
     readonly_fields = ("image_preview_change_page",)
 
 
@@ -19,6 +23,8 @@ class RoleAdmin(admin.ModelAdmin):
         "name",
         "slug",
     )
+    search_fields = ("role",)
+    list_filter = ("types",)
     formfield_overrides = {
         models.ManyToManyField: {"widget": CheckboxSelectMultiple},
     }

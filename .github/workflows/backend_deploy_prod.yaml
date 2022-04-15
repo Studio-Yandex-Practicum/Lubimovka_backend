@@ -158,6 +158,12 @@ jobs:
             echo URL=${{ secrets.URL }} >> .env-prod
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-prod
 
+            # Token for yandex disk
+            echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK_TOKEN }} >> .env-prod
+
+            # Очистка неиспользуемых контейнеров, образов, сетей
+            docker system prune --force
+
             docker network create prod_db_network || true
             docker network create prod_swag_network || true
 

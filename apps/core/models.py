@@ -47,6 +47,9 @@ class Image(BaseModel):
         verbose_name = "Изображение"
         verbose_name_plural = "Изображения"
 
+    def __str__(self):
+        return self.image.url
+
 
 class Person(BaseModel):
     first_name = models.CharField(
@@ -108,9 +111,9 @@ class Person(BaseModel):
         return f"{self.last_name} {self.first_name}"
 
     @property
-    @admin.display(description="Имя и фамилия")
-    def full_name(self):
-        return self.first_name + " " + self.last_name
+    @admin.display(description="Фамилия и имя")
+    def full_name(self) -> str:
+        return f"{self.last_name} {self.first_name}"
 
     @property
     def reversed_full_name(self):

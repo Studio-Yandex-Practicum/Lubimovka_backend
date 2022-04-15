@@ -57,12 +57,14 @@ class StatusButtonMixin:
         return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
-        for status in STATUS_INFO:
-            if status in request.POST:
-                obj.status = status
-                obj.save()
-                self.message_user(request, "Статус успешно обновлён!")
-                return HttpResponseRedirect(".")
+        user_level = get_user_perms_level(request, obj)
+        if user_level >= STATUS_INFO[obj.status]["min_level_to_change"]:
+            for status in STATUS_INFO:
+                if status in request.POST:
+                    obj.status = status
+                    obj.save()
+                    self.message_user(request, "Статус успешно обновлён!")
+                    return HttpResponseRedirect(".")
         return super().response_change(request, obj)
 
 
@@ -84,21 +86,22 @@ class AdminImagePreview:
 
     Need to add parameters in admin class
         list_display = ("image_preview_list_page",)
-        readonly_fields = ("image_preview_change_page",)
+        or readonly_fields = ("image_preview_change_page",)
+        or readonly_fields = ("inline_image_preview",)
     """
 
     @admin.display(description="Превью")
     def image_preview_change_page(self, obj):
-        return format_html(
-            '<img src="{}" width="600" height="300" style="object-fit: contain;" />'.format(obj.image.url)
-        )
+        return format_html('<img src="{}" height="300" style="object-fit: contain;" />'.format(obj.image.url))
+
+    @admin.display(description="Превью")
+    def inline_image_preview(self, obj):
+        return format_html('<img src="{}" height="150" style="object-fit: contain;" />'.format(obj.image.image.url))
 
     @admin.display(description="Превью")
     def image_preview_list_page(self, obj):
         if obj.image:
-            return format_html(
-                '<img src="{}" width="100" height="50" style="object-fit: contain;" />'.format(obj.image.url)
-            )
+            return format_html('<img src="{}" height="50" style="object-fit: contain;" />'.format(obj.image.url))
 
 
 class HideOnNavPanelAdminModelMixin:

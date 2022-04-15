@@ -28,6 +28,7 @@ class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
     """
 
     pagination_class = None
+    queryset = Author.objects.none()  # this needs only for schema generation
 
     def get_querylist(self):
         """
@@ -39,7 +40,7 @@ class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
         """
         q = self.request.query_params.get("q", "")
         if q:
-            plays_queryset = Play.objects.filter(name__icontains=q)
+            plays_queryset = Play.objects.exclude(program__slug="other_plays").filter(name__icontains=q)
             authors_queryset = Author.objects.filter(
                 Q(person__first_name__icontains=q) | Q(person__last_name__icontains=q)
             )

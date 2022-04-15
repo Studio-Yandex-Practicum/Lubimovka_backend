@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
 
@@ -36,7 +37,6 @@ class ProgramType(BaseModel):
 class Play(BaseModel):
     name = models.CharField(
         max_length=70,
-        unique=True,
         verbose_name="Название пьесы",
     )
     city = models.CharField(
@@ -75,6 +75,9 @@ class Play(BaseModel):
         on_delete=models.PROTECT,
         related_name="plays",
         verbose_name="Фестиваль",
+        blank=True,
+        null=True,
+        help_text="Для пьес Любимовки должен быть выбран Фестиваль",
     )
     published = models.BooleanField(
         verbose_name="Опубликовано",
@@ -90,6 +93,19 @@ class Play(BaseModel):
         )
         verbose_name = "Пьеса"
         verbose_name_plural = "Пьесы"
+        ordering = ("-year", "name")
 
     def __str__(self):
-        return self.name
+        return (
+            self.name
+            + ("" if self.published else " <— не опубликована —>")
+            + ("" if self.program.slug != "other_plays" else " <— Другая пьеса —>")
+        )
+
+    def clean(self):
+        if self.program.slug != "other_plays" and not self.festival:
+            raise ValidationError("У пьесы Любимовки должен быть фестиваль")
+        if self.program.slug == "other_plays":
+            self.festival = None
+            self.url_reading = None
+        return super().clean()

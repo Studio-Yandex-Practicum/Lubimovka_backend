@@ -7,7 +7,7 @@ from apps.core import utils
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.info.models import Festival
-from apps.library.models import Author, OtherLink, OtherPlay, Play, ProgramType, SocialNetworkLink
+from apps.library.models import Author, OtherLink, Play, ProgramType, SocialNetworkLink
 
 fake = Faker("ru_RU")
 
@@ -46,22 +46,6 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
         return Author.objects.order_by("?").first()
 
 
-@restrict_factory(general=(Author,))
-class OtherPlayFactory(factory.django.DjangoModelFactory):
-    """Create OtherPlay object."""
-
-    class Meta:
-        model = OtherPlay
-        django_get_or_create = ("author", "name")
-
-    name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
-    link = factory.Faker("url")
-
-    @factory.lazy_attribute
-    def author(self):
-        return Author.objects.order_by("?").first()
-
-
 @restrict_factory(general=(Play, Person, Festival, ProgramType))
 class AuthorFactory(factory.django.DjangoModelFactory):
     """Create Author object.
@@ -69,9 +53,8 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     Parameters:
     1. `add_several_social_network_link`:  create <int> `SocialNetworkLink` objects, link to `Author`.
     2. `add_several_other_link`: create <int> `OtherLink` objects, link to `Author`.
-    3. `add_several_other_play`: create <int> `OtherPlay` objects, link to `Author`.
-    4. `plays`: wait for Iterable[Play]. Link the `Play` objects to `Author`.
-    5. `plays__num`: select <num> `Play` objects and link them to `Author`.
+    3. `plays`: wait for Iterable[Play]. Link the `Play` objects to `Author`.
+    4. `plays__num`: select <num> `Play` objects and link them to `Author`.
 
     Class methods:
     1. `complex_create`:  shortcut. Create `Author` with fully populated fields.
@@ -134,15 +117,6 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             OtherLinkFactory.create_batch(links_count, author=self)
 
     @factory.post_generation
-    def add_other_play(self, created: bool, count: int, **kwargs):
-        """Create an OtherPlay object and link to self."""
-        if not created:
-            return
-        if count:
-            plays_count = count
-            OtherPlayFactory.create_batch(plays_count, author=self)
-
-    @factory.post_generation
     def plays(self, created: bool, extracted: Iterable[Play], **kwargs):
         """Add a Play objects to plays field for Author.
 
@@ -175,6 +149,5 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             count,
             add_social_network_link=3,
             add_other_link=3,
-            add_other_play=3,
             plays__num=3,
         )

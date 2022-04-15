@@ -9,20 +9,15 @@ class ParticipationAdmin(admin.ModelAdmin):
         "title",
         "first_name",
         "last_name",
-        "year",
-        "verified",
+        "festival_year",
         "exported_to_google",
         "saved_to_storage",
+        "sent_to_email",
     )
     list_filter = (
-        "year",
-        "verified",
-        "city",
+        "exported_to_google",
+        "saved_to_storage",
+        "festival_year",
+        "sent_to_email",
     )
-    search_fields = (
-        "title",
-        "first_name",
-        "last_name",
-        "city",
-        "year",
-    )
+    search_fields = ("title", "first_name", "last_name", "city", "year")

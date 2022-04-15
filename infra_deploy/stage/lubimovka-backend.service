@@ -6,6 +6,7 @@ After=docker.service
 [Service]
 Restart=always
 RestartSec=5
+TimeoutStartSec=1200
 User=root
 
 WorkingDirectory=/LUBIMOVKA/stage/

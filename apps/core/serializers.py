@@ -11,7 +11,7 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = ("image",)
 
 
-class RoleSerializer(serializers.ModelSerializer):
+class PersonRoleSerializer(serializers.ModelSerializer):
     class Meta:
         model = Role
         fields = (
