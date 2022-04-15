@@ -41,11 +41,20 @@ class ParticipationViewSet(APIView):
             max_value=timezone.now().year,
             label="Год рождения",
         )
-        url_file_in_storage = serializers.URLField(read_only=True)
 
         class Meta:
             model = ParticipationApplicationFestival
-            exclude = ["verified", "festival_year"]
+            fields = (
+                "first_name",
+                "last_name",
+                "birth_year",
+                "city",
+                "phone_number",
+                "email",
+                "title",
+                "year",
+                "file",
+            )
             validators = [
                 UniqueTogetherValidator(
                     queryset=ParticipationApplicationFestival.objects.all(),
@@ -54,11 +63,12 @@ class ParticipationViewSet(APIView):
             ]
 
     @extend_schema(
+        request=ParticipationSerializer,
         responses={
             201: ParticipationSerializer,
             400: ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
             403: ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403,
-        }
+        },
     )
     def post(self, request):
         serializer = self.ParticipationSerializer(data=request.data)

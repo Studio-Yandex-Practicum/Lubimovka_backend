@@ -16,13 +16,18 @@ class QuestionCreateAPIView(APIView):
     class QuestionSerializer(serializers.ModelSerializer):
         class Meta:
             model = Question
-            fields = "__all__"
+            fields = (
+                "question",
+                "author_name",
+                "author_email",
+            )
 
     @extend_schema(
+        request=QuestionSerializer,
         responses={
             201: QuestionSerializer,
             400: ERROR_MESSAGES_FOR_QUESTION_FOR_400,
-        }
+        },
     )
     def post(self, request):
         serializer = self.QuestionSerializer(data=request.data)
