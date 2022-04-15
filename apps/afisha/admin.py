@@ -35,7 +35,7 @@ class EventAdmin(admin.ModelAdmin):
         "type",
     )
     autocomplete_fields = ("common_event",)
-    # search_fields = ("common_event",)
+    search_fields = ("common_event",)
     empty_value_display = "-пусто-"
 
     # @admin.display(

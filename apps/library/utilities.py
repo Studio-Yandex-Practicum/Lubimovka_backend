@@ -36,6 +36,7 @@ class CustomAutocompleteSelect(AutocompleteSelect):
         attrs.update(
             {
                 "data-allow-clear": "true",
+                "data-dropdown-auto-width": "true",
                 "data-placeholder": self.placeholder,
             }
         )
