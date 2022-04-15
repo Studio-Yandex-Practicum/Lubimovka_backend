@@ -17,6 +17,7 @@ class PerformanceMediaReviewAdmin(admin.ModelAdmin):
         "pub_date",
     )
     autocomplete_fields = ("performance",)
+    list_filter = ("pub_date",)
     search_fields = (
         "media_name",
         "performance__name",

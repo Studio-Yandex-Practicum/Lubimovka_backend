@@ -17,6 +17,7 @@ class PerformanceReviewAdmin(admin.ModelAdmin):
         "pub_date",
     )
     autocomplete_fields = ("performance",)
+    list_filter = ("pub_date",)
     search_fields = (
         "reviewer_name",
         "performance__name",
