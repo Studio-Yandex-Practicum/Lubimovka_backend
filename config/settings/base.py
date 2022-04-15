@@ -46,6 +46,7 @@ THIRD_PARTY_APPS = [
     "drf_multiple_model",
     "ckeditor",
     "anymail",
+    'background_task',
 ]
 LOCAL_APPS = [
     "apps.users",
