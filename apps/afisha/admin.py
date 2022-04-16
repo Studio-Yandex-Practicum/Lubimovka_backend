@@ -8,7 +8,11 @@ from apps.afisha.models import CommonEvent, Event
 
 
 class CommonEventAdmin(admin.ModelAdmin):
-    search_fields = ("created",)
+    search_fields = (
+        "masterclass__name",
+        "reading__name",
+        "performance__name",
+    )
 
 
 class EventAdmin(admin.ModelAdmin):
