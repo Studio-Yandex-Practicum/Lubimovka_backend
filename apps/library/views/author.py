@@ -39,11 +39,11 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
                 "other_links",
                 Prefetch(
                     "author_plays",
-                    queryset=AuthorPlay.objects.filter(play__other_play=False),
+                    queryset=AuthorPlay.objects.filter(play__other_play=False, play__published=True),
                 ),
                 Prefetch(
                     "author_plays",
-                    queryset=AuthorPlay.objects.filter(play__other_play=True),
+                    queryset=AuthorPlay.objects.filter(play__other_play=True, play__published=True),
                     to_attr="other_plays",
                 ),
             ),
