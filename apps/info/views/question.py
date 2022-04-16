@@ -19,10 +19,11 @@ class QuestionCreateAPIView(APIView):
             fields = "__all__"
 
     @extend_schema(
+        request=QuestionSerializer,
         responses={
             201: None,
             400: ERROR_MESSAGES_FOR_QUESTION_FOR_400,
-        }
+        },
     )
     def post(self, request):
         serializer = self.QuestionSerializer(data=request.data)
