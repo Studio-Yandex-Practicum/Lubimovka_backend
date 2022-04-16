@@ -49,6 +49,7 @@ class EventAdmin(admin.ModelAdmin):
         StatusOfEvent,
         "type",
     )
+    search_fields = ("common_event",)
     empty_value_display = "-пусто-"
 
     def get_queryset(self, request):

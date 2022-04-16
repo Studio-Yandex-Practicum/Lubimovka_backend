@@ -16,12 +16,11 @@ from apps.library.models import (
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
     model = Performance.images_in_block.through
-    readonly_fields = ("inline_image_preview",)
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
     max_num = 8
-    classes = ["collapsible"]
+    classes = ("collapsible",)
     model.__str__ = lambda self: ""
 
 
@@ -29,14 +28,14 @@ class PerformanceMediaReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceMediaReview
     extra = 0
     max_num = 8
-    classes = ["collapsible"]
+    classes = ("collapsible",)
 
 
 class PerformanceReviewInline(InlineReadOnlyMixin, admin.TabularInline):
     model = PerformanceReview
     extra = 0
     max_num = 8
-    classes = ["collapsible"]
+    classes = ("collapsible",)
 
 
 class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
@@ -62,14 +61,18 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
 
 
 class TeamMemberInlineCollapsible(TeamMemberInline):
-    classes = ["collapsible"]
+    classes = ("collapsible",)
 
 
 @admin.register(MasterClass)
 class MasterClassAdmin(admin.ModelAdmin):
     list_display = ("name",)
     exclude = ("events",)
-    search_fields = ("name",)
+    search_fields = (
+        "project",
+        "play__name",
+        "name",
+    )
     inlines = (TeamMemberInline,)
 
 
@@ -128,7 +131,7 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         change_permission = get_user_change_perms_for_status(request, obj)
         if change_permission:
-            form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
+            form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
         return form
 
 
@@ -147,5 +150,5 @@ class ReadingAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
-        form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
+        form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
         return form
