@@ -54,11 +54,12 @@ class ParticipationViewSet(APIView):
             ]
 
     @extend_schema(
+        request=ParticipationSerializer,
         responses={
             201: None,
             400: ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
             403: ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403,
-        }
+        },
     )
     def post(self, request):
         serializer = self.ParticipationSerializer(data=request.data)
