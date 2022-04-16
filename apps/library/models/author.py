@@ -1,5 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
@@ -48,6 +49,7 @@ class Author(BaseModel):
         related_name="authors",
         blank=True,
         verbose_name="Пьесы автора",
+        through="AuthorPlay",
     )
     slug = models.SlugField(
         "Транслит фамилии для формирования адресной строки",
@@ -79,6 +81,43 @@ class Author(BaseModel):
     @property
     def image(self):
         return self.person.image
+
+
+class AuthorPlay(models.Model):
+    author = models.ForeignKey(
+        Author,
+        on_delete=models.CASCADE,
+        related_name="author_plays",
+        verbose_name="Автор",
+    )
+    play = models.ForeignKey(
+        Play,
+        on_delete=models.CASCADE,
+        related_name="author_plays",
+        verbose_name="Пьеса",
+    )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        verbose_name="Порядковый номер пьесы у автора",
+    )
+
+    class Meta:
+        verbose_name = "Отношение Автор-Пьеса"
+        verbose_name_plural = "Отношения Автор-Пьеса"
+        ordering = ("order",)
+
+    def __str__(self):
+        return f"Пьеса {self.play} - автор {self.author}"
+
+    def save(self):
+        if AuthorPlay.objects.filter(author=self.author, play=self.play) and self.id is None:
+            return
+        return super().save()
+
+    def clean(self):
+        if AuthorPlay.objects.filter(~Q(id=self.id), author=self.author, play=self.play) and self.id is not None:
+            raise ValidationError("Такая Пьеса уже есть у данного Автора")
+        return super().clean()
 
 
 class SocialNetworkLink(BaseModel):

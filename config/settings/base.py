@@ -254,3 +254,5 @@ SPECTACULAR_SETTINGS = {
         "partner_type": "apps.info.models.people.Partner.PartnerType"
     }
 }
+
+CSRF_FAILURE_VIEW = 'apps.core.views.csrf_failure'

@@ -1,4 +1,5 @@
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from rest_framework import status
 
 
@@ -18,3 +19,7 @@ def error404(request, exception, *args, **kwargs):
     """Return generic 404 error handler."""
     data = {"error": "Http404", "message": "Запрошенный ресурс не найден"}
     return JsonResponse(data, status=status.HTTP_404_NOT_FOUND)
+
+
+def csrf_failure(request, reason=""):
+    return redirect("/admin/")

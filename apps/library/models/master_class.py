@@ -40,6 +40,8 @@ class MasterClass(BaseModel):
         verbose_name_plural = "Мастер-классы"
 
     def __str__(self):
+        if len(self.name) >= 25:
+            return self.name[:25] + "..."
         return self.name
 
     @property

@@ -5,9 +5,9 @@ from apps.info.models import FestivalTeamMember
 
 
 class FestTeamMemberForm(forms.ModelForm):
-    """Форма для Арт дирекции фестиваля.
+    """Форма для Команды фестиваля.
 
-    Плюс дополнительное поле о данных о PR-менеджере.
+    Плюс дополнительное поле о данных о PR-директоре.
     """
 
     def __init__(self, *args, **kwargs):

@@ -38,6 +38,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
         "image_preview_list_page",
     )
     list_filter = ("type",)
+    search_fields = ("name",)
     fieldsets = (
         (
             None,
@@ -90,9 +91,29 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
         "image",
         "image_preview_list_page",
     )
+    search_fields = (
+        "first_name",
+        "last_name",
+    )
     list_filter = ("city",)
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
+
+
+class HasReviewFilter(admin.SimpleListFilter):
+    title = "Есть отзыв?"
+    parameter_name = "volunteer"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("True", "Да"),
+            ("False", "Нет"),
+        )
+
+    def queryset(self, request, queryset):
+        if self.value() == "True":
+            return Volunteer.objects.exclude(review_text__exact="")
+        return Volunteer.objects.filter(review_text__exact="")
 
 
 @admin.register(Volunteer)
@@ -103,6 +124,10 @@ class VolunteerAdmin(admin.ModelAdmin):
         "is_review",
     )
     readonly_fields = ("is_review",)
+    list_filter = (
+        "festival",
+        HasReviewFilter,
+    )
 
     @admin.display(
         boolean=True,
@@ -134,7 +159,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
-    classes = ["collapse"]
+    classes = ["collapsible"]
     ordering = ("person__last_name", "person__first_name")
 
     @admin.display(
@@ -151,10 +176,10 @@ class VolunteerInline(admin.TabularInline):
 class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     model = Festival.images.through
     readonly_fields = ("inline_image_preview",)
-    verbose_name = "Изображение фестиваля"
-    verbose_name_plural = "Изображения фестиваля"
+    verbose_name = "Изображение"
+    verbose_name_plural = "Изображения"
     extra = 1
-    classes = ["collapse"]
+    classes = ["collapsible"]
     model.__str__ = lambda self: ""
 
 
@@ -188,12 +213,6 @@ class PlaceAdmin(admin.ModelAdmin):
 @admin.register(PressRelease)
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
-
-
-class PressRealeaseAdmin(admin.ModelAdmin):
-    list_display = ("title",)
-    list_filter = ("title",)
-    search_fields = ("title",)
 
 
 @admin.register(ArtTeamMember)
