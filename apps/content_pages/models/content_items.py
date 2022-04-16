@@ -21,9 +21,14 @@ class AbstractItemWithTitle(BaseModel):
 
 
 class ContentUnitRichText(BaseModel):
-    """HTML text item for `content` block."""
+    """HTML text item for `content` block.
+
+    Text field with limited HTML tags support. In real life the content of the field is
+    produced by CKEditor plugin. Acceptable tags are configured in CKEDITOR settings.
+    """
 
     rich_text = RichTextField(
+        config_name="content_pages",
         verbose_name="Форматированный текст",
     )
 

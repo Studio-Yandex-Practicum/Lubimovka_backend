@@ -12,10 +12,7 @@ pytestmark = [pytest.mark.django_db]
         {"array_image": True},
         {"array_person": True},
         {"array_play": True},
-        {"unit_preamble": True},
-        {"unit_quote": True},
-        {"unit_text": True},
-        {"unit_title": True},
+        {"unit_rich_text": True},
     )
 )
 def blog_item_content_module(request, simple_blog_item, plays):

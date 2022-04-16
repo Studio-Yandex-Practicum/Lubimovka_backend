@@ -185,6 +185,12 @@ EMAIL_TIMEOUT = 5
 # DJANGO-CKEDITOR
 # ------------------------------------------------------------------------------
 # https://django-ckeditor.readthedocs.io/en/latest/#
+CKEDITOR_TOOLBAR_BASE = (
+    ("Undo", "Redo"),
+    ("Bold", "Italic", "Link", "Unlink", "RemoveFormat"),
+    ("Styles",),
+    ("Blockquote",),
+)
 CKEDITOR_BASE = {
     "height": 300,
     "autoGrow_bottomSpace": 30,
@@ -196,20 +202,16 @@ CKEDITOR_BASE = {
         {"name": "Заголовок", "element": "h4"},
         {"name": "Подзаголовок", "element": "h6"},
     ),
-    "contentsCss": "/static/core/ckeditor/lubimovka_styles.css",
+    "toolbar": "base",
+    "toolbar_base": CKEDITOR_TOOLBAR_BASE,
 }
-CKEDITOR_TOOLBAR_BASE = (
-    ("Undo", "Redo"),
-    ("Bold", "Italic", "Link", "Unlink", "RemoveFormat"),
-    ("Styles",),
-    ("Blockquote",),
-)
 CKEDITOR_CONFIGS = {
-    "default": CKEDITOR_BASE | {
-        "toolbar": "base",
-        "toolbar_base": CKEDITOR_TOOLBAR_BASE,
+    "default": CKEDITOR_BASE,
+    "content_pages": CKEDITOR_BASE | {
+        "contentsCss": "/static/core/ckeditor/lubimovka_styles.css",
     },
     "press_releases": CKEDITOR_BASE | {
+        "contentsCss": "/static/core/ckeditor/lubimovka_styles.css",
         "toolbar": "base_bulleted_list",
         "toolbar_base_bulleted_list": CKEDITOR_TOOLBAR_BASE + (("BulletedList",),),
     },
