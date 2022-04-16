@@ -31,7 +31,6 @@ def participation_services(instance_id, domain):
             instance.save()
     except (ValueError, HttpError) as error:
         logger.critical(error, exc_info=True)
-
     try:
         send_success = send_application_email(instance)
         if send_success:
