@@ -1,8 +1,8 @@
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 import django_filters
-import pytz
 from django.contrib import admin
+from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
@@ -29,7 +29,7 @@ class StatusOfEvent(admin.SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        date_now = datetime.today().replace(tzinfo=pytz.UTC).date()
+        date_now = timezone.now().date()
         date_tomorrow = date_now + timedelta(days=1)
         if self.value() is None:
             return queryset.filter(date_time__gt=date_now)
