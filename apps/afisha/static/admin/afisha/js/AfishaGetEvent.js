@@ -1,26 +1,32 @@
 jQuery(document).ready(function ($) {
     let $eventTypeSelectField = $('#id_type');
-    let $commonEventField = $("#id_common_event");
     let $divDependedOnCommonEvent = $(".depended_on_common_event");
 
-    function toggleDivDependedOnPartnerType(EventType, isFirstLoad) {
-        if (EventType != "") {
+    function toggleDivDependedOnPartnerType(eventType, isFirstLoad) {
+        if (eventType === undefined) {
+            return;
+        }
+        if (eventType != "") {
             $divDependedOnCommonEvent.slideDown();
         } else {
             if (isFirstLoad) {
                 $divDependedOnCommonEvent.hide();
             } else {
-                $commonEventField.prop("checked", true);
                 $divDependedOnCommonEvent.slideUp();
             }
         };
         $.ajax({
             url: "get-common-events-admin/",
-            data: { type: EventType, },
+            data: { type: eventType, },
             success: function (result) {
                 cols = $('#id_common_event')[0];
+                var selected = cols.options.item(cols.options.selectedIndex)
                 cols.options.length = 0;
-                cols.options.add(new Option("", ""));
+                if (isFirstLoad === false) {
+                    cols.options.add(new Option("", ""));
+                } else {
+                    cols.options.add(selected);
+                }
                 for (var event in result) {
                     cols.options.add(new Option(event, result[event]));
                 }

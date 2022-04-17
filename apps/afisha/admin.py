@@ -69,17 +69,10 @@ class EventAdmin(admin.ModelAdmin):
         return ajax_urls + urls
 
     def get_common_event(self, request, obj_id=None):
-        common_event_type = request.GET.get("type")
-        d = {
-            "READING": CommonEvent.reading,
-            "PERFORMANCE": CommonEvent.performance,
-            "MASTERCLASS": CommonEvent.masterclass,
-        }
-        print(common_event_type)
+        common_event_type = request.GET.get("type").lower()
         common_events = {}
         if common_event_type:
-            # common_events_queryset = Event.objects.filter(type=common_event_type).order_by("date_time")
-            common_events_queryset = d[common_event_type].get_queryset()
+            common_events_queryset = getattr(CommonEvent, common_event_type).get_queryset().order_by("-created")
             common_events = {event.name: event.id for event in common_events_queryset}
         return JsonResponse(common_events)
 
