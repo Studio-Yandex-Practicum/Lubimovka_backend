@@ -1,13 +1,57 @@
 from datetime import datetime
 
 from django.contrib import admin
+from django.http import JsonResponse
+from django.urls import re_path
 from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
-from apps.afisha.models import Event
+from apps.afisha.models import CommonEvent, Event
 
 
 class EventAdmin(admin.ModelAdmin):
+    list_display = (
+        "common_event",
+        "status",
+        "date_time",
+        "paid",
+        "pinned_on_main",
+    )
+    fieldsets = (
+        (
+            None,
+            {
+                "fields": ("type",),
+            },
+        ),
+        (
+            None,
+            {
+                "fields": ("common_event",),
+                "classes": ("depended_on_common_event",),
+            },
+        ),
+        (
+            None,
+            {
+                "fields": (
+                    "date_time",
+                    "paid",
+                    "url",
+                    "place",
+                    "pinned_on_main",
+                ),
+            },
+        ),
+    )
+    date_hierarchy = "date_time"
+    list_filter = (
+        StatusOfEvent,
+        "type",
+    )
+    search_fields = ("common_event",)
+    empty_value_display = "-пусто-"
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related(
@@ -17,27 +61,20 @@ class EventAdmin(admin.ModelAdmin):
         ).order_by("-date_time")
         return qs
 
-    list_display = (
-        "common_event",
-        "status",
-        "date_time",
-        "paid",
-        "pinned_on_main",
-    )
-    fields = ("common_event", "date_time", "paid", "url", "place", "pinned_on_main")
-    date_hierarchy = "date_time"
-    list_filter = (
-        StatusOfEvent,
-        "type",
-    )
-    search_fields = ("common_event",)
-    empty_value_display = "-пусто-"
+    def get_urls(self):
+        urls = super().get_urls()
+        ajax_urls = [
+            re_path(r"\S*/get-common-events-admin/", self.get_common_event),
+        ]
+        return ajax_urls + urls
 
-    # @admin.display(
-    #     description="Событие",
-    # )
-    # def short_common_event(self, obj):
-    #     return str(obj.common_event)[:25] + "..."
+    def get_common_event(self, request, obj_id=None):
+        common_event_type = request.GET.get("type").lower()
+        common_events = {}
+        if common_event_type:
+            common_events_queryset = getattr(CommonEvent, common_event_type).get_queryset().order_by("-created")
+            common_events = {event.name: event.id for event in common_events_queryset}
+        return JsonResponse(common_events)
 
     @admin.display(
         description="Состояние",
@@ -53,6 +90,10 @@ class EventAdmin(admin.ModelAdmin):
         elif obj.date_time.date() < date_now:
             return icon("past", "Прошедшее")
         return icon("today", "Cегодняшнее")
+
+    class Media:
+
+        js = ("admin/afisha/js/AfishaGetEvent.js",)
 
 
 admin.site.register(Event, EventAdmin)
