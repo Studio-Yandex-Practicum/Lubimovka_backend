@@ -190,6 +190,7 @@ CKEDITOR_TOOLBAR_BASE = (
     ("Bold", "Italic", "Link", "Unlink", "RemoveFormat"),
     ("Styles",),
     ("Blockquote",),
+    ("NumberedList", "BulletedList"),
 )
 CKEDITOR_BASE = {
     "height": 300,
@@ -199,21 +200,16 @@ CKEDITOR_BASE = {
     "extraPlugins": (",").join(("autogrow",)),
     "basicEntities": False,
     "stylesSet": (
-        {"name": "Заголовок", "element": "h4"},
-        {"name": "Подзаголовок", "element": "h6"},
+        {"name": "Заголовок", "element": "h3"},
+        {"name": "Подзаголовок", "element": "h4"},
     ),
     "toolbar": "base",
     "toolbar_base": CKEDITOR_TOOLBAR_BASE,
 }
 CKEDITOR_CONFIGS = {
     "default": CKEDITOR_BASE,
-    "content_pages": CKEDITOR_BASE | {
+    "lubimovka_styles": CKEDITOR_BASE | {
         "contentsCss": "/static/core/ckeditor/lubimovka_styles.css",
-    },
-    "press_releases": CKEDITOR_BASE | {
-        "contentsCss": "/static/core/ckeditor/lubimovka_styles.css",
-        "toolbar": "base_bulleted_list",
-        "toolbar_base_bulleted_list": CKEDITOR_TOOLBAR_BASE + (("BulletedList",),),
     },
 }
 

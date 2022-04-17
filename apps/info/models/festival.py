@@ -183,7 +183,7 @@ class PressRelease(BaseModel):
         verbose_name="Заголовок",
     )
     text = RichTextField(
-        config_name="press_releases",
+        config_name="lubimovka_styles",
         verbose_name="Текст",
     )
     festival = models.OneToOneField(

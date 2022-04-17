@@ -32,7 +32,7 @@ p {
 }
 
 
-h4 {
+h3 {
     /* Style from figma */
     font-family: "PP Neue Machina";
     font-style: normal;
@@ -46,7 +46,7 @@ h4 {
     margin-block-end: 0.5em;
 }
 
-h6 {
+h4 {
     /* Style from figma */
     padding: 0px;
     font-family: "PP Neue Machina";

@@ -1,7 +1,6 @@
 from django.contrib import admin
 
-from apps.content_pages.models import Link, Preamble, Quote, Text, Title
-from apps.content_pages.models.content_items import ContentUnitRichText
+from apps.content_pages.models import ContentUnitRichText, Link, Preamble, Quote, Text, Title
 from apps.core.mixins import HideOnNavPanelAdminModelMixin
 
 

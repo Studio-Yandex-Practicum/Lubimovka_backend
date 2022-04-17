@@ -28,7 +28,7 @@ class ContentUnitRichText(BaseModel):
     """
 
     rich_text = RichTextField(
-        config_name="content_pages",
+        config_name="lubimovka_styles",
         verbose_name="Форматированный текст",
     )
 
