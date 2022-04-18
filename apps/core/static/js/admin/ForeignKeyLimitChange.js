@@ -14,7 +14,7 @@ function removeLinks($, $object) {
     };
     prefixes.forEach(function(item, index, array) {
         let linkName = item + $object.attr("id");
-        let $link = $(document.getElementById(linkName));
+        let $link = $("#" + linkName);
         $link.remove();
     });
 };
