@@ -12,7 +12,7 @@ class PlayFiltersAPIView(APIView):
     @extend_schema(responses=PlayFiltersSerializer)
     def get(self, request):
         years_values_list = Festival.objects.values_list("year", flat=True)
-        programs = ProgramType.objects.exclude(slug="other_plays")
+        programs = ProgramType.objects.all()
         filter_instance = {
             "programs": programs,
             "years": years_values_list,
