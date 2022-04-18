@@ -23,7 +23,7 @@ class QuestionCreateAPIView(APIView):
     @extend_schema(
         request=QuestionSerializer,
         responses={
-            201: QuestionSerializer,
+            201: None,
             400: ERROR_MESSAGES_FOR_QUESTION_FOR_400,
         },
     )
