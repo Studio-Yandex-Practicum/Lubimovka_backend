@@ -5,9 +5,11 @@ from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
 from apps.afisha.models import CommonEvent, Event
+from apps.core.mixins import HideOnNavPanelAdminModelMixin
 
 
-class CommonEventAdmin(admin.ModelAdmin):
+@admin.register(CommonEvent)
+class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
     search_fields = (
         "masterclass__name",
         "reading__name",
@@ -15,6 +17,7 @@ class CommonEventAdmin(admin.ModelAdmin):
     )
 
 
+@admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
@@ -62,7 +65,3 @@ class EventAdmin(admin.ModelAdmin):
         elif obj.date_time.date() < date_now:
             return icon("past", "Прошедшее")
         return icon("today", "Cегодняшнее")
-
-
-admin.site.register(Event, EventAdmin)
-admin.site.register(CommonEvent, CommonEventAdmin)
