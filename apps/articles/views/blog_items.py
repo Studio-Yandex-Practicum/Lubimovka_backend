@@ -1,3 +1,7 @@
+from django.db.models import Prefetch
+from django.db.models import Value as V
+from django.db.models.functions import Concat
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers
@@ -53,7 +57,7 @@ class BlogItemListAPI(APIView):
 
 
 class BlogItemDetailAPI(APIView):
-    """Return datailed `BlogItem` object."""
+    """Return detailed `BlogItem` object."""
 
     class BlogItemDetailOutputSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
         other_blogs = BlogItemListSerializer(many=True, source="_other_blogs")
@@ -80,4 +84,25 @@ class BlogItemDetailAPI(APIView):
         blog_item_detail = selectors.blog_item_detail_get(blog_item_id=id)
         context = {"request": request}
         serializer = self.BlogItemDetailOutputSerializer(blog_item_detail, context=context)
+        return Response(serializer.data)
+
+
+class PreviewBlogItemDetailAPI(BlogItemDetailAPI):
+    def get(self, request, id):
+        published_blog_items = BlogItem.ext_objects.published()
+        current_blog_item_detail = get_object_or_404(BlogItem, id=id)
+        if not published_blog_items.filter(id=id).exists():
+            current_blog_item_detail._other_blogs = published_blog_items[:4]
+        else:
+            current_blog_item_detail._other_blogs = published_blog_items.exclude(id=id)[:4]
+        blog_item_roles = current_blog_item_detail.roles.distinct()
+        blog_item_persons = current_blog_item_detail.blog_persons.all()
+        blog_item_persons_full_name = blog_item_persons.annotate(
+            annotated_full_name=Concat("person__first_name", V(" "), "person__last_name")
+        )
+        current_blog_item_detail._team = blog_item_roles.prefetch_related(
+            Prefetch("blog_persons", queryset=blog_item_persons_full_name)
+        )
+        context = {"request": request}
+        serializer = self.BlogItemDetailOutputSerializer(current_blog_item_detail, context=context)
         return Response(serializer.data)

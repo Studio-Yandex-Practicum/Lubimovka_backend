@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
@@ -30,6 +32,7 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "pub_date",
         "image_preview_list_page",
         "status",
+        "button",
     )
     readonly_fields = (
         "status",
@@ -70,6 +73,15 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "image_preview_change_page",
         "image",
     )
+
+    @admin.display(
+        description="Предпросмотр страницы",
+    )
+    def button(self, obj):
+        b = reverse("blog-item-detail-preview", args=[obj.id])
+        # return mark_safe('<a class="button" href="{% url blog-item-detail-preview %}" >Предпросмотр</a>')
+        return format_html("<a href='{url}'>{url}</a>", url=b)
+        # return mark_safe(f'<a class="button" href={obj.url} >Предпросмотр</a>')
 
 
 admin.site.register(BlogItem, BlogItemAdmin)
