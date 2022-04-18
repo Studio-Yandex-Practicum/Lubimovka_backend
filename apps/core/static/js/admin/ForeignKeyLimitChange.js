@@ -19,23 +19,14 @@ function removeLinks($, $object) {
     });
 };
 
-function setAttributes(el, attrs) {
-    for(var key in attrs) {
-        el.setAttribute(key, attrs[key]);
-    };
-};
-
-function appendChangeButton($, $object) {
-    const objectId = $object.attr("id");
-
-    var linkId = "change_" + objectId;
-
+function createLink(linkId) {
     let $image = $("<img>", { src: imageSrc, alt: imageAlt });
     let $link = $("<a>", { id: linkId, href: "#", class: linkClass });
 
-    $link = $image.wrap($link).parent();
-    $object.after($link);
+   return $image.wrap($link).parent();
+};
 
+function addLinkAction ($link, $object) {
     $link.click(function (event) {
         event.preventDefault();
         event.stopPropagation();
@@ -47,60 +38,60 @@ function appendChangeButton($, $object) {
     });
 };
 
-function appendChangeButtonForSelect2(object) {
-    var lable = object.getAttribute('aria-labelledby')
+function appendChangeButton($object) {
+    const objectId = $object.attr("id");
+    var linkId = "change_" + objectId;
+    $link = createLink(linkId)
+    $object.after($link);
+    addLinkAction($link, $object);
+};
+
+function appendChangeButtonForSelect2($object) {
+    var lable = $object.attr("aria-labelledby")
     const foreignKeyFieldId = lable.split("-")[1]
-    const parentSpan = object.parentElement.parentElement
-
+    var $parentSpan = $object.parent().parent()
     var linkId = "change_" + foreignKeyFieldId;
-
-    let image = document.createElement('img')
-    setAttributes(image, {"src": imageSrc, "alt": imageAlt})
-    let link = document.createElement('a');
-    setAttributes(link, {"id": linkId, "href": "#", 'class': linkClass});
-    link.insertAdjacentElement("beforeend", image)
-
-    parentSpan.after(link);
-
-    link.onclick = function (event) {
-        event.preventDefault();
-        event.stopPropagation();
-        object.style.cssText = 'pointer-events:auto;touch-action:auto;background:""';
-    };
+    $link = createLink(linkId)
+    $parentSpan.after($link);
+    addLinkAction($link, $object);
 };
 
 function getLableName($object) {
     // Return lable attribute for select2 <span>
     const objectId = $object.attr("id");
     return '[aria-labelledby="select2-' + objectId + '-container"]';
-}
+};
+
+function disableField($object) {
+    $object.css({
+        "pointer-events": "none",
+        "touch-action": "none",
+        "background": "#eee"
+    });
+};
 
 jQuery(document).ready(function ($) {
-    const foreignKeyClass = $(".foreign-key-field");
+    const $foreignKeyClass = $(".foreign-key-field");
     const add_edit_button = $("#change_button_for_foreign_key").attr("value") === "true";
     var is_selec2 = false;
 
-    foreignKeyClass.each(function () {
+    $foreignKeyClass.each(function () {
         let lable = getLableName($( this ))
-        let element = document.querySelector(lable)
+        let $element = $(lable).eq(0)
         removeLinks($, $( this ));
         if ($( this ).val() != "") {
-            if (element) {
-                element.style.cssText = "pointer-events:none;touch-action:none;background:rgb(238, 238, 238)";
+            if ($element.length > 0) {
+                disableField($element)
                 is_selec2 = true;
             } else {
-                $( this ).css({
-                    "pointer-events": "none",
-                    "touch-action": "none",
-                    "background": "#eee"
-                });
+                disableField($( this ))
                 is_selec2 = false;
             }
             if (add_edit_button) {
                 if (is_selec2) {
-                    appendChangeButtonForSelect2(element);
+                    appendChangeButtonForSelect2($element);
                 } else {
-                    appendChangeButton($, $( this ));
+                    appendChangeButton($( this ));
                 }
             };
         };
