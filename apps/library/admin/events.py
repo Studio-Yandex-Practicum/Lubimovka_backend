@@ -44,6 +44,7 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
         "person",
         "role",
     )
+    autocomplete_fields = ("person",)
     extra = 0
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -101,6 +102,7 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         "age_limit",
         "status",
     )
+    autocomplete_fields = ("play",)
     search_fields = (
         "play__name",
         "name",
@@ -143,9 +145,10 @@ class ReadingAdmin(admin.ModelAdmin):
     )
     exclude = ("events",)
     search_fields = (
-        "play__name",
         "name",
+        "play__name",
     )
+    autocomplete_fields = ("play",)
     inlines = (TeamMemberInline,)
 
     def get_form(self, request, obj=None, **kwargs):

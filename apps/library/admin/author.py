@@ -96,6 +96,7 @@ class AuthorAdmin(admin.ModelAdmin):
         "person__email",
         "plays__name",
     )
+    autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
 
     def get_form(self, request, obj=None, **kwargs):

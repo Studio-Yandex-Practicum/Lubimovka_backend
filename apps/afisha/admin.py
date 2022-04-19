@@ -7,6 +7,16 @@ from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
 from apps.afisha.models import CommonEvent, Event
+from apps.core.mixins import HideOnNavPanelAdminModelMixin
+
+
+@admin.register(CommonEvent)
+class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
+    search_fields = (
+        "masterclass__name",
+        "reading__name",
+        "performance__name",
+    )
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -49,6 +59,7 @@ class EventAdmin(admin.ModelAdmin):
         StatusOfEvent,
         "type",
     )
+    autocomplete_fields = ("common_event",)
     search_fields = ("common_event",)
     empty_value_display = "-пусто-"
 
