@@ -9,6 +9,7 @@ from apps.core.widgets import FkSelect
 
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
     model = BlogItem.roles.through
+    autocomplete_fields = ("person",)
     extra = 0
     formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 

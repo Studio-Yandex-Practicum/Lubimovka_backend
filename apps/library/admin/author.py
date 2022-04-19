@@ -35,10 +35,10 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_queryset(self, request):
-        return AuthorPlay.objects.exclude(play__program__slug="other_plays")
+        return AuthorPlay.objects.filter(play__other_play=False)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Play.objects.exclude(program__slug="other_plays")
+        kwargs["queryset"] = Play.objects.filter(other_play=False)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -51,10 +51,10 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_queryset(self, request):
-        return AuthorPlay.objects.filter(play__program__slug="other_plays")
+        return AuthorPlay.objects.filter(play__other_play=True)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Play.objects.filter(program__slug="other_plays")
+        kwargs["queryset"] = Play.objects.filter(other_play=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
@@ -107,6 +107,7 @@ class AuthorAdmin(admin.ModelAdmin):
         "person__email",
         "plays__name",
     )
+    autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
     fields_with_overridden_fk_widget = ("person",)
 

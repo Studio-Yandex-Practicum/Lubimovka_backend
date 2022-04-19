@@ -4,8 +4,7 @@ from django.forms import ValidationError
 from django.forms.models import BaseInlineFormSet
 
 from apps.core.widgets import FkSelect
-from apps.library.filters.play import PlayProgramFilter
-from apps.library.forms.play import PlayForm
+from apps.library.filters.play import PlayTypeFilter
 from apps.library.models import AuthorPlay, Play
 
 
@@ -36,7 +35,6 @@ class AuthorInline(admin.TabularInline):
 
 @admin.register(Play)
 class PlayAdmin(admin.ModelAdmin):
-    form = PlayForm
     filter_horizontal = ("authors",)
     list_display = (
         "name",
@@ -47,10 +45,11 @@ class PlayAdmin(admin.ModelAdmin):
     )
     inlines = (AuthorInline,)
     list_filter = (
-        PlayProgramFilter,
+        PlayTypeFilter,
         "authors",
         "city",
         "festival",
+        "program",
         "published",
     )
     search_fields = (
@@ -62,8 +61,9 @@ class PlayAdmin(admin.ModelAdmin):
         "festival__year",
     )
     fields = (
-        "program",
+        "other_play",
         "name",
+        "program",
         "city",
         "year",
         "url_download",
@@ -72,4 +72,3 @@ class PlayAdmin(admin.ModelAdmin):
         "published",
     )
     formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
-    # FkSelect widget explicitly applied to program field in ../forms/play.py
