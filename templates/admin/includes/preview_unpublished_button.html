@@ -1,5 +1,5 @@
 {% load i18n %}
-<!--<form action="" method="GET">-->
-    {% csrf_token %}
-    <input type="submit" value="Предпросмотр страницы" />
-<!--</form>-->
+<form action="" method="GET">
+{% csrf_token %}
+   <a class="button" href="{% url 'blog-item-detail-preview' original.id %}" >Предпросмотр страницы</a>
+</form>

@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.urls import reverse
-from django.utils.html import format_html
+from django.utils.safestring import mark_safe
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
@@ -78,10 +78,8 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         description="Предпросмотр страницы",
     )
     def button(self, obj):
-        b = reverse("blog-item-detail-preview", args=[obj.id])
-        # return mark_safe('<a class="button" href="{% url blog-item-detail-preview %}" >Предпросмотр</a>')
-        return format_html("<a href='{url}'>{url}</a>", url=b)
-        # return mark_safe(f'<a class="button" href={obj.url} >Предпросмотр</a>')
+        preview_link = reverse("blog-item-detail-preview", args=[obj.id])
+        return mark_safe(f'<a class="button" href={preview_link} >Предпросмотр</a>')
 
 
 admin.site.register(BlogItem, BlogItemAdmin)
