@@ -5,7 +5,7 @@ from typing import Optional
 from django.conf import settings
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
+from googleapiclient.errors import Error
 
 from apps.main.models import SettingPlaySupply
 
@@ -227,6 +227,6 @@ class GoogleSpreadsheets:
                 self._set_borders(service=service)
                 self._set_header(service=service)
             return self._export_new_object(instance, service=service, file_url=file_url)
-        except (ValueError, HttpError) as error:
+        except (ValueError, Error) as error:
             msg = f"Не удалось выгрузить данные заявки от {instance.email} на Google Sheets."
             logger.critical(msg, error, exc_info=True)

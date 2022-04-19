@@ -11,7 +11,7 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
 from apps.core.models import Setting
-from apps.core.utils import send_email
+from apps.core.services.send_email import send_email
 
 User = get_user_model()
 
@@ -50,7 +50,9 @@ class UserAdminPasswordResetForm(PasswordResetForm):
 class UserAdminCreationForm(UserCreationForm):
     email = forms.EmailField(
         label="Email",
-        help_text="Обязательное поле." " На данную почту будет выслана пользователю ссылка для смены пароля.",
+        help_text=(
+            "Обязательное поле. На данную почту пользователю будет выслана ссылка для смены и восстановления пароля."
+        ),
         required=True,
     )
     first_name = forms.CharField(label="Имя", help_text="Обязательное поле")

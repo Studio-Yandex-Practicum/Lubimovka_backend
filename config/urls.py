@@ -44,12 +44,12 @@ api_schema_patterns = [
 
 urlpatterns = [
     path(
-        route="reset/done/",
+        route="admin/reset/done/",
         view=views.PasswordResetCompleteView.as_view(),
         name="password_reset_complete",
     ),
     path(
-        route="reset/<uidb64>/<token>/",
+        route="admin/reset/<uidb64>/<token>/",
         view=views.PasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
     ),

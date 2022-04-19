@@ -12,7 +12,6 @@ logger = logging.getLogger("django")
 def yandex_disk_export(instance) -> Optional[bool]:
     try:
         yndx = yadisk.YaDisk(token=settings.YNDX_DISK_TOKEN)
-        print(Path(str(instance.file)))
         _, year, name = Path(str(instance.file)).parts
         to_dir = f"{year}/{name}"
         from_dir = (settings.MEDIA_ROOT / instance.file.name).as_posix()
@@ -23,8 +22,7 @@ def yandex_disk_export(instance) -> Optional[bool]:
 
         if yndx.exists(to_dir):
             download_link = yndx.get_download_link(to_dir)
-            Path(instance.file.path).unlink()
             return download_link
-    except YaDiskError as error:
+    except (ValueError, YaDiskError) as error:
         msg = f"Не удалось загрузить пьесу {instance.title} от {instance.email} на Яндекс диск."
         logger.critical(msg, error, exc_info=True)
