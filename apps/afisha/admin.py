@@ -8,7 +8,6 @@ from django.utils.safestring import mark_safe
 from apps.afisha.filters import StatusOfEvent
 from apps.afisha.models import CommonEvent, Event
 from apps.core.mixins import HideOnNavPanelAdminModelMixin
-from apps.library.utilities import CustomAutocompleteSelect
 
 
 @admin.register(CommonEvent)
@@ -72,14 +71,6 @@ class EventAdmin(admin.ModelAdmin):
             "common_event__performance",
         ).order_by("-date_time")
         return qs
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "common_event":
-            db = kwargs.get("using")
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите событие"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     def get_urls(self):
         urls = super().get_urls()

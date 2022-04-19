@@ -8,7 +8,6 @@ from apps.core import utils
 from apps.core.models import Person
 from apps.library.forms.admin import OtherLinkForm
 from apps.library.models import Achievement, Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
-from apps.library.utilities import CustomAutocompleteSelect
 
 
 @admin.register(Achievement)
@@ -123,11 +122,3 @@ class AuthorAdmin(admin.ModelAdmin):
         slug = utils.slugify(person.last_name)
         response = {"slug": slug}
         return JsonResponse(response)
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "person":
-            db = kwargs.get("using")
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите человека"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)

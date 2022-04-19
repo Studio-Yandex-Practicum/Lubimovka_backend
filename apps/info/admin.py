@@ -17,7 +17,6 @@ from apps.info.models import (
     Volunteer,
 )
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
-from apps.library.utilities import CustomAutocompleteSelect
 
 
 @admin.register(Partner)
@@ -131,14 +130,6 @@ class VolunteerAdmin(admin.ModelAdmin):
         HasReviewFilter,
     )
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "person":
-            db = kwargs.get("using")
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите человека"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
     @admin.display(
         boolean=True,
         ordering="review_title",
@@ -172,14 +163,6 @@ class VolunteerInline(admin.TabularInline):
     )
     classes = ["collapsible"]
     ordering = ("person__last_name", "person__first_name")
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "person":
-            db = kwargs.get("using")
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите человека"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
     @admin.display(
         boolean=True,
@@ -257,14 +240,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "person":
-            db = kwargs.get("using")
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите человека"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset().filter(team="art")
         return qs
@@ -314,14 +289,6 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "person":
-            db = kwargs.get("using")
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите человека"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
     def save_model(self, request, obj, form, change):
         """Данные из поля 'pr_director_name' проверяются и сохраняются в модели 'Setting'."""
         if form.is_valid():
@@ -353,14 +320,6 @@ class SponsorAdmin(admin.ModelAdmin):
         "position",
     )
     autocomplete_fields = ("person",)
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "person":
-            db = kwargs.get("using")
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите человека"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Question)

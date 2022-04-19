@@ -12,7 +12,6 @@ from apps.library.models import (
     Reading,
     TeamMember,
 )
-from apps.library.utilities import CustomAutocompleteSelect
 
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
@@ -56,11 +55,6 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
             MasterClass: "master_class_role",
             Reading: "reading_role",
         }
-        db = kwargs.get("using")
-        if db_field.name == "person":
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите человека"
-            )
         if db_field.name == "role":
             if self.parent_model in LIMIT_ROLES.keys():
                 kwargs["queryset"] = Role.objects.filter(types__role_type=LIMIT_ROLES[self.parent_model])
@@ -142,14 +136,6 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
             form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
         return form
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "play":
-            db = kwargs.get("using")
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите пьесу"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
 
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
@@ -169,11 +155,3 @@ class ReadingAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
         return form
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        if db_field.name == "play":
-            db = kwargs.get("using")
-            kwargs["widget"] = CustomAutocompleteSelect(
-                db_field, self.admin_site, using=db, placeholder="Выберите пьесу"
-            )
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
