@@ -9,27 +9,28 @@ from apps.info.serializers import SettingsSerializer
 class SettingsAPIView(APIView):
     @extend_schema(request=None, responses=SettingsSerializer)
     def get(self, request):
-        """Get all required emails that can be changed.
-
-        except email on contacts page
-        """
+        """Get all required emails that can be changed."""
+        email = Setting.get_setting("email_send_to")
         email_on_project_page = Setting.get_setting("email_on_project_page")
         email_on_what_we_do_page = Setting.get_setting("email_on_what_we_do_page")
         email_on_trustees_page = Setting.get_setting("email_on_trustees_page")
         email_on_about_festival_page = Setting.get_setting("email_on_about_festival_page")
         email_on_acceptance_of_plays_page = Setting.get_setting("email_on_acceptance_of_plays_page")
         email_on_author_page = Setting.get_setting("email_on_author_page")
+        privacy_policy_link = Setting.get_setting("url_to_privacy_policy")
         photo_gallery_facebook_link = Setting.get_setting("photo_gallery_facebook")
         pr_director_name = Setting.get_setting("pr_director_name")
         pr_director = Person.objects.filter(festivalteammember__is_pr_director=True).first()
         plays_reception_is_open = Setting.get_setting("plays_reception_is_open")
         data = {
+            "email": email,
             "email_on_project_page": email_on_project_page,
             "email_on_what_we_do_page": email_on_what_we_do_page,
             "email_on_trustees_page": email_on_trustees_page,
             "email_on_about_festival_page": email_on_about_festival_page,
             "email_on_acceptance_of_plays_page": email_on_acceptance_of_plays_page,
             "email_on_author_page": email_on_author_page,
+            "privacy_policy_link": privacy_policy_link,
             "for_press": {
                 "pr_director": {
                     "pr_director_name": pr_director_name,
