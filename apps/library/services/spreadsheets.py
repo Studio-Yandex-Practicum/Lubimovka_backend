@@ -220,8 +220,6 @@ class GoogleSpreadsheets:
         try:
             self._get_settings()
             service = self._build_service()
-            if service is None:
-                return
             header_exists = self._check_header_exists(service)
             if not header_exists:
                 self._set_borders(service)
