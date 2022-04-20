@@ -22,8 +22,12 @@ def send_email(from_email: str, to_emails: tuple, template_id: str, context: dic
         if attach_file:
             file_path = context.get("file_path")
             message.attach_file(file_path)
-        message.send()
-        if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
+        send_status = message.send()
+        if send_status == 0:
+            return False
+        elif not hasattr(message, "anymail_status"):
+            return True
+        elif message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
             return True
         return False
     except AnymailConfigurationError as error:
