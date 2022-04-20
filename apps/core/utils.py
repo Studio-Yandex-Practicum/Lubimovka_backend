@@ -133,6 +133,6 @@ def get_app_list(self, request):
 
 
 def get_domain(request):
-    server_protocol = "".join(filter(str.isalpha, request.META["SERVER_PROTOCOL"])).lower()
+    server_protocol = request.META["SERVER_PROTOCOL"].split("/1.1")[0].lower()
     domain = server_protocol + "://" + request.META["HTTP_HOST"]
     return domain
