@@ -19,6 +19,9 @@ class SettingsAPIView(APIView):
         email_on_about_festival_page = Setting.get_setting("email_on_about_festival_page")
         email_on_acceptance_of_plays_page = Setting.get_setting("email_on_acceptance_of_plays_page")
         email_on_author_page = Setting.get_setting("email_on_author_page")
+        email_on_volunteers_page = Setting.get_setting("email_on_volunteers_page")
+        email_on_blog_page = Setting.get_setting("email_on_blog_page")
+        email_on_support_page = Setting.get_setting("email_on_support_page")
         photo_gallery_facebook_link = Setting.get_setting("photo_gallery_facebook")
         pr_director_name = Setting.get_setting("pr_director_name")
         pr_director = Person.objects.filter(festivalteammember__is_pr_director=True).first()
@@ -30,6 +33,9 @@ class SettingsAPIView(APIView):
             "email_on_about_festival_page": email_on_about_festival_page,
             "email_on_acceptance_of_plays_page": email_on_acceptance_of_plays_page,
             "email_on_author_page": email_on_author_page,
+            "email_on_volunteers_page": email_on_volunteers_page,
+            "email_on_blog_page": email_on_blog_page,
+            "email_on_support_page": email_on_support_page,
             "for_press": {
                 "pr_director": {
                     "pr_director_name": pr_director_name,

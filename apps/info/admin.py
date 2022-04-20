@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
+from django.utils.translation import gettext_lazy as _
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
@@ -101,19 +102,20 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
 
 
 class HasReviewFilter(admin.SimpleListFilter):
-    title = "Есть отзыв?"
+    title = _("Есть отзыв?")
     parameter_name = "volunteer"
 
     def lookups(self, request, model_admin):
         return (
-            ("True", "Да"),
-            ("False", "Нет"),
+            ("True", _("Да")),
+            ("False", _("Нет")),
         )
 
     def queryset(self, request, queryset):
         if self.value() == "True":
-            return Volunteer.objects.exclude(review_text__exact="")
-        return Volunteer.objects.filter(review_text__exact="")
+            return queryset.exclude(review_text__exact="")
+        if self.value() == "False":
+            return queryset.filter(review_text__exact="")
 
 
 @admin.register(Volunteer)
