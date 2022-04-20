@@ -72,7 +72,7 @@ class GoogleSpreadsheets:
                 return _sheet["properties"]["sheetId"]
 
     def _set_borders(self, service) -> None:
-        sheet_id = self._get_sheet_id_by_title(service=service)
+        sheet_id = self._get_sheet_id_by_title(service)
         body = {
             "includeSpreadsheetInResponse": False,
             "requests": [
@@ -138,7 +138,7 @@ class GoogleSpreadsheets:
         request.execute()
 
     def _set_autosize(self, service) -> None:
-        sheet_id = self._get_sheet_id_by_title(service=service)
+        sheet_id = self._get_sheet_id_by_title(service)
         body = {
             "includeSpreadsheetInResponse": False,
             "requests": [
@@ -222,11 +222,11 @@ class GoogleSpreadsheets:
             service = self._build_service()
             if service is None:
                 return
-            header_exists = self._check_header_exists(service=service)
+            header_exists = self._check_header_exists(service)
             if not header_exists:
-                self._set_borders(service=service)
-                self._set_header(service=service)
-            return self._export_new_object(instance, service=service, file_url=file_url)
+                self._set_borders(service)
+                self._set_header(service)
+            return self._export_new_object(instance, service, file_url)
         except (ValueError, Error) as error:
             msg = f"Не удалось выгрузить данные заявки от {instance.email} на Google Sheets."
             logger.critical(msg, error, exc_info=True)

@@ -1,11 +1,13 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Permission
 
+from apps.core.models import Setting
 from apps.core.utils import get_domain
 
-from .forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm
+from .forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm, UserAdminPasswordResetForm
 from .models import ProxyGroup
 
 User = get_user_model()
@@ -47,13 +49,6 @@ class UserAdmin(DjangoUserAdmin):
         "full_name",
     )
 
-    def get_form(self, request, obj=None, **kwargs):
-        domain = get_domain(request)
-        form = super().get_form(request, obj, **kwargs)
-        if obj is None:
-            form.domain = domain
-        return form
-
     @admin.display(description="Дата последней авторизации")
     def get_last_login(self, obj):
         return obj.last_login
@@ -71,6 +66,17 @@ class UserAdmin(DjangoUserAdmin):
     @admin.display(description="Роль")
     def role(self, obj):
         return obj.groups.first()
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        reset_form = UserAdminPasswordResetForm({"email": obj.email})
+        domain = get_domain(request)
+        if reset_form.is_valid():
+            reset_form.send_email_to_user(
+                from_email=Setting.get_setting("email_send_from"),
+                template_id=settings.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER,
+                domain=domain,
+            )
 
 
 class GroupAdmin(admin.ModelAdmin):

@@ -1,5 +1,4 @@
 from django import forms
-from django.conf import settings
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import PasswordResetForm, UserChangeForm, UserCreationForm
@@ -10,7 +9,6 @@ from django.utils.crypto import get_random_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 
-from apps.core.models import Setting
 from apps.core.services.send_email import send_email
 
 User = get_user_model()
@@ -27,24 +25,24 @@ class UserAdminForm(UserChangeForm):
 class UserAdminPasswordResetForm(PasswordResetForm):
     def send_email_to_user(self, from_email, template_id, domain):
         email = self.cleaned_data["email"]
-        email_field_name = User.get_email_field_name()
+        user = User.objects.filter(email=email).first()
+        uid = urlsafe_base64_encode(force_bytes(user.pk))
+        token = default_token_generator.make_token(user)
+        link = f"{domain}/admin/reset/{uid}/{token}"
 
-        for user in self.get_users(email):
-            user_email = getattr(user, email_field_name)
-            context = {
-                "full_name": user.get_full_name(),
-                "username": user.get_username(),
-                "email": user_email,
-                "domain": domain,
-                "uid": urlsafe_base64_encode(force_bytes(user.pk)),
-                "token": default_token_generator.make_token(user),
-            }
-            send_email(
-                from_email=from_email,
-                to_emails=(user_email,),
-                template_id=template_id,
-                context=context,
-            )
+        context = {
+            "full_name": user.get_full_name(),
+            "username": user.get_username(),
+            "email": user.email,
+            "domain": domain,
+            "link": link,
+        }
+        send_email(
+            from_email=from_email,
+            to_emails=(user.email,),
+            template_id=template_id,
+            context=context,
+        )
 
 
 class UserAdminCreationForm(UserCreationForm):
@@ -70,13 +68,6 @@ class UserAdminCreationForm(UserCreationForm):
             user.username = user.email
         user.set_password(get_random_string(length=8))
         user.save()
-        reset_form = UserAdminPasswordResetForm({"email": user.email})
-        if reset_form.is_valid():
-            reset_form.send_email_to_user(
-                from_email=Setting.get_setting("email_send_from"),
-                template_id=settings.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER,
-                domain=self.domain,
-            )
         return user
 
     class Meta:
