@@ -17,10 +17,7 @@ def simple_news_item():
         {"array_image": True},
         {"array_person": True},
         {"array_play": True},
-        {"unit_preamble": True},
-        {"unit_quote": True},
-        {"unit_text": True},
-        {"unit_title": True},
+        {"unit_rich_text": True},
     )
 )
 def news_item_content_module(request, simple_news_item, plays, persons):

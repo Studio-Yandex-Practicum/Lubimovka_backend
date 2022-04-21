@@ -37,7 +37,7 @@ class NewsItemFactory(factory.django.DjangoModelFactory):
     """Creates News Page.
 
     You can customize News content by adding method and count when
-    create (e.g. 'NewsItemFactory.create(add_several_preamble=5,
+    create (e.g. 'NewsItemFactory.create(add_several_rich_text=5,
     add_several_personsblock=3)). Content item/block will not be
     created if relevant method are not mentioned.
     You can use 'complex_create' which will create all content item/block
@@ -60,7 +60,7 @@ class NewsItemFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def add_several_imagesblock(self, created, count, **kwargs):
-        """Add specified count of content block with Images to News."""
+        """Add specified count of content block with Images."""
         if created and count:
             NewsItemContentModuleFactory.create_batch(
                 count,
@@ -70,50 +70,30 @@ class NewsItemFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def add_several_personsblock(self, created, count, **kwargs):
-        """Add specified count of content block with Persons to News."""
+        """Add specified count of content block with Persons."""
         if created and count:
             NewsItemContentModuleFactory.create_batch(count, content_page=self, array_person=True)
 
     @factory.post_generation
     def add_several_playsblock(self, created, count, **kwargs):
-        """Add specified count of content block with Plays to News."""
+        """Add specified count of content block with Plays."""
         if created and count:
             NewsItemContentModuleFactory.create_batch(count, content_page=self, array_play=True)
 
     @factory.post_generation
-    def add_several_preamble(self, created, count, **kwargs):
-        """Add specified count of Preamble item to News."""
+    def add_several_rich_text(self, created, count, **kwargs):
+        """Add specified count of RichText unit."""
         if created and count:
-            NewsItemContentModuleFactory.create_batch(count, content_page=self, unit_preamble=True)
-
-    @factory.post_generation
-    def add_several_quote(self, created, count, **kwargs):
-        """Add specified count of Quote item to News."""
-        if created and count:
-            NewsItemContentModuleFactory.create_batch(count, content_page=self, unit_quote=True)
-
-    @factory.post_generation
-    def add_several_text(self, created, count, **kwargs):
-        """Add specified count of Text item to News."""
-        if created and count:
-            NewsItemContentModuleFactory.create_batch(count, content_page=self, unit_text=True)
-
-    @factory.post_generation
-    def add_several_title(self, created, count, **kwargs):
-        """Add specified count of Title item to News."""
-        if created and count:
-            NewsItemContentModuleFactory.create_batch(count, content_page=self, unit_title=True)
+            NewsItemContentModuleFactory.create_batch(count, content_page=self, unit_rich_text=True)
 
     @classmethod
-    def complex_create(cls, count):
+    def complex_create(cls, count, **kwargs):
         """Create specified count of News with fully populated content."""
         return cls.create_batch(
             count,
-            add_several_preamble=1,
-            add_several_text=1,
-            add_several_title=1,
-            add_several_quote=1,
             add_several_playsblock=1,
             add_several_imagesblock=1,
             add_several_personsblock=1,
+            add_several_rich_text=1,
+            **kwargs,
         )
