@@ -1,15 +1,10 @@
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import PasswordResetForm, UserChangeForm, UserCreationForm
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import Group
-from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import ValidationError
 from django.utils.crypto import get_random_string
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-
-from apps.core.services.send_email import send_email
 
 User = get_user_model()
 
@@ -20,29 +15,6 @@ class UserAdminForm(UserChangeForm):
 
         if groups.count() > 1:
             raise ValidationError("Выбрать можно только одну группу.")
-
-
-class UserAdminPasswordResetForm(PasswordResetForm):
-    def send_email_to_user(self, from_email, template_id, domain):
-        email = self.cleaned_data["email"]
-        user = User.objects.filter(email=email).first()
-        uid = urlsafe_base64_encode(force_bytes(user.pk))
-        token = default_token_generator.make_token(user)
-        link = f"{domain}/admin/reset/{uid}/{token}"
-
-        context = {
-            "full_name": user.get_full_name(),
-            "username": user.get_username(),
-            "email": user.email,
-            "domain": domain,
-            "link": link,
-        }
-        send_email(
-            from_email=from_email,
-            to_emails=(user.email,),
-            template_id=template_id,
-            context=context,
-        )
 
 
 class UserAdminCreationForm(UserCreationForm):

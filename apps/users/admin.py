@@ -3,11 +3,16 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Permission
+from django.contrib.auth.tokens import default_token_generator
+from django.urls import reverse
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
 
 from apps.core.models import Setting
+from apps.core.services.send_email import send_email
 from apps.core.utils import get_domain
 
-from .forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm, UserAdminPasswordResetForm
+from .forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm
 from .models import ProxyGroup
 
 User = get_user_model()
@@ -69,13 +74,26 @@ class UserAdmin(DjangoUserAdmin):
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-        reset_form = UserAdminPasswordResetForm({"email": obj.email})
-        domain = get_domain(request)
-        if reset_form.is_valid():
-            reset_form.send_email_to_user(
+
+        if not change:
+            domain = get_domain(request)
+            uid = urlsafe_base64_encode(force_bytes(obj.pk))
+            token = default_token_generator.make_token(obj)
+            reverse_link = reverse("password_reset_confirm", kwargs={"uidb64": uid, "token": token})
+            link = f"{domain}{reverse_link}"
+
+            context = {
+                "full_name": obj.get_full_name(),
+                "username": obj.get_username(),
+                "email": obj.email,
+                "domain": domain,
+                "link": link,
+            }
+            send_email(
                 from_email=Setting.get_setting("email_send_from"),
+                to_emails=(obj.email,),
                 template_id=settings.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER,
-                domain=domain,
+                context=context,
             )
 
 

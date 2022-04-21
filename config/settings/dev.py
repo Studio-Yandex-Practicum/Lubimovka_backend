@@ -72,6 +72,3 @@ ANYMAIL = {
     "MAILJET_API_KEY": env("MAILJET_API_KEY", default=None),
     "MAILJET_SECRET_KEY": env("MAILJET_SECRET_KEY", default=None),
 }
-
-# https://anymail.readthedocs.io/en/stable/installation/?highlight=SERVER_EMAIL#configuring-django-s-email-backend
-SERVER_EMAIL = env("SERVER_EMAIL", default=None)

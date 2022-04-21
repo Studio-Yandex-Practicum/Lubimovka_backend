@@ -54,6 +54,3 @@ DATABASES = {
         "PORT": env("POSTGRES_PORT", default="5432"),
     }
 }
-
-# https://anymail.readthedocs.io/en/stable/installation/?highlight=SERVER_EMAIL#configuring-django-s-email-backend
-SERVER_EMAIL = env("SERVER_EMAIL", default=None)
