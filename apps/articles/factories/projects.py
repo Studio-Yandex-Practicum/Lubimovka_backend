@@ -39,7 +39,7 @@ class ProjectFactory(factory.django.DjangoModelFactory):
     """Creates Project Page.
 
     You can customize Project's content by adding method and count when
-    create (e.g. 'ProjectFactory.create(add_several_preamble=5,
+    create (e.g. 'ProjectFactory.create(add_several_rich_text=5,
     add_several_personsblock=3)). Content item/block will not be
     created if relevant method are not mentioned.
     You can use 'complex_create' which will create all content item/block
@@ -92,10 +92,10 @@ class ProjectFactory(factory.django.DjangoModelFactory):
             ProjectContentModuleFactory.create_batch(count, content_page=self, array_play=True)
 
     @factory.post_generation
-    def add_several_text(self, created, count, **kwargs):
-        """Add specified count of Text item to Project."""
+    def add_several_rich_text(self, created, count, **kwargs):
+        """Add specified count of RichText unit."""
         if created and count:
-            ProjectContentModuleFactory.create_batch(count, content_page=self, unit_text=True)
+            ProjectContentModuleFactory.create_batch(count, content_page=self, unit_rich_text=True)
 
     @factory.post_generation
     def add_several_videosblock(self, created, count, **kwargs):
@@ -104,15 +104,16 @@ class ProjectFactory(factory.django.DjangoModelFactory):
             ProjectContentModuleFactory.create_batch(count, content_page=self, array_video=True)
 
     @classmethod
-    def complex_create(cls, count):
+    def complex_create(cls, count, **kwargs):
         """Create specified count of Project with fully populated content."""
         return cls.create_batch(
             count,
-            add_several_text=1,
+            add_several_eventsblock=1,
+            add_several_imagesblock=1,
             add_several_links=1,
             add_several_playsblock=1,
-            add_several_imagesblock=1,
             add_several_personsblock=1,
+            add_several_rich_text=1,
             add_several_videosblock=1,
-            add_several_eventsblock=1,
+            **kwargs,
         )

@@ -57,7 +57,7 @@ class BlogItemFactory(factory.django.DjangoModelFactory):
     """Create `BlogItem` Page.
 
     You can customize Blog's content by adding method and count when
-    create (e.g. 'BlogFactory.create(add_several_preamble=5,
+    create (e.g. 'BlogFactory.create(add_several_rich_text=5,
     add_several_personsblock=3)). Content item/block will not be
     created if relevant method are not mentioned.
     You can use 'complex_create' which will create all content item/block
@@ -106,40 +106,20 @@ class BlogItemFactory(factory.django.DjangoModelFactory):
             BlogItemContentModuleFactory.create_batch(count, content_page=self, array_play=True)
 
     @factory.post_generation
-    def add_several_preamble(self, created, count, **kwargs):
-        """Add specified count of Preamble item to Blog."""
+    def add_several_rich_text(self, created, count, **kwargs):
+        """Add specified count of RichText content."""
         if created and count:
-            BlogItemContentModuleFactory.create_batch(count, content_page=self, unit_preamble=True)
-
-    @factory.post_generation
-    def add_several_quote(self, created, count, **kwargs):
-        """Add specified count of Quote item to Blog."""
-        if created and count:
-            BlogItemContentModuleFactory.create_batch(count, content_page=self, unit_quote=True)
-
-    @factory.post_generation
-    def add_several_text(self, created, count, **kwargs):
-        """Add specified count of Text item to Blog."""
-        if created and count:
-            BlogItemContentModuleFactory.create_batch(count, content_page=self, unit_text=True)
-
-    @factory.post_generation
-    def add_several_title(self, created, count, **kwargs):
-        """Add specified count of Title item to Blog."""
-        if created and count:
-            BlogItemContentModuleFactory.create_batch(count, content_page=self, unit_title=True)
+            BlogItemContentModuleFactory.create_batch(count, content_page=self, unit_rich_text=True)
 
     @classmethod
-    def complex_create(cls, count):
+    def complex_create(cls, count, **kwargs):
         """Create specified count of Blog with fully populated content."""
         return cls.create_batch(
             count,
             add_several_co_author=1,
-            add_several_preamble=1,
-            add_several_text=1,
-            add_several_title=1,
-            add_several_quote=1,
             add_several_playsblock=1,
             add_several_imagesblock=1,
             add_several_personsblock=1,
+            add_several_rich_text=1,
+            **kwargs,
         )

@@ -5,6 +5,18 @@ from apps.core.serializers import PersonRoleSerializer
 from apps.library.serializers import AuthorForPlaySerializer as LibraryPlayAuthorSerializer
 
 
+class ContentUnitRichTextSerializer(serializers.Serializer):
+    rich_text = serializers.CharField(
+        label="Форматированный текст с HTML разметкой",
+        help_text=(
+            "Текст с HTML разметкой. Может содержать теги блоков: `h3`, `h4`, `p`. "
+            "Блоки могут быть обернуты `blockquote` или использоваться в списках `ol`, `ul`. "
+            "Разрешены теги элементов: `strong`, `em`, `a`. "
+            r"Блоки разделятся последовательностью символов `\r\n\r\n`."
+        ),
+    )
+
+
 class ExtendedPersonSerializer(serializers.Serializer):
     id = serializers.SlugRelatedField(
         source="person",

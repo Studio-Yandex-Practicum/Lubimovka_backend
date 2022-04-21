@@ -2,6 +2,7 @@ from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_fiel
 from rest_framework import serializers
 
 from apps.content_pages.models import (
+    ContentUnitRichText,
     EventsBlock,
     ImagesBlock,
     Link,
@@ -14,6 +15,7 @@ from apps.content_pages.models import (
     VideosBlock,
 )
 from apps.content_pages.serializers import (
+    ContentUnitRichTextSerializer,
     EventsBlockSerializer,
     ImagesBlockSerializer,
     LinkSerializer,
@@ -27,6 +29,7 @@ from apps.content_pages.serializers import (
 )
 
 CONTENT_OBJECT_SERIALIZER_PAIRS = {
+    ContentUnitRichText: ContentUnitRichTextSerializer,
     EventsBlock: EventsBlockSerializer,
     ImagesBlock: ImagesBlockSerializer,
     Link: LinkSerializer,
@@ -85,7 +88,7 @@ class BaseContentSerializer(serializers.Serializer):
 
 
 class BaseContentPageSerializer(serializers.Serializer):
-    """Adds "contents" field to any serializer."""
+    """Add `contents` field to any serializer."""
 
     contents = BaseContentSerializer(
         many=True,

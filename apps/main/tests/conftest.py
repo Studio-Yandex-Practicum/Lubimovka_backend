@@ -62,32 +62,12 @@ def banners():
 
 @pytest.fixture
 def news_items_with_content(plays, images_block):
-    return NewsItemFactory.create_batch(
-        3,
-        add_several_preamble=1,
-        add_several_text=1,
-        add_several_title=1,
-        add_several_quote=1,
-        add_several_playsblock=1,
-        add_several_imagesblock=1,
-        add_several_personsblock=1,
-        status="PUBLISHED",
-    )
+    return NewsItemFactory.complex_create(3, status="PUBLISHED")
 
 
 @pytest.fixture
-def blog_items_with_content():
-    return BlogItemFactory.create_batch(
-        3,
-        add_several_co_author=1,
-        add_several_imagesblock=1,
-        add_several_personsblock=1,
-        add_several_playsblock=1,
-        add_several_preamble=1,
-        add_several_quote=1,
-        add_several_text=1,
-        add_several_title=1,
-    )
+def blog_items_with_content(plays, images_block):
+    return BlogItemFactory.complex_create(3, status="PUBLISHED")
 
 
 @pytest.fixture

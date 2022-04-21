@@ -3,15 +3,12 @@ from django.contrib.contenttypes.models import ContentType
 
 from apps.afisha.models import Event
 from apps.content_pages.factories import (
+    ContentUnitRichTextFactory,
     EventsBlockFactory,
     ImagesBlockFactory,
     LinkFactory,
     PersonsBlockFactory,
     PlaysBlockFactory,
-    PreambleFactory,
-    QuoteFactory,
-    TextFactory,
-    TitleFactory,
     VideosBlockFactory,
 )
 from apps.content_pages.models import AbstractContent
@@ -39,10 +36,7 @@ class AbstractContentFactory(factory.django.DjangoModelFactory):
         array_play = factory.Trait(item=factory.SubFactory(PlaysBlockFactory))
         array_video = factory.Trait(item=factory.SubFactory(VideosBlockFactory))
         unit_link = factory.Trait(item=factory.SubFactory(LinkFactory))
-        unit_preamble = factory.Trait(item=factory.SubFactory(PreambleFactory))
-        unit_quote = factory.Trait(item=factory.SubFactory(QuoteFactory))
-        unit_text = factory.Trait(item=factory.SubFactory(TextFactory))
-        unit_title = factory.Trait(item=factory.SubFactory(TitleFactory))
+        unit_rich_text = factory.Trait(item=factory.SubFactory(ContentUnitRichTextFactory))
 
     content_page = None
     item = None

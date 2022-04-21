@@ -177,8 +177,15 @@ class Festival(BaseModel):
 
 
 class PressRelease(BaseModel):
-    title = models.CharField(max_length=500, unique=True, verbose_name="Заголовок")
-    text = RichTextField(verbose_name="Текст")
+    title = models.CharField(
+        max_length=500,
+        unique=True,
+        verbose_name="Заголовок",
+    )
+    text = RichTextField(
+        config_name="lubimovka_styles",
+        verbose_name="Текст",
+    )
     festival = models.OneToOneField(
         Festival,
         on_delete=models.CASCADE,

@@ -135,7 +135,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
             [TeamMemberFactory.create(reading=self, role_slug=role_slug) for role_slug in role_slugs]
 
     @classmethod
-    def complex_create(cls, count=1):
+    def complex_create(cls, count=1, **kwargs):
         """Create Performance object with fully populated fields.
 
         You should create at least one Play and Project
@@ -146,6 +146,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
             add_images_in_block=True,
             add_review=True,
             add_media_review=True,
+            **kwargs,
         )
 
 

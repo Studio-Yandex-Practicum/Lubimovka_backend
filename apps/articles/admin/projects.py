@@ -9,6 +9,7 @@ class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = ProjectContent
 
     content_type_model = (
+        "contentunitrichtext",
         "eventsblock",
         "imagesblock",
         "link",
@@ -19,6 +20,7 @@ class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
     )
 
 
+@admin.register(Project)
 class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
@@ -59,6 +61,3 @@ class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "image_preview_change_page",
         "image",
     )
-
-
-admin.site.register(Project, ProjectAdmin)
