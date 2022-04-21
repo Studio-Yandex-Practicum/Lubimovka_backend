@@ -1,4 +1,3 @@
-from .contacts import ContactsSerializer
 from .festival import FestivalSerializer, YearsSerializer
 from .festivalteams import FestivalTeamsSerializer
 from .partners import PartnerSerializer
@@ -16,7 +15,6 @@ __all__ = (
     VolunteersSerializer,
     FestivalSerializer,
     YearsSerializer,
-    ContactsSerializer,
     SettingsSerializer,
     SelectorsSerializer,
 )

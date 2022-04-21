@@ -1,5 +1,3 @@
-from apps.info.views.contacts import ContactsAPIView
-
 from .festival import FestivalAPIView, FestivalYearsAPIView
 from .festivalteams import FestivalTeamsAPIView
 from .partners import PartnersAPIView
@@ -21,7 +19,6 @@ __all__ = (
     PressReleaseDownloadAPIView,
     SponsorsAPIView,
     VolunteersAPIView,
-    ContactsAPIView,
     SettingsAPIView,
     SelectorsAPIView,
 )
