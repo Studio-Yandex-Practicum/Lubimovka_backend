@@ -10,7 +10,7 @@ class SettingsAPIView(APIView):
     @extend_schema(request=None, responses=SettingsSerializer)
     def get(self, request):
         """Get all required emails that can be changed."""
-        email = Setting.get_setting("email_send_to")
+        email_send_to = Setting.get_setting("email_send_to")
         email_on_project_page = Setting.get_setting("email_on_project_page")
         email_on_what_we_do_page = Setting.get_setting("email_on_what_we_do_page")
         email_on_trustees_page = Setting.get_setting("email_on_trustees_page")
@@ -23,7 +23,7 @@ class SettingsAPIView(APIView):
         pr_director = Person.objects.filter(festivalteammember__is_pr_director=True).first()
         plays_reception_is_open = Setting.get_setting("plays_reception_is_open")
         data = {
-            "email": email,
+            "email_send_to": email_send_to,
             "email_on_project_page": email_on_project_page,
             "email_on_what_we_do_page": email_on_what_we_do_page,
             "email_on_trustees_page": email_on_trustees_page,
