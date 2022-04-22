@@ -141,6 +141,12 @@ class Command(BaseCommand):
             observer, created = Group.objects.get_or_create(name="observer")
             observer.permissions.set(observer_permissions)
 
+            # Удалить разрешения для приложений Sites и Sessions
+            deleted_permissions = Permission.objects.filter(
+                Q(codename__icontains="_site") | Q(codename__icontains="_session")
+            )
+            deleted_permissions.delete()
+
             self.stdout.write(self.style.SUCCESS("Права для пользователей успешно установлены."))
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка установки прав."))
