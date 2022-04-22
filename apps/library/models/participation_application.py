@@ -70,7 +70,7 @@ class ParticipationApplicationFestival(BaseModel):
     url_file_in_storage = models.URLField(
         verbose_name="Ссылка для скачивания файла с Диска",
         blank=True,
-        max_length=512,
+        max_length=1024,
     )
 
     BOOL_CHOICES = ((True, "Да"), (False, "Нет"))
@@ -108,7 +108,7 @@ class ParticipationApplicationFestival(BaseModel):
 
     def save(self, *args, **kwargs):
         """Save generated filename."""
-        if self.file:
+        if self.file and not self.saved_to_storage:
             self.file.name = self.generate_filename()
         super().save(*args, **kwargs)
 
