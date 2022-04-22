@@ -5,17 +5,7 @@ from django.utils.html import format_html
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.form import FestTeamMemberForm
-from apps.info.models import (
-    Festival,
-    FestivalTeamMember,
-    Partner,
-    Place,
-    PressRelease,
-    Question,
-    Selector,
-    Sponsor,
-    Volunteer,
-)
+from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
@@ -320,17 +310,6 @@ class SponsorAdmin(admin.ModelAdmin):
         "position",
     )
     autocomplete_fields = ("person",)
-
-
-@admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ("id", "author_name", "author_email", "question", "sent")
-    list_filter = ("sent",)
-
-    def has_module_permission(self, request):
-        if request.user.is_authenticated and (request.user.is_admin or request.user.is_superuser):
-            return super().has_module_permission(request)
-        return False
 
 
 @admin.register(Selector)

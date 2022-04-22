@@ -5,9 +5,9 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.info.models import Question
-from apps.info.schema.schema_extension import ERROR_MESSAGES_FOR_QUESTION_FOR_400
-from apps.info.utils import send_question
+from apps.feedback.models import Question
+from apps.feedback.schema.schema_extension import ERROR_MESSAGES_FOR_QUESTION_FOR_400
+from apps.feedback.utils import send_question
 
 
 class QuestionCreateAPIView(APIView):

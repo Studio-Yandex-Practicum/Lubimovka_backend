@@ -19,7 +19,6 @@ TEAMS_URL_FILTER = TEAMS_URL + "?team="
 SPONSORS_URL = reverse("sponsors")
 VOLUNTEERS_URL = reverse("volunteers")
 PARTNERS_URL = reverse("partners")
-QUESTIONS_URL = reverse("questions")
 
 
 @pytest.fixture(autouse=True)
