@@ -195,6 +195,27 @@ def add_email_settings(apps, schema_editor):
         text="Вопрос Любимовке",
         description="Тема письма для вопроса",
     )
+    Setting.objects.get_or_create(
+        field_type="EMAIL",
+        group="EMAIL",
+        settings_key="email_on_volunteers_page",
+        email="author@gmail.com",
+        description="Почта для тех кто хочет стать волонтером",
+    )
+    Setting.objects.get_or_create(
+        field_type="EMAIL",
+        group="EMAIL",
+        settings_key="email_on_blog_page",
+        email="author@gmail.com",
+        description="Почта для тех кто хочет стать автором",
+    )
+    Setting.objects.get_or_create(
+        field_type="EMAIL",
+        group="EMAIL",
+        settings_key="email_on_support_page",
+        email="author@gmail.com",
+        description="Почта для получения отчетности об использовании пожертвований",
+    )
 
 
 def add_afisha_settings(apps, schema_editor):

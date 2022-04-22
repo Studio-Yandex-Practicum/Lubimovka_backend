@@ -108,3 +108,16 @@
 
    message.template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
     ```
+
+
+### Правило для создания новых настроек в settings
+1. При добавлении новых настроек миграцию стоет называть "00XX_data_additional..."
+    T.e **так плохо**
+    ```python
+   "migrations/0016_additional_email_settings.py"
+
+    ```
+    Так **хорошо**
+    ```python
+    "migrations/0016_data_additional_email_settings.py"
+    ```

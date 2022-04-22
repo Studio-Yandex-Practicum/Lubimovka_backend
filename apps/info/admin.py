@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
-from django.utils.translation import gettext_lazy as _
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
+from apps.info.filters import HasReviewFilter
 from apps.info.form import FestTeamMemberForm
 from apps.info.models import (
     Festival,
@@ -99,23 +99,6 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     list_filter = ("city",)
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
-
-
-class HasReviewFilter(admin.SimpleListFilter):
-    title = _("Есть отзыв?")
-    parameter_name = "volunteer"
-
-    def lookups(self, request, model_admin):
-        return (
-            ("True", _("Да")),
-            ("False", _("Нет")),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == "True":
-            return queryset.exclude(review_text__exact="")
-        if self.value() == "False":
-            return queryset.filter(review_text__exact="")
 
 
 @admin.register(Volunteer)
