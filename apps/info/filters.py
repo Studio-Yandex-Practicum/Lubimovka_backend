@@ -8,7 +8,7 @@ class YearFestivalFilterSet(FilterSet):
     year = filters.NumberFilter(field_name="festival__year")
 
 
-class HasReviewFilter(admin.SimpleListFilter):
+class HasReviewAdminFilter(admin.SimpleListFilter):
     title = _("Есть отзыв?")
     parameter_name = "volunteer"
 

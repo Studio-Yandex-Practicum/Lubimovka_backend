@@ -4,7 +4,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.filters import HasReviewFilter
+from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import FestTeamMemberForm
 from apps.info.models import (
     Festival,
@@ -112,7 +112,7 @@ class VolunteerAdmin(admin.ModelAdmin):
     readonly_fields = ("is_review",)
     list_filter = (
         "festival",
-        HasReviewFilter,
+        HasReviewAdminFilter,
     )
 
     @admin.display(
