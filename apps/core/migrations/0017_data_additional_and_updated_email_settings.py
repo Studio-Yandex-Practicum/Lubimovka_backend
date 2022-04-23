@@ -26,12 +26,19 @@ def add_email_settings(apps, schema_editor):
         email="author@gmail.com",
         description="Почта для получения отчетности об использовании пожертвований",
     )
+    Setting.objects.update_or_create(
+        field_type="TEXT",
+        group="EMAIL",
+        settings_key="pr_directore_dative_name",
+        text="Имя Фамилия в дательном падеже (пример: Анне Загородниковой)",
+        description="Имя PR деректора на странице для прессы (в дательном падеже)",
+    )
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0015_add_press_realease_data'),
+        ('core', '0016_add_new_emails'),
     ]
 
     operations = [

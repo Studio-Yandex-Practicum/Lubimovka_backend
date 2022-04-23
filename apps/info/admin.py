@@ -264,8 +264,8 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ("pr_director_name",),
-                "classes": ("form-row field-pr_director_name",),
+                "fields": ("pr_directore_dative_name",),
+                "classes": ("form-row field-pr_directore_dative_name",),
             },
         ),
     )
@@ -275,13 +275,13 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
     search_fields = ("position", "person__first_name", "person__last_name")
 
     def save_model(self, request, obj, form, change):
-        """Данные из поля 'pr_director_name' проверяются и сохраняются в модели 'Setting'."""
+        """Данные из поля 'pr_directore_dative_name' проверяются и сохраняются в модели 'Setting'."""
         if form.is_valid():
             team = "fest"
             if obj.is_pr_director:
-                name_director = form.cleaned_data["pr_director_name"]
+                name_director = form.cleaned_data["pr_directore_dative_name"]
                 FestivalTeamMember.objects.filter(is_pr_director=True).update(is_pr_director=False)
-                Setting.objects.filter(settings_key="pr_director_name").update(text=name_director)
+                Setting.objects.filter(settings_key="pr_directore_dative_name").update(text=name_director)
             obj = form.save(commit=False)
             obj.team = team
             obj.save()
@@ -293,7 +293,7 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
         return qs
 
     class Media:
-        """Adds a script that displays the field ```pr_director_name``` if ```is_pr_director``` is selected."""
+        """Adds a script that displays the field ```pr_directore_dative_name``` if ```is_pr_director``` is selected."""
 
         js = ("admin/info/js/FestivalTeamFooter.js",)
 

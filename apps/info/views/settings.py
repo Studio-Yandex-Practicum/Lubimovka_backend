@@ -10,7 +10,7 @@ class SettingsAPIView(APIView):
     @extend_schema(request=None, responses=SettingsSerializer)
     def get(self, request):
         """Get all required emails that can be changed except email on contacts page."""
-        response_data = selectors.afisha_info_get()
+        response_data = selectors.info_settings_get()
         context = {"request": request}
         serializer = SettingsSerializer(response_data, context=context)
         return Response(serializer.data)
