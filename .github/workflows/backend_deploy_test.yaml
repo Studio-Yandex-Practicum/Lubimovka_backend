@@ -141,10 +141,12 @@ jobs:
             echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-test
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-test
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-test
-            echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-test
             echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-test
             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-test
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-test
+            echo MAILJET_TEMPLATE_ID_QUESTION=${{ secrets.MAILJET_TEMPLATE_ID_QUESTION }} >> .env-test
+            echo MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER=${{ secrets.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER }} >> .env-test
+            echo MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION=${{ secrets.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION }} >> .env-test
 
             # Secrets variables for google sheets in Django:
             echo GOOGLE_PRIVATE_KEY_ID=${{ secrets.GOOGLE_PRIVATE_KEY_ID }} >> .env-test

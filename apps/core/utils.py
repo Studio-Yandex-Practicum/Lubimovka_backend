@@ -1,13 +1,15 @@
+import logging
 import urllib
 from functools import wraps
 
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify as django_slugify
-from rest_framework import status
 from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
+
+logger = logging.getLogger("django")
 
 
 def slugify(name):
@@ -130,8 +132,7 @@ def get_app_list(self, request):
     return app_list
 
 
-def send_email(message):
-    message.send()
-    if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
-        return True
-    return False
+def get_domain(request):
+    server_protocol = request.META["SERVER_PROTOCOL"].split("/1.1")[0].lower()
+    domain = server_protocol + "://" + request.META["HTTP_HOST"]
+    return domain
