@@ -179,21 +179,21 @@ def add_email_settings(apps, schema_editor):
         group="EMAIL",
         settings_key="email_send_from",
         text="lubimovka-2021@yandex.ru",
-        description="Почта для отправки вопроса",
+        description="Почта для отправки писем.",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_send_to",
         text="lubimovka-2021@yandex.ru",
-        description="Почта для приёма вопроса",
+        description="Почта для приёма вопросов.",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
-        settings_key="email_subject_for_question",
-        text="Вопрос Любимовке",
-        description="Тема письма для вопроса",
+        settings_key="email_to_send_participations",
+        text="lubimovka-2021@yandex.ru",
+        description="Почта для приёма заявок на участие.",
     )
 
 
