@@ -1,4 +1,5 @@
 import urllib
+from datetime import date
 from functools import wraps
 
 from django.conf import settings
@@ -8,6 +9,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
+from config.settings.base import HASH_SECRET_KEY
 
 
 def slugify(name):
@@ -135,3 +137,8 @@ def send_email(message):
     if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
         return True
     return False
+
+
+def create_hash(object_id):
+    """Generate a hash for unpublished pages based on object_id and SECRET_KEY."""
+    return hash(HASH_SECRET_KEY + str(object_id) + str(date.today()))

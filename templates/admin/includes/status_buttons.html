@@ -1,6 +1,8 @@
 {% load i18n %}
 {% if original.status %}
-{% include "admin/includes/preview_unpublished_button.html" %}
+<div class="submit-row">
+   {% include "admin/includes/preview_unpublished_button.html" %}
+</div>
 <div class="submit-row">
     <strong> текущий статус: {{ original.get_status_display }} </strong>
     {% if user_level >= current_status_level %}

@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
 from apps.core.constants import STATUS_INFO
-from apps.core.utils import get_object, get_user_change_perms_for_status, get_user_perms_level
+from apps.core.utils import create_hash, get_object, get_user_change_perms_for_status, get_user_perms_level
 
 
 class StatusButtonMixin:
@@ -32,6 +32,7 @@ class StatusButtonMixin:
         if not hasattr(obj, "status"):
             return super().change_view(request, object_id, form_url, extra_context)
         user_level = get_user_perms_level(request, obj)
+        preview_page_hash = create_hash(object_id)
 
         # making Status buttons context for template
         possible_changes = STATUS_INFO[obj.status]["possible_changes"]
@@ -42,6 +43,9 @@ class StatusButtonMixin:
         extra_context["user_level"] = user_level
         extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
         extra_context["possible_statuses"] = statuses
+
+        # add hash for unpublished pages
+        extra_context["hash"] = preview_page_hash
 
         # hide buttons SAVE if user doesnt have permission to change in current status
         right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]

@@ -1,5 +1,5 @@
 {% load i18n %}
 <form action="" method="GET">
-{% csrf_token %}
-   <a class="button" href="{% url 'blog-item-detail-preview' original.id %}" >Предпросмотр страницы</a>
+   <strong> смотреть: </strong>
+       <a class="button" href="{% url 'blog-item-detail-preview' original.id hash %}" >{% if original.get_status_display != 'Опубликовано' %} Предпросмотр страницы {% else %} Просмотр страницы {% endif%}</a>
 </form>

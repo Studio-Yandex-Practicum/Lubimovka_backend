@@ -88,7 +88,9 @@ class BlogItemDetailAPI(APIView):
 
 
 class PreviewBlogItemDetailAPI(BlogItemDetailAPI):
-    def get(self, request, id):
+    """Return preview page of `BlogItem` object."""
+
+    def get(self, request, id, **kwargs):
         published_blog_items = BlogItem.ext_objects.published()
         current_blog_item_detail = get_object_or_404(BlogItem, id=id)
         if not published_blog_items.filter(id=id).exists():

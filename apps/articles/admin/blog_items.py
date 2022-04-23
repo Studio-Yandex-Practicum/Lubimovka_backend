@@ -5,6 +5,7 @@ from django.utils.safestring import mark_safe
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.utils import create_hash
 
 
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
@@ -32,7 +33,7 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "pub_date",
         "image_preview_list_page",
         "status",
-        "button",
+        "button_preview_page",
     )
     readonly_fields = (
         "status",
@@ -77,9 +78,19 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
     @admin.display(
         description="Предпросмотр страницы",
     )
-    def button(self, obj):
-        preview_link = reverse("blog-item-detail-preview", args=[obj.id])
-        return mark_safe(f'<a class="button" href={preview_link} >Предпросмотр</a>')
+    def button_preview_page(self, obj):
+        preview_page_hash = create_hash(obj.id)
+        preview_link = reverse(
+            "blog-item-detail-preview",
+            kwargs={
+                "id": obj.id,
+                "hash": preview_page_hash,
+            },
+        )
+        label_button = "Предпросмотр"
+        if obj.status and obj.status == "PUBLISHED":
+            label_button = "Просмотр"
+        return mark_safe(f'<a class="button" href={preview_link}>{label_button}</a>')
 
 
 admin.site.register(BlogItem, BlogItemAdmin)
