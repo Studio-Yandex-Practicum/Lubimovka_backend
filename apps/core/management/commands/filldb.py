@@ -32,6 +32,10 @@ def notification(command, objects, text):
     command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создано."))
 
 
+def notification_singular(command, objects, text):
+    command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создан."))
+
+
 class Command(BaseCommand):
     help = (
         "Заполняет БД тестовыми данными. Сейчас доступны:"
@@ -95,6 +99,9 @@ class Command(BaseCommand):
 
             teams = FestivalTeamFactory.create_batch(70)
             notification(self, teams, "членов команд")
+
+            team_with_pr_director = FestivalTeamFactory.create_batch(1)
+            notification_singular(self, team_with_pr_director, "член команды являющийся pr-директором")
 
             images = ImageFactory.create_batch(5)
             notification(self, images, "картинки")

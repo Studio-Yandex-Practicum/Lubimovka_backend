@@ -195,21 +195,21 @@ def add_email_settings(apps, schema_editor):
         text="lubimovka-2021@yandex.ru",
         description="Почта для приёма заявок на участие.",
     )
-    Setting.objects.get_or_create(
+    Setting.objects.create(
         field_type="EMAIL",
         group="EMAIL",
         settings_key="email_on_volunteers_page",
         email="author@gmail.com",
         description="Почта для тех кто хочет стать волонтером",
     )
-    Setting.objects.get_or_create(
+    Setting.objects.create(
         field_type="EMAIL",
         group="EMAIL",
         settings_key="email_on_blog_page",
         email="author@gmail.com",
         description="Почта для тех кто хочет стать автором",
     )
-    Setting.objects.get_or_create(
+    Setting.objects.create(
         field_type="EMAIL",
         group="EMAIL",
         settings_key="email_on_support_page",
