@@ -16,7 +16,7 @@ def info_settings_get() -> dict[str, Union[str, bool, dict[str, str]]]:
         "email_on_blog_page",
         "email_on_support_page",
         "photo_gallery_facebook",
-        "pr_director_dative_name",
+        "pr_director_name",
         "plays_reception_is_open",
     )
     info_settings_data = Setting.get_settings(settings_keys)
@@ -24,7 +24,7 @@ def info_settings_get() -> dict[str, Union[str, bool, dict[str, str]]]:
     pr_director = Person.objects.filter(festivalteammember__is_pr_director=True).first()
     for_press = {
         "pr_director": {
-            "pr_director_dative_name": info_settings_data.pop("pr_director_dative_name"),
+            "pr_director_name": info_settings_data.pop("pr_director_name"),
             "pr_director_email": pr_director.email,
             "pr_director_photo_link": pr_director.image,
         },

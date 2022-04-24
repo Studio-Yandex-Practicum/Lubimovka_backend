@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 
 class PRDirectorSerializer(serializers.Serializer):
-    pr_director_dative_name = serializers.CharField(max_length=60)
+    pr_director_name = serializers.CharField(max_length=60)
     pr_director_email = serializers.EmailField()
     pr_director_photo_link = serializers.ImageField()
 
