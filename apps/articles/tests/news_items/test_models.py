@@ -14,9 +14,9 @@ pytestmark = [pytest.mark.django_db]
         {"unit_rich_text": True},
     )
 )
-def news_item_content_module(request, one_news_published, plays, persons):
+def news_item_content_module(request, news_item_published, plays, persons):
     content_module_param = request.param
-    return NewsItemContentModuleFactory.create(content_page=one_news_published, **content_module_param)
+    return NewsItemContentModuleFactory.create(content_page=news_item_published, **content_module_param)
 
 
 def test_news_item_delete_related_content_module(news_item_content_module, plays, festivals):

@@ -13,7 +13,7 @@ MOSCOW_TZ = ZoneInfo("Europe/Moscow")
 
 
 @pytest.fixture
-def news_1_1995_november():
+def news_item_1_1995_november():
     return NewsItemFactory(
         title="first_year_1995_month_november",
         pub_date=datetime(1995, 11, 12, tzinfo=MOSCOW_TZ),
@@ -22,7 +22,7 @@ def news_1_1995_november():
 
 
 @pytest.fixture
-def news_2_1995_november():
+def news_item_2_1995_november():
     return NewsItemFactory(
         title="second_year_1995_month_november",
         pub_date=datetime(1995, 11, 25, tzinfo=MOSCOW_TZ),
@@ -31,7 +31,7 @@ def news_2_1995_november():
 
 
 @pytest.fixture
-def news_3_2000_january():
+def news_item_3_2000_january():
     return NewsItemFactory(
         title="year_2000_month_january",
         pub_date=datetime(2000, 1, 12, tzinfo=MOSCOW_TZ),
@@ -40,7 +40,7 @@ def news_3_2000_january():
 
 
 @pytest.fixture
-def news_4_2000_october():
+def news_item_4_2000_october():
     return NewsItemFactory(
         title="year_2000_month_october",
         pub_date=datetime(2000, 10, 12, tzinfo=MOSCOW_TZ),
@@ -48,38 +48,40 @@ def news_4_2000_october():
     )
 
 
-def test_news_item_years_months_fields(client, news_1_1995_november):
+def test_news_item_years_months_fields(client, news_item_1_1995_november):
     """Verify that received objects has expected fields."""
     response_data = client.get(NEWS_YEARS_MONTH_URL).data
     (year_month,) = response_data
 
     assert "year" in year_month
-    assert year_month["year"] == news_1_1995_november.pub_date.year
+    assert year_month["year"] == news_item_1_1995_november.pub_date.year
     assert "month" in year_month
-    assert year_month["month"] == news_1_1995_november.pub_date.month
+    assert year_month["month"] == news_item_1_1995_november.pub_date.month
 
 
-def test_news_item_years_months_empty_when_blog_items_not_published(client, one_news_not_published):
+def test_news_item_years_months_empty_when_blog_items_not_published(client, news_item_not_published):
     """Count the amount of results. All `NewsItem` objects are not published and result should be empty."""
     response_data = client.get(NEWS_YEARS_MONTH_URL).data
 
     assert len(response_data) == 0, "Not published objects should not influence years-month response."
 
 
-def test_news_item_years_month_ordering(client, news_1_1995_november, news_3_2000_january, news_4_2000_october):
+def test_news_item_years_month_ordering(
+    client, news_item_1_1995_november, news_item_3_2000_january, news_item_4_2000_october
+):
     """The response should be ordered by years DESC and by month ASC."""
     response_data = client.get(NEWS_YEARS_MONTH_URL).data
     (first_data, second_data, third_data) = response_data
 
-    assert first_data["year"] == news_3_2000_january.pub_date.year
-    assert first_data["month"] == news_3_2000_january.pub_date.month
-    assert second_data["year"] == news_4_2000_october.pub_date.year
-    assert second_data["month"] == news_4_2000_october.pub_date.month
-    assert third_data["year"] == news_1_1995_november.pub_date.year
-    assert third_data["month"] == news_1_1995_november.pub_date.month
+    assert first_data["year"] == news_item_3_2000_january.pub_date.year
+    assert first_data["month"] == news_item_3_2000_january.pub_date.month
+    assert second_data["year"] == news_item_4_2000_october.pub_date.year
+    assert second_data["month"] == news_item_4_2000_october.pub_date.month
+    assert third_data["year"] == news_item_1_1995_november.pub_date.year
+    assert third_data["month"] == news_item_1_1995_november.pub_date.month
 
 
-def test_news_item_years_months_distinct(client, news_1_1995_november, news_2_1995_november):
+def test_news_item_years_months_distinct(client, news_item_1_1995_november, news_item_2_1995_november):
     """Years-month objects should be distinct in response."""
     response_data = client.get(NEWS_YEARS_MONTH_URL).data
 

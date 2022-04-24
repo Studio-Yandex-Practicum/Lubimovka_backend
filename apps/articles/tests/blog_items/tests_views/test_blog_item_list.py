@@ -38,7 +38,7 @@ def blog_items_with_known_datetime():
 
 
 @pytest.mark.parametrize("paginator_field", ("count", "next", "previous", "results"))
-def test_blog_item_list_paginated(client, paginator_field, blog_published):
+def test_blog_item_list_paginated(client, paginator_field, blog_item_published):
     """Look for specific fields for paginated response."""
     response = client.get(BLOG_ITEM_LIST_URL)
     response_data = response.data
@@ -58,7 +58,7 @@ def test_blog_item_list_paginated(client, paginator_field, blog_published):
         "image",
     ),
 )
-def test_blog_item_list_fields(client, expected_field, blog_published):
+def test_blog_item_list_fields(client, expected_field, blog_item_published):
     """Take the first `BlogItem` representation and look for expected fields."""
     response = client.get(BLOG_ITEM_LIST_URL)
     results = response.data.get("results")
@@ -67,7 +67,7 @@ def test_blog_item_list_fields(client, expected_field, blog_published):
     assert expected_field in blog_item_data
 
 
-def test_blog_item_list_not_published_in_results(client, blog_not_published):
+def test_blog_item_list_not_published_in_results(client, blog_item_not_published):
     """Count the amount of results. `BlogItem` objects with status other than `PUBLISHED` should not be there."""
     response = client.get(BLOG_ITEM_LIST_URL)
     count = response.data.get("count")

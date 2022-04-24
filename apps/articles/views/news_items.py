@@ -36,7 +36,7 @@ class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
 
 
 class NewsItemYearsMonthsAPI(APIView):
-    """Return years and monthes of published `NewsItem`."""
+    """Return years and months of published `NewsItem`."""
 
     class NewsItemYearsMonthsOutputSerializer(YearMonthSerializer):
         pass

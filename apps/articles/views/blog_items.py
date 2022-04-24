@@ -84,7 +84,7 @@ class BlogItemDetailAPI(APIView):
 
 
 class BlogItemYearsMonthsAPI(APIView):
-    """Return years and monthes when at least one `BlogItem` published."""
+    """Return years and months of published `BlogItem`."""
 
     class BlogItemYearsMonthsOutputSerializer(YearMonthSerializer):
         pass

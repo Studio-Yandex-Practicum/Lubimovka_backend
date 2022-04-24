@@ -9,7 +9,7 @@ def test_news_item_list_smoke(client):
     assert response.status_code == status.HTTP_200_OK
 
 
-def test_news_item_detail_smoke(client, one_news_published):
+def test_news_item_detail_smoke(client, news_item_published):
     response = client.get("/api/v1/news/100/")
     assert response.status_code == status.HTTP_200_OK
 
