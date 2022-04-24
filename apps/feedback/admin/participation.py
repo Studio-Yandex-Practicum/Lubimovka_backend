@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.library.models import ParticipationApplicationFestival
+from apps.feedback.models import ParticipationApplicationFestival
 
 
 @admin.register(ParticipationApplicationFestival)
