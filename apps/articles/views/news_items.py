@@ -1,11 +1,15 @@
 from django_filters import rest_framework as filters
+from drf_spectacular.utils import extend_schema
 from rest_framework import filters as rest_filters
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
+from apps.articles import selectors
 from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
-from apps.articles.serializers import NewsItemDetailedSerializer, NewsItemListSerializer
+from apps.articles.serializers import NewsItemDetailedSerializer, NewsItemListSerializer, YearMonthSerializer
 
 
 class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
@@ -29,3 +33,16 @@ class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
 
     class Meta:
         model = NewsItem
+
+
+class NewsItemYearsMonthsAPI(APIView):
+    """Return years and months of published `NewsItem`."""
+
+    class NewsItemYearsMonthsOutputSerializer(YearMonthSerializer):
+        pass
+
+    @extend_schema(responses=NewsItemYearsMonthsOutputSerializer(many=True))
+    def get(self, request):
+        news_item_years_months = selectors.article_get_years_months_publications(NewsItem)
+        serializer = self.NewsItemYearsMonthsOutputSerializer(news_item_years_months, many=True)
+        return Response(serializer.data)
