@@ -195,6 +195,27 @@ def add_email_settings(apps, schema_editor):
         text="lubimovka-2021@yandex.ru",
         description="Почта для приёма заявок на участие.",
     )
+    Setting.objects.create(
+        field_type="EMAIL",
+        group="EMAIL",
+        settings_key="email_on_volunteers_page",
+        email="author@gmail.com",
+        description="Почта для тех кто хочет стать волонтером",
+    )
+    Setting.objects.create(
+        field_type="EMAIL",
+        group="EMAIL",
+        settings_key="email_on_blog_page",
+        email="author@gmail.com",
+        description="Почта для тех кто хочет стать автором",
+    )
+    Setting.objects.create(
+        field_type="EMAIL",
+        group="EMAIL",
+        settings_key="email_on_support_page",
+        email="author@gmail.com",
+        description="Почта для получения отчетности об использовании пожертвований",
+    )
 
 
 def add_afisha_settings(apps, schema_editor):
@@ -423,6 +444,19 @@ def add_playsupply_settings(apps, schema_editor):
     )
 
 
+def add_press_release_setting(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
+    Setting.objects.create(
+        field_type="TEXT",
+        group="EMAIL",
+        settings_key="pr_director_name",
+        text="Имя Фамилия в дательном падеже (пример: Анне Загородниковой)",
+        description="Имя PR деректора на странице для прессы (в дательном падеже)",
+    )
+
+
 def add_short_list_program(apps, schema_editor):
     Program = apps.get_model(
         "library",
@@ -472,6 +506,9 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             add_short_list_program,
+        ),
+        migrations.RunPython(
+            add_press_release_setting,
         ),
         migrations.RunPython(
             add_playsupply_settings,

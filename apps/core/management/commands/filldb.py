@@ -29,7 +29,10 @@ from apps.users.factories import AdminUserFactory, EditorUserFactory, Journalist
 
 
 def notification(command, objects, text):
-    command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создано."))
+    if len(objects) > 1:
+        command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создано."))
+    else:
+        command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создан."))
 
 
 class Command(BaseCommand):
