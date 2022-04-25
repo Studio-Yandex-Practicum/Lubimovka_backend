@@ -4,7 +4,7 @@ import factory
 from faker import Faker
 
 from apps.core.decorators import restrict_factory
-from apps.core.models import Image, Person
+from apps.core.models import Image, Person, Setting
 from apps.core.utils import get_picsum_image
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
 
@@ -95,6 +95,13 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
         queryset = Person.objects.filter(city__isnull=False, email__isnull=False).exclude(image__exact="")
         person = queryset.order_by("?").first()
         return person
+
+
+def change_setting_pr_director_name():
+    pr_director = FestivalTeamMember.objects.filter(is_pr_director=True).first()
+    if pr_director:
+        name = pr_director.person.full_name
+        Setting.objects.filter(settings_key="pr_director_name").update(text=name)
 
 
 @restrict_factory(general=(Image,))

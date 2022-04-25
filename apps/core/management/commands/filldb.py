@@ -13,6 +13,7 @@ from apps.info.factories import (
     SelectorFactory,
     SponsorFactory,
     VolunteerFactory,
+    change_setting_pr_director_name,
 )
 from apps.library.factories import (
     AuthorFactory,
@@ -93,8 +94,13 @@ class Command(BaseCommand):
             sponsors = SponsorFactory.create_batch(50)
             notification(self, sponsors, "попечителей")
 
+            pr_director = FestivalTeamFactory.create_batch(1, is_pr_director=True, team="fest")
+            notification(self, pr_director, "PR директор")
+
             teams = FestivalTeamFactory.create_batch(70)
             notification(self, teams, "членов команд")
+
+            change_setting_pr_director_name()
 
             images = ImageFactory.create_batch(5)
             notification(self, images, "картинки")
