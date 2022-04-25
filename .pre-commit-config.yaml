@@ -3,7 +3,7 @@
 repos:
 
 - repo: https://github.com/pre-commit/pre-commit-hooks
-  rev: v4.0.1
+  rev: v4.2.0
   hooks:
     - id: trailing-whitespace
     - id: end-of-file-fixer
@@ -12,14 +12,14 @@ repos:
     - id: check-merge-conflict
 
 - repo: https://github.com/pycqa/isort
-  rev: 5.9.3
+  rev: 5.10.1
   hooks:
     - id: isort
       exclude: migrations
       args: [--profile, black, --line-length=120]
 
 - repo: https://github.com/pycqa/flake8
-  rev: 3.9.2
+  rev: 4.0.1
   hooks:
     - id: flake8
       exclude: (migrations|config/settings/)
@@ -27,7 +27,7 @@ repos:
         - flake8-docstrings
 
 - repo: https://github.com/ambv/black
-  rev: 21.9b0
+  rev: 22.3.0
   hooks:
     - id: black
       exclude: (migrations|config/settings/)

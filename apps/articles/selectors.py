@@ -1,10 +1,24 @@
-from django.db.models import Prefetch, QuerySet
+from typing import Union
+
+from django.db.models import F, Prefetch, QuerySet
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 from django.shortcuts import get_object_or_404
 
 from apps.articles.filters import PubDateFilter
-from apps.articles.models import BlogItem
+from apps.articles.models import BlogItem, NewsItem, Project
+
+
+def article_get_years_months_publications(article_model: Union[BlogItem, NewsItem, Project]) -> QuerySet:
+    """Return distinct years and months of published BlogItem/NewsItem/Project."""
+    publications_years_months_qs = (
+        article_model.ext_objects.published()
+        .annotate(year=F("pub_date__year"), month=F("pub_date__month"))
+        .values("year", "month")
+        .distinct()
+        .order_by("-year", "month")
+    )
+    return publications_years_months_qs
 
 
 def blog_item_list_get(filters: dict[str, str] = None) -> QuerySet:

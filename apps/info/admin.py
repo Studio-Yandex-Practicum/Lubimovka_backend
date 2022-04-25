@@ -4,6 +4,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
+from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import FestTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
@@ -90,22 +91,6 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
-class HasReviewFilter(admin.SimpleListFilter):
-    title = "Есть отзыв?"
-    parameter_name = "volunteer"
-
-    def lookups(self, request, model_admin):
-        return (
-            ("True", "Да"),
-            ("False", "Нет"),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == "True":
-            return Volunteer.objects.exclude(review_text__exact="")
-        return Volunteer.objects.filter(review_text__exact="")
-
-
 @admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
     list_display = (
@@ -117,7 +102,7 @@ class VolunteerAdmin(admin.ModelAdmin):
     readonly_fields = ("is_review",)
     list_filter = (
         "festival",
-        HasReviewFilter,
+        HasReviewAdminFilter,
     )
 
     @admin.display(
