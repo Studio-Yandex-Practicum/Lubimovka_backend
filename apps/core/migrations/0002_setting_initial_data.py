@@ -415,13 +415,6 @@ def add_main_settings(apps, schema_editor):
         url="https://lubimovks.url.ru",
         description="Ссылка на youtube видео-архива на главной странице",
     )
-    Setting.objects.create(
-        field_type="TEXT",
-        group="EMAIL",
-        settings_key="pr_director_name",
-        text="Имя Фамилия в дательном падеже (пример: Анне Загородниковой)",
-        description="Имя PR деректора на странице для прессы (в дательном падеже)",
-    )
 
 
 def add_playsupply_settings(apps, schema_editor):
@@ -448,6 +441,19 @@ def add_playsupply_settings(apps, schema_editor):
         settings_key="form_to_submit_a_play",
         boolean=True,
         description="Форма для отправки пьесы",
+    )
+
+
+def add_press_release_setting(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
+    Setting.objects.create(
+        field_type="TEXT",
+        group="EMAIL",
+        settings_key="pr_director_name",
+        text="Имя Фамилия в дательном падеже (пример: Анне Загородниковой)",
+        description="Имя PR деректора на странице для прессы (в дательном падеже)",
     )
 
 
@@ -500,6 +506,9 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             add_short_list_program,
+        ),
+        migrations.RunPython(
+            add_press_release_setting,
         ),
         migrations.RunPython(
             add_playsupply_settings,
