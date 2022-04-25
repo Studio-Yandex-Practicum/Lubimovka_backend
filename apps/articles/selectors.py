@@ -14,9 +14,9 @@ def article_get_years_months_publications(article_model: Union[BlogItem, NewsIte
     publications_years_months_qs = (
         article_model.ext_objects.published()
         .annotate(year=F("pub_date__year"), month=F("pub_date__month"))
-        .order_by("-year", "month")
-        .distinct()
         .values("year", "month")
+        .distinct()
+        .order_by("-year", "month")
     )
     return publications_years_months_qs
 
