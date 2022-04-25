@@ -1,6 +1,12 @@
 from django.contrib import admin
 
-from apps.feedback.models import ParticipationApplicationFestival
+from apps.feedback.models import ParticipationApplicationFestival, Question
+
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ("id", "author_name", "author_email", "question", "sent_to_email")
+    list_filter = ("sent_to_email",)
 
 
 @admin.register(ParticipationApplicationFestival)

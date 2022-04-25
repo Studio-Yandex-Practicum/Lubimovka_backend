@@ -247,6 +247,7 @@ MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER = env("MAILJET_TEMPLATE_ID_CHANGE_PASSW
 ADMIN_SITE_APPS_ORDER = (
     "Библиотека",
     "Новости, Проекты, Блог",
+    "Обратная информация",
     "Афиша",
     "Информация",
     "Общие ресурсы приложений",
