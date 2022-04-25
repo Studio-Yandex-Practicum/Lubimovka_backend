@@ -12,7 +12,7 @@ from apps.articles.models import BlogItem, NewsItem, Project
 def article_get_years_months_publications(article_model: Union[BlogItem, NewsItem, Project]) -> QuerySet:
     """Return distinct years and months of published BlogItem/NewsItem/Project."""
     publications_years_months_qs = (
-        article_model.objects.filter(status="PUBLISHED")
+        article_model.ext_objects.published()
         .annotate(year=F("pub_date__year"), month=F("pub_date__month"))
         .order_by("-year", "month")
         .distinct()
