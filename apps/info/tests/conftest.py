@@ -53,11 +53,6 @@ def festival_team(persons_with_image):
 
 
 @pytest.fixture
-def festival_team_pr_director(persons_with_image):
-    return FestivalTeamFactory(person=PersonFactory(add_image=True), is_pr_director=True)
-
-
-@pytest.fixture
 def festival_teams(persons_with_image):
     return FestivalTeamFactory.create_batch(5)
 

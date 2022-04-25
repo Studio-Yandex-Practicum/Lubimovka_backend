@@ -415,6 +415,13 @@ def add_main_settings(apps, schema_editor):
         url="https://lubimovks.url.ru",
         description="Ссылка на youtube видео-архива на главной странице",
     )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="EMAIL",
+        settings_key="pr_director_name",
+        text="Имя Фамилия в дательном падеже (пример: Анне Загородниковой)",
+        description="Имя PR деректора на странице для прессы (в дательном падеже)",
+    )
 
 
 def add_playsupply_settings(apps, schema_editor):

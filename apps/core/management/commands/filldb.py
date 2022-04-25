@@ -99,9 +99,6 @@ class Command(BaseCommand):
             teams = FestivalTeamFactory.create_batch(70)
             notification(self, teams, "членов команд")
 
-            team_with_pr_director = FestivalTeamFactory.create_batch(1)
-            notification(self, team_with_pr_director, "член команды являющийся pr-директором")
-
             images = ImageFactory.create_batch(5)
             notification(self, images, "картинки")
 

@@ -90,9 +90,6 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
     team = factory.Iterator(FestivalTeamMember.TeamType.values)
     position = factory.Faker("job", locale="ru_RU")
 
-    class Params:
-        is_pr_director = True
-
     @factory.lazy_attribute
     def person(self):
         queryset = Person.objects.filter(city__isnull=False, email__isnull=False).exclude(image__exact="")
