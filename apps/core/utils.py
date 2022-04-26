@@ -133,7 +133,6 @@ def get_app_list(self, request):
 
 
 def get_domain(request):
-    print(request.is_secure)
     server_protocol = request.META["SERVER_PROTOCOL"].split("/1.1")[0].lower()
     domain = server_protocol + "://" + request.META["HTTP_HOST"]
     return domain
