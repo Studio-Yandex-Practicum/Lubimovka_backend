@@ -62,8 +62,6 @@ class UserAdmin(DjangoUserAdmin):
             "date_joined",
             "last_login",
         )
-        if not request.user == obj:
-            readonly_fields += ("password",)
         if not request.user.is_superuser:
             readonly_fields += ("is_superuser",)
         return readonly_fields

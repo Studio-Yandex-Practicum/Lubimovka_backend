@@ -10,6 +10,8 @@ User = get_user_model()
 
 
 class UserAdminForm(UserChangeForm):
+    password = forms.CharField(widget=forms.HiddenInput())
+
     def clean(self):
         groups = self.cleaned_data["groups"]
 
