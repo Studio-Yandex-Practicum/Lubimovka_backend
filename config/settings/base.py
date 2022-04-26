@@ -65,6 +65,11 @@ INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 
+# https://docs.djangoproject.com/en/4.0/topics/auth/customizing/#specifying-authentication-backends
+AUTHENTICATION_BACKENDS = [
+    "apps.users.backends.admin_user.AdminUserModelBackend",
+]
+
 SITE_ID = 1
 
 MIDDLEWARE = [
@@ -100,7 +105,6 @@ TEMPLATES = [
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
@@ -183,33 +187,62 @@ EMAIL_BACKEND = env(
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
 EMAIL_TIMEOUT = 5
 
-# Use CKEditor (Configuration)
+# DJANGO-CKEDITOR
 # ------------------------------------------------------------------------------
-CKEDITOR_CONFIGS = {
-    "default": {
-        "removePlugins": "elementspath",
-        "removeDialogTabs": "dialog:advanced",
-        "toolbar": "Custom",
-        "toolbar_Custom": [
-            ["Undo", "Redo"],
-            ["Bold", "Italic", "Underline", "Strike"],
-            ["Link", "Unlink"],
-        ],
-    }
+# https://django-ckeditor.readthedocs.io/en/latest/#
+CKEDITOR_TOOLBAR_BASE = (
+    ("Undo", "Redo"),
+    ("Bold", "Italic", "Link", "Unlink", "RemoveFormat"),
+    ("Styles",),
+    ("Blockquote",),
+    ("NumberedList", "BulletedList"),
+)
+CKEDITOR_BASE = {
+    "height": 300,
+    "autoGrow_bottomSpace": 30,
+    "autoGrow_minHeight": 300,
+    "autoGrow_maxHeight": 500,
+    "extraPlugins": (",").join(("autogrow",)),
+    "basicEntities": False,
+    "stylesSet": (
+        {"name": "Заголовок", "element": "h3"},
+        {"name": "Подзаголовок", "element": "h4"},
+    ),
+    "toolbar": "base",
+    "toolbar_base": CKEDITOR_TOOLBAR_BASE,
 }
+CKEDITOR_CONFIGS = {
+    "default": CKEDITOR_BASE,
+    "lubimovka_styles": CKEDITOR_BASE | {
+        "contentsCss": "/static/core/ckeditor/lubimovka_styles.css",
+    },
+}
+
+# Google Sheets Export integration keys
+# ------------------------------------------------------------------------------
 GOOGLE_PRIVATE_KEY = env("GOOGLE_PRIVATE_KEY", default="private_key").replace("\\n", "\n")
 GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
+
+
+# Export to Yandex.Disk integration key
+# ------------------------------------------------------------------------------
 YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
 HASH_SECRET_KEY = env("HASH_SECRET_KEY", default="hash_secret_key")
 
+
+# Logging settings
+# ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/4.0/topics/logging/#configuring-logging
 LOGGING = LOGGING_SETTINGS
 
+LOGIN_URL = "/admin/login/"
+
 # Templates for mailjet
-# https://anymail.dev/en/stable/esps/mailjet/
 # ------------------------------------------------------------------------------
+# https://anymail.dev/en/stable/esps/mailjet/
 MAILJET_TEMPLATE_ID_QUESTION = env("MAILJET_TEMPLATE_ID_QUESTION", default="0000000")
 MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION = env("MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION", default="0000000")
+MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER = env("MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER", default="0000000")
 
 ADMIN_SITE_APPS_ORDER = (
     "Библиотека",
@@ -252,8 +285,11 @@ ADMIN_SITE_MODELS_ORDER = {
 SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
         "event_type": "apps.afisha.models.Event.EventType",
-        "partner_type": "apps.info.models.people.Partner.PartnerType"
+        "partner_type": "apps.info.models.people.Partner.PartnerType",
     }
 }
 
 CSRF_FAILURE_VIEW = 'apps.core.views.csrf_failure'
+
+# https://anymail.readthedocs.io/en/stable/installation/?highlight=SERVER_EMAIL#configuring-django-s-email-backend
+SERVER_EMAIL = env("SERVER_EMAIL", default=None)

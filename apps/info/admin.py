@@ -4,6 +4,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
+from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import FestTeamMemberForm
 from apps.info.models import (
     Festival,
@@ -100,22 +101,6 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
-class HasReviewFilter(admin.SimpleListFilter):
-    title = "Есть отзыв?"
-    parameter_name = "volunteer"
-
-    def lookups(self, request, model_admin):
-        return (
-            ("True", "Да"),
-            ("False", "Нет"),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == "True":
-            return Volunteer.objects.exclude(review_text__exact="")
-        return Volunteer.objects.filter(review_text__exact="")
-
-
 @admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
     list_display = (
@@ -123,10 +108,11 @@ class VolunteerAdmin(admin.ModelAdmin):
         "get_year",
         "is_review",
     )
+    autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
     list_filter = (
         "festival",
-        HasReviewFilter,
+        HasReviewAdminFilter,
     )
 
     @admin.display(
@@ -151,6 +137,7 @@ class VolunteerAdmin(admin.ModelAdmin):
 
 class VolunteerInline(admin.TabularInline):
     model = Volunteer
+    autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
     verbose_name = "Волонтёр"
     verbose_name_plural = "Волонтёры"
@@ -235,7 +222,7 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
     )
 
     ordering = ("person__last_name", "person__first_name")
-
+    autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
     def get_queryset(self, request):
@@ -284,7 +271,7 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
     )
 
     ordering = ("person__last_name", "person__first_name")
-
+    autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
     def save_model(self, request, obj, form, change):
@@ -317,6 +304,7 @@ class SponsorAdmin(admin.ModelAdmin):
         "person",
         "position",
     )
+    autocomplete_fields = ("person",)
 
 
 @admin.register(Question)
@@ -337,6 +325,7 @@ class SelectorAdmin(admin.ModelAdmin):
         "get_year",
         "position",
     )
+    autocomplete_fields = ("person",)
 
     @admin.display(
         ordering="festival",

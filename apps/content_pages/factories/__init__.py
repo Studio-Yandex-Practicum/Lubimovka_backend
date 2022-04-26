@@ -12,7 +12,14 @@ from .content_arrays import (
     PlaysBlockFactory,
     VideosBlockFactory,
 )
-from .content_units import LinkFactory, PreambleFactory, QuoteFactory, TextFactory, TitleFactory
+from .content_units import (
+    ContentUnitRichTextFactory,
+    LinkFactory,
+    PreambleFactory,
+    QuoteFactory,
+    TextFactory,
+    TitleFactory,
+)
 
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split

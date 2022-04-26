@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime as dt
 from typing import Optional
 
@@ -6,6 +7,8 @@ from google.oauth2 import service_account
 from googleapiclient.discovery import build
 
 from apps.main.models import SettingPlaySupply
+
+logger = logging.getLogger("django")
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets"]
 URL = "https://www.googleapis.com/robot/v1/metadata/x509/lubimovka%40swift-area-340613.iam.gserviceaccount.com"
@@ -36,9 +39,8 @@ class GoogleSpreadsheets:
         self.sheet = SettingPlaySupply.get_setting("SHEET")
         self.range = self.sheet + "!A1"
 
-    def _get_instance_values(self, instance, domain) -> dict:
+    def _get_instance_values(self, instance, file_link) -> dict:
         instance_created = dt.now().strftime("%Y-%m-%d %H:%M:%S")
-        instance_file_path = domain + str(instance.file.url)
         return {
             "values": [
                 [
@@ -51,7 +53,7 @@ class GoogleSpreadsheets:
                     instance.email,
                     instance.year,
                     instance.title,
-                    instance_file_path,
+                    file_link,
                 ]
             ]
         }
@@ -69,7 +71,7 @@ class GoogleSpreadsheets:
                 return _sheet["properties"]["sheetId"]
 
     def _set_borders(self, service) -> None:
-        sheet_id = self._get_sheet_id_by_title(service=service)
+        sheet_id = self._get_sheet_id_by_title(service)
         body = {
             "includeSpreadsheetInResponse": False,
             "requests": [
@@ -135,7 +137,7 @@ class GoogleSpreadsheets:
         request.execute()
 
     def _set_autosize(self, service) -> None:
-        sheet_id = self._get_sheet_id_by_title(service=service)
+        sheet_id = self._get_sheet_id_by_title(service)
         body = {
             "includeSpreadsheetInResponse": False,
             "requests": [
@@ -190,9 +192,9 @@ class GoogleSpreadsheets:
         )
         request.execute()
 
-    def _export_new_object(self, instance, service, domain) -> Optional[bool]:
+    def _export_new_object(self, instance, service, file_url) -> Optional[bool]:
         value_input_option = "USER_ENTERED"
-        body = self._get_instance_values(instance, domain)
+        body = self._get_instance_values(instance, file_url)
         request = (
             service.spreadsheets()
             .values()
@@ -213,13 +215,15 @@ class GoogleSpreadsheets:
         response = request.execute()
         return response.get("values") is not None
 
-    def export(self, instance, domain) -> Optional[bool]:
-        self._get_settings()
-        service = self._build_service()
-        if service is None:
-            return
-        header_exists = self._check_header_exists(service=service)
-        if not header_exists:
-            self._set_borders(service=service)
-            self._set_header(service=service)
-        return self._export_new_object(instance, service=service, domain=domain)
+    def export(self, instance, file_url) -> Optional[bool]:
+        try:
+            self._get_settings()
+            service = self._build_service()
+            header_exists = self._check_header_exists(service)
+            if not header_exists:
+                self._set_borders(service)
+                self._set_header(service)
+            return self._export_new_object(instance, service, file_url)
+        except (ValueError, Exception) as error:
+            msg = f"Не удалось выгрузить данные заявки от {instance.email} на Google Sheets."
+            logger.critical(msg, error, exc_info=True)

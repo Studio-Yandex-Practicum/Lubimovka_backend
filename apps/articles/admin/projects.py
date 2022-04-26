@@ -10,6 +10,7 @@ class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = ProjectContent
 
     content_type_model = (
+        "contentunitrichtext",
         "eventsblock",
         "imagesblock",
         "link",
@@ -20,6 +21,7 @@ class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
     )
 
 
+@admin.register(Project)
 class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
@@ -67,6 +69,3 @@ class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
     )
     def button_preview_page(self, obj):
         return get_button_preview_page(obj)
-
-
-admin.site.register(Project, ProjectAdmin)

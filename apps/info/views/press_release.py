@@ -37,5 +37,5 @@ class PressReleaseDownloadAPIView(APIView):
     def get(self, request, festival__year):
         """Get a press-release pdf file."""
         press_release = get_object_or_404(PressRelease, festival__year=festival__year)
-        path_to_font = f"{settings.STATIC_ROOT}/fonts/NeueMachinaRegular/PPNeueMachina-Regular.ttf"
+        path_to_font = f"{settings.STATIC_ROOT}/fonts/PPNeueMachina/PPNeueMachina-Regular.ttf"
         return get_pdf_response(press_release, path_to_font)

@@ -12,6 +12,7 @@ class NewsItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = NewsItemContent
 
     content_type_model = (
+        "contentunitrichtext",
         "imagesblock",
         "personsblock",
         "playsblock",
@@ -22,6 +23,7 @@ class NewsItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     )
 
 
+@admin.register(NewsItem)
 class NewsItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
@@ -79,6 +81,3 @@ class NewsItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         if obj.status and obj.status == "PUBLISHED":
             label_button = "Просмотр"
         return mark_safe(f'<a class="button" href={preview_link}>{label_button}</a>')
-
-
-admin.site.register(NewsItem, NewsItemAdmin)

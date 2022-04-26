@@ -25,7 +25,7 @@ class CommonEvent(BaseModel):
         verbose_name_plural = "Базовые события"
 
     def __str__(self):
-        return f"{self.target_model._meta.verbose_name}: {self.target_model}"
+        return f"{self.target_model}"
 
     @property
     def target_model(self):
@@ -59,6 +59,7 @@ class Event(BaseModel):
         choices=EventType.choices,
         max_length=50,
         verbose_name="Тип события",
+        help_text="Выберите тип события",
     )
     date_time = models.DateTimeField(
         verbose_name="Дата и время",

@@ -8,12 +8,14 @@ from apps.library.utilities import get_button_preview_page
 
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
     model = BlogItem.roles.through
+    autocomplete_fields = ("person",)
     extra = 0
 
 
 class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = BlogItemContent
     content_type_model = (
+        "contentunitrichtext",
         "imagesblock",
         "personsblock",
         "playsblock",
@@ -24,6 +26,7 @@ class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     )
 
 
+@admin.register(BlogItem)
 class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
@@ -78,6 +81,3 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
     )
     def button_preview_page(self, obj):
         return get_button_preview_page(obj)
-
-
-admin.site.register(BlogItem, BlogItemAdmin)

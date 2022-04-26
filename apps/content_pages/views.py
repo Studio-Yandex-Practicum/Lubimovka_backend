@@ -10,11 +10,7 @@ from rest_framework.views import APIView
 POPUP_SUFFIX = "?_popup=1"
 
 
-@extend_schema(
-    responses={
-        200: {"example": {"url": "string"}},
-    }
-)
+@extend_schema(exclude=True)
 class GetContentTypeLink(APIView):
     """Return URL link to add or change based on `model_id` and `object_id`."""
 
