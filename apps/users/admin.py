@@ -1,19 +1,13 @@
-from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Permission
-from django.contrib.auth.tokens import default_token_generator
-from django.urls import reverse
-from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-
-from apps.core.models import Setting
-from apps.core.services.send_email import send_email
-from apps.core.utils import get_domain
+from django.http import HttpResponseRedirect
+from django.utils.crypto import get_random_string
 
 from .forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm
 from .models import ProxyGroup
+from .utils import send_reset_password_email
 
 User = get_user_model()
 
@@ -64,9 +58,15 @@ class UserAdmin(DjangoUserAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         """Only superusers can edit `is_superuser` field."""
+        readonly_fields = (
+            "date_joined",
+            "last_login",
+        )
+        if not request.user == obj:
+            readonly_fields += ("password",)
         if not request.user.is_superuser:
-            return ("is_superuser", "date_joined", "last_login")
-        return ("date_joined", "last_login")
+            readonly_fields += ("is_superuser",)
+        return readonly_fields
 
     @admin.display(description="Роль")
     def role(self, obj):
@@ -74,27 +74,17 @@ class UserAdmin(DjangoUserAdmin):
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
-
         if not change:
-            domain = get_domain(request)
-            uid = urlsafe_base64_encode(force_bytes(obj.pk))
-            token = default_token_generator.make_token(obj)
-            reverse_link = reverse("password_reset_confirm", kwargs={"uidb64": uid, "token": token})
-            link = f"{domain}{reverse_link}"
+            send_reset_password_email(request, obj)
 
-            context = {
-                "full_name": obj.get_full_name(),
-                "username": obj.get_username(),
-                "email": obj.email,
-                "domain": domain,
-                "link": link,
-            }
-            send_email(
-                from_email=Setting.get_setting("email_send_from"),
-                to_emails=(obj.email,),
-                template_id=settings.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER,
-                context=context,
-            )
+    def response_change(self, request, obj):
+        if "reset_password" in request.POST:
+            obj.set_password(get_random_string(length=8))
+            obj.save()
+            send_reset_password_email(request, obj)
+            self.message_user(request, "Пароль был сброшен. Пользователю отправлена ссылка для смены пароля.")
+            return HttpResponseRedirect(".")
+        return super().response_change(request, obj)
 
 
 class GroupAdmin(admin.ModelAdmin):
