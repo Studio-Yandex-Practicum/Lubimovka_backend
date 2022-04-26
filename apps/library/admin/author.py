@@ -7,20 +7,19 @@ from django.urls import re_path
 from apps.core import utils
 from apps.core.models import Person
 from apps.library.forms.admin import OtherLinkForm
-from apps.library.models import Achievement, Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
+from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
+
+# @admin.register(Achievement)
+# class AchievementAdmin(admin.ModelAdmin):
+#     search_fields = ("tag",)
 
 
-@admin.register(Achievement)
-class AchievementAdmin(admin.ModelAdmin):
-    search_fields = ("tag",)
-
-
-class AchievementInline(admin.TabularInline):
-    model = Author.achievements.through
-    extra = 1
-    verbose_name = "Достижение"
-    verbose_name_plural = "Достижения"
-    classes = ("collapsible",)
+# class AchievementInline(admin.TabularInline):
+#     model = Author.achievements.through
+#     extra = 1
+#     verbose_name = "Достижение"
+#     verbose_name_plural = "Достижения"
+#     classes = ("collapsible",)
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -75,14 +74,12 @@ class AuthorAdmin(admin.ModelAdmin):
         "slug",
     )
     inlines = (
-        AchievementInline,
         PlayInline,
         OtherPlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
     )
     exclude = (
-        "achievements",
         "plays",
         "social_network_links",
         "other_links",

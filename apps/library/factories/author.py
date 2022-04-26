@@ -7,18 +7,9 @@ from apps.core import utils
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.info.models import Festival
-from apps.library.models import Achievement, Author, OtherLink, Play, ProgramType, SocialNetworkLink
+from apps.library.models import Author, OtherLink, Play, ProgramType, SocialNetworkLink
 
 fake = Faker("ru_RU")
-
-
-class AchievementFactory(factory.django.DjangoModelFactory):
-    """Create Achievement object."""
-
-    class Meta:
-        model = Achievement
-
-    tag = factory.Faker("word", locale="ru_RU")
 
 
 @restrict_factory(general=(Author,))
@@ -108,15 +99,15 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         )
         return super()._generate(strategy, params)
 
-    @factory.post_generation
-    def add_achievement(self, created: bool, count: int, **kwargs):
-        """Create an Achievement object and link to self."""
-        if not created:
-            return
-        if count:
-            achievement_count = count
-            achievements = AchievementFactory.create_batch(achievement_count)
-            self.achievements.add(*achievements)
+    # @factory.post_generation
+    # def add_achievement(self, created: bool, count: int, **kwargs):
+    #     """Create an Achievement object and link to self."""
+    #     if not created:
+    #         return
+    #     if count:
+    #         achievement_count = count
+    #         achievements = AchievementFactory.create_batch(achievement_count)
+    #         self.achievements.add(*achievements)
 
     @factory.post_generation
     def add_social_network_link(self, created: bool, count: int, **kwargs):
@@ -167,7 +158,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         """Create Author object with fully populated fields."""
         return cls.create_batch(
             count,
-            add_achievement=3,
+            # add_achievement=3,
             add_social_network_link=3,
             add_other_link=3,
             plays__num=3,

@@ -34,7 +34,6 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
     def get_object(self):
         author = get_object_or_404(
             Author.objects.prefetch_related(
-                "achievements",
                 "social_networks",
                 "other_links",
                 Prefetch(

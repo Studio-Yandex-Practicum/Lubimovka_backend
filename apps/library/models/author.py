@@ -8,21 +8,6 @@ from apps.core.models import BaseModel, Person
 from .play import Play
 
 
-class Achievement(BaseModel):
-    tag = models.CharField(
-        max_length=40,
-        verbose_name="Достижения в виде тега",
-        help_text="Не более 40 символов",
-    )
-
-    class Meta:
-        verbose_name = "Достижение"
-        verbose_name_plural = "Достижения"
-
-    def __str__(self):
-        return self.tag
-
-
 class Author(BaseModel):
     person = models.OneToOneField(
         Person,
@@ -38,12 +23,20 @@ class Author(BaseModel):
         max_length=3000,
         verbose_name="Текст про автора",
     )
-    achievements = models.ManyToManyField(
-        Achievement,
-        verbose_name="Достижения",
-        related_name="authors",
-        blank=True,
-    )
+
+    @property
+    def play_with_achievements(self):
+        return Play.objects.raw(
+            """
+            SELECT * FROM library_Author
+                JOIN library_AuthorPlay ON library_AuthorPlay.author_id = library_Author.id
+                JOIN library_Play ON library_Play.id = library_AuthorPlay.play_id
+                JOIN library_ProgramType ON library_ProgramType.id = library_Play.program_id
+            WHERE library_Author.id = %s
+            """,
+            params=(self.id,),
+        )
+
     plays = models.ManyToManyField(
         Play,
         related_name="authors",
