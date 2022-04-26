@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
@@ -73,13 +74,15 @@ class UserAdmin(DjangoUserAdmin):
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         if not change:
-            send_reset_password_email(request, obj)
+            template_id = settings.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER
+            send_reset_password_email(request, obj, template_id)
 
     def response_change(self, request, obj):
         if "reset_password" in request.POST:
             obj.set_password(get_random_string(length=8))
             obj.save()
-            send_reset_password_email(request, obj)
+            template_id = settings.MAILJET_TEMPLATE_ID_RESET_PASSWORD_USER
+            send_reset_password_email(request, obj, template_id)
             self.message_user(request, "Пароль был сброшен. Пользователю отправлена ссылка для смены пароля.")
             return HttpResponseRedirect(".")
         return super().response_change(request, obj)
