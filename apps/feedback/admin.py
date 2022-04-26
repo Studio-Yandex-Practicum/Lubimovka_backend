@@ -5,8 +5,9 @@ from apps.feedback.models import ParticipationApplicationFestival, Question
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ("id", "author_name", "author_email", "question", "sent_to_email")
+    list_display = ("author_name", "author_email", "question", "sent_to_email")
     list_filter = ("sent_to_email",)
+    search_fields = ("author_name", "author_email", "question")
 
 
 @admin.register(ParticipationApplicationFestival)

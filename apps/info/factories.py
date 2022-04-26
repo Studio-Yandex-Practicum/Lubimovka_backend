@@ -89,6 +89,7 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
 
     team = factory.Iterator(FestivalTeamMember.TeamType.values)
     position = factory.Faker("job", locale="ru_RU")
+    is_pr_director = False
 
     @factory.lazy_attribute
     def person(self):

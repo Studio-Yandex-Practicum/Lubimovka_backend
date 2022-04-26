@@ -4,6 +4,7 @@ from django.core.management.base import BaseCommand, CommandError
 
 from apps.afisha.factories import EventFactory
 from apps.core.factories import ImageFactory, PersonFactory
+from apps.core.models import Setting
 from apps.feedback.factories import ParticipationApplicationFestivalFactory
 from apps.info.factories import (
     FestivalFactory,
@@ -15,6 +16,7 @@ from apps.info.factories import (
     SponsorFactory,
     VolunteerFactory,
 )
+from apps.info.models import FestivalTeamMember
 from apps.library.factories import (
     AuthorFactory,
     MasterClassFactory,
@@ -26,6 +28,18 @@ from apps.library.factories import (
 )
 from apps.main.factories import BannerFactory as MainBannerFactory
 from apps.users.factories import AdminUserFactory, EditorUserFactory, JournalistUserFactory, ObserverUserFactory
+
+
+def add_pr_director(command):
+    member = FestivalTeamMember.objects.filter(team="fest").first()
+    if member:
+        name = member.person.full_name
+        member.is_pr_director = True
+        member.save()
+        Setting.objects.filter(settings_key="pr_director_name").update(text=name)
+        command.stdout.write(command.style.SUCCESS("ПР директор успешно создан"))
+    else:
+        command.stdout.write(command.style.ERROR("Нет члена команды Фестиваль"))
 
 
 def notification(command, objects, text):
@@ -98,6 +112,8 @@ class Command(BaseCommand):
 
             teams = FestivalTeamFactory.create_batch(70)
             notification(self, teams, "членов команд")
+
+            add_pr_director(self)
 
             images = ImageFactory.create_batch(5)
             notification(self, images, "картинки")
