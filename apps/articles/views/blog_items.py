@@ -77,7 +77,7 @@ class BlogItemDetailAPI(APIView):
 
     @extend_schema(responses=BlogItemDetailOutputSerializer)
     def get(self, request, id, **kwargs):
-        blog_item_detail = selectors.blog_item_detail_get(blog_item_id=id)
+        blog_item_detail = selectors.blog_item_detail_get_for_unpublished(blog_item_id=id)
         context = {"request": request}
         serializer = self.BlogItemDetailOutputSerializer(blog_item_detail, context=context)
         return Response(serializer.data)
