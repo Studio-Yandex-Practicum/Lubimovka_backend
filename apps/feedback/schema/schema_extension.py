@@ -53,4 +53,10 @@ ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400 = {
         ],
     }
 }
-ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403 = {"example": {"detail": "Приём пьес закрыт."}}
+# fmt: off
+ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403 = {
+    "example": {
+        "detail": "Приём пьес закрыт."
+    }
+}
+# fmt: on
