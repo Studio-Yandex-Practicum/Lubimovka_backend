@@ -100,6 +100,9 @@ class Performance(BaseModel):
             return self.name[:25] + "..."
         return self.name
 
+    def get_class_name(self):
+        return self.__class__.__name__
+
     @property
     def team(self):
         """Return all team members."""

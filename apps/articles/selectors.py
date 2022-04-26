@@ -40,9 +40,11 @@ def blog_item_detail_get(blog_item_id):
         blog_persons, not only related to exact blog_item).
     """
     published_blog_items = BlogItem.ext_objects.published()
-    blog_item = get_object_or_404(published_blog_items, id=blog_item_id)
-
-    blog_item._other_blogs = published_blog_items.exclude(id=blog_item_id)[:4]
+    blog_item = get_object_or_404(BlogItem, id=blog_item_id)
+    if not published_blog_items.filter(id=blog_item_id).exists():
+        blog_item._other_blogs = published_blog_items[:4]
+    else:
+        blog_item._other_blogs = published_blog_items.exclude(id=blog_item_id)[:4]
 
     blog_item_roles = blog_item.roles.distinct()
     blog_item_persons = blog_item.blog_persons.all()

@@ -18,6 +18,9 @@ class Project(AbstractContentPage):
     def __str__(self):
         return f"Проект {self.title}"
 
+    def get_class_name(self):
+        return self.__class__.__name__
+
     class Meta:
         ordering = ("-pub_date",)
         verbose_name = "Проект"

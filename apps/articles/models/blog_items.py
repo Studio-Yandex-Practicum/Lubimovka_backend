@@ -78,6 +78,9 @@ class BlogItem(AbstractContentPage):
     def __str__(self):
         return f"Запись блога {self.title}"
 
+    def get_class_name(self):
+        return self.__class__.__name__
+
 
 class BlogItemContent(AbstractContent):
     """Custom ContentPage model for BlogItem models.

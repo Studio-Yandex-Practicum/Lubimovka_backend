@@ -12,6 +12,7 @@ from apps.library.models import (
     Reading,
     TeamMember,
 )
+from apps.library.utilities import get_button_preview_page
 
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
@@ -83,6 +84,7 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         "description",
         "play",
         "status",
+        "button_preview_page",
     )
     fields = (
         "status",
@@ -133,6 +135,12 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         if change_permission:
             form.base_fields["play"].queryset = Play.objects.exclude(program__slug="other_plays")
         return form
+
+    @admin.display(
+        description="Предпросмотр страницы",
+    )
+    def button_preview_page(self, obj):
+        return get_button_preview_page(obj)
 
 
 @admin.register(Reading)

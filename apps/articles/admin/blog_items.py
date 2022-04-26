@@ -1,11 +1,9 @@
 from django.contrib import admin
-from django.urls import reverse
-from django.utils.safestring import mark_safe
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
-from apps.core.utils import create_hash
+from apps.library.utilities import get_button_preview_page
 
 
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
@@ -79,18 +77,7 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         description="Предпросмотр страницы",
     )
     def button_preview_page(self, obj):
-        preview_page_hash = create_hash(obj.id)
-        preview_link = reverse(
-            "blog-item-detail-preview",
-            kwargs={
-                "id": obj.id,
-                "hash": preview_page_hash,
-            },
-        )
-        label_button = "Предпросмотр"
-        if obj.status and obj.status == "PUBLISHED":
-            label_button = "Просмотр"
-        return mark_safe(f'<a class="button" href={preview_link}>{label_button}</a>')
+        return get_button_preview_page(obj)
 
 
 admin.site.register(BlogItem, BlogItemAdmin)

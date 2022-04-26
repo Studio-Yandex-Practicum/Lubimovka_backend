@@ -12,6 +12,7 @@ from apps.library.views import (
     PlayViewSet,
     SearchResultViewSet,
 )
+from apps.library.views.performance import PreviewPerformanceViewSet
 
 router = DefaultRouter()
 router.register(
@@ -53,10 +54,18 @@ participation_url = [
         name="participation",
     ),
 ]
+performance_urls = [
+    path(
+        route="performance/preview/<int:id>/<str:hash>/",
+        view=PreviewPerformanceViewSet.as_view(),
+        name="performance-item-detail-preview",
+    ),
+]
 
 library_urls = [
     path("library/", include(router.urls)),
     path("library/", include(participation_url)),
+    path("library/", include(performance_urls)),
     path(
         "library/author_letters/",
         AuthorLettersAPIView.as_view(),

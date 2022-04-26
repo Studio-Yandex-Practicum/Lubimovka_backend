@@ -29,3 +29,8 @@ class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
 
     class Meta:
         model = NewsItem
+
+
+class PreviewNewsItemDetailViewSet(NewsItemsViewSet):
+    def get_queryset(self):
+        return NewsItem.ext_objects.current_and_published(self.kwargs["pk"])

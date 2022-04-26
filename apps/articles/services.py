@@ -11,7 +11,10 @@ def get_latest_four_published_items_data(
     model_class = object.__class__
 
     published_items = model_class.ext_objects.published()
-    latest_four_items_qs = published_items.exclude(id=object.id)[:4]
+    if not published_items.filter(id=object.id).exists():
+        latest_four_items_qs = published_items[:4]
+    else:
+        latest_four_items_qs = published_items.exclude(id=object.id)[:4]
 
     serializer = serializer_class(instance=latest_four_items_qs, many=True)
     return serializer.data
