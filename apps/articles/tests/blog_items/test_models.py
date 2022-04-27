@@ -11,11 +11,14 @@ pytestmark = [pytest.mark.django_db]
     params=(
         {"array_image": True},
         {"array_person": True},
+        {"array_event": True},
         {"array_play": True},
+        {"array_video": True},
+        {"unit_link": True},
         {"unit_rich_text": True},
     )
 )
-def blog_item_content_module(request, blog_item_published, plays, persons):
+def blog_item_content_module(request, blog_item_published, events, plays, persons):
     content_module_param = request.param
     return BlogItemContentModuleFactory.create(content_page=blog_item_published, **content_module_param)
 
