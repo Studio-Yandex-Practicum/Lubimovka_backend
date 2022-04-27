@@ -56,6 +56,7 @@ LOCAL_APPS = [
     "apps.articles",
     "apps.info",
     "apps.content_pages",
+    "apps.feedback",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -252,6 +253,7 @@ ADMIN_SITE_APPS_ORDER = (
     "Общие ресурсы приложений",
     "Настройки приложения",
     "Пользователи",
+    "Обратная информация",
 )
 
 ADMIN_SITE_MODELS_ORDER = {
@@ -272,7 +274,6 @@ ADMIN_SITE_MODELS_ORDER = {
         "Арт-дирекция фестиваля",
         "Партнеры",
         "Площадки",
-        "Вопросы или предложения",
     ],
     "Общие ресурсы приложений": [
         "Люди",

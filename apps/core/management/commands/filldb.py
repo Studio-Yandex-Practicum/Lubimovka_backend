@@ -5,6 +5,7 @@ from django.core.management.base import BaseCommand, CommandError
 from apps.afisha.factories import EventFactory
 from apps.core.factories import ImageFactory, PersonFactory
 from apps.core.models import Setting
+from apps.feedback.factories import ParticipationApplicationFestivalFactory
 from apps.info.factories import (
     FestivalFactory,
     FestivalTeamFactory,
@@ -20,7 +21,6 @@ from apps.library.factories import (
     AuthorFactory,
     MasterClassFactory,
     OtherPlayFactory,
-    ParticipationApplicationFestivalFactory,
     PerformanceFactory,
     PlayFactory,
     ProgramTypeFactory,

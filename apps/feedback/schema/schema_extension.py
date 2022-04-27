@@ -1,9 +1,25 @@
 from django.utils import timezone
 
-from apps.library.models.participation_application import (
+from apps.feedback.models.participation_application import (
     ALLOWED_FORMATS_FILE_FOR_PARTICIPATION,
     UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION,
 )
+
+ERROR_MESSAGES_FOR_QUESTION_FOR_400 = {
+    "example": {
+        "author_email": [
+            "Это поле не может быть пустым.",
+            "Введите правильный адрес электронной почты.",
+        ],
+        "question": [
+            "Это поле не может быть пустым.",
+            "Вопрос должен состоять более чем из 2 символов.",
+        ],
+        "author_name": [
+            "Это поле не может быть пустым.",
+        ],
+    }
+}
 
 ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400 = {
     "example": {
@@ -37,6 +53,10 @@ ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400 = {
         ],
     }
 }
-ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403 = {"example": {"detail": "Приём пьес закрыт."}}
-
-ERROR_MESSAGES_FOR_AUTHOR_FOR_403 = {"example": {"detail": "Укажите параметр - letter."}}
+# fmt: off
+ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403 = {
+    "example": {
+        "detail": "Приём пьес закрыт."
+    }
+}
+# fmt: on

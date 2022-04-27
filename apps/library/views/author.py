@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 
 from apps.library.filters import AuthorFilter
 from apps.library.models import Author, AuthorPlay
-from apps.library.schema.schema_extension import ERROR_MESSAGES_FOR_AUTHOR_FOR_403
+from apps.library.schema_extension import ERROR_MESSAGES_FOR_AUTHOR_FOR_403
 from apps.library.serializers import AuthorLettersSerializer, AuthorListSerializer, AuthorRetrieveSerializer
 
 
