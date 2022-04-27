@@ -19,16 +19,10 @@ participation_url = [
 ]
 
 app_prefix = [
-    path(
-        "feedback/",
-        include(feedback_urls),
-    ),
+    path("feedback/", include(feedback_urls)),
     path("feedback/", include(participation_url)),
 ]
 
 urlpatterns = [
-    path(
-        "v1/",
-        include(app_prefix),
-    ),
+    path("v1/", include(app_prefix)),
 ]
