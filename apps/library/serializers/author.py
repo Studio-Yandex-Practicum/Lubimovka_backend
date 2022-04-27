@@ -25,17 +25,13 @@ class SocialNetworkSerializer(serializers.ModelSerializer):
 
 
 class ProgramSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source="program.id", read_only=True)
-    slug = serializers.SlugRelatedField(slug_field="slug", source="program", read_only=True)
     name = serializers.CharField(source="program.name", read_only=True)
     year = serializers.IntegerField(source="festival.year", read_only=True)
 
     class Meta:
         model = Play
         fields = (
-            "id",
             "year",
-            "slug",
             "name",
         )
 
