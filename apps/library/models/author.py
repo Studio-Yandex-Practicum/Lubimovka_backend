@@ -25,17 +25,9 @@ class Author(BaseModel):
     )
 
     @property
-    def play_with_achievements(self):
-        return Play.objects.raw(
-            """
-            SELECT * FROM library_Author
-                JOIN library_AuthorPlay ON library_AuthorPlay.author_id = library_Author.id
-                JOIN library_Play ON library_Play.id = library_AuthorPlay.play_id
-                JOIN library_ProgramType ON library_ProgramType.id = library_Play.program_id
-            WHERE library_Author.id = %s
-            """,
-            params=(self.id,),
-        )
+    def achievements(self):
+        """Get plays with program."""
+        return self.plays.filter(program__isnull=False)
 
     plays = models.ManyToManyField(
         Play,

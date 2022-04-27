@@ -99,16 +99,6 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         )
         return super()._generate(strategy, params)
 
-    # @factory.post_generation
-    # def add_achievement(self, created: bool, count: int, **kwargs):
-    #     """Create an Achievement object and link to self."""
-    #     if not created:
-    #         return
-    #     if count:
-    #         achievement_count = count
-    #         achievements = AchievementFactory.create_batch(achievement_count)
-    #         self.achievements.add(*achievements)
-
     @factory.post_generation
     def add_social_network_link(self, created: bool, count: int, **kwargs):
         """Create a SocialNetworkLink object and link to self."""
@@ -158,7 +148,6 @@ class AuthorFactory(factory.django.DjangoModelFactory):
         """Create Author object with fully populated fields."""
         return cls.create_batch(
             count,
-            # add_achievement=3,
             add_social_network_link=3,
             add_other_link=3,
             plays__num=3,

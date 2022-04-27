@@ -9,18 +9,6 @@ from apps.core.models import Person
 from apps.library.forms.admin import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
 
-# @admin.register(Achievement)
-# class AchievementAdmin(admin.ModelAdmin):
-#     search_fields = ("tag",)
-
-
-# class AchievementInline(admin.TabularInline):
-#     model = Author.achievements.through
-#     extra = 1
-#     verbose_name = "Достижение"
-#     verbose_name_plural = "Достижения"
-#     classes = ("collapsible",)
-
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     model = AuthorPlay
