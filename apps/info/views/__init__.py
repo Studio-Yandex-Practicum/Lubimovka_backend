@@ -4,7 +4,6 @@ from .festival import FestivalAPIView, FestivalYearsAPIView
 from .festivalteams import FestivalTeamsAPIView
 from .partners import PartnersAPIView
 from .press_release import PressReleaseDownloadAPIView, PressReleaseViewSet, PressReleaseYearsAPIView
-from .question import QuestionCreateAPIView
 from .selectors import SelectorsAPIView
 from .settings import SettingsAPIView
 from .sponsors import SponsorsAPIView
@@ -15,7 +14,6 @@ __all__ = (
     FestivalTeamsAPIView,
     FestivalYearsAPIView,
     PartnersAPIView,
-    QuestionCreateAPIView,
     PressReleaseViewSet,
     PressReleaseYearsAPIView,
     PressReleaseDownloadAPIView,

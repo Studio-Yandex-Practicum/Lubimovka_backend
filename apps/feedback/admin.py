@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.library.models import ParticipationApplicationFestival
+from apps.feedback.models import ParticipationApplicationFestival, Question
 
 
 @admin.register(ParticipationApplicationFestival)
@@ -21,3 +21,10 @@ class ParticipationAdmin(admin.ModelAdmin):
         "sent_to_email",
     )
     search_fields = ("title", "first_name", "last_name", "city", "year")
+
+
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    list_display = ("author_name", "author_email", "question", "sent_to_email")
+    list_filter = ("sent_to_email",)
+    search_fields = ("author_name", "author_email", "question")

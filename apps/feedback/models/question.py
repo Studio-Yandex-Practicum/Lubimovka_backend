@@ -18,7 +18,7 @@ class Question(BaseModel):
         max_length=50,
         verbose_name="Электронная почта",
     )
-    sent = models.BooleanField(verbose_name="Отправлено", default=False)
+    sent_to_email = models.BooleanField(default=False, verbose_name="Отправлена на почту", editable=False)
 
     class Meta:
         verbose_name = "Вопрос или предложение"

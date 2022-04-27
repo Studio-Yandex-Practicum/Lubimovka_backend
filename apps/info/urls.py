@@ -9,7 +9,6 @@ from apps.info.views import (
     PressReleaseDownloadAPIView,
     PressReleaseViewSet,
     PressReleaseYearsAPIView,
-    QuestionCreateAPIView,
     SelectorsAPIView,
     SettingsAPIView,
     SponsorsAPIView,
@@ -68,11 +67,6 @@ info_urls = [
         "settings/",
         SettingsAPIView.as_view(),
         name="settings",
-    ),
-    path(
-        "questions/",
-        QuestionCreateAPIView.as_view(),
-        name="questions",
     ),
     path(
         "press-releases/<int:festival__year>/",

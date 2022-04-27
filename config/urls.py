@@ -22,6 +22,7 @@ apps_patterns = [
     path("", include("apps.library.urls")),
     path("", include("apps.info.urls")),
     path("", include("apps.main.urls")),
+    path("", include("apps.feedback.urls")),
 ]
 
 api_schema_patterns = [

@@ -2,7 +2,7 @@ import factory
 from faker import Faker
 from faker.providers.phone_number.ru_RU import Provider
 
-from apps.library.models import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION, ParticipationApplicationFestival
+from apps.feedback.models import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION, ParticipationApplicationFestival
 
 fake = Faker("ru_RU")
 

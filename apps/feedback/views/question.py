@@ -6,8 +6,8 @@ from rest_framework.views import APIView
 
 from apps.core.models import Setting
 from apps.core.services.send_email import send_email
-from apps.info.models import Question
-from apps.info.schema.schema_extension import ERROR_MESSAGES_FOR_QUESTION_FOR_400
+from apps.feedback.models import Question
+from apps.feedback.schema.schema_extension import ERROR_MESSAGES_FOR_QUESTION_FOR_400
 
 
 class QuestionCreateAPIView(APIView):
@@ -16,7 +16,7 @@ class QuestionCreateAPIView(APIView):
     class QuestionSerializer(serializers.ModelSerializer):
         class Meta:
             model = Question
-            exclude = ("sent",)
+            exclude = ("sent_to_email",)
 
     @extend_schema(
         request=QuestionSerializer,
@@ -42,6 +42,6 @@ class QuestionCreateAPIView(APIView):
         response_success = send_email(from_email, to_emails, template_id, context)
 
         if response_success:
-            instance.sent = True
+            instance.sent_to_email = True
             instance.save()
         return Response(status=status.HTTP_201_CREATED)
