@@ -74,7 +74,7 @@ class UserAdmin(DjangoUserAdmin):
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
         if not change:
-            template_id = settings.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER
+            template_id = settings.MAILJET_TEMPLATE_ID_REGISTRATION_USER
             send_reset_password_email(request, obj, template_id)
 
     def response_change(self, request, obj):

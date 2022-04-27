@@ -145,7 +145,7 @@ jobs:
             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-test
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-test
             echo MAILJET_TEMPLATE_ID_QUESTION=${{ secrets.MAILJET_TEMPLATE_ID_QUESTION }} >> .env-test
-            echo MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER=${{ secrets.MAILJET_TEMPLATE_ID_CHANGE_PASSWORD_USER }} >> .env-test
+            echo MAILJET_TEMPLATE_ID_REGISTRATION_USER=${{ secrets.MAILJET_TEMPLATE_ID_REGISTRATION_USER }} >> .env-test
             echo MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION=${{ secrets.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION }} >> .env-test
             echo MAILJET_TEMPLATE_ID_RESET_PASSWORD_USER=${{ secrets.MAILJET_TEMPLATE_ID_RESET_PASSWORD_USER }} >> .env-test
 
