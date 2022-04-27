@@ -112,19 +112,16 @@ def decorator_with_args(decorator_to_enhance):
 def cache_user(func, *args, **kwargs):
     """Cache data for timelimit (in seconds)."""
     cache_user_dict = dict()
-    time_user_dict = dict()
     timelimit = kwargs["timelimit"]
 
     @wraps(func)
     def wrapper(self, request, *args, **kwargs):
         user = request.user.username
         current_time = round(time.time() / timelimit)
-        if user in cache_user_dict:
-            if user in time_user_dict and current_time == time_user_dict[user]:
-                return cache_user_dict[user]
+        if user in cache_user_dict and current_time == cache_user_dict[user][1]:
+            return cache_user_dict[user][0]
         result = func(self, request, *args, **kwargs)
-        cache_user_dict[user] = result
-        time_user_dict[user] = current_time
+        cache_user_dict[user] = (result, current_time)
         return result
 
     return wrapper
