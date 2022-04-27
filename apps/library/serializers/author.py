@@ -25,12 +25,14 @@ class SocialNetworkSerializer(serializers.ModelSerializer):
 
 
 class ProgramSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(source="program.id", read_only=True)
     name = serializers.CharField(source="program.name", read_only=True)
     year = serializers.IntegerField(source="festival.year", read_only=True)
 
     class Meta:
         model = Play
         fields = (
+            "id",
             "year",
             "name",
         )
@@ -39,10 +41,6 @@ class ProgramSerializer(serializers.ModelSerializer):
 class AuthorRetrieveSerializer(serializers.ModelSerializer):
     name = serializers.SlugRelatedField(source="person", slug_field="full_name", read_only=True)
     city = serializers.SlugRelatedField(source="person", slug_field="city", read_only=True)
-    achievements = ProgramSerializer(
-        many=True,
-        read_only=True,
-    )
     social_networks = SocialNetworkSerializer(many=True)
     email = serializers.SlugRelatedField(source="person", slug_field="email", read_only=True)
     other_links = OtherLinkSerializer(many=True)

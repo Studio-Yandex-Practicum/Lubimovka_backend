@@ -26,8 +26,13 @@ class Author(BaseModel):
 
     @property
     def achievements(self):
-        """Get plays with program."""
-        return self.plays.filter(program__isnull=False)
+        """Get queryset with info about achievements."""
+        return (
+            self.plays.filter(program__isnull=False)
+            .values("program__id", "program__name", "festival__year")
+            .order_by("festival__id")
+            .distinct("festival__id")
+        )
 
     plays = models.ManyToManyField(
         Play,
