@@ -8,17 +8,6 @@ from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = ProjectContent
 
-    content_type_model = (
-        "contentunitrichtext",
-        "eventsblock",
-        "imagesblock",
-        "link",
-        "personsblock",
-        "playsblock",
-        "text",
-        "videosblock",
-    )
-
 
 @admin.register(Project)
 class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
@@ -39,11 +28,8 @@ class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
                     "intro",
                     "pub_date",
                     "description",
-                    (
-                        "image_preview_change_page",
-                        "image",
-                    ),
-                )
+                    ("image_preview_change_page", "image"),
+                ),
             },
         ),
     )

@@ -8,17 +8,6 @@ from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
 class NewsItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = NewsItemContent
 
-    content_type_model = (
-        "contentunitrichtext",
-        "imagesblock",
-        "personsblock",
-        "playsblock",
-        "preamble",
-        "quote",
-        "text",
-        "title",
-    )
-
 
 @admin.register(NewsItem)
 class NewsItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
@@ -43,10 +32,7 @@ class NewsItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
                     "title",
                     "pub_date",
                     "description",
-                    (
-                        "image_preview_change_page",
-                        "image",
-                    ),
+                    ("image_preview_change_page", "image"),
                 )
             },
         ),
