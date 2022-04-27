@@ -13,8 +13,8 @@ def cache_user(timelimit):
         @wraps(func)
         def wrapper(self, request, *args, **kwargs):
             user = request.user.username
-            current_time = round(time.time() / timelimit)
-            if user in cache_user_dict and current_time == cache_user_dict[user].time:
+            current_time = time.time()
+            if user in cache_user_dict and (current_time - cache_user_dict[user].time) < timelimit:
                 return cache_user_dict[user].result
             result = func(self, request, *args, **kwargs)
             cache_user_dict[user] = named_tuple(result, current_time)
