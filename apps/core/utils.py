@@ -97,6 +97,8 @@ def manual_order_model_list(app, admin_site_models_order):
 
 
 def decorator_with_args(decorator_to_enhance):
+    """Needs only for other decorator to add some arguments."""
+
     def decorator_maker(*args, **kwargs):
         def decorator_wrapper(func):
             return decorator_to_enhance(func, *args, **kwargs)
