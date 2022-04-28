@@ -95,7 +95,7 @@ def manual_order_model_list(app, admin_site_models_order):
     return app["models"]
 
 
-@cache_user
+@cache_user(timelimit=300)
 def get_app_list(self, request):
     admin_site_apps_order = getattr(settings, "ADMIN_SITE_APPS_ORDER", None)
     admin_site_models_order = getattr(settings, "ADMIN_SITE_MODELS_ORDER", None)
