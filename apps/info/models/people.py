@@ -44,9 +44,8 @@ class Partner(BaseModel):
 
     def save(self, *args, **kwargs):
         this = Partner.objects.filter(id=self.id).first()
-        if this:
-            if this.image != self.image:
-                this.image.delete(save=False)
+        if this and this.image != self.image:
+            this.image.delete(save=False)
         super().save(*args, **kwargs)
 
     def __str__(self):
