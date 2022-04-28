@@ -56,22 +56,15 @@ def permissions_new_unicode(self):
     # Translate default permissions
     class_name = str(self.content_type)
     permissions_name = str(self.name)
-    if "Can delete log entry" in permissions_name:
-        permissions_name = permissions_name.replace("Can delete log entry", "Может удалить запись в журнале")
-    elif "Can change log entry" in permissions_name:
-        permissions_name = permissions_name.replace("Can change log entry", "Может изменять запись в журнале")
-    elif "Can add log entry" in permissions_name:
-        permissions_name = permissions_name.replace("Can add log entry", "Может добавлять запись в журнале")
-    elif "Can view log entry" in permissions_name:
-        permissions_name = permissions_name.replace("Can view log entry", "Может просматривать запись в журнале")
-    elif "Can delete" in permissions_name:
-        permissions_name = permissions_name.replace("Can delete", "Может удалять")
+
+    if "Can delete" in permissions_name:
+        permissions_name = "Может удалять"
     elif "Can add" in permissions_name:
-        permissions_name = permissions_name.replace("Can add", "Может добавлять")
+        permissions_name = "Может добавлять"
     elif "Can change" in permissions_name:
-        permissions_name = permissions_name.replace("Can change", "Может изменять")
+        permissions_name = "Может изменять"
     elif "Can view" in permissions_name:
-        permissions_name = permissions_name.replace("Can view", "Может просматривать")
+        permissions_name = "Может смотреть"
 
     return "%s - %s" % (class_name.title(), permissions_name)
 
