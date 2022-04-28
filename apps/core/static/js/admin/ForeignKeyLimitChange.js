@@ -70,7 +70,7 @@ function disableField($object) {
     });
 };
 
-jQuery(document).ready(function ($) {
+jQuery(document).ready(function () {
     const $foreignKeyClass = $(".foreign-key-field");
     const add_edit_button = $("#change_button_for_foreign_key").attr("value") === "true";
     var is_selec2 = false;
