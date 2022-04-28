@@ -24,6 +24,7 @@ class PartnerListAPIView(APIView):
         class Meta:
             model = Partner
             fields = (
+                "id",
                 "name",
                 "type",
                 "url",
