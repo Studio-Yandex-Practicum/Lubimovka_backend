@@ -9,10 +9,18 @@ class Place(BaseModel):
     city = models.CharField(max_length=50, verbose_name="Город")
     address = models.CharField(max_length=50, verbose_name="Адрес")
     map_link = models.URLField(verbose_name="Ссылка на карту")
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Сортировка",
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = "Площадка"
         verbose_name_plural = "Площадки"
+        ordering = ("order",)
         constraints = [
             models.UniqueConstraint(
                 fields=("name", "city"),

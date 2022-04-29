@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
@@ -11,7 +12,7 @@ from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
 @admin.register(Partner)
-class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
+class PartnerAdmin(SortableAdminMixin, AdminImagePreview, admin.ModelAdmin):
     """Class for registration Partner model in admin panel and expanded with JS script.
 
     There are used two classes in fieldsets: `predefined` and `included`.
@@ -24,6 +25,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
 
     list_display = (
         "name",
+        "order",
         "type",
         "get_partner_url",
         "image_preview_list_page",
@@ -92,9 +94,10 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
 
 
 @admin.register(Volunteer)
-class VolunteerAdmin(admin.ModelAdmin):
+class VolunteerAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
         "person",
+        "order",
         "get_year",
         "is_review",
     )
@@ -176,9 +179,10 @@ class FestivalAdmin(admin.ModelAdmin):
 
 
 @admin.register(Place)
-class PlaceAdmin(admin.ModelAdmin):
+class PlaceAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
         "name",
+        "order",
         "city",
         "address",
     )
@@ -193,9 +197,10 @@ class PressReleaseAdmin(admin.ModelAdmin):
 
 
 @admin.register(ArtTeamMember)
-class ArtTeamMemberAdmin(admin.ModelAdmin):
+class ArtTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
         "person",
+        "order",
         "team",
         "position",
     )
@@ -210,8 +215,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
-    ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
@@ -231,10 +234,11 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
 
 
 @admin.register(FestTeamMember)
-class FestTeamMemberAdmin(admin.ModelAdmin):
+class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     form = FestTeamMemberForm
     list_display = (
         "person",
+        "order",
         "team",
         "position",
         "is_pr_director",
@@ -259,8 +263,6 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
-    ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
@@ -289,18 +291,20 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
 
 
 @admin.register(Sponsor)
-class SponsorAdmin(admin.ModelAdmin):
+class SponsorAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
         "person",
+        "order",
         "position",
     )
     autocomplete_fields = ("person",)
 
 
 @admin.register(Selector)
-class SelectorAdmin(admin.ModelAdmin):
+class SelectorAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
         "person",
+        "order",
         "get_year",
         "position",
     )
