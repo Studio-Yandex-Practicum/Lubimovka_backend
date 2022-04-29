@@ -97,7 +97,22 @@ class AbstractContent(models.Model):
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,
-        limit_choices_to={"app_label": "content_pages"},
+        limit_choices_to={
+            "app_label": "content_pages",
+            "model__in": (
+                "contentunitrichtext",
+                "eventsblock",
+                "imagesblock",
+                "link",
+                "personsblock",
+                "playsblock",
+                "preamble",
+                "quote",
+                "text",
+                "title",
+                "videosblock",
+            ),
+        },
         verbose_name="Тип объекта",
     )
     object_id = models.PositiveIntegerField(

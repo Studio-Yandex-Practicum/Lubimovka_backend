@@ -1,13 +1,15 @@
+import logging
 import urllib
-from functools import wraps
 
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify as django_slugify
-from rest_framework import status
 from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
+from apps.core.decorators.cache import cache_user
+
+logger = logging.getLogger("django")
 
 
 def slugify(name):
@@ -93,23 +95,7 @@ def manual_order_model_list(app, admin_site_models_order):
     return app["models"]
 
 
-def cache_user(func):
-    cache_user_dict = dict()
-
-    @wraps(func)
-    def wrapper(self, request, *args, **kwargs):
-        user = request.user.username
-        if user in cache_user_dict:
-            return cache_user_dict[user]
-
-        result = func(self, request, *args, **kwargs)
-        cache_user_dict[user] = result
-        return result
-
-    return wrapper
-
-
-@cache_user
+@cache_user(timelimit=300)
 def get_app_list(self, request):
     admin_site_apps_order = getattr(settings, "ADMIN_SITE_APPS_ORDER", None)
     admin_site_models_order = getattr(settings, "ADMIN_SITE_MODELS_ORDER", None)
@@ -130,8 +116,7 @@ def get_app_list(self, request):
     return app_list
 
 
-def send_email(message):
-    message.send()
-    if hasattr(message, "anymail_status") and message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
-        return True
-    return False
+def get_domain(request):
+    server_protocol = request.META["SERVER_PROTOCOL"].split("/1.1")[0].lower()
+    domain = server_protocol + "://" + request.META["HTTP_HOST"]
+    return domain

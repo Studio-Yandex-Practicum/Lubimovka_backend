@@ -3,12 +3,11 @@ from datetime import datetime
 import pytest
 from django.urls import reverse
 
-from apps.info.models import FestivalTeamMember, Question
+from apps.info.models import FestivalTeamMember
 from apps.info.tests.conftest import (
     FESTIVAL_URL_NAME,
     FESTIVAL_YEARS_URL,
     PARTNERS_URL,
-    QUESTIONS_URL,
     SPONSORS_URL,
     TEAMS_URL,
     TEAMS_URL_FILTER,
@@ -229,24 +228,3 @@ class TestPartnersAPIViews:
         assert image_url_in_response.endswith(
             image_url_in_db
         ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение 'image' неправильное"
-
-
-class TestQuestionsAPIViews:
-    def test_question_url(self, client):
-        """Checks that question object add in db with correct fields values."""
-        data = {
-            "question": "Text",
-            "author_name": "Name",
-            "author_email": "author@mail.ru",
-        }
-        url = QUESTIONS_URL
-        response = client.post(url, data=data)
-        for field, value in data.items():
-            question = Question.objects.get(id=response.json().get("id"))
-            question_value = getattr(question, field)
-            data_value = value
-            assert question_value == data_value, (
-                f"Проверьте, что при POST запросе {url} "
-                f"в базу данных добавляется объект c корректным"
-                f"значением поля {field}"
-            )

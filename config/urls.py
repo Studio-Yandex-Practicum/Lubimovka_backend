@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth import views
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
@@ -21,6 +22,7 @@ apps_patterns = [
     path("", include("apps.library.urls")),
     path("", include("apps.info.urls")),
     path("", include("apps.main.urls")),
+    path("", include("apps.feedback.urls")),
 ]
 
 api_schema_patterns = [
@@ -42,6 +44,16 @@ api_schema_patterns = [
 ]
 
 urlpatterns = [
+    path(
+        route="admin/reset/done/",
+        view=views.PasswordResetCompleteView.as_view(),
+        name="password_reset_complete",
+    ),
+    path(
+        route="admin/reset/<uidb64>/<token>/",
+        view=views.PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
     path(
         route="admin/",
         view=admin.site.urls,

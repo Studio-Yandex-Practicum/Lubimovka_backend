@@ -11,16 +11,16 @@ pytestmark = [pytest.mark.django_db]
     params=(
         {"array_image": True},
         {"array_person": True},
+        {"array_event": True},
         {"array_play": True},
-        {"unit_preamble": True},
-        {"unit_quote": True},
-        {"unit_text": True},
-        {"unit_title": True},
+        {"array_video": True},
+        {"unit_link": True},
+        {"unit_rich_text": True},
     )
 )
-def blog_item_content_module(request, simple_blog_item, plays):
+def blog_item_content_module(request, blog_item_published, events, plays, persons):
     content_module_param = request.param
-    return BlogItemContentModuleFactory.create(content_page=simple_blog_item, **content_module_param)
+    return BlogItemContentModuleFactory.create(content_page=blog_item_published, **content_module_param)
 
 
 def test_blog_item_delete_related_content_module(blog_item_content_module, plays, festivals):
@@ -32,12 +32,14 @@ def test_blog_item_delete_related_content_module(blog_item_content_module, plays
         item.refresh_from_db()
 
 
-def test_blog_item_queryset_published(simple_blog_item_not_published, simple_blog_item_published):
-    """Check published queryset retrun only `BlogItem` with status`Опубликовано`."""
+def test_blog_item_queryset_published(blog_item_published, blog_item_not_published):
+    """Check published queryset retrun only `BlogItem` with status `PUBLISHED`."""
     qs = BlogItem.ext_objects.published()
 
-    is_not_published_in_qs = qs.filter(id=simple_blog_item_not_published.id).exists()
-    assert is_not_published_in_qs is False, "Проверьте что блог со статусом `В работе` не отдается в queryset."
+    is_not_published_in_qs = qs.filter(id=blog_item_not_published.id).exists()
+    assert (
+        is_not_published_in_qs is False
+    ), f"Проверьте что блог со статусом `{blog_item_not_published.status}` не отдается в queryset."
 
-    is_published_in_qs = qs.filter(id=simple_blog_item_published.id).exists()
-    assert is_published_in_qs is True, "Проверьте что блог со статусом `Опубликовано` есть в queryset."
+    is_published_in_qs = qs.filter(id=blog_item_published.id).exists()
+    assert is_published_in_qs is True, "Проверьте что блог со статусом `PUBLISHED` есть в queryset."

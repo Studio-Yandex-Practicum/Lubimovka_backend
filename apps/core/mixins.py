@@ -43,26 +43,28 @@ class StatusButtonMixin:
         extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
         extra_context["possible_statuses"] = statuses
 
-        # hide buttons SAVE if user doesnt have permission to change in current status
+        # hide buttons SAVE if user doesn't have permission to change in current status
         right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
         if user_level < right_to_change:
             extra_context["show_save"] = False
             extra_context["show_save_and_continue"] = False
             extra_context["show_save_and_add_another"] = False
 
-        # hide button DELETE if user doesnt have permission to delete in current status
+        # hide button DELETE if user doesn't have permission to delete in current status
         right_to_delete = STATUS_INFO[obj.status]["min_level_to_delete"]
         if user_level < right_to_delete:
             extra_context["show_delete"] = False
         return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
-        for status in STATUS_INFO:
-            if status in request.POST:
-                obj.status = status
-                obj.save()
-                self.message_user(request, "Статус успешно обновлён!")
-                return HttpResponseRedirect(".")
+        user_level = get_user_perms_level(request, obj)
+        if user_level >= STATUS_INFO[obj.status]["min_level_to_change"]:
+            for status in STATUS_INFO:
+                if status in request.POST:
+                    obj.status = status
+                    obj.save()
+                    self.message_user(request, "Статус успешно обновлён!")
+                    return HttpResponseRedirect(".")
         return super().response_change(request, obj)
 
 

@@ -179,21 +179,42 @@ def add_email_settings(apps, schema_editor):
         group="EMAIL",
         settings_key="email_send_from",
         text="lubimovka-2021@yandex.ru",
-        description="Почта для отправки вопроса",
+        description="Почта для отправки писем.",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
         settings_key="email_send_to",
         text="lubimovka-2021@yandex.ru",
-        description="Почта для приёма вопроса",
+        description="Почта для приёма вопросов.",
     )
     Setting.objects.create(
         field_type="TEXT",
         group="EMAIL",
-        settings_key="email_subject_for_question",
-        text="Вопрос Любимовке",
-        description="Тема письма для вопроса",
+        settings_key="email_to_send_participations",
+        text="lubimovka-2021@yandex.ru",
+        description="Почта для приёма заявок на участие.",
+    )
+    Setting.objects.create(
+        field_type="EMAIL",
+        group="EMAIL",
+        settings_key="email_on_volunteers_page",
+        email="author@gmail.com",
+        description="Почта для тех кто хочет стать волонтером",
+    )
+    Setting.objects.create(
+        field_type="EMAIL",
+        group="EMAIL",
+        settings_key="email_on_blog_page",
+        email="author@gmail.com",
+        description="Почта для тех кто хочет стать автором",
+    )
+    Setting.objects.create(
+        field_type="EMAIL",
+        group="EMAIL",
+        settings_key="email_on_support_page",
+        email="author@gmail.com",
+        description="Почта для получения отчетности об использовании пожертвований",
     )
 
 
@@ -423,6 +444,19 @@ def add_playsupply_settings(apps, schema_editor):
     )
 
 
+def add_press_release_setting(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+
+    Setting.objects.create(
+        field_type="TEXT",
+        group="EMAIL",
+        settings_key="pr_director_name",
+        text="Имя Фамилия в дательном падеже (пример: Анне Загородниковой)",
+        description="Имя PR деректора на странице для прессы (в дательном падеже)",
+    )
+
+
 def add_short_list_program(apps, schema_editor):
     Program = apps.get_model(
         "library",
@@ -431,16 +465,6 @@ def add_short_list_program(apps, schema_editor):
     Program.objects.create(
         name="Шорт-лист",
         slug="short-list",
-    )
-
-def add_other_plays_program(apps, schema_editor):
-    Program = apps.get_model(
-        "library",
-        "ProgramType",
-    )
-    Program.objects.create(
-        name="Другие пьесы",
-        slug="other_plays",
     )
 
 
@@ -484,7 +508,7 @@ class Migration(migrations.Migration):
             add_short_list_program,
         ),
         migrations.RunPython(
-            add_other_plays_program,
+            add_press_release_setting,
         ),
         migrations.RunPython(
             add_playsupply_settings,

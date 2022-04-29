@@ -15,15 +15,15 @@ def simple_project():
 @pytest.fixture(
     params=(
         {"array_image": True},
-        {"unit_link": True},
-        {"array_event": True},
         {"array_person": True},
+        {"array_event": True},
         {"array_play": True},
-        {"unit_text": True},
         {"array_video": True},
+        {"unit_link": True},
+        {"unit_rich_text": True},
     )
 )
-def project_content_module(request, simple_project, plays, persons, events):
+def project_content_module(request, simple_project, events, plays, persons):
     content_module_param = request.param
     return ProjectContentModuleFactory.create(content_page=simple_project, **content_module_param)
 

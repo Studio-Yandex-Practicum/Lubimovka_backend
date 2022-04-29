@@ -4,18 +4,9 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
+from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import FestTeamMemberForm
-from apps.info.models import (
-    Festival,
-    FestivalTeamMember,
-    Partner,
-    Place,
-    PressRelease,
-    Question,
-    Selector,
-    Sponsor,
-    Volunteer,
-)
+from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
@@ -38,6 +29,7 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
         "image_preview_list_page",
     )
     list_filter = ("type",)
+    search_fields = ("name",)
     fieldsets = (
         (
             None,
@@ -90,6 +82,11 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
         "image",
         "image_preview_list_page",
     )
+    search_fields = (
+        "first_name",
+        "last_name",
+    )
+    list_filter = ("city",)
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
 
@@ -101,7 +98,12 @@ class VolunteerAdmin(admin.ModelAdmin):
         "get_year",
         "is_review",
     )
+    autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
+    list_filter = (
+        "festival",
+        HasReviewAdminFilter,
+    )
 
     @admin.display(
         boolean=True,
@@ -125,6 +127,7 @@ class VolunteerAdmin(admin.ModelAdmin):
 
 class VolunteerInline(admin.TabularInline):
     model = Volunteer
+    autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
     verbose_name = "Волонтёр"
     verbose_name_plural = "Волонтёры"
@@ -133,7 +136,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
-    classes = ["collapse"]
+    classes = ["collapsible"]
     ordering = ("person__last_name", "person__first_name")
 
     @admin.display(
@@ -150,10 +153,10 @@ class VolunteerInline(admin.TabularInline):
 class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     model = Festival.images.through
     readonly_fields = ("inline_image_preview",)
-    verbose_name = "Изображение фестиваля"
-    verbose_name_plural = "Изображения фестиваля"
+    verbose_name = "Изображение"
+    verbose_name_plural = "Изображения"
     extra = 1
-    classes = ["collapse"]
+    classes = ["collapsible"]
     model.__str__ = lambda self: ""
 
 
@@ -187,13 +190,6 @@ class PlaceAdmin(admin.ModelAdmin):
 @admin.register(PressRelease)
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
-    list_filter = ("festival",)
-
-
-class PressRealeaseAdmin(admin.ModelAdmin):
-    list_display = ("title",)
-    list_filter = ("title",)
-    search_fields = ("title",)
 
 
 @admin.register(ArtTeamMember)
@@ -216,7 +212,7 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
     )
 
     ordering = ("person__last_name", "person__first_name")
-
+    autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
     def get_queryset(self, request):
@@ -265,7 +261,7 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
     )
 
     ordering = ("person__last_name", "person__first_name")
-
+    autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
     def save_model(self, request, obj, form, change):
@@ -298,17 +294,7 @@ class SponsorAdmin(admin.ModelAdmin):
         "person",
         "position",
     )
-
-
-@admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ("id", "author_name", "author_email", "question", "sent")
-    list_filter = ("sent",)
-
-    def has_module_permission(self, request):
-        if request.user.is_authenticated and (request.user.is_admin or request.user.is_superuser):
-            return super().has_module_permission(request)
-        return False
+    autocomplete_fields = ("person",)
 
 
 @admin.register(Selector)
@@ -318,6 +304,7 @@ class SelectorAdmin(admin.ModelAdmin):
         "get_year",
         "position",
     )
+    autocomplete_fields = ("person",)
 
     @admin.display(
         ordering="festival",

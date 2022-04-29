@@ -2,9 +2,8 @@ from django.contrib import admin
 from django.forms import ValidationError
 from django.forms.models import BaseInlineFormSet
 
-from apps.library.filters.play import PlayProgramFilter
-from apps.library.forms.admin.play import PlayForm
-from apps.library.models import Author, Play
+from apps.library.filters.play import PlayTypeFilter
+from apps.library.models import AuthorPlay, Play
 
 
 class AuthorRequiredInlineFormset(BaseInlineFormSet):
@@ -23,17 +22,16 @@ class AuthorRequiredInlineFormset(BaseInlineFormSet):
 
 
 class AuthorInline(admin.TabularInline):
-    model = Author.plays.through
+    model = AuthorPlay
     formset = AuthorRequiredInlineFormset
-    extra = 1
+    extra = 0
     verbose_name = "Автор"
     verbose_name_plural = "Авторы"
-    classes = ["collapse"]
+    fields = ("author",)
 
 
 @admin.register(Play)
 class PlayAdmin(admin.ModelAdmin):
-    form = PlayForm
     filter_horizontal = ("authors",)
     list_display = (
         "name",
@@ -44,10 +42,11 @@ class PlayAdmin(admin.ModelAdmin):
     )
     inlines = (AuthorInline,)
     list_filter = (
-        PlayProgramFilter,
+        PlayTypeFilter,
         "authors",
         "city",
         "festival",
+        "program",
         "published",
     )
     search_fields = (
@@ -59,8 +58,9 @@ class PlayAdmin(admin.ModelAdmin):
         "festival__year",
     )
     fields = (
-        "program",
+        "other_play",
         "name",
+        "program",
         "city",
         "year",
         "url_download",
@@ -68,6 +68,3 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "published",
     )
-
-    class Media:
-        js = ("admin/play.js",)

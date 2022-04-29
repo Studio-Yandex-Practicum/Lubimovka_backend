@@ -1,10 +1,14 @@
+from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
 from django.contrib.auth.models import Permission
+from django.http import HttpResponseRedirect
+from django.utils.crypto import get_random_string
 
-from .forms import GroupAdminForm, UserAdminForm
+from .forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm
 from .models import ProxyGroup
+from .utils import send_reset_password_email
 
 User = get_user_model()
 
@@ -15,6 +19,7 @@ class UserAdmin(DjangoUserAdmin):
     list_display = (
         "full_name",
         "username",
+        "email",
         "is_active",
         "role",
         "get_last_login",
@@ -22,6 +27,26 @@ class UserAdmin(DjangoUserAdmin):
     list_filter = (
         "groups",
         "is_active",
+    )
+    add_form = UserAdminCreationForm
+    add_fieldsets = (
+        (
+            None,
+            {
+                "classes": ("wide",),
+                "fields": (
+                    "first_name",
+                    "last_name",
+                    "username",
+                    "email",
+                ),
+            },
+        ),
+    )
+    search_fields = (
+        "email",
+        "username",
+        "full_name",
     )
 
     @admin.display(description="Дата последней авторизации")
@@ -34,13 +59,33 @@ class UserAdmin(DjangoUserAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         """Only superusers can edit `is_superuser` field."""
+        readonly_fields = (
+            "date_joined",
+            "last_login",
+        )
         if not request.user.is_superuser:
-            return ("is_superuser",)
-        return super().get_readonly_fields(request, obj)
+            readonly_fields += ("is_superuser",)
+        return readonly_fields
 
     @admin.display(description="Роль")
     def role(self, obj):
         return obj.groups.first()
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if not change:
+            template_id = settings.MAILJET_TEMPLATE_ID_REGISTRATION_USER
+            send_reset_password_email(request, obj, template_id)
+
+    def response_change(self, request, obj):
+        if "reset_password" in request.POST:
+            obj.set_password(get_random_string(length=8))
+            obj.save()
+            template_id = settings.MAILJET_TEMPLATE_ID_RESET_PASSWORD_USER
+            send_reset_password_email(request, obj, template_id)
+            self.message_user(request, "Пароль был сброшен. Пользователю отправлена ссылка для смены пароля.")
+            return HttpResponseRedirect(".")
+        return super().response_change(request, obj)
 
 
 class GroupAdmin(admin.ModelAdmin):

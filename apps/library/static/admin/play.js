@@ -4,13 +4,14 @@ $(document).ready(function(jQuery) {
         let yearField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-year');
         let urlReadingField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-url_reading');
         let festivalField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-festival');
+        let programField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-program');
 
-        var mainFieldsArray = [cityField, yearField, urlReadingField, festivalField]
+        var mainFieldsArray = [cityField, yearField, urlReadingField, festivalField, programField];
 
         var duration = 1;
 
-        function toggleLink(slug) {
-            if (slug == "other_plays") {
+        function toggleLink(type) {
+            if (type) {
                 mainFieldsArray.forEach(function(item) {
                     item.slideUp(duration);
                 });
@@ -20,13 +21,11 @@ $(document).ready(function(jQuery) {
                 });
             }
         };
-        // slide up and down fields when select program changed by user
-        $('select#id_program').on('change', function() {
-            toggleLink($('#id_program').val());
-        });
-        // slide up and down fields when program is already selected (when page was reload, e.g. validation errors)
-        $('select#id_program').each(function() {
-            toggleLink($('#id_program').val());
+        // show/hide on load
+        toggleLink($('#id_other_play').is(':checked'));
+        // show/hide on change
+        $('#id_other_play').change(function() {
+            toggleLink($('#id_other_play').is(':checked'));
         });
     });
 });
