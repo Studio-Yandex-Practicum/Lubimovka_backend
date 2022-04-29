@@ -2,42 +2,6 @@
 
 from django.db import migrations, models
 
-def set_order_partner(apps, schema_editor):
-    Partner = apps.get_model("info", "Partner")
-    for partner in Partner.objects.all():
-        partner.order = partner.id
-        partner.save()
-
-def set_order_sponsor(apps, schema_editor):
-    Sponsor = apps.get_model("info", "Sponsor")
-    for sponsor in Sponsor.objects.all():
-        sponsor.order = sponsor.id
-        sponsor.save()
-
-def set_order_volunteer(apps, schema_editor):
-    Volunteer = apps.get_model("info", "Volunteer")
-    for volunteer in Volunteer.objects.all():
-        volunteer.order = volunteer.id
-        volunteer.save()
-
-def set_order_festivalteammember(apps, schema_editor):
-    FestivalTeamMember = apps.get_model("info", "FestivalTeamMember")
-    for member in FestivalTeamMember.objects.all():
-        member.order = member.id
-        member.save()
-
-def set_order_place(apps, schema_editor):
-    Place = apps.get_model("info", "Place")
-    for place in Place.objects.all():
-        place.order = place.id
-        place.save()
-
-def set_order_selector(apps, schema_editor):
-    Selector = apps.get_model("info", "Selector")
-    for selector in Selector.objects.all():
-        selector.order = selector.id
-        selector.save()
-
 def order_model(Model):
     for obj in Model.objects.all():
         obj.order = obj.id
