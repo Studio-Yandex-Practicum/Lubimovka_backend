@@ -17,14 +17,13 @@ class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
     """If `ingress` exist returns preview page else returns published items."""
 
     def get_queryset(self, **kwargs):
-        object_id = self.kwargs["pk"]
-        model_name = "newsitem"
-        ingress = self.request.GET.get("ingress", "")
-        if ingress == create_hash(object_id, model_name):
-            queryset = NewsItem.ext_objects.current_and_published(object_id)
-        else:
-            queryset = NewsItem.ext_objects.published()
-        return queryset
+        object_id = self.kwargs.get("pk")
+        if object_id:
+            model_name = "newsitem"
+            ingress = self.request.GET.get("ingress", "")
+            if ingress == create_hash(object_id, model_name):
+                return NewsItem.ext_objects.current_and_published(object_id)
+        return NewsItem.ext_objects.published()
 
     filter_backends = (
         filters.DjangoFilterBackend,

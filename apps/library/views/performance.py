@@ -17,14 +17,12 @@ class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     serializer_class = PerformanceSerializer
 
     def get_queryset(self, **kwargs):
-        object_id = self.kwargs["pk"]
+        object_id = self.kwargs.get("pk")
         model_name = "performance"
         ingress = self.request.GET.get("ingress", "")
         if ingress == create_hash(object_id, model_name):
-            queryset = Performance.ext_objects.current_and_published(object_id)
-        else:
-            queryset = Performance.ext_objects.published()
-        return queryset
+            return Performance.ext_objects.current_and_published(object_id)
+        return Performance.ext_objects.published()
 
 
 @extend_schema_view(

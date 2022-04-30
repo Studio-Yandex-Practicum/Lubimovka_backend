@@ -40,14 +40,16 @@ def blog_item_with_persons(three_persons, role_text, role_translator):
 def test_selector_blog_item_detail_get_return_only_published(blog_item_not_published):
     """Selector should return 404 if `BlogItem` has status other than `PUBLISHED`."""
     blog_item_id = blog_item_not_published.id
+    blog_items_published = BlogItem.ext_objects.published()
     with pytest.raises(Http404):
-        selectors.blog_item_detail_get(blog_item_id)
+        selectors.blog_item_detail_get(blog_item_id, blog_items_published)
 
 
 def test_selector_blog_item_detail_get_type(blog_item_with_persons):
     """Selector should return `BlogItem` object."""
     blog_item_id = blog_item_with_persons.id
-    blog_item = selectors.blog_item_detail_get(blog_item_id)
+    blog_items_published = BlogItem.ext_objects.published()
+    blog_item = selectors.blog_item_detail_get(blog_item_id, blog_items_published)
 
     assert isinstance(blog_item, BlogItem), "Тип возвращаемого объекта `BlogItem`."
 
@@ -56,7 +58,8 @@ def test_selector_blog_item_detail_get_type(blog_item_with_persons):
 def test_selector_blog_item_detail_get_has_extended_attributes(extended_attr, blog_item_with_persons):
     """Returned `BlogItem` has to be extended with "_other_blogs" and "_team."""
     blog_item_id = blog_item_with_persons.id
-    blog_item = selectors.blog_item_detail_get(blog_item_id)
+    blog_items_published = BlogItem.ext_objects.published()
+    blog_item = selectors.blog_item_detail_get(blog_item_id, blog_items_published)
 
     blog_item_extended_attr = getattr(blog_item, extended_attr, None)
     assert blog_item_extended_attr is not None, f"Проверьте, что в возвращаемом объекте есть {extended_attr}."
@@ -65,7 +68,8 @@ def test_selector_blog_item_detail_get_has_extended_attributes(extended_attr, bl
 def test_selector_blog_item_detail_get_team_annotated_full_name(blog_item_with_persons):
     """`_team.persons` structure has to have `annotated_full_name` attribute."""
     blog_item_id = blog_item_with_persons.id
-    blog_item = selectors.blog_item_detail_get(blog_item_id)
+    blog_items_published = BlogItem.ext_objects.published()
+    blog_item = selectors.blog_item_detail_get(blog_item_id, blog_items_published)
 
     team = blog_item._team
     first_role = team.first()
@@ -77,7 +81,8 @@ def test_selector_blog_item_detail_get_team_annotated_full_name(blog_item_with_p
 def test_selector_blog_item_detail_get_roles_count(blog_item_with_persons):
     """Check the amount tested object."""
     blog_item_id = blog_item_with_persons.id
-    blog_item = selectors.blog_item_detail_get(blog_item_id)
+    blog_items_published = BlogItem.ext_objects.published()
+    blog_item = selectors.blog_item_detail_get(blog_item_id, blog_items_published)
     roles = blog_item._team
 
     assert roles.count() == 2, "У созданного блога должно быть только 2 роли в команде"
@@ -93,7 +98,8 @@ def test_selector_blog_item_detail_get_roles_count(blog_item_with_persons):
 def test_selector_blog_item_detail_get_roles_names(role_name, blog_item_with_persons):
     """Roles in `_team` should be distinct and match person fixtures."""
     blog_item_id = blog_item_with_persons.id
-    blog_item = selectors.blog_item_detail_get(blog_item_id)
+    blog_items_published = BlogItem.ext_objects.published()
+    blog_item = selectors.blog_item_detail_get(blog_item_id, blog_items_published)
     roles = blog_item._team
     roles_names = roles.values_list("name", flat=True)
 
@@ -103,7 +109,8 @@ def test_selector_blog_item_detail_get_roles_names(role_name, blog_item_with_per
 def test_selector_blog_item_detail_get_role_persons(blog_item_with_persons):
     """Get every role array in `_team` and count persons in it. It should match to expected."""
     blog_item_id = blog_item_with_persons.id
-    blog_item = selectors.blog_item_detail_get(blog_item_id)
+    blog_items_published = BlogItem.ext_objects.published()
+    blog_item = selectors.blog_item_detail_get(blog_item_id, blog_items_published)
     roles = blog_item._team
 
     role_translator = roles.get(slug="translator")
