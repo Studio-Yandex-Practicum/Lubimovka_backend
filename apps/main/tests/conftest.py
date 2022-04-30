@@ -61,16 +61,6 @@ def banners():
 
 
 @pytest.fixture
-def news_items_with_content(plays, images_block):
-    return NewsItemFactory.complex_create(3, status="PUBLISHED")
-
-
-@pytest.fixture
-def blog_items_with_content(plays, images_block):
-    return BlogItemFactory.complex_create(3, status="PUBLISHED")
-
-
-@pytest.fixture
 def places():
     return PlaceFactory.create_batch(3)
 
@@ -91,6 +81,26 @@ def performance(plays, persons):
 
 
 @pytest.fixture
+def four_performances(plays, persons):
+    return PerformanceFactory.complex_create(4)
+
+
+@pytest.fixture
+def four_performance_events(four_performances):
+    return EventFactory.create_batch(4)
+
+
+@pytest.fixture
 def events_pinned_on_main(freezer, reading, performance, master_class):
     freezer.move_to("2021-05-20 15:42")
     return EventFactory.create_batch(4, date_time_in_three_hours=True, pinned_on_main=True)
+
+
+@pytest.fixture
+def news_items_with_content(plays, images_block, four_performance_events):
+    return NewsItemFactory.complex_create(3, status="PUBLISHED")
+
+
+@pytest.fixture
+def blog_items_with_content(plays, images_block, four_performance_events):
+    return BlogItemFactory.complex_create(3, status="PUBLISHED")

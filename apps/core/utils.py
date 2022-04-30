@@ -2,7 +2,6 @@ import hashlib
 import logging
 import urllib
 from datetime import date
-from functools import wraps
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -10,6 +9,7 @@ from django.template.defaultfilters import slugify as django_slugify
 from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
+from apps.core.decorators.cache import cache_user
 from config.settings.base import HASH_SECRET_KEY
 
 logger = logging.getLogger("django")
@@ -98,23 +98,7 @@ def manual_order_model_list(app, admin_site_models_order):
     return app["models"]
 
 
-def cache_user(func):
-    cache_user_dict = dict()
-
-    @wraps(func)
-    def wrapper(self, request, *args, **kwargs):
-        user = request.user.username
-        if user in cache_user_dict:
-            return cache_user_dict[user]
-
-        result = func(self, request, *args, **kwargs)
-        cache_user_dict[user] = result
-        return result
-
-    return wrapper
-
-
-@cache_user
+@cache_user(timelimit=300)
 def get_app_list(self, request):
     admin_site_apps_order = getattr(settings, "ADMIN_SITE_APPS_ORDER", None)
     admin_site_models_order = getattr(settings, "ADMIN_SITE_MODELS_ORDER", None)

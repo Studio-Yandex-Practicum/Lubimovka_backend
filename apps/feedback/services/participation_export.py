@@ -4,8 +4,8 @@ from django.conf import settings
 
 from apps.core.models import Setting
 from apps.core.services.send_email import send_email
-from apps.library.services.spreadsheets import GoogleSpreadsheets
-from apps.library.services.yandex_disk_export import yandex_disk_export
+from apps.feedback.services.spreadsheets import GoogleSpreadsheets
+from apps.feedback.services.yandex_disk_export import yandex_disk_export
 
 logger = logging.getLogger("django")
 gs = GoogleSpreadsheets()

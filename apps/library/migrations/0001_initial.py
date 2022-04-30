@@ -109,7 +109,7 @@ class Migration(migrations.Migration):
                 ('email', models.EmailField(max_length=100, verbose_name='Электронная почта')),
                 ('title', models.CharField(max_length=200, verbose_name='Название пьесы')),
                 ('year', models.PositiveSmallIntegerField(validators=[apps.library.validators.year_validator], verbose_name='Год написания')),
-                ('file', models.FileField(help_text="Файл в одно из форматов ('doc', 'docx', 'txt', 'odt', 'pdf')", upload_to=apps.library.utilities.generate_upload_path, validators=[django.core.validators.FileExtensionValidator(('doc', 'docx', 'txt', 'odt', 'pdf'))], verbose_name='Файл')),
+                ('file', models.FileField(help_text="Файл в одно из форматов ('doc', 'docx', 'txt', 'odt', 'pdf')", upload_to=apps.feedback.utilities.generate_upload_path, validators=[django.core.validators.FileExtensionValidator(('doc', 'docx', 'txt', 'odt', 'pdf'))], verbose_name='Файл')),
                 ('verified', models.BooleanField(choices=[(True, 'Да'), (False, 'Нет')], default=False, verbose_name='Проверена?')),
             ],
             options={

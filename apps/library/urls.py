@@ -4,7 +4,6 @@ from rest_framework.routers import DefaultRouter
 from apps.library.views import (
     AuthorLettersAPIView,
     AuthorsReadViewSet,
-    ParticipationViewSet,
     PerformanceMediaReviewViewSet,
     PerformanceReviewViewSet,
     PerformanceViewSet,
@@ -46,15 +45,18 @@ router.register(
     basename="authors",
 )
 
-participation_url = [
-    path("participation/", ParticipationViewSet.as_view(), name="participation"),
-]
-
 library_urls = [
     path("library/", include(router.urls)),
-    path("library/", include(participation_url)),
-    path("library/author_letters/", AuthorLettersAPIView.as_view(), name="author_letters"),
-    path("library/playfilters/", PlayFiltersAPIView.as_view(), name="playfilters"),
+    path(
+        "library/author_letters/",
+        AuthorLettersAPIView.as_view(),
+        name="author_letters",
+    ),
+    path(
+        "library/playfilters/",
+        PlayFiltersAPIView.as_view(),
+        name="playfilters",
+    ),
 ]
 
 urlpatterns = [
