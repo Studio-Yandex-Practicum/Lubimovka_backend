@@ -2,9 +2,6 @@
 {% if original.status %}
 <div class="submit-row">
     <strong> текущий статус: {{ original.get_status_display }} </strong>
-    {% if original.get_class_name %}
-      {% include "admin/includes/preview_unpublished_button.html" %}
-    {% endif%}
     {% if user_level >= current_status_level %}
         {% for status, params in possible_statuses.items %}
             {% if user_level >= params.min_access_level %}
@@ -12,5 +9,6 @@
             {% endif %}
         {% endfor %}
     {% endif%}
+    {% include "admin/includes/preview_unpublished_button.html" %}
 </div>
 {% endif %}

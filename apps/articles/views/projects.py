@@ -1,16 +1,22 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from apps.articles.models import Project
 from apps.articles.serializers import ProjectListSerializer, ProjectSerializer
+from apps.core.utils import create_hash
 
 
 class ProjectsViewSet(ReadOnlyModelViewSet):
-    """Returns published Project items."""
+    """If `ingress` exist returns preview page else returns published items."""
 
-    queryset = Project.ext_objects.published()
+    def get_queryset(self, **kwargs):
+        object_id = self.kwargs["pk"]
+        model_name = "project"
+        ingress = self.request.GET.get("ingress", "")
+        if ingress == create_hash(object_id, model_name):
+            queryset = Project.ext_objects.current_and_published(object_id)
+        else:
+            queryset = Project.ext_objects.published()
+        return queryset
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -19,13 +25,3 @@ class ProjectsViewSet(ReadOnlyModelViewSet):
 
     class Meta:
         model = Project
-
-
-class PreviewProjectsDetailAPI(APIView):
-    """Returns preview page of `Project` object."""
-
-    def get(self, request, id, **kwargs):
-        project_item_detail = get_object_or_404(Project, id=id)
-        context = {"request": request}
-        serializer = ProjectSerializer(project_item_detail, context=context)
-        return Response(serializer.data)

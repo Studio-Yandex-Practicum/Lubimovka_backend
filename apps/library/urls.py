@@ -12,13 +12,12 @@ from apps.library.views import (
     PlayViewSet,
     SearchResultViewSet,
 )
-from apps.library.views.performance import PreviewPerformanceViewSet
 
 router = DefaultRouter()
 router.register(
     "performances",
     PerformanceViewSet,
-    basename="performances",
+    basename="performance",
 )
 router.register(
     r"performances/(?P<performance_id>\d+)/media-reviews",
@@ -48,34 +47,14 @@ router.register(
 )
 
 participation_url = [
-    path(
-        "participation/",
-        ParticipationViewSet.as_view(),
-        name="participation",
-    ),
-]
-performance_urls = [
-    path(
-        route="performance/preview/<int:id>/<str:hash>/",
-        view=PreviewPerformanceViewSet.as_view(),
-        name="performance-item-detail-preview",
-    ),
+    path("participation/", ParticipationViewSet.as_view(), name="participation"),
 ]
 
 library_urls = [
     path("library/", include(router.urls)),
     path("library/", include(participation_url)),
-    path("library/", include(performance_urls)),
-    path(
-        "library/author_letters/",
-        AuthorLettersAPIView.as_view(),
-        name="author_letters",
-    ),
-    path(
-        "library/playfilters/",
-        PlayFiltersAPIView.as_view(),
-        name="playfilters",
-    ),
+    path("library/author_letters/", AuthorLettersAPIView.as_view(), name="author_letters"),
+    path("library/playfilters/", PlayFiltersAPIView.as_view(), name="playfilters"),
 ]
 
 urlpatterns = [

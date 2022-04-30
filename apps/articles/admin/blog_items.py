@@ -3,7 +3,6 @@ from django.contrib import admin
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
-from apps.library.utilities import get_button_preview_page
 
 
 class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
@@ -34,7 +33,6 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "pub_date",
         "image_preview_list_page",
         "status",
-        "button_preview_page",
     )
     readonly_fields = (
         "status",
@@ -75,9 +73,3 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "image_preview_change_page",
         "image",
     )
-
-    @admin.display(
-        description="Предпросмотр страницы",
-    )
-    def button_preview_page(self, obj):
-        return get_button_preview_page(obj)

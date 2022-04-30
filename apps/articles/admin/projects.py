@@ -3,7 +3,6 @@ from django.contrib import admin
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
-from apps.library.utilities import get_button_preview_page
 
 
 class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
@@ -29,7 +28,6 @@ class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "pub_date",
         "image_preview_list_page",
         "status",
-        "button_preview_page",
     )
     fieldsets = (
         (
@@ -63,9 +61,3 @@ class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "image_preview_change_page",
         "image",
     )
-
-    @admin.display(
-        description="Предпросмотр страницы",
-    )
-    def button_preview_page(self, obj):
-        return get_button_preview_page(obj)

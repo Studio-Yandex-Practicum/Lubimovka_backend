@@ -10,12 +10,22 @@ from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
 from apps.articles.serializers import NewsItemDetailedSerializer, NewsItemListSerializer, YearMonthSerializer
+from apps.core.utils import create_hash
 
 
 class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
-    """Returns published News items."""
+    """If `ingress` exist returns preview page else returns published items."""
 
-    queryset = NewsItem.ext_objects.published()
+    def get_queryset(self, **kwargs):
+        object_id = self.kwargs["pk"]
+        model_name = "newsitem"
+        ingress = self.request.GET.get("ingress", "")
+        if ingress == create_hash(object_id, model_name):
+            queryset = NewsItem.ext_objects.current_and_published(object_id)
+        else:
+            queryset = NewsItem.ext_objects.published()
+        return queryset
+
     filter_backends = (
         filters.DjangoFilterBackend,
         rest_filters.OrderingFilter,
@@ -33,11 +43,6 @@ class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
 
     class Meta:
         model = NewsItem
-
-
-class PreviewNewsItemDetailViewSet(NewsItemsViewSet):
-    def get_queryset(self):
-        return NewsItem.ext_objects.current_and_published(self.kwargs["pk"])
 
 
 class NewsItemYearsMonthsAPI(APIView):

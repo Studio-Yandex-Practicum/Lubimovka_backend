@@ -32,7 +32,6 @@ class StatusButtonMixin:
         if not hasattr(obj, "status"):
             return super().change_view(request, object_id, form_url, extra_context)
         user_level = get_user_perms_level(request, obj)
-        preview_page_hash = create_hash(object_id)
 
         # making Status buttons context for template
         possible_changes = STATUS_INFO[obj.status]["possible_changes"]
@@ -44,8 +43,13 @@ class StatusButtonMixin:
         extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
         extra_context["possible_statuses"] = statuses
 
+        # making context for preview page buttons in template
+        current_model_name = obj._meta.model_name
+        ingress_hash = create_hash(object_id, current_model_name)
+        extra_context["model_name"] = current_model_name
         # add hash for unpublished pages
-        extra_context["hash"] = preview_page_hash
+        extra_context["ingress_hash"] = ingress_hash
+        extra_context["url_name"] = f"{current_model_name}-detail"
 
         # hide buttons SAVE if user doesn't have permission to change in current status
         right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]

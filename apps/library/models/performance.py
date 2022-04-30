@@ -6,6 +6,7 @@ from apps.core.constants import AgeLimit, Status
 from apps.core.models import BaseModel, Image, Person
 from apps.library.utilities import get_team_roles
 
+from ...content_pages.querysets import ContenPageQuerySet
 from ...content_pages.utilities import path_by_app_label_and_class_name
 from .play import Play
 
@@ -84,6 +85,8 @@ class Performance(BaseModel):
         default=timedelta(minutes=85),
         verbose_name="Продолжительность",
     )
+    objects = models.Manager()
+    ext_objects = ContenPageQuerySet.as_manager()
 
     class Meta:
         ordering = ("-created",)
@@ -99,9 +102,6 @@ class Performance(BaseModel):
         if len(self.name) >= 25:
             return self.name[:25] + "..."
         return self.name
-
-    def get_class_name(self):
-        return self.__class__.__name__
 
     @property
     def team(self):

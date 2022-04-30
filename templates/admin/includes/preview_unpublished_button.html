@@ -1,12 +1,4 @@
 {% load i18n %}
 <form action="" method="GET">
-     {% if original.get_class_name == 'BlogItem' %}
-       <a class="button" href="{% url 'blog-item-detail-preview' original.id hash %}" >{% if original.get_status_display != 'Опубликовано' %} Предпросмотр страницы {% else %} Просмотр страницы {% endif%}</a>
-     {% elif original.get_class_name == 'NewsItem' %}
-       <a class="button" href="{% url 'news-item-detail-preview' original.id hash %}" >{% if original.get_status_display != 'Опубликовано' %} Предпросмотр страницы {% else %} Просмотр страницы {% endif%}</a>
-     {% elif original.get_class_name == 'Project' %}
-       <a class="button" href="{% url 'project-item-detail-preview' original.id hash %}" >{% if original.get_status_display != 'Опубликовано' %} Предпросмотр страницы {% else %} Просмотр страницы {% endif%}</a>
-     {% elif original.get_class_name == 'Performance' %}
-       <a class="button" href="{% url 'performance-item-detail-preview' original.id hash %}" >{% if original.get_status_display != 'Опубликовано' %} Предпросмотр страницы {% else %} Просмотр страницы {% endif%}</a>
-     {% endif%}
+       <a class="button" href="{% url url_name original.id %}?ingress={{ ingress_hash }}" >{% if original.get_status_display != 'Опубликовано' %} Предпросмотр страницы {% else %} Просмотр страницы {% endif%}</a>
 </form>

@@ -2,3 +2,8 @@
 .select2-results__options {
    max-height: 450px !important;
 }
+/* resize button for preview page */
+a.button {
+   padding: 10px 14px;
+   background: #00CC99;
+}

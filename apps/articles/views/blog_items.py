@@ -9,7 +9,7 @@ from apps.articles import selectors
 from apps.articles.models import BlogItem
 from apps.articles.serializers import BlogItemListSerializer, BlogItemRoleSerializer, YearMonthSerializer
 from apps.content_pages.serializers import BaseContentPageSerializer
-from apps.core.utils import get_paginated_response
+from apps.core.utils import create_hash, get_paginated_response
 
 
 class BlogItemListAPI(APIView):
@@ -77,7 +77,13 @@ class BlogItemDetailAPI(APIView):
 
     @extend_schema(responses=BlogItemDetailOutputSerializer)
     def get(self, request, id, **kwargs):
-        blog_item_detail = selectors.blog_item_detail_get_for_unpublished(blog_item_id=id)
+        model_name = "blogitem"
+        ingress = request.GET.get("ingress", "")
+        if ingress == create_hash(id, model_name):
+            published_blog_items = BlogItem.ext_objects.current_and_published(id)
+        else:
+            published_blog_items = BlogItem.ext_objects.published()
+        blog_item_detail = selectors.blog_item_detail_get(id, published_blog_items)
         context = {"request": request}
         serializer = self.BlogItemDetailOutputSerializer(blog_item_detail, context=context)
         return Response(serializer.data)

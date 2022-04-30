@@ -28,7 +28,7 @@ def blog_item_list_get(filters: dict[str, str] = None) -> QuerySet:
     return PubDateFilter(filters, published_blog_items).qs
 
 
-def blog_item_detail_get(blog_item_id):
+def blog_item_detail_get(blog_item_id, blog_items):
     """Return `detailed` published `BlogItem` object if it exists.
 
     The `BlogItem` extends with:
@@ -53,25 +53,8 @@ def blog_item_detail_get(blog_item_id):
         blog_item's objects only (typically `role.blog_persons` returns all
         blog_persons, not only related to exact blog_item).
     """
-    published_blog_items = BlogItem.ext_objects.published()
-    blog_item = get_object_or_404(published_blog_items, id=blog_item_id)
-    blog_item._other_blogs = published_blog_items.exclude(id=blog_item_id)[:4]
-
-    blog_item_roles = blog_item.roles.distinct()
-    blog_item_persons = blog_item.blog_persons.all()
-    blog_item_persons_full_name = blog_item_persons.annotate(
-        annotated_full_name=Concat("person__first_name", V(" "), "person__last_name")
-    )
-    blog_item._team = blog_item_roles.prefetch_related(Prefetch("blog_persons", queryset=blog_item_persons_full_name))
-
-    return blog_item
-
-
-def blog_item_detail_get_for_unpublished(blog_item_id):
-    published_blog_items = BlogItem.ext_objects.current_and_published(blog_item_id)
-    blog_item = get_object_or_404(published_blog_items, id=blog_item_id)
-
-    blog_item._other_blogs = published_blog_items.exclude(id=blog_item_id)[:4]
+    blog_item = get_object_or_404(blog_items, id=blog_item_id)
+    blog_item._other_blogs = blog_items.exclude(id=blog_item_id)[:4]
 
     blog_item_roles = blog_item.roles.distinct()
     blog_item_persons = blog_item.blog_persons.all()

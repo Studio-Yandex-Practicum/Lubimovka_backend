@@ -1,3 +1,4 @@
+import hashlib
 import logging
 import urllib
 from datetime import date
@@ -140,6 +141,9 @@ def get_domain(request):
     return domain
 
 
-def create_hash(object_id):
+def create_hash(object_id, model_name):
     """Generate a hash for unpublished pages based on object_id and SECRET_KEY."""
-    return hash(HASH_SECRET_KEY + str(object_id) + str(date.today()))
+    hash_string = HASH_SECRET_KEY + model_name + str(object_id) + str(date.today())
+    hash_object = hashlib.sha1(hash_string.encode())
+    hex_dig = hash_object.hexdigest()
+    return hex_dig[0:5]
