@@ -2,15 +2,13 @@ version: '3.8'
 
 services:
   swag:
-    image: linuxserver/swag:1.22.0
+    image: linuxserver/swag:1.26.0
     container_name: swag_prod
     cap_add:
       - NET_ADMIN
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
-      - SUBDOMAINS=${DEV_SUBDOMAIN}
-      - ONLY_SUBDOMAINS=true
       - CERTPROVIDER=zerossl
     env_file:
       - .env-prod
