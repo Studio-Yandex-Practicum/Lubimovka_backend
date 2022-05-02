@@ -1,7 +1,6 @@
 from datetime import datetime
 
 from django.contrib import admin
-from django.db import models
 from django.http import JsonResponse
 from django.urls import re_path
 from django.utils.safestring import mark_safe
@@ -9,7 +8,6 @@ from django.utils.safestring import mark_safe
 from apps.afisha.filters import StatusOfEvent
 from apps.afisha.models import CommonEvent, Event
 from apps.core.mixins import HideOnNavPanelAdminModelMixin
-from apps.core.widgets import FkSelect
 
 
 @admin.register(CommonEvent)
@@ -64,7 +62,6 @@ class EventAdmin(admin.ModelAdmin):
     autocomplete_fields = ("common_event",)
     search_fields = ("common_event",)
     empty_value_display = "-пусто-"
-    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

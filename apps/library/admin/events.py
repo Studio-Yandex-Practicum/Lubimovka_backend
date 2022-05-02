@@ -1,10 +1,8 @@
 from django.contrib import admin
-from django.db import models
 
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, StatusButtonMixin
 from apps.core.models import Role
 from apps.core.utils import get_user_change_perms_for_status
-from apps.core.widgets import AutocompleteSelectWithRestriction, FkSelect
 from apps.library.models import (
     MasterClass,
     Performance,
@@ -48,7 +46,6 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
     )
     autocomplete_fields = ("person",)
     extra = 0
-    # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Restricts role types for the model where inline is used."""
@@ -78,7 +75,6 @@ class MasterClassAdmin(admin.ModelAdmin):
         "name",
     )
     inlines = (TeamMemberInline,)
-    # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 
 @admin.register(Performance)
@@ -132,16 +128,6 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         PerformanceReviewInline,
         TeamMemberInlineCollapsible,
     )
-    # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
-    limited_fk_fields = ("play",)
-
-    def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):
-        db = kwargs.get("using")
-        if db_field.name in self.autocomplete_fields and db_field.name in self.limited_fk_fields:
-            kwargs["widget"] = AutocompleteSelectWithRestriction(db_field, self.admin_site, using=db)
-        elif db_field.name in self.limited_fk_fields:
-            kwargs["widget"] = FkSelect
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
@@ -149,6 +135,9 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
         if change_permission:
             form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
         return form
+
+    # class Media:
+    #     js = ("js/admin/ForeignKeyLimitChange.js",)
 
 
 @admin.register(Reading)
@@ -164,7 +153,6 @@ class ReadingAdmin(admin.ModelAdmin):
     )
     autocomplete_fields = ("play",)
     inlines = (TeamMemberInline,)
-    # formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)

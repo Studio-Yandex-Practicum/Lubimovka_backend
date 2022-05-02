@@ -1,6 +1,5 @@
 {% extends "admin/change_form.html" %}
-
-{% block admin_change_form_document_ready %}
-  {{ block.super }}
-  <div id="change_button_for_foreign_key" value="{% if user.is_superuser or user.is_admin %}true{% else %}false{% endif %}" style="display: none; position: absolute;"></div>
+{% load static %}
+{% block admin_change_form_document_ready %}{{ block.super }}
+  <script type="text/javascript" src="{% static 'js/admin/ForeignKeyLimitChange.js' %}"></script>
 {% endblock %}

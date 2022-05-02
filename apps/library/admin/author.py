@@ -1,13 +1,11 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
-from django.db import models
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
-from apps.core.widgets import FkSelect
 from apps.library.forms.admin import OtherLinkForm
 from apps.library.models import Achievement, Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
 
@@ -23,7 +21,6 @@ class AchievementInline(admin.TabularInline):
     verbose_name = "Достижение"
     verbose_name_plural = "Достижения"
     classes = ("collapsible",)
-    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -32,7 +29,6 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ("collapsible",)
-    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=False)
@@ -48,7 +44,6 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
     classes = ("collapsible",)
-    formfield_overrides = {models.ForeignKey: {"widget": FkSelect}}
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=True)
@@ -62,12 +57,6 @@ class SocialNetworkLinkInline(admin.TabularInline):
     model = SocialNetworkLink
     extra = 1
     classes = ("collapsible",)
-    fields_with_overridden_fk_widget = ("name",)
-
-    def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):
-        if db_field.name in self.fields_with_overridden_fk_widget:
-            kwargs["widget"] = FkSelect
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
 class OtherLinkInline(admin.TabularInline):
@@ -109,12 +98,6 @@ class AuthorAdmin(admin.ModelAdmin):
     )
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
-    fields_with_overridden_fk_widget = ("person",)
-
-    def formfield_for_dbfield(self, db_field: models.Field, request, **kwargs):
-        if db_field.name in self.fields_with_overridden_fk_widget:
-            kwargs["widget"] = FkSelect
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
