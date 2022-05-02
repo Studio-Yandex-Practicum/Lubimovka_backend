@@ -20,6 +20,27 @@ class AbstractItemWithTitle(BaseModel):
         return self.title
 
 
+class ContentUnitRichText(BaseModel):
+    """HTML text item for `content` block.
+
+    Text field with limited HTML tags support. In real life the content of the field is
+    produced by CKEditor plugin. Acceptable tags are configured in CKEDITOR settings.
+    """
+
+    rich_text = RichTextField(
+        config_name="lubimovka_styles",
+        verbose_name="Форматированный текст",
+    )
+
+    class Meta:
+        verbose_name = "Форматированный текст"
+        verbose_name_plural = "Форматированные тексты"
+
+    def __str__(self):
+        text = strip_tags(self.rich_text)
+        return text if len(text) <= 100 else text[:97] + "..."
+
+
 class Link(AbstractItemWithTitle):
     """Link with title for `content` blocks."""
 

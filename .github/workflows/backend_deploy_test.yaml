@@ -141,10 +141,13 @@ jobs:
             echo DJANGO_SUPERUSER_USERNAME=${{ secrets.DJANGO_SUPERUSER_USERNAME }} >> .env-test
             echo DJANGO_SUPERUSER_EMAIL=${{ secrets.DJANGO_SUPERUSER_EMAIL }} >> .env-test
             echo DJANGO_SUPERUSER_PASSWORD=${{ secrets.DJANGO_SUPERUSER_PASSWORD }} >> .env-test
-            echo DEFAULT_FROM_EMAIL=${{ secrets.DEFAULT_FROM_EMAIL }} >> .env-test
             echo SERVER_EMAIL=${{ secrets.SERVER_EMAIL }} >> .env-test
             echo MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} >> .env-test
             echo MAILJET_SECRET_KEY=${{ secrets.MAILJET_SECRET_KEY }} >> .env-test
+            echo MAILJET_TEMPLATE_ID_QUESTION=${{ secrets.MAILJET_TEMPLATE_ID_QUESTION }} >> .env-test
+            echo MAILJET_TEMPLATE_ID_REGISTRATION_USER=${{ secrets.MAILJET_TEMPLATE_ID_REGISTRATION_USER }} >> .env-test
+            echo MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION=${{ secrets.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION }} >> .env-test
+            echo MAILJET_TEMPLATE_ID_RESET_PASSWORD_USER=${{ secrets.MAILJET_TEMPLATE_ID_RESET_PASSWORD_USER }} >> .env-test
 
             # Secrets variables for google sheets in Django:
             echo GOOGLE_PRIVATE_KEY_ID=${{ secrets.GOOGLE_PRIVATE_KEY_ID }} >> .env-test
@@ -156,10 +159,15 @@ jobs:
             echo URL=${{ secrets.URL }} >> .env-test
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
 
+            # Token for yandex disk
+            echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK_TOKEN }} >> .env-test
+
             # Уделение старых данных
             systemctl stop lubimovka-frontend.service
             systemctl stop lubimovka-backend.service
             docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
+            # Очистка неиспользуемых контейнеров, образов, сетей
+            docker system prune --force
 
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create test_db_network || true

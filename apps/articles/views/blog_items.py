@@ -7,7 +7,7 @@ from rest_framework.views import APIView
 
 from apps.articles import selectors
 from apps.articles.models import BlogItem
-from apps.articles.serializers import BlogItemListSerializer, BlogItemRoleSerializer
+from apps.articles.serializers import BlogItemListSerializer, BlogItemRoleSerializer, YearMonthSerializer
 from apps.content_pages.serializers import BaseContentPageSerializer
 from apps.core.utils import get_paginated_response
 
@@ -80,4 +80,17 @@ class BlogItemDetailAPI(APIView):
         blog_item_detail = selectors.blog_item_detail_get(blog_item_id=id)
         context = {"request": request}
         serializer = self.BlogItemDetailOutputSerializer(blog_item_detail, context=context)
+        return Response(serializer.data)
+
+
+class BlogItemYearsMonthsAPI(APIView):
+    """Return years and months of published `BlogItem`."""
+
+    class BlogItemYearsMonthsOutputSerializer(YearMonthSerializer):
+        pass
+
+    @extend_schema(responses=BlogItemYearsMonthsOutputSerializer(many=True))
+    def get(self, request):
+        blog_item_years_months = selectors.article_get_years_months_publications(BlogItem)
+        serializer = self.BlogItemYearsMonthsOutputSerializer(blog_item_years_months, many=True)
         return Response(serializer.data)

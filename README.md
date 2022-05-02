@@ -1,5 +1,6 @@
-[![codestyle PEP8 and tests](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/codestyle_pep8_and_tests.yaml)
-[![deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy.yaml)
+[![Tests](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/pytests.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/pytests.yaml)
+[![Prod build and deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy_prod.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy_prod.yaml)
+[![Stage build and deploy](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy_stage.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/backend_deploy_stage.yaml)
 [![python safety](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/check_vulnerabilities.yaml/badge.svg)](https://github.com/Studio-Yandex-Practicum/Lubimovka_backend/actions/workflows/check_vulnerabilities.yaml)
 
 # Бэкенд "Любимовка"
@@ -109,7 +110,7 @@
 - попечители
 - волонтёры
 - команды фестиваля
-- пользователи-админы и редакторы (для входа используем ник admin_X или editor_X, где Х - число от 1 до 5 и дефолтный пароль "pass")
+- пользователи-админы, редакторы, журналисты и наблюдатели (для входа используем: admin_X (где Х - в диапазоне от 00 до 04), editor_X (где Х - в диапазоне от 05 до 09), journalist_X (X в диапазоне от 10 до 14), observer_X (где Х - в диапазоне от 15 до 16) и дефолтный пароль "pass")
 
 Для создания таких тестовых данных, как проекты, новости и блог доступна команда:
 ```

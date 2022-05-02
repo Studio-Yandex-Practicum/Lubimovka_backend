@@ -1,7 +1,10 @@
-FROM python:3.9
+FROM python:3.9-slim-bullseye
 WORKDIR /code
 COPY .  .
 COPY requirements/ requirements/
 RUN python -m pip install --upgrade pip
 RUN pip install -r requirements/dev.txt
-CMD gunicorn config.wsgi:application --bind 0.0.0.0:8000
+RUN apt-get update && apt-get install -y \
+  git \
+  && rm -rf /var/lib/apt/lists/*
+CMD gunicorn config.wsgi:application -c /code/gunicorn.conf.py

@@ -133,6 +133,9 @@ dmypy.json
 /media
 /staticfiles
 
+# Logs Django
+/logs
+
 # Папки, создаваемые средой разработки
 .idea
 .DS_Store

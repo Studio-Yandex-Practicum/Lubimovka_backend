@@ -6,6 +6,6 @@ from apps.library.serializers import PlaySerializer
 
 
 class PlayViewSet(mixins.ListModelMixin, viewsets.GenericViewSet):
-    queryset = Play.objects.all()
+    queryset = Play.objects.filter(other_play=False, published=True)
     serializer_class = PlaySerializer
     filterset_class = PlayFilter

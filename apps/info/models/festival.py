@@ -30,10 +30,10 @@ class FestivalTeamMember(BaseModel):
         max_length=150,
         verbose_name="Должность",
     )
-    is_pr_manager = models.BooleanField(
+    is_pr_director = models.BooleanField(
         default=False,
-        verbose_name="PR-менеджер",
-        help_text="Поставьте галочку, чтобы назначить человека PR-менеджером",
+        verbose_name="PR-директор",
+        help_text="Поставьте галочку, чтобы назначить человека PR-директором",
     )
 
     class Meta:
@@ -59,20 +59,36 @@ class FestivalTeamMember(BaseModel):
             raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
-        if not self.is_pr_manager:
-            hasAnotherPrManager = FestivalTeamMember.objects.filter(
-                Q(is_pr_manager=True) & Q(person=self.person)
+        if not FestivalTeamMember.objects.filter(Q(team=self.team) & Q(person=self.person)).exists():
+            raise ValidationError("Этот человек уже в составе команды.")
+        if not self.is_pr_director:
+            hasAnotherPrDirector = FestivalTeamMember.objects.filter(
+                Q(is_pr_director=True) & Q(person=self.person)
             ).exists()
-            if hasAnotherPrManager:
+            if hasAnotherPrDirector:
                 raise ValidationError(
-                    "Для того чтобы снять с должности PR-менеджера, "
+                    "Для того чтобы снять с должности PR-директора, "
                     "нужно назначить другого человека на эту должность"
                 )
 
     def delete(self, *args, **kwargs):
-        if self.is_pr_manager:
-            raise ValidationError("Перед удалением назначьте на должность PR-менеджера другого человека")
+        if self.is_pr_director:
+            raise ValidationError("Перед удалением назначьте на должность PR-директора другого человека")
         super().delete(*args, **kwargs)
+
+
+class ArtTeamMember(FestivalTeamMember):
+    class Meta:
+        proxy = True
+        verbose_name = "Арт-дирекция фестиваля"
+        verbose_name_plural = "Арт-дирекция фестиваля"
+
+
+class FestTeamMember(FestivalTeamMember):
+    class Meta:
+        proxy = True
+        verbose_name = "Команда фестиваля"
+        verbose_name_plural = "Команда фестиваля"
 
 
 class Festival(BaseModel):
@@ -126,8 +142,9 @@ class Festival(BaseModel):
         verbose_name="Ссылка на видео о фестивале",
     )
     blog_entries = models.CharField(
-        max_length=10,
+        max_length=100,
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
+        blank=True,
     )  # При изменении - скорректировать фабрику в части создания данного поля
     press_release_image = models.ImageField(
         upload_to="images/info/press_releases",
@@ -154,14 +171,21 @@ class Festival(BaseModel):
         return super().save(*args, **kwargs)
 
     def clean(self):
-        if self.end_date and self.start_date and self.end_date < self.start_date:
-            raise ValidationError({"end_date": _("Дата окончания фестиваля не может быть раньше даты его начала.")})
+        if self.end_date and self.start_date and self.end_date <= self.start_date:
+            raise ValidationError({"end_date": _("Дата окончания фестиваля должна быть позже даты его начала.")})
         return super().clean()
 
 
 class PressRelease(BaseModel):
-    title = models.CharField(max_length=500, unique=True, verbose_name="Заголовок")
-    text = RichTextField(verbose_name="Текст")
+    title = models.CharField(
+        max_length=500,
+        unique=True,
+        verbose_name="Заголовок",
+    )
+    text = RichTextField(
+        config_name="lubimovka_styles",
+        verbose_name="Текст",
+    )
     festival = models.OneToOneField(
         Festival,
         on_delete=models.CASCADE,

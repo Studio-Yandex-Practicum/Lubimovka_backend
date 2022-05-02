@@ -1,23 +1,19 @@
 import pytest
 from django.conf import settings
-from django.urls import reverse
+from rest_framework.test import APIClient
 
 from apps.core.factories import ImageFactory, PersonFactory
-from apps.info.factories import FestivalFactory, FestivalTeamFactory, PartnerFactory, SponsorFactory, VolunteerFactory
-
-FESTIVAL_URL_NAME = "festivals"
-FESTIVAL_YEARS_URL = reverse("festivals-years")
-TEAMS_URL = reverse("festival-teams")
-TEAMS_URL_FILTER = TEAMS_URL + "?team="
-SPONSORS_URL = reverse("sponsors")
-VOLUNTEERS_URL = reverse("volunteers")
-PARTNERS_URL = reverse("partners")
-QUESTIONS_URL = reverse("questions")
+from apps.info.factories import FestivalFactory, FestivalTeamFactory, SelectorFactory, SponsorFactory, VolunteerFactory
 
 
 @pytest.fixture(autouse=True)
 def set_media_temp_folder(tmpdir):
     settings.MEDIA_ROOT = tmpdir.mkdir("media")
+
+
+@pytest.fixture(autouse=True)
+def client():
+    return APIClient(format="json")
 
 
 @pytest.fixture
@@ -56,25 +52,25 @@ def images():
 
 
 @pytest.fixture
-def festival(images):
-    return FestivalFactory()
+def festival_2020(images):
+    return FestivalFactory(year=2020)
 
 
 @pytest.fixture
-def volunteer(persons_with_image_email_city, festival):
+def volunteer(persons_with_image_email_city, festival_2020):
     return VolunteerFactory()
 
 
 @pytest.fixture
-def volunteers(persons_with_image_email_city, festival):
+def volunteers(persons_with_image_email_city, festival_2020):
     return VolunteerFactory.create_batch(5)
 
 
 @pytest.fixture
-def partner():
-    return PartnerFactory()
+def selector(persons_with_image_email_city, festival_2020):
+    return SelectorFactory()
 
 
 @pytest.fixture
-def partners():
-    return PartnerFactory.create_batch(5)
+def selectors(persons_with_image_email_city, festival_2020):
+    return SelectorFactory.create_batch(5)

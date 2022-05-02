@@ -1,7 +1,9 @@
 from .content_items import (
+    ContentUnitRichTextSerializer,
     ExtendedPersonSerializer,
     LinkSerializer,
     OrderedImageSerializer,
+    OrderedPlaySerializer,
     OrderedVideoSerializer,
     PreambleSerializer,
     QuoteSerializer,

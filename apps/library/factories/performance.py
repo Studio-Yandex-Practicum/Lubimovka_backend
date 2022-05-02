@@ -6,6 +6,7 @@ import factory
 from django.conf import settings
 from faker import Faker
 
+from apps.core.constants import AgeLimit, Status
 from apps.core.decorators import restrict_factory
 from apps.core.factories import ImageFactory
 from apps.core.models import Person, Role
@@ -74,12 +75,13 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     )
     description = factory.Faker("text", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
-    age_limit = factory.Faker("random_int", min=0, max=18)
+    age_limit = factory.LazyFunction(lambda: random.choice(list(AgeLimit)))
     video = factory.Faker("url")
+    status = factory.LazyFunction(lambda: random.choice(list(Status)))
 
     @factory.lazy_attribute
     def play(self):
-        return Play.objects.order_by("?").first()
+        return Play.objects.filter(other_play=False).order_by("?").first()
 
     dramatist_person = factory.RelatedFactory(
         TeamMemberFactory,
@@ -133,7 +135,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
             [TeamMemberFactory.create(reading=self, role_slug=role_slug) for role_slug in role_slugs]
 
     @classmethod
-    def complex_create(cls, count=1):
+    def complex_create(cls, count=1, **kwargs):
         """Create Performance object with fully populated fields.
 
         You should create at least one Play and Project
@@ -144,6 +146,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
             add_images_in_block=True,
             add_review=True,
             add_media_review=True,
+            **kwargs,
         )
 
 

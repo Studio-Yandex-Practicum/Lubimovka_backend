@@ -8,6 +8,7 @@ from django.utils import timezone
 from apps.content_pages.querysets import ContenPageQuerySet
 from apps.content_pages.services import content_delete_generic_related_items
 from apps.content_pages.utilities import path_by_app_label_and_class_name
+from apps.core.constants import Status
 from apps.core.models import BaseModel
 
 
@@ -17,7 +18,7 @@ class AbstractContentPage(BaseModel):
     Для создания полноценной модели с конструктором создайте две новые модели
     унаследовав их от 'AbstractContentPage' и 'AbstractContent'.
 
-    Модель обладает обычными полями (title, description, image, is_draft,
+    Модель обладает обычными полями (title, description, image, status,
     pub_date). К ней подключается блок с конструктором.
 
     Дополнена расширенным manager (`ext_objects`) для более простого
@@ -34,10 +35,11 @@ class AbstractContentPage(BaseModel):
         blank=True,
         verbose_name="Заглавная картинка",
     )
-    is_draft = models.BooleanField(
-        default=True,
-        verbose_name="Черновик",
-        help_text="Поставьте отметку если это черновик",
+    status = models.CharField(
+        choices=Status.choices,
+        default=Status.IN_PROCESS,
+        max_length=35,
+        verbose_name="Статус",
     )
     pub_date = models.DateTimeField(
         default=timezone.now,
@@ -95,7 +97,22 @@ class AbstractContent(models.Model):
     content_type = models.ForeignKey(
         ContentType,
         on_delete=models.CASCADE,
-        limit_choices_to={"app_label": "content_pages"},
+        limit_choices_to={
+            "app_label": "content_pages",
+            "model__in": (
+                "contentunitrichtext",
+                "eventsblock",
+                "imagesblock",
+                "link",
+                "personsblock",
+                "playsblock",
+                "preamble",
+                "quote",
+                "text",
+                "title",
+                "videosblock",
+            ),
+        },
         verbose_name="Тип объекта",
     )
     object_id = models.PositiveIntegerField(

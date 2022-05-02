@@ -1,7 +1,20 @@
 from rest_framework import serializers
 
 from apps.content_pages.models import Link, OrderedImage, OrderedVideo, Preamble, Quote, Text, Title
-from apps.core.serializers import RoleSerializer
+from apps.core.serializers import PersonRoleSerializer
+from apps.library.serializers import AuthorForPlaySerializer as LibraryPlayAuthorSerializer
+
+
+class ContentUnitRichTextSerializer(serializers.Serializer):
+    rich_text = serializers.CharField(
+        label="Форматированный текст с HTML разметкой",
+        help_text=(
+            "Текст с HTML разметкой. Может содержать теги блоков: `h3`, `h4`, `p`. "
+            "Блоки могут быть обернуты `blockquote` или использоваться в списках `ol`, `ul`. "
+            "Разрешены теги элементов: `strong`, `em`, `a`. "
+            r"Блоки разделятся последовательностью символов `\r\n\r\n`."
+        ),
+    )
 
 
 class ExtendedPersonSerializer(serializers.Serializer):
@@ -39,7 +52,7 @@ class ExtendedPersonSerializer(serializers.Serializer):
         source="person.image",
         read_only=True,
     )
-    roles = RoleSerializer(many=True)
+    roles = PersonRoleSerializer(many=True)
 
 
 class LinkSerializer(serializers.ModelSerializer):
@@ -83,6 +96,34 @@ class OrderedImageSerializer(serializers.ModelSerializer):
             "title",
             "image",
         )
+
+
+class OrderedPlaySerializer(serializers.Serializer):
+    id = serializers.IntegerField(
+        source="item.id",
+        label="ID",
+        read_only=True,
+    )
+    name = serializers.CharField(
+        source="item.name",
+        label="Название пьесы",
+        max_length=70,
+    )
+    authors = LibraryPlayAuthorSerializer(
+        source="item.authors",
+        many=True,
+    )
+    city = serializers.CharField(
+        source="item.city",
+        label="Город",
+        max_length=200,
+        required=False,
+    )
+    year = serializers.IntegerField(
+        source="item.year",
+        required=False,
+        label="Год написания пьесы",
+    )
 
 
 class OrderedVideoSerializer(serializers.ModelSerializer):

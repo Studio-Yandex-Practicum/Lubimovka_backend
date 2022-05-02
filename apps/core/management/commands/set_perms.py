@@ -12,7 +12,9 @@ class Command(BaseCommand):
         try:
             editors_permissions = Permission.objects.filter(
                 Q(codename__endswith="_achievement")
+                | Q(codename__endswith="_artteammember")
                 | Q(codename__endswith="_author")
+                | Q(codename__endswith="_authorplay")
                 | Q(codename__endswith="_blogitem")
                 | Q(codename__endswith="_blogitemcontent")
                 | Q(codename__endswith="_blogperson")
@@ -90,6 +92,12 @@ class Command(BaseCommand):
 
             observer, created = Group.objects.get_or_create(name="observer")
             observer.permissions.set(observer_permissions)
+
+            # Удалить разрешения для приложений Sites и Sessions
+            deleted_permissions = Permission.objects.filter(
+                Q(codename__icontains="_site") | Q(codename__icontains="_session")
+            )
+            deleted_permissions.delete()
 
             self.stdout.write(self.style.SUCCESS("Права для пользователей успешно установлены."))
         except CommandError:

@@ -44,10 +44,9 @@ class Partner(BaseModel):
 
     def save(self, *args, **kwargs):
         this = Partner.objects.filter(id=self.id).first()
-        if this:
-            if this.image != self.image:
-                this.image.delete(save=False)
-        super(Partner, self).save(*args, **kwargs)
+        if this and this.image != self.image:
+            this.image.delete(save=False)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} - {self.type}"
@@ -71,17 +70,9 @@ class Sponsor(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name}"
 
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
-
     def clean(self, *args, **kwargs):
-        if self._has_person_before_saving() and not self.person.image:
+        if self.person_id and not self.person.image:
             raise ValidationError("Для спонсора должно быть выбрано фото")
-        return super().clean(*args, **kwargs)
-
-    def _has_person_before_saving(self):
-        return self.person_id is not None
 
 
 class Volunteer(BaseModel):
@@ -121,18 +112,51 @@ class Volunteer(BaseModel):
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - волонтёр фестиваля {self.festival.year} года"
 
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        return super().save(*args, **kwargs)
+    def clean(self):
+        errors = []
+        if not self.person_id:
+            return
+        if not self.person.email:
+            errors.append("Укажите email для волонтёра")
+        if not self.person.image:
+            errors.append("Для волонтёра необходимо выбрать его фото")
+        if not self.person.city:
+            errors.append("Укажите город проживания волонтёра")
+        if errors:
+            raise ValidationError(errors)
+
+
+class Selector(BaseModel):
+    person = models.ForeignKey(
+        Person,
+        on_delete=models.PROTECT,
+        verbose_name="Человек",
+    )
+    festival = models.ForeignKey(
+        Festival,
+        on_delete=models.CASCADE,
+        related_name="selectors",
+        verbose_name="Фестиваль",
+    )
+    position = models.CharField(
+        max_length=150,
+        verbose_name="Должность",
+    )
+
+    class Meta:
+        verbose_name = "Отборщик фестиваля"
+        verbose_name_plural = "Отборщики фестиваля"
+        ordering = ("person__last_name", "person__first_name")
+        constraints = [
+            UniqueConstraint(
+                fields=("person", "festival"),
+                name="unique_selector",
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.person.first_name} {self.person.last_name} - Отборщик фестиваля {self.festival.year} года"
 
     def clean(self):
-        if self._has_person_before_saving():
-            if not self.person.email:
-                raise ValidationError("Укажите email для волонтёра")
-            if not self.person.image:
-                raise ValidationError("Для волонтёра необходимо выбрать его фото")
-            if not self.person.city:
-                raise ValidationError("Укажите город проживания волонтёра")
-
-    def _has_person_before_saving(self):
-        return self.person_id is not None
+        if self.person_id and not self.person.image:
+            raise ValidationError("Для отборщика необходимо выбрать его фото")

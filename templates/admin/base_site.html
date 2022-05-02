@@ -1,9 +1,23 @@
 {% extends "admin/base_site.html" %}
 {% load static %}
+{% load cache %}
+
 
 {% block branding %}
-    <h1 id="site-name">
-        <img src="{% static 'logo.png' %}" alt="logo" width="70px" height="58px">
-        <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
-    </h1>
+    {% cache 500 branding %}
+        <h1 id="site-name">
+            <img src="{% static 'logo.png' %}" alt="logo" width="70px" height="58px">
+            <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
+        </h1>
+        <div style="position: fixed;right: 20px;bottom: 20px;color: #00000014; display: grid;font-weight: bold; pointer-events: none;">
+            {% if branch != "develop" or branch != "master" %}
+                <span>branch: {{ branch }}</span>
+            {% endif %}
+            {% if tag %}
+                <span>tag: {{ tag }}</span>
+            {% endif %}
+            <span>commit_date: {{ commit_date }}</span>
+            <span>last_commit: {{ last_commit }}</span>
+        </div>
+    {% endcache %}
 {% endblock %}

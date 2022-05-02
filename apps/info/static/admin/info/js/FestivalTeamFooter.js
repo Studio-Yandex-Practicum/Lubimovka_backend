@@ -1,27 +1,33 @@
-// Show/hide the boolean field `is_pr_manager`.
-// The field has to be extended in admin with CSS class `depended_on_team`.
+// Show/hide the field `pr_director_name`.
+// The field has to be extended in admin with CSS class `form-row field-pr_director_name`.
 //
 // The logic:
-//  - show the field if selected team type is `art`
-//  - set "checked" to `false` and hide the field if other partner type is selected
+//  - show the field if boolean field `is_pr_director` is `true`
 
 jQuery(document).ready(function ($) {
-    let teamTypeSelectField = $("#id_team");
-    let divDependedOnTeamType = $(".depended_on_team_type");
+    let idIsPrDirector = $("#id_is_pr_director");
+    let divHideDatePrDirector = $(".form-row .field-pr_director_name")
 
-    function toggleDivDependedOnTeamType(teamType) {
-        if (teamType === "art") {
-            divDependedOnTeamType.slideDown();
-        } else {
-        divDependedOnTeamType.slideUp();
-        }
+    // exit from function if there isn't selector
+    if (!idIsPrDirector.length) {
+        return false
     }
+    // hide the field `pr_director_name`.
+    divHideDatePrDirector.hide();
 
-    // show/hide on load based on existing value of teamTypeSelectField
-    toggleDivDependedOnTeamType(teamTypeSelectField.val(), true);
+    function toggleDivDependedOnIsPrDirector(inputType) {
+         if (inputType) {
+            divHideDatePrDirector.slideDown();
+         } else {
+            divHideDatePrDirector.slideUp();
+         }
+     }
+
+    // show/hide on load based on existing value of idIsPrDirector
+    toggleDivDependedOnIsPrDirector(idIsPrDirector.is(":checked"));
 
     // show/hide on change
-    teamTypeSelectField.change(function () {
-        toggleDivDependedOnTeamType($(this).val(), false);
+    idIsPrDirector.change(function() {
+        toggleDivDependedOnIsPrDirector(idIsPrDirector.is(":checked"));
     });
 });

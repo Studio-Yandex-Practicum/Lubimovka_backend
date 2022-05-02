@@ -1,10 +1,41 @@
-from django.db.models import Prefetch, QuerySet
+from collections import OrderedDict
+from typing import Union
+
+from django.db.models import F, Prefetch, QuerySet
 from django.db.models import Value as V
 from django.db.models.functions import Concat
 from django.shortcuts import get_object_or_404
 
 from apps.articles.filters import PubDateFilter
-from apps.articles.models import BlogItem
+from apps.articles.models import BlogItem, NewsItem, Project
+
+
+def article_get_years_months_publications(
+    article_model: Union[BlogItem, NewsItem, Project]
+) -> dict[int, dict[int, list[int]]]:
+    """Return ordered list of years and months of published BlogItem/NewsItem.
+
+    The list is ordered by years (DESC). Each record should be a dict looked like this:
+        {
+            "year": 2020
+            "months": [2, 3, 10]  <-- ordered ASC
+        }
+    """
+    publications_years_months_qs = (
+        article_model.ext_objects.published()
+        .annotate(year=F("pub_date__year"), month=F("pub_date__month"))
+        .values_list("year", "month")
+        .distinct()
+        .order_by("-year", "month")
+    )
+
+    year_months_records = OrderedDict()
+    for year, month in publications_years_months_qs:
+        year_record = year_months_records.get(year, {"year": year, "months": []})
+        year_record["months"].append(month)
+        year_months_records[year] = year_record
+
+    return year_months_records.values()
 
 
 def blog_item_list_get(filters: dict[str, str] = None) -> QuerySet:

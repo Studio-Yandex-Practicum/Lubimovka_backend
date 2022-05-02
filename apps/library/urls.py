@@ -2,8 +2,8 @@ from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from apps.library.views import (
+    AuthorLettersAPIView,
     AuthorsReadViewSet,
-    ParticipationViewSet,
     PerformanceMediaReviewViewSet,
     PerformanceReviewViewSet,
     PerformanceViewSet,
@@ -44,14 +44,14 @@ router.register(
     AuthorsReadViewSet,
     basename="authors",
 )
-router.register(
-    "participation",
-    ParticipationViewSet,
-    basename="participation",
-)
 
 library_urls = [
     path("library/", include(router.urls)),
+    path(
+        "library/author_letters/",
+        AuthorLettersAPIView.as_view(),
+        name="author_letters",
+    ),
     path(
         "library/playfilters/",
         PlayFiltersAPIView.as_view(),

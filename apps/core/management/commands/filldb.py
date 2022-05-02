@@ -4,30 +4,49 @@ from django.core.management.base import BaseCommand, CommandError
 
 from apps.afisha.factories import EventFactory
 from apps.core.factories import ImageFactory, PersonFactory
+from apps.core.models import Setting
+from apps.feedback.factories import ParticipationApplicationFestivalFactory
 from apps.info.factories import (
     FestivalFactory,
     FestivalTeamFactory,
     PartnerFactory,
     PlaceFactory,
     PressReleaseFactory,
+    SelectorFactory,
     SponsorFactory,
     VolunteerFactory,
 )
+from apps.info.models import FestivalTeamMember
 from apps.library.factories import (
     AuthorFactory,
     MasterClassFactory,
-    ParticipationApplicationFestivalFactory,
+    OtherPlayFactory,
     PerformanceFactory,
     PlayFactory,
     ProgramTypeFactory,
     ReadingFactory,
 )
 from apps.main.factories import BannerFactory as MainBannerFactory
-from apps.users.factories import AdminUserFactory, EditorUserFactory
+from apps.users.factories import AdminUserFactory, EditorUserFactory, JournalistUserFactory, ObserverUserFactory
+
+
+def add_pr_director(command):
+    member = FestivalTeamMember.objects.filter(team="fest").first()
+    if member:
+        name = member.person.full_name
+        member.is_pr_director = True
+        member.save()
+        Setting.objects.filter(settings_key="pr_director_name").update(text=name)
+        command.stdout.write(command.style.SUCCESS("ПР директор успешно создан"))
+    else:
+        command.stdout.write(command.style.ERROR("Нет члена команды Фестиваль"))
 
 
 def notification(command, objects, text):
-    command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создано."))
+    if len(objects) > 1:
+        command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создано."))
+    else:
+        command.stdout.write(command.style.SUCCESS(f"{len(objects)} {text} успешно создан."))
 
 
 class Command(BaseCommand):
@@ -48,9 +67,12 @@ class Command(BaseCommand):
         " - Видео (ссылки с описанием)"
         " - Пользователи-админы"
         " - Пользователи-редакторы"
+        " - Пользователи-журналисты"
+        " - Пользователи-наблюдатели"
         " - Программы"
         " - Авторы"
         " - Пьесы"
+        " - Другие пьесы"
         " - Спектакли"
         " - Мастер-классы"
         " - Читки"
@@ -91,6 +113,8 @@ class Command(BaseCommand):
             teams = FestivalTeamFactory.create_batch(70)
             notification(self, teams, "членов команд")
 
+            add_pr_director(self)
+
             images = ImageFactory.create_batch(5)
             notification(self, images, "картинки")
 
@@ -100,14 +124,23 @@ class Command(BaseCommand):
             volunteers = VolunteerFactory.create_batch(50)
             notification(self, volunteers, "волонтёров")
 
+            selectors = SelectorFactory.create_batch(30)
+            notification(self, selectors, "отборщиков")
+
             press_releases = PressReleaseFactory.create_batch(10)
             notification(self, press_releases, "пресс-релизов")
 
-            users_editors = AdminUserFactory.create_batch(5)
+            users_admins = AdminUserFactory.create_batch(5)
+            notification(self, users_admins, "админов")
+
+            users_editors = EditorUserFactory.create_batch(5)
             notification(self, users_editors, "редакторов")
 
-            users_admins = EditorUserFactory.create_batch(5)
-            notification(self, users_admins, "админов")
+            users_journalists = JournalistUserFactory.create_batch(5)
+            notification(self, users_journalists, "журналистов")
+
+            users_observers = ObserverUserFactory.create_batch(2)
+            notification(self, users_observers, "наблюдателя")
 
             # Library factories.
 
@@ -116,6 +149,9 @@ class Command(BaseCommand):
 
             plays = PlayFactory.create_batch(10)
             notification(self, plays, "пьес")
+
+            other_plays = OtherPlayFactory.create_batch(10)
+            notification(self, other_plays, "других пьес")
 
             perfomances = PerformanceFactory.complex_create(6)
             notification(self, perfomances, "спектаклей")

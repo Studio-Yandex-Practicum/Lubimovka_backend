@@ -5,11 +5,11 @@ from apps.info.views import (
     FestivalAPIView,
     FestivalTeamsAPIView,
     FestivalYearsAPIView,
-    PartnersAPIView,
+    PartnerListAPIView,
     PressReleaseDownloadAPIView,
     PressReleaseViewSet,
     PressReleaseYearsAPIView,
-    QuestionCreateAPIView,
+    SelectorsAPIView,
     SettingsAPIView,
     SponsorsAPIView,
     VolunteersAPIView,
@@ -31,6 +31,11 @@ about_festival_urls = [
         VolunteersAPIView.as_view(),
         name="volunteers",
     ),
+    path(
+        "selectors/",
+        SelectorsAPIView.as_view(),
+        name="selectors",
+    ),
 ]
 
 info_urls = [
@@ -49,8 +54,8 @@ info_urls = [
         include(about_festival_urls),
     ),
     path(
-        "partners/",
-        PartnersAPIView.as_view(),
+        route="partners/",
+        view=PartnerListAPIView.as_view(),
         name="partners",
     ),
     path(
@@ -62,11 +67,6 @@ info_urls = [
         "settings/",
         SettingsAPIView.as_view(),
         name="settings",
-    ),
-    path(
-        "questions/",
-        QuestionCreateAPIView.as_view(),
-        name="questions",
     ),
     path(
         "press-releases/<int:festival__year>/",
