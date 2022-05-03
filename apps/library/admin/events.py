@@ -136,9 +136,6 @@ class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
             form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
         return form
 
-    # class Media:
-    #     js = ("js/admin/ForeignKeyLimitChange.js",)
-
 
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
