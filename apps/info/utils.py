@@ -19,7 +19,6 @@ def send_question(instance):
     message = EmailMessage(
         subject=Setting.get_setting("email_subject_for_question"),
         from_email=Setting.get_setting("email_send_from"),
-        to=(Setting.get_setting("email_send_to"),),
     )
 
     message.template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
