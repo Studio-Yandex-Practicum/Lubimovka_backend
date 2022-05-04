@@ -1,11 +1,28 @@
+import django_filters
 from django.contrib import admin
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from django_filters import FilterSet, filters
+
+from apps.info.models import Partner
 
 
-class YearFestivalFilterSet(FilterSet):
-    year = filters.NumberFilter(field_name="festival__year")
+class CharInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
+    pass
+
+
+class YearFestivalFilterSet(django_filters.FilterSet):
+    year = django_filters.NumberFilter(field_name="festival__year")
+
+
+class PartnerFilterSet(django_filters.FilterSet):
+    types = CharInFilter(field_name="type", lookup_expr="in")
+
+    class Meta:
+        model = Partner
+        fields = (
+            "types",
+            "in_footer_partner",
+        )
 
 
 class HasReviewAdminFilter(admin.SimpleListFilter):
