@@ -5,7 +5,7 @@ from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.info.models import Festival, FestivalInfoLink
+from apps.info.models import Festival, InfoLink
 from apps.info.serializers import FestivalSerializer, YearsSerializer
 
 
@@ -24,13 +24,13 @@ class FestivalAPIView(RetrieveAPIView):
         festival = get_object_or_404(
             Festival.objects.prefetch_related(
                 Prefetch(
-                    "festival_links",
-                    queryset=FestivalInfoLink.objects.filter(link__type="plays_links"),
+                    "infolinks",
+                    queryset=InfoLink.objects.filter(type="plays_links"),
                     to_attr="plays_links",
                 ),
                 Prefetch(
-                    "festival_links",
-                    queryset=FestivalInfoLink.objects.filter(link__type="additional_links"),
+                    "infolinks",
+                    queryset=InfoLink.objects.filter(type="additional_links"),
                     to_attr="additional_links",
                 ),
             ),

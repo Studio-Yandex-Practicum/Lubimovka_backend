@@ -63,6 +63,7 @@ class Command(BaseCommand):
         " - Команды фестиваля"
         " - Картинки"
         " - Фестивали"
+        " - Прочие ссылки для Фестиваля"
         " - Пресс-релизы"
         " - Изображения для новостей/блогов/проектов"
         " - Видео (ссылки с описанием)"
@@ -116,14 +117,14 @@ class Command(BaseCommand):
 
             add_pr_director(self)
 
-            links = InfoLinkFactory.create_batch(25)
-            notification(self, links, "ссылок для фестиваля")
-
             images = ImageFactory.create_batch(5)
             notification(self, images, "картинки")
 
             festivals = FestivalFactory.create_batch(10)
             notification(self, festivals, "фестивалей")
+
+            links = InfoLinkFactory.create_batch(25)
+            notification(self, links, "ссылок для фестиваля")
 
             volunteers = VolunteerFactory.create_batch(50)
             notification(self, volunteers, "волонтёров")

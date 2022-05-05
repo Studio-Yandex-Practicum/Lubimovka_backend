@@ -9,7 +9,6 @@ from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import FestTeamMemberForm
 from apps.info.models import (
     Festival,
-    FestivalInfoLink,
     FestivalTeamMember,
     InfoLink,
     Partner,
@@ -179,34 +178,26 @@ class InfoLinkAdmin(admin.ModelAdmin):
         return {}
 
 
-class FestivalPlayLinksInline(SortableInlineAdminMixin, admin.TabularInline):
-    model = FestivalInfoLink
+class PlayInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
     extra = 0
     verbose_name = "Пьесы (ссылки)"
     verbose_name_plural = "Пьесы (ссылки)"
     classes = ("collapsible",)
 
     def get_queryset(self, request):
-        return FestivalInfoLink.objects.filter(link__type="plays_links")
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = InfoLink.objects.filter(type="plays_links")
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+        return InfoLink.objects.filter(type="plays_links")
 
 
-class FestivalAddsLinksInline(SortableInlineAdminMixin, admin.TabularInline):
-    model = FestivalInfoLink
+class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
     extra = 0
     verbose_name = "Дополнительно (ссылки)"
     verbose_name_plural = "Дополнительно (ссылки)"
     classes = ("collapsible",)
 
     def get_queryset(self, request):
-        return FestivalInfoLink.objects.filter(link__type="additional_links")
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = InfoLink.objects.filter(type="additional_links")
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+        return InfoLink.objects.filter(type="additional_links")
 
 
 @admin.register(Festival)
@@ -215,14 +206,13 @@ class FestivalAdmin(admin.ModelAdmin):
     inlines = (
         VolunteerInline,
         FestivalImagesInline,
-        FestivalAddsLinksInline,
-        FestivalPlayLinksInline,
+        PlayInfoLinkInline,
+        AdditionalInfoLinkInline,
     )
     exclude = (
         "teams",
         "sponsors",
         "images",
-        "links",
     )
     empty_value_display = "-пусто-"
 

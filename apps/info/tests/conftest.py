@@ -59,13 +59,13 @@ def images():
 
 
 @pytest.fixture
-def links():
-    return InfoLinkFactory.create_batch(10)
+def festival_2020(images):
+    return FestivalFactory(year=2020)
 
 
 @pytest.fixture
-def festival_2020(images, links):
-    return FestivalFactory(year=2020)
+def links(festival_2020):
+    return InfoLinkFactory.create_batch(10)
 
 
 @pytest.fixture

@@ -108,18 +108,7 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
         return person
 
 
-class InfoLinkFactory(factory.django.DjangoModelFactory):
-    """Create Links for Festival."""
-
-    class Meta:
-        model = InfoLink
-
-    type = factory.Iterator(InfoLink.LinkType.values)
-    description = factory.Faker("sentence", locale="ru_RU")
-    url = factory.Faker("url")
-
-
-@restrict_factory(general=(Image, InfoLink))
+@restrict_factory(general=(Image,))
 class FestivalFactory(factory.django.DjangoModelFactory):
     """Create Festival object with 1-6 images."""
 
@@ -144,18 +133,6 @@ class FestivalFactory(factory.django.DjangoModelFactory):
             images = Image.objects.order_by("?")[:how_many]
             self.images.add(*images)
 
-    @factory.post_generation
-    def links(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.links.add(*extracted)
-        else:
-            links_count = InfoLink.objects.count()
-            how_many = min(links_count, random.randint(1, 7))
-            links = InfoLink.objects.order_by("?")[:how_many]
-            self.links.add(*links)
-
     plays_count = factory.Faker("random_int", min=20, max=200, step=1)
     selected_plays_count = factory.Faker("random_int", min=1, max=20, step=1)
     selectors_count = factory.Faker("random_int", min=1, max=20, step=1)
@@ -167,6 +144,22 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     # корректировки поля модели фестиваля
     blog_entries = factory.LazyFunction(lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"]))
     press_release_image = factory.django.ImageField(color="blue")
+
+
+@restrict_factory(general=(Festival,))
+class InfoLinkFactory(factory.django.DjangoModelFactory):
+    """Create other InfoLinks for Festival."""
+
+    class Meta:
+        model = InfoLink
+
+    type = factory.Iterator(InfoLink.LinkType.values)
+    description = factory.Faker("sentence", locale="ru_RU")
+    url = factory.Faker("url")
+
+    @factory.lazy_attribute
+    def festival(self):
+        return Festival.objects.order_by("?").first()
 
 
 @restrict_factory(general=(Festival,))

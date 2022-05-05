@@ -25,13 +25,13 @@ def images():
 
 
 @pytest.fixture
-def links():
-    return InfoLinkFactory.create_batch(10)
+def festival(images):
+    return FestivalFactory(start_date="2021-07-14", end_date="2021-07-15", year="2021")
 
 
 @pytest.fixture
-def festival(images, links):
-    return FestivalFactory(start_date="2021-07-14", end_date="2021-07-15", year="2021")
+def links(festival):
+    return InfoLinkFactory.create_batch(10)
 
 
 @pytest.fixture

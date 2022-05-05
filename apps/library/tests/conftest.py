@@ -13,18 +13,18 @@ def images():
 
 
 @pytest.fixture
-def links():
-    return InfoLinkFactory.create_batch(10)
-
-
-@pytest.fixture
 def program_types():
     return ProgramTypeFactory.create_batch(5)
 
 
 @pytest.fixture
-def festivals(images, links):
+def festivals(images):
     return FestivalFactory.create_batch(5)
+
+
+@pytest.fixture
+def links(festivals):
+    return InfoLinkFactory.create_batch(10)
 
 
 @pytest.fixture

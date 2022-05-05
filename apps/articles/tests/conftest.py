@@ -26,13 +26,13 @@ def images():
 
 
 @pytest.fixture
-def links():
-    return InfoLinkFactory.create_batch(10)
+def festivals(images):
+    return FestivalFactory.create_batch(5)
 
 
 @pytest.fixture
-def festivals(images, links):
-    return FestivalFactory.create_batch(5)
+def links(festivals):
+    return InfoLinkFactory.create_batch(10)
 
 
 @pytest.fixture

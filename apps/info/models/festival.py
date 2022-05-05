@@ -91,30 +91,6 @@ class FestTeamMember(FestivalTeamMember):
         verbose_name_plural = "Команда фестиваля"
 
 
-class InfoLink(BaseModel):
-    class LinkType(models.TextChoices):
-        PLAYS_LINKS = "plays_links", _("Пьесы")
-        ADDITIONAL_LINKS = "additional_links", _("Дополнительно")
-
-    type = models.CharField(
-        max_length=25,
-        choices=LinkType.choices,
-        verbose_name="Тип ссылки",
-    )
-    description = models.TextField(
-        max_length=250,
-        verbose_name="Описание ссылки",
-    )
-    url = models.URLField()
-
-    class Meta:
-        verbose_name = "Ссылка с описанием"
-        verbose_name_plural = "Ссылки с описанием"
-
-    def __str__(self):
-        return self.description
-
-
 class Festival(BaseModel):
     start_date = models.DateField(
         verbose_name="Дата начала фестиваля",
@@ -175,13 +151,6 @@ class Festival(BaseModel):
         blank=True,
         verbose_name="Изображение для страницы пресс-релизов",
     )
-    links = models.ManyToManyField(
-        InfoLink,
-        blank=True,
-        related_name="festival",
-        verbose_name="Ссылки",
-        through="FestivalInfoLink",
-    )
 
     class Meta:
         verbose_name = "Фестиваль"
@@ -207,37 +176,36 @@ class Festival(BaseModel):
         return super().clean()
 
 
-class FestivalInfoLink(models.Model):
+class InfoLink(BaseModel):
+    class LinkType(models.TextChoices):
+        PLAYS_LINKS = "plays_links", _("Пьесы")
+        ADDITIONAL_LINKS = "additional_links", _("Дополнительно")
+
     festival = models.ForeignKey(
-        Festival,
-        on_delete=models.CASCADE,
-        related_name="festival_links",
-        verbose_name="Фестиваль",
+        Festival, on_delete=models.CASCADE, related_name="infolinks", verbose_name="Прочие ссылки"
     )
-    link = models.ForeignKey(
-        InfoLink,
-        on_delete=models.CASCADE,
-        related_name="festival_links",
-        verbose_name="Ссылка",
+    type = models.CharField(
+        max_length=25,
+        choices=LinkType.choices,
+        verbose_name="Тип ссылки",
     )
+    description = models.CharField(
+        max_length=100,
+        verbose_name="Описание ссылки",
+    )
+    url = models.URLField()
     order = models.PositiveSmallIntegerField(
         default=0,
         verbose_name="Порядковый номер ссылки",
     )
 
     class Meta:
-        verbose_name = "Ссылка фестиваля"
-        verbose_name_plural = "Ссылки фестиваля"
+        verbose_name = "Ссылка с описанием"
+        verbose_name_plural = "Ссылки с описанием"
         ordering = ("order",)
-        constraints = [
-            UniqueConstraint(
-                fields=("festival", "link"),
-                name="unique_festival_link",
-            )
-        ]
 
     def __str__(self):
-        return f"Ссылка {self.link} фестиваля {self.festival.year} года"
+        return self.description
 
 
 class PressRelease(BaseModel):

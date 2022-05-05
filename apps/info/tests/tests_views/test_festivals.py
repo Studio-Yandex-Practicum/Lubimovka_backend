@@ -85,7 +85,7 @@ class TestFestivalAPIViews:
         response = client.get(url)
         data = response.json()
         objects_count_in_response = len(data.get(field))
-        objects_count_in_db = getattr(festival_2020, "links").filter(type=field).count()
+        objects_count_in_db = getattr(festival_2020, "infolinks").filter(type=field).count()
         assert (
             objects_count_in_response == objects_count_in_db
         ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
