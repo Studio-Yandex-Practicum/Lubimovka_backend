@@ -6,7 +6,17 @@ from faker import Faker
 from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person
 from apps.core.utils import get_picsum_image
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
+from apps.info.models import (
+    Festival,
+    FestivalTeamMember,
+    InfoLink,
+    Partner,
+    Place,
+    PressRelease,
+    Selector,
+    Sponsor,
+    Volunteer,
+)
 
 fake = Faker(locale="en_US")
 
@@ -98,7 +108,18 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
         return person
 
 
-@restrict_factory(general=(Image,))
+class InfoLinkFactory(factory.django.DjangoModelFactory):
+    """Create Links for Festival."""
+
+    class Meta:
+        model = InfoLink
+
+    type = factory.Iterator(InfoLink.LinkType.values)
+    description = factory.Faker("sentence", locale="ru_RU")
+    url = factory.Faker("url")
+
+
+@restrict_factory(general=(Image, InfoLink))
 class FestivalFactory(factory.django.DjangoModelFactory):
     """Create Festival object with 1-6 images."""
 
@@ -122,6 +143,18 @@ class FestivalFactory(factory.django.DjangoModelFactory):
             how_many = min(images_count, random.randint(1, 7))
             images = Image.objects.order_by("?")[:how_many]
             self.images.add(*images)
+
+    @factory.post_generation
+    def links(self, create, extracted, **kwargs):
+        if not create:
+            return
+        if extracted:
+            self.links.add(*extracted)
+        else:
+            links_count = InfoLink.objects.count()
+            how_many = min(links_count, random.randint(1, 7))
+            links = InfoLink.objects.order_by("?")[:how_many]
+            self.links.add(*links)
 
     plays_count = factory.Faker("random_int", min=20, max=200, step=1)
     selected_plays_count = factory.Faker("random_int", min=1, max=20, step=1)

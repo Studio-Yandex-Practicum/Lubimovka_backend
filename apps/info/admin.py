@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
@@ -6,7 +7,18 @@ from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import FestTeamMemberForm
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
+from apps.info.models import (
+    Festival,
+    FestivalInfoLink,
+    FestivalTeamMember,
+    InfoLink,
+    Partner,
+    Place,
+    PressRelease,
+    Selector,
+    Sponsor,
+    Volunteer,
+)
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
@@ -156,8 +168,45 @@ class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1
-    classes = ["collapsible"]
+    classes = ("collapsible",)
     model.__str__ = lambda self: ""
+
+
+@admin.register(InfoLink)
+class InfoLinkAdmin(admin.ModelAdmin):
+    def get_model_perms(self, request):
+        """Return empty perms dict thus hiding the model from admin index."""
+        return {}
+
+
+class FestivalPlayLinksInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = FestivalInfoLink
+    extra = 0
+    verbose_name = "Пьесы (ссылки)"
+    verbose_name_plural = "Пьесы (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return FestivalInfoLink.objects.filter(link__type="plays_links")
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = InfoLink.objects.filter(type="plays_links")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class FestivalAddsLinksInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = FestivalInfoLink
+    extra = 0
+    verbose_name = "Дополнительно (ссылки)"
+    verbose_name_plural = "Дополнительно (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return FestivalInfoLink.objects.filter(link__type="additional_links")
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        kwargs["queryset"] = InfoLink.objects.filter(type="additional_links")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 @admin.register(Festival)
@@ -166,11 +215,14 @@ class FestivalAdmin(admin.ModelAdmin):
     inlines = (
         VolunteerInline,
         FestivalImagesInline,
+        FestivalAddsLinksInline,
+        FestivalPlayLinksInline,
     )
     exclude = (
         "teams",
         "sponsors",
         "images",
+        "links",
     )
     empty_value_display = "-пусто-"
 

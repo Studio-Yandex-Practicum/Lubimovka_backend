@@ -9,6 +9,7 @@ from apps.feedback.factories import ParticipationApplicationFestivalFactory
 from apps.info.factories import (
     FestivalFactory,
     FestivalTeamFactory,
+    InfoLinkFactory,
     PartnerFactory,
     PlaceFactory,
     PressReleaseFactory,
@@ -114,6 +115,9 @@ class Command(BaseCommand):
             notification(self, teams, "членов команд")
 
             add_pr_director(self)
+
+            links = InfoLinkFactory.create_batch(25)
+            notification(self, links, "ссылок для фестиваля")
 
             images = ImageFactory.create_batch(5)
             notification(self, images, "картинки")

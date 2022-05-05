@@ -5,8 +5,15 @@ from apps.info.models import Festival
 from apps.info.serializers.volunteers import VolunteerInFestivalSerializer
 
 
+class FestivalLinkSerializer(serializers.Serializer):
+    description = serializers.CharField(source="link.description")
+    url = serializers.URLField(source="link.url")
+
+
 class FestivalSerializer(serializers.ModelSerializer):
     volunteers = serializers.SerializerMethodField()
+    plays_links = FestivalLinkSerializer(many=True)
+    additional_links = FestivalLinkSerializer(many=True)
 
     @extend_schema_field(VolunteerInFestivalSerializer(many=True))
     def get_volunteers(self, obj):
@@ -34,6 +41,8 @@ class FestivalSerializer(serializers.ModelSerializer):
             "press_release_image",
             "volunteers",
             "images",
+            "plays_links",
+            "additional_links",
         )
 
 
