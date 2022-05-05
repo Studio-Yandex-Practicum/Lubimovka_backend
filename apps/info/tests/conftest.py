@@ -64,7 +64,7 @@ def links():
 
 
 @pytest.fixture
-def festival(images, links):
+def festival_2020(images, links):
     return FestivalFactory(year=2020)
 
 
