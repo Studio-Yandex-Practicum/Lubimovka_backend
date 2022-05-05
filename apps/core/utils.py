@@ -10,7 +10,6 @@ from rest_framework.response import Response
 
 from apps.core.constants import ALPHABET, STATUS_INFO
 from apps.core.decorators.cache import cache_user
-from config.settings.base import HASH_SECRET_KEY
 
 logger = logging.getLogger("django")
 
@@ -125,9 +124,9 @@ def get_domain(request):
     return domain
 
 
-def create_hash(object_id, model_name):
+def calculate_hash(object_id):
     """Generate a hash for unpublished pages based on object_id and SECRET_KEY."""
-    hash_string = HASH_SECRET_KEY + model_name + str(object_id) + str(date.today())
+    hash_string = settings.SECRET_KEY + str(object_id) + str(date.today())
     hash_object = hashlib.sha1(hash_string.encode())
-    hex_dig = hash_object.hexdigest()
-    return hex_dig[0:5]
+    hexadecimal_digits = hash_object.hexdigest()
+    return hexadecimal_digits[0:5]

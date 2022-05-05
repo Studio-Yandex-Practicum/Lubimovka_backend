@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
 from apps.core.constants import STATUS_INFO
-from apps.core.utils import create_hash, get_object, get_user_change_perms_for_status, get_user_perms_level
+from apps.core.utils import calculate_hash, get_object, get_user_change_perms_for_status, get_user_perms_level
 
 
 class StatusButtonMixin:
@@ -43,14 +43,6 @@ class StatusButtonMixin:
         extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
         extra_context["possible_statuses"] = statuses
 
-        # making context for preview page buttons in template
-        current_model_name = obj._meta.model_name
-        ingress_hash = create_hash(object_id, current_model_name)
-        extra_context["model_name"] = current_model_name
-        # add hash for unpublished pages
-        extra_context["ingress_hash"] = ingress_hash
-        extra_context["url_name"] = f"{current_model_name}-detail"
-
         # hide buttons SAVE if user doesn't have permission to change in current status
         right_to_change = STATUS_INFO[obj.status]["min_level_to_change"]
         if user_level < right_to_change:
@@ -74,6 +66,26 @@ class StatusButtonMixin:
                     self.message_user(request, "Статус успешно обновлён!")
                     return HttpResponseRedirect(".")
         return super().response_change(request, obj)
+
+
+class PreviewButtonMixin:
+    """Mixin to add preview buttons on change page.
+
+    Pass hash and name of url to context.
+    """
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        obj = get_object(self, object_id)
+        current_model_name = obj._meta.model_name
+        link_hash = calculate_hash(object_id)
+
+        # add hash for unpublished pages
+        preview_button_context = {
+            "link_hash": link_hash,
+            "url_name": f"{current_model_name}-detail-preview",
+        }
+        extra_context.update(preview_button_context)
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 class InlineReadOnlyMixin:

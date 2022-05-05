@@ -1,4 +1,3 @@
-{% load i18n %}
 <form action="" method="GET">
-       <a class="button" href="{% url url_name original.id %}?ingress={{ ingress_hash }}" >{% if original.get_status_display != 'Опубликовано' %} Предпросмотр страницы {% else %} Просмотр страницы {% endif%}</a>
+       <a class="button" href="{% url url_name original.id %}?preview_hash={{ link_hash }}" >{% if original.get_status_display != 'Опубликовано' %} Предпросмотр страницы {% else %} Просмотр страницы {% endif%}</a>
 </form>

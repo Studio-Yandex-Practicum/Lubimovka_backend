@@ -7,10 +7,7 @@ pytestmark = [pytest.mark.django_db]
 
 @pytest.fixture(params=["IN_PROCESS", "REVIEW", "READY_FOR_PUBLICATION", "REMOVED_FROM_PUBLICATION"])
 def blog_item_not_published(request):
-    yield BlogItemFactory(
-        # id=200,
-        status=request.param
-    )
+    yield BlogItemFactory(status=request.param)
 
 
 @pytest.fixture

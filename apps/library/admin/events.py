@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
 from apps.core.models import Role
 from apps.core.utils import get_user_change_perms_for_status
 from apps.library.models import (
@@ -78,7 +78,7 @@ class MasterClassAdmin(admin.ModelAdmin):
 
 
 @admin.register(Performance)
-class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
+class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, admin.ModelAdmin):
     list_display = (
         "name",
         "description",

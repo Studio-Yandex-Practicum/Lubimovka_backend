@@ -7,7 +7,7 @@ from apps.core.factories import PersonFactory, RoleFactory
 
 pytestmark = [pytest.mark.django_db]
 
-BLOG_ITEM_DETAIL_URL = reverse("blogitem-detail", args=(100,))
+BLOG_ITEM_DETAIL_URL = reverse("blog-item-detail", args=(100,))
 
 
 @pytest.fixture

@@ -1,8 +1,10 @@
 from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import OpenApiParameter, extend_schema, extend_schema_view
 from rest_framework import mixins, viewsets
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from apps.core.utils import create_hash
+from apps.articles import selectors
 from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
 from apps.library.serializers import (
     PerformanceMediaReviewSerializer,
@@ -12,17 +14,20 @@ from apps.library.serializers import (
 
 
 class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
-    """If `ingress` exist returns preview page else returns published items."""
+    """Returns published Performance items."""
 
+    queryset = Performance.objects.all()
     serializer_class = PerformanceSerializer
 
-    def get_queryset(self, **kwargs):
-        object_id = self.kwargs.get("pk")
-        model_name = "performance"
-        ingress = self.request.GET.get("ingress", "")
-        if ingress == create_hash(object_id, model_name):
-            return Performance.ext_objects.current_and_published(object_id)
-        return Performance.ext_objects.published()
+
+class PerformancePreviewDetailAPI(APIView):
+    """Returns preview page `Performance`."""
+
+    def get(self, request, id, **kwargs):
+        performance_item_detail = selectors.preview_item_detail_get(Performance, id, request)
+        context = {"request": request}
+        serializer = PerformanceSerializer(performance_item_detail, context=context)
+        return Response(serializer.data)
 
 
 @extend_schema_view(

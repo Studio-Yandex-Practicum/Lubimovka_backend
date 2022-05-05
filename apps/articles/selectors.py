@@ -3,10 +3,12 @@ from typing import Union
 from django.db.models import F, Prefetch, QuerySet
 from django.db.models import Value as V
 from django.db.models.functions import Concat
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 from apps.articles.filters import PubDateFilter
 from apps.articles.models import BlogItem, NewsItem, Project
+from apps.core.utils import calculate_hash
 
 
 def article_get_years_months_publications(article_model: Union[BlogItem, NewsItem, Project]) -> QuerySet:
@@ -28,7 +30,12 @@ def blog_item_list_get(filters: dict[str, str] = None) -> QuerySet:
     return PubDateFilter(filters, published_blog_items).qs
 
 
-def blog_item_detail_get(blog_item_id, blog_items):
+def check_hash(current_hash, id):
+    """Check hash and return bool."""
+    return current_hash == calculate_hash(id)
+
+
+def blog_item_detail_get(blog_item_id, item_detail=None):
     """Return `detailed` published `BlogItem` object if it exists.
 
     The `BlogItem` extends with:
@@ -53,8 +60,10 @@ def blog_item_detail_get(blog_item_id, blog_items):
         blog_item's objects only (typically `role.blog_persons` returns all
         blog_persons, not only related to exact blog_item).
     """
-    blog_item = get_object_or_404(blog_items, id=blog_item_id)
-    blog_item._other_blogs = blog_items.exclude(id=blog_item_id)[:4]
+    published_blog_items = BlogItem.ext_objects.published()
+    blog_item = item_detail or get_object_or_404(published_blog_items, id=blog_item_id)
+
+    blog_item._other_blogs = published_blog_items.exclude(id=blog_item_id)[:4]
 
     blog_item_roles = blog_item.roles.distinct()
     blog_item_persons = blog_item.blog_persons.all()
@@ -64,3 +73,11 @@ def blog_item_detail_get(blog_item_id, blog_items):
     blog_item._team = blog_item_roles.prefetch_related(Prefetch("blog_persons", queryset=blog_item_persons_full_name))
 
     return blog_item
+
+
+def preview_item_detail_get(article_model, object_id, request=None):
+    """Return object for preview page if hash matches."""
+    preview_hash = request.GET.get("preview_hash", None)
+    if preview_hash and check_hash(preview_hash, object_id):
+        return get_object_or_404(article_model, id=object_id)
+    raise Http404()

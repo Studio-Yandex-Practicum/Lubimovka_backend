@@ -228,8 +228,6 @@ GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
 # Export to Yandex.Disk integration key
 # ------------------------------------------------------------------------------
 YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
-HASH_SECRET_KEY = env("HASH_SECRET_KEY", default="hash_secret_key")
-
 
 # Logging settings
 # ------------------------------------------------------------------------------

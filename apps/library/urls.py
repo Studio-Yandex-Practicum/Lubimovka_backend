@@ -5,6 +5,7 @@ from apps.library.views import (
     AuthorLettersAPIView,
     AuthorsReadViewSet,
     PerformanceMediaReviewViewSet,
+    PerformancePreviewDetailAPI,
     PerformanceReviewViewSet,
     PerformanceViewSet,
     PlayFiltersAPIView,
@@ -44,9 +45,18 @@ router.register(
     AuthorsReadViewSet,
     basename="authors",
 )
+performance_item_urls = [
+    path(
+        route="performances/<int:id>/preview/",
+        view=PerformancePreviewDetailAPI.as_view(),
+        # don't change name, look PreviewButtonMixin
+        name="performance-detail-preview",
+    )
+]
 
 library_urls = [
     path("library/", include(router.urls)),
+    path("library/", include(performance_item_urls)),
     path(
         "library/author_letters/",
         AuthorLettersAPIView.as_view(),
