@@ -1,7 +1,7 @@
 import pytest
 
 from apps.core.factories import ImageFactory
-from apps.info.factories import FestivalFactory
+from apps.info.factories import FestivalFactory, InfoLinkFactory
 from apps.library.factories import PlayFactory, ProgramTypeFactory
 
 pytestmark = [pytest.mark.django_db]
@@ -13,12 +13,17 @@ def images():
 
 
 @pytest.fixture
+def links():
+    return InfoLinkFactory.create_batch(10)
+
+
+@pytest.fixture
 def program_types():
     return ProgramTypeFactory.create_batch(5)
 
 
 @pytest.fixture
-def festivals(images):
+def festivals(images, links):
     return FestivalFactory.create_batch(5)
 
 

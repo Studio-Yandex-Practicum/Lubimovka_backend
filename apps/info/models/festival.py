@@ -229,14 +229,15 @@ class FestivalInfoLink(models.Model):
         verbose_name = "Ссылка фестиваля"
         verbose_name_plural = "Ссылки фестиваля"
         ordering = ("order",)
+        constraints = [
+            UniqueConstraint(
+                fields=("festival", "link"),
+                name="unique_festival_link",
+            )
+        ]
 
     def __str__(self):
         return f"Ссылка {self.link} фестиваля {self.festival.year} года"
-
-    def clean(self):
-        if FestivalInfoLink.objects.filter(~Q(id=self.id), festival=self.festival, link=self.link):
-            raise ValidationError("Такая ссылка уже есть у данного Фестиваля")
-        return super().clean()
 
 
 class PressRelease(BaseModel):

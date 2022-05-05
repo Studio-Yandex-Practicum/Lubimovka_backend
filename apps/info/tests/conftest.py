@@ -6,6 +6,7 @@ from apps.core.factories import ImageFactory, PersonFactory
 from apps.info.factories import (
     FestivalFactory,
     FestivalTeamFactory,
+    InfoLinkFactory,
     PartnerFactory,
     SelectorFactory,
     SponsorFactory,
@@ -62,7 +63,12 @@ def images():
 
 
 @pytest.fixture
-def festival(images):
+def links():
+    return InfoLinkFactory.create_batch(10)
+
+
+@pytest.fixture
+def festival(images, links):
     return FestivalFactory()
 
 

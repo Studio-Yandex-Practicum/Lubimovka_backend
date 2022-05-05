@@ -75,6 +75,24 @@ class TestFestivalAPIViews:
             objects_count_in_response == objects_count_in_db
         ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
 
+    @pytest.mark.parametrize(
+        "field",
+        (
+            "plays_links",
+            "additional_links",
+        ),
+    )
+    def test_get_links_from_festival(self, client, festival, field):
+        """Checks links count in festival."""
+        url = reverse(FESTIVAL_URL_NAME, kwargs={"year": festival.year})
+        response = client.get(url)
+        data = response.json()
+        objects_count_in_response = len(data.get(field))
+        objects_count_in_db = getattr(festival, "links").filter(type=field).count()
+        assert (
+            objects_count_in_response == objects_count_in_db
+        ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
+
     def test_get_festival_years(self, client, festival):
         """Check getting festival years."""
         url = FESTIVAL_YEARS_URL

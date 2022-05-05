@@ -40,6 +40,10 @@ class Migration(migrations.Migration):
                 'ordering': ('order',),
             },
         ),
+        migrations.AddConstraint(
+            model_name='festivalinfolink',
+            constraint=models.UniqueConstraint(fields=('festival', 'link'), name='unique_festival_link'),
+        ),
         migrations.AddField(
             model_name='festival',
             name='links',
