@@ -9,8 +9,11 @@ class YearMonthSerializer(serializers.Serializer):
         max_value=timezone.now().year,
         help_text="Максимальный год равен текущему году",
     )
-    month = serializers.IntegerField(
-        label="Месяц",
-        min_value=1,
-        max_value=12,
+    months = serializers.ListSerializer(
+        child=serializers.IntegerField(
+            label="Месяц",
+            min_value=1,
+            max_value=12,
+        ),
+        label="Месяцы",
     )
