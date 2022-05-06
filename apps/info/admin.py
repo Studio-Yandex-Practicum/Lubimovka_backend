@@ -5,7 +5,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.filters import HasReviewAdminFilter
+from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
 from apps.info.form import FestTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
@@ -24,13 +24,13 @@ class PartnerAdmin(SortableAdminMixin, AdminImagePreview, admin.ModelAdmin):
     """
 
     list_display = (
-        "name",
         "order",
+        "name",
         "type",
         "get_partner_url",
         "image_preview_list_page",
     )
-    list_filter = ("type",)
+    list_filter = (PartnerTypeFilter,)
     search_fields = ("name",)
     fieldsets = (
         (
@@ -96,8 +96,8 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
 @admin.register(Volunteer)
 class VolunteerAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
-        "person",
         "order",
+        "person",
         "get_year",
         "is_review",
     )
@@ -181,8 +181,8 @@ class FestivalAdmin(admin.ModelAdmin):
 @admin.register(Place)
 class PlaceAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
-        "name",
         "order",
+        "name",
         "city",
         "address",
     )
@@ -199,8 +199,8 @@ class PressReleaseAdmin(admin.ModelAdmin):
 @admin.register(ArtTeamMember)
 class ArtTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
-        "person",
         "order",
+        "person",
         "team",
         "position",
     )
@@ -237,8 +237,8 @@ class ArtTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
 class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     form = FestTeamMemberForm
     list_display = (
-        "person",
         "order",
+        "person",
         "team",
         "position",
         "is_pr_director",
@@ -293,8 +293,8 @@ class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
 @admin.register(Sponsor)
 class SponsorAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
-        "person",
         "order",
+        "person",
         "position",
     )
     autocomplete_fields = ("person",)
@@ -303,8 +303,8 @@ class SponsorAdmin(SortableAdminMixin, admin.ModelAdmin):
 @admin.register(Selector)
 class SelectorAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
-        "person",
         "order",
+        "person",
         "get_year",
         "position",
     )

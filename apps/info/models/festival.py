@@ -39,7 +39,7 @@ class FestivalTeamMember(BaseModel):
         default=0,
         blank=False,
         null=False,
-        verbose_name="Сортировка",
+        verbose_name="Порядок",
         db_index=True,
     )
 

@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='partner',
             name='order',
-            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Сортировка'),
+            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Порядок'),
         ),
         migrations.AlterModelOptions(
             name='sponsor',
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='sponsor',
             name='order',
-            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Сортировка'),
+            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Порядок'),
         ),
         migrations.AlterModelOptions(
             name='volunteer',
@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='volunteer',
             name='order',
-            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Сортировка'),
+            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Порядок'),
         ),
         migrations.AlterModelOptions(
             name='festivalteammember',
@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='festivalteammember',
             name='order',
-            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Сортировка'),
+            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Порядок'),
         ),
         migrations.AlterModelOptions(
             name='place',
@@ -69,7 +69,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='place',
             name='order',
-            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Сортировка'),
+            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Порядок'),
         ),
         migrations.AlterModelOptions(
             name='selector',
@@ -78,7 +78,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='selector',
             name='order',
-            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Сортировка'),
+            field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Порядок'),
         ),
         migrations.RunPython(
             set_order,

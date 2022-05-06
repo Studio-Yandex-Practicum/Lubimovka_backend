@@ -40,7 +40,7 @@ class Partner(BaseModel):
         default=0,
         blank=False,
         null=False,
-        verbose_name="Сортировка",
+        verbose_name="Порядок",
         db_index=True,
     )
 
@@ -73,7 +73,7 @@ class Sponsor(BaseModel):
         default=0,
         blank=False,
         null=False,
-        verbose_name="Сортировка",
+        verbose_name="Порядок",
         db_index=True,
     )
 
@@ -116,7 +116,7 @@ class Volunteer(BaseModel):
         default=0,
         blank=False,
         null=False,
-        verbose_name="Сортировка",
+        verbose_name="Порядок",
         db_index=True,
     )
 
@@ -168,7 +168,7 @@ class Selector(BaseModel):
         default=0,
         blank=False,
         null=False,
-        verbose_name="Сортировка",
+        verbose_name="Порядок",
         db_index=True,
     )
 
