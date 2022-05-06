@@ -181,6 +181,7 @@ class OtherLink(BaseModel):
         help_text="Закрепить ссылку вверху страницы?",
     )
     order_number = models.PositiveSmallIntegerField(
+        default=0,
         verbose_name="Порядковый номер",
         help_text="Указывается для формирования порядка вывода информации",
     )
