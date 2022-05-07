@@ -59,7 +59,7 @@ class SocialNetworkLinkInline(admin.TabularInline):
     classes = ("collapsible",)
 
 
-class OtherLinkInline(admin.TabularInline):
+class OtherLinkInline(SortableInlineAdminMixin, admin.TabularInline):
     form = OtherLinkForm
     model = OtherLink
     extra = 1
