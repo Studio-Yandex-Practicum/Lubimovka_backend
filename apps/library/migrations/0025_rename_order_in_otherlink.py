@@ -21,6 +21,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='otherlink',
             name='order',
-            field=models.PositiveSmallIntegerField(default=0, help_text='Указывается для формирования порядка вывода информации', verbose_name='Порядковый номер'),
+            field=models.PositiveSmallIntegerField(default=0, help_text='Указывается для формирования порядка вывода информации', verbose_name='Порядок'),
         ),
     ]

@@ -182,7 +182,7 @@ class OtherLink(BaseModel):
     )
     order = models.PositiveSmallIntegerField(
         default=0,
-        verbose_name="Порядковый номер",
+        verbose_name="Порядок",
         help_text="Указывается для формирования порядка вывода информации",
     )
 
