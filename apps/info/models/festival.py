@@ -205,7 +205,7 @@ class InfoLink(BaseModel):
         ordering = ("order",)
 
     def __str__(self):
-        return self.description
+        return self.title
 
 
 class PressRelease(BaseModel):

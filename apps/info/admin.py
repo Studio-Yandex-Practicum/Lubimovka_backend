@@ -171,13 +171,6 @@ class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     model.__str__ = lambda self: ""
 
 
-@admin.register(InfoLink)
-class InfoLinkAdmin(admin.ModelAdmin):
-    def get_model_perms(self, request):
-        """Return empty perms dict thus hiding the model from admin index."""
-        return {}
-
-
 class PlayInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
     model = InfoLink
     extra = 0
