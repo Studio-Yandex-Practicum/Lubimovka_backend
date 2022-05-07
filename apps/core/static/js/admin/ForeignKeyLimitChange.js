@@ -30,7 +30,7 @@ function disableButton($object) {
     });
 }
 
-function addCss($object) {
+function enableObject($object) {
     $object.css({
         "pointer-events": "auto",
         "touch-action": "auto",
@@ -44,8 +44,8 @@ function addButtonAction ($link, $editButton, $fieldObject) {
         event.preventDefault();
         event.stopPropagation();
         let objects = [$editButton, $fieldObject]
-        addCss($editButton);
-        addCss($fieldObject);
+        enableObject($editButton);
+        enableObject($fieldObject);
         $link.remove();
     });
 };
