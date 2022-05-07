@@ -4,10 +4,12 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
+from apps.core.utils import get_user_change_perms_for_status
 from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import FestTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
+from apps.info.utils import get_vacant_and_current_festival
 
 
 @admin.register(Partner)
@@ -190,6 +192,17 @@ class PlaceAdmin(admin.ModelAdmin):
 @admin.register(PressRelease)
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
+
+    def get_form(self, request, obj=None, **kwargs):
+        """Set free festivals plus current festivals."""
+        form = super().get_form(request, obj, **kwargs)
+        change_permission = get_user_change_perms_for_status(request, obj)
+        if change_permission:
+            select = None
+            if obj:
+                select = obj.festival_id
+            form.base_fields["festival"].queryset = get_vacant_and_current_festival(select)
+        return form
 
 
 @admin.register(ArtTeamMember)
