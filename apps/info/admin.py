@@ -186,7 +186,7 @@ class PlayInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
     classes = ("collapsible",)
 
     def get_queryset(self, request):
-        return InfoLink.objects.filter(type="plays_links")
+        return InfoLink.objects.filter(type=InfoLink.LinkType.PLAYS_LINKS)
 
 
 class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -197,7 +197,7 @@ class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
     classes = ("collapsible",)
 
     def get_queryset(self, request):
-        return InfoLink.objects.filter(type="additional_links")
+        return InfoLink.objects.filter(type=InfoLink.LinkType.ADDITIONAL_LINKS)
 
 
 @admin.register(Festival)

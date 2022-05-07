@@ -154,8 +154,8 @@ class InfoLinkFactory(factory.django.DjangoModelFactory):
         model = InfoLink
 
     type = factory.Iterator(InfoLink.LinkType.values)
-    description = factory.Faker("sentence", locale="ru_RU")
-    url = factory.Faker("url")
+    title = factory.Faker("sentence", locale="ru_RU")
+    link = factory.Faker("url")
 
     @factory.lazy_attribute
     def festival(self):

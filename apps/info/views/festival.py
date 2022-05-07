@@ -25,12 +25,12 @@ class FestivalAPIView(RetrieveAPIView):
             Festival.objects.prefetch_related(
                 Prefetch(
                     "infolinks",
-                    queryset=InfoLink.objects.filter(type="plays_links"),
+                    queryset=InfoLink.objects.filter(type=InfoLink.LinkType.PLAYS_LINKS),
                     to_attr="plays_links",
                 ),
                 Prefetch(
                     "infolinks",
-                    queryset=InfoLink.objects.filter(type="additional_links"),
+                    queryset=InfoLink.objects.filter(type=InfoLink.LinkType.ADDITIONAL_LINKS),
                     to_attr="additional_links",
                 ),
             ),

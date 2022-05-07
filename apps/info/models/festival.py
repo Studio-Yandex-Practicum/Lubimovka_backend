@@ -189,11 +189,11 @@ class InfoLink(BaseModel):
         choices=LinkType.choices,
         verbose_name="Тип ссылки",
     )
-    description = models.CharField(
+    title = models.CharField(
         max_length=100,
-        verbose_name="Описание ссылки",
+        verbose_name="Название ссылки",
     )
-    url = models.URLField()
+    link = models.URLField()
     order = models.PositiveSmallIntegerField(
         default=0,
         verbose_name="Порядковый номер ссылки",

@@ -9,7 +9,7 @@ from apps.info.serializers.volunteers import VolunteerInFestivalSerializer
 class InfoLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = InfoLink
-        fields = ("description", "url")
+        fields = ("title", "link")
 
 
 class FestivalSerializer(serializers.ModelSerializer):
