@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
@@ -6,7 +7,17 @@ from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import FestTeamMemberForm
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
+from apps.info.models import (
+    Festival,
+    FestivalTeamMember,
+    InfoLink,
+    Partner,
+    Place,
+    PressRelease,
+    Selector,
+    Sponsor,
+    Volunteer,
+)
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
@@ -156,8 +167,30 @@ class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1
-    classes = ["collapsible"]
+    classes = ("collapsible",)
     model.__str__ = lambda self: ""
+
+
+class PlayInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
+    extra = 0
+    verbose_name = "Пьесы (ссылки)"
+    verbose_name_plural = "Пьесы (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return InfoLink.objects.filter(type=InfoLink.LinkType.PLAYS_LINKS)
+
+
+class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
+    extra = 0
+    verbose_name = "Дополнительно (ссылки)"
+    verbose_name_plural = "Дополнительно (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return InfoLink.objects.filter(type=InfoLink.LinkType.ADDITIONAL_LINKS)
 
 
 @admin.register(Festival)
@@ -166,6 +199,8 @@ class FestivalAdmin(admin.ModelAdmin):
     inlines = (
         VolunteerInline,
         FestivalImagesInline,
+        PlayInfoLinkInline,
+        AdditionalInfoLinkInline,
     )
     exclude = (
         "teams",

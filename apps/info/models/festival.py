@@ -176,6 +176,38 @@ class Festival(BaseModel):
         return super().clean()
 
 
+class InfoLink(BaseModel):
+    class LinkType(models.TextChoices):
+        PLAYS_LINKS = "plays_links", _("Пьесы")
+        ADDITIONAL_LINKS = "additional_links", _("Дополнительно")
+
+    festival = models.ForeignKey(
+        Festival, on_delete=models.CASCADE, related_name="infolinks", verbose_name="Прочие ссылки"
+    )
+    type = models.CharField(
+        max_length=25,
+        choices=LinkType.choices,
+        verbose_name="Тип ссылки",
+    )
+    title = models.CharField(
+        max_length=100,
+        verbose_name="Название ссылки",
+    )
+    link = models.URLField()
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        verbose_name="Порядковый номер ссылки",
+    )
+
+    class Meta:
+        verbose_name = "Ссылка с описанием"
+        verbose_name_plural = "Ссылки с описанием"
+        ordering = ("order",)
+
+    def __str__(self):
+        return self.title
+
+
 class PressRelease(BaseModel):
     title = models.CharField(
         max_length=500,
