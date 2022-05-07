@@ -8,6 +8,13 @@ def order_model(Model):
         obj.save()
 
 def set_order(apps, schema_editor):
+    """Set order to already existing objects.
+
+    Without this operation SortableAdminMixin will not work
+    for existing objects. Also you can use this command:
+    './manage.py reorder APP_NAME.MODEl_NAME.'
+    """
+
     models = []
     models.append(apps.get_model("info", "Partner"))
     models.append(apps.get_model("info", "Sponsor"))

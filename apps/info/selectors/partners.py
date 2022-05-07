@@ -11,8 +11,8 @@ def partner_list(filters: dict[str, str] = None) -> QuerySet:
     filters = filters or {}
     qs = Partner.objects.all()
     filtered_qs = PartnerFilterSet(data=filters, queryset=qs).qs
-    general_qs = filtered_qs.filter(type="general")
-    festival_qs = filtered_qs.filter(type="festival")
-    info_qs = filtered_qs.filter(type="info")
+    general_qs = filtered_qs.filter(type=Partner.PartnerType.GENERAL_PARTNER)
+    festival_qs = filtered_qs.filter(type=Partner.PartnerType.FESTIVAL_PARTNER)
+    info_qs = filtered_qs.filter(type=Partner.PartnerType.INFO_PARTNER)
     result = chain(general_qs, festival_qs, info_qs)
     return result
