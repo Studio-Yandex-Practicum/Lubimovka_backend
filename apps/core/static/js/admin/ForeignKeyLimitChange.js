@@ -61,7 +61,6 @@ function createLink(linkId) {
 };
 
 function unlockChangeButton(elementId, $editButton, $fieldObject) {
-    // const objectId = $object.attr("id");
     var linkId = "unlock_" + elementId;
     $link = createLink(linkId)
     $editButton.after($link);
