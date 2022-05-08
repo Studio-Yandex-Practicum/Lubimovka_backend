@@ -9,4 +9,4 @@ class SponsorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sponsor
-        fields = ("person", "position")
+        fields = ("id", "person", "position")
