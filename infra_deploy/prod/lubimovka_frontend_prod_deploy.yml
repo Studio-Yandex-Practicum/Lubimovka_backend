@@ -9,7 +9,6 @@ services:
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
-      - CERTPROVIDER=zerossl
     env_file:
       - .env-prod
     networks:

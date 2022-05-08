@@ -48,7 +48,6 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
     name = factory.LazyFunction(lambda: fake["ru_RU"].word().capitalize())
     link = factory.Faker("url")
     is_pinned = factory.Faker("pybool")
-    order_number = factory.Sequence(lambda index: index)
 
     @factory.lazy_attribute
     def author(self):
