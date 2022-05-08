@@ -29,7 +29,7 @@ def set_order(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('info', '0015_delete_question'),
+        ('info', '0016_infolink'),
     ]
 
     operations = [
