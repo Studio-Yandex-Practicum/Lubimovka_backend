@@ -45,7 +45,7 @@ STATUS_INFO = {
         "button_name": "Подготовить к публикации",
         "min_access_level": 2,
         "min_level_to_change": 2,
-        "min_level_to_delete": 3,
+        "min_level_to_delete": 2,
         "possible_changes": (
             "IN_PROCESS",
             "PUBLISHED",
@@ -53,7 +53,7 @@ STATUS_INFO = {
     },
     "PUBLISHED": {
         "button_name": "ОПУБЛИКОВАТЬ",
-        "min_access_level": 3,
+        "min_access_level": 2,
         "min_level_to_change": 3,
         "min_level_to_delete": 3,
         "possible_changes": (
@@ -63,9 +63,9 @@ STATUS_INFO = {
     },
     "REMOVED_FROM_PUBLICATION": {
         "button_name": "Снять с публикации",
-        "min_access_level": 3,
+        "min_access_level": 2,
         "min_level_to_change": 2,
-        "min_level_to_delete": 3,
+        "min_level_to_delete": 2,
         "possible_changes": (
             "IN_PROCESS",
             "PUBLISHED",
