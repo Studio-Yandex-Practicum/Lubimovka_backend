@@ -1,7 +1,7 @@
 from django import forms
 
 from apps.core.models import Setting
-from apps.info.models import FestivalTeamMember
+from apps.info.models import FestivalTeamMember, InfoLink
 
 
 class FestTeamMemberForm(forms.ModelForm):
@@ -41,3 +41,37 @@ class FestTeamMemberForm(forms.ModelForm):
         if is_pr_director and not pr_director_name:
             msg = "Дополните данные о PR-директоре. Укажите Имя Фамилия в дательном падеже."
             self.add_error("pr_director_name", msg)
+
+
+class AdditionalLinkForm(forms.ModelForm):
+    """Set type to InfoLink according to inline."""
+
+    class Meta:
+        model = InfoLink
+        fields = (
+            "title",
+            "link",
+        )
+
+    def save(self, commit=True):
+        new_link = super().save(commit=False)
+        new_link.type = InfoLink.LinkType.ADDITIONAL_LINKS
+        new_link.save()
+        return new_link
+
+
+class PlayLinkForm(forms.ModelForm):
+    """Set type to InfoLink according to inline."""
+
+    class Meta:
+        model = InfoLink
+        fields = (
+            "title",
+            "link",
+        )
+
+    def save(self, commit=True):
+        new_link = super().save(commit=False)
+        new_link.type = InfoLink.LinkType.PLAYS_LINKS
+        new_link.save()
+        return new_link
