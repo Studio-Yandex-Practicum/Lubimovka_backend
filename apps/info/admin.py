@@ -1,17 +1,19 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.form import FestTeamMemberForm
+from apps.info.filters import HasReviewAdminFilter
+from apps.info.form import AdditionalLinkForm, FestTeamMemberForm, PlayLinkForm
 from apps.info.models import (
     Festival,
     FestivalTeamMember,
+    InfoLink,
     Partner,
     Place,
     PressRelease,
-    Question,
     Selector,
     Sponsor,
     Volunteer,
@@ -100,22 +102,6 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     readonly_fields = ("image_preview_change_page",)
 
 
-class HasReviewFilter(admin.SimpleListFilter):
-    title = "Есть отзыв?"
-    parameter_name = "volunteer"
-
-    def lookups(self, request, model_admin):
-        return (
-            ("True", "Да"),
-            ("False", "Нет"),
-        )
-
-    def queryset(self, request, queryset):
-        if self.value() == "True":
-            return Volunteer.objects.exclude(review_text__exact="")
-        return Volunteer.objects.filter(review_text__exact="")
-
-
 @admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
     list_display = (
@@ -127,7 +113,7 @@ class VolunteerAdmin(admin.ModelAdmin):
     readonly_fields = ("is_review",)
     list_filter = (
         "festival",
-        HasReviewFilter,
+        HasReviewAdminFilter,
     )
 
     @admin.display(
@@ -181,8 +167,32 @@ class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1
-    classes = ["collapsible"]
+    classes = ("collapsible",)
     model.__str__ = lambda self: ""
+
+
+class PlayInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
+    form = PlayLinkForm
+    extra = 0
+    verbose_name = "Пьесы (ссылки)"
+    verbose_name_plural = "Пьесы (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return InfoLink.objects.filter(type=InfoLink.LinkType.PLAYS_LINKS)
+
+
+class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
+    form = AdditionalLinkForm
+    extra = 0
+    verbose_name = "Дополнительно (ссылки)"
+    verbose_name_plural = "Дополнительно (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return InfoLink.objects.filter(type=InfoLink.LinkType.ADDITIONAL_LINKS)
 
 
 @admin.register(Festival)
@@ -191,6 +201,8 @@ class FestivalAdmin(admin.ModelAdmin):
     inlines = (
         VolunteerInline,
         FestivalImagesInline,
+        PlayInfoLinkInline,
+        AdditionalInfoLinkInline,
     )
     exclude = (
         "teams",
@@ -318,17 +330,6 @@ class SponsorAdmin(admin.ModelAdmin):
         "position",
     )
     autocomplete_fields = ("person",)
-
-
-@admin.register(Question)
-class QuestionAdmin(admin.ModelAdmin):
-    list_display = ("id", "author_name", "author_email", "question", "sent")
-    list_filter = ("sent",)
-
-    def has_module_permission(self, request):
-        if request.user.is_authenticated and (request.user.is_admin or request.user.is_superuser):
-            return super().has_module_permission(request)
-        return False
 
 
 @admin.register(Selector)

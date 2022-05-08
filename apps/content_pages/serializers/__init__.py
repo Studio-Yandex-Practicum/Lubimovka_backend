@@ -1,4 +1,5 @@
 from .content_items import (
+    ContentUnitRichTextSerializer,
     ExtendedPersonSerializer,
     LinkSerializer,
     OrderedImageSerializer,

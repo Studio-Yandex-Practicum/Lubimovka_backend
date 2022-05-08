@@ -13,17 +13,9 @@ class BlogPersonInline(InlineReadOnlyMixin, admin.TabularInline):
 
 class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
     model = BlogItemContent
-    content_type_model = (
-        "imagesblock",
-        "personsblock",
-        "playsblock",
-        "preamble",
-        "quote",
-        "text",
-        "title",
-    )
 
 
+@admin.register(BlogItem)
 class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
@@ -47,16 +39,10 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
                 "fields": (
                     "status",
                     "title",
-                    (
-                        "author_url_title",
-                        "author_url",
-                    ),
+                    ("author_url_title", "author_url"),
                     "pub_date",
                     "description",
-                    (
-                        "image_preview_change_page",
-                        "image",
-                    ),
+                    ("image_preview_change_page", "image"),
                 )
             },
         ),
@@ -71,6 +57,3 @@ class BlogItemAdmin(StatusButtonMixin, BaseContentPageAdmin):
         "image_preview_change_page",
         "image",
     )
-
-
-admin.site.register(BlogItem, BlogItemAdmin)

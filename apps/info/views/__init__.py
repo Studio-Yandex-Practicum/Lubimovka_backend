@@ -2,9 +2,8 @@ from apps.info.views.contacts import ContactsAPIView
 
 from .festival import FestivalAPIView, FestivalYearsAPIView
 from .festivalteams import FestivalTeamsAPIView
-from .partners import PartnersAPIView
+from .partners import PartnerListAPIView
 from .press_release import PressReleaseDownloadAPIView, PressReleaseViewSet, PressReleaseYearsAPIView
-from .question import QuestionCreateAPIView
 from .selectors import SelectorsAPIView
 from .settings import SettingsAPIView
 from .sponsors import SponsorsAPIView
@@ -14,8 +13,7 @@ __all__ = (
     FestivalAPIView,
     FestivalTeamsAPIView,
     FestivalYearsAPIView,
-    PartnersAPIView,
-    QuestionCreateAPIView,
+    PartnerListAPIView,
     PressReleaseViewSet,
     PressReleaseYearsAPIView,
     PressReleaseDownloadAPIView,

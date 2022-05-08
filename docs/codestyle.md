@@ -46,6 +46,7 @@
     ```
 2. У модели всегда должен присутствовать метод `__str__`
 3. У каждой модели должно быть `verbose_name` и `verbose_name_plural`
+4. Если модель сортируемая и у нее есть поле, отвечающее за сортировку, такое поле должно иметь имя `order` и `verbose_name` - ` Порядок`
 
 
 ### Правила для регистрации моделей в админке
@@ -107,4 +108,17 @@
    from django.conf import settings
 
    message.template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
+    ```
+
+
+### Правило для создания новых настроек в settings
+1. При добавлении, изменении или удалении данных через миграцию, её имя должно начинаться с `data`, а общее название должно быть такого вида "00XX_data_..."
+    T.e **так плохо**
+    ```python
+   "migrations/0016_additional_email_settings.py"
+
+    ```
+    Так **хорошо**
+    ```python
+    "migrations/0016_data_additional_email_settings.py"
     ```

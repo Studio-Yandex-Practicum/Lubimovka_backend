@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='participationapplicationfestival',
             name='festival_year',
-            field=models.PositiveSmallIntegerField(default=apps.library.utilities.get_festival_year, verbose_name='Год фестиваля'),
+            field=models.PositiveSmallIntegerField(default=apps.feedback.utilities.get_festival_year, verbose_name='Год фестиваля'),
         ),
     ]

@@ -11,7 +11,6 @@ class OtherLinkSerializer(serializers.ModelSerializer):
             "name",
             "link",
             "is_pinned",
-            "order_number",
         )
 
 
