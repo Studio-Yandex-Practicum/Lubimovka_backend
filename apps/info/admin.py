@@ -6,7 +6,7 @@ from django.utils.html import format_html
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.filters import HasReviewAdminFilter
-from apps.info.form import FestTeamMemberForm
+from apps.info.form import AdditionalLinkForm, FestTeamMemberForm, PlayLinkForm
 from apps.info.models import (
     Festival,
     FestivalTeamMember,
@@ -173,6 +173,7 @@ class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
 
 class PlayInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
     model = InfoLink
+    form = PlayLinkForm
     extra = 0
     verbose_name = "Пьесы (ссылки)"
     verbose_name_plural = "Пьесы (ссылки)"
@@ -184,6 +185,7 @@ class PlayInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
 
 class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
     model = InfoLink
+    form = AdditionalLinkForm
     extra = 0
     verbose_name = "Дополнительно (ссылки)"
     verbose_name_plural = "Дополнительно (ссылки)"
