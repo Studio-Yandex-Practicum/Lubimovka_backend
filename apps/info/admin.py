@@ -257,7 +257,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
     ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
@@ -306,7 +305,6 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
     ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
