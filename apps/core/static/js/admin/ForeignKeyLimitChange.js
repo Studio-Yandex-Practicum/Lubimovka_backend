@@ -6,37 +6,21 @@
 function hideAddButton(objectId) {
     const addButtonId = "#add_" + objectId;
     const addButton = $(addButtonId);
-    addButton.css({"display": "none"});
+    addButton.addClass("hiden");
 }
 
-function getLableName(elementId) {
-    // Return lable attribute for select2 <span>
-    return '[aria-labelledby="select2-' + elementId + '-container"]';
+function getSelect2Element(elementId) {
+    // Return select2 <span>
+    const lable = '[aria-labelledby="select2-' + elementId + '-container"]';
+    return $(lable).eq(0)
 }
 
-function disableField($object) {
-    $object.css({
-        "pointer-events": "none",
-        "touch-action": "none",
-        "background": "#eee"
-    });
+function disableField($field) {
+    $field.addClass("disabled-field");
 }
 
-function disableButton($object) {
-    $object.css({
-        "pointer-events": "none",
-        "touch-action": "none",
-        "filter": "grayscale(100%)"
-    });
-}
-
-function enableObject($object) {
-    $object.css({
-        "pointer-events": "auto",
-        "touch-action": "auto",
-        "background": "",
-        "filter": "",
-    });
+function disableButton($button) {
+    $button.addClass("disabled-button");
 }
 
 function addButtonAction ($link, $editButton, $fieldObject, $additionalField) {
@@ -44,28 +28,28 @@ function addButtonAction ($link, $editButton, $fieldObject, $additionalField) {
         event.preventDefault();
         event.stopPropagation();
 
-        enableObject($editButton);
-        enableObject($fieldObject);
+        $editButton.removeClass("disabled-button");
+        $fieldObject.removeClass("disabled-field");
         if ($additionalField) {
-            enableObject($additionalField);
+            $additionalField.removeClass("disabled-field");
         }
         $link.remove();
     });
 }
 
-function createLink(linkId) {
-    const imageSrc = "/static/unlock.svg";
+function createLink(elementId) {
+    const linkId = "unlock_" + elementId;
+    const imageSrc = "/static/unlock-fill.svg";
     const imageAlt = "Разблокировать редактирование";
     const linkClass = "related-widget-wrapper-link change-related";
-    let $image = $("<img>", { src: imageSrc, alt: imageAlt });
+    let $image = $("<img>", { src: imageSrc, alt: imageAlt, height: "20px" });
     let $link = $("<a>", { id: linkId, href: "#", class: linkClass });
 
     return $image.wrap($link).parent();
 }
 
 function unlockChangeButton(elementId, $editButton, $fieldObject, $additionalField) {
-    var linkId = "unlock_" + elementId;
-    $link = createLink(linkId)
+    $link = createLink(elementId)
     if ($editButton.length) {
         $editButton.after($link);
     } else {
@@ -74,50 +58,50 @@ function unlockChangeButton(elementId, $editButton, $fieldObject, $additionalFie
     addButtonAction($link, $editButton, $fieldObject, $additionalField);
 }
 
-function disableAndAddUnlockButton($selectElement, url) {
-    if ($selectElement.val()) {
-        let elementId = $selectElement.attr("id");
-        let lable = getLableName(elementId);
-        let $select2Element = $(lable).eq(0);
-        let $editButton = $('#change_' + elementId);
-        let $select = $select2Element.length ? $select2Element : $selectElement;
-
-        hideAddButton($selectElement.attr("id"));
+function disableAndAddUnlockButton($defaultSelectField, url) {
+    if ($defaultSelectField.val()) {
+        let fieldId = $defaultSelectField.attr("id");
+        let $select2Element = getSelect2Element(fieldId);
+        // If $select2Element is empty use default <select> tag - $defaultSelectField
+        let $select = $select2Element.length ? $select2Element : $defaultSelectField;
+        hideAddButton($defaultSelectField.attr("id"));
         disableField($select);
+
         let $additionalField = null;
         if (url.includes("event")) {
             $additionalField = $("#id_type");
             disableField($additionalField);
         }
-        if ($editButton) {
-            disableButton($editButton);
-            unlockChangeButton(elementId, $editButton, $select, $additionalField);
-        }
+
+        let $editButton = $('#change_' + fieldId);
+        disableButton($editButton);
+        unlockChangeButton(fieldId, $editButton, $select, $additionalField);
     }
 }
 
 function limitChangeForDropdowns() {
-    const relatedWidgets = $(".related-widget-wrapper");
-    const $deleteButtons = relatedWidgets.find("[id^=delete_id_]");
+    const $relatedWidgets = $(".related-widget-wrapper");
+    const $deleteButtons = $relatedWidgets.find("[id^=delete_id_]");
     const url = $(location).attr('href').split("/");
     const excludePages = ["add", "users"];
-    let isExcluded = url.filter(value => excludePages.includes(value)).length;
 
     $deleteButtons.each(function () {
-        $( this ).css({"display": "none"});
+        $( this ).addClass("hiden");
     })
 
+    // For users app pages and pages for creation new record limits are disabled
+    let isExcluded = url.filter(value => excludePages.includes(value)).length;
     if (isExcluded) {
         return
     }
 
-    const $dropdowns = relatedWidgets.find("[id^=id_]");
-
+    const $dropdowns = $relatedWidgets.find("[id^=id_]");
     $dropdowns.each(function () {
         disableAndAddUnlockButton($( this ), url);
     })
+    // Explicitly disable type field on Partners page
     if (url.includes("partner")) {
-        let $typeField = $("#id_type")
+        let $typeField = $("#id_type");
         disableAndAddUnlockButton($typeField, url);
     }
 }
@@ -125,6 +109,6 @@ function limitChangeForDropdowns() {
 jQuery(window).on("load", function () {
     setTimeout(() => {
     // setTimeout for correct work in Firefox
-        limitChangeForDropdowns()
+        limitChangeForDropdowns();
     }, 0)
 })

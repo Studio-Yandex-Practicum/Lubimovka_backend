@@ -1,5 +1,8 @@
 {% extends "admin/change_form.html" %}
 {% load static %}
+{% block extrastyle %}{{ block.super }}
+  <link rel="stylesheet" type="text/css" href="{% static 'admin/css/change_form.css' %}">
+{% endblock %}
 {% block admin_change_form_document_ready %}{{ block.super }}
   <script type="text/javascript" src="{% static 'js/admin/ForeignKeyLimitChange.js' %}"></script>
 {% endblock %}
