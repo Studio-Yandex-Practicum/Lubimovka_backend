@@ -7,7 +7,9 @@ pytestmark = pytest.mark.django_db
 @pytest.mark.parametrize(
     "url",
     (
+        "/api/v1/info/press-releases/years/",
         "/api/v1/info/partners/",
+        "/api/v1/info/settings/",
         "/api/v1/info/festivals/years/",
         "/api/v1/info/about-festival/selectors/",
         "/api/v1/info/about-festival/sponsors/",

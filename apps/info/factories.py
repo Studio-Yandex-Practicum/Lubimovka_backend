@@ -6,7 +6,17 @@ from faker import Faker
 from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person
 from apps.core.utils import get_picsum_image
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
+from apps.info.models import (
+    Festival,
+    FestivalTeamMember,
+    InfoLink,
+    Partner,
+    Place,
+    PressRelease,
+    Selector,
+    Sponsor,
+    Volunteer,
+)
 
 fake = Faker(locale="en_US")
 
@@ -134,6 +144,22 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     # корректировки поля модели фестиваля
     blog_entries = factory.LazyFunction(lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"]))
     press_release_image = factory.django.ImageField(color="blue")
+
+
+@restrict_factory(general=(Festival,))
+class InfoLinkFactory(factory.django.DjangoModelFactory):
+    """Create other InfoLinks for Festival."""
+
+    class Meta:
+        model = InfoLink
+
+    type = factory.Iterator(InfoLink.LinkType.values)
+    title = factory.Faker("sentence", locale="ru_RU")
+    link = factory.Faker("url")
+
+    @factory.lazy_attribute
+    def festival(self):
+        return Festival.objects.order_by("?").first()
 
 
 @restrict_factory(general=(Festival,))
