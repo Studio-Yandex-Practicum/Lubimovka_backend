@@ -3,8 +3,8 @@
 // //  - variables without jQuery functionality don't have `$` sigh in names
 // //  - Exact `$` variable is basic jQuery object
 
-function hideAddButton($object) {
-    const addButtonId = "#add_" + $object.attr("id");
+function hideAddButton(objectId) {
+    const addButtonId = "#add_" + objectId;
     const addButton = $(addButtonId)
     addButton.css({"display": "none"});
 }
@@ -43,7 +43,7 @@ function addButtonAction ($link, $editButton, $fieldObject) {
     $link.click(function (event) {
         event.preventDefault();
         event.stopPropagation();
-        let objects = [$editButton, $fieldObject]
+
         enableObject($editButton);
         enableObject($fieldObject);
         $link.remove();
@@ -51,13 +51,13 @@ function addButtonAction ($link, $editButton, $fieldObject) {
 };
 
 function createLink(linkId) {
-    const imageSrc = "/static/admin/img/icon-viewlink.svg";
+    const imageSrc = "/static/unlock.svg";
     const imageAlt = "Разблокировать редактирование";
     const linkClass = "related-widget-wrapper-link change-related";
     let $image = $("<img>", { src: imageSrc, alt: imageAlt });
     let $link = $("<a>", { id: linkId, href: "#", class: linkClass });
 
-   return $image.wrap($link).parent();
+    return $image.wrap($link).parent();
 };
 
 function unlockChangeButton(elementId, $editButton, $fieldObject) {
@@ -67,12 +67,11 @@ function unlockChangeButton(elementId, $editButton, $fieldObject) {
     addButtonAction($link, $editButton, $fieldObject);
 };
 
-jQuery(window).on("load", function () {
+function limitChangeForDropdowns() {
     setTimeout(() => {
     // setTimeout for correct work in Firefox
-        const $addButtons = $(".related-widget-wrapper > [id^=add_id_]");
-        const $deleteButtons = $(".related-widget-wrapper > [id^=delete_id_]");
-        const $dropdowns = $(".related-widget-wrapper > [id^=id_]")
+        const relatedWidgets = $(".related-widget-wrapper")
+        const $deleteButtons = relatedWidgets.find("[id^=delete_id_]");
         const url = $(location).attr('href').split("/");
 
         $deleteButtons.each(function () {
@@ -83,27 +82,28 @@ jQuery(window).on("load", function () {
             return
         }
 
+        const $dropdowns = relatedWidgets.find("[id^=id_]")
+
         $dropdowns.each(function () {
-            let elementId = $( this ).attr("id");
-            let lable = getLableName(elementId);
-            let $select2Element = $(lable).eq(0);
-            let $editButton = $('#change_' + elementId)
-            if ($( this ).val() != "" && $( this ).val() != null) {
-                hideAddButton($( this ))
-                if ($select2Element.length > 0) {
-                    disableField($select2Element)
-                } else {
-                    disableField($( this ))
-                }
+            let $selectElement = $( this )
+            if ($selectElement.val()) {
+                let elementId = $selectElement.attr("id");
+                let lable = getLableName(elementId);
+                let $select2Element = $(lable).eq(0);
+                let $editButton = $('#change_' + elementId)
+                let $select = $select2Element.length ? $select2Element : $selectElement
+
+                hideAddButton($selectElement.attr("id"))
+                disableField($select)
                 if ($editButton) {
                     disableButton($editButton)
-                    if ($select2Element.length > 0) {
-                        unlockChangeButton(elementId, $editButton, $select2Element);
-                    } else {
-                        unlockChangeButton(elementId, $editButton, $( this ));
-                    }
+                    unlockChangeButton(elementId, $editButton, $select);
                 }
             }
         });
     }, 0)
-});
+}
+
+jQuery(window).on("load", function () {
+    limitChangeForDropdowns()
+})
