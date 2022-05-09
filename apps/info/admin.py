@@ -1,15 +1,14 @@
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.core.utils import get_user_change_perms_for_status
 from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import FestTeamMemberForm
 from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
-from apps.info.utils import get_vacant_and_current_festival
 
 
 @admin.register(Partner)
@@ -194,14 +193,12 @@ class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
 
     def get_form(self, request, obj=None, **kwargs):
-        """Set free festivals plus current festivals."""
+        """Set free festivals and current festivals if exists."""
         form = super().get_form(request, obj, **kwargs)
-        change_permission = get_user_change_perms_for_status(request, obj)
-        if change_permission:
-            select = None
-            if obj:
-                select = obj.festival_id
-            form.base_fields["festival"].queryset = get_vacant_and_current_festival(select)
+        current_id = None if not obj else obj.festival_id
+        form.base_fields["festival"].queryset = Festival.objects.filter(
+            Q(press_releases__festival__isnull=True) | Q(id=current_id)
+        )
         return form
 
 
