@@ -48,7 +48,7 @@ function addButtonAction ($link, $editButton, $fieldObject) {
         enableObject($fieldObject);
         $link.remove();
     });
-};
+}
 
 function createLink(linkId) {
     const imageSrc = "/static/unlock.svg";
@@ -58,52 +58,52 @@ function createLink(linkId) {
     let $link = $("<a>", { id: linkId, href: "#", class: linkClass });
 
     return $image.wrap($link).parent();
-};
+}
 
 function unlockChangeButton(elementId, $editButton, $fieldObject) {
     var linkId = "unlock_" + elementId;
     $link = createLink(linkId)
     $editButton.after($link);
     addButtonAction($link, $editButton, $fieldObject);
-};
+}
 
 function limitChangeForDropdowns() {
-    setTimeout(() => {
-    // setTimeout for correct work in Firefox
-        const relatedWidgets = $(".related-widget-wrapper")
-        const $deleteButtons = relatedWidgets.find("[id^=delete_id_]");
-        const url = $(location).attr('href').split("/");
+    const relatedWidgets = $(".related-widget-wrapper")
+    const $deleteButtons = relatedWidgets.find("[id^=delete_id_]");
+    const url = $(location).attr('href').split("/");
 
-        $deleteButtons.each(function () {
-            $( this ).css({"display": "none"});
-        })
+    $deleteButtons.each(function () {
+        $( this ).css({"display": "none"});
+    })
 
-        if (url.includes("add")) {
-            return
-        }
+    if (url.includes("add")) {
+        return
+    }
 
-        const $dropdowns = relatedWidgets.find("[id^=id_]")
+    const $dropdowns = relatedWidgets.find("[id^=id_]")
 
-        $dropdowns.each(function () {
-            let $selectElement = $( this )
-            if ($selectElement.val()) {
-                let elementId = $selectElement.attr("id");
-                let lable = getLableName(elementId);
-                let $select2Element = $(lable).eq(0);
-                let $editButton = $('#change_' + elementId)
-                let $select = $select2Element.length ? $select2Element : $selectElement
+    $dropdowns.each(function () {
+        let $selectElement = $( this )
+        if ($selectElement.val()) {
+            let elementId = $selectElement.attr("id");
+            let lable = getLableName(elementId);
+            let $select2Element = $(lable).eq(0);
+            let $editButton = $('#change_' + elementId)
+            let $select = $select2Element.length ? $select2Element : $selectElement
 
-                hideAddButton($selectElement.attr("id"))
-                disableField($select)
-                if ($editButton) {
-                    disableButton($editButton)
-                    unlockChangeButton(elementId, $editButton, $select);
-                }
+            hideAddButton($selectElement.attr("id"))
+            disableField($select)
+            if ($editButton) {
+                disableButton($editButton)
+                unlockChangeButton(elementId, $editButton, $select);
             }
-        });
-    }, 0)
+        }
+    })
 }
 
 jQuery(window).on("load", function () {
-    limitChangeForDropdowns()
+    setTimeout(() => {
+    // setTimeout for correct work in Firefox
+        limitChangeForDropdowns()
+    }, 0)
 })
