@@ -9,6 +9,7 @@ services:
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
+      - EXTRA_DOMAINS=2022.lubimovka.ru
     env_file:
       - .env-prod
     networks:
