@@ -92,9 +92,8 @@ def blog_item_detail_get(blog_item_id, item_detail=None):
     return blog_item
 
 
-def preview_item_detail_get(article_model, object_id, request=None):
+def preview_item_detail_get(article_model, object_id, hash_sum=None):
     """Return object for preview page if hash matches."""
-    preview_hash = request.GET.get("preview_hash", None)
-    if preview_hash and check_hash(preview_hash, object_id):
+    if hash_sum and check_hash(hash_sum, object_id):
         return get_object_or_404(article_model, id=object_id)
     raise Http404()

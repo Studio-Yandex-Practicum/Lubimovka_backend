@@ -57,7 +57,7 @@ class BlogItemDetailAPI(APIView):
     """Return detailed `BlogItem` object."""
 
     @extend_schema(responses=BlogItemDetailOutputSerializer)
-    def get(self, request, id, **kwargs):
+    def get(self, request, id):
         blog_item_detail = selectors.blog_item_detail_get(blog_item_id=id)
         context = {"request": request}
         serializer = BlogItemDetailOutputSerializer(blog_item_detail, context=context)
@@ -67,8 +67,9 @@ class BlogItemDetailAPI(APIView):
 class BlogItemPreviewDetailAPI(APIView):
     """Return detailed preview `BlogItem` object."""
 
-    def get(self, request, id, **kwargs):
-        item_detail = preview_item_detail_get(BlogItem, id, request)
+    def get(self, request, id):
+        hash_sum = request.GET.get("hash", None)
+        item_detail = preview_item_detail_get(BlogItem, id, hash_sum)
         blog_item_detail = selectors.blog_item_detail_get(id, item_detail)
         context = {"request": request}
         serializer = BlogItemDetailOutputSerializer(blog_item_detail, context=context)

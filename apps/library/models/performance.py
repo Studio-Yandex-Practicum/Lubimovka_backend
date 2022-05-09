@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.db import models
 
-from apps.content_pages.querysets import ContenPageQuerySet
+from apps.content_pages.querysets import PublishedContentQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
 from apps.core.models import BaseModel, Image, Person
@@ -86,7 +86,7 @@ class Performance(BaseModel):
         verbose_name="Продолжительность",
     )
     objects = models.Manager()
-    ext_objects = ContenPageQuerySet.as_manager()
+    ext_objects = PublishedContentQuerySet.as_manager()
 
     class Meta:
         ordering = ("-created",)

@@ -32,8 +32,7 @@ blog_item_urls = [
     path(
         route="<int:id>/preview/",
         view=BlogItemPreviewDetailAPI.as_view(),
-        # don't change name, look PreviewButtonMixin
-        name="blogitem-detail-preview",
+        name="blog-item-detail-preview",
     ),
 ]
 
@@ -42,8 +41,7 @@ news_item_urls = [
     path(
         route="<int:id>/preview/",
         view=NewsItemsPreviewDetailAPI.as_view(),
-        # don't change name, look PreviewButtonMixin
-        name="newsitem-detail-preview",
+        name="news-item-detail-preview",
     ),
 ]
 
@@ -51,7 +49,6 @@ project_item_urls = [
     path(
         route="<int:id>/preview/",
         view=ProjectsPreviewDetailAPI.as_view(),
-        # don't change name, look PreviewButtonMixin
         name="project-detail-preview",
     )
 ]

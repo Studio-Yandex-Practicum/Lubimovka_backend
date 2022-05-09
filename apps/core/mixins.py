@@ -75,14 +75,17 @@ class PreviewButtonMixin:
     """
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
-        obj = get_object(self, object_id)
-        current_model_name = obj._meta.model_name
         link_hash = calculate_hash(object_id)
-
+        string_url = {
+            "BlogItem": "blog",
+            "NewsItem": "news",
+            "Project": "projects",
+            "Performance": "library/performances",
+        }
         # add hash for unpublished pages
         preview_button_context = {
             "link_hash": link_hash,
-            "url_name": f"{current_model_name}-detail-preview",
+            "url_name": string_url[self.model._meta.object_name],
         }
         extra_context.update(preview_button_context)
         return super().change_view(request, object_id, form_url, extra_context)

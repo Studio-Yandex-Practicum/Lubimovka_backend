@@ -16,15 +16,16 @@ from apps.library.serializers import (
 class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """Returns published Performance items."""
 
-    queryset = Performance.objects.all()
+    queryset = Performance.ext_objects.published()
     serializer_class = PerformanceSerializer
 
 
 class PerformancePreviewDetailAPI(APIView):
     """Returns preview page `Performance`."""
 
-    def get(self, request, id, **kwargs):
-        performance_item_detail = selectors.preview_item_detail_get(Performance, id, request)
+    def get(self, request, id):
+        hash_sum = request.GET.get("hash", None)
+        performance_item_detail = selectors.preview_item_detail_get(Performance, id, hash_sum)
         context = {"request": request}
         serializer = PerformanceSerializer(performance_item_detail, context=context)
         return Response(serializer.data)

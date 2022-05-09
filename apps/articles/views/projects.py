@@ -24,8 +24,9 @@ class ProjectsViewSet(ReadOnlyModelViewSet):
 class ProjectsPreviewDetailAPI(APIView):
     """Returns preview page `Projects`."""
 
-    def get(self, request, id, **kwargs):
-        project_item_detail = selectors.preview_item_detail_get(Project, id, request)
+    def get(self, request, id):
+        hash_sum = request.GET.get("hash", None)
+        project_item_detail = selectors.preview_item_detail_get(Project, id, hash_sum)
         context = {"request": request}
         serializer = ProjectSerializer(project_item_detail, context=context)
         return Response(serializer.data)

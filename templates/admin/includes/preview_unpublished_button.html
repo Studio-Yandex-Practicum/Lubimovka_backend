@@ -1,3 +1,5 @@
-<form action="" method="GET">
-       <a class="button" href="{% url url_name original.id %}?preview_hash={{ link_hash }}" >{% if original.get_status_display != 'Опубликовано' %} Предпросмотр страницы {% else %} Просмотр страницы {% endif%}</a>
-</form>
+{% if original.get_status_display != 'Опубликовано' %}
+<a class="button" href="/api/v1/{{ url_name }}/{{ original.id }}/preview/?hash={{ link_hash }}">Предпросмотр страницы</a>
+{% else %}
+<a class="button" href="/api/v1/{{ url_name }}/{{ original.id }}/" >Просмотр страницы</a>
+{% endif%}
