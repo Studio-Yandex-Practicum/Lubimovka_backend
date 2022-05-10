@@ -85,8 +85,7 @@ class Performance(BaseModel):
         default=timedelta(minutes=85),
         verbose_name="Продолжительность",
     )
-    objects = models.Manager()
-    ext_objects = PublishedContentQuerySet.as_manager()
+    objects = PublishedContentQuerySet.as_manager()
 
     class Meta:
         ordering = ("-created",)

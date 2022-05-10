@@ -16,7 +16,7 @@ from apps.library.serializers import (
 class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """Returns published Performance items."""
 
-    queryset = Performance.ext_objects.published()
+    queryset = Performance.objects.published()
     serializer_class = PerformanceSerializer
 
 

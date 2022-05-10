@@ -5,5 +5,9 @@
 /* resize button for preview page */
 a.button {
    padding: 10px 14px;
-   background: #00CC99;
+   background: #759e4a;
+}
+/* change button color */
+a.button:hover {
+    background: #435b2a;
 }
