@@ -40,7 +40,7 @@ class StatusButtonMixin:
             statuses[status] = STATUS_INFO[status]
         extra_context = {}
         extra_context["user_level"] = user_level
-        extra_context["current_status_level"] = STATUS_INFO[obj.status]["min_access_level"]
+        extra_context["level_to_change"] = STATUS_INFO[obj.status]["min_level_to_change"]
         extra_context["possible_statuses"] = statuses
 
         # hide buttons SAVE if user doesn't have permission to change in current status

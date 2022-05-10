@@ -2,7 +2,7 @@
 {% if original.status %}
 <div class="submit-row">
     <strong> текущий статус: {{ original.get_status_display }} </strong>
-    {% if user_level >= current_status_level %}
+    {% if user_level >= level_to_change %}
         {% for status, params in possible_statuses.items %}
             {% if user_level >= params.min_access_level %}
                 <input type="submit" value="{% trans params.button_name %}" name="{% trans status %}" />
