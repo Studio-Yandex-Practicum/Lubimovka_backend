@@ -40,7 +40,7 @@ def blog_item_with_persons(three_persons, role_text, role_translator):
 def test_selector_blog_item_detail_get_return_only_published(blog_item_not_published):
     """Selector should return 404 if `BlogItem` has status other than `PUBLISHED`."""
     blog_item_id = blog_item_not_published.id
-    blog_items_published = BlogItem.ext_objects.published()
+    blog_items_published = BlogItem.objects.published()
     with pytest.raises(Http404):
         selectors.blog_item_detail_get(blog_item_id, blog_items_published)
 

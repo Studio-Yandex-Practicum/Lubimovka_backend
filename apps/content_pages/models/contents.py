@@ -50,8 +50,7 @@ class AbstractContentPage(BaseModel):
         verbose_name="Заголовок",
     )
 
-    objects = models.Manager()
-    ext_objects = PublishedContentQuerySet.as_manager()
+    objects = PublishedContentQuerySet.as_manager()
 
     class Meta:
         abstract = True

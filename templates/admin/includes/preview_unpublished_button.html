@@ -1,5 +1,5 @@
 {% if original.get_status_display != 'Опубликовано' %}
-<a class="button" href="/api/v1/{{ url_name }}/{{ original.id }}/preview/?hash={{ link_hash }}">Предпросмотр страницы</a>
+<a class="button" href="/{{ url_name }}/{{ original.id }}?hash={{ link_hash }}">Предпросмотр страницы</a>
 {% else %}
-<a class="button" href="/api/v1/{{ url_name }}/{{ original.id }}/" >Просмотр страницы</a>
+<a class="button" href="/{{ url_name }}/{{ original.id }}" >Просмотр страницы</a>
 {% endif%}

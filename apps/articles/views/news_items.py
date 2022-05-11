@@ -15,7 +15,7 @@ from apps.articles.serializers import NewsItemDetailedSerializer, NewsItemListSe
 class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
     """Returns published News items."""
 
-    queryset = NewsItem.ext_objects.published()
+    queryset = NewsItem.objects.published()
 
     filter_backends = (
         filters.DjangoFilterBackend,
