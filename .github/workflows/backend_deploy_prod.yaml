@@ -123,7 +123,7 @@ jobs:
             echo "IMAGE_FRONT=${{ secrets.IMAGE_FRONT }}" >> .github_vars
             echo "IMAGE_FRONT_TAG=${{ secrets.IMAGE_FRONT_TAG }}" >> .github_vars
             echo "FRONT_BASE_URL=${{ secrets.FRONT_BASE_URL }}" >> .github_vars
-            echo "DEVELOP_API_BASE_URL=${{ secrets.DEVELOP_API_BASE_URL }}" >> .github_vars
+            echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> .github_vars
 
             # PostgreSQL environment variables
             echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} > .env-prod

@@ -30,7 +30,7 @@ services:
     container_name: frontend_test
     environment:
       BASE_URL: ${FRONT_BASE_URL}
-      API_BASE_URL: ${DEVELOP_API_BASE_URL}
+      API_BASE_URL: ${API_BASE_URL}
     networks:
       - test_swag_network
     ports:
