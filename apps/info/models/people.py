@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -189,3 +191,7 @@ class Selector(BaseModel):
     def clean(self):
         if self.person_id and not self.person.image:
             raise ValidationError("Для отборщика необходимо выбрать его фото")
+
+    @property
+    def get_year_datetime(self, obj):
+        return datetime(year=obj.festival.year)

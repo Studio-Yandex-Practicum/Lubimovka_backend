@@ -345,6 +345,7 @@ class SelectorAdmin(SortableAdminMixin, admin.ModelAdmin):
         "position",
     )
     autocomplete_fields = ("person",)
+    # date_hierarchy = "get_year_datetime"
 
     @admin.display(
         ordering="festival",
