@@ -18,6 +18,7 @@ services:
     volumes:
       - ./swag/swag_nginx_stage.conf:/config/nginx/site-confs/default
       - swag_volume_stage:/config
+      - /LUBIMOVKA/test/logs/swag_logs/:/config/log/
       - static_value_stage:/config/stage/static/
       - media_value_stage:/config/stage/media/
     ports:

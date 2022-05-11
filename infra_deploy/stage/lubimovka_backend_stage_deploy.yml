@@ -18,9 +18,9 @@ services:
     container_name: backend_stage
     restart: always
     volumes:
-      - static_value_stage:/code/staticfiles/
+      - static_value_stage:/code/statstaticfilesicfiles/
       - media_value_stage:/code/media/
-      - /LUBIMOVKA/stage/backend_logs/:/code/logs/
+      - /LUBIMOVKA/test/logs/backend_logs/:/code/logs/
     depends_on:
       - postgres
     env_file:
@@ -34,7 +34,7 @@ services:
     volumes:
       - static_value_stage:/code/staticfiles/
       - media_value_stage:/code/media/
-      - /LUBIMOVKA/stage/backend_logs/:/code/logs/
+      - /LUBIMOVKA/test/logs/backend_logs/:/code/logs/
     command: >
       sh -c "
         sleep 5;
