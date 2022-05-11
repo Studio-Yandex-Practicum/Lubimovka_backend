@@ -18,7 +18,7 @@ services:
     container_name: backend_stage
     restart: always
     volumes:
-      - static_value_stage:/code/statstaticfilesicfiles/
+      - static_value_stage:/code/staticfiles/
       - media_value_stage:/code/media/
       - /LUBIMOVKA/stage/logs/backend_logs/:/code/logs/
     depends_on:
