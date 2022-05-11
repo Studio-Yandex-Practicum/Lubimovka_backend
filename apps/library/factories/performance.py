@@ -8,10 +8,9 @@ from faker import Faker
 
 from apps.core.constants import AgeLimit, Status
 from apps.core.decorators import restrict_factory
-from apps.core.factories import ImageFactory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
-from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview, Play
+from apps.library.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview, Play
 
 from .team_member import TeamMemberFactory
 
@@ -103,8 +102,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
         """
         if created and extracted:
             images_count = random.randint(1, 9)
-            images = ImageFactory.create_batch(images_count)
-            self.images_in_block.add(*images)
+            PerformanceImageFactory.create_batch(images_count, performance=self)
 
     @factory.post_generation
     def add_review(self, created: bool, extracted: bool, **kwargs):
@@ -148,6 +146,25 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
             add_media_review=True,
             **kwargs,
         )
+
+
+@restrict_factory(general=(Performance,))
+class PerformanceImageFactory(factory.django.DjangoModelFactory):
+    """Create Images for Performance."""
+
+    class Meta:
+        model = PerformanceImage
+        django_get_or_create = ("image",)
+
+    image = factory.django.ImageField(
+        color=factory.Faker("color"),
+        width=factory.Faker("random_int", min=10, max=1000),
+        height=factory.SelfAttribute("width"),
+    )
+
+    @factory.lazy_attribute
+    def performance(self):
+        return Performance.objects.order_by("?").first()
 
 
 @restrict_factory(general=(Performance,))
