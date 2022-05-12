@@ -41,11 +41,6 @@ class Performance(BaseModel):
         upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение внизу страницы",
     )
-    images_in_block = models.ManyToManyField(
-        Image,
-        blank=True,
-        verbose_name="Фотографии спектакля в блоке фотографий",
-    )
     video = models.URLField(
         max_length=200,
         unique=True,
@@ -109,6 +104,15 @@ class Performance(BaseModel):
     def event_team(self):
         """Return directors and dramatists related with Performance."""
         return get_team_roles(self, {"team_members__performance": self, "slug__in": ["director", "dramatist"]})
+
+
+class PerformanceImage(Image):
+    performance = models.ForeignKey(
+        Performance,
+        on_delete=models.CASCADE,
+        related_name="images_in_block",
+        verbose_name="Изображения спектакля",
+    )
 
 
 class PerformanceMediaReview(BaseModel):
