@@ -1,6 +1,7 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
@@ -229,6 +230,15 @@ class PlaceAdmin(admin.ModelAdmin):
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
 
+    def get_form(self, request, obj=None, **kwargs):
+        """Set free festivals and current festivals if exists."""
+        form = super().get_form(request, obj, **kwargs)
+        current_id = None if not obj else obj.festival_id
+        form.base_fields["festival"].queryset = Festival.objects.filter(
+            Q(press_releases__festival__isnull=True) | Q(id=current_id)
+        )
+        return form
+
 
 @admin.register(ArtTeamMember)
 class ArtTeamMemberAdmin(admin.ModelAdmin):
@@ -248,7 +258,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
     ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
@@ -297,7 +306,6 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
     ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
