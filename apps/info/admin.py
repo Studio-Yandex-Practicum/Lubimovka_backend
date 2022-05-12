@@ -114,7 +114,7 @@ class VolunteerAdmin(SortableAdminMixin, admin.ModelAdmin):
     autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
     list_filter = (
-        "festival__year",
+        "festival",
         HasReviewAdminFilter,
     )
 
@@ -200,7 +200,6 @@ class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
 
 @admin.register(Festival)
 class FestivalAdmin(admin.ModelAdmin):
-    list_display = ("year",)
     inlines = (
         VolunteerInline,
         FestivalImagesInline,
@@ -346,7 +345,7 @@ class SelectorAdmin(SortableAdminMixin, admin.ModelAdmin):
         "position",
     )
     autocomplete_fields = ("person",)
-    list_filter = ("festival__year",)
+    list_filter = ("festival",)
 
     @admin.display(
         ordering="festival",
