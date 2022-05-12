@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.contrib.admin.templatetags.admin_list import _boolean_icon
 from django.utils.html import format_html
@@ -15,8 +16,9 @@ from apps.main.models import (
 
 
 @admin.register(Banner)
-class BannerAdmin(admin.ModelAdmin):
+class BannerAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
+        "order",
         "title",
         "description",
         "url",

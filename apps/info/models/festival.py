@@ -35,11 +35,18 @@ class FestivalTeamMember(BaseModel):
         verbose_name="PR-директор",
         help_text="Поставьте галочку, чтобы назначить человека PR-директором",
     )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядок",
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = "Команда фестиваля"
         verbose_name_plural = "Команды фестиваля"
-        ordering = ("person__last_name", "person__first_name")
+        ordering = ("order",)
         constraints = [
             UniqueConstraint(
                 fields=("person", "team"),
