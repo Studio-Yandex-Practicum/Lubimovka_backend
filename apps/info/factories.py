@@ -4,10 +4,11 @@ import factory
 from faker import Faker
 
 from apps.core.decorators import restrict_factory
-from apps.core.models import Image, Person
+from apps.core.models import Person
 from apps.core.utils import get_picsum_image
 from apps.info.models import (
     Festival,
+    FestivalImage,
     FestivalTeamMember,
     InfoLink,
     Partner,
@@ -108,7 +109,6 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
         return person
 
 
-@restrict_factory(general=(Image,))
 class FestivalFactory(factory.django.DjangoModelFactory):
     """Create Festival object with 1-6 images."""
 
@@ -123,15 +123,15 @@ class FestivalFactory(factory.django.DjangoModelFactory):
 
     @factory.post_generation
     def images(self, create, extracted, **kwargs):
-        if not create:
-            return
-        if extracted:
-            self.images.add(*extracted)
-        else:
-            images_count = Image.objects.count()
-            how_many = min(images_count, random.randint(1, 7))
-            images = Image.objects.order_by("?")[:how_many]
-            self.images.add(*images)
+        if create:
+            images_count = random.randint(1, 6)
+            FestivalImageFactory.create_batch(images_count, festival=self)
+
+    @factory.post_generation
+    def infolinks(self, create, extracted, **kwargs):
+        if create:
+            links_count = random.randint(2, 9)
+            InfoLinkFactory.create_batch(links_count, festival=self)
 
     plays_count = factory.Faker("random_int", min=20, max=200, step=1)
     selected_plays_count = factory.Faker("random_int", min=1, max=20, step=1)
@@ -144,6 +144,25 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     # корректировки поля модели фестиваля
     blog_entries = factory.LazyFunction(lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"]))
     press_release_image = factory.django.ImageField(color="blue")
+
+
+@restrict_factory(general=(Festival,))
+class FestivalImageFactory(factory.django.DjangoModelFactory):
+    """Create Images for Festival."""
+
+    class Meta:
+        model = FestivalImage
+        django_get_or_create = ("image",)
+
+    image = factory.django.ImageField(
+        color=factory.Faker("color"),
+        width=factory.Faker("random_int", min=10, max=1000),
+        height=factory.SelfAttribute("width"),
+    )
+
+    @factory.lazy_attribute
+    def festival(self):
+        return Festival.objects.order_by("?").first()
 
 
 @restrict_factory(general=(Festival,))

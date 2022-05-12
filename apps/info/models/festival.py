@@ -108,11 +108,6 @@ class Festival(BaseModel):
         unique=True,
         verbose_name="Год фестиваля",
     )
-    images = models.ManyToManyField(
-        Image,
-        related_name="festivalimages",
-        verbose_name="Изображения",
-    )
     plays_count = models.PositiveIntegerField(
         default=1,
         verbose_name="Общее количество пьес",
@@ -174,6 +169,15 @@ class Festival(BaseModel):
         if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError({"end_date": _("Дата окончания фестиваля должна быть позже даты его начала.")})
         return super().clean()
+
+
+class FestivalImage(Image):
+    festival = models.ForeignKey(
+        Festival,
+        on_delete=models.CASCADE,
+        related_name="images",
+        verbose_name="Изображения фестиваля",
+    )
 
 
 class InfoLink(BaseModel):

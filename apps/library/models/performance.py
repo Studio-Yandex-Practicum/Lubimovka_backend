@@ -110,7 +110,7 @@ class PerformanceImage(Image):
     performance = models.ForeignKey(
         Performance,
         on_delete=models.CASCADE,
-        related_name="performance_image",
+        related_name="images_in_block",
         verbose_name="Изображения спектакля",
     )
 

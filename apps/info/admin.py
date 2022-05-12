@@ -9,6 +9,7 @@ from apps.info.filters import HasReviewAdminFilter
 from apps.info.form import AdditionalLinkForm, FestTeamMemberForm, PlayLinkForm
 from apps.info.models import (
     Festival,
+    FestivalImage,
     FestivalTeamMember,
     InfoLink,
     Partner,
@@ -162,8 +163,8 @@ class VolunteerInline(admin.TabularInline):
 
 
 class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
-    model = Festival.images.through
-    readonly_fields = ("inline_image_preview",)
+    model = FestivalImage
+    readonly_fields = ("image_preview_list_page",)
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1
