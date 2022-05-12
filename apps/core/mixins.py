@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
-from apps.core.constants import STATUS_INFO
+from apps.core.constants import STATUS_INFO, Status
 from apps.core.utils import calculate_hash, get_object, get_user_change_perms_for_status, get_user_perms_level
 
 
@@ -81,16 +81,16 @@ class PreviewButtonMixin:
             "Project": "projects",
             "Performance": "library/performances",
         }
-        preview_button_context = {
-            "button_name": "Просмотр страницы",
-            "link_hash": "",
-            "url_name": string_url[self.model._meta.object_name],
-        }
-        # add hash for unpublished pages and change button name
+        link = f"/{string_url[self.model._meta.object_name]}/{object_id}"
         obj = get_object(self, object_id)
-        if obj.status != "PUBLISHED":
-            preview_button_context["link_hash"] = f"?hash={calculate_hash(object_id)}"
+        # add hash for unpublished pages and change button name
+        preview_button_context = {}
+        if obj.status == Status.PUBLISHED:
+            preview_button_context["button_name"] = "Просмотр страницы"
+            preview_button_context["link"] = link
+        else:
             preview_button_context["button_name"] = "Предпросмотр страницы"
+            preview_button_context["link"] = f"{link}?hash={calculate_hash(object_id)}"
         extra_context.update(preview_button_context)
         return super().change_view(request, object_id, form_url, extra_context)
 
