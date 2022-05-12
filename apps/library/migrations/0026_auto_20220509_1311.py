@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
             name='PerformanceImage',
             fields=[
                 ('image_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='core.image')),
-                ('performance', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='performance_image', to='library.performance', verbose_name='Изображения спектакля')),
+                ('performance', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='images_in_block', to='library.performance', verbose_name='Изображения спектакля')),
             ],
             options={
                 'abstract': False,
