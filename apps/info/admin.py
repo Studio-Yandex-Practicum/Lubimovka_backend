@@ -108,13 +108,23 @@ class VolunteerAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
         "order",
         "person",
+        "get_year",
         "is_review",
     )
-    exclude = ("festival_date",)
     autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
-    list_filter = (HasReviewAdminFilter,)
-    date_hierarchy = "festival_date"
+    list_filter = (
+        "festival__year",
+        HasReviewAdminFilter,
+    )
+
+    @admin.display(
+        ordering="festival",
+        description="Год фестиваля",
+    )
+    def get_year(self, obj):
+        """Возвращает год фестиваля."""
+        return obj.festival.year
 
     @admin.display(
         boolean=True,
@@ -136,7 +146,6 @@ class VolunteerInline(admin.TabularInline):
     verbose_name_plural = "Волонтёры"
     extra = 1
     exclude = (
-        "festival_date",
         "order",
         "review_title",
         "review_text",
@@ -333,8 +342,16 @@ class SelectorAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
         "order",
         "person",
+        "get_year",
         "position",
     )
-    exclude = ("festival_date",)
     autocomplete_fields = ("person",)
-    date_hierarchy = "festival_date"
+    list_filter = ("festival__year",)
+
+    @admin.display(
+        ordering="festival",
+        description="Год фестиваля",
+    )
+    def get_year(self, obj):
+        """Возвращает год фестиваля."""
+        return obj.festival.year

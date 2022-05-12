@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
@@ -121,11 +119,6 @@ class Volunteer(BaseModel):
         verbose_name="Порядок",
         db_index=True,
     )
-    festival_date = models.DateField(
-        verbose_name="Год в формате дата-время",
-        blank=True,
-        null=True,
-    )
 
     class Meta:
         verbose_name = "Волонтёр фестиваля"
@@ -140,13 +133,6 @@ class Volunteer(BaseModel):
 
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - волонтёр фестиваля {self.festival.year} года"
-
-    def save(self, *args, **kwargs):
-        year = self.festival.year
-        month = self.festival.start_date.month
-        day = self.festival.start_date.day
-        self.festival_date = datetime(year=year, month=month, day=day)
-        return super().save(*args, **kwargs)
 
     def clean(self):
         errors = []
@@ -185,11 +171,6 @@ class Selector(BaseModel):
         verbose_name="Порядок",
         db_index=True,
     )
-    festival_date = models.DateField(
-        verbose_name="Год в формате дата-время",
-        blank=True,
-        null=True,
-    )
 
     class Meta:
         verbose_name = "Отборщик фестиваля"
@@ -204,13 +185,6 @@ class Selector(BaseModel):
 
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name} - Отборщик фестиваля {self.festival.year} года"
-
-    def save(self, *args, **kwargs):
-        year = self.festival.year
-        month = self.festival.start_date.month
-        day = self.festival.start_date.day
-        self.festival_date = datetime(year=year, month=month, day=day)
-        return super().save(*args, **kwargs)
 
     def clean(self):
         if self.person_id and not self.person.image:
