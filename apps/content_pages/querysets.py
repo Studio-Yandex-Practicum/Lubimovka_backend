@@ -12,5 +12,5 @@ class PublishedContentQuerySet(models.QuerySet):
 
     def preview(self, id):
         """Return unpublished object."""
-        qs = get_object_or_404(self, id=id)
-        return qs
+        obj = get_object_or_404(self, id=id)
+        return obj
