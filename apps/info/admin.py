@@ -1,12 +1,24 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.filters import HasReviewAdminFilter
-from apps.info.form import FestTeamMemberForm
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
+from apps.info.form import AdditionalLinkForm, FestTeamMemberForm, PlayLinkForm
+from apps.info.models import (
+    Festival,
+    FestivalTeamMember,
+    InfoLink,
+    Partner,
+    Place,
+    PressRelease,
+    Selector,
+    Sponsor,
+    Volunteer,
+)
 from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
@@ -156,8 +168,32 @@ class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1
-    classes = ["collapsible"]
+    classes = ("collapsible",)
     model.__str__ = lambda self: ""
+
+
+class PlayInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
+    form = PlayLinkForm
+    extra = 0
+    verbose_name = "Пьесы (ссылки)"
+    verbose_name_plural = "Пьесы (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return InfoLink.objects.filter(type=InfoLink.LinkType.PLAYS_LINKS)
+
+
+class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
+    form = AdditionalLinkForm
+    extra = 0
+    verbose_name = "Дополнительно (ссылки)"
+    verbose_name_plural = "Дополнительно (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return InfoLink.objects.filter(type=InfoLink.LinkType.ADDITIONAL_LINKS)
 
 
 @admin.register(Festival)
@@ -166,6 +202,8 @@ class FestivalAdmin(admin.ModelAdmin):
     inlines = (
         VolunteerInline,
         FestivalImagesInline,
+        PlayInfoLinkInline,
+        AdditionalInfoLinkInline,
     )
     exclude = (
         "teams",
@@ -191,6 +229,15 @@ class PlaceAdmin(admin.ModelAdmin):
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
 
+    def get_form(self, request, obj=None, **kwargs):
+        """Set free festivals and current festivals if exists."""
+        form = super().get_form(request, obj, **kwargs)
+        current_id = None if not obj else obj.festival_id
+        form.base_fields["festival"].queryset = Festival.objects.filter(
+            Q(press_releases__festival__isnull=True) | Q(id=current_id)
+        )
+        return form
+
 
 @admin.register(ArtTeamMember)
 class ArtTeamMemberAdmin(admin.ModelAdmin):
@@ -210,7 +257,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
     ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
@@ -259,7 +305,6 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
     ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")

@@ -11,7 +11,6 @@ services:
       - VALIDATION=http
       - SUBDOMAINS=${DEV_SUBDOMAIN}
       - ONLY_SUBDOMAINS=true
-      - CERTPROVIDER=zerossl
     env_file:
       - .env-test
     networks:

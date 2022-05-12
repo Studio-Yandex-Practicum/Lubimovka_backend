@@ -10,7 +10,7 @@
             <a href="{% url 'admin:index' %}">{{ site_header|default:_('Django administration') }}</a>
         </h1>
         <div style="position: fixed;right: 20px;bottom: 20px;color: #00000014; display: grid;font-weight: bold; pointer-events: none;">
-            {% if branch != "develop" or branch != "master" %}
+            {% if branch != "develop" and branch != "master" %}
                 <span>branch: {{ branch }}</span>
             {% endif %}
             {% if tag %}

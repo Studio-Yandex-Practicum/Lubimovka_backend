@@ -1,9 +1,11 @@
+from django.db.models import Prefetch
+from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.info.models import Festival
+from apps.info.models import Festival, InfoLink
 from apps.info.serializers import FestivalSerializer, YearsSerializer
 
 
@@ -17,6 +19,24 @@ class FestivalAPIView(RetrieveAPIView):
     serializer_class = FestivalSerializer
     lookup_field = "year"
     pagination_class = None
+
+    def get_object(self):
+        festival = get_object_or_404(
+            Festival.objects.prefetch_related(
+                Prefetch(
+                    "infolinks",
+                    queryset=InfoLink.objects.filter(type=InfoLink.LinkType.PLAYS_LINKS),
+                    to_attr="plays_links",
+                ),
+                Prefetch(
+                    "infolinks",
+                    queryset=InfoLink.objects.filter(type=InfoLink.LinkType.ADDITIONAL_LINKS),
+                    to_attr="additional_links",
+                ),
+            ),
+            year=self.kwargs["year"],
+        )
+        return festival
 
 
 class FestivalYearsAPIView(APIView):
