@@ -10,12 +10,14 @@ TEAMS_URL = reverse("festival-teams")
 TEAMS_URL_FILTER = TEAMS_URL + "?team="
 SPONSORS_URL = reverse("sponsors")
 VOLUNTEERS_URL = reverse("volunteers")
+SELECTORS_URL = reverse("selectors")
 
 
 ABOUT_FESTIVAL_URLS_AND_FIXTURES = (
     (TEAMS_URL, pytest.lazy_fixture("festival_team")),
     (SPONSORS_URL, pytest.lazy_fixture("sponsor")),
     (VOLUNTEERS_URL, pytest.lazy_fixture("volunteer")),
+    (SELECTORS_URL, pytest.lazy_fixture("selector")),
 )
 
 
@@ -26,6 +28,7 @@ class TestAboutFestivalAPIViews:
             (TEAMS_URL, pytest.lazy_fixture("festival_teams")),
             (SPONSORS_URL, pytest.lazy_fixture("sponsors")),
             (VOLUNTEERS_URL, pytest.lazy_fixture("volunteers")),
+            (SELECTORS_URL, pytest.lazy_fixture("selectors")),
         ],
     )
     def test_objects_count_in_response_matches_count_in_db(self, client, url, objects):
@@ -94,6 +97,18 @@ class TestAboutFestivalAPIViews:
             volunteer_field_in_db = getattr(volunteer, field)
             assert (
                 volunteer_field_in_response == volunteer_field_in_db
+            ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
+
+    def test_get_selector_fields(self, client, selector):
+        """Checks selector field in response."""
+        url = SELECTORS_URL
+        response = client.get(url)
+        data = response.json()
+        for field in ("id", "position"):
+            selector_field_in_response = data[0].get(field)
+            selector_field_in_db = getattr(selector, field)
+            assert (
+                selector_field_in_response == selector_field_in_db
             ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
 
     @pytest.mark.parametrize("url, object", ABOUT_FESTIVAL_URLS_AND_FIXTURES)
