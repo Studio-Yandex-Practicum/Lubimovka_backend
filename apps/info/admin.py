@@ -6,7 +6,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.filters import FestivalYearFilter, HasReviewAdminFilter, PartnerTypeFilter
+from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
 from apps.info.form import AdditionalLinkForm, FestTeamMemberForm, PlayLinkForm
 from apps.info.models import (
     Festival,
@@ -116,7 +116,7 @@ class VolunteerAdmin(admin.ModelAdmin):
     autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
     list_filter = (
-        FestivalYearFilter,
+        "festival",
         HasReviewAdminFilter,
     )
 
@@ -364,7 +364,7 @@ class SelectorAdmin(admin.ModelAdmin):
         "position",
     )
     autocomplete_fields = ("person",)
-    list_filter = (FestivalYearFilter,)
+    list_filter = ("festival",)
 
     @admin.display(
         ordering="festival",

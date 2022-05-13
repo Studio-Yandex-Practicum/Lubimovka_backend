@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
-from apps.info.models import Festival, Partner
+from apps.info.models import Partner
 
 
 class CharInFilter(django_filters.BaseInFilter, django_filters.CharFilter):
@@ -61,41 +61,6 @@ class PartnerTypeFilter(admin.SimpleListFilter):
             return Partner.objects.filter(type=Partner.PartnerType.GENERAL_PARTNER)
         if self.value() == Partner.PartnerType.INFO_PARTNER:
             return Partner.objects.filter(type=Partner.PartnerType.INFO_PARTNER)
-
-    def choices(self, changelist):
-        for lookup, title in self.lookup_choices:
-            yield {
-                "selected": self.value() == lookup,
-                "query_string": changelist.get_query_string(
-                    {
-                        self.parameter_name: lookup,
-                    },
-                    [],
-                ),
-                "display": title,
-            }
-
-
-class FestivalYearFilter(admin.SimpleListFilter):
-    title = "Год фестиваля"
-    parameter_name = "festival__year"
-
-    def lookups(self, request, model_admin):
-        list_of_years = []
-        years = Festival.objects.order_by("-year").values_list("year", flat=True)
-        for year in years:
-            if len(list_of_years) == 0:
-                list_of_years.append((None, f"Фестиваль {year} года"))  # last Festival will set as default
-            else:
-                list_of_years.append((str(year), f"Фестиваль {year} года"))
-        return list_of_years
-
-    def queryset(self, request, queryset):
-        latest_festival_year = Festival.objects.latest("year").year
-        if self.value() is None:
-            return queryset.filter(festival__year=latest_festival_year)
-        else:
-            return queryset.filter(festival__year=self.value())
 
     def choices(self, changelist):
         for lookup, title in self.lookup_choices:
