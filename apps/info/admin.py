@@ -113,7 +113,6 @@ class VolunteerAdmin(admin.ModelAdmin):
         "get_year",
         "is_review",
     )
-    list_display_links = ("person",)
     autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
     list_filter = (
@@ -364,7 +363,6 @@ class SelectorAdmin(admin.ModelAdmin):
         "get_year",
         "position",
     )
-    list_display_links = ("person",)
     autocomplete_fields = ("person",)
     list_filter = (FestivalYearFilter,)
 

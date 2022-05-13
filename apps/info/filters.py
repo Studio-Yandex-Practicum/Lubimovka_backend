@@ -85,17 +85,17 @@ class FestivalYearFilter(admin.SimpleListFilter):
         years = Festival.objects.order_by("-year").values_list("year", flat=True)
         for year in years:
             if len(list_of_years) == 0:
-                list_of_years.append((None, f"Фестиваль {year} года"))
+                list_of_years.append((None, f"Фестиваль {year} года"))  # last Festival will set as default
             else:
                 list_of_years.append((str(year), f"Фестиваль {year} года"))
         return list_of_years
 
     def queryset(self, request, queryset):
         latest_festival_year = Festival.objects.latest("year").year
-        if self.value():
-            return queryset.filter(festival__year=self.value())
-        else:
+        if self.value() is None:
             return queryset.filter(festival__year=latest_festival_year)
+        else:
+            return queryset.filter(festival__year=self.value())
 
     def choices(self, changelist):
         for lookup, title in self.lookup_choices:
