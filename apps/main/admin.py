@@ -23,6 +23,7 @@ class BannerAdmin(SortableAdminMixin, admin.ModelAdmin):
         "description",
         "url",
     )
+    list_display_links = ("title",)
 
 
 @admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen, SettingAfishaScreen, SettingPlaySupply)

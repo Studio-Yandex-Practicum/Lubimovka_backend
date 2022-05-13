@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('core', '0017_data_additional_and_updated_email_settings'),
-        ('info', '0016_infolink'),
+        ('info', '0017_auto_20220429_1527'),
     ]
 
     operations = [

@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from apps.info.models import Festival
 from apps.info.models.festival import InfoLink
+from apps.info.serializers.selectors import SelectorInFestivalSerializer
 from apps.info.serializers.volunteers import VolunteerInFestivalSerializer
 
 
@@ -14,6 +15,7 @@ class InfoLinkSerializer(serializers.ModelSerializer):
 
 class FestivalSerializer(serializers.ModelSerializer):
     volunteers = serializers.SerializerMethodField()
+    selectors = serializers.SerializerMethodField()
     plays_links = InfoLinkSerializer(many=True)
     additional_links = InfoLinkSerializer(many=True)
 
@@ -22,6 +24,12 @@ class FestivalSerializer(serializers.ModelSerializer):
         serializer = VolunteerInFestivalSerializer
         volunteers = obj.volunteers.all()
         return serializer(volunteers, many=True).data
+
+    @extend_schema_field(SelectorInFestivalSerializer(many=True))
+    def get_selectors(self, obj):
+        serializer = SelectorInFestivalSerializer
+        selectors = obj.selectors.all()
+        return serializer(selectors, many=True).data
 
     class Meta:
         model = Festival
@@ -42,6 +50,7 @@ class FestivalSerializer(serializers.ModelSerializer):
             "blog_entries",
             "press_release_image",
             "volunteers",
+            "selectors",
             "images",
             "plays_links",
             "additional_links",

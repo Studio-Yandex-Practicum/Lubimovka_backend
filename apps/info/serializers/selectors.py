@@ -16,3 +16,17 @@ class SelectorsSerializer(serializers.ModelSerializer):
             "year",
             "position",
         )
+
+
+class SelectorInFestivalSerializer(serializers.ModelSerializer):
+    person = serializers.IntegerField(source="person.id")
+    year = serializers.IntegerField(source="festival.year")
+
+    class Meta:
+        model = Selector
+        fields = (
+            "id",
+            "person",
+            "year",
+            "position",
+        )
