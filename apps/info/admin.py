@@ -42,6 +42,7 @@ class PartnerAdmin(SortableAdminMixin, AdminImagePreview, admin.ModelAdmin):
         "get_partner_url",
         "image_preview_list_page",
     )
+    list_display_links = ("name",)
     list_filter = (PartnerTypeFilter,)
     search_fields = ("name",)
     fieldsets = (
@@ -106,9 +107,8 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
 
 
 @admin.register(Volunteer)
-class VolunteerAdmin(SortableAdminMixin, admin.ModelAdmin):
+class VolunteerAdmin(admin.ModelAdmin):
     list_display = (
-        "order",
         "person",
         "get_year",
         "is_review",
@@ -140,7 +140,7 @@ class VolunteerAdmin(SortableAdminMixin, admin.ModelAdmin):
         return False
 
 
-class VolunteerInline(admin.TabularInline):
+class VolunteerInline(SortableInlineAdminMixin, admin.TabularInline):
     model = Volunteer
     autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
@@ -148,12 +148,10 @@ class VolunteerInline(admin.TabularInline):
     verbose_name_plural = "Волонтёры"
     extra = 1
     exclude = (
-        "order",
         "review_title",
         "review_text",
     )
     classes = ("collapsible",)
-    ordering = ("person__last_name", "person__first_name")
 
     @admin.display(
         boolean=True,
@@ -164,6 +162,15 @@ class VolunteerInline(admin.TabularInline):
         if obj.review_text:
             return True
         return False
+
+
+class SelectorInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = Selector
+    autocomplete_fields = ("person",)
+    verbose_name = "Отборщик"
+    verbose_name_plural = "Отборщики"
+    extra = 1
+    classes = ("collapsible",)
 
 
 class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
@@ -204,6 +211,7 @@ class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
 class FestivalAdmin(admin.ModelAdmin):
     inlines = (
         VolunteerInline,
+        SelectorInline,
         FestivalImagesInline,
         PlayInfoLinkInline,
         AdditionalInfoLinkInline,
@@ -224,7 +232,7 @@ class PlaceAdmin(SortableAdminMixin, admin.ModelAdmin):
         "city",
         "address",
     )
-
+    list_display_links = ("name",)
     list_filter = ("city",)
     search_fields = ("name", "address")
 
@@ -248,9 +256,9 @@ class ArtTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
         "order",
         "person",
-        "team",
         "position",
     )
+    list_display_links = ("person",)
     fieldsets = (
         (
             None,
@@ -286,10 +294,10 @@ class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
         "order",
         "person",
-        "team",
         "position",
         "is_pr_director",
     )
+    list_display_links = ("person",)
     list_filter = ("is_pr_director",)
     fieldsets = (
         (
@@ -344,13 +352,13 @@ class SponsorAdmin(SortableAdminMixin, admin.ModelAdmin):
         "person",
         "position",
     )
+    list_display_links = ("person",)
     autocomplete_fields = ("person",)
 
 
 @admin.register(Selector)
-class SelectorAdmin(SortableAdminMixin, admin.ModelAdmin):
+class SelectorAdmin(admin.ModelAdmin):
     list_display = (
-        "order",
         "person",
         "get_year",
         "position",
