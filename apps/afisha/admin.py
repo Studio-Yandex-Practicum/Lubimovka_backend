@@ -60,7 +60,11 @@ class EventAdmin(admin.ModelAdmin):
         "type",
     )
     autocomplete_fields = ("common_event",)
-    search_fields = ("common_event",)
+    search_fields = (
+        "common_event__reading__name",
+        "common_event__masterclass__name",
+        "common_event__performance__name",
+    )
     empty_value_display = "-пусто-"
 
     def get_queryset(self, request):

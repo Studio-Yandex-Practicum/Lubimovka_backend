@@ -6,4 +6,4 @@ from apps.info.models import Place
 class PlaceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Place
-        exclude = ("created", "modified")
+        exclude = ("created", "modified", "order")

@@ -3,7 +3,7 @@ from django.conf import settings
 from rest_framework.test import APIClient
 
 from apps.afisha.factories import EventFactory
-from apps.core.factories import ImageFactory, PersonFactory
+from apps.core.factories import PersonFactory
 from apps.info.factories import FestivalFactory, InfoLinkFactory
 from apps.library.factories import PerformanceFactory, PlayFactory
 
@@ -21,12 +21,7 @@ def set_media_temp_folder(tmpdir):
 
 
 @pytest.fixture
-def images():
-    return ImageFactory.create_batch(10)
-
-
-@pytest.fixture
-def festivals(images):
+def festivals():
     return FestivalFactory.create_batch(5)
 
 

@@ -45,10 +45,7 @@ class TestFestivalAPIViews:
 
     @pytest.mark.parametrize(
         "field",
-        (
-            "volunteers",
-            "images",
-        ),
+        ("images",),
     )
     def test_get_volunteers_and_images_from_festival(self, client, festival_2020, field):
         """Checks volunteers and images count in festival."""

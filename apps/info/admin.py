@@ -1,4 +1,4 @@
-from adminsortable2.admin import SortableInlineAdminMixin
+from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db.models import Q
@@ -6,10 +6,11 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.filters import HasReviewAdminFilter
+from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
 from apps.info.form import AdditionalLinkForm, FestTeamMemberForm, PlayLinkForm
 from apps.info.models import (
     Festival,
+    FestivalImage,
     FestivalTeamMember,
     InfoLink,
     Partner,
@@ -23,7 +24,7 @@ from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
 @admin.register(Partner)
-class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
+class PartnerAdmin(SortableAdminMixin, AdminImagePreview, admin.ModelAdmin):
     """Class for registration Partner model in admin panel and expanded with JS script.
 
     There are used two classes in fieldsets: `predefined` and `included`.
@@ -35,12 +36,14 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
     """
 
     list_display = (
+        "order",
         "name",
         "type",
         "get_partner_url",
         "image_preview_list_page",
     )
-    list_filter = ("type",)
+    list_display_links = ("name",)
+    list_filter = (PartnerTypeFilter,)
     search_fields = ("name",)
     fieldsets = (
         (
@@ -118,6 +121,14 @@ class VolunteerAdmin(admin.ModelAdmin):
     )
 
     @admin.display(
+        ordering="festival",
+        description="Год фестиваля",
+    )
+    def get_year(self, obj):
+        """Возвращает год фестиваля."""
+        return obj.festival.year
+
+    @admin.display(
         boolean=True,
         ordering="review_title",
         description="Есть отзыв?",
@@ -128,16 +139,8 @@ class VolunteerAdmin(admin.ModelAdmin):
             return True
         return False
 
-    @admin.display(
-        ordering="festival",
-        description="Год фестиваля",
-    )
-    def get_year(self, obj):
-        """Возвращает год фестиваля."""
-        return obj.festival.year
 
-
-class VolunteerInline(admin.TabularInline):
+class VolunteerInline(SortableInlineAdminMixin, admin.TabularInline):
     model = Volunteer
     autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
@@ -148,8 +151,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
-    classes = ["collapsible"]
-    ordering = ("person__last_name", "person__first_name")
+    classes = ("collapsible",)
 
     @admin.display(
         boolean=True,
@@ -162,9 +164,18 @@ class VolunteerInline(admin.TabularInline):
         return False
 
 
+class SelectorInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = Selector
+    autocomplete_fields = ("person",)
+    verbose_name = "Отборщик"
+    verbose_name_plural = "Отборщики"
+    extra = 1
+    classes = ("collapsible",)
+
+
 class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
-    model = Festival.images.through
-    readonly_fields = ("inline_image_preview",)
+    model = FestivalImage
+    readonly_fields = ("image_preview_list_page",)
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1
@@ -198,9 +209,9 @@ class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
 
 @admin.register(Festival)
 class FestivalAdmin(admin.ModelAdmin):
-    list_display = ("year",)
     inlines = (
         VolunteerInline,
+        SelectorInline,
         FestivalImagesInline,
         PlayInfoLinkInline,
         AdditionalInfoLinkInline,
@@ -214,13 +225,14 @@ class FestivalAdmin(admin.ModelAdmin):
 
 
 @admin.register(Place)
-class PlaceAdmin(admin.ModelAdmin):
+class PlaceAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
+        "order",
         "name",
         "city",
         "address",
     )
-
+    list_display_links = ("name",)
     list_filter = ("city",)
     search_fields = ("name", "address")
 
@@ -240,12 +252,13 @@ class PressReleaseAdmin(admin.ModelAdmin):
 
 
 @admin.register(ArtTeamMember)
-class ArtTeamMemberAdmin(admin.ModelAdmin):
+class ArtTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
+        "order",
         "person",
-        "team",
         "position",
     )
+    list_display_links = ("person",)
     fieldsets = (
         (
             None,
@@ -257,7 +270,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-    ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
@@ -277,14 +289,15 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
 
 
 @admin.register(FestTeamMember)
-class FestTeamMemberAdmin(admin.ModelAdmin):
+class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     form = FestTeamMemberForm
     list_display = (
+        "order",
         "person",
-        "team",
         "position",
         "is_pr_director",
     )
+    list_display_links = ("person",)
     list_filter = ("is_pr_director",)
     fieldsets = (
         (
@@ -305,7 +318,6 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-    ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
@@ -334,11 +346,13 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
 
 
 @admin.register(Sponsor)
-class SponsorAdmin(admin.ModelAdmin):
+class SponsorAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
+        "order",
         "person",
         "position",
     )
+    list_display_links = ("person",)
     autocomplete_fields = ("person",)
 
 
@@ -350,6 +364,7 @@ class SelectorAdmin(admin.ModelAdmin):
         "position",
     )
     autocomplete_fields = ("person",)
+    list_filter = ("festival",)
 
     @admin.display(
         ordering="festival",

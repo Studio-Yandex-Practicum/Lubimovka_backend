@@ -36,11 +36,18 @@ class Partner(BaseModel):
         verbose_name="Отображать внизу страницы",
         help_text=("Поставьте галочку, чтобы показать логотип партнёра внизу страницы"),
     )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядок",
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = "Партнер"
         verbose_name_plural = "Партнеры"
-        ordering = ("type",)
+        ordering = ("order",)
 
     def save(self, *args, **kwargs):
         this = Partner.objects.filter(id=self.id).first()
@@ -62,10 +69,18 @@ class Sponsor(BaseModel):
         max_length=150,
         verbose_name="Должность",
     )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядок",
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = "Попечитель фестиваля"
         verbose_name_plural = "Попечители фестиваля"
+        ordering = ("order",)
 
     def __str__(self):
         return f"{self.person.first_name} {self.person.last_name}"
@@ -97,11 +112,18 @@ class Volunteer(BaseModel):
         blank=True,
         verbose_name="Текст отзыва",
     )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядок",
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = "Волонтёр фестиваля"
         verbose_name_plural = "Волонтёры фестиваля"
-        ordering = ("person__last_name", "person__first_name")
+        ordering = ("order",)
         constraints = [
             UniqueConstraint(
                 fields=("person", "festival"),
@@ -142,11 +164,18 @@ class Selector(BaseModel):
         max_length=150,
         verbose_name="Должность",
     )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядок",
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = "Отборщик фестиваля"
         verbose_name_plural = "Отборщики фестиваля"
-        ordering = ("person__last_name", "person__first_name")
+        ordering = ("order",)
         constraints = [
             UniqueConstraint(
                 fields=("person", "festival"),

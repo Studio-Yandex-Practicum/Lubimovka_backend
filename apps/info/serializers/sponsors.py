@@ -9,4 +9,4 @@ class SponsorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sponsor
-        exclude = ("created", "modified")
+        fields = ("id", "person", "position")
