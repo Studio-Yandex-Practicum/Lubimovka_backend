@@ -2,11 +2,12 @@ from datetime import timedelta
 
 from django.db import models
 
+from apps.content_pages.querysets import PublishedContentQuerySet
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
 from apps.core.models import BaseModel, Image, Person
 from apps.library.utilities import get_team_roles
 
-from ...content_pages.utilities import path_by_app_label_and_class_name
 from .play import Play
 
 
@@ -79,6 +80,7 @@ class Performance(BaseModel):
         default=timedelta(minutes=85),
         verbose_name="Продолжительность",
     )
+    objects = PublishedContentQuerySet.as_manager()
 
     class Meta:
         ordering = ("-created",)

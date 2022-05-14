@@ -229,7 +229,6 @@ GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
 # ------------------------------------------------------------------------------
 YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
 
-
 # Logging settings
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/4.0/topics/logging/#configuring-logging

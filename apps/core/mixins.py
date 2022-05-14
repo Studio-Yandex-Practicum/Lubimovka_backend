@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
 from apps.core.constants import STATUS_INFO
-from apps.core.utils import get_object, get_user_change_perms_for_status, get_user_perms_level
+from apps.core.utils import calculate_hash, get_object, get_user_change_perms_for_status, get_user_perms_level
 
 
 class StatusButtonMixin:
@@ -66,6 +66,32 @@ class StatusButtonMixin:
                     self.message_user(request, "Статус успешно обновлён!")
                     return HttpResponseRedirect(".")
         return super().response_change(request, obj)
+
+
+class PreviewButtonMixin:
+    """Mixin to add preview buttons on change page.
+
+    Pass hash and name of url to context.
+    """
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        string_url = {
+            "BlogItem": "blog",
+            "NewsItem": "news",
+            "Project": "projects",
+            "Performance": "library/performances",
+        }
+        link = f"/{string_url[self.model._meta.object_name]}/{object_id}"
+        # add hash for unpublished pages and change button name
+        preview_button_context = {}
+        if self.model.objects.is_published(object_id):
+            preview_button_context["button_name"] = "Просмотр страницы"
+            preview_button_context["link"] = link
+        else:
+            preview_button_context["button_name"] = "Предпросмотр страницы"
+            preview_button_context["link"] = f"{link}?hash={calculate_hash(object_id)}"
+        extra_context.update(preview_button_context)
+        return super().change_view(request, object_id, form_url, extra_context)
 
 
 class InlineReadOnlyMixin:
