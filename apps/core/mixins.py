@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
-from apps.core.constants import STATUS_INFO, Status
+from apps.core.constants import STATUS_INFO
 from apps.core.utils import calculate_hash, get_object, get_user_change_perms_for_status, get_user_perms_level
 
 
@@ -82,10 +82,9 @@ class PreviewButtonMixin:
             "Performance": "library/performances",
         }
         link = f"/{string_url[self.model._meta.object_name]}/{object_id}"
-        obj = get_object(self, object_id)
         # add hash for unpublished pages and change button name
         preview_button_context = {}
-        if obj.status == Status.PUBLISHED:
+        if self.model.objects.is_published(object_id):
             preview_button_context["button_name"] = "Просмотр страницы"
             preview_button_context["link"] = link
         else:

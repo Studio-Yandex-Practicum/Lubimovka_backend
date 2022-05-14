@@ -14,3 +14,7 @@ class PublishedContentQuerySet(models.QuerySet):
         """Return unpublished object."""
         obj = get_object_or_404(self, id=id)
         return obj
+
+    def is_published(self, id):
+        """Return bool of published object."""
+        return self.filter(id=id, status=Status.PUBLISHED).exists()
