@@ -1,5 +1,5 @@
-import concurrent.futures
 import logging
+import threading
 
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
@@ -64,12 +64,6 @@ class ParticipationViewSet(APIView):
         file_link = get_domain(request) + str(instance.file.url)
 
         export = ParticipationExport()
-        with concurrent.futures.ThreadPoolExecutor() as executor:
-            yandex_disk_thread = executor.submit(export.yandex_disk, instance)
-            yandex_disk_link = yandex_disk_thread.result()
-            if yandex_disk_link is not None:
-                file_link = yandex_disk_link
-            executor.submit(export.google_sheets, instance, file_link)
-            executor.submit(export.mail_send, instance, file_link)
-
+        thread_for_services = threading.Thread(target=export.joint_execution, args=(instance, file_link))
+        thread_for_services.start()
         return Response(status=status.HTTP_201_CREATED)

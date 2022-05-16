@@ -1,5 +1,4 @@
 import logging
-import threading
 
 from django.conf import settings
 
@@ -13,43 +12,44 @@ gs = GoogleSpreadsheets()
 
 
 class ParticipationExport:
-    def __init__(self):
-        self._lock = threading.Lock()
-
     def yandex_disk(self, instance):
-        with self._lock:
-            download_link_in_yandex_disk = yandex_disk_export(instance)
-            if download_link_in_yandex_disk:
-                instance.url_file_in_storage = download_link_in_yandex_disk
-                instance.saved_to_storage = True
-                instance.file.delete()
-                instance.save()
-                return download_link_in_yandex_disk
+        download_link_in_yandex_disk = yandex_disk_export(instance)
+        if download_link_in_yandex_disk:
+            instance.url_file_in_storage = download_link_in_yandex_disk
+            instance.saved_to_storage = True
+            instance.file.delete()
+            instance.save()
+            return download_link_in_yandex_disk
 
     def google_sheets(self, instance, file_link):
-        with self._lock:
-            export_to_google_sheets_success = gs.export(instance, file_link)
-            if export_to_google_sheets_success:
-                instance.exported_to_google = True
-                instance.save()
+        export_to_google_sheets_success = gs.export(instance, file_link)
+        if export_to_google_sheets_success:
+            instance.exported_to_google = True
+            instance.save()
 
     def mail_send(self, instance, file_link):
-        with self._lock:
-            from_email = Setting.get_setting("email_send_from")
-            to_emails = (Setting.get_setting("email_to_send_participations"),)
-            template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
-            context = {
-                "year": instance.year,
-                "birth_year": instance.birth_year,
-                "first_name": instance.first_name,
-                "last_name": instance.last_name,
-                "city": instance.city,
-                "phone_number": instance.phone_number.as_international,
-                "email": instance.email,
-                "title": instance.title,
-                "file_link": file_link,
-            }
-            send_email_success = send_email(from_email, to_emails, template_id, context)
-            if send_email_success:
-                instance.sent_to_email = True
-                instance.save()
+        from_email = Setting.get_setting("email_send_from")
+        to_emails = (Setting.get_setting("email_to_send_participations"),)
+        template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
+        context = {
+            "year": instance.year,
+            "birth_year": instance.birth_year,
+            "first_name": instance.first_name,
+            "last_name": instance.last_name,
+            "city": instance.city,
+            "phone_number": instance.phone_number.as_international,
+            "email": instance.email,
+            "title": instance.title,
+            "file_link": file_link,
+        }
+        send_email_success = send_email(from_email, to_emails, template_id, context)
+        if send_email_success:
+            instance.sent_to_email = True
+            instance.save()
+
+    def joint_execution(self, instance, file_link):
+        yandex_disk_link = self.yandex_disk(instance)
+        if yandex_disk_link is not None:
+            file_link = yandex_disk_link
+        self.google_sheets(instance, file_link)
+        self.mail_send(instance, file_link)
