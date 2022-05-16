@@ -1,3 +1,4 @@
+import concurrent.futures
 import logging
 
 from django.utils import timezone
@@ -63,10 +64,12 @@ class ParticipationViewSet(APIView):
         file_link = get_domain(request) + str(instance.file.url)
 
         export = ParticipationExport()
-        yandex_disk_link = export.yandex_disk(instance)
-        if yandex_disk_link is not None:
-            file_link = yandex_disk_link
-        export.google_sheets(instance, file_link)
-        export.mail_send(instance, file_link)
+        with concurrent.futures.ThreadPoolExecutor() as executor:
+            yandex_disk_thread = executor.submit(export.yandex_disk, instance)
+            yandex_disk_link = yandex_disk_thread.result()
+            if yandex_disk_link is not None:
+                file_link = yandex_disk_link
+            executor.submit(export.google_sheets, instance, file_link)
+            executor.submit(export.mail_send, instance, file_link)
 
         return Response(status=status.HTTP_201_CREATED)
