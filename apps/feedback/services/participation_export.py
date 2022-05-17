@@ -4,16 +4,14 @@ from django.conf import settings
 
 from apps.core.models import Setting
 from apps.core.services.send_email import send_email
-from apps.feedback.services.spreadsheets import GoogleSpreadsheets
-from apps.feedback.services.yandex_disk_export import yandex_disk_export
+from apps.feedback import services
 
 logger = logging.getLogger("django")
-gs = GoogleSpreadsheets()
 
 
 class ParticipationExport:
     def yandex_disk_export(self, instance):
-        download_link_in_yandex_disk = yandex_disk_export(instance)
+        download_link_in_yandex_disk = services.yandex_disk_export(instance)
         if download_link_in_yandex_disk:
             instance.url_file_in_storage = download_link_in_yandex_disk
             instance.saved_to_storage = True
@@ -22,6 +20,7 @@ class ParticipationExport:
             return download_link_in_yandex_disk
 
     def google_sheets_export(self, instance, file_link):
+        gs = services.GoogleSpreadsheets()
         export_to_google_sheets_success = gs.export(instance, file_link)
         if export_to_google_sheets_success:
             instance.exported_to_google = True
