@@ -64,6 +64,6 @@ class ParticipationViewSet(APIView):
         file_link = get_domain(request) + str(instance.file.url)
 
         export = ParticipationExport()
-        thread_for_services = threading.Thread(target=export.joint_execution, args=(instance, file_link))
+        thread_for_services = threading.Thread(target=export.export_main, args=(instance, file_link))
         thread_for_services.start()
         return Response(status=status.HTTP_201_CREATED)
