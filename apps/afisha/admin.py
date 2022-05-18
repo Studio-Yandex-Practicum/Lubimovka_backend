@@ -18,6 +18,11 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
         "performance__name",
     )
 
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        print(request.GET.get("ac_field_name"))
+        return queryset, use_distinct
+
 
 class EventAdmin(admin.ModelAdmin):
     list_display = (
