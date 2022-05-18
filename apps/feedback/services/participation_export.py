@@ -9,7 +9,7 @@ from apps.feedback import services
 logger = logging.getLogger("django")
 
 
-class ParticipationExport:
+class ParticipationApplicationExport:
     def yandex_disk_export(self, instance):
         download_link_in_yandex_disk = services.yandex_disk_export(instance)
         if download_link_in_yandex_disk:
@@ -46,7 +46,7 @@ class ParticipationExport:
             instance.sent_to_email = True
             instance.save()
 
-    def export_main(self, instance, file_link):
+    def export_application(self, instance, file_link):
         """Функция объндиняющая экспорт в диск, таблицу и отправку на почту."""
         yandex_disk_link = self.yandex_disk_export(instance)
         if yandex_disk_link is not None:
