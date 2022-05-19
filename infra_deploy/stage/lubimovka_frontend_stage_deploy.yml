@@ -9,7 +9,7 @@ services:
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
-      - SUBDOMAINS=${DEV_SUBDOMAIN}
+      - SUBDOMAINS=${SUBDOMAIN}
       - ONLY_SUBDOMAINS=true
     env_file:
       - .env-stage
