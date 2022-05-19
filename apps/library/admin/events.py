@@ -1,11 +1,12 @@
 from django.contrib import admin
 
-from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
 from apps.core.models import Role
 from apps.core.utils import get_user_change_perms_for_status
 from apps.library.models import (
     MasterClass,
     Performance,
+    PerformanceImage,
     PerformanceMediaReview,
     PerformanceReview,
     Play,
@@ -15,13 +16,14 @@ from apps.library.models import (
 
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
-    model = Performance.images_in_block.through
+    model = PerformanceImage
     verbose_name = "Изображение в блоке изображений"
     verbose_name_plural = "Изображения в блоке изображений"
     extra = 0
     max_num = 8
     classes = ("collapsible",)
     model.__str__ = lambda self: ""
+    readonly_fields = ("image_preview_list_page",)
 
 
 class PerformanceMediaReviewInline(InlineReadOnlyMixin, admin.TabularInline):
@@ -78,7 +80,7 @@ class MasterClassAdmin(admin.ModelAdmin):
 
 
 @admin.register(Performance)
-class PerformanceAdmin(StatusButtonMixin, admin.ModelAdmin):
+class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, admin.ModelAdmin):
     list_display = (
         "name",
         "description",

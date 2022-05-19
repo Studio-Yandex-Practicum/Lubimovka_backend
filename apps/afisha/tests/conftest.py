@@ -6,9 +6,9 @@ from django.conf import settings
 from rest_framework.test import APIClient
 
 from apps.afisha.factories import EventFactory
-from apps.core.factories import ImageFactory, PersonFactory
+from apps.core.factories import PersonFactory
 from apps.core.models import Setting
-from apps.info.factories import FestivalFactory
+from apps.info.factories import FestivalFactory, InfoLinkFactory
 from apps.library.factories import (
     MasterClassFactory,
     PerformanceFactory,
@@ -41,18 +41,18 @@ def is_not_festival_afisha():
 
 
 @pytest.fixture
-def images():
-    return ImageFactory.create_batch(10)
-
-
-@pytest.fixture
 def program_types():
     return ProgramTypeFactory.create_batch(5)
 
 
 @pytest.fixture
-def festivals(images):
+def festivals():
     return FestivalFactory.create_batch(5)
+
+
+@pytest.fixture
+def links(festivals):
+    return InfoLinkFactory.create_batch(10)
 
 
 @pytest.fixture

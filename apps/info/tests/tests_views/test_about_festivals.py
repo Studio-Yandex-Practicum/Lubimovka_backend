@@ -1,90 +1,24 @@
-from datetime import datetime
-
 import pytest
 from django.urls import reverse
 
 from apps.info.models import FestivalTeamMember
-from apps.info.tests.conftest import (
-    FESTIVAL_URL_NAME,
-    FESTIVAL_YEARS_URL,
-    PARTNERS_URL,
-    SPONSORS_URL,
-    TEAMS_URL,
-    TEAMS_URL_FILTER,
-    VOLUNTEERS_URL,
-)
 
 pytestmark = pytest.mark.django_db
 
-ABOUT_FESTIVAL_URLS_AND_FIXTURES = [
+
+TEAMS_URL = reverse("festival-teams")
+TEAMS_URL_FILTER = TEAMS_URL + "?team="
+SPONSORS_URL = reverse("sponsors")
+VOLUNTEERS_URL = reverse("volunteers")
+SELECTORS_URL = reverse("selectors")
+
+
+ABOUT_FESTIVAL_URLS_AND_FIXTURES = (
     (TEAMS_URL, pytest.lazy_fixture("festival_team")),
     (SPONSORS_URL, pytest.lazy_fixture("sponsor")),
     (VOLUNTEERS_URL, pytest.lazy_fixture("volunteer")),
-]
-
-
-class TestFestivalAPIViews:
-    def test_get_festival_fields(self, client, festival):
-        """Checks festival field in response."""
-        url = reverse(FESTIVAL_URL_NAME, kwargs={"year": festival.year})
-        response = client.get(url)
-        data = response.json()
-        for field in (
-            "description",
-            "year",
-            "plays_count",
-            "selected_plays_count",
-            "selectors_count",
-            "volunteers_count",
-            "events_count",
-            "cities_count",
-            "blog_entries",
-            "video_link",
-        ):
-            festival_field_in_response = data.get(field)
-            festival_field_in_db = getattr(festival, field)
-            assert (
-                festival_field_in_response == festival_field_in_db
-            ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
-        for field in (
-            "start_date",
-            "end_date",
-        ):
-            date = data.get(field)
-            festival_field_in_response = datetime.strptime(date, "%Y-%m-%d").date()
-            festival_field_in_db = getattr(festival, field)
-            assert (
-                festival_field_in_response == festival_field_in_db
-            ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
-
-    @pytest.mark.parametrize(
-        "field",
-        (
-            "volunteers",
-            "images",
-        ),
-    )
-    def test_get_volunteers_and_images_from_festival(self, client, festival, field):
-        """Checks volunteers and images count in festival."""
-        url = reverse(FESTIVAL_URL_NAME, kwargs={"year": festival.year})
-        response = client.get(url)
-        data = response.json()
-        objects_count_in_response = len(data.get(field))
-        objects_count_in_db = getattr(festival, field).all().count()
-        assert (
-            objects_count_in_response == objects_count_in_db
-        ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
-
-    def test_get_festival_years(self, client, festival):
-        """Check getting festival years."""
-        url = FESTIVAL_YEARS_URL
-        response = client.get(url)
-        data = response.json()
-        year_in_db = getattr(festival, "year")
-        years_in_response = data.get("years")
-        assert (
-            year_in_db in years_in_response
-        ), f"Проверьте, что при GET запросе {url} возвращается список годов фестивалей"
+    (SELECTORS_URL, pytest.lazy_fixture("selector")),
+)
 
 
 class TestAboutFestivalAPIViews:
@@ -94,6 +28,7 @@ class TestAboutFestivalAPIViews:
             (TEAMS_URL, pytest.lazy_fixture("festival_teams")),
             (SPONSORS_URL, pytest.lazy_fixture("sponsors")),
             (VOLUNTEERS_URL, pytest.lazy_fixture("volunteers")),
+            (SELECTORS_URL, pytest.lazy_fixture("selectors")),
         ],
     )
     def test_objects_count_in_response_matches_count_in_db(self, client, url, objects):
@@ -164,6 +99,18 @@ class TestAboutFestivalAPIViews:
                 volunteer_field_in_response == volunteer_field_in_db
             ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
 
+    def test_get_selector_fields(self, client, selector):
+        """Checks selector field in response."""
+        url = SELECTORS_URL
+        response = client.get(url)
+        data = response.json()
+        for field in ("id", "position"):
+            selector_field_in_response = data[0].get(field)
+            selector_field_in_db = getattr(selector, field)
+            assert (
+                selector_field_in_response == selector_field_in_db
+            ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
+
     @pytest.mark.parametrize("url, object", ABOUT_FESTIVAL_URLS_AND_FIXTURES)
     def test_get_fields_for_person(self, client, url, object):
         """Checks fields for person field for team, sponsor, volunteer."""
@@ -190,41 +137,6 @@ class TestAboutFestivalAPIViews:
         data = response.json()
         image_url_in_response = data[0].get("person").get("image")
         image_url_in_db = object.person.image.url
-        assert image_url_in_response.endswith(
-            image_url_in_db
-        ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение 'image' неправильное"
-
-
-class TestPartnersAPIViews:
-    def test_partners_count_in_response_matches_count_in_db(self, client, partners):
-        """Checks that count partners in response matches count in db."""
-        url = PARTNERS_URL
-        response = client.get(url)
-        objects_count_in_response = len(response.json())
-        objects_count_in_db = len(partners)
-        assert (
-            objects_count_in_db == objects_count_in_response
-        ), f"Проверьте, что при GET запросе {url} возвращаются все объекты"
-
-    def test_get_partners_fields(self, client, partner):
-        """Checks partners field in response."""
-        url = PARTNERS_URL
-        response = client.get(url)
-        data = response.json()
-        for field in ("id", "name", "type", "url"):
-            team_field_in_response = data[0].get(field)
-            team_field_in_db = getattr(partner, field)
-            assert (
-                team_field_in_response == team_field_in_db
-            ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
-
-    def test_get_image_for_person(self, client, partner):
-        """Checks partners image field in response."""
-        url = PARTNERS_URL
-        response = client.get(url)
-        data = response.json()
-        image_url_in_response = data[0].get("image")
-        image_url_in_db = partner.image.url
         assert image_url_in_response.endswith(
             image_url_in_db
         ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение 'image' неправильное"

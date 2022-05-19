@@ -34,7 +34,7 @@ def test_blog_item_delete_related_content_module(blog_item_content_module, plays
 
 def test_blog_item_queryset_published(blog_item_published, blog_item_not_published):
     """Check published queryset retrun only `BlogItem` with status `PUBLISHED`."""
-    qs = BlogItem.ext_objects.published()
+    qs = BlogItem.objects.published()
 
     is_not_published_in_qs = qs.filter(id=blog_item_not_published.id).exists()
     assert (

@@ -1,5 +1,7 @@
+import hashlib
 import logging
 import urllib
+from datetime import date
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -120,3 +122,11 @@ def get_domain(request):
     server_protocol = request.META["SERVER_PROTOCOL"].split("/1.1")[0].lower()
     domain = server_protocol + "://" + request.META["HTTP_HOST"]
     return domain
+
+
+def calculate_hash(object_id):
+    """Generate a hash for unpublished pages based on object_id and SECRET_KEY."""
+    hash_string = settings.SECRET_KEY + str(object_id) + str(date.today())
+    hash_object = hashlib.sha1(hash_string.encode())
+    hexadecimal_digits = hash_object.hexdigest()
+    return hexadecimal_digits[0:5]

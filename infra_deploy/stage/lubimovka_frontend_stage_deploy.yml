@@ -2,16 +2,15 @@ version: '3.8'
 
 services:
   swag:
-    image: linuxserver/swag:1.22.0
+    image: linuxserver/swag:1.26.0
     container_name: swag_stage
     cap_add:
       - NET_ADMIN
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
-      - SUBDOMAINS=${DEV_SUBDOMAIN}
+      - SUBDOMAINS=${SUBDOMAIN}
       - ONLY_SUBDOMAINS=true
-      - CERTPROVIDER=zerossl
     env_file:
       - .env-stage
     networks:
@@ -19,8 +18,9 @@ services:
     volumes:
       - ./swag/swag_nginx_stage.conf:/config/nginx/site-confs/default
       - swag_volume_stage:/config
+      - ./logs/swag_logs/:/config/log/
       - static_value_stage:/config/stage/static/
-      - media_value_stage:/config/stage/media/
+      - ./media:/config/stage/media/
     ports:
       - 443:443
       - 80:80
@@ -30,11 +30,9 @@ services:
     container_name: frontend_stage
     environment:
       BASE_URL: ${FRONT_BASE_URL}
-      API_BASE_URL: ${DEVELOP_API_BASE_URL}
+      API_BASE_URL: ${API_BASE_URL}
     networks:
       - stage_swag_network
-    ports:
-      - "3005:3000"
     restart: always
     depends_on:
       - swag
@@ -47,7 +45,5 @@ networks:
 volumes:
   static_value_stage:
     name: static_value_stage
-  media_value_stage:
-    name: media_value_stage
   swag_volume_stage:
     name: swag_volume_stage

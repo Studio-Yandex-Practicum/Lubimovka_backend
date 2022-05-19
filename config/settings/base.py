@@ -229,7 +229,6 @@ GOOGLE_PRIVATE_KEY_ID = env("GOOGLE_PRIVATE_KEY_ID", default="private_key_id")
 # ------------------------------------------------------------------------------
 YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
 
-
 # Logging settings
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/4.0/topics/logging/#configuring-logging
@@ -253,7 +252,7 @@ ADMIN_SITE_APPS_ORDER = (
     "Общие ресурсы приложений",
     "Настройки приложения",
     "Пользователи",
-    "Обратная информация",
+    "Обратная связь",
 )
 
 ADMIN_SITE_MODELS_ORDER = {

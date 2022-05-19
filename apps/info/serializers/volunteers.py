@@ -11,12 +11,3 @@ class VolunteersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Volunteer
         fields = ("id", "person", "year", "review_title", "review_text")
-
-
-class VolunteerInFestivalSerializer(serializers.ModelSerializer):
-    person = serializers.IntegerField(source="person.id")
-    year = serializers.IntegerField(source="festival.year")
-
-    class Meta:
-        model = Volunteer
-        fields = ("id", "year", "review_title", "review_text", "person")

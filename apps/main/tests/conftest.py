@@ -5,8 +5,8 @@ from django.urls import reverse
 from apps.afisha.factories import EventFactory
 from apps.articles.factories import BlogItemFactory, NewsItemFactory
 from apps.content_pages.factories import ImagesBlockFactory
-from apps.core.factories import ImageFactory, PersonFactory
-from apps.info.factories import FestivalFactory, PlaceFactory
+from apps.core.factories import PersonFactory
+from apps.info.factories import FestivalFactory, InfoLinkFactory, PlaceFactory
 from apps.library.factories import MasterClassFactory, PerformanceFactory, PlayFactory, ReadingFactory
 from apps.library.models.play import ProgramType
 from apps.main.factories import BannerFactory
@@ -20,13 +20,13 @@ def set_media_temp_folder(tmpdir):
 
 
 @pytest.fixture
-def images():
-    return ImageFactory.create_batch(10)
+def festival():
+    return FestivalFactory(start_date="2021-07-14", end_date="2021-07-15", year="2021")
 
 
 @pytest.fixture
-def festival(images):
-    return FestivalFactory(start_date="2021-07-14", end_date="2021-07-15", year="2021")
+def links(festival):
+    return InfoLinkFactory.create_batch(10)
 
 
 @pytest.fixture

@@ -2,11 +2,12 @@ from datetime import timedelta
 
 from django.db import models
 
+from apps.content_pages.querysets import PublishedContentQuerySet
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
 from apps.core.models import BaseModel, Image, Person
 from apps.library.utilities import get_team_roles
 
-from ...content_pages.utilities import path_by_app_label_and_class_name
 from .play import Play
 
 
@@ -40,11 +41,6 @@ class Performance(BaseModel):
     bottom_image = models.ImageField(
         upload_to=path_by_app_label_and_class_name,
         verbose_name="Изображение внизу страницы",
-    )
-    images_in_block = models.ManyToManyField(
-        Image,
-        blank=True,
-        verbose_name="Фотографии спектакля в блоке фотографий",
     )
     video = models.URLField(
         max_length=200,
@@ -84,6 +80,7 @@ class Performance(BaseModel):
         default=timedelta(minutes=85),
         verbose_name="Продолжительность",
     )
+    objects = PublishedContentQuerySet.as_manager()
 
     class Meta:
         ordering = ("-created",)
@@ -109,6 +106,15 @@ class Performance(BaseModel):
     def event_team(self):
         """Return directors and dramatists related with Performance."""
         return get_team_roles(self, {"team_members__performance": self, "slug__in": ["director", "dramatist"]})
+
+
+class PerformanceImage(Image):
+    performance = models.ForeignKey(
+        Performance,
+        on_delete=models.CASCADE,
+        related_name="images_in_block",
+        verbose_name="Изображения спектакля",
+    )
 
 
 class PerformanceMediaReview(BaseModel):

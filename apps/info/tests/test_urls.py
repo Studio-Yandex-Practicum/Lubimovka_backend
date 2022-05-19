@@ -1,43 +1,29 @@
 import pytest
-from django.urls import reverse
-
-from apps.info.tests.conftest import (
-    FESTIVAL_URL_NAME,
-    FESTIVAL_YEARS_URL,
-    PARTNERS_URL,
-    SPONSORS_URL,
-    TEAMS_URL,
-    VOLUNTEERS_URL,
-)
+from rest_framework import status
 
 pytestmark = pytest.mark.django_db
 
 
-class TestFestivalAPIUrls:
-    def test_festival_urls(self, client, festival):
-        """Checks status code for festival url."""
-        urls = (
-            FESTIVAL_YEARS_URL,
-            reverse(FESTIVAL_URL_NAME, kwargs={"year": festival.year}),
-        )
-        for url in urls:
-            response = client.get(url)
-            assert response.status_code == 200, f"Проверьте, что при GET запросе {url} возвращается статус 200"
+@pytest.mark.parametrize(
+    "url",
+    (
+        "/api/v1/info/press-releases/years/",
+        "/api/v1/info/partners/",
+        "/api/v1/info/settings/",
+        "/api/v1/info/festivals/years/",
+        "/api/v1/info/about-festival/selectors/",
+        "/api/v1/info/about-festival/sponsors/",
+        "/api/v1/info/about-festival/team/",
+        "/api/v1/info/about-festival/volunteers/",
+    ),
+)
+def test_info_url_smoke(client, url):
+    """Smoke test. Status code check only."""
+    response = client.get(url)
+    assert response.status_code == status.HTTP_200_OK
 
 
-class TestAboutFestivalAPIUrls:
-    """Checks status code for about festival urls."""
-
-    @pytest.mark.parametrize("url", (TEAMS_URL, SPONSORS_URL, VOLUNTEERS_URL))
-    def test_about_festival_urls(self, client, url):
-        response = client.get(url)
-        assert response.status_code == 200, f"Проверьте, что при GET запросе {url} возвращается статус 200"
-
-
-class TestPartnersAPIUrls:
-    """Checks status code for partners url."""
-
-    def test_partners_urls(self, client):
-        url = PARTNERS_URL
-        response = client.get(url)
-        assert response.status_code == 200, f"Проверьте, что при GET запросе {url} возвращается статус 200"
+def test_info_url_festival_detail_smoke(client, festival_2020):
+    """Smoke test for exact festival."""
+    response = client.get("/api/v1/info/festivals/2020/")
+    assert response.status_code == status.HTTP_200_OK

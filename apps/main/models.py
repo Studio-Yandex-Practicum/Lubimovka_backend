@@ -33,10 +33,18 @@ class Banner(BaseModel):
         max_length=40,
         verbose_name="Выбор типа кнопки",
     )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядок",
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = "Банер для главной странице"
         verbose_name_plural = "Банеры для главной странице"
+        ordering = ("order",)
 
     def __str__(self):
         return f"{self.title}"
