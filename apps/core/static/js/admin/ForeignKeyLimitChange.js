@@ -4,14 +4,15 @@
 // //  - Exact `$` variable is basic jQuery object
 
 function hideAddButton(objectId) {
-    const addButtonId = "#add_" + objectId;
+    const addButtonId = `#add_${objectId}`;
     const addButton = $(addButtonId);
     addButton.attr("hidden", true);
 }
 
 function getSelect2Element(elementId) {
     // Return select2 <span>
-    const lable = '[aria-labelledby="select2-' + elementId + '-container"]';
+    const lable = `[aria-labelledby="select2-${elementId}-container"]`;
+    console.log(lable)
     return $(lable).eq(0)
 }
 
@@ -30,7 +31,7 @@ function addButtonAction ($link, $editButton, $fieldObject, $additionalField) {
 }
 
 function createLink(elementId) {
-    const linkId = "unlock_" + elementId;
+    const linkId = `unlock_${elementId}`;
     const imageSrc = "/static/unlock-fill.svg";
     const title = "Разблокировать редактирование";
     const linkClass = "related-widget-wrapper-link change-related";
@@ -65,7 +66,7 @@ function disableAndAddUnlockButton($defaultSelectField, url) {
             $additionalField.addClass("disabled-field");
         }
 
-        let $editButton = $('#change_' + fieldId);
+        let $editButton = $(`#change_${fieldId}`);
         $editButton.addClass("disabled-button");
         unlockChangeButton(fieldId, $editButton, $select, $additionalField);
     }
