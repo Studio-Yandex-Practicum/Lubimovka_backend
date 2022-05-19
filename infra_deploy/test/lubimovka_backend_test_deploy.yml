@@ -19,7 +19,7 @@ services:
     restart: always
     volumes:
       - static_value_test:/code/staticfiles/
-      - media_value_test:/code/media/
+      - ./media:/code/media/
       - ./logs/backend_logs/:/code/logs/
     depends_on:
       - postgres
@@ -33,7 +33,7 @@ services:
     container_name: migrations_test
     volumes:
       - static_value_test:/code/staticfiles/
-      - media_value_test:/code/media/
+      - ./media:/code/media/
       - ./logs/backend_logs/:/code/logs/
     command: >
       sh -c "sleep 5; python manage.py migrate &&
@@ -62,5 +62,3 @@ volumes:
     name: postgres_data_test
   static_value_test:
     name: static_value_test
-  media_value_test:
-    name: media_value_test

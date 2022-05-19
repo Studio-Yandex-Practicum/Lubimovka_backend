@@ -19,7 +19,7 @@ services:
     restart: always
     volumes:
       - static_value_stage:/code/staticfiles/
-      - media_value_stage:/code/media/
+      - ./media:/code/media/
       - ./logs/backend_logs/:/code/logs/
     depends_on:
       - postgres
@@ -33,7 +33,7 @@ services:
     container_name: migrations_stage
     volumes:
       - static_value_stage:/code/staticfiles/
-      - media_value_stage:/code/media/
+      - ./media:/code/media/
       - ./logs/backend_logs/:/code/logs/
     command: >
       sh -c "
@@ -62,5 +62,3 @@ volumes:
     name: postgres_data_stage
   static_value_stage:
     name: static_value_stage
-  media_value_stage:
-    name: media_value_stage

@@ -19,7 +19,7 @@ services:
       - swag_volume_prod:/config
       - ./logs/swag_logs/:/config/log/
       - static_value_prod:/config/prod/static/
-      - media_value_prod:/config/prod/media/
+      - ./media:/config/prod/media/
     ports:
       - 443:443
       - 80:80
@@ -44,7 +44,5 @@ networks:
 volumes:
   static_value_prod:
     name: static_value_prod
-  media_value_prod:
-    name: media_value_prod
   swag_volume_prod:
     name: swag_volume_prod

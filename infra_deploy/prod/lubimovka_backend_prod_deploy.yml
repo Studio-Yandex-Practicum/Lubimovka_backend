@@ -17,7 +17,7 @@ services:
     restart: always
     volumes:
       - static_value_prod:/code/staticfiles/
-      - media_value_prod:/code/media/
+      - ./media:/code/media/
       - ./logs/backend_logs/:/code/logs/
     depends_on:
       - postgres
@@ -31,7 +31,7 @@ services:
     container_name: migrations_prod
     volumes:
       - static_value_prod:/code/staticfiles/
-      - media_value_prod:/code/media/
+      - ./media:/code/media/
       - ./logs/backend_logs/:/code/logs/
     command: >
       sh -c "
@@ -60,5 +60,3 @@ volumes:
     name: postgres_data_prod
   static_value_prod:
     name: static_value_prod
-  media_value_prod:
-    name: media_value_prod

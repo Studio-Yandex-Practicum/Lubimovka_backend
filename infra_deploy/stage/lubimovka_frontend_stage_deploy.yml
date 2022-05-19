@@ -20,7 +20,7 @@ services:
       - swag_volume_stage:/config
       - ./logs/swag_logs/:/config/log/
       - static_value_stage:/config/stage/static/
-      - media_value_stage:/config/stage/media/
+      - ./media:/config/stage/media/
     ports:
       - 443:443
       - 80:80
@@ -45,7 +45,5 @@ networks:
 volumes:
   static_value_stage:
     name: static_value_stage
-  media_value_stage:
-    name: media_value_stage
   swag_volume_stage:
     name: swag_volume_stage

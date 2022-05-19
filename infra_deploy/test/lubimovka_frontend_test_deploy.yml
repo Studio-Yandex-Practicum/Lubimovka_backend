@@ -20,7 +20,7 @@ services:
       - swag_volume_test:/config
       - ./logs/swag_logs/:/config/log/
       - static_value_test:/config/test/static/
-      - media_value_test:/config/test/media/
+      - ./media:/config/test/media/
     ports:
       - 443:443
       - 80:80
@@ -45,7 +45,5 @@ networks:
 volumes:
   static_value_test:
     name: static_value_test
-  media_value_test:
-    name: media_value_test
   swag_volume_test:
     name: swag_volume_test
