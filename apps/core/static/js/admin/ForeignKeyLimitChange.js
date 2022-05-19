@@ -6,21 +6,13 @@
 function hideAddButton(objectId) {
     const addButtonId = "#add_" + objectId;
     const addButton = $(addButtonId);
-    addButton.addClass("hiden");
+    addButton.attr("hidden", true);
 }
 
 function getSelect2Element(elementId) {
     // Return select2 <span>
     const lable = '[aria-labelledby="select2-' + elementId + '-container"]';
     return $(lable).eq(0)
-}
-
-function disableField($field) {
-    $field.addClass("disabled-field");
-}
-
-function disableButton($button) {
-    $button.addClass("disabled-button");
 }
 
 function addButtonAction ($link, $editButton, $fieldObject, $additionalField) {
@@ -40,9 +32,9 @@ function addButtonAction ($link, $editButton, $fieldObject, $additionalField) {
 function createLink(elementId) {
     const linkId = "unlock_" + elementId;
     const imageSrc = "/static/unlock-fill.svg";
-    const imageAlt = "Разблокировать редактирование";
+    const title = "Разблокировать редактирование";
     const linkClass = "related-widget-wrapper-link change-related";
-    let $image = $("<img>", { src: imageSrc, alt: imageAlt, height: "20px" });
+    let $image = $("<img>", { src: imageSrc, title: title, height: "20px" });
     let $link = $("<a>", { id: linkId, href: "#", class: linkClass });
 
     return $image.wrap($link).parent();
@@ -65,16 +57,16 @@ function disableAndAddUnlockButton($defaultSelectField, url) {
         // If $select2Element is empty use default <select> tag - $defaultSelectField
         let $select = $select2Element.length ? $select2Element : $defaultSelectField;
         hideAddButton($defaultSelectField.attr("id"));
-        disableField($select);
+        $select.addClass("disabled-field");
 
         let $additionalField = null;
         if (url.includes("event")) {
             $additionalField = $("#id_type");
-            disableField($additionalField);
+            $additionalField.addClass("disabled-field");
         }
 
         let $editButton = $('#change_' + fieldId);
-        disableButton($editButton);
+        $editButton.addClass("disabled-button");
         unlockChangeButton(fieldId, $editButton, $select, $additionalField);
     }
 }
@@ -86,7 +78,7 @@ function limitChangeForDropdowns() {
     const excludePages = ["add", "users"];
 
     $deleteButtons.each(function () {
-        $( this ).addClass("hiden");
+        $( this ).attr("hidden", true);
     })
 
     // For users app pages and pages for creation new record limits are disabled
