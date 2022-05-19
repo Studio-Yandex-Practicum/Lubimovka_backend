@@ -15,7 +15,8 @@ from apps.articles.serializers import NewsItemDetailedSerializer, NewsItemListSe
 class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
     """Returns published News items."""
 
-    queryset = NewsItem.ext_objects.published()
+    queryset = NewsItem.objects.published()
+
     filter_backends = (
         filters.DjangoFilterBackend,
         rest_filters.OrderingFilter,
@@ -33,6 +34,17 @@ class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
 
     class Meta:
         model = NewsItem
+
+
+class NewsItemsPreviewDetailAPI(APIView):
+    """Returns preview page `NewsItems`."""
+
+    def get(self, request, id):
+        hash_sum = request.GET.get("hash", None)
+        news_item_detail = selectors.preview_item_detail_get(NewsItem, id, hash_sum)
+        context = {"request": request}
+        serializer = NewsItemDetailedSerializer(news_item_detail, context=context)
+        return Response(serializer.data)
 
 
 class NewsItemYearsMonthsAPI(APIView):

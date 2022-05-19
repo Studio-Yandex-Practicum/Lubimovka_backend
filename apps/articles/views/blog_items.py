@@ -7,8 +7,9 @@ from rest_framework.views import APIView
 
 from apps.articles import selectors
 from apps.articles.models import BlogItem
-from apps.articles.serializers import BlogItemListSerializer, BlogItemRoleSerializer, YearMonthSerializer
-from apps.content_pages.serializers import BaseContentPageSerializer
+from apps.articles.selectors import preview_item_detail_get
+from apps.articles.serializers import BlogItemListSerializer, YearMonthSerializer
+from apps.articles.serializers.blog_items import BlogItemDetailOutputSerializer
 from apps.core.utils import get_paginated_response
 
 
@@ -53,33 +54,25 @@ class BlogItemListAPI(APIView):
 
 
 class BlogItemDetailAPI(APIView):
-    """Return datailed `BlogItem` object."""
-
-    class BlogItemDetailOutputSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
-        other_blogs = BlogItemListSerializer(many=True, source="_other_blogs")
-        team = BlogItemRoleSerializer(many=True, source="_team")
-        pub_date = serializers.DateTimeField(required=True)
-
-        class Meta:
-            model = BlogItem
-            fields = (
-                "id",
-                "title",
-                "description",
-                "image",
-                "author_url",
-                "author_url_title",
-                "pub_date",
-                "contents",
-                "team",
-                "other_blogs",
-            )
+    """Return detailed `BlogItem` object."""
 
     @extend_schema(responses=BlogItemDetailOutputSerializer)
     def get(self, request, id):
         blog_item_detail = selectors.blog_item_detail_get(blog_item_id=id)
         context = {"request": request}
-        serializer = self.BlogItemDetailOutputSerializer(blog_item_detail, context=context)
+        serializer = BlogItemDetailOutputSerializer(blog_item_detail, context=context)
+        return Response(serializer.data)
+
+
+class BlogItemPreviewDetailAPI(APIView):
+    """Return detailed preview `BlogItem` object."""
+
+    def get(self, request, id):
+        hash_sum = request.GET.get("hash", None)
+        item_detail = preview_item_detail_get(BlogItem, id, hash_sum)
+        blog_item_detail = selectors.blog_item_detail_get(id, item_detail)
+        context = {"request": request}
+        serializer = BlogItemDetailOutputSerializer(blog_item_detail, context=context)
         return Response(serializer.data)
 
 

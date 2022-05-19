@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
-from apps.core.mixins import InlineReadOnlyMixin, StatusButtonMixin
+from apps.core.mixins import InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
 
 
 class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
@@ -10,7 +10,7 @@ class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
 
 
 @admin.register(Project)
-class ProjectAdmin(StatusButtonMixin, BaseContentPageAdmin):
+class ProjectAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
     list_display = (
         "title",
         "description",

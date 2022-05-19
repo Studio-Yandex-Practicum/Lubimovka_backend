@@ -29,7 +29,7 @@ class MainObject:
         main_add_blog = Setting.get_setting("main_add_blog")
         if main_add_blog:
             title = Setting.get_setting("main_blog_title")
-            items = BlogItem.ext_objects.published()[:6]
+            items = BlogItem.objects.published()[:6]
             self.blog = {
                 "title": title,
                 "items": items,
@@ -39,7 +39,7 @@ class MainObject:
         main_add_news = Setting.get_setting("main_add_news")
         if main_add_news:
             title = Setting.get_setting("main_news_title")
-            items = NewsItem.ext_objects.published()[:6]
+            items = NewsItem.objects.published()[:6]
             self.news = {
                 "title": title,
                 "items": items,
