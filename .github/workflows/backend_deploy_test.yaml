@@ -121,8 +121,7 @@ jobs:
             echo "IMAGE_FRONT_TAG=${{ secrets.IMAGE_FRONT_TAG }}" >> .github_vars
             echo "FRONT_BASE_URL=${{ secrets.FRONT_BASE_URL }}" >> .github_vars
             echo "API_BASE_URL=${{ secrets.API_BASE_URL }}" >> .github_vars
-            echo "DEV_SUBDOMAIN=${{ secrets.DEV_SUBDOMAIN }}" >> .github_vars
-            echo "TEST_SUBDOMAIN=${{ secrets.TEST_SUBDOMAIN }}" >> .github_vars
+            echo "SUBDOMAIN=${{ secrets.SUBDOMAIN }}" >> .github_vars
 
             # PostgreSQL environment variables
             echo POSTGRES_DB=${{ secrets.POSTGRES_DB }} > .env-test
@@ -203,7 +202,7 @@ jobs:
                   ${{ secrets.HUB_URL }}/${{ github.repository }}/tree/${{ github.ref_name }}
                   Тестирует - ${{ github.event.inputs.name }}
                   Сайт доступен по адресу:
-                  https://${{ secrets.DEV_SUBDOMAIN }}.${{ secrets.URL }}
+                  https://${{ secrets.SUBDOMAIN }}.${{ secrets.URL }}
                   Сcылка на документацию в Swagger:
                   ${{ secrets.DEVELOP_SWAGGER_URL }}
                   Панель администратора:
