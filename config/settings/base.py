@@ -264,6 +264,12 @@ ADMIN_SITE_MODELS_ORDER = {
         "Мастер-классы",
         "Читки",
     ],
+    "Афиша": [
+        "События",
+        "Спектакли",
+        "Мастер-классы",
+        "Читки",
+    ],
     "Информация": [
         "Фестивали",
         "Пресс-релизы",
@@ -284,7 +290,7 @@ ADMIN_SITE_MODELS_ORDER = {
 
 SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
-        "event_type": "apps.afisha.models.Event.EventType",
+        "event_type": "apps.afisha.models.events.Event.EventType",
         "partner_type": "apps.info.models.people.Partner.PartnerType",
     }
 }

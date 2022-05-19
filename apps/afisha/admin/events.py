@@ -6,7 +6,7 @@ from django.urls import re_path
 from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
-from apps.afisha.models import CommonEvent, Event
+from apps.afisha.models.events import CommonEvent, Event
 from apps.core.mixins import HideOnNavPanelAdminModelMixin
 
 
@@ -19,6 +19,7 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
     )
 
 
+@admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = (
         "common_event",
@@ -109,6 +110,3 @@ class EventAdmin(admin.ModelAdmin):
     class Media:
 
         js = ("admin/afisha/js/AfishaGetEvent.js",)
-
-
-admin.site.register(Event, EventAdmin)

@@ -1,18 +1,12 @@
 from django.contrib import admin
 
+from apps.afisha.models.masterclass import MasterClass
+from apps.afisha.models.performance import Performance
+from apps.afisha.models.reading import Reading
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
 from apps.core.models import Role
 from apps.core.utils import get_user_change_perms_for_status
-from apps.library.models import (
-    MasterClass,
-    Performance,
-    PerformanceImage,
-    PerformanceMediaReview,
-    PerformanceReview,
-    Play,
-    Reading,
-    TeamMember,
-)
+from apps.library.models import PerformanceImage, PerformanceMediaReview, PerformanceReview, Play, TeamMember
 
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
@@ -65,18 +59,6 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
 
 class TeamMemberInlineCollapsible(TeamMemberInline):
     classes = ("collapsible",)
-
-
-@admin.register(MasterClass)
-class MasterClassAdmin(admin.ModelAdmin):
-    list_display = ("name",)
-    exclude = ("events",)
-    search_fields = (
-        "project",
-        "play__name",
-        "name",
-    )
-    inlines = (TeamMemberInline,)
 
 
 @admin.register(Performance)
@@ -136,24 +118,4 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, admin.ModelAdmin):
         change_permission = get_user_change_perms_for_status(request, obj)
         if change_permission:
             form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
-        return form
-
-
-@admin.register(Reading)
-class ReadingAdmin(admin.ModelAdmin):
-    list_display = (
-        "play",
-        "name",
-    )
-    exclude = ("events",)
-    search_fields = (
-        "name",
-        "play__name",
-    )
-    autocomplete_fields = ("play",)
-    inlines = (TeamMemberInline,)
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
         return form

@@ -3,11 +3,11 @@ from typing import Iterable
 import factory
 from faker import Faker
 
+from apps.afisha.models.reading import Reading
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
-from apps.library.models import Play, Reading
-
-from .team_member import TeamMemberFactory
+from apps.library.factories.team_member import TeamMemberFactory
+from apps.library.models import Play
 
 fake = Faker("ru_RU")
 

@@ -3,7 +3,7 @@ from datetime import timedelta
 import pytest
 from django.utils import timezone
 
-from apps.afisha.models import Event
+from apps.afisha.models.events import Event
 from apps.library.models import Play
 from apps.main.tests.conftest import MAIN_URL
 

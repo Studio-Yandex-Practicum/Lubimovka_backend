@@ -1,11 +1,10 @@
 from django.db import models
 from django.db.models import Q
 
+from apps.afisha.models.masterclass import MasterClass
+from apps.afisha.models.performance import Performance
+from apps.afisha.models.reading import Reading
 from apps.core.models import BaseModel, Person
-
-from .master_class import MasterClass
-from .performance import Performance
-from .reading import Reading
 
 
 class TeamMember(BaseModel):

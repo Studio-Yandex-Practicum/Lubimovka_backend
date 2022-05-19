@@ -1,7 +1,7 @@
 from drf_spectacular.utils import OpenApiExample, extend_schema_serializer
 from rest_framework import serializers
 
-from apps.afisha.serializers import AfishaEventSerializer
+from apps.afisha.serializers.events import AfishaEventSerializer
 from apps.articles.serializers import BlogItemListSerializer, NewsItemListSerializer
 from apps.info.serializers.place import PlaceSerializer
 from apps.library.serializers import PlaySerializer

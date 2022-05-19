@@ -3,16 +3,8 @@ from django.db import models
 from apps.core.models import BaseModel, Person
 from apps.library.utilities import get_team_roles
 
-from .play import Play
 
-
-class Reading(BaseModel):
-    play = models.ForeignKey(
-        Play,
-        on_delete=models.PROTECT,
-        related_name="readings",
-        verbose_name="Пьеса",
-    )
+class MasterClass(BaseModel):
     name = models.CharField(
         max_length=200,
         verbose_name="Название",
@@ -23,14 +15,14 @@ class Reading(BaseModel):
     )
     persons = models.ManyToManyField(
         Person,
-        through="TeamMember",
-        related_name="readings",
+        through="library.TeamMember",
+        related_name="masterclasses",
         verbose_name="Члены команды",
     )
     events = models.OneToOneField(
         "afisha.CommonEvent",
         on_delete=models.PROTECT,
-        related_name="reading",
+        related_name="masterclass",
         verbose_name="События",
     )
     project = models.ForeignKey(
@@ -38,14 +30,15 @@ class Reading(BaseModel):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
-        related_name="readings",
+        related_name="masterclasses",
         verbose_name="Проект",
     )
 
     class Meta:
+        db_table = "masterclass"
         ordering = ("-created",)
-        verbose_name = "Читка"
-        verbose_name_plural = "Читки"
+        verbose_name = "Мастер-класс"
+        verbose_name_plural = "Мастер-классы"
 
     def __str__(self):
         if len(self.name) >= 25:
@@ -54,5 +47,5 @@ class Reading(BaseModel):
 
     @property
     def event_team(self):
-        """Return directors and dramatists related with Reading."""
-        return get_team_roles(self, {"team_members__reading": self, "slug__in": ["director", "dramatist"]})
+        """Return hosts related with MasterClass."""
+        return get_team_roles(self, {"team_members__masterclass": self, "slug__in": ["host"]})
