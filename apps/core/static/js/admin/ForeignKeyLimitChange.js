@@ -21,7 +21,6 @@ function addButtonAction ($link, $editButton, $fieldObject, $additionalField) {
         event.preventDefault();
         event.stopPropagation();
 
-        $editButton.removeClass("disabled-button");
         $fieldObject.removeClass("disabled-field");
         if ($additionalField) {
             $additionalField.removeClass("disabled-field");
@@ -67,7 +66,6 @@ function disableAndAddUnlockButton($defaultSelectField, url) {
         }
 
         let $editButton = $(`#change_${fieldId}`);
-        $editButton.addClass("disabled-button");
         unlockChangeButton(fieldId, $editButton, $select, $additionalField);
     }
 }
