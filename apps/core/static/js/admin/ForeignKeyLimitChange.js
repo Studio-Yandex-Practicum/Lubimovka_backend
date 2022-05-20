@@ -74,7 +74,7 @@ function limitChangeForDropdowns() {
     const $relatedWidgets = $(".related-widget-wrapper");
     const $deleteButtons = $relatedWidgets.find("[id^=delete_id_]");
     const url = $(location).attr('href').split("/");
-    const excludePages = ["add", "users"];
+    const excludePages = ["add", "users", "role"];
 
     $deleteButtons.each(function () {
         $( this ).attr("hidden", true);
