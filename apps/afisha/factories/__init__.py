@@ -1,5 +1,5 @@
 from .events import EventFactory
-from .masterclass import MasterClassFactory
+from .master_class import MasterClassFactory
 from .performance import PerformanceFactory
 from .reading import ReadingFactory
 

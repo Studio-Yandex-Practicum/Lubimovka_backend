@@ -1,7 +1,7 @@
 from apps.info.views.contacts import ContactsAPIView
 
 from .festival import FestivalAPIView, FestivalYearsAPIView
-from .festivalteams import FestivalTeamsAPIView
+from .festival_teams import FestivalTeamsAPIView
 from .partners import PartnerListAPIView
 from .press_release import PressReleaseDownloadAPIView, PressReleaseViewSet, PressReleaseYearsAPIView
 from .selectors import SelectorsAPIView

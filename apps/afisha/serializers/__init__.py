@@ -1,4 +1,4 @@
-from .masterclass import EventMasterClassSerializer
+from .master_class import EventMasterClassSerializer
 from .performance import (
     EventPerformanceSerializer,
     PerformanceMediaReviewSerializer,

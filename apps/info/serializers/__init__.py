@@ -1,6 +1,6 @@
 from .contacts import ContactsSerializer
 from .festival import FestivalSerializer, InfoLinkSerializer, YearsSerializer
-from .festivalteams import FestivalTeamsSerializer
+from .festival_teams import FestivalTeamsSerializer
 from .press_release import PressReleaseSerializer
 from .selectors import SelectorsSerializer
 from .settings import SettingsSerializer

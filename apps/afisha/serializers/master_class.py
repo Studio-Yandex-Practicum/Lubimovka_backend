@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.afisha.models.masterclass import MasterClass
+from apps.afisha.models.master_class import MasterClass
 from apps.library.serializers.role import RoleSerializer
 
 

@@ -3,7 +3,7 @@ from typing import Iterable
 import factory
 from faker import Faker
 
-from apps.afisha.models.masterclass import MasterClass
+from apps.afisha.models.master_class import MasterClass
 from apps.articles.models import Project
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role

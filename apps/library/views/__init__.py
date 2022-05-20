@@ -1,7 +1,7 @@
 from .author import AuthorLettersAPIView, AuthorsReadViewSet
 from .play import PlayViewSet
-from .playfilters import PlayFiltersAPIView
-from .searchresult import SearchResultViewSet
+from .play_filters import PlayFiltersAPIView
+from .search_result import SearchResultViewSet
 
 __all__ = (
     AuthorsReadViewSet,

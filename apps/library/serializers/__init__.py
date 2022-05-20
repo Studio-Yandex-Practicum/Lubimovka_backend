@@ -1,6 +1,6 @@
 from .author import AuthorLettersSerializer, AuthorListSerializer, AuthorRetrieveSerializer, AuthorSearchSerializer
 from .play import AuthorForPlaySerializer, AuthorPlaySerializer, PlaySerializer
-from .playfilters import PlayFiltersSerializer
+from .play_filters import PlayFiltersSerializer
 from .role import RoleSerializer
 
 __all__ = (

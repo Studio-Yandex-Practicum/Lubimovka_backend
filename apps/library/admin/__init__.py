@@ -1,6 +1,6 @@
 from .author import AuthorAdmin
 from .play import PlayAdmin
-from .programtype import ProgramTypeAdmin
+from .program_type import ProgramTypeAdmin
 
 __all__ = (
     AuthorAdmin,
