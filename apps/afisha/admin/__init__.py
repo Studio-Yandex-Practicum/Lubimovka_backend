@@ -4,16 +4,18 @@ from django.contrib.sites.models import Site
 from apps.afisha.admin.events import EventAdmin
 from apps.afisha.admin.masterclass import MasterClassAdmin
 from apps.afisha.admin.performance import PerformanceAdmin, TeamMemberInline
+from apps.afisha.admin.performancemediareview import PerformanceMediaReviewAdmin
+from apps.afisha.admin.performancereview import PerformanceReviewAdmin
 from apps.afisha.admin.reading import ReadingAdmin
-from apps.library.admin.author import AuthorAdmin
 
 __all__ = (
     EventAdmin,
-    AuthorAdmin,
     MasterClassAdmin,
     PerformanceAdmin,
     TeamMemberInline,
     ReadingAdmin,
+    PerformanceMediaReviewAdmin,
+    PerformanceReviewAdmin,
 )
 
 admin.site.unregister(Site)

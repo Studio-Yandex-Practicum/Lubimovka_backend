@@ -2,8 +2,8 @@ from rest_framework import serializers
 
 from apps.afisha.models.events import Event
 from apps.afisha.models.performance import Performance
+from apps.afisha.models.performance_media_review import PerformanceMediaReview, PerformanceReview
 from apps.core.serializers import ImageSerializer
-from apps.library.models import PerformanceMediaReview, PerformanceReview
 from apps.library.serializers.play import PlaySerializer
 from apps.library.serializers.role import RoleSerializer
 

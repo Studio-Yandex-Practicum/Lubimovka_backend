@@ -1,7 +1,6 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.afisha.views import PerformanceMediaReviewViewSet, PerformanceReviewViewSet
 from apps.library.views import (
     AuthorLettersAPIView,
     AuthorsReadViewSet,
@@ -11,17 +10,6 @@ from apps.library.views import (
 )
 
 router = DefaultRouter()
-router.register(
-    r"performances/(?P<performance_id>\d+)/media-reviews",
-    PerformanceMediaReviewViewSet,
-    basename="performance-media-reviews",
-)
-router.register(
-    r"performances/(?P<performance_id>\d+)/reviews",
-    PerformanceReviewViewSet,
-    basename="performance-reviews",
-)
-
 router.register(
     "plays",
     PlayViewSet,
@@ -39,6 +27,7 @@ router.register(
 )
 
 library_urls = [
+    path("library/", include(router.urls)),
     path(
         "library/author_letters/",
         AuthorLettersAPIView.as_view(),

@@ -2,11 +2,12 @@ from django.contrib import admin
 
 from apps.afisha.models.masterclass import MasterClass
 from apps.afisha.models.performance import Performance
+from apps.afisha.models.performance_media_review import PerformanceImage, PerformanceMediaReview, PerformanceReview
 from apps.afisha.models.reading import Reading
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
 from apps.core.models import Role
 from apps.core.utils import get_user_change_perms_for_status
-from apps.library.models import PerformanceImage, PerformanceMediaReview, PerformanceReview, Play, TeamMember
+from apps.library.models import Play, TeamMember
 
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):

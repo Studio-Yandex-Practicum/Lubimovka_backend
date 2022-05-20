@@ -7,12 +7,13 @@ from django.conf import settings
 from faker import Faker
 
 from apps.afisha.models.performance import Performance
+from apps.afisha.models.performance_media_review import PerformanceImage, PerformanceMediaReview, PerformanceReview
 from apps.core.constants import AgeLimit, Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
 from apps.library.factories.team_member import TeamMemberFactory
-from apps.library.models import PerformanceImage, PerformanceMediaReview, PerformanceReview, Play
+from apps.library.models import Play
 
 fake = Faker("ru_RU")
 

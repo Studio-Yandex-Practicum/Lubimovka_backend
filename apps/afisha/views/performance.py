@@ -5,9 +5,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.afisha.models.performance import Performance
+from apps.afisha.models.performance_media_review import PerformanceMediaReview, PerformanceReview
 from apps.afisha.serializers import PerformanceMediaReviewSerializer, PerformanceReviewSerializer, PerformanceSerializer
 from apps.articles import selectors
-from apps.library.models import PerformanceMediaReview, PerformanceReview
 
 
 class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
