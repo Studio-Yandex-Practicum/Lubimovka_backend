@@ -86,7 +86,6 @@ class Play(BaseModel):
     )
     other_play = models.BooleanField(
         verbose_name="Сторонняя пьеса",
-        help_text="Да/нет",
         default=False,
     )
 
