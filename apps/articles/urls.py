@@ -7,18 +7,13 @@ from apps.articles.views import (
     BlogItemPreviewDetailAPI,
     BlogItemYearsMonthsAPI,
     NewsItemsPreviewDetailAPI,
-    NewsItemsViewSet,
     NewsItemYearsMonthsAPI,
     ProjectsPreviewDetailAPI,
     ProjectsViewSet,
 )
+from apps.articles.views.news_items import NewsItemsDetailAPI, NewsItemsListAPI
 
 router = DefaultRouter()
-router.register(
-    prefix="news",
-    viewset=NewsItemsViewSet,
-    basename="news-item",
-)
 router.register(
     prefix="projects",
     viewset=ProjectsViewSet,
@@ -38,6 +33,16 @@ blog_item_urls = [
 
 news_item_urls = [
     path(route="years-months/", view=NewsItemYearsMonthsAPI.as_view(), name="news-item-years-months"),
+    path(
+        route="",
+        view=NewsItemsListAPI.as_view(),
+        name="news-item-list",
+    ),
+    path(
+        route="<int:id>/",
+        view=NewsItemsDetailAPI.as_view(),
+        name="news-item-detail",
+    ),
     path(
         route="<int:id>/preview/",
         view=NewsItemsPreviewDetailAPI.as_view(),

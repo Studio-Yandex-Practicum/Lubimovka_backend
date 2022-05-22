@@ -40,7 +40,7 @@ class BlogItemListSerializer(serializers.ModelSerializer):
 
 
 class BlogItemDetailOutputSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
-    other_blogs = BlogItemListSerializer(many=True, source="_other_blogs")
+    other_blogs = BlogItemListSerializer(many=True, source="_other_items")
     team = BlogItemRoleSerializer(many=True, source="_team")
     pub_date = serializers.DateTimeField(required=True)
 
