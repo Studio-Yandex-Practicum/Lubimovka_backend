@@ -75,3 +75,7 @@ class PlayLinkForm(forms.ModelForm):
         new_link.type = InfoLink.LinkType.PLAYS_LINKS
         new_link.save()
         return new_link
+
+
+class FestivalForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea, label="Описание фестиваля", max_length=200)
