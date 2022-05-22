@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
-from apps.info.form import AdditionalLinkForm, FestTeamMemberForm, PlayLinkForm
+from apps.info.form import AdditionalLinkForm, FestivalForm, FestTeamMemberForm, PlayLinkForm
 from apps.info.models import (
     Festival,
     FestivalImage,
@@ -216,6 +216,7 @@ class FestivalAdmin(admin.ModelAdmin):
         PlayInfoLinkInline,
         AdditionalInfoLinkInline,
     )
+    form = FestivalForm
     exclude = (
         "teams",
         "sponsors",
