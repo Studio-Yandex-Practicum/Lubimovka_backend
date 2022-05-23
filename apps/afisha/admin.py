@@ -20,7 +20,10 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        print(request.GET.get("ac_field_name"))
+        common_event_type = request.GET.get("type_name").lower()
+        if common_event_type:
+            filter = common_event_type + "__" + "name" + "__" + "isnull"
+            queryset = queryset.filter(**{filter: False})
         return queryset, use_distinct
 
 

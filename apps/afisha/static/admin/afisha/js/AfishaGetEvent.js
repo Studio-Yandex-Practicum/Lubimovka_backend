@@ -45,10 +45,6 @@ jQuery(document).ready(function ($) {
     $eventTypeSelectField.change(function () {
         toggleDivDependedOnPartnerType($(this).val(), false);
     });
-});
-'use strict';
-{
-    const $ = django.jQuery;
 
     $.fn.djangoAdminSelect2 = function(options) {
         var settings = $.extend({}, options);
@@ -72,11 +68,11 @@ jQuery(document).ready(function ($) {
                         app_label: $element.data('app-label'),
                         model_name: $element.data('model-name'),
                         field_name: $element.data('field-name'),
-                        type_name: options.ac_field_name
+                        type_name: $('#id_type').val()
                     };
                 }
             }
         }, options);
         $element.select2(settings);
     };
-}
+});
