@@ -6,7 +6,7 @@ from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
-from apps.library.forms.admin import OtherLinkForm
+from apps.library.forms import OtherLinkForm
 from apps.library.models import Achievement, Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
 
 
