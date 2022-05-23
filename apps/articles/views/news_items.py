@@ -28,11 +28,10 @@ class NewsItemsListAPI(PubDateSchemaMixin, APIView):
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
 
     def get(self, request):
-        news_item_list = NewsItem.objects.published()
         return get_paginated_response(
             pagination_class=self.pagination_class,
             serializer_class=NewsItemListSerializer,
-            queryset=news_item_list,
+            queryset=NewsItem.objects.published(),
             request=request,
             view=self,
         )

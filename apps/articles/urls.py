@@ -6,12 +6,13 @@ from apps.articles.views import (
     BlogItemListAPI,
     BlogItemPreviewDetailAPI,
     BlogItemYearsMonthsAPI,
+    NewsItemsDetailAPI,
+    NewsItemsListAPI,
     NewsItemsPreviewDetailAPI,
     NewsItemYearsMonthsAPI,
     ProjectsPreviewDetailAPI,
     ProjectsViewSet,
 )
-from apps.articles.views.news_items import NewsItemsDetailAPI, NewsItemsListAPI
 
 router = DefaultRouter()
 router.register(
@@ -51,18 +52,18 @@ news_item_urls = [
 ]
 
 project_item_urls = [
+    path("", include(router.urls)),
     path(
-        route="<int:id>/preview/",
+        route="projects/<int:id>/preview/",
         view=ProjectsPreviewDetailAPI.as_view(),
         name="project-detail-preview",
-    )
+    ),
 ]
 
 articles_urls = [
     path("blog/", include(blog_item_urls)),
     path("news/", include(news_item_urls)),
-    path("projects/", include(project_item_urls)),
-    path("", include(router.urls)),
+    path("", include(project_item_urls)),
 ]
 
 urlpatterns = [
