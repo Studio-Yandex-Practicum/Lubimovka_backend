@@ -1,5 +1,4 @@
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
 from apps.articles.views import (
     BlogItemDetailAPI,
@@ -12,13 +11,6 @@ from apps.articles.views import (
     NewsItemYearsMonthsAPI,
     ProjectsPreviewDetailAPI,
     ProjectsViewSet,
-)
-
-router = DefaultRouter()
-router.register(
-    prefix="projects",
-    viewset=ProjectsViewSet,
-    basename="project",
 )
 
 blog_item_urls = [
@@ -52,9 +44,10 @@ news_item_urls = [
 ]
 
 project_item_urls = [
-    path("", include(router.urls)),
+    path("", ProjectsViewSet.as_view({"get": "list"}), name="project-list"),
+    path("<int:pk>/", ProjectsViewSet.as_view({"get": "retrieve"}), name="project-detail"),
     path(
-        route="projects/<int:id>/preview/",
+        route="<int:id>/preview/",
         view=ProjectsPreviewDetailAPI.as_view(),
         name="project-detail-preview",
     ),
@@ -63,7 +56,7 @@ project_item_urls = [
 articles_urls = [
     path("blog/", include(blog_item_urls)),
     path("news/", include(news_item_urls)),
-    path("", include(project_item_urls)),
+    path("projects/", include(project_item_urls)),
 ]
 
 urlpatterns = [
