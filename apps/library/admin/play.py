@@ -69,6 +69,15 @@ class PlayAdmin(admin.ModelAdmin):
         "published",
     )
 
+    def get_search_fields(self, request):
+        if (
+            "autocomplete" in request.path
+            and request.GET.get("field_name") == "play"
+            and (request.GET.get("model_name") == "reading" or request.GET.get("model_name") == "performance")
+        ):
+            return ("name",)
+        return super().get_search_fields(request)
+
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
         if (

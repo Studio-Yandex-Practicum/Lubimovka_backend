@@ -7,6 +7,7 @@ from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
 from apps.afisha.models import CommonEvent, Event
+from apps.core.constants import Status
 from apps.core.mixins import HideOnNavPanelAdminModelMixin
 
 
@@ -20,10 +21,12 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        common_event_type = request.GET.get("type_name").lower()
-        if common_event_type:
-            filter = common_event_type + "__" + "name" + "__" + "isnull"
+        event_type = request.GET.get("event_type").lower()
+        if event_type:
+            filter = f"{event_type}__name__isnull"
             queryset = queryset.filter(**{filter: False})
+            if event_type == "performance":
+                queryset = queryset.filter(performance__status=Status.PUBLISHED)
         return queryset, use_distinct
 
 

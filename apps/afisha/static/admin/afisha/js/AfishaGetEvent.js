@@ -46,18 +46,17 @@ jQuery(document).ready(function ($) {
         toggleDivDependedOnPartnerType($(this).val(), false);
     });
 
+    // source code - required for next step changes (see below)
     $.fn.djangoAdminSelect2 = function(options) {
         var settings = $.extend({}, options);
         $.each(this, function(i, element) {
             var $element = $(element);
-            $.extend(settings, {
-                'ac_field_name': $element.parents().filter('.related-widget-wrapper').find('select').attr('type')
-            });
             init($element, settings);
         });
         return this;
     };
 
+    // added event_type to request info - required to limit search_result according to event type
     var init = function($element, options) {
         var settings = $.extend({
             ajax: {
@@ -68,7 +67,7 @@ jQuery(document).ready(function ($) {
                         app_label: $element.data('app-label'),
                         model_name: $element.data('model-name'),
                         field_name: $element.data('field-name'),
-                        type_name: $('#id_type').val()
+                        event_type: $('#id_type').val()
                     };
                 }
             }
