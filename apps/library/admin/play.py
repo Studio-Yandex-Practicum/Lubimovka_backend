@@ -68,3 +68,13 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "published",
     )
+
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        if (
+            "autocomplete" in request.path
+            and request.GET.get("field_name") == "play"
+            and (request.GET.get("model_name") == "reading" or request.GET.get("model_name") == "performance")
+        ):
+            queryset = queryset.filter(other_play=False)
+        return queryset, use_distinct
