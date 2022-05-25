@@ -1,12 +1,11 @@
 from datetime import datetime
 
 from django.contrib import admin
-from django.http import JsonResponse
-from django.urls import re_path
 from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
 from apps.afisha.models import CommonEvent, Event
+from apps.core.constants import Status
 from apps.core.mixins import HideOnNavPanelAdminModelMixin
 
 
@@ -17,6 +16,16 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
         "reading__name",
         "performance__name",
     )
+
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        event_type = request.GET.get("event_type").lower()
+        if event_type:
+            filter = f"{event_type}__name__isnull"
+            queryset = queryset.filter(**{filter: False})
+            if event_type == "performance":
+                queryset = queryset.filter(performance__status=Status.PUBLISHED)
+        return queryset, use_distinct
 
 
 class EventAdmin(admin.ModelAdmin):
@@ -75,21 +84,6 @@ class EventAdmin(admin.ModelAdmin):
             "common_event__performance",
         ).order_by("-date_time")
         return qs
-
-    def get_urls(self):
-        urls = super().get_urls()
-        ajax_urls = [
-            re_path(r"\S*/get-common-events-admin/", self.get_common_event),
-        ]
-        return ajax_urls + urls
-
-    def get_common_event(self, request, obj_id=None):
-        common_event_type = request.GET.get("type").lower()
-        common_events = {}
-        if common_event_type:
-            common_events_queryset = getattr(CommonEvent, common_event_type).get_queryset().order_by("-created")
-            common_events = {event.name: event.id for event in common_events_queryset}
-        return JsonResponse(common_events)
 
     @admin.display(
         description="Состояние",

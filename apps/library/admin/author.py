@@ -99,16 +99,6 @@ class AuthorAdmin(admin.ModelAdmin):
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        if not request.user.has_perm("library.change_author"):
-            return form
-        if obj:
-            form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
-        else:
-            form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
-        return form
-
     def get_urls(self):
         urls = super().get_urls()
         ajax_urls = [

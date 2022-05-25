@@ -105,6 +105,17 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
 
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        if (
+            "autocomplete" in request.path
+            and request.GET.get("field_name") == "person"
+            and request.GET.get("model_name") == "author"
+        ):
+            person_authors = Person.objects.filter(authors__isnull=False)
+            queryset = queryset.difference(person_authors).order_by("last_name", "first_name")
+        return queryset, use_distinct
+
 
 @admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
