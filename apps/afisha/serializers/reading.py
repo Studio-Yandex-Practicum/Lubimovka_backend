@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
-from apps.afisha.models.reading import Reading
-from apps.library.serializers.role import RoleSerializer
+from apps.afisha.models import Reading
+from apps.library.serializers import RoleSerializer
 
 
 class EventReadingSerializer(serializers.ModelSerializer):

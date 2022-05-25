@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from apps.afisha.admin import TeamMemberInline
-from apps.afisha.models.reading import Reading
+from apps.afisha.models import Reading
+from apps.library.admin import TeamMemberInline
 from apps.library.models import Play
 
 

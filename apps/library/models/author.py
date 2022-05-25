@@ -5,8 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
 
-from .play import Play
-
 
 class Achievement(BaseModel):
     tag = models.CharField(
@@ -45,7 +43,7 @@ class Author(BaseModel):
         blank=True,
     )
     plays = models.ManyToManyField(
-        Play,
+        "library.Play",
         related_name="authors",
         blank=True,
         verbose_name="Пьесы автора",
@@ -91,7 +89,7 @@ class AuthorPlay(models.Model):
         verbose_name="Автор",
     )
     play = models.ForeignKey(
-        Play,
+        "library.Play",
         on_delete=models.CASCADE,
         related_name="author_plays",
         verbose_name="Пьеса",

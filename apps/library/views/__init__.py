@@ -1,12 +1,4 @@
-from .author import AuthorLettersAPIView, AuthorsReadViewSet
-from .play import PlayViewSet
-from .play_filters import PlayFiltersAPIView
-from .search_result import SearchResultViewSet
-
-__all__ = (
-    AuthorsReadViewSet,
-    PlayFiltersAPIView,
-    PlayViewSet,
-    SearchResultViewSet,
-    AuthorLettersAPIView,
-)
+from apps.library.views.author import AuthorLettersAPIView, AuthorsReadViewSet
+from apps.library.views.play import PlayViewSet
+from apps.library.views.play_filters import PlayFiltersAPIView
+from apps.library.views.search_result import SearchResultViewSet

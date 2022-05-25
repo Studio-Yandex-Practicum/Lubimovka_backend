@@ -1,6 +1,6 @@
 from django.db import models
 
-from apps.afisha.models.performance import Performance
+from apps.afisha.models import Performance
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Image
 

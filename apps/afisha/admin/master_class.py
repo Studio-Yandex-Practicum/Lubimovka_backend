@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from apps.afisha.admin.performance import TeamMemberInline
-from apps.afisha.models.master_class import MasterClass
+from apps.afisha.models import MasterClass
+from apps.library.admin import TeamMemberInline
 
 
 @admin.register(MasterClass)

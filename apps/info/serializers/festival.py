@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
-from apps.info.models import Festival
-from apps.info.models.festival import InfoLink
+from apps.info.models import Festival, InfoLink
 
 
 class InfoLinkSerializer(serializers.ModelSerializer):

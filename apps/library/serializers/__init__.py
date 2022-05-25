@@ -1,16 +1,14 @@
-from .author import AuthorLettersSerializer, AuthorListSerializer, AuthorRetrieveSerializer, AuthorSearchSerializer
-from .play import AuthorForPlaySerializer, AuthorPlaySerializer, PlaySerializer
-from .play_filters import PlayFiltersSerializer
-from .role import RoleSerializer
-
-__all__ = (
+from apps.library.serializers.author import (
+    AuthorLettersSerializer,
     AuthorListSerializer,
-    AuthorPlaySerializer,
     AuthorRetrieveSerializer,
     AuthorSearchSerializer,
-    AuthorLettersSerializer,
-    AuthorForPlaySerializer,
-    PlaySerializer,
-    PlayFiltersSerializer,
-    RoleSerializer,
 )
+from apps.library.serializers.play import (
+    AuthorForPlaySerializer,
+    AuthorOtherPlaySerializer,
+    AuthorPlaySerializer,
+    PlaySerializer,
+)
+from apps.library.serializers.play_filters import PlayFiltersSerializer
+from apps.library.serializers.role import RoleSerializer

@@ -3,8 +3,7 @@ from zoneinfo import ZoneInfo
 import factory
 from django.conf import settings
 
-from apps.afisha.models.events import Event
-from apps.afisha.models.performance import Performance
+from apps.afisha.models import Event, Performance
 from apps.articles.models import BlogItem, BlogItemContent, BlogPerson
 from apps.content_pages.factories import AbstractContentFactory
 from apps.core.constants import Status

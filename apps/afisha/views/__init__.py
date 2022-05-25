@@ -1,16 +1,7 @@
-from .events import AfishaEventListAPIView, AfishaInfoAPIView
-from .performance import (
+from apps.afisha.views.events import AfishaEventListAPIView, AfishaInfoAPIView
+from apps.afisha.views.performance import (
     PerformanceMediaReviewViewSet,
     PerformancePreviewDetailAPI,
     PerformanceReviewViewSet,
     PerformanceViewSet,
-)
-
-__all__ = (
-    PerformanceMediaReviewViewSet,
-    PerformancePreviewDetailAPI,
-    PerformanceReviewViewSet,
-    PerformanceViewSet,
-    AfishaEventListAPIView,
-    AfishaInfoAPIView,
 )

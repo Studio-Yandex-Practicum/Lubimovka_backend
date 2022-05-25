@@ -9,9 +9,11 @@ from apps.core.models import Person, Setting
 from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
 from apps.info.form import AdditionalLinkForm, FestTeamMemberForm, PlayLinkForm
 from apps.info.models import (
+    ArtTeamMember,
     Festival,
     FestivalImage,
     FestivalTeamMember,
+    FestTeamMember,
     InfoLink,
     Partner,
     Place,
@@ -20,7 +22,6 @@ from apps.info.models import (
     Sponsor,
     Volunteer,
 )
-from apps.info.models.festival import ArtTeamMember, FestTeamMember
 
 
 @admin.register(Partner)

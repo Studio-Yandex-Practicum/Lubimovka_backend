@@ -1,15 +1,12 @@
 from django.db import models
 from django.db.models import Q
 
-from apps.afisha.models.master_class import MasterClass
-from apps.afisha.models.performance import Performance
-from apps.afisha.models.reading import Reading
 from apps.core.models import BaseModel, Person
 
 
 class TeamMember(BaseModel):
     performance = models.ForeignKey(
-        Performance,
+        "afisha.Performance",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -17,7 +14,7 @@ class TeamMember(BaseModel):
         verbose_name="Спектакль",
     )
     reading = models.ForeignKey(
-        Reading,
+        "afisha.Reading",
         null=True,
         blank=True,
         on_delete=models.CASCADE,
@@ -25,7 +22,7 @@ class TeamMember(BaseModel):
         verbose_name="Читка",
     )
     masterclass = models.ForeignKey(
-        MasterClass,
+        "afisha.MasterClass",
         null=True,
         blank=True,
         on_delete=models.CASCADE,

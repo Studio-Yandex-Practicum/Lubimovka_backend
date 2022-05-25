@@ -6,7 +6,6 @@ from apps.content_pages.querysets import PublishedContentQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
 from apps.core.models import BaseModel, Person
-from apps.library.models.play import Play
 from apps.library.utilities import get_team_roles
 
 
@@ -22,7 +21,7 @@ class Performance(BaseModel):
         verbose_name="Название спектакля",
     )
     play = models.ForeignKey(
-        Play,
+        "library.Play",
         on_delete=models.PROTECT,
         related_name="performances",
         verbose_name="Пьеса",

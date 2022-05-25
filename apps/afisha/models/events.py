@@ -2,9 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
 
-from apps.afisha.models.master_class import MasterClass
-from apps.afisha.models.performance import Performance
-from apps.afisha.models.reading import Reading
+from apps.afisha.models import MasterClass, Performance, Reading
 from apps.core.models import BaseModel
 
 

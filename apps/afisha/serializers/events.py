@@ -1,10 +1,7 @@
 from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_field
 from rest_framework import serializers
 
-from apps.afisha.models.events import Event
-from apps.afisha.models.master_class import MasterClass
-from apps.afisha.models.performance import Performance
-from apps.afisha.models.reading import Reading
+from apps.afisha.models import Event, MasterClass, Performance, Reading
 from apps.afisha.serializers import EventMasterClassSerializer, EventPerformanceSerializer, EventReadingSerializer
 
 AFISHA_EVENTS_SERIALIZER_PAIRS = {

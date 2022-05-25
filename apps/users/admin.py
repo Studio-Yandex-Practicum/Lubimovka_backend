@@ -6,9 +6,9 @@ from django.contrib.auth.models import Permission
 from django.http import HttpResponseRedirect
 from django.utils.crypto import get_random_string
 
-from .forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm
-from .models import ProxyGroup
-from .utils import send_reset_password_email
+from apps.users.forms import GroupAdminForm, UserAdminCreationForm, UserAdminForm
+from apps.users.models import ProxyGroup
+from apps.users.utils import send_reset_password_email
 
 User = get_user_model()
 

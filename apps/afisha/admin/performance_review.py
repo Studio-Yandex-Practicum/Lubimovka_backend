@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from apps.afisha.models.performance_media_review import PerformanceReview
+from apps.afisha.models import PerformanceReview
 
 
 @admin.register(PerformanceReview)
