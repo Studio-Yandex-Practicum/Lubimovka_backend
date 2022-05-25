@@ -1,7 +1,7 @@
 import factory
 from django.contrib.contenttypes.models import ContentType
 
-from apps.afisha.models import Event
+from apps.afisha.models.events import Event
 from apps.content_pages.factories import (
     EventsBlockFactory,
     ImagesBlockFactory,

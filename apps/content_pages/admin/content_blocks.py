@@ -1,7 +1,7 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 
-from apps.afisha.models import Event
+from apps.afisha.models.events import Event
 from apps.content_pages.models import (
     ContentPersonRole,
     EventsBlock,

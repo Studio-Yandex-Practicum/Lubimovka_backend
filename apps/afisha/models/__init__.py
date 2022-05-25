@@ -1,4 +1,3 @@
-from apps.afisha.models.events import CommonEvent, Event
 from apps.afisha.models.master_class import MasterClass
 from apps.afisha.models.performance import Performance
 from apps.afisha.models.performance_media_review import PerformanceImage, PerformanceMediaReview, PerformanceReview

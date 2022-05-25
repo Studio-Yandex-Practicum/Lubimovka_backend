@@ -6,7 +6,7 @@ from django.urls import re_path
 from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
-from apps.afisha.models import CommonEvent, Event
+from apps.afisha.models.events import CommonEvent, Event
 from apps.core.mixins import HideOnNavPanelAdminModelMixin
 
 

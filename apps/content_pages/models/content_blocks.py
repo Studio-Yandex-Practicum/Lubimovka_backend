@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.db import models
 from django.db.models.constraints import UniqueConstraint
 
-from apps.afisha.models import Event
+from apps.afisha.models.events import Event
 from apps.content_pages.models.content_items import AbstractItemWithTitle
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Person, Role

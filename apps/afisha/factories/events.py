@@ -3,7 +3,7 @@ from zoneinfo import ZoneInfo
 import factory
 from django.conf import settings
 
-from apps.afisha.models import CommonEvent, Event
+from apps.afisha.models.events import CommonEvent, Event
 from apps.core.decorators.factory import restrict_factory
 
 
