@@ -6,6 +6,5 @@ from apps.afisha.admin.master_class import MasterClassAdmin
 from apps.afisha.admin.performance import PerformanceAdmin
 from apps.afisha.admin.performance_media_review import PerformanceMediaReviewAdmin
 from apps.afisha.admin.performance_review import PerformanceReviewAdmin
-from apps.afisha.admin.reading import ReadingAdmin
 
 admin.site.unregister(Site)

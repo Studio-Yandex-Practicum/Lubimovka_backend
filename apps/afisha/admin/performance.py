@@ -1,10 +1,8 @@
 from django.contrib import admin
 
-from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview
+from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview, Reading
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
-from apps.core.utils import get_user_change_perms_for_status
-from apps.library.admin import TeamMemberInlineCollapsible
-from apps.library.models import Play
+from apps.library.admin import TeamMemberInline, TeamMemberInlineCollapsible
 
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
@@ -84,9 +82,17 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, admin.ModelAdmin):
         TeamMemberInlineCollapsible,
     )
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        change_permission = get_user_change_perms_for_status(request, obj)
-        if change_permission:
-            form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
-        return form
+
+@admin.register(Reading)
+class ReadingAdmin(admin.ModelAdmin):
+    list_display = (
+        "play",
+        "name",
+    )
+    exclude = ("events",)
+    search_fields = (
+        "name",
+        "play__name",
+    )
+    autocomplete_fields = ("play",)
+    inlines = (TeamMemberInline,)
