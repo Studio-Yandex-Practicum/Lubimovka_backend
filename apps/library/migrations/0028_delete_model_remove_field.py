@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('afisha', '0007_rename_table_add_model'),
-        ('library', '0026_auto_20220509_1311'),
+        ('library', '0027_alter_play_other_play'),
     ]
 
     operations = [
