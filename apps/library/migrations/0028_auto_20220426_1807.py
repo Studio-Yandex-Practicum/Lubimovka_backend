@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0024_delete_participationapplicationfestival'),
+        ('library', '0027_alter_play_other_play'),
     ]
 
     operations = [
