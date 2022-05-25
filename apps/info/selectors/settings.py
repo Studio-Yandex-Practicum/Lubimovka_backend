@@ -27,14 +27,12 @@ def info_settings_get() -> dict[str, Union[str, bool, dict[str, str]]]:
     pr_director_photo_link = pr_director.image if pr_director else None
     photo_gallery_facebook = info_settings_data.pop("photo_gallery_facebook")
     pr_director_name = info_settings_data.pop("pr_director_name")
-    url_to_privacy_policy = info_settings_data.pop("url_to_privacy_policy")
     for_press = {
         "pr_director": {
             "pr_director_name": pr_director_name,
             "pr_director_email": pr_director_email,
             "pr_director_photo_link": pr_director_photo_link,
         },
-        "url_to_privacy_policy": url_to_privacy_policy,
         "photo_gallery_facebook_link": photo_gallery_facebook,
     }
 
