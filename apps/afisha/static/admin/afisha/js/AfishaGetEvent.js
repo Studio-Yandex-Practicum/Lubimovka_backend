@@ -18,7 +18,7 @@ jQuery(document).ready(function ($) {
 
     }
 
-    // show/hide on load based on existing value of partnerTypeSelectField
+    // show/hide on load based on existing value of eventTypeSelectField
     toggleDivDependedOnEventType($eventTypeSelectField.val(), true);
 
     // show/hide on change
