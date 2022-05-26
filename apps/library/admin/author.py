@@ -19,7 +19,8 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=False).select_related(
-            "author__person", "play__program", "play__festival"
+            "author__person",
+            "play",
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -36,7 +37,8 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=True).select_related(
-            "author__person", "play__program", "play__festival"
+            "author__person",
+            "play",
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
