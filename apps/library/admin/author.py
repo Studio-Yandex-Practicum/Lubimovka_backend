@@ -6,13 +6,12 @@ from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
-from apps.library.forms import OtherLinkForm, OtherPlayInlineForm, PlayInlineForm
+from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     model = AuthorPlay
-    form = PlayInlineForm
     extra = 0
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
@@ -30,7 +29,6 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     model = AuthorPlay
-    form = OtherPlayInlineForm
     extra = 0
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
