@@ -23,17 +23,6 @@ class Author(BaseModel):
         max_length=3000,
         verbose_name="Текст про автора",
     )
-
-    @property
-    def achievements(self):
-        """Get queryset with info about achievements."""
-        return (
-            self.plays.filter(program__isnull=False)
-            .values("program__id", "program__name", "festival__year")
-            .order_by("festival__id")
-            .distinct("festival__id")
-        )
-
     plays = models.ManyToManyField(
         Play,
         related_name="authors",
@@ -71,6 +60,15 @@ class Author(BaseModel):
     @property
     def image(self):
         return self.person.image
+
+    @property
+    def achievements(self):
+        """Get queryset with info about achievements."""
+        return (
+            self.plays.filter(program__isnull=False)
+            .values("program__id", "program__name", "festival__year")
+            .order_by("-festival__year")
+        )
 
 
 class AuthorPlay(models.Model):

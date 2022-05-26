@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.library.models import Author, OtherLink, Play, SocialNetworkLink
+from apps.library.models import Author, OtherLink, SocialNetworkLink
 from apps.library.serializers.play import AuthorOtherPlaySerializer, AuthorPlaySerializer
 
 
@@ -23,18 +23,10 @@ class SocialNetworkSerializer(serializers.ModelSerializer):
         )
 
 
-class ProgramSerializer(serializers.ModelSerializer):
-    id = serializers.IntegerField(source="program.id", read_only=True)
-    name = serializers.CharField(source="program.name", read_only=True)
-    year = serializers.IntegerField(source="festival.year", read_only=True)
-
-    class Meta:
-        model = Play
-        fields = (
-            "id",
-            "year",
-            "name",
-        )
+class AchievementSerializer(serializers.Serializer):
+    id = serializers.IntegerField(source="program__id", read_only=True)
+    name = serializers.CharField(source="program__name", read_only=True)
+    year = serializers.IntegerField(source="festival__year", read_only=True)
 
 
 class AuthorRetrieveSerializer(serializers.ModelSerializer):
@@ -46,6 +38,7 @@ class AuthorRetrieveSerializer(serializers.ModelSerializer):
     plays = AuthorPlaySerializer(source="author_plays", many=True)
     other_plays = AuthorOtherPlaySerializer(many=True)
     image = serializers.ImageField()
+    achievements = AchievementSerializer(many=True)
 
     class Meta:
         model = Author
