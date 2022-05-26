@@ -1,4 +1,3 @@
-from .contacts import ContactsSerializer
 from .festival import FestivalSerializer, InfoLinkSerializer, YearsSerializer
 from .festivalteams import FestivalTeamsSerializer
 from .press_release import PressReleaseSerializer
@@ -15,7 +14,6 @@ __all__ = (
     InfoLinkSerializer,
     FestivalSerializer,
     YearsSerializer,
-    ContactsSerializer,
     SettingsSerializer,
     SelectorsSerializer,
 )
