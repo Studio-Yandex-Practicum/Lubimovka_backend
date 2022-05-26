@@ -9,8 +9,9 @@ from apps.articles.views import (
     NewsItemsPreviewDetailAPI,
     NewsItemsViewSet,
     NewsItemYearsMonthsAPI,
+    ProjectDetailAPI,
+    ProjectListAPI,
     ProjectsPreviewDetailAPI,
-    ProjectsViewSet,
 )
 
 router = DefaultRouter()
@@ -18,11 +19,6 @@ router.register(
     prefix="news",
     viewset=NewsItemsViewSet,
     basename="news-item",
-)
-router.register(
-    prefix="projects",
-    viewset=ProjectsViewSet,
-    basename="project",
 )
 
 blog_item_urls = [
@@ -47,10 +43,20 @@ news_item_urls = [
 
 project_item_urls = [
     path(
+        route="",
+        view=ProjectListAPI.as_view(),
+        name="project-list",
+    ),
+    path(
+        route="<int:id>/",
+        view=ProjectDetailAPI.as_view(),
+        name="project-detail",
+    ),
+    path(
         route="<int:id>/preview/",
         view=ProjectsPreviewDetailAPI.as_view(),
         name="project-detail-preview",
-    )
+    ),
 ]
 
 articles_urls = [
