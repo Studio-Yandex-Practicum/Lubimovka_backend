@@ -103,7 +103,7 @@ class Play(BaseModel):
     def __str__(self):
         return (
             self.name
-            + ("" if self.published else " <— не опубликована —>")
+            + ("" if self.published else " <— 🔴 пьеса не опубликована —>")
             + ("" if not self.other_play else " <— Другая пьеса —>")
         )
 
