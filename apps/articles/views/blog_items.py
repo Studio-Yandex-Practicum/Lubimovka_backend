@@ -58,7 +58,7 @@ class BlogItemDetailAPI(APIView):
 
     @extend_schema(responses=BlogItemDetailOutputSerializer)
     def get(self, request, id):
-        blog_item_detail = selectors.blog_item_detail_get(blog_item_id=id)
+        blog_item_detail = selectors.item_detail_get(BlogItem, item_id=id)
         context = {"request": request}
         serializer = BlogItemDetailOutputSerializer(blog_item_detail, context=context)
         return Response(serializer.data)
@@ -70,7 +70,7 @@ class BlogItemPreviewDetailAPI(APIView):
     def get(self, request, id):
         hash_sum = request.GET.get("hash", None)
         item_detail = preview_item_detail_get(BlogItem, id, hash_sum)
-        blog_item_detail = selectors.blog_item_detail_get(id, item_detail)
+        blog_item_detail = selectors.item_detail_get(BlogItem, id, item_detail)
         context = {"request": request}
         serializer = BlogItemDetailOutputSerializer(blog_item_detail, context=context)
         return Response(serializer.data)
