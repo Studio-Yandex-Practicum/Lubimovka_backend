@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
 from apps.core.models import Role
-from apps.core.utils import get_user_change_perms_for_status
 from apps.library.models import (
     MasterClass,
     Performance,
@@ -131,13 +130,6 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, admin.ModelAdmin):
         TeamMemberInlineCollapsible,
     )
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        change_permission = get_user_change_perms_for_status(request, obj)
-        if change_permission:
-            form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
-        return form
-
 
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
@@ -152,8 +144,3 @@ class ReadingAdmin(admin.ModelAdmin):
     )
     autocomplete_fields = ("play",)
     inlines = (TeamMemberInline,)
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        form.base_fields["play"].queryset = Play.objects.filter(other_play=False)
-        return form
