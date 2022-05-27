@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview, Reading
+from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
-from apps.library.admin import TeamMemberInline, TeamMemberInlineCollapsible
+from apps.library.admin import TeamMemberInlineCollapsible
 
 
 class ImagesInBlockInline(InlineReadOnlyMixin, admin.TabularInline, AdminImagePreview):
@@ -81,18 +81,3 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, admin.ModelAdmin):
         PerformanceReviewInline,
         TeamMemberInlineCollapsible,
     )
-
-
-@admin.register(Reading)
-class ReadingAdmin(admin.ModelAdmin):
-    list_display = (
-        "play",
-        "name",
-    )
-    exclude = ("events",)
-    search_fields = (
-        "name",
-        "play__name",
-    )
-    autocomplete_fields = ("play",)
-    inlines = (TeamMemberInline,)

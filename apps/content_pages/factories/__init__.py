@@ -13,7 +13,6 @@ from apps.content_pages.factories.content_arrays import (
     PlaysBlockFactory,
     VideosBlockFactory,
 )
-from apps.content_pages.factories.content_modules import AbstractContentFactory
 from apps.content_pages.factories.content_units import (
     ContentUnitRichTextFactory,
     LinkFactory,
@@ -25,3 +24,5 @@ from apps.content_pages.factories.content_units import (
 
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split
+
+from apps.content_pages.factories.content_modules import AbstractContentFactory

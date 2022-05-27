@@ -1,16 +1,3 @@
-from apps.content_pages.models.content_blocks import (
-    ContentPersonRole,
-    EventsBlock,
-    ExtendedPerson,
-    ImagesBlock,
-    OrderedEvent,
-    OrderedImage,
-    OrderedPlay,
-    OrderedVideo,
-    PersonsBlock,
-    PlaysBlock,
-    VideosBlock,
-)
 from apps.content_pages.models.content_items import (
     AbstractItemWithTitle,
     ContentUnitRichText,
@@ -24,3 +11,17 @@ from apps.content_pages.models.contents import AbstractContent, AbstractContentP
 
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split
+
+from apps.content_pages.models.content_blocks import (
+    ContentPersonRole,
+    EventsBlock,
+    ExtendedPerson,
+    ImagesBlock,
+    OrderedEvent,
+    OrderedImage,
+    OrderedPlay,
+    OrderedVideo,
+    PersonsBlock,
+    PlaysBlock,
+    VideosBlock,
+)
