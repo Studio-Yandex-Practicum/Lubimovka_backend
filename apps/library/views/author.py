@@ -34,19 +34,22 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
     def get_object(self):
         author = get_object_or_404(
             Author.objects.prefetch_related(
-                "achievements",
                 "social_networks",
                 "other_links",
                 Prefetch(
                     "author_plays",
-                    queryset=AuthorPlay.objects.filter(play__other_play=False, play__published=True),
+                    queryset=AuthorPlay.objects.filter(play__other_play=False, play__published=True).prefetch_related(
+                        "play__authors__person"
+                    ),
                 ),
                 Prefetch(
                     "author_plays",
-                    queryset=AuthorPlay.objects.filter(play__other_play=True, play__published=True),
+                    queryset=AuthorPlay.objects.filter(play__other_play=True, play__published=True).prefetch_related(
+                        "play__authors__person"
+                    ),
                     to_attr="other_plays",
                 ),
-            ),
+            ).select_related("person"),
             slug=self.kwargs["slug"],
         )
         return author
