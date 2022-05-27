@@ -1,4 +1,3 @@
-from apps.info.views.contacts import ContactsAPIView
 from apps.info.views.festival import FestivalAPIView, FestivalYearsAPIView
 from apps.info.views.festival_teams import FestivalTeamsAPIView
 from apps.info.views.partners import PartnerListAPIView

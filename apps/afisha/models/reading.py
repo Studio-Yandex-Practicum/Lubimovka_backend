@@ -41,7 +41,6 @@ class Reading(BaseModel):
     )
 
     class Meta:
-        db_table = "reading"
         ordering = ("-created",)
         verbose_name = "Читка"
         verbose_name_plural = "Читки"

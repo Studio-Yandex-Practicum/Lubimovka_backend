@@ -2,7 +2,7 @@ import factory
 from django.db import models
 from faker import Faker
 
-from apps.core.decorators.factory import restrict_factory
+from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person, Role, RoleType
 from apps.core.utils import get_picsum_image, slugify
 

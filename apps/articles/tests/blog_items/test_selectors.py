@@ -2,8 +2,7 @@ import pytest
 from django.http import Http404
 
 from apps.articles import selectors
-from apps.articles.factories import BlogItemFactory
-from apps.articles.factories.blog_items import BlogPersonFactory
+from apps.articles.factories import BlogItemFactory, BlogPersonFactory
 from apps.articles.models import BlogItem
 from apps.core.factories import PersonFactory, RoleFactory
 

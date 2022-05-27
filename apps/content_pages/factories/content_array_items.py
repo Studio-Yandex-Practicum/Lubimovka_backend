@@ -1,6 +1,6 @@
 import factory
 
-from apps.afisha.models.events import Event
+from apps.afisha.models import Event
 from apps.content_pages.models import (
     ContentPersonRole,
     ExtendedPerson,

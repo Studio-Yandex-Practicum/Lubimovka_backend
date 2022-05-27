@@ -8,7 +8,7 @@ from apps.content_pages.factories import ImagesBlockFactory
 from apps.core.factories import PersonFactory
 from apps.info.factories import FestivalFactory, InfoLinkFactory, PlaceFactory
 from apps.library.factories import PlayFactory
-from apps.library.models.play import ProgramType
+from apps.library.models import ProgramType
 from apps.main.factories import BannerFactory
 
 MAIN_URL = reverse("main:main_page")

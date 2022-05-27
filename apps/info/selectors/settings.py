@@ -17,6 +17,7 @@ def info_settings_get() -> dict[str, Union[str, bool, dict[str, str]]]:
         "email_on_support_page",
         "photo_gallery_facebook",
         "pr_director_name",
+        "url_to_privacy_policy",
         "plays_reception_is_open",
     )
     info_settings_data = Setting.get_settings(settings_keys)

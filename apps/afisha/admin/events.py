@@ -4,7 +4,7 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
-from apps.afisha.models.events import CommonEvent, Event
+from apps.afisha.models import CommonEvent, Event
 from apps.core.constants import Status
 from apps.core.mixins import HideOnNavPanelAdminModelMixin
 

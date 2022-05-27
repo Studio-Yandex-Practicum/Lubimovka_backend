@@ -35,7 +35,6 @@ class MasterClass(BaseModel):
     )
 
     class Meta:
-        db_table = "masterclass"
         ordering = ("-created",)
         verbose_name = "Мастер-класс"
         verbose_name_plural = "Мастер-классы"

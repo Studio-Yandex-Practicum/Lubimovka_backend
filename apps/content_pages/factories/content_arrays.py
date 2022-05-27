@@ -1,6 +1,6 @@
 import factory
 
-from apps.content_pages.factories.content_array_items import (
+from apps.content_pages.factories import (
     ExtendedPersonFactory,
     OrderedEventFactory,
     OrderedImageFactory,

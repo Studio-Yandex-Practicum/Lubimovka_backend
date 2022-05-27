@@ -4,7 +4,7 @@ from django.db.models import F, QuerySet
 from django.utils import timezone
 
 from apps.afisha.filters import AfishaEventsDateInFilter
-from apps.afisha.models.events import Event
+from apps.afisha.models import Event
 from apps.core.models import Setting
 
 

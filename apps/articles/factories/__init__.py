@@ -1,3 +1,3 @@
-from apps.articles.factories.blog_items import BlogItemContentModuleFactory, BlogItemFactory
+from apps.articles.factories.blog_items import BlogItemContentModuleFactory, BlogItemFactory, BlogPersonFactory
 from apps.articles.factories.news_items import NewsItemContentModuleFactory, NewsItemFactory
 from apps.articles.factories.projects import ProjectContentModuleFactory, ProjectFactory

@@ -50,7 +50,6 @@ class PerformanceMediaReview(BaseModel):
     )
 
     class Meta:
-        db_table = "performance_media_review"
         ordering = ("-created",)
         verbose_name = "Медиа отзыв на спектакль"
         verbose_name_plural = "Медиа отзывы на спектакль"

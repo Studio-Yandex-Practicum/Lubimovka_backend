@@ -2,7 +2,7 @@ from datetime import timedelta
 
 from django.utils import timezone
 
-from apps.afisha.models.events import Event
+from apps.afisha.models import Event
 from apps.articles.models import BlogItem, NewsItem
 from apps.core.models import Setting
 from apps.info.models import Festival, Place

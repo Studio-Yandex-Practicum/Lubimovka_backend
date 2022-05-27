@@ -11,7 +11,15 @@ from apps.content_pages.models.content_blocks import (
     PlaysBlock,
     VideosBlock,
 )
-from apps.content_pages.models.content_items import ContentUnitRichText, Link, Preamble, Quote, Text, Title
+from apps.content_pages.models.content_items import (
+    AbstractItemWithTitle,
+    ContentUnitRichText,
+    Link,
+    Preamble,
+    Quote,
+    Text,
+    Title,
+)
 from apps.content_pages.models.contents import AbstractContent, AbstractContentPage
 
 # Prevent isort to rearrange imports and prevent circular imports.

@@ -6,3 +6,5 @@ from apps.afisha.serializers.performance import (
     PerformanceSerializer,
 )
 from apps.afisha.serializers.reading import EventReadingSerializer
+
+from apps.afisha.serializers.events import AfishaEventSerializer  # isort:skip

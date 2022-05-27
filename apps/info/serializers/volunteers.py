@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.info.models import Volunteer
-from apps.info.serializers.person import PersonsSerializer
+from apps.info.serializers import PersonsSerializer
 
 
 class VolunteersSerializer(serializers.ModelSerializer):

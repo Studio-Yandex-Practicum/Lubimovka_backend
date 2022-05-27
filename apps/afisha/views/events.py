@@ -5,7 +5,7 @@ from rest_framework.settings import api_settings
 from rest_framework.views import APIView
 
 from apps.afisha import selectors
-from apps.afisha.serializers.events import AfishaEventSerializer
+from apps.afisha.serializers import AfishaEventSerializer
 from apps.core.fields import CharacterSeparatedSerializerField
 from apps.core.utils import get_paginated_response
 

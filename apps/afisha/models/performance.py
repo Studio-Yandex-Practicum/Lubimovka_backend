@@ -81,7 +81,6 @@ class Performance(BaseModel):
     objects = PublishedContentQuerySet.as_manager()
 
     class Meta:
-        db_table = "performance"
         ordering = ("-created",)
         verbose_name = "Спектакль"
         verbose_name_plural = "Спектакли"
