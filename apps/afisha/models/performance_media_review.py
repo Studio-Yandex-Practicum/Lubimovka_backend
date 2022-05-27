@@ -13,9 +13,6 @@ class PerformanceImage(Image):
         verbose_name="Изображения спектакля",
     )
 
-    class Meta:
-        db_table = "performance_image"
-
 
 class PerformanceMediaReview(BaseModel):
     media_name = models.CharField(
@@ -87,7 +84,6 @@ class PerformanceReview(BaseModel):
     )
 
     class Meta:
-        db_table = "performance_review"
         ordering = ("-created",)
         verbose_name = "Отзыв зрителя на спектакль"
         verbose_name_plural = "Отзывы зрителей на спектакль"

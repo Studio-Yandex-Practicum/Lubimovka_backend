@@ -2,7 +2,7 @@ import factory
 from django.contrib.contenttypes.models import ContentType
 
 from apps.afisha.models import Event
-from apps.content_pages.factories import (  # ContentUnitRichTextFactory,; LinkFactory,
+from apps.content_pages.factories import (
     ContentUnitRichTextFactory,
     EventsBlockFactory,
     ImagesBlockFactory,
@@ -11,8 +11,6 @@ from apps.content_pages.factories import (  # ContentUnitRichTextFactory,; LinkF
     PlaysBlockFactory,
     VideosBlockFactory,
 )
-
-# from apps.content_pages.factories import ContentUnitRichTextFactory, LinkFactory
 from apps.content_pages.models import AbstractContent
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role

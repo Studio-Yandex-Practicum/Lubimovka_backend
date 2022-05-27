@@ -18,6 +18,3 @@ from apps.content_pages.serializers.content_items import (
     TitleSerializer,
 )
 from apps.content_pages.serializers.contents import BaseContentPageSerializer, BaseContentSerializer
-
-# Prevent isort to rearrange imports and prevent circular imports.
-# isort: split
