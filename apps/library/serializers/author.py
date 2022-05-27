@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.library.models import Author, OtherLink, SocialNetworkLink
-from apps.library.serializers.play import AuthorOtherPlaySerializer, AuthorPlaySerializer
+from apps.library.serializers import AuthorOtherPlaySerializer, AuthorPlaySerializer
 
 
 class OtherLinkSerializer(serializers.ModelSerializer):

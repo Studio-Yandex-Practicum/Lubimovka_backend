@@ -28,6 +28,7 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
         return queryset, use_distinct
 
 
+@admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = (
         "common_event",
@@ -103,6 +104,3 @@ class EventAdmin(admin.ModelAdmin):
     class Media:
 
         js = ("admin/afisha/js/AfishaGetEvent.js",)
-
-
-admin.site.register(Event, EventAdmin)

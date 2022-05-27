@@ -2,6 +2,7 @@
 
 from django.db import migrations
 
+
 def add_playsupply_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")

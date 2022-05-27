@@ -5,7 +5,7 @@ from rest_framework.views import APIView
 
 from apps.info.models import Festival
 from apps.library.models import ProgramType
-from apps.library.serializers.playfilters import PlayFiltersSerializer
+from apps.library.serializers import PlayFiltersSerializer
 
 
 class PlayFiltersAPIView(APIView):

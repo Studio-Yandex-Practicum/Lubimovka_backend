@@ -1,8 +1,8 @@
 import pytest
 from django.db import IntegrityError
 
+from apps.afisha.factories import MasterClassFactory, PerformanceFactory, ReadingFactory
 from apps.core.factories import PersonFactory, RoleFactory
-from apps.library.factories import MasterClassFactory, PerformanceFactory, ReadingFactory
 from apps.library.models import TeamMember
 
 pytestmark = [pytest.mark.django_db]

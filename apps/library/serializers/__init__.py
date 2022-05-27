@@ -1,30 +1,14 @@
-from .author import AuthorLettersSerializer, AuthorListSerializer, AuthorRetrieveSerializer, AuthorSearchSerializer
-from .masterclass import EventMasterClassSerializer
-from .performance import (
-    EventPerformanceSerializer,
-    PerformanceMediaReviewSerializer,
-    PerformanceReviewSerializer,
-    PerformanceSerializer,
-)
-from .play import AuthorForPlaySerializer, AuthorPlaySerializer, PlaySerializer
-from .playfilters import PlayFiltersSerializer
-from .reading import EventReadingSerializer
-from .role import RoleSerializer
-
-__all__ = (
-    AuthorListSerializer,
+from apps.library.serializers.play import (  # isort:skip
+    AuthorForPlaySerializer,
+    AuthorOtherPlaySerializer,
     AuthorPlaySerializer,
+    PlaySerializer,
+)
+from apps.library.serializers.author import (
+    AuthorLettersSerializer,
+    AuthorListSerializer,
     AuthorRetrieveSerializer,
     AuthorSearchSerializer,
-    AuthorLettersSerializer,
-    AuthorForPlaySerializer,
-    EventMasterClassSerializer,
-    EventPerformanceSerializer,
-    EventReadingSerializer,
-    PlaySerializer,
-    PlayFiltersSerializer,
-    PerformanceSerializer,
-    PerformanceReviewSerializer,
-    PerformanceMediaReviewSerializer,
-    RoleSerializer,
 )
+from apps.library.serializers.play_filters import PlayFiltersSerializer
+from apps.library.serializers.role import RoleSerializer

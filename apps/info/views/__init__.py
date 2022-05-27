@@ -1,22 +1,8 @@
-from .festival import FestivalAPIView, FestivalYearsAPIView
-from .festivalteams import FestivalTeamsAPIView
-from .partners import PartnerListAPIView
-from .press_release import PressReleaseDownloadAPIView, PressReleaseViewSet, PressReleaseYearsAPIView
-from .selectors import SelectorsAPIView
-from .settings import SettingsAPIView
-from .sponsors import SponsorsAPIView
-from .volunteers import VolunteersAPIView
-
-__all__ = (
-    FestivalAPIView,
-    FestivalTeamsAPIView,
-    FestivalYearsAPIView,
-    PartnerListAPIView,
-    PressReleaseViewSet,
-    PressReleaseYearsAPIView,
-    PressReleaseDownloadAPIView,
-    SponsorsAPIView,
-    VolunteersAPIView,
-    SettingsAPIView,
-    SelectorsAPIView,
-)
+from apps.info.views.festival import FestivalAPIView, FestivalYearsAPIView
+from apps.info.views.festival_teams import FestivalTeamsAPIView
+from apps.info.views.partners import PartnerListAPIView
+from apps.info.views.press_release import PressReleaseDownloadAPIView, PressReleaseViewSet, PressReleaseYearsAPIView
+from apps.info.views.selectors import SelectorsAPIView
+from apps.info.views.settings import SettingsAPIView
+from apps.info.views.sponsors import SponsorsAPIView
+from apps.info.views.volunteers import VolunteersAPIView

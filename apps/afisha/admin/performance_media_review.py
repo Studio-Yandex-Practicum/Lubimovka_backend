@@ -1,23 +1,23 @@
 from django.contrib import admin
 
-from apps.library.models import PerformanceReview
+from apps.afisha.models import PerformanceMediaReview
 
 
-@admin.register(PerformanceReview)
-class PerformanceReviewAdmin(admin.ModelAdmin):
+@admin.register(PerformanceMediaReview)
+class PerformanceMediaReviewAdmin(admin.ModelAdmin):
     list_display = (
-        "reviewer_name",
+        "media_name",
         "performance",
         "pub_date",
     )
     list_filter = (
-        "reviewer_name",
+        "media_name",
         "performance__name",
         "pub_date",
     )
     autocomplete_fields = ("performance",)
     search_fields = (
-        "reviewer_name",
+        "media_name",
         "performance__name",
         "pub_date",
     )
