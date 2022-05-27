@@ -65,7 +65,10 @@ class Author(BaseModel):
     def achievements(self):
         """Get queryset with info about achievements."""
         return (
-            self.plays.filter(program__isnull=False).values("program__id", "program__name", "festival__year").distinct()
+            self.plays.filter(program__isnull=False)
+            .values("program__id", "program__name", "festival__year")
+            .order_by("-festival__year")
+            .distinct("festival__year", "program__name")
         )
 
 
