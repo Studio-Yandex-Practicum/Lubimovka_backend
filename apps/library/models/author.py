@@ -8,21 +8,6 @@ from apps.core.models import BaseModel, Person
 from .play import Play
 
 
-class Achievement(BaseModel):
-    tag = models.CharField(
-        max_length=40,
-        verbose_name="Достижения в виде тега",
-        help_text="Не более 40 символов",
-    )
-
-    class Meta:
-        verbose_name = "Достижение"
-        verbose_name_plural = "Достижения"
-
-    def __str__(self):
-        return self.tag
-
-
 class Author(BaseModel):
     person = models.OneToOneField(
         Person,
@@ -37,12 +22,6 @@ class Author(BaseModel):
     biography = models.TextField(
         max_length=3000,
         verbose_name="Текст про автора",
-    )
-    achievements = models.ManyToManyField(
-        Achievement,
-        verbose_name="Достижения",
-        related_name="authors",
-        blank=True,
     )
     plays = models.ManyToManyField(
         Play,
@@ -81,6 +60,16 @@ class Author(BaseModel):
     @property
     def image(self):
         return self.person.image
+
+    @property
+    def achievements(self):
+        """Get queryset with info about achievements."""
+        return (
+            self.plays.filter(program__isnull=False)
+            .values("program__id", "program__name", "festival__year")
+            .order_by("-festival__year")
+            .distinct("festival__year", "program__name")
+        )
 
 
 class AuthorPlay(models.Model):
