@@ -62,8 +62,11 @@ class AchivementInline(admin.TabularInline):
         return f"{obj.play.program} - {obj.play.festival.year}"
 
     def get_queryset(self, request):
-        return AuthorPlay.objects.filter(play__other_play=False).select_related(
-            "author__person", "play__program", "play__festival"
+        return (
+            AuthorPlay.objects.filter(play__other_play=False)
+            .select_related("author__person", "play__program", "play__festival")
+            .order_by("-play__festival__year")
+            .distinct("play__festival__year", "play__program")
         )
 
     def has_add_permission(self, request, obj=None):
