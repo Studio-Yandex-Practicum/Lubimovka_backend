@@ -3,12 +3,10 @@ from django.db import models
 from apps.core.models import BaseModel, Person
 from apps.library.utilities import get_team_roles
 
-from .play import Play
-
 
 class Reading(BaseModel):
     play = models.ForeignKey(
-        Play,
+        "library.Play",
         on_delete=models.PROTECT,
         related_name="readings",
         verbose_name="Пьеса",
@@ -23,7 +21,7 @@ class Reading(BaseModel):
     )
     persons = models.ManyToManyField(
         Person,
-        through="TeamMember",
+        through="library.TeamMember",
         related_name="readings",
         verbose_name="Члены команды",
     )

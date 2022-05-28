@@ -6,8 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from apps.info.models import PressRelease
-from apps.info.serializers.festival import YearsSerializer
-from apps.info.serializers.press_release import PressReleaseSerializer
+from apps.info.serializers import PressReleaseSerializer, YearsSerializer
 from apps.info.utils import get_pdf_response
 
 

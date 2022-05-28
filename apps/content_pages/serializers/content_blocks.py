@@ -1,14 +1,14 @@
 from rest_framework import serializers
 
 from apps.afisha.models import Event
+from apps.afisha.serializers import EventPerformanceSerializer
 from apps.content_pages.models import EventsBlock, ImagesBlock, PersonsBlock, PlaysBlock, VideosBlock
-from apps.content_pages.serializers import (
+from apps.content_pages.serializers.content_items import (
     ExtendedPersonSerializer,
     OrderedImageSerializer,
     OrderedPlaySerializer,
     OrderedVideoSerializer,
 )
-from apps.library.serializers.performance import EventPerformanceSerializer
 
 
 class EventInBlockSerializer(serializers.ModelSerializer):

@@ -15,7 +15,7 @@ class MasterClass(BaseModel):
     )
     persons = models.ManyToManyField(
         Person,
-        through="TeamMember",
+        through="library.TeamMember",
         related_name="masterclasses",
         verbose_name="Члены команды",
     )

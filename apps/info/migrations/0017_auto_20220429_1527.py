@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 
+
 def order_model(Model):
     for obj in Model.objects.all():
         obj.order = obj.id

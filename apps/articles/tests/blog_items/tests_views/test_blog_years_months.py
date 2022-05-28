@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 import pytest
 from django.urls import reverse
 
-from apps.articles.factories.blog_items import BlogItemFactory
+from apps.articles.factories import BlogItemFactory
 
 pytestmark = [pytest.mark.django_db]
 

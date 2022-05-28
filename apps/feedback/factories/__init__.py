@@ -1,1 +1,1 @@
-from .participationapplication import ParticipationApplicationFestivalFactory
+from apps.feedback.factories.participation_application import ParticipationApplicationFestivalFactory
