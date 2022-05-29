@@ -27,8 +27,6 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        dict = kwargs
-        print(dict)
         kwargs["queryset"] = Play.objects.filter(other_play=False)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
