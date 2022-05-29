@@ -12,7 +12,6 @@ function hideAddButton(objectId) {
 function getSelect2Element(elementId) {
     // Return select2 <span>
     const lable = `[aria-labelledby="select2-${elementId}-container"]`;
-    console.log(lable)
     return $(lable).eq(0)
 }
 
@@ -81,7 +80,7 @@ function limitChangeForDropdowns() {
     })
 
     // For users app pages and pages for creation new record limits are disabled
-    let isExcluded = url.filter(value => excludePages.includes(value)).length;
+    const isExcluded = url.filter(value => excludePages.includes(value)).length;
     if (isExcluded) {
         return
     }
