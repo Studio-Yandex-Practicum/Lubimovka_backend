@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.forms import ValidationError
 from django.forms.models import BaseInlineFormSet
 
-from apps.library.filters.play import PlayTypeFilter
+from apps.library.filters import PlayTypeFilter
 from apps.library.models import AuthorPlay, Play
 
 

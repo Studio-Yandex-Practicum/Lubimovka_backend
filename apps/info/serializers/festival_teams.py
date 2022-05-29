@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.info.models import FestivalTeamMember
-from apps.info.serializers.person import PersonsSerializer
+from apps.info.serializers import PersonsSerializer
 
 
 class FestivalTeamsSerializer(serializers.ModelSerializer):

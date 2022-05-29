@@ -9,14 +9,13 @@ from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.views import APIView
 
 from apps.core.utils import get_domain
-from apps.feedback.models import ParticipationApplicationFestival
-from apps.feedback.models.participation_application import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION
+from apps.feedback.models import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION, ParticipationApplicationFestival
 from apps.feedback.permissions import SettingsPlayReceptionPermission
 from apps.feedback.schema.schema_extension import (
     ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
     ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403,
 )
-from apps.feedback.services.participation_export import ParticipationApplicationExport
+from apps.feedback.services import ParticipationApplicationExport
 
 logger = logging.getLogger("django")
 

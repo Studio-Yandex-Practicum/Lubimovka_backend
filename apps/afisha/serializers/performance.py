@@ -1,11 +1,8 @@
 from rest_framework import serializers
 
-from apps.afisha.models import Event
+from apps.afisha.models import Event, Performance, PerformanceMediaReview, PerformanceReview
 from apps.core.serializers import ImageSerializer
-from apps.library.models import Performance, PerformanceMediaReview, PerformanceReview
-from apps.library.serializers.role import RoleSerializer
-
-from .play import PlaySerializer
+from apps.library.serializers import PlaySerializer, RoleSerializer
 
 
 class LocalEventSerializer(serializers.ModelSerializer):

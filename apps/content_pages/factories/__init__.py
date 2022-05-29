@@ -1,18 +1,19 @@
-from .content_array_items import (
+from apps.content_pages.factories.content_array_items import (
     ContentPersonRoleFactory,
     ExtendedPersonFactory,
+    OrderedEventFactory,
     OrderedImageFactory,
     OrderedPlayFactory,
     OrderedVideoFactory,
 )
-from .content_arrays import (
+from apps.content_pages.factories.content_arrays import (
     EventsBlockFactory,
     ImagesBlockFactory,
     PersonsBlockFactory,
     PlaysBlockFactory,
     VideosBlockFactory,
 )
-from .content_units import (
+from apps.content_pages.factories.content_units import (
     ContentUnitRichTextFactory,
     LinkFactory,
     PreambleFactory,
@@ -24,4 +25,4 @@ from .content_units import (
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split
 
-from .content_modules import AbstractContentFactory
+from apps.content_pages.factories.content_modules import AbstractContentFactory

@@ -12,7 +12,7 @@ from apps.content_pages.factories import (
     VideosBlockFactory,
 )
 from apps.content_pages.models import AbstractContent
-from apps.core.decorators.factory import restrict_factory
+from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.library.models import Play
 

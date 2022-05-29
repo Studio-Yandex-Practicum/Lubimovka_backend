@@ -5,17 +5,11 @@ import pytest
 from django.conf import settings
 from rest_framework.test import APIClient
 
-from apps.afisha.factories import EventFactory
+from apps.afisha.factories import EventFactory, MasterClassFactory, PerformanceFactory, ReadingFactory
 from apps.core.factories import PersonFactory
 from apps.core.models import Setting
 from apps.info.factories import FestivalFactory, InfoLinkFactory
-from apps.library.factories import (
-    MasterClassFactory,
-    PerformanceFactory,
-    PlayFactory,
-    ProgramTypeFactory,
-    ReadingFactory,
-)
+from apps.library.factories import PlayFactory, ProgramTypeFactory
 
 pytestmark = [pytest.mark.django_db]
 

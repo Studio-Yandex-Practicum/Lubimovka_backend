@@ -2,13 +2,13 @@ import pytest
 from django.conf import settings
 from django.urls import reverse
 
-from apps.afisha.factories import EventFactory
+from apps.afisha.factories import EventFactory, MasterClassFactory, PerformanceFactory, ReadingFactory
 from apps.articles.factories import BlogItemFactory, NewsItemFactory
 from apps.content_pages.factories import ImagesBlockFactory
 from apps.core.factories import PersonFactory
 from apps.info.factories import FestivalFactory, InfoLinkFactory, PlaceFactory
-from apps.library.factories import MasterClassFactory, PerformanceFactory, PlayFactory, ReadingFactory
-from apps.library.models.play import ProgramType
+from apps.library.factories import PlayFactory
+from apps.library.models import ProgramType
 from apps.main.factories import BannerFactory
 
 MAIN_URL = reverse("main:main_page")

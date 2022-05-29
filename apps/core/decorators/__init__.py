@@ -1,3 +1,1 @@
-from .factory import restrict_factory
-
-__all__ = (restrict_factory,)
+from apps.core.decorators.factory import restrict_factory

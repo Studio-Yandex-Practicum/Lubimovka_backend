@@ -52,11 +52,11 @@ def check_hash(current_hash, id):
     return current_hash == calculate_hash(id)
 
 
-def blog_item_detail_get(blog_item_id, item_detail=None):
-    """Return `detailed` published `BlogItem` object if it exists.
+def item_detail_get(article_model, item_id, item_detail=None):
+    """Return `detailed` published object if it exists.
 
     The `BlogItem` extends with:
-    - _other_blogs: Return latest four `BlogItem` except the object itself.
+    - _other_item: Return latest four `BlogItem` except the object itself.
     - _team: Make `team` data based on `roles` and `blog_persons`.
     Team serialized data has to look like this:
         "team": [
@@ -76,20 +76,22 @@ def blog_item_detail_get(blog_item_id, item_detail=None):
         2. Limit (prefetch) `blog_persons` (roles reverse relation) with
         blog_item's objects only (typically `role.blog_persons` returns all
         blog_persons, not only related to exact blog_item).
+    The `NewsItem` extends only with:
+    - _other_item: Return latest four `NewsItem` except the object itself.
     """
-    published_blog_items = BlogItem.objects.published()
-    blog_item = item_detail or get_object_or_404(published_blog_items, id=blog_item_id)
-
-    blog_item._other_blogs = published_blog_items.exclude(id=blog_item_id)[:4]
-
-    blog_item_roles = blog_item.roles.distinct()
-    blog_item_persons = blog_item.blog_persons.all()
-    blog_item_persons_full_name = blog_item_persons.annotate(
-        annotated_full_name=Concat("person__first_name", V(" "), "person__last_name")
-    )
-    blog_item._team = blog_item_roles.prefetch_related(Prefetch("blog_persons", queryset=blog_item_persons_full_name))
-
-    return blog_item
+    published_items = article_model.objects.published()
+    published_item = item_detail or get_object_or_404(published_items, id=item_id)
+    published_item._other_items = published_items.exclude(id=item_id)[:4]
+    if article_model == BlogItem:
+        blog_item_roles = published_item.roles.distinct()
+        blog_item_persons = published_item.blog_persons.all()
+        blog_item_persons_full_name = blog_item_persons.annotate(
+            annotated_full_name=Concat("person__first_name", V(" "), "person__last_name")
+        )
+        published_item._team = blog_item_roles.prefetch_related(
+            Prefetch("blog_persons", queryset=blog_item_persons_full_name)
+        )
+    return published_item
 
 
 def preview_item_detail_get(article_model, object_id, hash_sum=None):
