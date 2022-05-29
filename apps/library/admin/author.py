@@ -17,6 +17,9 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name_plural = "Пьесы"
     classes = ("collapsible",)
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=False).select_related(
             "author__person",
@@ -24,6 +27,8 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
         )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        dict = kwargs
+        print(dict)
         kwargs["queryset"] = Play.objects.filter(other_play=False)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
@@ -34,6 +39,9 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
     classes = ("collapsible",)
+
+    def has_change_permission(self, request, obj=None):
+        return False
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=True).select_related(
