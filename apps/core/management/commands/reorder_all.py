@@ -13,6 +13,7 @@ class Command(BaseCommand):
             "info.Partner",
             "info.Sponsor",
             "info.Place",
+            "main.Banner",
         )
         try:
             for model in models:
