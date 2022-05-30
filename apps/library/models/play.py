@@ -65,7 +65,7 @@ class Play(BaseModel):
         max_length=200,
         upload_to="plays",
         verbose_name="Текст пьесы",
-        help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PLAY}",
+        help_text=f"Файл пьесы должен быть в одном из следующих форматов: " f"{ALLOWED_FORMATS_FILE_FOR_PLAY}",
     )
     url_reading = models.URLField(
         max_length=200,
