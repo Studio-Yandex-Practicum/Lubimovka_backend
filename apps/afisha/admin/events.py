@@ -77,6 +77,12 @@ class EventAdmin(admin.ModelAdmin):
     )
     empty_value_display = "-пусто-"
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["common_event"].widget.can_add_related = False
+        form.base_fields["common_event"].widget.can_change_related = False
+        return form
+
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related(

@@ -15,7 +15,6 @@ jQuery(document).ready(function ($) {
                 $divDependedOnCommonEvent.slideUp();
             }
         };
-
     }
 
     // show/hide on load based on existing value of eventTypeSelectField
