@@ -35,7 +35,7 @@ class ProgramType(BaseModel):
 
 
 ALLOWED_FORMATS_FILE_FOR_PLAY = (
-    "doc",  #
+    "doc",
     "docx",
     "txt",
     "odt",
