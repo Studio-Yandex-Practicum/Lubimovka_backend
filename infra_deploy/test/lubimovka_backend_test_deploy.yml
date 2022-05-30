@@ -41,7 +41,8 @@ services:
              python manage.py createsuperuser --noinput &&
              python manage.py filldb &&
              python manage.py set_perms &&
-             python manage.py filldb_articles"
+             python manage.py filldb_articles
+             python manage.py reorder_all"
     depends_on:
       - backend
     env_file:
