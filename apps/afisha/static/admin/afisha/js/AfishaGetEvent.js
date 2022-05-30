@@ -25,6 +25,16 @@ jQuery(document).ready(function ($) {
         toggleDivDependedOnEventType($(this).val(), false);
     });
 
+    // add function to hide button ADD ("+")
+    function hideAddButton(objectId) {
+        const addButtonId = `#add_${objectId}`;
+        const addButton = $(addButtonId);
+        addButton.attr("hidden", true);
+    };
+
+    // and apply it to common_event
+    hideAddButton($divDependedOnCommonEvent);
+
     // source code - required for next step changes (see below)
     $.fn.djangoAdminSelect2 = function(options) {
         var settings = $.extend({}, options);
