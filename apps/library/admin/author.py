@@ -16,6 +16,7 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ("collapsible",)
+    autocomplete_fields = ("play",)
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=False).select_related(
@@ -27,6 +28,9 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
         kwargs["queryset"] = Play.objects.filter(other_play=False)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
+    class Media:
+        js = ("admin/play_autocomplete.js",)
+
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     model = AuthorPlay
@@ -34,6 +38,7 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
     classes = ("collapsible",)
+    autocomplete_fields = ("play",)
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=True).select_related(
@@ -44,6 +49,9 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         kwargs["queryset"] = Play.objects.filter(other_play=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    class Media:
+        js = ("admin/otherplay_autocomplete.js",)
 
 
 class AchivementInline(admin.TabularInline):
