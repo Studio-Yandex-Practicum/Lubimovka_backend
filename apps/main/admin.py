@@ -62,6 +62,8 @@ class SettingAdmin(admin.ModelAdmin):
         if isinstance(obj.value, bool):
             return _boolean_icon(obj.value)
         if obj.field_type == "IMAGE":
+            if not obj.value:
+                return None
             return format_html('<a href="{}">{}</a>'.format(obj.image.url, obj.value))
         if obj.field_type == "URL":
             return format_html('<a href="{}">{}</a>'.format(obj.url, obj.value))
