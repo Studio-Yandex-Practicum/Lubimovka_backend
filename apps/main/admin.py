@@ -61,9 +61,7 @@ class SettingAdmin(admin.ModelAdmin):
         """Return value of the setting object."""
         if isinstance(obj.value, bool):
             return _boolean_icon(obj.value)
-        if obj.field_type == "IMAGE":
-            if not obj.value:
-                return None
+        if obj.field_type == "IMAGE" and obj.value:
             return format_html('<a href="{}">{}</a>'.format(obj.image.url, obj.value))
         if obj.field_type == "URL":
             return format_html('<a href="{}">{}</a>'.format(obj.url, obj.value))
