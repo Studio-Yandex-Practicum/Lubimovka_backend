@@ -15,6 +15,7 @@ jQuery(document).ready(function ($) {
                 $divDependedOnCommonEvent.slideUp();
             }
         };
+
     }
 
     // show/hide on load based on existing value of eventTypeSelectField
@@ -34,6 +35,16 @@ jQuery(document).ready(function ($) {
 
     // and apply it to common_event
     hideAddButton($divDependedOnCommonEvent);
+
+    // add function to hide button EDIT
+    function hideChangeButton(objectId) {
+        const changeButtonId = `#change_${objectId}`;
+        const changeButton = $(changeButtonId);
+        changeButton.attr("hidden", true);
+    };
+
+    // and apply it to common_event
+    hideChangeButton($divDependedOnCommonEvent);
 
     // source code - required for next step changes (see below)
     $.fn.djangoAdminSelect2 = function(options) {

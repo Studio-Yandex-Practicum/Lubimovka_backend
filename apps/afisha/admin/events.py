@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.contrib import admin
+from django.urls import reverse
 from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
@@ -47,7 +48,7 @@ class EventAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ("common_event",),
+                "fields": ("common_event", "common_event_link"),
                 "classes": ("depended_on_common_event",),
             },
         ),
@@ -76,6 +77,28 @@ class EventAdmin(admin.ModelAdmin):
         "common_event__performance__name",
     )
     empty_value_display = "-пусто-"
+    readonly_fields = ("common_event_link",)
+
+    @admin.display(
+        description="Изменить базовое событие",
+    )
+    def common_event_link(self, obj):
+        if obj:
+            print("yes")
+            event_pk = obj.common_event.reading.pk
+            print("here")
+            print(event_pk)
+            url = reverse("admin:afisha_reading_change", args=(event_pk,))
+            print("there")
+            return '<a href="%s">Edit Event</a>' % url
+        print("none")
+
+    common_event_link.allow_tags = True
+
+    def get_form(self, request, obj=None, **kwargs):
+        form = super().get_form(request, obj, **kwargs)
+        form.base_fields["common_event"].widget.can_add_related = False
+        return form
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
