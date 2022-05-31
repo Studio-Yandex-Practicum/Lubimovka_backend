@@ -26,7 +26,6 @@ class FestTeamMemberForm(forms.ModelForm):
 
     class Meta:
         model = FestivalTeamMember
-        # exclude = ("team",)
         fields = (
             "person",
             "position",
@@ -36,9 +35,7 @@ class FestTeamMemberForm(forms.ModelForm):
         )
 
     def clean(self):
-        print("clean?")
         cleaned_data = super().clean()
-        print("clean!")
         is_pr_director = cleaned_data["is_pr_director"]
         pr_director_name = cleaned_data["pr_director_name"]
 
