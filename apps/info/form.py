@@ -22,19 +22,23 @@ class FestTeamMemberForm(forms.ModelForm):
         help_text="пример: Ивану Иванову",
         max_length=60,
     )
+    team = forms.CharField(widget=forms.HiddenInput(), initial="fest")
 
     class Meta:
         model = FestivalTeamMember
-        exclude = ("team",)
+        # exclude = ("team",)
         fields = (
             "person",
             "position",
             "is_pr_director",
             "pr_director_name",
+            "team",
         )
 
     def clean(self):
+        print("clean?")
         cleaned_data = super().clean()
+        print("clean!")
         is_pr_director = cleaned_data["is_pr_director"]
         pr_director_name = cleaned_data["pr_director_name"]
 

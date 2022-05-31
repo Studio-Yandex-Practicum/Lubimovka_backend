@@ -318,6 +318,7 @@ class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
             {
                 "fields": (
                     "person",
+                    "team",
                     "position",
                     "is_pr_director",
                 ),
@@ -336,14 +337,14 @@ class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         """Данные из поля 'pr_director_name' проверяются и сохраняются в модели 'Setting'."""
+        print("try to save")
         if form.is_valid():
-            team = "fest"
+            print("form valid")
             if obj.is_pr_director:
                 name_director = form.cleaned_data["pr_director_name"]
                 FestivalTeamMember.objects.filter(is_pr_director=True).update(is_pr_director=False)
                 Setting.objects.filter(settings_key="pr_director_name").update(text=name_director)
             obj = form.save(commit=False)
-            obj.team = team
             obj.save()
         else:
             raise ValidationError("Заполните поля корректно")
