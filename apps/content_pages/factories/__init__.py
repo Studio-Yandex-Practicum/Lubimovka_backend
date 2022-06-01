@@ -13,14 +13,7 @@ from apps.content_pages.factories.content_arrays import (
     PlaysBlockFactory,
     VideosBlockFactory,
 )
-from apps.content_pages.factories.content_units import (
-    ContentUnitRichTextFactory,
-    LinkFactory,
-    PreambleFactory,
-    QuoteFactory,
-    TextFactory,
-    TitleFactory,
-)
+from apps.content_pages.factories.content_units import ContentUnitRichTextFactory, LinkFactory
 
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split
