@@ -1,10 +1,11 @@
 from typing import Any, Union
 
-from django.db.models import F, QuerySet
+from django.db.models import F, Q, QuerySet
 from django.utils import timezone
 
 from apps.afisha.filters import AfishaEventsDateInFilter
 from apps.afisha.models import Event
+from apps.core.constants import Status
 from apps.core.models import Setting
 
 
@@ -50,6 +51,11 @@ def afisha_event_list_get(filters: dict[str, str] = None) -> QuerySet:
             "common_event__masterclass",
             "common_event__reading",
             "common_event__performance",
+        )
+        .filter(
+            Q(common_event__reading__name__isnull=False)
+            | Q(common_event__masterclass__name__isnull=False)
+            | Q(common_event__performance__status=Status.PUBLISHED)
         )
         .order_by("date_time")
     )
