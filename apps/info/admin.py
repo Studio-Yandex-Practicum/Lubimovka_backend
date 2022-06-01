@@ -7,7 +7,7 @@ from django.utils.html import format_html
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
 from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
-from apps.info.form import AdditionalLinkForm, FestivalForm, FestTeamMemberForm, PlayLinkForm
+from apps.info.form import AdditionalLinkForm, ArtTeamMemberForm, FestivalForm, FestTeamMemberForm, PlayLinkForm
 from apps.info.models import (
     ArtTeamMember,
     Festival,
@@ -266,6 +266,7 @@ class PressReleaseAdmin(admin.ModelAdmin):
 
 @admin.register(ArtTeamMember)
 class ArtTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
+    form = ArtTeamMemberForm
     list_display = (
         "order",
         "person",
@@ -279,6 +280,7 @@ class ArtTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
                 "fields": (
                     "person",
                     "position",
+                    "team",
                 ),
             },
         ),
@@ -289,16 +291,6 @@ class ArtTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset().filter(team="art")
         return qs
-
-    def save_model(self, request, obj, form, change):
-        """Устанваливается поле "team" на значение "art"."""
-        if form.is_valid():
-            team = "art"
-            obj = form.save(commit=False)
-            obj.team = team
-            obj.save()
-        else:
-            raise ValidationError("Заполните поля корректно")
 
 
 @admin.register(FestTeamMember)
@@ -320,6 +312,7 @@ class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
                     "person",
                     "position",
                     "is_pr_director",
+                    "team",
                 ),
             },
         ),
@@ -337,14 +330,11 @@ class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         """Данные из поля 'pr_director_name' проверяются и сохраняются в модели 'Setting'."""
         if form.is_valid():
-            team = "fest"
             if obj.is_pr_director:
                 name_director = form.cleaned_data["pr_director_name"]
                 FestivalTeamMember.objects.filter(is_pr_director=True).update(is_pr_director=False)
                 Setting.objects.filter(settings_key="pr_director_name").update(text=name_director)
-            obj = form.save(commit=False)
-            obj.team = team
-            obj.save()
+            obj = form.save()
         else:
             raise ValidationError("Заполните поля корректно")
 
