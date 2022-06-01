@@ -65,15 +65,17 @@ class MainObject:
                     .order_by("date_time")
                 )
             else:
+                today = timezone.now()
+                end_date = today.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=6)
                 items = (
-                    Event.objects.filter(date_time__gte=timezone.now())
+                    Event.objects.filter(date_time__range=[today, end_date])
                     .filter(pinned_on_main=True)
                     .filter(
                         Q(common_event__reading__name__isnull=False)
                         | Q(common_event__masterclass__name__isnull=False)
                         | Q(common_event__performance__status=Status.PUBLISHED)
                     )
-                    .order_by("date_time")[:6]
+                    .order_by("date_time")
                 )
 
             description = Setting.get_setting("afisha_description")
