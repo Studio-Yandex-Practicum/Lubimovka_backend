@@ -43,6 +43,7 @@ class ParticipationViewSet(APIView):
                 UniqueTogetherValidator(
                     queryset=ParticipationApplicationFestival.objects.all(),
                     fields=UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION,
+                    message="Заявка уже была отправлена.",
                 )
             ]
 

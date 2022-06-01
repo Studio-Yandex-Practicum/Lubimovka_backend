@@ -80,7 +80,7 @@ class Person(BaseModel):
         null=True,
         blank=True,
         unique=True,
-        help_text="Обязательно указать для: членов команды, волонтёров и авторов.",
+        help_text="Поле не обязательное",
     )
     image = models.ImageField(
         upload_to="images/person_avatars",

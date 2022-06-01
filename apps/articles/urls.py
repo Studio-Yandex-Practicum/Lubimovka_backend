@@ -9,8 +9,9 @@ from apps.articles.views import (
     NewsItemsListAPI,
     NewsItemsPreviewDetailAPI,
     NewsItemYearsMonthsAPI,
+    ProjectDetailAPI,
+    ProjectListAPI,
     ProjectsPreviewDetailAPI,
-    ProjectsViewSet,
 )
 
 blog_item_urls = [
@@ -44,8 +45,16 @@ news_item_urls = [
 ]
 
 project_item_urls = [
-    path("", ProjectsViewSet.as_view({"get": "list"}), name="project-list"),
-    path("<int:pk>/", ProjectsViewSet.as_view({"get": "retrieve"}), name="project-detail"),
+    path(
+        route="",
+        view=ProjectListAPI.as_view(),
+        name="project-list",
+    ),
+    path(
+        route="<int:id>/",
+        view=ProjectDetailAPI.as_view(),
+        name="project-detail",
+    ),
     path(
         route="<int:id>/preview/",
         view=ProjectsPreviewDetailAPI.as_view(),

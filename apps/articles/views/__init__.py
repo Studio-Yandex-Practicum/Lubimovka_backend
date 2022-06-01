@@ -10,4 +10,4 @@ from apps.articles.views.news_items import (
     NewsItemsPreviewDetailAPI,
     NewsItemYearsMonthsAPI,
 )
-from apps.articles.views.projects import ProjectsPreviewDetailAPI, ProjectsViewSet
+from apps.articles.views.projects import ProjectDetailAPI, ProjectListAPI, ProjectsPreviewDetailAPI
