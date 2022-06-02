@@ -28,9 +28,6 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
         kwargs["queryset"] = Play.objects.filter(other_play=False)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
-    class Media:
-        js = ("admin/play_autocomplete.js",)
-
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     model = AuthorPlay
@@ -49,9 +46,6 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         kwargs["queryset"] = Play.objects.filter(other_play=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    class Media:
-        js = ("admin/otherplay_autocomplete.js",)
 
 
 class AchivementInline(admin.TabularInline):
@@ -145,3 +139,6 @@ class AuthorAdmin(admin.ModelAdmin):
         slug = utils.slugify(person.last_name)
         response = {"slug": slug}
         return JsonResponse(response)
+
+    class Media:
+        js = ("admin/play_autocomplete.js",)
