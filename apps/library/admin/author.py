@@ -133,4 +133,4 @@ class AuthorAdmin(admin.ModelAdmin):
         return JsonResponse(response)
 
     class Media:
-        js = ("admin/play_autocomplete.js",)
+        js = ("admin/author_admin.js",)
