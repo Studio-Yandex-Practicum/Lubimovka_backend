@@ -42,8 +42,8 @@ class Banner(BaseModel):
     )
 
     class Meta:
-        verbose_name = "Банер для главной странице"
-        verbose_name_plural = "Банеры для главной странице"
+        verbose_name = "Банер на главной странице"
+        verbose_name_plural = "Банеры на главной странице"
         ordering = ("order",)
 
     def __str__(self):
