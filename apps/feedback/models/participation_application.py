@@ -66,6 +66,7 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name="Файл",
         upload_to=generate_upload_path,
         help_text=f"Файл в одно из форматов " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",
+        blank=True,
     )
     url_file_in_storage = models.URLField(
         verbose_name="Ссылка для скачивания файла с Диска",
