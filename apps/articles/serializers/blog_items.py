@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.articles.models import BlogItem
+from apps.content_pages.serializers import BaseContentPageSerializer
 from apps.core.models import Role
 
 
@@ -35,4 +36,25 @@ class BlogItemListSerializer(serializers.ModelSerializer):
             "author_url",
             "author_url_title",
             "image",
+        )
+
+
+class BlogItemDetailOutputSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
+    other_blogs = BlogItemListSerializer(many=True, source="_other_items")
+    team = BlogItemRoleSerializer(many=True, source="_team")
+    pub_date = serializers.DateTimeField(required=True)
+
+    class Meta:
+        model = BlogItem
+        fields = (
+            "id",
+            "title",
+            "description",
+            "image",
+            "author_url",
+            "author_url_title",
+            "pub_date",
+            "contents",
+            "team",
+            "other_blogs",
         )

@@ -1,14 +1,11 @@
-from .festival import Festival, FestivalTeamMember, PressRelease
-from .people import Partner, Selector, Sponsor, Volunteer
-from .place import Place
-
-__all__ = (
-    FestivalTeamMember,
+from apps.info.models.festival import (
+    ArtTeamMember,
     Festival,
-    Partner,
-    Place,
-    Sponsor,
-    Volunteer,
+    FestivalImage,
+    FestivalTeamMember,
+    FestTeamMember,
+    InfoLink,
     PressRelease,
-    Selector,
 )
+from apps.info.models.people import Partner, Selector, Sponsor, Volunteer
+from apps.info.models.place import Place

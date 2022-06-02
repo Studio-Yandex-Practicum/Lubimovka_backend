@@ -40,3 +40,37 @@ class HasReviewAdminFilter(admin.SimpleListFilter):
             return queryset.filter(~Q(review_text__exact=""))
         if self.value() == "False":
             return queryset.filter(review_text__exact="")
+
+
+class PartnerTypeFilter(admin.SimpleListFilter):
+    title = _("Тип партнера")
+    parameter_name = "type"
+
+    def lookups(self, request, model_admin):
+        partner_types_list = [
+            (None, _("Партнер фестиваля")),  # default lookup which is used instead of 'All' ('Все')
+            (Partner.PartnerType.GENERAL_PARTNER, _("Генеральный партнер")),
+            (Partner.PartnerType.INFO_PARTNER, _("Информационный партнер")),
+        ]
+        return partner_types_list
+
+    def queryset(self, request, queryset):
+        if self.value() is None:  # get qs for new default lookup
+            return Partner.objects.filter(type=Partner.PartnerType.FESTIVAL_PARTNER)
+        if self.value() == Partner.PartnerType.GENERAL_PARTNER:
+            return Partner.objects.filter(type=Partner.PartnerType.GENERAL_PARTNER)
+        if self.value() == Partner.PartnerType.INFO_PARTNER:
+            return Partner.objects.filter(type=Partner.PartnerType.INFO_PARTNER)
+
+    def choices(self, changelist):
+        for lookup, title in self.lookup_choices:
+            yield {
+                "selected": self.value() == lookup,
+                "query_string": changelist.get_query_string(
+                    {
+                        self.parameter_name: lookup,
+                    },
+                    [],
+                ),
+                "display": title,
+            }

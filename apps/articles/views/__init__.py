@@ -1,3 +1,13 @@
-from .blog_items import BlogItemDetailAPI, BlogItemListAPI, BlogItemYearsMonthsAPI
-from .news_items import NewsItemsViewSet, NewsItemYearsMonthsAPI
-from .projects import ProjectsViewSet
+from apps.articles.views.blog_items import (
+    BlogItemDetailAPI,
+    BlogItemListAPI,
+    BlogItemPreviewDetailAPI,
+    BlogItemYearsMonthsAPI,
+)
+from apps.articles.views.news_items import (
+    NewsItemsDetailAPI,
+    NewsItemsListAPI,
+    NewsItemsPreviewDetailAPI,
+    NewsItemYearsMonthsAPI,
+)
+from apps.articles.views.projects import ProjectsPreviewDetailAPI, ProjectsViewSet

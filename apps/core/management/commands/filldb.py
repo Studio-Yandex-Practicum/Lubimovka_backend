@@ -2,8 +2,9 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.afisha.factories import EventFactory
-from apps.core.factories import ImageFactory, PersonFactory
+from apps.afisha.factories import MasterClassFactory, PerformanceFactory, ReadingFactory
+from apps.afisha.factories.events import EventFactory
+from apps.core.factories import PersonFactory
 from apps.core.models import Setting
 from apps.feedback.factories import ParticipationApplicationFestivalFactory
 from apps.info.factories import (
@@ -17,15 +18,7 @@ from apps.info.factories import (
     VolunteerFactory,
 )
 from apps.info.models import FestivalTeamMember
-from apps.library.factories import (
-    AuthorFactory,
-    MasterClassFactory,
-    OtherPlayFactory,
-    PerformanceFactory,
-    PlayFactory,
-    ProgramTypeFactory,
-    ReadingFactory,
-)
+from apps.library.factories import AuthorFactory, OtherPlayFactory, PlayFactory, ProgramTypeFactory
 from apps.main.factories import BannerFactory as MainBannerFactory
 from apps.users.factories import AdminUserFactory, EditorUserFactory, JournalistUserFactory, ObserverUserFactory
 
@@ -60,7 +53,6 @@ class Command(BaseCommand):
         " - Попечители"
         " - Волонтёры"
         " - Команды фестиваля"
-        " - Картинки"
         " - Фестивали"
         " - Пресс-релизы"
         " - Изображения для новостей/блогов/проектов"
@@ -114,9 +106,6 @@ class Command(BaseCommand):
             notification(self, teams, "членов команд")
 
             add_pr_director(self)
-
-            images = ImageFactory.create_batch(5)
-            notification(self, images, "картинки")
 
             festivals = FestivalFactory.create_batch(10)
             notification(self, festivals, "фестивалей")

@@ -35,11 +35,18 @@ class FestivalTeamMember(BaseModel):
         verbose_name="PR-директор",
         help_text="Поставьте галочку, чтобы назначить человека PR-директором",
     )
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядок",
+        db_index=True,
+    )
 
     class Meta:
         verbose_name = "Команда фестиваля"
         verbose_name_plural = "Команды фестиваля"
-        ordering = ("person__last_name", "person__first_name")
+        ordering = ("order",)
         constraints = [
             UniqueConstraint(
                 fields=("person", "team"),
@@ -108,11 +115,6 @@ class Festival(BaseModel):
         unique=True,
         verbose_name="Год фестиваля",
     )
-    images = models.ManyToManyField(
-        Image,
-        related_name="festivalimages",
-        verbose_name="Изображения",
-    )
     plays_count = models.PositiveIntegerField(
         default=1,
         verbose_name="Общее количество пьес",
@@ -174,6 +176,47 @@ class Festival(BaseModel):
         if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError({"end_date": _("Дата окончания фестиваля должна быть позже даты его начала.")})
         return super().clean()
+
+
+class FestivalImage(Image):
+    festival = models.ForeignKey(
+        Festival,
+        on_delete=models.CASCADE,
+        related_name="images",
+        verbose_name="Изображения фестиваля",
+    )
+
+
+class InfoLink(BaseModel):
+    class LinkType(models.TextChoices):
+        PLAYS_LINKS = "plays_links", _("Пьесы")
+        ADDITIONAL_LINKS = "additional_links", _("Дополнительно")
+
+    festival = models.ForeignKey(
+        Festival, on_delete=models.CASCADE, related_name="infolinks", verbose_name="Прочие ссылки"
+    )
+    type = models.CharField(
+        max_length=25,
+        choices=LinkType.choices,
+        verbose_name="Тип ссылки",
+    )
+    title = models.CharField(
+        max_length=100,
+        verbose_name="Название ссылки",
+    )
+    link = models.URLField()
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        verbose_name="Порядковый номер ссылки",
+    )
+
+    class Meta:
+        verbose_name = "Ссылка с описанием"
+        verbose_name_plural = "Ссылки с описанием"
+        ordering = ("order",)
+
+    def __str__(self):
+        return self.title
 
 
 class PressRelease(BaseModel):

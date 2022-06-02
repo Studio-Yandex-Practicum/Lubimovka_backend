@@ -3,13 +3,13 @@ from zoneinfo import ZoneInfo
 import factory
 from django.conf import settings
 
-from apps.afisha.models import Event
+from apps.afisha.models import Event, Performance
 from apps.articles.models import NewsItem, NewsItemContent
 from apps.content_pages.factories import AbstractContentFactory
 from apps.core.constants import Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
-from apps.library.models import Performance, Play
+from apps.library.models import Play
 
 
 @restrict_factory(general=(NewsItem,))

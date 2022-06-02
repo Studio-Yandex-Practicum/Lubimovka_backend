@@ -2,8 +2,15 @@ import pytest
 from django.conf import settings
 from rest_framework.test import APIClient
 
-from apps.core.factories import ImageFactory, PersonFactory
-from apps.info.factories import FestivalFactory, FestivalTeamFactory, SelectorFactory, SponsorFactory, VolunteerFactory
+from apps.core.factories import PersonFactory
+from apps.info.factories import (
+    FestivalFactory,
+    FestivalTeamFactory,
+    InfoLinkFactory,
+    SelectorFactory,
+    SponsorFactory,
+    VolunteerFactory,
+)
 
 
 @pytest.fixture(autouse=True)
@@ -47,13 +54,13 @@ def festival_teams(persons_with_image):
 
 
 @pytest.fixture
-def images():
-    return ImageFactory.create_batch(10)
+def festival_2020():
+    return FestivalFactory(year=2020)
 
 
 @pytest.fixture
-def festival_2020(images):
-    return FestivalFactory(year=2020)
+def links(festival_2020):
+    return InfoLinkFactory.create_batch(10)
 
 
 @pytest.fixture

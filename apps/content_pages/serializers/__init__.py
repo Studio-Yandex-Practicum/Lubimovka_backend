@@ -1,4 +1,11 @@
-from .content_items import (
+from apps.content_pages.serializers.content_blocks import (
+    EventsBlockSerializer,
+    ImagesBlockSerializer,
+    PersonsBlockSerializer,
+    PlaysBlockSerializer,
+    VideosBlockSerializer,
+)
+from apps.content_pages.serializers.content_items import (
     ContentUnitRichTextSerializer,
     ExtendedPersonSerializer,
     LinkSerializer,
@@ -10,19 +17,4 @@ from .content_items import (
     TextSerializer,
     TitleSerializer,
 )
-
-# Prevent isort to rearrange imports and prevent circular imports.
-# isort: split
-
-from .content_blocks import (
-    EventsBlockSerializer,
-    ImagesBlockSerializer,
-    PersonsBlockSerializer,
-    PlaysBlockSerializer,
-    VideosBlockSerializer,
-)
-
-# Prevent isort to rearrange imports and prevent circular imports.
-# isort: split
-
-from .contents import BaseContentPageSerializer, BaseContentSerializer
+from apps.content_pages.serializers.contents import BaseContentPageSerializer, BaseContentSerializer

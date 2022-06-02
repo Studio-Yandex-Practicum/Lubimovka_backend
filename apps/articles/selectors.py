@@ -4,10 +4,12 @@ from typing import Union
 from django.db.models import F, Prefetch, QuerySet
 from django.db.models import Value as V
 from django.db.models.functions import Concat
+from django.http import Http404
 from django.shortcuts import get_object_or_404
 
 from apps.articles.filters import PubDateFilter
 from apps.articles.models import BlogItem, NewsItem, Project
+from apps.core.utils import calculate_hash
 
 
 def article_get_years_months_publications(
@@ -22,7 +24,7 @@ def article_get_years_months_publications(
         }
     """
     publications_years_months_qs = (
-        article_model.ext_objects.published()
+        article_model.objects.published()
         .annotate(year=F("pub_date__year"), month=F("pub_date__month"))
         .values_list("year", "month")
         .distinct()
@@ -41,15 +43,20 @@ def article_get_years_months_publications(
 def blog_item_list_get(filters: dict[str, str] = None) -> QuerySet:
     """Return published and filtered `BlogItem` queryset."""
     filters = filters or {}
-    published_blog_items = BlogItem.ext_objects.published()
+    published_blog_items = BlogItem.objects.published()
     return PubDateFilter(filters, published_blog_items).qs
 
 
-def blog_item_detail_get(blog_item_id):
-    """Return `detailed` published `BlogItem` object if it exists.
+def check_hash(current_hash, id):
+    """Check hash and return bool."""
+    return current_hash == calculate_hash(id)
+
+
+def item_detail_get(article_model, item_id, item_detail=None):
+    """Return `detailed` published object if it exists.
 
     The `BlogItem` extends with:
-    - _other_blogs: Return latest four `BlogItem` except the object itself.
+    - _other_item: Return latest four `BlogItem` except the object itself.
     - _team: Make `team` data based on `roles` and `blog_persons`.
     Team serialized data has to look like this:
         "team": [
@@ -69,17 +76,26 @@ def blog_item_detail_get(blog_item_id):
         2. Limit (prefetch) `blog_persons` (roles reverse relation) with
         blog_item's objects only (typically `role.blog_persons` returns all
         blog_persons, not only related to exact blog_item).
+    The `NewsItem` extends only with:
+    - _other_item: Return latest four `NewsItem` except the object itself.
     """
-    published_blog_items = BlogItem.ext_objects.published()
-    blog_item = get_object_or_404(published_blog_items, id=blog_item_id)
+    published_items = article_model.objects.published()
+    published_item = item_detail or get_object_or_404(published_items, id=item_id)
+    published_item._other_items = published_items.exclude(id=item_id)[:4]
+    if article_model == BlogItem:
+        blog_item_roles = published_item.roles.distinct()
+        blog_item_persons = published_item.blog_persons.all()
+        blog_item_persons_full_name = blog_item_persons.annotate(
+            annotated_full_name=Concat("person__first_name", V(" "), "person__last_name")
+        )
+        published_item._team = blog_item_roles.prefetch_related(
+            Prefetch("blog_persons", queryset=blog_item_persons_full_name)
+        )
+    return published_item
 
-    blog_item._other_blogs = published_blog_items.exclude(id=blog_item_id)[:4]
 
-    blog_item_roles = blog_item.roles.distinct()
-    blog_item_persons = blog_item.blog_persons.all()
-    blog_item_persons_full_name = blog_item_persons.annotate(
-        annotated_full_name=Concat("person__first_name", V(" "), "person__last_name")
-    )
-    blog_item._team = blog_item_roles.prefetch_related(Prefetch("blog_persons", queryset=blog_item_persons_full_name))
-
-    return blog_item
+def preview_item_detail_get(article_model, object_id, hash_sum=None):
+    """Return object for preview page if hash matches."""
+    if hash_sum and check_hash(hash_sum, object_id):
+        return article_model.objects.preview(object_id)
+    raise Http404()

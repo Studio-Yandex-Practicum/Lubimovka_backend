@@ -1,17 +1,31 @@
+from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
 from django.contrib import admin
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Person, Setting
-from apps.info.filters import HasReviewAdminFilter
-from apps.info.form import FestTeamMemberForm
-from apps.info.models import Festival, FestivalTeamMember, Partner, Place, PressRelease, Selector, Sponsor, Volunteer
-from apps.info.models.festival import ArtTeamMember, FestTeamMember
+from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
+from apps.info.form import AdditionalLinkForm, FestivalForm, FestTeamMemberForm, PlayLinkForm
+from apps.info.models import (
+    ArtTeamMember,
+    Festival,
+    FestivalImage,
+    FestivalTeamMember,
+    FestTeamMember,
+    InfoLink,
+    Partner,
+    Place,
+    PressRelease,
+    Selector,
+    Sponsor,
+    Volunteer,
+)
 
 
 @admin.register(Partner)
-class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
+class PartnerAdmin(SortableAdminMixin, AdminImagePreview, admin.ModelAdmin):
     """Class for registration Partner model in admin panel and expanded with JS script.
 
     There are used two classes in fieldsets: `predefined` and `included`.
@@ -23,12 +37,14 @@ class PartnerAdmin(AdminImagePreview, admin.ModelAdmin):
     """
 
     list_display = (
+        "order",
         "name",
         "type",
         "get_partner_url",
         "image_preview_list_page",
     )
-    list_filter = ("type",)
+    list_display_links = ("name",)
+    list_filter = (PartnerTypeFilter,)
     search_fields = ("name",)
     fieldsets = (
         (
@@ -90,6 +106,17 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
 
+    def get_search_results(self, request, queryset, search_term):
+        queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+        if (
+            "autocomplete" in request.path
+            and request.GET.get("field_name") == "person"
+            and request.GET.get("model_name") == "author"
+        ):
+            person_authors = Person.objects.filter(authors__isnull=False)
+            queryset = queryset.difference(person_authors).order_by("last_name", "first_name")
+        return queryset, use_distinct
+
 
 @admin.register(Volunteer)
 class VolunteerAdmin(admin.ModelAdmin):
@@ -106,6 +133,14 @@ class VolunteerAdmin(admin.ModelAdmin):
     )
 
     @admin.display(
+        ordering="festival",
+        description="Год фестиваля",
+    )
+    def get_year(self, obj):
+        """Возвращает год фестиваля."""
+        return obj.festival.year
+
+    @admin.display(
         boolean=True,
         ordering="review_title",
         description="Есть отзыв?",
@@ -116,16 +151,8 @@ class VolunteerAdmin(admin.ModelAdmin):
             return True
         return False
 
-    @admin.display(
-        ordering="festival",
-        description="Год фестиваля",
-    )
-    def get_year(self, obj):
-        """Возвращает год фестиваля."""
-        return obj.festival.year
 
-
-class VolunteerInline(admin.TabularInline):
+class VolunteerInline(SortableInlineAdminMixin, admin.TabularInline):
     model = Volunteer
     autocomplete_fields = ("person",)
     readonly_fields = ("is_review",)
@@ -136,8 +163,7 @@ class VolunteerInline(admin.TabularInline):
         "review_title",
         "review_text",
     )
-    classes = ["collapsible"]
-    ordering = ("person__last_name", "person__first_name")
+    classes = ("collapsible",)
 
     @admin.display(
         boolean=True,
@@ -150,23 +176,59 @@ class VolunteerInline(admin.TabularInline):
         return False
 
 
+class SelectorInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = Selector
+    autocomplete_fields = ("person",)
+    verbose_name = "Отборщик"
+    verbose_name_plural = "Отборщики"
+    extra = 1
+    classes = ("collapsible",)
+
+
 class FestivalImagesInline(admin.TabularInline, AdminImagePreview):
-    model = Festival.images.through
-    readonly_fields = ("inline_image_preview",)
+    model = FestivalImage
+    readonly_fields = ("image_preview_list_page",)
     verbose_name = "Изображение"
     verbose_name_plural = "Изображения"
     extra = 1
-    classes = ["collapsible"]
+    classes = ("collapsible",)
     model.__str__ = lambda self: ""
+
+
+class PlayInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
+    form = PlayLinkForm
+    extra = 0
+    verbose_name = "Пьесы (ссылки)"
+    verbose_name_plural = "Пьесы (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return InfoLink.objects.filter(type=InfoLink.LinkType.PLAYS_LINKS)
+
+
+class AdditionalInfoLinkInline(SortableInlineAdminMixin, admin.TabularInline):
+    model = InfoLink
+    form = AdditionalLinkForm
+    extra = 0
+    verbose_name = "Дополнительно (ссылки)"
+    verbose_name_plural = "Дополнительно (ссылки)"
+    classes = ("collapsible",)
+
+    def get_queryset(self, request):
+        return InfoLink.objects.filter(type=InfoLink.LinkType.ADDITIONAL_LINKS)
 
 
 @admin.register(Festival)
 class FestivalAdmin(admin.ModelAdmin):
-    list_display = ("year",)
     inlines = (
         VolunteerInline,
+        SelectorInline,
         FestivalImagesInline,
+        PlayInfoLinkInline,
+        AdditionalInfoLinkInline,
     )
+    form = FestivalForm
     exclude = (
         "teams",
         "sponsors",
@@ -176,13 +238,14 @@ class FestivalAdmin(admin.ModelAdmin):
 
 
 @admin.register(Place)
-class PlaceAdmin(admin.ModelAdmin):
+class PlaceAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
+        "order",
         "name",
         "city",
         "address",
     )
-
+    list_display_links = ("name",)
     list_filter = ("city",)
     search_fields = ("name", "address")
 
@@ -191,14 +254,24 @@ class PlaceAdmin(admin.ModelAdmin):
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
 
+    def get_form(self, request, obj=None, **kwargs):
+        """Set free festivals and current festivals if exists."""
+        form = super().get_form(request, obj, **kwargs)
+        current_id = None if not obj else obj.festival_id
+        form.base_fields["festival"].queryset = Festival.objects.filter(
+            Q(press_releases__festival__isnull=True) | Q(id=current_id)
+        )
+        return form
+
 
 @admin.register(ArtTeamMember)
-class ArtTeamMemberAdmin(admin.ModelAdmin):
+class ArtTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
+        "order",
         "person",
-        "team",
         "position",
     )
+    list_display_links = ("person",)
     fieldsets = (
         (
             None,
@@ -210,8 +283,6 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
-    ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
@@ -231,14 +302,15 @@ class ArtTeamMemberAdmin(admin.ModelAdmin):
 
 
 @admin.register(FestTeamMember)
-class FestTeamMemberAdmin(admin.ModelAdmin):
+class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     form = FestTeamMemberForm
     list_display = (
+        "order",
         "person",
-        "team",
         "position",
         "is_pr_director",
     )
+    list_display_links = ("person",)
     list_filter = ("is_pr_director",)
     fieldsets = (
         (
@@ -259,8 +331,6 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
             },
         ),
     )
-
-    ordering = ("person__last_name", "person__first_name")
     autocomplete_fields = ("person",)
     search_fields = ("position", "person__first_name", "person__last_name")
 
@@ -289,11 +359,13 @@ class FestTeamMemberAdmin(admin.ModelAdmin):
 
 
 @admin.register(Sponsor)
-class SponsorAdmin(admin.ModelAdmin):
+class SponsorAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = (
+        "order",
         "person",
         "position",
     )
+    list_display_links = ("person",)
     autocomplete_fields = ("person",)
 
 
@@ -305,6 +377,7 @@ class SelectorAdmin(admin.ModelAdmin):
         "position",
     )
     autocomplete_fields = ("person",)
+    list_filter = ("festival",)
 
     @admin.display(
         ordering="festival",

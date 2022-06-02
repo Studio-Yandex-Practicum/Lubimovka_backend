@@ -5,23 +5,6 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
 
-from .play import Play
-
-
-class Achievement(BaseModel):
-    tag = models.CharField(
-        max_length=40,
-        verbose_name="Достижения в виде тега",
-        help_text="Не более 40 символов",
-    )
-
-    class Meta:
-        verbose_name = "Достижение"
-        verbose_name_plural = "Достижения"
-
-    def __str__(self):
-        return self.tag
-
 
 class Author(BaseModel):
     person = models.OneToOneField(
@@ -38,14 +21,8 @@ class Author(BaseModel):
         max_length=3000,
         verbose_name="Текст про автора",
     )
-    achievements = models.ManyToManyField(
-        Achievement,
-        verbose_name="Достижения",
-        related_name="authors",
-        blank=True,
-    )
     plays = models.ManyToManyField(
-        Play,
+        "library.Play",
         related_name="authors",
         blank=True,
         verbose_name="Пьесы автора",
@@ -82,6 +59,16 @@ class Author(BaseModel):
     def image(self):
         return self.person.image
 
+    @property
+    def achievements(self):
+        """Get queryset with info about achievements."""
+        return (
+            self.plays.filter(program__isnull=False)
+            .values("program__id", "program__name", "festival__year")
+            .order_by("-festival__year")
+            .distinct("festival__year", "program__name")
+        )
+
 
 class AuthorPlay(models.Model):
     author = models.ForeignKey(
@@ -91,7 +78,7 @@ class AuthorPlay(models.Model):
         verbose_name="Автор",
     )
     play = models.ForeignKey(
-        Play,
+        "library.Play",
         on_delete=models.CASCADE,
         related_name="author_plays",
         verbose_name="Пьеса",
@@ -180,13 +167,14 @@ class OtherLink(BaseModel):
         verbose_name="Закрепить ссылку",
         help_text="Закрепить ссылку вверху страницы?",
     )
-    order_number = models.PositiveSmallIntegerField(
-        verbose_name="Порядковый номер",
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        verbose_name="Порядок",
         help_text="Указывается для формирования порядка вывода информации",
     )
 
     class Meta:
-        ordering = ("order_number",)
+        ordering = ("order",)
         verbose_name = "Публикации и другие материалы"
         verbose_name_plural = "Публикации и другие материалы"
         constraints = (

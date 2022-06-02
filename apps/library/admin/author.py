@@ -6,21 +6,8 @@ from django.urls import re_path
 
 from apps.core import utils
 from apps.core.models import Person
-from apps.library.forms.admin import OtherLinkForm
-from apps.library.models import Achievement, Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
-
-
-@admin.register(Achievement)
-class AchievementAdmin(admin.ModelAdmin):
-    search_fields = ("tag",)
-
-
-class AchievementInline(admin.TabularInline):
-    model = Author.achievements.through
-    extra = 1
-    verbose_name = "Достижение"
-    verbose_name_plural = "Достижения"
-    classes = ("collapsible",)
+from apps.library.forms import OtherLinkForm
+from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -31,7 +18,10 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     classes = ("collapsible",)
 
     def get_queryset(self, request):
-        return AuthorPlay.objects.filter(play__other_play=False)
+        return AuthorPlay.objects.filter(play__other_play=False).select_related(
+            "author__person",
+            "play",
+        )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         kwargs["queryset"] = Play.objects.filter(other_play=False)
@@ -46,11 +36,44 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     classes = ("collapsible",)
 
     def get_queryset(self, request):
-        return AuthorPlay.objects.filter(play__other_play=True)
+        return AuthorPlay.objects.filter(play__other_play=True).select_related(
+            "author__person",
+            "play",
+        )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         kwargs["queryset"] = Play.objects.filter(other_play=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+class AchivementInline(admin.TabularInline):
+    model = AuthorPlay
+    extra = 0
+    verbose_name = "Достижение"
+    verbose_name_plural = "Достижения"
+    classes = ("collapsible",)
+    fields = ("achievement",)
+    readonly_fields = ("achievement",)
+
+    @admin.display(
+        description="Достижения",
+    )
+    def achievement(self, obj):
+        return f"{obj.play.program} - {obj.play.festival.year}"
+
+    def get_queryset(self, request):
+        return (
+            AuthorPlay.objects.filter(play__other_play=False)
+            .select_related("author__person", "play__program", "play__festival")
+            .order_by("-play__festival__year")
+            .distinct("play__festival__year", "play__program")
+        )
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class SocialNetworkLinkInline(admin.TabularInline):
@@ -59,7 +82,7 @@ class SocialNetworkLinkInline(admin.TabularInline):
     classes = ("collapsible",)
 
 
-class OtherLinkInline(admin.TabularInline):
+class OtherLinkInline(SortableInlineAdminMixin, admin.TabularInline):
     form = OtherLinkForm
     model = OtherLink
     extra = 1
@@ -75,14 +98,13 @@ class AuthorAdmin(admin.ModelAdmin):
         "slug",
     )
     inlines = (
-        AchievementInline,
         PlayInline,
         OtherPlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
+        AchivementInline,
     )
     exclude = (
-        "achievements",
         "plays",
         "social_network_links",
         "other_links",
@@ -99,15 +121,8 @@ class AuthorAdmin(admin.ModelAdmin):
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        if not request.user.has_perm("library.change_author"):
-            return form
-        if obj:
-            form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
-        else:
-            form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
-        return form
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("person")
 
     def get_urls(self):
         urls = super().get_urls()

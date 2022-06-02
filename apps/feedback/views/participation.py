@@ -1,4 +1,5 @@
 import logging
+import threading
 
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
@@ -8,14 +9,13 @@ from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.views import APIView
 
 from apps.core.utils import get_domain
-from apps.feedback.models import ParticipationApplicationFestival
-from apps.feedback.models.participation_application import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION
+from apps.feedback.models import UNIQUE_CONSTRAINT_FIELDS_FOR_PARTICIPATION, ParticipationApplicationFestival
 from apps.feedback.permissions import SettingsPlayReceptionPermission
 from apps.feedback.schema.schema_extension import (
     ERROR_MESSAGES_FOR_PARTICIPATION_FOR_400,
     ERROR_MESSAGES_FOR_PARTICIPATION_FOR_403,
 )
-from apps.feedback.services.participation_export import ParticipationExport
+from apps.feedback.services import ParticipationApplicationExport
 
 logger = logging.getLogger("django")
 
@@ -62,11 +62,7 @@ class ParticipationViewSet(APIView):
         instance = serializer.save()
         file_link = get_domain(request) + str(instance.file.url)
 
-        export = ParticipationExport()
-        yandex_disk_link = export.yandex_disk(instance)
-        if yandex_disk_link is not None:
-            file_link = yandex_disk_link
-        export.google_sheets(instance, file_link)
-        export.mail_send(instance, file_link)
-
+        export = ParticipationApplicationExport()
+        thread_for_services = threading.Thread(target=export.export_application, args=(instance, file_link))
+        thread_for_services.start()
         return Response(status=status.HTTP_201_CREATED)

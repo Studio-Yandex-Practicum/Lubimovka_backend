@@ -9,7 +9,7 @@ services:
     environment:
       - TZ=Europe/Moscow
       - VALIDATION=http
-      - CERTPROVIDER=zerossl
+      - EXTRA_DOMAINS=2022.lubimovka.ru
     env_file:
       - .env-prod
     networks:
@@ -17,8 +17,9 @@ services:
     volumes:
       - ./swag/swag_nginx_prod.conf:/config/nginx/site-confs/default
       - swag_volume_prod:/config
+      - ./logs/swag_logs/:/config/log/
       - static_value_prod:/config/prod/static/
-      - media_value_prod:/config/prod/media/
+      - ./media:/config/prod/media/
     ports:
       - 443:443
       - 80:80
@@ -28,11 +29,9 @@ services:
     container_name: frontend_prod
     environment:
       BASE_URL: ${FRONT_BASE_URL}
-      API_BASE_URL: ${DEVELOP_API_BASE_URL}
+      API_BASE_URL: ${API_BASE_URL}
     networks:
       - prod_swag_network
-    ports:
-      - "3005:3000"
     restart: always
     depends_on:
       - swag
@@ -45,7 +44,5 @@ networks:
 volumes:
   static_value_prod:
     name: static_value_prod
-  media_value_prod:
-    name: media_value_prod
   swag_volume_prod:
     name: swag_volume_prod

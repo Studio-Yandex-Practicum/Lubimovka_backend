@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.info.models import Volunteer
-from apps.info.serializers.person import PersonsSerializer
+from apps.info.serializers import PersonsSerializer
 
 
 class VolunteersSerializer(serializers.ModelSerializer):
@@ -11,12 +11,3 @@ class VolunteersSerializer(serializers.ModelSerializer):
     class Meta:
         model = Volunteer
         fields = ("id", "person", "year", "review_title", "review_text")
-
-
-class VolunteerInFestivalSerializer(serializers.ModelSerializer):
-    person = serializers.IntegerField(source="person.id")
-    year = serializers.IntegerField(source="festival.year")
-
-    class Meta:
-        model = Volunteer
-        fields = ("id", "year", "review_title", "review_text", "person")

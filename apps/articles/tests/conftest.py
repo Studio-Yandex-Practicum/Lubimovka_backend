@@ -2,10 +2,10 @@ import pytest
 from django.conf import settings
 from rest_framework.test import APIClient
 
-from apps.afisha.factories import EventFactory
-from apps.core.factories import ImageFactory, PersonFactory
-from apps.info.factories import FestivalFactory
-from apps.library.factories import PerformanceFactory, PlayFactory
+from apps.afisha.factories import EventFactory, PerformanceFactory
+from apps.core.factories import PersonFactory
+from apps.info.factories import FestivalFactory, InfoLinkFactory
+from apps.library.factories import PlayFactory
 
 pytestmark = [pytest.mark.django_db]
 
@@ -21,13 +21,13 @@ def set_media_temp_folder(tmpdir):
 
 
 @pytest.fixture
-def images():
-    return ImageFactory.create_batch(10)
+def festivals():
+    return FestivalFactory.create_batch(5)
 
 
 @pytest.fixture
-def festivals(images):
-    return FestivalFactory.create_batch(5)
+def links(festivals):
+    return InfoLinkFactory.create_batch(10)
 
 
 @pytest.fixture

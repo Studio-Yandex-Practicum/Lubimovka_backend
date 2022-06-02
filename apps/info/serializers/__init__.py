@@ -1,20 +1,9 @@
-from .contacts import ContactsSerializer
-from .festival import FestivalSerializer, YearsSerializer
-from .festivalteams import FestivalTeamsSerializer
-from .press_release import PressReleaseSerializer
-from .selectors import SelectorsSerializer
-from .settings import SettingsSerializer
-from .sponsors import SponsorSerializer
-from .volunteers import VolunteersSerializer
-
-__all__ = (
-    PressReleaseSerializer,
-    SponsorSerializer,
-    FestivalTeamsSerializer,
-    VolunteersSerializer,
-    FestivalSerializer,
-    YearsSerializer,
-    ContactsSerializer,
-    SettingsSerializer,
-    SelectorsSerializer,
-)
+from apps.info.serializers.person import PersonsSerializer  # isort:skip
+from apps.info.serializers.festival import FestivalSerializer, InfoLinkSerializer, YearsSerializer
+from apps.info.serializers.festival_teams import FestivalTeamsSerializer
+from apps.info.serializers.place import PlaceSerializer
+from apps.info.serializers.press_release import PressReleaseSerializer
+from apps.info.serializers.selectors import SelectorsSerializer
+from apps.info.serializers.settings import SettingsSerializer
+from apps.info.serializers.sponsors import SponsorSerializer
+from apps.info.serializers.volunteers import VolunteersSerializer

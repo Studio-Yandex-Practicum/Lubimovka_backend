@@ -26,4 +26,4 @@ jobs:
         pip install -r requirements/prod.txt
     -
       name: Make migrations
-      run: python manage.py makemigrations --settings config.settings.test --check
+      run: python manage.py makemigrations --settings config.settings.test --check --dry-run

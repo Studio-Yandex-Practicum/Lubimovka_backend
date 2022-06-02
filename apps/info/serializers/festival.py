@@ -1,18 +1,17 @@
-from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
-from apps.info.models import Festival
-from apps.info.serializers.volunteers import VolunteerInFestivalSerializer
+from apps.info.models import Festival, InfoLink
+
+
+class InfoLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InfoLink
+        fields = ("title", "link")
 
 
 class FestivalSerializer(serializers.ModelSerializer):
-    volunteers = serializers.SerializerMethodField()
-
-    @extend_schema_field(VolunteerInFestivalSerializer(many=True))
-    def get_volunteers(self, obj):
-        serializer = VolunteerInFestivalSerializer
-        volunteers = obj.volunteers.all()
-        return serializer(volunteers, many=True).data
+    plays_links = InfoLinkSerializer(many=True)
+    additional_links = InfoLinkSerializer(many=True)
 
     class Meta:
         model = Festival
@@ -32,8 +31,9 @@ class FestivalSerializer(serializers.ModelSerializer):
             "video_link",
             "blog_entries",
             "press_release_image",
-            "volunteers",
             "images",
+            "plays_links",
+            "additional_links",
         )
 
 

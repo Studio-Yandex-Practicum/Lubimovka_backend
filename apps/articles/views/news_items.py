@@ -2,20 +2,20 @@ from django_filters import rest_framework as filters
 from drf_spectacular.utils import extend_schema
 from rest_framework import filters as rest_filters
 from rest_framework.response import Response
+from rest_framework.settings import api_settings
 from rest_framework.views import APIView
-from rest_framework.viewsets import ReadOnlyModelViewSet
 
 from apps.articles import selectors
 from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
-from apps.articles.serializers import NewsItemDetailedSerializer, NewsItemListSerializer, YearMonthSerializer
+from apps.articles.serializers import NewsItemDetailSerializer, NewsItemListSerializer, YearMonthSerializer
+from apps.core.utils import get_paginated_response
 
 
-class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
+class NewsItemsListAPI(PubDateSchemaMixin, APIView):
     """Returns published News items."""
 
-    queryset = NewsItem.ext_objects.published()
     filter_backends = (
         filters.DjangoFilterBackend,
         rest_filters.OrderingFilter,
@@ -25,14 +25,38 @@ class NewsItemsViewSet(PubDateSchemaMixin, ReadOnlyModelViewSet):
         "pub_date__year",
         "pub_date__month",
     )
+    pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
 
-    def get_serializer_class(self):
-        if self.action == "list":
-            return NewsItemListSerializer
-        return NewsItemDetailedSerializer
+    def get(self, request):
+        return get_paginated_response(
+            pagination_class=self.pagination_class,
+            serializer_class=NewsItemListSerializer,
+            queryset=NewsItem.objects.published(),
+            request=request,
+            view=self,
+        )
 
-    class Meta:
-        model = NewsItem
+
+class NewsItemsDetailAPI(APIView):
+    """Returns object `NewsItems`."""
+
+    def get(self, request, id):
+        news_item_detail = selectors.item_detail_get(NewsItem, id)
+        context = {"request": request}
+        serializer = NewsItemDetailSerializer(news_item_detail, context=context)
+        return Response(serializer.data)
+
+
+class NewsItemsPreviewDetailAPI(APIView):
+    """Returns preview page `NewsItems`."""
+
+    def get(self, request, id):
+        hash_sum = request.GET.get("hash", None)
+        item_detail = selectors.preview_item_detail_get(NewsItem, id, hash_sum)
+        news_item_detail = selectors.item_detail_get(NewsItem, id, item_detail)
+        context = {"request": request}
+        serializer = NewsItemDetailSerializer(news_item_detail, context=context)
+        return Response(serializer.data)
 
 
 class NewsItemYearsMonthsAPI(APIView):
