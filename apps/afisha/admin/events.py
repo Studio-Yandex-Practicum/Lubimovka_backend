@@ -1,4 +1,3 @@
-import re
 from datetime import datetime
 
 from django.contrib import admin
@@ -27,9 +26,7 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
         return redirect_urls + urls
 
     def redirect_to_base_event(self, request, object_id=None):
-        path = request.META.get("PATH_INFO")
-        commonevent_id = int(re.search(r"\d+", path).group())
-        commonevent = get_object_or_404(CommonEvent, id=commonevent_id)
+        commonevent = get_object_or_404(CommonEvent, id=object_id)
         event_choices = ("masterclass", "performance", "reading")
         for event in event_choices:
             if hasattr(commonevent, event):
