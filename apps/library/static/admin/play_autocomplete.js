@@ -9,7 +9,7 @@ jQuery(document).ready(function ($) {
         return this;
     };
 
-    // added event_type to request info - required to limit search_result according to event type
+    // added play_type to request info - required to limit search_result according to play type
     var init = function($element, options) {
         var inlineName = $element.parent().parent().parent().parent().parent().parent().parent().parent().attr('id');
         if (inlineName == "author_plays-group") {
