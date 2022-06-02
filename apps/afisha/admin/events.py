@@ -1,7 +1,10 @@
+import re
 from datetime import datetime
 
 from django.contrib import admin
-from django.urls import reverse
+from django.shortcuts import get_object_or_404, redirect
+from django.urls import path, reverse_lazy
+from django.utils.http import urlencode
 from django.utils.safestring import mark_safe
 
 from apps.afisha.filters import StatusOfEvent
@@ -17,6 +20,23 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
         "reading__name",
         "performance__name",
     )
+
+    def get_urls(self):
+        urls = super().get_urls()
+        redirect_urls = [path("<path:object_id>/change/", self.redirect_to_base_event)]
+        return redirect_urls + urls
+
+    def redirect_to_base_event(self, request, object_id=None):
+        path = request.META.get("PATH_INFO")
+        commonevent_id = int(re.search(r"\d+", path).group())
+        commonevent = get_object_or_404(CommonEvent, id=commonevent_id)
+        event_choices = ("masterclass", "performance", "reading")
+        for event in event_choices:
+            if hasattr(commonevent, event):
+                event_id = getattr(commonevent, event).id
+                url = reverse_lazy(f"admin:afisha_{event}_change", kwargs={"object_id": event_id})
+        query_string = {"_to_field": "id", "_popup": "1"}
+        return redirect(to=f"{url}?{urlencode(query_string)}")
 
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
@@ -48,7 +68,7 @@ class EventAdmin(admin.ModelAdmin):
         (
             None,
             {
-                "fields": ("common_event", "common_event_link"),
+                "fields": ("common_event",),
                 "classes": ("depended_on_common_event",),
             },
         ),
@@ -77,28 +97,6 @@ class EventAdmin(admin.ModelAdmin):
         "common_event__performance__name",
     )
     empty_value_display = "-пусто-"
-    readonly_fields = ("common_event_link",)
-
-    @admin.display(
-        description="Изменить базовое событие",
-    )
-    def common_event_link(self, obj):
-        if obj:
-            print("yes")
-            event_pk = obj.common_event.reading.pk
-            print("here")
-            print(event_pk)
-            url = reverse("admin:afisha_reading_change", args=(event_pk,))
-            print("there")
-            return '<a href="%s">Edit Event</a>' % url
-        print("none")
-
-    common_event_link.allow_tags = True
-
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        form.base_fields["common_event"].widget.can_add_related = False
-        return form
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)
