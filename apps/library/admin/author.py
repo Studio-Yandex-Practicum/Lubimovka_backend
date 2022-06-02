@@ -7,7 +7,7 @@ from django.urls import re_path
 from apps.core import utils
 from apps.core.models import Person
 from apps.library.forms import OtherLinkForm
-from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
+from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -24,10 +24,6 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
             "play",
         )
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Play.objects.filter(other_play=False)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     model = AuthorPlay
@@ -42,10 +38,6 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
             "author__person",
             "play",
         )
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Play.objects.filter(other_play=True)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class AchivementInline(admin.TabularInline):
