@@ -39,6 +39,7 @@ class ParticipationViewSet(APIView):
         class Meta:
             model = ParticipationApplicationFestival
             exclude = ["verified", "festival_year"]
+            extra_kwargs = {"file": {"required": True}}
             validators = [
                 UniqueTogetherValidator(
                     queryset=ParticipationApplicationFestival.objects.all(),
