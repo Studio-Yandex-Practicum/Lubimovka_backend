@@ -1,9 +1,11 @@
 from datetime import timedelta
 
+from django.db.models import Q
 from django.utils import timezone
 
 from apps.afisha.models import Event
 from apps.articles.models import BlogItem, NewsItem
+from apps.core.constants import Status
 from apps.core.models import Setting
 from apps.info.models import Festival, Place
 from apps.library.models import Play, ProgramType
@@ -53,14 +55,24 @@ class MainObject:
             if main_show_afisha_only_for_today:
                 today = timezone.now()
                 tomorrow = today.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
-                items = Event.objects.filter(
-                    date_time__range=(today, tomorrow),
-                    pinned_on_main=True,
-                ).order_by("date_time")
+                items = (
+                    Event.objects.filter(date_time__range=(today, tomorrow), pinned_on_main=True)
+                    .filter(
+                        Q(common_event__reading__name__isnull=False)
+                        | Q(common_event__masterclass__name__isnull=False)
+                        | Q(common_event__performance__status=Status.PUBLISHED)
+                    )
+                    .order_by("date_time")
+                )
             else:
                 items = (
                     Event.objects.filter(date_time__gte=timezone.now())
                     .filter(pinned_on_main=True)
+                    .filter(
+                        Q(common_event__reading__name__isnull=False)
+                        | Q(common_event__masterclass__name__isnull=False)
+                        | Q(common_event__performance__status=Status.PUBLISHED)
+                    )
                     .order_by("date_time")[:6]
                 )
 

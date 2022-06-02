@@ -12,9 +12,5 @@ from apps.content_pages.serializers.content_items import (
     OrderedImageSerializer,
     OrderedPlaySerializer,
     OrderedVideoSerializer,
-    PreambleSerializer,
-    QuoteSerializer,
-    TextSerializer,
-    TitleSerializer,
 )
 from apps.content_pages.serializers.contents import BaseContentPageSerializer, BaseContentSerializer

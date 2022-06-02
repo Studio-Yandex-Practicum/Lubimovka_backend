@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import Link, OrderedImage, OrderedVideo, Preamble, Quote, Text, Title
+from apps.content_pages.models import Link, OrderedImage, OrderedVideo
 from apps.core.serializers import PersonRoleSerializer
 from apps.library.serializers import AuthorForPlaySerializer as LibraryPlayAuthorSerializer
 
@@ -63,30 +63,6 @@ class LinkSerializer(serializers.ModelSerializer):
             "description",
             "url",
         )
-
-
-class PreambleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Preamble
-        fields = ("preamble",)
-
-
-class QuoteSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Quote
-        fields = ("quote",)
-
-
-class TextSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Text
-        fields = ("text",)
-
-
-class TitleSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Title
-        fields = ("title",)
 
 
 class OrderedImageSerializer(serializers.ModelSerializer):

@@ -22,6 +22,9 @@ class ParticipationAdmin(admin.ModelAdmin):
     )
     search_fields = ("title", "first_name", "last_name", "city", "year")
 
+    def has_add_permission(self, request):
+        return False
+
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
