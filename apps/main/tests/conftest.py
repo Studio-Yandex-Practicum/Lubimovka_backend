@@ -5,6 +5,7 @@ from django.urls import reverse
 from apps.afisha.factories import EventFactory, MasterClassFactory, PerformanceFactory, ReadingFactory
 from apps.articles.factories import BlogItemFactory, NewsItemFactory
 from apps.content_pages.factories import ImagesBlockFactory
+from apps.core.constants import Status
 from apps.core.factories import PersonFactory
 from apps.info.factories import FestivalFactory, InfoLinkFactory, PlaceFactory
 from apps.library.factories import PlayFactory
@@ -77,7 +78,7 @@ def reading(plays, persons):
 
 @pytest.fixture
 def performance(plays, persons):
-    return PerformanceFactory()
+    return PerformanceFactory.create_batch(5, status=Status.PUBLISHED)
 
 
 @pytest.fixture
@@ -98,9 +99,9 @@ def events_pinned_on_main(freezer, reading, performance, master_class):
 
 @pytest.fixture
 def news_items_with_content(plays, images_block, four_performance_events):
-    return NewsItemFactory.complex_create(3, status="PUBLISHED")
+    return NewsItemFactory.complex_create(3, status=Status.PUBLISHED)
 
 
 @pytest.fixture
 def blog_items_with_content(plays, images_block, four_performance_events):
-    return BlogItemFactory.complex_create(3, status="PUBLISHED")
+    return BlogItemFactory.complex_create(3, status=Status.PUBLISHED)

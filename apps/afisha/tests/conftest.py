@@ -71,7 +71,7 @@ def readings(persons_email_city_image, plays):
 
 @pytest.fixture
 def performances(persons_email_city_image, plays):
-    return PerformanceFactory.create_batch(5)
+    return PerformanceFactory.create_batch(5, status="PUBLISHED")
 
 
 @pytest.fixture
