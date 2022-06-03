@@ -5,15 +5,6 @@ jQuery(document).ready(function ($) {
             $.each(this, function(i, element) {
                 var $element = $(element);
                 init($element, settings);
-                if ($element.attr('id') == 'id_person') {
-                    $element.on('change', function() {
-                        var fullName = $element.text();
-                        var lastName = fullName.replace(/ .*/,'');
-                        alert(lastName)
-                        $('lastName').append(lastName)
-                        $('#id_slug').val(URLify($('#lastName').val()));
-                    });
-                };
             });
             return this;
         };
@@ -44,4 +35,11 @@ jQuery(document).ready(function ($) {
         }, options);
         $element.select2(settings);
     };
+    jQuery(function($) {
+        $('#id_person').on('select2:select', function() {
+            var fullName = $('#id_person').select2('data')[0].text;
+            var lastName = fullName.replace(/ .*/,'');
+            $('#id_slug').val(lastName);
+        });
+    });
 });
