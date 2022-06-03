@@ -70,20 +70,27 @@ class PlayAdmin(admin.ModelAdmin):
     )
 
     def get_search_fields(self, request):
-        if (
-            "autocomplete" in request.path
-            and request.GET.get("field_name") == "play"
-            and (request.GET.get("model_name") == "reading" or request.GET.get("model_name") == "performance")
-        ):
+        # if request is for autocomplete, search only in names
+        if "autocomplete" in request.path:
             return ("name",)
         return super().get_search_fields(request)
 
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
-        if (
-            "autocomplete" in request.path
-            and request.GET.get("field_name") == "play"
-            and (request.GET.get("model_name") == "reading" or request.GET.get("model_name") == "performance")
-        ):
-            queryset = queryset.filter(other_play=False)
+        # custom queryset for autocomplete requests
+        if "autocomplete" in request.path and request.GET.get("field_name") == "play":
+            # queryset with only main Plays for request autocomplete from reading, performance and
+            # author's inline Plays
+            if (
+                request.GET.get("model_name") == "reading"
+                or request.GET.get("model_name") == "performance"
+                or (request.GET.get("model_name") == "authorplay" and request.GET.get("play_type") == "main")
+            ):
+                queryset = queryset.filter(other_play=False)
+            # queryset with only Other Plays for request autocomplete from author's inline Other Plays
+            elif request.GET.get("model_name") == "authorplay" and request.GET.get("play_type") == "other":
+                queryset = queryset.filter(other_play=True)
         return queryset, use_distinct
+
+    class Media:
+        js = ("admin/play_admin.js",)
