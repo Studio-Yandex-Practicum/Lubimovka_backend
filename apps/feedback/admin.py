@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib import admin
-from django.utils import formats
+from django.utils import formats, timezone
 
 from apps.feedback.models import ParticipationApplicationFestival, Question
 
@@ -10,7 +10,7 @@ class LookBackDateListFilter(admin.SimpleListFilter):
     """Ретроспективный фильтр по датам."""
 
     title = "Дата создания"
-    parameter_name = "created"
+    parameter_name = "created_since"
 
     def lookups(self, request, model_admin):
         return (
@@ -21,7 +21,7 @@ class LookBackDateListFilter(admin.SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        today = datetime.datetime.now().date()
+        today = timezone.now().date()
         date_ranges = {
             "today": today,
             "seven_days": today - datetime.timedelta(days=7),
