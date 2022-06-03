@@ -17,6 +17,7 @@ class NewsItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin)
         "pub_date",
         "image_preview_list_page",
         "status",
+        "creator_name",
     )
     readonly_fields = (
         "status",

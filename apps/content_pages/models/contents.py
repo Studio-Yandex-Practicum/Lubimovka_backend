@@ -1,5 +1,6 @@
 from typing import Tuple
 
+from django.contrib.auth import get_user_model
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -10,6 +11,8 @@ from apps.content_pages.services import content_delete_generic_related_items
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import Status
 from apps.core.models import BaseModel
+
+User = get_user_model()
 
 
 class AbstractContentPage(BaseModel):
@@ -49,6 +52,7 @@ class AbstractContentPage(BaseModel):
         max_length=200,
         verbose_name="Заголовок",
     )
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Создатель", blank=True, null=True)
 
     objects = PublishedContentQuerySet.as_manager()
 
