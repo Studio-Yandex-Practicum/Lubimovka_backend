@@ -137,3 +137,6 @@ class AuthorAdmin(admin.ModelAdmin):
         slug = utils.slugify(person.last_name)
         response = {"slug": slug}
         return JsonResponse(response)
+
+    class Media:
+        js = ("admin/author_admin.js",)
