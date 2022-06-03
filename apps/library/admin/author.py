@@ -7,7 +7,7 @@ from django.urls import re_path
 from apps.core import utils
 from apps.core.models import Person
 from apps.library.forms import OtherLinkForm
-from apps.library.models import Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
+from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -16,16 +16,13 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ("collapsible",)
+    autocomplete_fields = ("play",)
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=False).select_related(
             "author__person",
             "play",
         )
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Play.objects.filter(other_play=False)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -34,16 +31,13 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
     classes = ("collapsible",)
+    autocomplete_fields = ("play",)
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=True).select_related(
             "author__person",
             "play",
         )
-
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Play.objects.filter(other_play=True)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class AchivementInline(admin.TabularInline):
