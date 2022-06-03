@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils import formats
 
 from apps.feedback.models import ParticipationApplicationFestival, Question
 
@@ -13,14 +14,20 @@ class ParticipationAdmin(admin.ModelAdmin):
         "exported_to_google",
         "saved_to_storage",
         "sent_to_email",
+        "created_datetime",
     )
     list_filter = (
         "exported_to_google",
         "saved_to_storage",
         "festival_year",
         "sent_to_email",
+        "created",
     )
     search_fields = ("title", "first_name", "last_name", "city", "year")
+
+    @admin.display(description="Создана")
+    def created_datetime(self, obj):
+        return formats.localize(obj.created)
 
     def has_add_permission(self, request):
         return False
