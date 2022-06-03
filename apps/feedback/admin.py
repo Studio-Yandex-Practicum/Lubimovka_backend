@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib import admin
-from django.utils import formats, timezone
+from django.utils import timezone
 
 from apps.feedback.models import ParticipationApplicationFestival, Question
 
@@ -58,7 +58,7 @@ class ParticipationAdmin(admin.ModelAdmin):
 
     @admin.display(description="Создана")
     def created_datetime(self, obj):
-        return formats.localize(obj.created)
+        return obj.created
 
     def has_add_permission(self, request):
         return False
