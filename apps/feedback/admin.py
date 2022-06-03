@@ -23,6 +23,8 @@ class ParticipationAdmin(admin.ModelAdmin):
         "sent_to_email",
         "created",
     )
+
+    readonly_fields = ("created",)
     search_fields = ("title", "first_name", "last_name", "city", "year")
 
     @admin.display(description="Создана")
