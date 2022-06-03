@@ -26,8 +26,8 @@ class BaseModel(models.Model):
     It provides self-updating ``created`` and ``modified`` fields.
     """
 
-    created = models.DateTimeField("Дата создания", auto_now_add=True)
-    modified = models.DateTimeField("Дата редактирования", auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
 
     class Meta:
         abstract = True
