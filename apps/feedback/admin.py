@@ -49,8 +49,8 @@ class ParticipationAdmin(admin.ModelAdmin):
     list_filter = (
         "exported_to_google",
         "saved_to_storage",
-        "festival_year",
         "sent_to_email",
+        "festival_year",
         LookBackDateListFilter,
     )
 
