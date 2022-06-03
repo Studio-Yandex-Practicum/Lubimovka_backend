@@ -11,12 +11,14 @@ jQuery(document).ready(function ($) {
 
     // added play_type to request info - required to limit search_result according to play type
     var init = function($element, options) {
-        if ($element.closest('#author_plays-group').length == 1) {
-            var inlinePlayType = 'main'
-        }
-        if ($element.closest('#author_plays-2-group').length == 1) {
-            var inlinePlayType = 'other'
-        }
+        let inlinePlayType = NaN
+        if ($element.closest('#author_plays-group').length) {
+            inlinePlayType = 'main';
+        } else {
+            if ($element.closest('#author_plays-2-group').length) {
+                inlinePlayType = 'other';
+            }
+        };
         var settings = $.extend({
             ajax: {
                 data: function(params) {
