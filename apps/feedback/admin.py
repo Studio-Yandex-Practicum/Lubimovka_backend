@@ -21,7 +21,7 @@ class LookBackDateListFilter(admin.SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        today = timezone.now().date()
+        today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         date_ranges = {
             "today": today,
             "seven_days": today - datetime.timedelta(days=7),
