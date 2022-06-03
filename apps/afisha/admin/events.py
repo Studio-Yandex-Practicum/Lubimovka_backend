@@ -27,11 +27,11 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 
     def redirect_to_base_event(self, request, object_id=None):
         commonevent = get_object_or_404(CommonEvent, id=object_id)
-        event_choices = ("masterclass", "performance", "reading")
-        for event in event_choices:
-            if hasattr(commonevent, event):
-                event_id = getattr(commonevent, event).id
-                url = reverse_lazy(f"admin:afisha_{event}_change", kwargs={"object_id": event_id})
+        event_type = type(commonevent.target_model)._meta.model_name
+        if not event_type:
+            raise Exception("Неподдерживаемый тип базового события!")
+        event_id = getattr(commonevent, event_type).id
+        url = reverse_lazy(f"admin:afisha_{event_type}_change", kwargs={"object_id": event_id})
         query_string = {"_to_field": "id", "_popup": "1"}
         return redirect(to=f"{url}?{urlencode(query_string)}")
 
