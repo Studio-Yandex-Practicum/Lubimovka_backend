@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib import admin
-from django.utils import timezone
+from django.utils import formats, timezone
 
 from apps.feedback.models import ParticipationApplicationFestival, Question
 
@@ -21,7 +21,7 @@ class LookBackDateListFilter(admin.SimpleListFilter):
         )
 
     def queryset(self, request, queryset):
-        today = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        today = timezone.localtime().replace(hour=0, minute=0, second=0, microsecond=0)
         date_ranges = {
             "today": today,
             "seven_days": today - datetime.timedelta(days=7),
@@ -45,6 +45,7 @@ class ParticipationAdmin(admin.ModelAdmin):
         "saved_to_storage",
         "sent_to_email",
         "created_datetime",
+        "created",
     )
     list_filter = (
         "exported_to_google",
@@ -54,11 +55,13 @@ class ParticipationAdmin(admin.ModelAdmin):
         LookBackDateListFilter,
     )
 
+    readonly_fields = ("created_datetime",)
     search_fields = ("title", "first_name", "last_name", "city", "year")
 
+    # TODO: добавить verbose_name к полю created и избавиться от этого метода
     @admin.display(description="Создана")
     def created_datetime(self, obj):
-        return obj.created
+        return formats.localize(timezone.localtime(obj.created))
 
     def has_add_permission(self, request):
         return False
