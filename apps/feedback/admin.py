@@ -45,7 +45,6 @@ class ParticipationAdmin(admin.ModelAdmin):
         "saved_to_storage",
         "sent_to_email",
         "created_datetime",
-        "created",
     )
     list_filter = (
         "exported_to_google",
