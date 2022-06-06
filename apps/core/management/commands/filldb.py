@@ -107,7 +107,7 @@ class Command(BaseCommand):
 
             add_pr_director(self)
 
-            festivals = FestivalFactory.create_batch(10, add_real_video=True)
+            festivals = FestivalFactory.create_batch(10)
             notification(self, festivals, "фестивалей")
 
             volunteers = VolunteerFactory.create_batch(50)
@@ -136,13 +136,13 @@ class Command(BaseCommand):
             programtypes = ProgramTypeFactory.create_batch(3)
             notification(self, programtypes, "программ")
 
-            plays = PlayFactory.create_batch(10, add_real_video=True)
+            plays = PlayFactory.create_batch(10)
             notification(self, plays, "пьес")
 
             other_plays = OtherPlayFactory.create_batch(10)
             notification(self, other_plays, "других пьес")
 
-            perfomances = PerformanceFactory.complex_create(6, add_real_video=True)
+            perfomances = PerformanceFactory.complex_create(6)
             notification(self, perfomances, "спектаклей")
 
             authors = AuthorFactory.complex_create(15)
@@ -163,10 +163,10 @@ class Command(BaseCommand):
             places = PlaceFactory.create_batch(3)
             notification(self, places, "мест")
 
-            events_of_performances = EventFactory.create_batch(5, performance=True, add_real_video=True)
+            events_of_performances = EventFactory.create_batch(5, performance=True)
             notification(self, events_of_performances, "событий спектакля")
 
-            events = EventFactory.create_batch(10, add_real_video=True)
+            events = EventFactory.create_batch(10)
             notification(self, events, "событий")
 
         except CommandError:

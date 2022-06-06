@@ -5,8 +5,8 @@ import factory
 from django.conf import settings
 
 from apps.afisha.models import CommonEvent, Event
+from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
-from apps.core.utils import get_video_in_channel
 
 
 @restrict_factory(general=(CommonEvent,))
@@ -18,8 +18,7 @@ class EventFactory(factory.django.DjangoModelFactory):
     more than 3 hours from now.
     2. `masterclass=True`: bind event with random `master class`
     3. `reading=True`: bind event with random `reading`
-    4. `performance=True`: bind event with random `performance`
-    5. `add_real_video=True`: create object with real link to youtube video`.
+    4. `performance=True`: bind event with random `performance`.
     """
 
     class Meta:
@@ -48,9 +47,6 @@ class EventFactory(factory.django.DjangoModelFactory):
                 lambda: CommonEvent.objects.exclude(performance__isnull=True).order_by("?").first()
             ),
         )
-        add_real_video = factory.Trait(
-            url=factory.LazyFunction(lambda: random.choice(get_video_in_channel())),
-        )
 
     date_time = factory.Faker(
         "date_time_this_year",
@@ -59,7 +55,7 @@ class EventFactory(factory.django.DjangoModelFactory):
         tzinfo=ZoneInfo(settings.TIME_ZONE),
     )
     paid = factory.Faker("boolean", chance_of_getting_true=50)
-    url = factory.Faker("url")
+    url = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
     place = factory.Faker("address", locale="ru_RU")
     pinned_on_main = factory.Faker("boolean", chance_of_getting_true=80)
 
