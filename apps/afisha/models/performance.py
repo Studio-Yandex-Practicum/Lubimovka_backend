@@ -82,7 +82,7 @@ class Performance(BaseModel):
         verbose_name="Продолжительность",
     )
     objects = PublishedContentQuerySet.as_manager()
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Создатель", blank=True, null=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Создатель", null=True)
 
     class Meta:
         ordering = ("-created",)

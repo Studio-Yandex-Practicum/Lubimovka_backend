@@ -52,7 +52,7 @@ class AbstractContentPage(BaseModel):
         max_length=200,
         verbose_name="Заголовок",
     )
-    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Создатель", blank=True, null=True)
+    creator = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Создатель", null=True)
 
     objects = PublishedContentQuerySet.as_manager()
 
