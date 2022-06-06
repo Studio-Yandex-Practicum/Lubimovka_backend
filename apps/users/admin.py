@@ -58,13 +58,13 @@ def permissions_new_unicode(self):
     permissions_name = str(self.name)
 
     if "Can delete" in permissions_name:
-        permissions_name = "Может удалять"
+        permissions_name = "разрешено удалять"
     elif "Can add" in permissions_name:
-        permissions_name = "Может добавлять"
+        permissions_name = "разрешено добавлять"
     elif "Can change" in permissions_name:
-        permissions_name = "Может изменять"
+        permissions_name = "разрешено изменять"
     elif "Can view" in permissions_name:
-        permissions_name = "Может смотреть"
+        permissions_name = "разрешено просматривать"
 
     return "%s - %s" % (class_name.title(), permissions_name)
 
