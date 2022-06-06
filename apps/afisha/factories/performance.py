@@ -75,7 +75,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     description = factory.Faker("text", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
     age_limit = factory.LazyFunction(lambda: random.choice(list(AgeLimit)))
-    video = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
+    video = factory.Iterator(YOUTUBE_VIDEO_LINKS)
     status = factory.LazyFunction(lambda: random.choice(list(Status)))
 
     @factory.lazy_attribute
