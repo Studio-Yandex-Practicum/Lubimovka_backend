@@ -5,7 +5,7 @@ from faker import Faker
 
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
-from apps.core.utils import get_picsum_image
+from apps.core.utils import get_picsum_image, get_video_in_channel
 from apps.info.models import (
     Festival,
     FestivalImage,
@@ -144,6 +144,11 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     # корректировки поля модели фестиваля
     blog_entries = factory.LazyFunction(lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"]))
     press_release_image = factory.django.ImageField(color="blue")
+
+    class Params:
+        add_real_video = factory.Trait(
+            video_link=factory.LazyFunction(lambda: random.choice(get_video_in_channel())),
+        )
 
 
 @restrict_factory(general=(Festival,))

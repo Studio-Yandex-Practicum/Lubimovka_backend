@@ -10,7 +10,7 @@ from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaRe
 from apps.core.constants import AgeLimit, Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
-from apps.core.utils import get_picsum_image
+from apps.core.utils import get_picsum_image, get_video_in_channel
 from apps.library.factories import TeamMemberFactory
 from apps.library.models import Play
 
@@ -35,6 +35,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     6. `add_team_members_with_roles`: waits for an iterable of strings. The
     strings should be a slug of any role. Selects random `Person` and add it to
     the `Performance` as team_member with the corresponding role.
+    7. `add_real_video`: if True, create object with link to real youtube video.
 
     Class methods:
     1. `complex_create`:  shortcut. Run `create` method with parameters:
@@ -59,6 +60,9 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
         add_real_images = factory.Trait(
             main_image=factory.django.ImageField(from_func=get_picsum_image),
             bottom_image=factory.django.ImageField(from_func=get_picsum_image),
+        )
+        add_real_video = factory.Trait(
+            video=factory.LazyFunction(lambda: random.choice(get_video_in_channel())),
         )
 
     name = factory.Faker("text", max_nb_chars=150, locale="ru_RU")
