@@ -144,6 +144,7 @@ class SponsorAdmin(SortableAdminMixin, admin.ModelAdmin):
         "position",
     )
     list_display_links = ("person",)
+    search_fields = ("person__first_name", "person__last_name")
     autocomplete_fields = ("person",)
 
 
