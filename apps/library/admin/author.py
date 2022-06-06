@@ -1,17 +1,22 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 
+from apps.afisha.mixins import AdminPlayMixin
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 
 
-class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
+class PlayInline(SortableInlineAdminMixin, AdminPlayMixin, admin.TabularInline):
     model = AuthorPlay
     extra = 0
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ("collapsible",)
     autocomplete_fields = ("play",)
+    readonly_fields = (
+        "play_festival_year",
+        "play_program",
+    )
 
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=False).select_related(
