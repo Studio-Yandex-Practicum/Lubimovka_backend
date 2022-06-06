@@ -9,8 +9,7 @@ class MasterClassAdmin(admin.ModelAdmin):
     list_display = ("name", "project")
     exclude = ("events",)
     search_fields = (
-        "project",
-        "play__name",
+        "project__title",
         "name",
     )
     inlines = (TeamMemberInline,)
