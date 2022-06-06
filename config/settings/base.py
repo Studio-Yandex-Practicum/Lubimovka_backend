@@ -314,3 +314,5 @@ CSRF_FAILURE_VIEW = 'apps.core.views.csrf_failure'
 
 # https://anymail.readthedocs.io/en/stable/installation/?highlight=SERVER_EMAIL#configuring-django-s-email-backend
 SERVER_EMAIL = env("SERVER_EMAIL", default=None)
+
+YOUTUBE_API_KEY = env("YOUTUBE_API_KEY", default="private_key_id")
