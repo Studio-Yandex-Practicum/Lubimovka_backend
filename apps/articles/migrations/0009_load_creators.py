@@ -17,8 +17,8 @@ def load_creators(apps, schema_editor):
         .filter(action_flag=ADDITION)\
         .values("object_id_as_int", "user_id")
     for log in project_logs:
-        project = Project.objects.get(id=log["object_id_as_int"])
-        if project.creator is None:
+        project = Project.objects.filter(id=log["object_id_as_int"])
+        if project.first().creator is None:
             project.update(creator=log["user_id"])
 
     BlogItem = apps.get_model("articles", "BlogItem")
@@ -30,8 +30,8 @@ def load_creators(apps, schema_editor):
         .filter(action_flag=ADDITION)\
         .values("object_id_as_int", "user_id")
     for log in blog_logs:
-        blog = BlogItem.objects.get(id=log["object_id_as_int"])
-        if blog.creator is None:
+        blog = BlogItem.objects.filter(id=log["object_id_as_int"])
+        if blog.first().creator is None:
             blog.update(creator=log["user_id"])
 
     NewsItem = apps.get_model("articles", "NewsItem")
@@ -43,8 +43,8 @@ def load_creators(apps, schema_editor):
         .filter(action_flag=ADDITION)\
         .values("object_id_as_int", "user_id")
     for log in news_logs :
-        news = NewsItem.objects.get(id=log["object_id_as_int"])
-        if news.creator is None:
+        news = NewsItem.objects.filter(id=log["object_id_as_int"])
+        if news.first().creator is None:
             news.update(creator=log["user_id"])
 
 

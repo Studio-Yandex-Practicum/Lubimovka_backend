@@ -17,8 +17,8 @@ def load_creators(apps, schema_editor):
         .filter(action_flag=ADDITION)\
         .values("object_id_as_int", "user_id")
     for log in perfomance_logs:
-        perfomance = Performance.objects.get(id=log["object_id_as_int"])
-        if perfomance.creator is None:
+        perfomance = Performance.objects.filter(id=log["object_id_as_int"])
+        if perfomance.first().creator is None:
             perfomance.update(creator=log["user_id"])
 
 
