@@ -140,3 +140,5 @@ YOUTUBE_VIDEO_LINKS = [
     "https://www.youtube.com/watch?v=-UYCpXEdL8I",
     "https://www.youtube.com/watch?v=OvDe1Ebqr-8",
 ]
+
+AUTHORS_COUNT = [1, 1, 1, 1, 2, 2, 3]

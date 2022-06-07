@@ -1,5 +1,3 @@
-from typing import Iterable
-
 import factory
 from faker import Faker
 
@@ -7,7 +5,7 @@ from apps.core import utils
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.info.models import Festival
-from apps.library.models import Author, OtherLink, Play, ProgramType, SocialNetworkLink
+from apps.library.models import Author, OtherLink, ProgramType, SocialNetworkLink
 
 fake = Faker("ru_RU")
 
@@ -45,7 +43,7 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
         return Author.objects.order_by("?").first()
 
 
-@restrict_factory(general=(Play, Person, Festival, ProgramType))
+@restrict_factory(general=(Person, Festival, ProgramType))
 class AuthorFactory(factory.django.DjangoModelFactory):
     """Create Author object.
 
@@ -53,8 +51,6 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     1. `add_several_achievement`: create <int> `Achievement` objects, link to `Author`.
     2. `add_several_social_network_link`:  create <int> `SocialNetworkLink` objects, link to `Author`.
     3. `add_several_other_link`: create <int> `OtherLink` objects, link to `Author`.
-    4. `plays`: wait for Iterable[Play]. Link the `Play` objects to `Author`.
-    5. `plays__num`: select <num> `Play` objects and link them to `Author`.
 
     Class methods:
     1. `complex_create`:  shortcut. Create `Author` with fully populated fields.
@@ -116,32 +112,6 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             links_count = count
             OtherLinkFactory.create_batch(links_count, author=self)
 
-    @factory.post_generation
-    def plays(self, created: bool, extracted: Iterable[Play], **kwargs):
-        """Add a Play objects to plays field for Author.
-
-        To add concrete plays use
-        AuthorFactory.create(plays=(play1, play2, ...)).
-        To add given number of Play objects use
-        AuthorFactory.create(plays__num=<int>)
-        """
-        if not created:
-            return
-        if extracted:
-            plays = extracted
-            self.plays.add(*plays)
-            return
-
-        at_least = 1
-        num = kwargs.get("num", None)
-        how_many = num or at_least
-
-        plays_count = Play.objects.count()
-        how_many = min(plays_count, how_many)
-
-        plays = Play.objects.order_by("?")[:how_many]
-        self.plays.add(*plays)
-
     @classmethod
     def complex_create(cls, count=1):
         """Create Author object with fully populated fields."""
@@ -149,5 +119,4 @@ class AuthorFactory(factory.django.DjangoModelFactory):
             count,
             add_social_network_link=3,
             add_other_link=3,
-            plays__num=3,
         )
