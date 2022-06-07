@@ -1,12 +1,11 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 
-from apps.afisha.mixins import AdminPlayMixin
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 
 
-class PlayInline(SortableInlineAdminMixin, AdminPlayMixin, admin.TabularInline):
+class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     model = AuthorPlay
     extra = 0
     verbose_name = "Пьеса"
@@ -23,6 +22,14 @@ class PlayInline(SortableInlineAdminMixin, AdminPlayMixin, admin.TabularInline):
             "author__person",
             "play",
         )
+
+    @admin.display(description="Год участия в фестивале")
+    def play_festival_year(self, obj):
+        return f"{obj.play.festival.year}"
+
+    @admin.display(description="Программа")
+    def play_program(self, obj):
+        return f"{obj.play.program}"
 
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
