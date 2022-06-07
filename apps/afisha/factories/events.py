@@ -1,9 +1,11 @@
+import random
 from zoneinfo import ZoneInfo
 
 import factory
 from django.conf import settings
 
 from apps.afisha.models import CommonEvent, Event
+from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
 
 
@@ -12,11 +14,11 @@ class EventFactory(factory.django.DjangoModelFactory):
     """Create Event.
 
     Parameters:
-    1.`date_time_in_three_hours=True`: create event at random time but not
+    1. `date_time_in_three_hours=True`: create event at random time but not
     more than 3 hours from now.
     2. `masterclass=True`: bind event with random `master class`
     3. `reading=True`: bind event with random `reading`
-    4. `performance=True`: bind event with random `performance`
+    4. `performance=True`: bind event with random `performance`.
     """
 
     class Meta:
@@ -53,7 +55,7 @@ class EventFactory(factory.django.DjangoModelFactory):
         tzinfo=ZoneInfo(settings.TIME_ZONE),
     )
     paid = factory.Faker("boolean", chance_of_getting_true=50)
-    url = factory.Faker("url")
+    url = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
     place = factory.Faker("address", locale="ru_RU")
     pinned_on_main = factory.Faker("boolean", chance_of_getting_true=80)
 
