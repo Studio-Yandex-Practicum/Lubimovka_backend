@@ -95,7 +95,7 @@ class EventAdmin(admin.ModelAdmin):
     )
     empty_value_display = "-пусто-"
 
-    def get_queryset(self, request):
+    def get_queryset(self, request: object) -> object:
         qs = super().get_queryset(request)
         qs = qs.select_related(
             "common_event__masterclass",

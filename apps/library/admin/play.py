@@ -86,10 +86,10 @@ class PlayAdmin(admin.ModelAdmin):
                 or request.GET.get("model_name") == "performance"
                 or (request.GET.get("model_name") == "authorplay" and request.GET.get("play_type") == "main")
             ):
-                queryset = queryset.filter(other_play=False)
+                queryset = queryset.filter(published=True, other_play=False)
             # queryset with only Other Plays for request autocomplete from author's inline Other Plays
             elif request.GET.get("model_name") == "authorplay" and request.GET.get("play_type") == "other":
-                queryset = queryset.filter(other_play=True)
+                queryset = queryset.filter(published=True, other_play=True)
         return queryset, use_distinct
 
     class Media:
