@@ -1,8 +1,11 @@
+import logging
 from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.articles.factories import BlogItemFactory, NewsItemFactory, ProjectFactory
+
+logging.getLogger("django").setLevel(logging.WARNING)
 
 
 def notification(command, objects, text):

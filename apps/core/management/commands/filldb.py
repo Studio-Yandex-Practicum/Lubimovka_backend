@@ -31,8 +31,7 @@ from apps.users.factories import (
     SuperUserFactory,
 )
 
-logger = logging.getLogger()
-logger.disabled = True
+logging.getLogger("django").setLevel(logging.WARNING)
 
 
 def create_plays(command):
@@ -103,6 +102,7 @@ class Command(BaseCommand):
     )
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
+
         try:
             # users creation
             process_message(self, "Создаю тестовых пользователей...")
@@ -223,6 +223,3 @@ class Command(BaseCommand):
 
         except CommandError:
             self.stdout.write(self.style.ERROR("Ошибка наполнения БД"))
-
-
-logger.disabled = False
