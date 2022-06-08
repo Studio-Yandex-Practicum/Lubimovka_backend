@@ -8,44 +8,23 @@ from django.db.models.functions import Cast
 
 
 def load_creators(apps, schema_editor):
-    Project = apps.get_model("articles", "Project")
-    contentType = ContentType.objects.get_for_model(Project)
-    project_logs = LogEntry.objects\
-        .annotate(object_id_as_int=Cast('object_id', IntegerField()))\
-        .filter(object_id_as_int__in=Project.objects.values_list('id'))\
-        .filter(content_type=contentType)\
-        .filter(action_flag=ADDITION)\
-        .values("object_id_as_int", "user_id")
-    for log in project_logs:
-        project = Project.objects.filter(id=log["object_id_as_int"])
-        if project.first().creator is None:
-            project.update(creator=log["user_id"])
+    def load_using_model_name(model_name):
+        Model = apps.get_model("articles", model_name)
+        contentType = ContentType.objects.get_for_model(Model)
+        model_logs = LogEntry.objects\
+            .annotate(object_id_as_int=Cast('object_id', IntegerField()))\
+            .filter(object_id_as_int__in=Model.objects.values_list('id'))\
+            .filter(content_type=contentType)\
+            .filter(action_flag=ADDITION)\
+            .values("object_id_as_int", "user_id")
+        for log in model_logs:
+            model = Model.objects.filter(id=log["object_id_as_int"])
+            if model.first().creator is None:
+                model.update(creator=log["user_id"])
 
-    BlogItem = apps.get_model("articles", "BlogItem")
-    contentType = ContentType.objects.get_for_model(BlogItem)
-    blog_logs = LogEntry.objects\
-        .annotate(object_id_as_int=Cast('object_id', IntegerField()))\
-        .filter(object_id_as_int__in=BlogItem.objects.values_list('id'))\
-        .filter(content_type=contentType)\
-        .filter(action_flag=ADDITION)\
-        .values("object_id_as_int", "user_id")
-    for log in blog_logs:
-        blog = BlogItem.objects.filter(id=log["object_id_as_int"])
-        if blog.first().creator is None:
-            blog.update(creator=log["user_id"])
-
-    NewsItem = apps.get_model("articles", "NewsItem")
-    contentType = ContentType.objects.get_for_model(NewsItem)
-    news_logs = LogEntry.objects\
-        .annotate(object_id_as_int=Cast('object_id', IntegerField()))\
-        .filter(object_id_as_int__in=NewsItem.objects.values_list('id'))\
-        .filter(content_type=contentType)\
-        .filter(action_flag=ADDITION)\
-        .values("object_id_as_int", "user_id")
-    for log in news_logs :
-        news = NewsItem.objects.filter(id=log["object_id_as_int"])
-        if news.first().creator is None:
-            news.update(creator=log["user_id"])
+    load_using_model_name("Project")
+    load_using_model_name("BlogItem")
+    load_using_model_name("NewsItem")
 
 
 class Migration(migrations.Migration):
