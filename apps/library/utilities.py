@@ -21,5 +21,5 @@ def get_video_links():
     for link in YOUTUBE_VIDEO_LINKS:
         if link not in used_links:
             video_links.append(link)
-            video_links.append(None)
+            # video_links.append(None)
     return video_links

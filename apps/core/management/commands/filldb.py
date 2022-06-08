@@ -1,7 +1,7 @@
 import logging
+import random
 from typing import Any, Optional
 
-import factory
 from django.core.management.base import BaseCommand, CommandError
 
 from apps.afisha.factories import MasterClassFactory, PerformanceFactory, ReadingFactory
@@ -34,8 +34,13 @@ from apps.users.factories import (
 logger = logging.getLogger()
 logger.disabled = True
 
-VIDEO_LINKS = get_video_links()
-PLAYS_COUNT = len(VIDEO_LINKS)
+
+def create_plays(command):
+    links = get_video_links()
+    for link in links:
+        url_reading = random.choice([None, link])
+        PlayFactory.create(url_reading=url_reading)
+    return links  # needs for notification, because count of Plays is equal to links
 
 
 def add_pr_director(command):
@@ -180,7 +185,8 @@ class Command(BaseCommand):
             authors = AuthorFactory.complex_create(15)
             notification(self, authors, "авторов")
 
-            plays = PlayFactory.create_batch(PLAYS_COUNT, url_reading=factory.Iterator(VIDEO_LINKS))
+            # count of plays depends on 'free' youtube video links, it could be from 50 (at first filldb call) to 0
+            plays = create_plays(self)
             notification(self, plays, "пьес")
 
             other_plays = OtherPlayFactory.create_batch(5)
