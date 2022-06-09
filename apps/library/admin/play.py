@@ -43,8 +43,6 @@ class PlayAdmin(admin.ModelAdmin):
     inlines = (AuthorInline,)
     list_filter = (
         PlayTypeFilter,
-        "authors",
-        "city",
         "festival",
         "program",
         "published",
