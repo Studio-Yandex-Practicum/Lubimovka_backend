@@ -29,11 +29,24 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     autocomplete_fields = ("play",)
     formset = PlayCheckInlineFormset
 
+    readonly_fields = (
+        "play_festival_year",
+        "play_program",
+    )
+
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=False).select_related(
             "author__person",
             "play",
         )
+
+    @admin.display(description="Год участия в фестивале")
+    def play_festival_year(self, obj):
+        return f"{obj.play.festival.year}"
+
+    @admin.display(description="Программа")
+    def play_program(self, obj):
+        return f"{obj.play.program}"
 
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
