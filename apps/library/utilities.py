@@ -1,7 +1,7 @@
 from django.db.models.query import Prefetch
 
-from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.models import Role
+from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play
 
 

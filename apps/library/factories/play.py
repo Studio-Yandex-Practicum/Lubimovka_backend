@@ -4,10 +4,10 @@ from typing import Iterable
 import factory
 from faker import Faker
 
-from apps.core.constants import AUTHORS_COUNT, YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
 from apps.core.utils import slugify
 from apps.info.models import Festival
+from apps.library.factories.constants import AUTHORS_COUNT, YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play, ProgramType
 from apps.library.models.author import Author
 

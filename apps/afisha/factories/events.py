@@ -5,8 +5,8 @@ import factory
 from django.conf import settings
 
 from apps.afisha.models import CommonEvent, Event
-from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
+from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 
 
 @restrict_factory(general=(CommonEvent,))

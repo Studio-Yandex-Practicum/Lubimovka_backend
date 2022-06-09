@@ -3,7 +3,6 @@ import random
 import factory
 from faker import Faker
 
-from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.core.utils import get_picsum_image
@@ -19,6 +18,7 @@ from apps.info.models import (
     Sponsor,
     Volunteer,
 )
+from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 
 fake = Faker(locale="en_US")
 

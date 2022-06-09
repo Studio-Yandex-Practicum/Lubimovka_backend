@@ -7,11 +7,12 @@ from django.conf import settings
 from faker import Faker
 
 from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview
-from apps.core.constants import YOUTUBE_VIDEO_LINKS, AgeLimit, Status
+from apps.core.constants import AgeLimit, Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
 from apps.library.factories import TeamMemberFactory
+from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play
 
 fake = Faker("ru_RU")

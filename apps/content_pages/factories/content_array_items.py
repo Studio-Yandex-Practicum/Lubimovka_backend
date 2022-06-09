@@ -12,10 +12,10 @@ from apps.content_pages.models import (
     OrderedVideo,
     PersonsBlock,
 )
-from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
+from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play
 
 
