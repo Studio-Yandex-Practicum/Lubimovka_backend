@@ -6,7 +6,7 @@ def path_by_app_label_and_class_name(instance, filename):
     return path
 
 
-def path_by_media_app_label_and_class_name(instance, filename):
+def path_by_media_and_class_name(instance, filename):
     """Return path in format media/`class_name`s/`filename`."""
     class_name_lower = instance.__class__.__name__.lower()
     path = f"media/{class_name_lower}s/{filename}"
