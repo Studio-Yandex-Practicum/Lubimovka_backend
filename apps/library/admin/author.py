@@ -1,8 +1,20 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
+from django.forms import BaseInlineFormSet, ValidationError
+from django.forms.formsets import DELETION_FIELD_NAME
 
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
+
+
+class PlayCheckInlineFormset(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        if any(self.errors):
+            return  # Don't bother validating the formset unless each form is valid on its own
+        for form in self.forms:
+            if form.cleaned_data.get(DELETION_FIELD_NAME, False) and form.instance.play.author_plays.count() == 1:
+                raise ValidationError(f"{form.instance.play} не может быть удалена, так как это единственный её автор")
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -12,6 +24,8 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name_plural = "Пьесы"
     classes = ("collapsible",)
     autocomplete_fields = ("play",)
+    formset = PlayCheckInlineFormset
+
     readonly_fields = (
         "play_festival_year",
         "play_program",
