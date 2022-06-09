@@ -1,9 +1,11 @@
 from datetime import timedelta
 
 import pytest
+from django.db.models import Q
 from django.utils import timezone
 
 from apps.afisha.models import Event
+from apps.core.constants import Status
 from apps.library.models import Play
 from apps.main.tests.conftest import MAIN_URL
 
@@ -234,9 +236,17 @@ class TestMainAPIViews:
         """Checks that count afisha items in response matches count in db."""
         today = timezone.now()
         tomorrow = today.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
-        objects_count_in_db = Event.objects.filter(date_time__range=(today, tomorrow), pinned_on_main=True).count()
+        objects_count_in_db = (
+            Event.objects.filter(date_time__range=(today, tomorrow), pinned_on_main=True)
+            .filter(
+                Q(common_event__reading__name__isnull=False)
+                | Q(common_event__masterclass__name__isnull=False)
+                | Q(common_event__performance__status=Status.PUBLISHED)
+            )
+            .count()
+        )
 
         response = client.get(MAIN_URL)
         objects_count_in_response = len(response.data["afisha"]["items"])
 
-        assert objects_count_in_db == objects_count_in_response, "В блоке афига неожидаемое количество объектов."
+        assert objects_count_in_db == objects_count_in_response, "В блоке афиша неожидаемое количество объектов."

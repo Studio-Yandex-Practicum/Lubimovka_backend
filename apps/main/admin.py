@@ -24,6 +24,7 @@ class BannerAdmin(SortableAdminMixin, admin.ModelAdmin):
         "url",
     )
     list_display_links = ("title",)
+    search_fields = ("title", "description", "url")
 
 
 @admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen, SettingAfishaScreen, SettingPlaySupply)
@@ -32,7 +33,7 @@ class SettingAdmin(admin.ModelAdmin):
         "description",
         "get_value",
     )
-    search_fields = ("field_type", "settings_key", "text")
+    search_fields = ("field_type", "settings_key", "text", "description")
     readonly_fields = (
         "field_type",
         "settings_key",
@@ -61,7 +62,7 @@ class SettingAdmin(admin.ModelAdmin):
         """Return value of the setting object."""
         if isinstance(obj.value, bool):
             return _boolean_icon(obj.value)
-        if obj.field_type == "IMAGE":
+        if obj.field_type == "IMAGE" and obj.value:
             return format_html('<a href="{}">{}</a>'.format(obj.image.url, obj.value))
         if obj.field_type == "URL":
             return format_html('<a href="{}">{}</a>'.format(obj.url, obj.value))

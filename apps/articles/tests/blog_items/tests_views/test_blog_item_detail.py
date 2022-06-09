@@ -1,8 +1,7 @@
 import pytest
 from django.urls import reverse
 
-from apps.articles.factories import BlogItemFactory
-from apps.articles.factories.blog_items import BlogItemContentModuleFactory, BlogPersonFactory
+from apps.articles.factories import BlogItemContentModuleFactory, BlogItemFactory, BlogPersonFactory
 from apps.core.factories import PersonFactory, RoleFactory
 
 pytestmark = [pytest.mark.django_db]

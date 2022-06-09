@@ -1,6 +1,3 @@
-from .author import AuthorFactory
-from .masterclass import MasterClassFactory
-from .performance import PerformanceFactory
-from .play import OtherPlayFactory, PlayFactory, ProgramTypeFactory
-from .reading import ReadingFactory
-from .team_member import TeamMemberFactory
+from apps.library.factories.author import AuthorFactory
+from apps.library.factories.play import OtherPlayFactory, PlayFactory, ProgramTypeFactory
+from apps.library.factories.team_member import TeamMemberFactory

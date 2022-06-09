@@ -2,6 +2,7 @@
 
 from django.db import migrations, models
 
+
 def set_email(apps, schema_editor):
     User = apps.get_model("users", "User")
     for user in User.objects.all():

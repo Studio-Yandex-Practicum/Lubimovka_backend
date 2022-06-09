@@ -1,3 +1,5 @@
+import random
+
 import factory
 
 from apps.afisha.models import Event
@@ -10,6 +12,7 @@ from apps.content_pages.models import (
     OrderedVideo,
     PersonsBlock,
 )
+from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
@@ -138,5 +141,5 @@ class OrderedVideoFactory(factory.django.DjangoModelFactory):
         empty_title = factory.Trait(title="")
 
     title = factory.Faker("sentence", locale="ru_RU")
-    url = factory.Faker("url")
+    url = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
     order = factory.Sequence(lambda n: (n % 3 + 1))

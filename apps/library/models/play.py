@@ -1,4 +1,5 @@
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 
@@ -33,6 +34,15 @@ class ProgramType(BaseModel):
         return super().save(*args, **kwargs)
 
 
+ALLOWED_FORMATS_FILE_FOR_PLAY = (
+    "doc",
+    "docx",
+    "txt",
+    "odt",
+    "pdf",
+)
+
+
 class Play(BaseModel):
     name = models.CharField(
         max_length=70,
@@ -51,9 +61,11 @@ class Play(BaseModel):
         null=True,
     )
     url_download = models.FileField(
+        validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PLAY),),
         max_length=200,
         upload_to="plays",
         verbose_name="Текст пьесы",
+        help_text=f"Файл пьесы должен быть в одном из следующих форматов: " f"{ALLOWED_FORMATS_FILE_FOR_PLAY}",
     )
     url_reading = models.URLField(
         max_length=200,
@@ -86,7 +98,6 @@ class Play(BaseModel):
     )
     other_play = models.BooleanField(
         verbose_name="Сторонняя пьеса",
-        help_text="Да/нет",
         default=False,
     )
 
@@ -104,7 +115,7 @@ class Play(BaseModel):
     def __str__(self):
         return (
             self.name
-            + ("" if self.published else " <— не опубликована —>")
+            + ("" if self.published else " <— 🔴 пьеса не опубликована —>")
             + ("" if not self.other_play else " <— Другая пьеса —>")
         )
 

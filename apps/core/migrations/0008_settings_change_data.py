@@ -2,6 +2,7 @@
 
 from django.db import migrations
 
+
 def change_first_screen_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")

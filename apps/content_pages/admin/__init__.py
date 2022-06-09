@@ -1,4 +1,4 @@
-from .content_blocks import (
+from apps.content_pages.admin.content_blocks import (
     EventsBlockAdmin,
     ExtendedPersonInline,
     ImagesBlockAdmin,
@@ -10,5 +10,5 @@ from .content_blocks import (
     PlaysBlockAdmin,
     VideosBlockAdmin,
 )
-from .content_items import Link, Quote, Text, Title
-from .contents import BaseContentInline, BaseContentPageAdmin
+from apps.content_pages.admin.content_items import Link
+from apps.content_pages.admin.contents import BaseContentInline, BaseContentPageAdmin

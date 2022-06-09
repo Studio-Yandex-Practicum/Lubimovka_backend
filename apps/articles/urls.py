@@ -1,28 +1,17 @@
 from django.urls import include, path
-from rest_framework.routers import DefaultRouter
 
 from apps.articles.views import (
     BlogItemDetailAPI,
     BlogItemListAPI,
     BlogItemPreviewDetailAPI,
     BlogItemYearsMonthsAPI,
+    NewsItemsDetailAPI,
+    NewsItemsListAPI,
     NewsItemsPreviewDetailAPI,
-    NewsItemsViewSet,
     NewsItemYearsMonthsAPI,
+    ProjectDetailAPI,
+    ProjectListAPI,
     ProjectsPreviewDetailAPI,
-    ProjectsViewSet,
-)
-
-router = DefaultRouter()
-router.register(
-    prefix="news",
-    viewset=NewsItemsViewSet,
-    basename="news-item",
-)
-router.register(
-    prefix="projects",
-    viewset=ProjectsViewSet,
-    basename="project",
 )
 
 blog_item_urls = [
@@ -39,6 +28,16 @@ blog_item_urls = [
 news_item_urls = [
     path(route="years-months/", view=NewsItemYearsMonthsAPI.as_view(), name="news-item-years-months"),
     path(
+        route="",
+        view=NewsItemsListAPI.as_view(),
+        name="news-item-list",
+    ),
+    path(
+        route="<int:id>/",
+        view=NewsItemsDetailAPI.as_view(),
+        name="news-item-detail",
+    ),
+    path(
         route="<int:id>/preview/",
         view=NewsItemsPreviewDetailAPI.as_view(),
         name="news-item-detail-preview",
@@ -47,17 +46,26 @@ news_item_urls = [
 
 project_item_urls = [
     path(
+        route="",
+        view=ProjectListAPI.as_view(),
+        name="project-list",
+    ),
+    path(
+        route="<int:id>/",
+        view=ProjectDetailAPI.as_view(),
+        name="project-detail",
+    ),
+    path(
         route="<int:id>/preview/",
         view=ProjectsPreviewDetailAPI.as_view(),
         name="project-detail-preview",
-    )
+    ),
 ]
 
 articles_urls = [
     path("blog/", include(blog_item_urls)),
     path("news/", include(news_item_urls)),
     path("projects/", include(project_item_urls)),
-    path("", include(router.urls)),
 ]
 
 urlpatterns = [

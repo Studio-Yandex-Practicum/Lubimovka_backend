@@ -66,8 +66,6 @@ class FestivalTeamMember(BaseModel):
             raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
-        if not FestivalTeamMember.objects.filter(Q(team=self.team) & Q(person=self.person)).exists():
-            raise ValidationError("Этот человек уже в составе команды.")
         if not self.is_pr_director:
             hasAnotherPrDirector = FestivalTeamMember.objects.filter(
                 Q(is_pr_director=True) & Q(person=self.person)

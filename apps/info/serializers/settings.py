@@ -22,5 +22,6 @@ class SettingsSerializer(serializers.Serializer):
     email_on_volunteers_page = serializers.EmailField()
     email_on_blog_page = serializers.EmailField()
     email_on_support_page = serializers.EmailField()
+    url_to_privacy_policy = serializers.URLField()
     for_press = ForPressSerializer()
     plays_reception_is_open = serializers.BooleanField()

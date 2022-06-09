@@ -22,15 +22,16 @@ class FestTeamMemberForm(forms.ModelForm):
         help_text="пример: Ивану Иванову",
         max_length=60,
     )
+    team = forms.CharField(widget=forms.HiddenInput(), initial="fest")
 
     class Meta:
         model = FestivalTeamMember
-        exclude = ("team",)
         fields = (
             "person",
             "position",
             "is_pr_director",
             "pr_director_name",
+            "team",
         )
 
     def clean(self):
@@ -41,6 +42,20 @@ class FestTeamMemberForm(forms.ModelForm):
         if is_pr_director and not pr_director_name:
             msg = "Дополните данные о PR-директоре. Укажите Имя Фамилия в дательном падеже."
             self.add_error("pr_director_name", msg)
+
+
+class ArtTeamMemberForm(forms.ModelForm):
+    """Форма для Арт-дирекции фестиваля."""
+
+    team = forms.CharField(widget=forms.HiddenInput(), initial="art")
+
+    class Meta:
+        model = FestivalTeamMember
+        fields = (
+            "person",
+            "position",
+            "team",
+        )
 
 
 class AdditionalLinkForm(forms.ModelForm):
@@ -75,3 +90,7 @@ class PlayLinkForm(forms.ModelForm):
         new_link.type = InfoLink.LinkType.PLAYS_LINKS
         new_link.save()
         return new_link
+
+
+class FestivalForm(forms.ModelForm):
+    description = forms.CharField(widget=forms.Textarea, label="Описание фестиваля", max_length=200)

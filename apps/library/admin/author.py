@@ -1,26 +1,20 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
-from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.urls import re_path
+from django.forms import BaseInlineFormSet, ValidationError
+from django.forms.formsets import DELETION_FIELD_NAME
 
-from apps.core import utils
-from apps.core.models import Person
-from apps.library.forms.admin import OtherLinkForm
-from apps.library.models import Achievement, Author, AuthorPlay, OtherLink, Play, SocialNetworkLink
+from apps.library.forms import OtherLinkForm
+from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 
 
-@admin.register(Achievement)
-class AchievementAdmin(admin.ModelAdmin):
-    search_fields = ("tag",)
-
-
-class AchievementInline(admin.TabularInline):
-    model = Author.achievements.through
-    extra = 1
-    verbose_name = "Достижение"
-    verbose_name_plural = "Достижения"
-    classes = ("collapsible",)
+class PlayCheckInlineFormset(BaseInlineFormSet):
+    def clean(self):
+        super().clean()
+        if any(self.errors):
+            return  # Don't bother validating the formset unless each form is valid on its own
+        for form in self.forms:
+            if form.cleaned_data.get(DELETION_FIELD_NAME, False) and form.instance.play.author_plays.count() == 1:
+                raise ValidationError(f"{form.instance.play} не может быть удалена, так как это единственный её автор")
 
 
 class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -29,13 +23,27 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name = "Пьеса"
     verbose_name_plural = "Пьесы"
     classes = ("collapsible",)
+    autocomplete_fields = ("play",)
+    formset = PlayCheckInlineFormset
+
+    readonly_fields = (
+        "play_festival_year",
+        "play_program",
+    )
 
     def get_queryset(self, request):
-        return AuthorPlay.objects.filter(play__other_play=False)
+        return AuthorPlay.objects.filter(play__other_play=False).select_related(
+            "author__person",
+            "play",
+        )
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Play.objects.filter(other_play=False)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+    @admin.display(description="Год участия в фестивале")
+    def play_festival_year(self, obj):
+        return f"{obj.play.festival.year}"
+
+    @admin.display(description="Программа")
+    def play_program(self, obj):
+        return f"{obj.play.program}"
 
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -44,13 +52,43 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     verbose_name = "Другая пьеса"
     verbose_name_plural = "Другие пьесы"
     classes = ("collapsible",)
+    autocomplete_fields = ("play",)
 
     def get_queryset(self, request):
-        return AuthorPlay.objects.filter(play__other_play=True)
+        return AuthorPlay.objects.filter(play__other_play=True).select_related(
+            "author__person",
+            "play",
+        )
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Play.objects.filter(other_play=True)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+class AchivementInline(admin.TabularInline):
+    model = AuthorPlay
+    extra = 0
+    verbose_name = "Достижение"
+    verbose_name_plural = "Достижения"
+    classes = ("collapsible",)
+    fields = ("achievement",)
+    readonly_fields = ("achievement",)
+
+    @admin.display(
+        description="Достижения",
+    )
+    def achievement(self, obj):
+        return f"{obj.play.program} - {obj.play.festival.year}"
+
+    def get_queryset(self, request):
+        return (
+            AuthorPlay.objects.filter(play__other_play=False)
+            .select_related("author__person", "play__program", "play__festival")
+            .order_by("-play__festival__year")
+            .distinct("play__festival__year", "play__program")
+        )
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class SocialNetworkLinkInline(admin.TabularInline):
@@ -75,14 +113,13 @@ class AuthorAdmin(admin.ModelAdmin):
         "slug",
     )
     inlines = (
-        AchievementInline,
         PlayInline,
         OtherPlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
+        AchivementInline,
     )
     exclude = (
-        "achievements",
         "plays",
         "social_network_links",
         "other_links",
@@ -99,26 +136,8 @@ class AuthorAdmin(admin.ModelAdmin):
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
 
-    def get_form(self, request, obj=None, **kwargs):
-        form = super().get_form(request, obj, **kwargs)
-        if not request.user.has_perm("library.change_author"):
-            return form
-        if obj:
-            form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.exclude(id=obj.id))
-        else:
-            form.base_fields["person"].queryset = Person.objects.exclude(authors__in=Author.objects.all())
-        return form
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("person")
 
-    def get_urls(self):
-        urls = super().get_urls()
-        ajax_urls = [
-            re_path(r"\S*/ajax_author_slug/", self.author_slug),
-        ]
-        return ajax_urls + urls
-
-    def author_slug(self, request, obj_id=None):
-        person_id = request.GET.get("person")
-        person = get_object_or_404(Person, id=person_id)
-        slug = utils.slugify(person.last_name)
-        response = {"slug": slug}
-        return JsonResponse(response)
+    class Media:
+        js = ("admin/author_admin.js",)

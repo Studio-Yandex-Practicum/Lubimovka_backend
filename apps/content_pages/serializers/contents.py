@@ -8,10 +8,6 @@ from apps.content_pages.models import (
     Link,
     PersonsBlock,
     PlaysBlock,
-    Preamble,
-    Quote,
-    Text,
-    Title,
     VideosBlock,
 )
 from apps.content_pages.serializers import (
@@ -21,10 +17,6 @@ from apps.content_pages.serializers import (
     LinkSerializer,
     PersonsBlockSerializer,
     PlaysBlockSerializer,
-    PreambleSerializer,
-    QuoteSerializer,
-    TextSerializer,
-    TitleSerializer,
     VideosBlockSerializer,
 )
 
@@ -35,10 +27,6 @@ CONTENT_OBJECT_SERIALIZER_PAIRS = {
     Link: LinkSerializer,
     PersonsBlock: PersonsBlockSerializer,
     PlaysBlock: PlaysBlockSerializer,
-    Preamble: PreambleSerializer,
-    Quote: QuoteSerializer,
-    Text: TextSerializer,
-    Title: TitleSerializer,
     VideosBlock: VideosBlockSerializer,
 }
 

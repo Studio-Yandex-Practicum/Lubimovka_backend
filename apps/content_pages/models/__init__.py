@@ -1,10 +1,10 @@
-from .content_items import AbstractItemWithTitle, ContentUnitRichText, Link, Preamble, Quote, Text, Title
-from .contents import AbstractContent, AbstractContentPage
+from apps.content_pages.models.content_items import AbstractItemWithTitle, ContentUnitRichText, Link
+from apps.content_pages.models.contents import AbstractContent, AbstractContentPage
 
 # Prevent isort to rearrange imports and prevent circular imports.
 # isort: split
 
-from .content_blocks import (
+from apps.content_pages.models.content_blocks import (
     ContentPersonRole,
     EventsBlock,
     ExtendedPerson,

@@ -3,14 +3,10 @@ from django.db.models import Q
 
 from apps.core.models import BaseModel, Person
 
-from .master_class import MasterClass
-from .performance import Performance
-from .reading import Reading
-
 
 class TeamMember(BaseModel):
     performance = models.ForeignKey(
-        Performance,
+        "afisha.Performance",
         on_delete=models.CASCADE,
         null=True,
         blank=True,
@@ -18,7 +14,7 @@ class TeamMember(BaseModel):
         verbose_name="Спектакль",
     )
     reading = models.ForeignKey(
-        Reading,
+        "afisha.Reading",
         null=True,
         blank=True,
         on_delete=models.CASCADE,
@@ -26,7 +22,7 @@ class TeamMember(BaseModel):
         verbose_name="Читка",
     )
     masterclass = models.ForeignKey(
-        MasterClass,
+        "afisha.MasterClass",
         null=True,
         blank=True,
         on_delete=models.CASCADE,

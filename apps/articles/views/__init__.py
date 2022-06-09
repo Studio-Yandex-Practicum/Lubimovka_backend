@@ -1,15 +1,13 @@
-from .blog_items import BlogItemDetailAPI, BlogItemListAPI, BlogItemPreviewDetailAPI, BlogItemYearsMonthsAPI
-from .news_items import NewsItemsPreviewDetailAPI, NewsItemsViewSet, NewsItemYearsMonthsAPI
-from .projects import ProjectsPreviewDetailAPI, ProjectsViewSet
-
-__all__ = (
+from apps.articles.views.blog_items import (
     BlogItemDetailAPI,
     BlogItemListAPI,
-    BlogItemYearsMonthsAPI,
-    NewsItemsViewSet,
-    NewsItemYearsMonthsAPI,
-    ProjectsViewSet,
     BlogItemPreviewDetailAPI,
-    NewsItemsPreviewDetailAPI,
-    ProjectsPreviewDetailAPI,
+    BlogItemYearsMonthsAPI,
 )
+from apps.articles.views.news_items import (
+    NewsItemsDetailAPI,
+    NewsItemsListAPI,
+    NewsItemsPreviewDetailAPI,
+    NewsItemYearsMonthsAPI,
+)
+from apps.articles.views.projects import ProjectDetailAPI, ProjectListAPI, ProjectsPreviewDetailAPI
