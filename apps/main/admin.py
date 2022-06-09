@@ -24,6 +24,7 @@ class BannerAdmin(SortableAdminMixin, admin.ModelAdmin):
         "url",
     )
     list_display_links = ("title",)
+    search_fields = ("title", "description", "url")
 
 
 @admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen, SettingAfishaScreen, SettingPlaySupply)

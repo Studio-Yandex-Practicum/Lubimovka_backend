@@ -86,7 +86,6 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
         "first_name",
         "last_name",
     )
-    list_filter = ("city",)
     empty_value_display = "-пусто-"
     readonly_fields = ("image_preview_change_page",)
 
