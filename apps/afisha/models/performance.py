@@ -1,6 +1,5 @@
 from datetime import timedelta
 
-from django.core.exceptions import ValidationError
 from django.db import models
 
 from apps.content_pages.querysets import PublishedContentQuerySet
@@ -95,10 +94,6 @@ class Performance(BaseModel):
         if len(self.name) >= 25:
             return self.name[:25] + "..."
         return self.name
-
-    def clean(self):
-        if not self.play.published:
-            raise ValidationError({"play": "Допускаются только опубликованные пьесы"})
 
     @property
     def team(self):

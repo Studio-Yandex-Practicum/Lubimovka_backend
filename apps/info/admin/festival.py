@@ -192,7 +192,7 @@ class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
         else:
             raise ValidationError("Заполните поля корректно")
 
-    def get_queryset(self, request: object) -> object:
+    def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset().filter(team="fest")
         return qs
 
