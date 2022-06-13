@@ -3,6 +3,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 
+from apps.content_pages.utilities import path_by_media_and_class_name
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.info.models import Festival
@@ -63,7 +64,7 @@ class Play(BaseModel):
     url_download = models.FileField(
         validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PLAY),),
         max_length=200,
-        upload_to="plays",
+        upload_to=path_by_media_and_class_name,
         verbose_name="Текст пьесы",
         help_text=f"Файл пьесы должен быть в одном из следующих форматов: " f"{ALLOWED_FORMATS_FILE_FOR_PLAY}",
     )
