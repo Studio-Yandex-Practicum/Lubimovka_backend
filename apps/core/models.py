@@ -81,7 +81,6 @@ class Person(BaseModel):
         null=True,
         blank=True,
         unique=True,
-        help_text="Поле обязательно для членов команды",
     )
     image = models.ImageField(
         upload_to="images/person_avatars",
