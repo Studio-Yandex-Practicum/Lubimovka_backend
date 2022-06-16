@@ -6,6 +6,7 @@ from django.db.models import F, Q, UniqueConstraint
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Image, Person
 
 
@@ -146,10 +147,10 @@ class Festival(BaseModel):
         verbose_name="Записи в блоге о фестивале",  # Ждет создание сущности
         blank=True,
     )  # При изменении - скорректировать фабрику в части создания данного поля
-    press_release_image = models.ImageField(
-        upload_to="images/info/press_releases",
+    festival_image = models.ImageField(
+        upload_to=path_by_app_label_and_class_name,
         blank=True,
-        verbose_name="Изображение для страницы пресс-релизов",
+        verbose_name="Постер фестиваля",
     )
 
     class Meta:
@@ -232,6 +233,11 @@ class PressRelease(BaseModel):
         on_delete=models.CASCADE,
         related_name="press_releases",
         verbose_name="Фестиваль",
+    )
+    press_release_image = models.ImageField(
+        upload_to=path_by_app_label_and_class_name,
+        blank=True,
+        verbose_name="Изображение для страницы пресс-релизов",
     )
 
     class Meta:
