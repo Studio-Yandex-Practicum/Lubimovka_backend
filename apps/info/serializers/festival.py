@@ -30,7 +30,7 @@ class FestivalSerializer(serializers.ModelSerializer):
             "cities_count",
             "video_link",
             "blog_entries",
-            "press_release_image",
+            "festival_image",
             "images",
             "plays_links",
             "additional_links",

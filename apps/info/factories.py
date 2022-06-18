@@ -144,7 +144,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     # blog_entries необходимо изменить после
     # корректировки поля модели фестиваля
     blog_entries = factory.LazyFunction(lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"]))
-    press_release_image = factory.django.ImageField(color="blue")
+    festival_image = factory.django.ImageField(color=factory.Faker("color"))
 
 
 @restrict_factory(general=(Festival,))
@@ -190,6 +190,7 @@ class PressReleaseFactory(factory.django.DjangoModelFactory):
 
     title = factory.Faker("sentence", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
+    press_release_image = factory.django.ImageField(color=factory.Faker("color"))
 
     @factory.lazy_attribute
     def festival(self):
