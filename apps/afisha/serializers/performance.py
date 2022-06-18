@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.afisha.models import Event, Performance, PerformanceMediaReview, PerformanceReview
-from apps.core.serializers import ImageSerializer
+from apps.core.models import Image
 from apps.library.serializers import PlaySerializer, RoleSerializer
 
 
@@ -13,12 +13,25 @@ class LocalEventSerializer(serializers.ModelSerializer):
         fields = ("id", "date_time", "paid", "url", "place", "pinned_on_main")
 
 
+class BlockImagesSerializer(serializers.ModelSerializer):
+    """Сериализатор блока изображений."""
+
+    block_images_description = serializers.CharField(source="performance.block_images_description")
+
+    class Meta:
+        model = Image
+        fields = (
+            "block_images_description",
+            "image",
+        )
+
+
 class PerformanceSerializer(serializers.ModelSerializer):
     """Performance serializer for performance page."""
 
     play = PlaySerializer()
     team = RoleSerializer(many=True)
-    images_in_block = ImageSerializer(many=True)
+    images_in_block = BlockImagesSerializer(many=True)
     events = LocalEventSerializer(source="events.body", many=True)
 
     class Meta:
@@ -27,6 +40,7 @@ class PerformanceSerializer(serializers.ModelSerializer):
             "modified",
             "project",
             "persons",
+            "block_images_description",
         )
         model = Performance
 

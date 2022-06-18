@@ -50,6 +50,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, admin.ModelAdmin):
         "age_limit",
         "project",
         "duration",
+        "block_images_description",
     )
     list_filter = (
         "age_limit",
