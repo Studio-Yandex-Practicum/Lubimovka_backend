@@ -78,6 +78,14 @@ class Performance(BaseModel):
         default=timedelta(minutes=85),
         verbose_name="Продолжительность",
     )
+    block_images_description = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        default=None,
+        verbose_name="Заголовок для фотографий",
+        help_text="Опишите блок с фотографиями",
+    )
     objects = PublishedContentQuerySet.as_manager()
 
     class Meta:
