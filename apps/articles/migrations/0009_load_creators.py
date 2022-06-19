@@ -30,7 +30,7 @@ def load_creators(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('articles', '0008_auto_20220604_1009'),
+        ('articles', '0008_auto_20220619_2139'),
     ]
 
     operations = [migrations.RunPython(load_creators)]

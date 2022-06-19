@@ -25,7 +25,7 @@ def load_creators(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('afisha', '0007_performance_creator'),
+        ('afisha', '0008_performance_creator'),
     ]
 
     operations = [migrations.RunPython(load_creators)]
