@@ -4,6 +4,7 @@ from zoneinfo import ZoneInfo
 
 import factory
 from django.conf import settings
+from django.contrib.auth import get_user_model
 from faker import Faker
 
 from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview
@@ -14,6 +15,7 @@ from apps.core.utils import get_picsum_image
 from apps.library.factories import TeamMemberFactory
 from apps.library.models import Play
 
+User = get_user_model()
 fake = Faker("ru_RU")
 
 
@@ -77,6 +79,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     age_limit = factory.LazyFunction(lambda: random.choice(list(AgeLimit)))
     video = factory.Faker("url")
     status = factory.LazyFunction(lambda: random.choice(list(Status)))
+    creator = factory.LazyFunction(lambda: User.objects.first())
 
     @factory.lazy_attribute
     def play(self):
