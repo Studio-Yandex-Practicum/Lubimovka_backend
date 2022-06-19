@@ -14,9 +14,17 @@ from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
 from apps.library.factories import TeamMemberFactory
 from apps.library.models import Play
+from apps.users.factories import AdminUserFactory
 
 User = get_user_model()
 fake = Faker("ru_RU")
+
+
+def creator_field():
+    user = User.objects.first()
+    if user is None:
+        user = AdminUserFactory.create()
+    return user
 
 
 @restrict_factory(general=(Person, Play, Role))
@@ -79,7 +87,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     age_limit = factory.LazyFunction(lambda: random.choice(list(AgeLimit)))
     video = factory.Iterator(YOUTUBE_VIDEO_LINKS)
     status = factory.LazyFunction(lambda: random.choice(list(Status)))
-    creator = factory.LazyFunction(lambda: User.objects.first())
+    creator = factory.LazyFunction(creator_field)
 
     @factory.lazy_attribute
     def play(self):
