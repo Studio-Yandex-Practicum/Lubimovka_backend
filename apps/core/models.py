@@ -1,6 +1,7 @@
 from typing import Any, Union
 
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
@@ -80,7 +81,6 @@ class Person(BaseModel):
         null=True,
         blank=True,
         unique=True,
-        help_text="Поле не обязательное",
     )
     image = models.ImageField(
         upload_to="images/person_avatars",
@@ -280,6 +280,16 @@ class Setting(BaseModel):
 
     def __str__(self):
         return self.settings_key
+
+    def clean(self):
+        if (
+            self.group == self.SettingGroup.FIRST_SCREEN
+            and self.field_type == self.SettingFieldType.IMAGE
+            and not self.image
+        ):
+            raise ValidationError(
+                {"image": "Изображение должно присутствовать на странице. Оставьте или замените на другое."}
+            )
 
     def save(self, *args, **kwargs):
         self._check_related_settings(self)

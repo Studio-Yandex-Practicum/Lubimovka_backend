@@ -138,8 +138,6 @@ class Volunteer(BaseModel):
         errors = []
         if not self.person_id:
             return
-        if not self.person.email:
-            errors.append("Укажите email для волонтёра")
         if not self.person.image:
             errors.append("Для волонтёра необходимо выбрать его фото")
         if not self.person.city:

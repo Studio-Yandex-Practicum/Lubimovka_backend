@@ -24,6 +24,7 @@ class BannerAdmin(SortableAdminMixin, admin.ModelAdmin):
         "url",
     )
     list_display_links = ("title",)
+    search_fields = ("title", "description", "url")
 
 
 @admin.register(SettingEmail, SettingGeneral, SettingMain, SettingFirstScreen, SettingAfishaScreen, SettingPlaySupply)
@@ -32,7 +33,7 @@ class SettingAdmin(admin.ModelAdmin):
         "description",
         "get_value",
     )
-    search_fields = ("field_type", "settings_key", "text")
+    search_fields = ("field_type", "settings_key", "text", "description")
     readonly_fields = (
         "field_type",
         "settings_key",

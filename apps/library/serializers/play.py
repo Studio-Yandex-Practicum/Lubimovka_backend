@@ -47,7 +47,7 @@ class AuthorPlaySerializer(serializers.Serializer):
     year = serializers.IntegerField(
         source="play.year", required=False, min_value=0, max_value=32767, label="Год написания пьесы"
     )
-    url_download = serializers.URLField(source="play.url_download")
+    url_download = serializers.FileField(source="play.url_download")
     url_reading = serializers.URLField(source="play.url_reading", required=False)
 
 
@@ -60,4 +60,4 @@ class AuthorOtherPlaySerializer(serializers.Serializer):
     id = serializers.IntegerField(source="play.id")
     name = serializers.CharField(source="play.name")
     authors = AuthorForPlaySerializer(source="play.authors", many=True)
-    url_download = serializers.URLField(source="play.url_download")
+    url_download = serializers.FileField(source="play.url_download")

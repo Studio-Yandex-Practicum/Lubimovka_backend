@@ -1,6 +1,7 @@
 import factory
 from faker import Faker
 
+from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
 from apps.core.utils import slugify
 from apps.info.models import Festival
@@ -34,11 +35,7 @@ class PlayFactory(factory.django.DjangoModelFactory):
     url_download = factory.django.FileField()
     published = factory.Faker("boolean", chance_of_getting_true=50)
     other_play = False
-
-    @factory.lazy_attribute
-    def url_reading(self):
-        name = slugify(self.name)
-        return f"https://www.plays-reading.ru/{name}"
+    url_reading = factory.Iterator(YOUTUBE_VIDEO_LINKS)
 
     @factory.lazy_attribute
     def program(self):

@@ -3,6 +3,7 @@ import random
 import factory
 from faker import Faker
 
+from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.core.utils import get_picsum_image
@@ -139,11 +140,11 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     volunteers_count = factory.Faker("random_int", min=1, max=20, step=1)
     events_count = factory.Faker("random_int", min=1, max=20, step=1)
     cities_count = factory.Faker("random_int", min=1, max=20, step=1)
-    video_link = factory.Faker("url", locale="ru_RU")
+    video_link = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
     # blog_entries необходимо изменить после
     # корректировки поля модели фестиваля
     blog_entries = factory.LazyFunction(lambda: fake.word(ext_word_list=["abc", "def", "ghi", "jkl"]))
-    press_release_image = factory.django.ImageField(color="blue")
+    festival_image = factory.django.ImageField(color=factory.Faker("color"))
 
 
 @restrict_factory(general=(Festival,))
@@ -189,6 +190,7 @@ class PressReleaseFactory(factory.django.DjangoModelFactory):
 
     title = factory.Faker("sentence", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
+    press_release_image = factory.django.ImageField(color=factory.Faker("color"))
 
     @factory.lazy_attribute
     def festival(self):

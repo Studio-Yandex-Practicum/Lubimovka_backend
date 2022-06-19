@@ -8,7 +8,7 @@ from django.contrib.auth import get_user_model
 from faker import Faker
 
 from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview
-from apps.core.constants import AgeLimit, Status
+from apps.core.constants import YOUTUBE_VIDEO_LINKS, AgeLimit, Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
@@ -77,7 +77,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
     description = factory.Faker("text", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
     age_limit = factory.LazyFunction(lambda: random.choice(list(AgeLimit)))
-    video = factory.Faker("url")
+    video = factory.Iterator(YOUTUBE_VIDEO_LINKS)
     status = factory.LazyFunction(lambda: random.choice(list(Status)))
     creator = factory.LazyFunction(lambda: User.objects.first())
 
