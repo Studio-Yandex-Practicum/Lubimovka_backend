@@ -1,5 +1,6 @@
 from typing import Any, Union
 
+from django.apps import apps
 from django.contrib import admin
 from django.core.exceptions import ValidationError
 from django.db import models
@@ -220,6 +221,29 @@ class Setting(BaseModel):
         SettingFieldType.IMAGE: "image",
         SettingFieldType.EMAIL: "email",
     }
+
+    TRIGGERS = {
+        "festival_status": {
+            True: {
+                "SettingMain": {
+                    "main_add_blog": True,
+                    "main_add_news": False,
+                    "main_add_places": True,
+                    "main_add_short_list": False,
+                }
+            },
+            False: {
+                "SettingMain": {
+                    "main_add_blog": False,
+                    "main_add_news": True,
+                    "main_add_places": False,
+                    "main_add_short_list": True,
+                }
+            },
+        }
+    }
+    do_not_check_triggers = False
+
     RELATED_SETTINGS = {
         "main_add_blog": "main_add_news",
         "main_add_news": "main_add_blog",
@@ -293,6 +317,8 @@ class Setting(BaseModel):
 
     def save(self, *args, **kwargs):
         self._check_related_settings(self)
+        if not type(self).do_not_check_triggers:
+            self._check_triggers(self)
         super().save(*args, **kwargs)
 
     @property
@@ -332,13 +358,26 @@ class Setting(BaseModel):
         return settings_dict
 
     @classmethod
-    def _turn_off_setting(cls, setting):
+    def _set_setting(cls, setting, value=False):
         if cls.objects.filter(settings_key=setting).exists():
             setting = cls.objects.get(settings_key=setting)
-            setting.boolean = False
+            setting.boolean = value
             setting.save()
 
     @classmethod
     def _check_related_settings(cls, setting):
         if setting.settings_key in cls.RELATED_SETTINGS and setting.boolean:
-            cls._turn_off_setting(cls.RELATED_SETTINGS[setting.settings_key])
+            cls._set_setting(cls.RELATED_SETTINGS[setting.settings_key])
+
+    @classmethod
+    def _check_triggers(cls, setting):
+        print("Checking triggers for:", setting)
+        if setting.settings_key in cls.TRIGGERS:
+            preset = cls.TRIGGERS[setting.settings_key]
+            for model, settings in preset.get(setting.boolean, {}).items():
+                for key, value in settings.items():
+                    cls.do_not_check_triggers = True
+                    try:
+                        apps.get_model("main", model)._set_setting(key, value)
+                    finally:
+                        cls.do_not_check_triggers = False
