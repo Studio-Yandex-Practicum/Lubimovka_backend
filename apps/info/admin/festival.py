@@ -107,6 +107,7 @@ class FestivalAdmin(admin.ModelAdmin):
 @admin.register(PressRelease)
 class PressReleaseAdmin(admin.ModelAdmin):
     list_display = ("festival",)
+    exclude = ("title",)
 
     def get_form(self, request, obj=None, **kwargs):
         """Set free festivals and current festivals if exists."""
