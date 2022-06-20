@@ -22,11 +22,10 @@ fake = Faker("ru_RU")
 
 def creator_field():
     users = User.objects.all()
-    if users is None:
+    if users.count() == 0:
         return AdminUserFactory.create()
-    pks = users.values_list("pk", flat=True)
-    random_pk = random.choice(pks)
-    random_user = users.get(pk=random_pk)
+    items = list(users)
+    random_user = random.choice(items)
     return random_user
 
 
