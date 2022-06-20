@@ -1,5 +1,5 @@
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
 from django.db.models import Q
 
@@ -196,6 +196,16 @@ class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     def get_queryset(self, request):
         qs = self.model._default_manager.get_queryset().filter(team="fest")
         return qs
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.is_pr_director:
+            messages.add_message(
+                request,
+                messages.ERROR,
+                ("Для того чтобы снять с должности PR-директора, " "нужно назначить другого человека на эту должность"),
+            )
+            return False
+        return super().has_delete_permission(request, obj)
 
     class Media:
         """Adds a script that displays the field ```pr_director_name``` if ```is_pr_director``` is selected."""

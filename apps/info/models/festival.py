@@ -67,15 +67,6 @@ class FestivalTeamMember(BaseModel):
             raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
-        if not self.is_pr_director:
-            hasAnotherPrDirector = FestivalTeamMember.objects.filter(
-                Q(is_pr_director=True) & Q(person=self.person)
-            ).exists()
-            if hasAnotherPrDirector:
-                raise ValidationError(
-                    "Для того чтобы снять с должности PR-директора, "
-                    "нужно назначить другого человека на эту должность"
-                )
 
     def delete(self, *args, **kwargs):
         if self.is_pr_director:
