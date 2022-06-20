@@ -3,6 +3,7 @@ from zoneinfo import ZoneInfo
 import factory
 from django.conf import settings
 
+from apps.afisha.factories import creator_field
 from apps.afisha.models import Event, Performance
 from apps.articles.models import NewsItem, NewsItemContent
 from apps.content_pages.factories import AbstractContentFactory
@@ -58,6 +59,7 @@ class NewsItemFactory(factory.django.DjangoModelFactory):
     pub_date = factory.Faker("date_time", tzinfo=ZoneInfo(settings.TIME_ZONE))
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
     status = factory.Iterator(Status.values)
+    creator = factory.LazyFunction(creator_field)
 
     @factory.post_generation
     def add_several_eventsblock(self, created, count, **kwargs):
