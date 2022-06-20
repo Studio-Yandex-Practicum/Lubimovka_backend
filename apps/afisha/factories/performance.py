@@ -21,10 +21,13 @@ fake = Faker("ru_RU")
 
 
 def creator_field():
-    user = User.objects.first()
-    if user is None:
-        user = AdminUserFactory.create()
-    return user
+    users = User.objects.all()
+    if users is None:
+        return AdminUserFactory.create()
+    pks = users.values_list("pk", flat=True)
+    random_pk = random.choice(pks)
+    random_user = users.get(pk=random_pk)
+    return random_user
 
 
 @restrict_factory(general=(Person, Play, Role))
