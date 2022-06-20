@@ -371,7 +371,6 @@ class Setting(BaseModel):
 
     @classmethod
     def _check_triggers(cls, setting):
-        print("Checking triggers for:", setting)
         if setting.settings_key in cls.TRIGGERS:
             preset = cls.TRIGGERS[setting.settings_key]
             for model, settings in preset.get(setting.boolean, {}).items():
