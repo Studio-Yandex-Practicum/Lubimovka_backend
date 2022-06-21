@@ -5,6 +5,7 @@ from apps.core import utils
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.info.models import Festival
+from apps.info.utils import get_random_objects
 from apps.library.models import Author, OtherLink, ProgramType, SocialNetworkLink
 
 fake = Faker("ru_RU")
@@ -23,7 +24,7 @@ class SocialNetworkLinkFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def author(self):
-        return Author.objects.order_by("?").first()
+        return get_random_objects(Author.objects.all())
 
 
 @restrict_factory(general=(Author,))
@@ -40,7 +41,7 @@ class OtherLinkFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def author(self):
-        return Author.objects.order_by("?").first()
+        return get_random_objects(Author.objects.all())
 
 
 @restrict_factory(general=(Person, Festival, ProgramType))
@@ -73,7 +74,7 @@ class AuthorFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def person(self):
         queryset = Person.objects.filter(email__isnull=False).exclude(city__exact="").exclude(image__exact="")
-        person = queryset.order_by("?").first()
+        person = get_random_objects(queryset)
         return person
 
     @factory.lazy_attribute

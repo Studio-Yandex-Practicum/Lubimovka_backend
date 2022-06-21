@@ -15,6 +15,7 @@ from apps.content_pages.models import (
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
+from apps.info.utils import get_random_objects
 from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play
 
@@ -32,11 +33,11 @@ class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def role(self):
-        return Role.objects.order_by("?").first()
+        return get_random_objects(Role.objects.all())
 
     @factory.lazy_attribute
     def extended_person(self):
-        return ExtendedPerson.objects.order_by("?").first()
+        return get_random_objects(ExtendedPerson.objects.all())
 
 
 @restrict_factory(general=(Person,))
@@ -55,11 +56,11 @@ class ExtendedPersonFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def person(self):
-        return Person.objects.order_by("?").first()
+        return get_random_objects(Person.objects.all())
 
     @factory.lazy_attribute
     def block(self):
-        return PersonsBlock.objects.order_by("?").first()
+        return get_random_objects(PersonsBlock.objects.all())
 
     @factory.post_generation
     def add_roles(self, created, extracted, **kwargs):
@@ -106,7 +107,7 @@ class OrderedEventFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def item(self):
-        return Event.objects.filter(type="PERFORMANCE").order_by("?").first()
+        return get_random_objects(Event.objects.filter(type="PERFORMANCE"))
 
 
 @restrict_factory(general=(Play,))
@@ -123,7 +124,7 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def item(self):
-        return Play.objects.filter(other_play=False).order_by("?").first()
+        return get_random_objects(Play.objects.filter(other_play=False))
 
 
 class OrderedVideoFactory(factory.django.DjangoModelFactory):

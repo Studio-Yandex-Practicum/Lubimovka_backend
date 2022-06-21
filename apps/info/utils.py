@@ -1,3 +1,5 @@
+import random
+
 from django.http import HttpResponse
 from django.template.loader import get_template
 from rest_framework import status
@@ -27,3 +29,10 @@ def get_pdf_response(press_release_instance, path_to_font):
             status_code=status.HTTP_400_BAD_REQUEST,
         )
     return response
+
+
+def get_random_objects(objects, number=1):
+    items = list(objects)
+    if number > 1:
+        return random.sample(items, number)
+    return random.choice(items)

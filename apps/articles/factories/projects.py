@@ -9,6 +9,7 @@ from apps.content_pages.factories import AbstractContentFactory
 from apps.core.constants import Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
+from apps.info.utils import get_random_objects
 from apps.library.models import Play
 
 
@@ -26,7 +27,7 @@ class ProjectContentModuleFactory(AbstractContentFactory):
 
     @factory.lazy_attribute
     def content_page(self):
-        return Project.objects.order_by("?").first()
+        return get_random_objects(Project.objects.all())
 
 
 @restrict_factory(
