@@ -230,6 +230,7 @@ class Setting(BaseModel):
                     "main_add_news": False,
                     "main_add_places": True,
                     "main_add_short_list": False,
+                    "main_show_afisha_only_for_today": True,
                 }
             },
             False: {
@@ -238,6 +239,7 @@ class Setting(BaseModel):
                     "main_add_news": True,
                     "main_add_places": False,
                     "main_add_short_list": True,
+                    "main_show_afisha_only_for_today": False,
                 }
             },
         }
