@@ -105,8 +105,8 @@ class Command(FillDbLogsMixin, BaseCommand):
             member.save()
             Setting.objects.filter(settings_key="pr_director_name").update(text=name)
             self.log_success_creation(command, member, "PR директор")
-        else:
-            self.log_error(command, "Нет члена команды Фестиваль")
+            return True
+        return False
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
 
@@ -161,7 +161,9 @@ class Command(FillDbLogsMixin, BaseCommand):
             teams = FestivalTeamFactory.create_batch(10)
             self.log_success_creation(self, teams, "членов команд")
 
-            self.add_pr_director(self)
+            pr_director_creation_result = self.add_pr_director(self)
+            if pr_director_creation_result is False:
+                self.log_error(pr_director_creation_result, "Отсутствуют члены команды для создания PR директор")
 
             sponsors = SponsorFactory.create_batch(10)
             self.log_success_creation(self, sponsors, "попечителей")
