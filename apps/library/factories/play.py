@@ -54,7 +54,8 @@ class PlayFactory(factory.django.DjangoModelFactory):
         """Add a Author(s) to play.
 
         To add concrete authors use
-        PlayFactory.create(authors=(author1, author2, ...)).
+        PlayFactory.create(authors=(author1, author2, ...))
+        and they will get to 'extracted' argument.
         """
         if not created:
             return

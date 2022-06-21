@@ -60,13 +60,20 @@ class SponsorFactory(factory.django.DjangoModelFactory):
         return person
 
 
+def festival_field():
+    festivals = Festival.objects.all()
+    items = list(festivals)
+    random_festival = random.choice(items)
+    return random_festival
+
+
 @restrict_factory(general=(Festival, Person))
 class VolunteerFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Volunteer
         django_get_or_create = ("person", "festival")
 
-    festival = factory.Iterator(Festival.objects.all())
+    festival = factory.LazyFunction(festival_field)
     review_title = factory.Faker("text", max_nb_chars=50, locale="ru_RU")
     review_text = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
 
@@ -83,7 +90,7 @@ class SelectorFactory(factory.django.DjangoModelFactory):
         model = Selector
         django_get_or_create = ("person", "festival")
 
-    festival = factory.Iterator(Festival.objects.all())
+    festival = factory.LazyFunction(festival_field)
     position = factory.Faker("job", locale="ru_RU")
 
     @factory.lazy_attribute
@@ -120,7 +127,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     start_date = factory.Faker("past_date")
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
-    year = factory.Iterator(range(1990, 2022))
+    year = factory.Faker("random_int", min=1990, max=2022, step=1)
 
     @factory.post_generation
     def images(self, create, extracted, **kwargs):
