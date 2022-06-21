@@ -31,8 +31,8 @@ def get_pdf_response(press_release_instance, path_to_font):
     return response
 
 
-def get_random_objects(objects, number=1):
+def get_random_objects(objects, number=None):
     items = list(objects)
-    if number > 1:
+    if number is not None:
         return random.sample(items, number)
     return random.choice(items)
