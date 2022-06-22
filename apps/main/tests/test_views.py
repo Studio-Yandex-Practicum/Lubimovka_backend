@@ -198,6 +198,7 @@ class TestMainAPIViews:
         """Checks data["afisha"]["items"]["event_body"] in response."""
         fields = ["id", "name", "description", "team", "project_title"]
         response = client.get(MAIN_URL)
+        print(response.data)
         for field in fields:
             assert (
                 field in response.data["afisha"]["items"][0]["event_body"]
