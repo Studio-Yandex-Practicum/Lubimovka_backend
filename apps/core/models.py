@@ -60,7 +60,7 @@ class Person(BaseModel):
     )
     last_name = models.CharField(
         max_length=50,
-        validators=(name_validator,),
+        validators=(nickname_validator,),
         verbose_name="Фамилия",
         blank=True,
     )
