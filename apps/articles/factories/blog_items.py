@@ -10,6 +10,7 @@ from apps.content_pages.factories import AbstractContentFactory
 from apps.core.constants import Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
+from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.models import Play
 
 
@@ -27,7 +28,7 @@ class BlogItemContentModuleFactory(AbstractContentFactory):
 
     @factory.lazy_attribute
     def content_page(self):
-        return BlogItem.objects.order_by("?").first()
+        return get_random_objects_by_model(BlogItem)
 
 
 @restrict_factory(general=(Person, Role, BlogItem))
@@ -39,15 +40,15 @@ class BlogPersonFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def person(self):
-        return Person.objects.order_by("?").first()
+        return get_random_objects_by_model(Person)
 
     @factory.lazy_attribute
     def role(self):
-        return Role.objects.filter(types__role_type="blog_persons_role").order_by("?").first()
+        return get_random_objects_by_queryset(Role.objects.filter(types__role_type="blog_persons_role"))
 
     @factory.lazy_attribute
     def blog(self):
-        return BlogItem.objects.filter("?").first()
+        return get_random_objects_by_model(BlogItem)
 
 
 @restrict_factory(

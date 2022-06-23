@@ -8,11 +8,13 @@ from django.contrib.auth import get_user_model
 from faker import Faker
 
 from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview
-from apps.core.constants import YOUTUBE_VIDEO_LINKS, AgeLimit, Status
+from apps.core.constants import AgeLimit, Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
+from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.factories import TeamMemberFactory
+from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play
 from apps.users.factories import AdminUserFactory
 
@@ -93,7 +95,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def play(self):
-        return Play.objects.filter(other_play=False).order_by("?").first()
+        return get_random_objects_by_queryset(Play.objects.filter(other_play=False))
 
     dramatist_person = factory.RelatedFactory(
         TeamMemberFactory,
@@ -177,7 +179,7 @@ class PerformanceImageFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def performance(self):
-        return Performance.objects.order_by("?").first()
+        return get_random_objects_by_model(Performance)
 
 
 @restrict_factory(general=(Performance,))
@@ -205,7 +207,7 @@ class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def performance(self):
-        return Performance.objects.order_by("?").first()
+        return get_random_objects_by_queryset(Performance.objects.all())
 
 
 @restrict_factory(general=(Performance,))
@@ -223,4 +225,4 @@ class PerformanceReviewFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def performance(self):
-        return Performance.objects.order_by("?").first()
+        return get_random_objects_by_model(Performance)

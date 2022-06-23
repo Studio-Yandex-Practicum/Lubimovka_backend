@@ -1,3 +1,5 @@
+import random
+
 from django.http import HttpResponse
 from django.template.loader import get_template
 from rest_framework import status
@@ -27,3 +29,20 @@ def get_pdf_response(press_release_instance, path_to_font):
             status_code=status.HTTP_400_BAD_REQUEST,
         )
     return response
+
+
+def get_random_objects_by_queryset(queryset, number=None):
+    items = list(queryset)
+    length = len(items)
+    if length == 0:
+        return None
+    if number is not None:
+        if number > length:
+            number = length
+        return random.sample(items, number)
+    return random.choice(items)
+
+
+def get_random_objects_by_model(model, number=None):
+    queryset = model.objects.all()
+    return get_random_objects_by_queryset(queryset, number)
