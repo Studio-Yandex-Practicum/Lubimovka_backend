@@ -31,8 +31,15 @@ def get_pdf_response(press_release_instance, path_to_font):
     return response
 
 
-def get_random_objects(objects, number=None):
-    items = list(objects)
+def get_random_objects_by_queryset(queryset, number=None):
+    items = list(queryset)
+    if len(items) == 0:
+        return None
     if number is not None:
         return random.sample(items, number)
     return random.choice(items)
+
+
+def get_random_objects_by_model(model, number=None):
+    queryset = model.objects.all()
+    return get_random_objects_by_queryset(queryset, number)

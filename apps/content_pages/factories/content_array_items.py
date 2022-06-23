@@ -15,7 +15,7 @@ from apps.content_pages.models import (
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
-from apps.info.utils import get_random_objects
+from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play
 
@@ -33,11 +33,11 @@ class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def role(self):
-        return get_random_objects(Role.objects.all())
+        return get_random_objects_by_model(Role)
 
     @factory.lazy_attribute
     def extended_person(self):
-        return get_random_objects(ExtendedPerson.objects.all())
+        return get_random_objects_by_model(ExtendedPerson)
 
 
 @restrict_factory(general=(Person,))
@@ -56,11 +56,11 @@ class ExtendedPersonFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def person(self):
-        return get_random_objects(Person.objects.all())
+        return get_random_objects_by_model(Person)
 
     @factory.lazy_attribute
     def block(self):
-        return get_random_objects(PersonsBlock.objects.all())
+        return get_random_objects_by_model(PersonsBlock)
 
     @factory.post_generation
     def add_roles(self, created, extracted, **kwargs):
@@ -107,7 +107,7 @@ class OrderedEventFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def item(self):
-        return get_random_objects(Event.objects.filter(type="PERFORMANCE"))
+        return get_random_objects_by_queryset(Event.objects.filter(type=Event.EventType.PERFORMANCE))
 
 
 @restrict_factory(general=(Play,))
@@ -124,7 +124,7 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def item(self):
-        return get_random_objects(Play.objects.filter(other_play=False))
+        return get_random_objects_by_queryset(Play.objects.filter(other_play=False))
 
 
 class OrderedVideoFactory(factory.django.DjangoModelFactory):

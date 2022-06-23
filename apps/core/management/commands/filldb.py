@@ -86,27 +86,6 @@ class Command(FillDbLogsMixin, BaseCommand):
         " - Баннеры главной страницы"
     )
 
-    def create_plays(self, command):
-        def _get_video_links():
-            used_links = Play.objects.filter(other_play=False).values_list("url_reading", flat=True)
-            return (link for link in YOUTUBE_VIDEO_LINKS if link not in used_links)
-
-        links = _get_video_links()
-        for link in links:
-            url_reading = random.choice([None, link])
-            PlayFactory.create(url_reading=url_reading)
-        return links  # needs for notification, because count of Plays is equal to links
-
-    def add_pr_director(self, command):
-        member = FestivalTeamMember.objects.filter(team="fest").first()
-        if member:
-            name = member.person.full_name
-            member.is_pr_director = True
-            member.save()
-            Setting.objects.filter(settings_key="pr_director_name").update(text=name)
-            return True, member
-        return False, member
-
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
 
         try:
@@ -134,12 +113,12 @@ class Command(FillDbLogsMixin, BaseCommand):
             persons_base = PersonFactory.create_batch(15)
             self.log_success_creation(self, persons_base, "базовых персон")
 
-            persons_with_image = PersonFactory.create_batch(15, add_image=True)
+            persons_with_image = PersonFactory.create_batch(15, add_real_image=True)
             self.log_success_creation(self, persons_with_image, "персон с фото")
 
             persons_with_image_email_city = PersonFactory.create_batch(
                 15,
-                add_image=True,
+                add_real_image=True,
                 add_email=True,
                 add_city=True,
             )
@@ -226,10 +205,31 @@ class Command(FillDbLogsMixin, BaseCommand):
             participations = ParticipationApplicationFestivalFactory.create_batch(5)
             self.log_success_creation(self, participations, "заявок на участие в фестивале")
 
-            main_banners = MainBannerFactory.create_batch(3)  # add_real_image=True
+            main_banners = MainBannerFactory.create_batch(3, add_real_image=True)
             self.log_success_creation(self, main_banners, "баннера на главную страницу (с картинкой)")
 
             self.log_info(self, "Создание тестовых данных завершено!")
 
         except CommandError as err:
             self.log_error(self, f"Ошибка наполнения базы данных:\n{err}")
+
+    def create_plays(self, command):
+        def _get_video_links():
+            used_links = Play.objects.filter(other_play=False).values_list("url_reading", flat=True)
+            return (link for link in YOUTUBE_VIDEO_LINKS if link not in used_links)
+
+        links = _get_video_links()
+        for link in links:
+            url_reading = random.choice([None, link])
+            PlayFactory.create(url_reading=url_reading)
+        return links  # needs for notification, because count of Plays is equal to links
+
+    def add_pr_director(self, command):
+        member = FestivalTeamMember.objects.filter(team="fest").first()
+        if member:
+            name = member.person.full_name
+            member.is_pr_director = True
+            member.save()
+            Setting.objects.filter(settings_key="pr_director_name").update(text=name)
+            return True, member
+        return False, member

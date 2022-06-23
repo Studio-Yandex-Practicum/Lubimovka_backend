@@ -6,7 +6,7 @@ from django.conf import settings
 
 from apps.afisha.models import CommonEvent, Event
 from apps.core.decorators import restrict_factory
-from apps.info.utils import get_random_objects
+from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 
 
@@ -35,17 +35,17 @@ class EventFactory(factory.django.DjangoModelFactory):
         )
         masterclass = factory.Trait(
             common_event=factory.LazyFunction(
-                lambda: get_random_objects(CommonEvent.objects.exclude(masterclass__isnull=True))
+                lambda: get_random_objects_by_queryset(CommonEvent.objects.exclude(masterclass__isnull=True))
             ),
         )
         reading = factory.Trait(
             common_event=factory.LazyFunction(
-                lambda: get_random_objects(CommonEvent.objects.exclude(reading__isnull=True))
+                lambda: get_random_objects_by_queryset(CommonEvent.objects.exclude(reading__isnull=True))
             ),
         )
         performance = factory.Trait(
             common_event=factory.LazyFunction(
-                lambda: get_random_objects(CommonEvent.objects.exclude(performance__isnull=True))
+                lambda: get_random_objects_by_queryset(CommonEvent.objects.exclude(performance__isnull=True))
             ),
         )
 
@@ -62,4 +62,4 @@ class EventFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def common_event(self):
-        return get_random_objects(CommonEvent.objects.all())
+        return get_random_objects_by_model(CommonEvent)

@@ -11,7 +11,7 @@ from apps.core.constants import AgeLimit, Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
 from apps.core.utils import get_picsum_image
-from apps.info.utils import get_random_objects
+from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.factories import TeamMemberFactory
 from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play
@@ -82,7 +82,7 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def play(self):
-        return get_random_objects(Play.objects.filter(other_play=False))
+        return get_random_objects_by_queryset(Play.objects.filter(other_play=False))
 
     dramatist_person = factory.RelatedFactory(
         TeamMemberFactory,
@@ -166,7 +166,7 @@ class PerformanceImageFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def performance(self):
-        return get_random_objects(Performance.objects.all())
+        return get_random_objects_by_model(Performance)
 
 
 @restrict_factory(general=(Performance,))
@@ -194,7 +194,7 @@ class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def performance(self):
-        return get_random_objects(Performance.objects.all())
+        return get_random_objects_by_queryset(Performance.objects.all())
 
 
 @restrict_factory(general=(Performance,))
@@ -212,4 +212,4 @@ class PerformanceReviewFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def performance(self):
-        return get_random_objects(Performance.objects.all())
+        return get_random_objects_by_model(Performance)

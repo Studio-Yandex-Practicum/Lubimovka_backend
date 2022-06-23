@@ -3,7 +3,7 @@ from faker import Faker
 
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role, RoleType
-from apps.info.utils import get_random_objects
+from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.models import TeamMember
 
 fake = Faker("ru_RU")
@@ -43,7 +43,7 @@ class TeamMemberFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def person(self):
-        return get_random_objects(Person.objects.all())
+        return get_random_objects_by_model(Person)
 
     @factory.lazy_attribute
     def role(self):
@@ -55,7 +55,7 @@ class TeamMemberFactory(factory.django.DjangoModelFactory):
             role_type = RoleType.objects.filter(role_type="master_class_role")
 
         allowable_roles = Role.objects.filter(types__in=role_type)
-        allowable_random_role = get_random_objects(allowable_roles)
+        allowable_random_role = get_random_objects_by_queryset(allowable_roles)
         return allowable_random_role
 
     @factory.post_generation

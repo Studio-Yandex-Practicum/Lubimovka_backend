@@ -6,7 +6,7 @@ from faker import Faker
 from apps.afisha.models import Reading
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
-from apps.info.utils import get_random_objects
+from apps.info.utils import get_random_objects_by_queryset
 from apps.library.factories import TeamMemberFactory
 from apps.library.models import Play
 
@@ -38,7 +38,7 @@ class ReadingFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def play(self):
-        return get_random_objects(Play.objects.filter(other_play=False))
+        return get_random_objects_by_queryset(Play.objects.filter(other_play=False))
 
     dramatist_person = factory.RelatedFactory(
         TeamMemberFactory,

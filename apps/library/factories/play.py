@@ -7,7 +7,7 @@ from faker import Faker
 from apps.core.decorators import restrict_factory
 from apps.core.utils import slugify
 from apps.info.models import Festival
-from apps.info.utils import get_random_objects
+from apps.info.utils import get_random_objects_by_model
 from apps.library.factories.constants import AUTHORS_COUNT, YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play, ProgramType
 from apps.library.models.author import Author
@@ -44,11 +44,11 @@ class PlayFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def program(self):
-        return get_random_objects(ProgramType.objects.all())
+        return get_random_objects_by_model(ProgramType)
 
     @factory.lazy_attribute
     def festival(self):
-        return get_random_objects(Festival.objects.all())
+        return get_random_objects_by_model(Festival)
 
     @factory.post_generation
     def authors(self, created: bool, extracted: Iterable[Author], **kwargs):
@@ -67,7 +67,7 @@ class PlayFactory(factory.django.DjangoModelFactory):
 
         how_many = random.choice(AUTHORS_COUNT)
 
-        authors = get_random_objects(Author.objects.all(), how_many)
+        authors = get_random_objects_by_model(Author, how_many)
         self.authors.add(*authors)
 
 
