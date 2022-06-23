@@ -141,9 +141,9 @@ class Command(FillDbLogsMixin, BaseCommand):
 
             pr_director_creation_result, member = self.add_pr_director(self)
             if pr_director_creation_result is False:
-                self.log_error(pr_director_creation_result, "Отсутствуют члены команды для создания PR директор")
+                self.log_error(self, "Отсутствуют члены команды для создания PR директор")
             else:
-                self.log_success_creation(pr_director_creation_result, member, "PR директор")
+                self.log_success_creation(self, member, "PR директор")
 
             sponsors = SponsorFactory.create_batch(10)
             self.log_success_creation(self, sponsors, "попечителей")
