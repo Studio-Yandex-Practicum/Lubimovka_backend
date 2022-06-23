@@ -36,9 +36,9 @@ def get_random_objects_by_queryset(queryset, number=None):
     length = len(items)
     if length == 0:
         return None
-    if number > length:
-        number = length
     if number is not None:
+        if number > length:
+            number = length
         return random.sample(items, number)
     return random.choice(items)
 
