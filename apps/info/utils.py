@@ -33,8 +33,11 @@ def get_pdf_response(press_release_instance, path_to_font):
 
 def get_random_objects_by_queryset(queryset, number=None):
     items = list(queryset)
-    if len(items) == 0:
+    length = len(items)
+    if length == 0:
         return None
+    if number > length:
+        number = length
     if number is not None:
         return random.sample(items, number)
     return random.choice(items)
