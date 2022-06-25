@@ -46,7 +46,7 @@ ALLOWED_FORMATS_FILE_FOR_PLAY = (
 
 class Play(BaseModel):
     name = models.CharField(
-        max_length=70,
+        max_length=200,
         verbose_name="Название пьесы",
     )
     city = models.CharField(
