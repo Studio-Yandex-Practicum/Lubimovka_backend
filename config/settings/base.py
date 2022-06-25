@@ -194,7 +194,7 @@ EMAIL_TIMEOUT = 5
 CKEDITOR_TOOLBAR_BASE = (
     ("Undo", "Redo"),
     ("Bold", "Italic", "Link", "Unlink", "RemoveFormat"),
-    ("Styles",),
+    ("Styles", "Font", "FontSize"),
     ("Blockquote",),
     ("NumberedList", "BulletedList"),
 )
@@ -206,8 +206,9 @@ CKEDITOR_BASE = {
     "extraPlugins": (",").join(("autogrow",)),
     "basicEntities": False,
     "stylesSet": (
-        {"name": "Заголовок", "element": "h3"},
-        {"name": "Подзаголовок", "element": "h4"},
+        {"name": "Заголовок", "element": "h2"},
+        {"name": "Подзаголовок", "element": "h3"},
+        {"name": "Обычный", "element": "p"}
     ),
     "toolbar": "base",
     "toolbar_base": CKEDITOR_TOOLBAR_BASE,
