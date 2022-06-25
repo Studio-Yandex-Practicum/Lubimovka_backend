@@ -14,18 +14,18 @@ class Command(FillDbLogsMixin, BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         try:
-            self.log_info(self, "Создаю данные для новостей, проектов, блогов...")
+            self.log_info("Создаю данные для новостей, проектов, блогов...")
 
             blog_items = BlogItemFactory.complex_create(15)
-            self.log_success_creation(self, blog_items, "блогов")
+            self.log_success_creation(blog_items, "блогов")
 
             news_items = NewsItemFactory.complex_create(15)
-            self.log_success_creation(self, news_items, "новостей")
+            self.log_success_creation(news_items, "новостей")
 
             projects_item = ProjectFactory.complex_create(5)
-            self.log_success_creation(self, projects_item, "проектов")
+            self.log_success_creation(projects_item, "проектов")
 
-            self.log_info(self, "Создание тестовых данных завершено!")
+            self.log_info("Создание тестовых данных завершено!")
 
         except CommandError as err:
-            self.log_error(self, f"Ошибка наполнения базы данных:\n{err}")
+            self.log_error(f"Ошибка наполнения базы данных:\n{err}")
