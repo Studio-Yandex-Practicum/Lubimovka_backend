@@ -14,8 +14,9 @@ class SaveCreatorMixin:
     def save_model(self, request, obj, form, change):
         """При создании записи сохраняем ее создателя."""
         if form.is_valid():
-            creator = request.user
-            obj.creator = creator
+            if obj.creator is None:
+                creator = request.user
+                obj.creator = creator
             obj = form.save()
         else:
             raise ValidationError("Заполните поля корректно")
