@@ -20,6 +20,7 @@ from apps.info.factories import (
     VolunteerFactory,
 )
 from apps.info.models import FestivalTeamMember
+from apps.info.utils import get_random_objects_by_queryset
 from apps.library.factories import AuthorFactory, OtherPlayFactory, PlayFactory, ProgramTypeFactory
 from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play
@@ -141,7 +142,10 @@ class Command(FillDbLogsMixin, BaseCommand):
 
             pr_director_creation_result, member = self.add_pr_director()
             if pr_director_creation_result is False:
-                self.log_error("Отсутствуют члены команды для создания PR директор")
+                if member is None:
+                    self.log_error("PR директор уже существует")
+                else:
+                    self.log_error("Отсутствуют члены команды для создания PR директор")
             else:
                 self.log_success_creation(member, "PR директор")
 
@@ -225,7 +229,10 @@ class Command(FillDbLogsMixin, BaseCommand):
         return links  # needs for notification, because count of Plays is equal to links
 
     def add_pr_director(command):
-        member = FestivalTeamMember.objects.filter(team="fest").first()
+        festival_team_members = FestivalTeamMember.objects.filter(team="fest")
+        if festival_team_members.filter(is_pr_director=True).exists():
+            return False, None
+        member = get_random_objects_by_queryset(festival_team_members)
         if member:
             name = member.person.full_name
             member.is_pr_director = True
