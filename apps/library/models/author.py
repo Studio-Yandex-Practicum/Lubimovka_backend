@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
+from django.template.defaultfilters import truncatechars
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
@@ -68,6 +69,11 @@ class Author(BaseModel):
             .order_by("-festival__year")
             .distinct("festival__year", "program__name")
         )
+
+    @property
+    def short_bio(self):
+        """Get short biography."""
+        return truncatechars(self.biography, 50)
 
 
 class AuthorPlay(models.Model):

@@ -109,7 +109,7 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = (
         "person",
         "quote",
-        "biography",
+        "short_bio",
         "slug",
     )
     inlines = (
