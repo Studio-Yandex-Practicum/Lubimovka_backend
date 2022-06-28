@@ -8,28 +8,85 @@
 
         @font-face {
             font-family: "PP Neue Machina";
-            src: url("{{ path_to_font }}");
+            src: url(/static/fonts/PPNeueMachina/PPNeueMachina-Regular.ttf);
         }
 
-        .title {
+        p {
+            /* Style from figma */
             font-family: "PP Neue Machina";
+            font-style: normal;
+            font-weight: 300;
             font-size: 20px;
+            line-height: 28px;
+            letter-spacing: -0.01em;
+            font-feature-settings: 'ss01' on;
+
+            /* Adjust block margin */
+            margin-block-start: 0.5em;
+            margin-block-end: 0.5em;
         }
 
-        .text {
+
+        h1 {
+            text-align: center;
             font-family: "PP Neue Machina";
-            font-size: 14px;
+            font-style: normal;
+            font-weight: 600;
+            font-size: 3.5rem;
+            line-height: 0.7rem;
+            letter-spacing: -0.01em;
+
+            /* Adjust block margin */
+            margin-block-start: 0em;
+            margin-block-end: 4.75rem;
         }
 
         h2 {
-            text-align: center;
+            /* Style from figma */
+            font-family: "PP Neue Machina";
+            font-style: normal;
+            font-weight: 600;
+            font-size: 2.25rem;
+            line-height: 0.7rem;
+            letter-spacing: -0.01em;
+
+            /* Adjust block margin */
+            margin-block-start: 0rem;
+            margin-block-end: 1.5rem;
+        }
+
+        blockquote {
+            /* Style from figma */
+            font-family: "PP Neue Machina";
+            font-style: normal;
+            font-weight: 400;
+            font-size: 28px;
+            line-height: 32px;
+            letter-spacing: -0.01em;
+
+            /* Adjust block style */
+            border-style: solid;
+            border-color: #ccc;
+            border-width: 0 0 0 5px;
+            padding: 0 12px 0 8px;
+        }
+
+        a {
+            /* Adjust link color */
+            color: #242424;
+        }
+
+        ol,ul,dl {
+            /* Adjust block style */
+            font-family: "PP Neue Machina";
+            font-size: 20px;
         }
 
     </style>
 </head>
 
 <body>
-    <div class="title"><h2>{{ press_release.title | safe }}</h2></div>
+    <div class="title"><h1>{{ press_release.title | safe }}</h1></div>
     <div class="text">{{ press_release.text | safe }}</div>
 
 </body>
