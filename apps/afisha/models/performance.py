@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth import get_user_model
 from django.db import models
 
 from apps.content_pages.querysets import PublishedContentQuerySet
@@ -7,6 +8,8 @@ from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
 from apps.core.models import BaseModel, Person
 from apps.library.utilities import get_team_roles
+
+User = get_user_model()
 
 
 class Performance(BaseModel):
@@ -78,7 +81,20 @@ class Performance(BaseModel):
         default=timedelta(minutes=85),
         verbose_name="Продолжительность",
     )
+    block_images_description = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        default=None,
+        verbose_name="Заголовок для фотографий",
+        help_text="Опишите блок с фотографиями",
+    )
     objects = PublishedContentQuerySet.as_manager()
+    creator = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Создатель",
+    )
 
     class Meta:
         ordering = ("-created",)

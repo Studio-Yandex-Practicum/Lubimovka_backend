@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview
+from apps.content_pages.filters import CreatorFilter
+from apps.content_pages.mixins import SaveCreatorMixin
 from apps.core.mixins import AdminImagePreview, InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
 from apps.library.admin import TeamMemberInlineCollapsible
 
@@ -31,12 +33,13 @@ class PerformanceReviewInline(InlineReadOnlyMixin, admin.TabularInline):
 
 
 @admin.register(Performance)
-class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, admin.ModelAdmin):
+class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, admin.ModelAdmin):
     list_display = (
         "name",
         "description",
         "play",
         "status",
+        "creator_name",
     )
     fields = (
         "status",
@@ -50,16 +53,20 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, admin.ModelAdmin):
         "age_limit",
         "project",
         "duration",
+        "block_images_description",
     )
     list_filter = (
         "age_limit",
         "status",
+        CreatorFilter,
     )
     autocomplete_fields = ("play",)
     search_fields = (
         "play__name",
         "name",
         "text",
+        "creator__first_name",
+        "creator__last_name",
     )
     readonly_fields = ("status",)
     other_readonly_fields = (

@@ -7,6 +7,7 @@ from apps.afisha.models import MasterClass
 from apps.articles.models import Project
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
+from apps.info.utils import get_random_objects_by_model
 from apps.library.factories import TeamMemberFactory
 
 fake = Faker("ru_RU")
@@ -38,7 +39,7 @@ class MasterClassFactory(factory.django.DjangoModelFactory):
 
     class Params:
         add_project = factory.Trait(
-            project=factory.LazyFunction(lambda: Project.objects.order_by("?").first()),
+            project=factory.LazyFunction(lambda: get_random_objects_by_model(Project)),
         )
 
     name = factory.LazyFunction(lambda: fake.word().capitalize())

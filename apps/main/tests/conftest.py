@@ -8,7 +8,7 @@ from apps.content_pages.factories import ImagesBlockFactory
 from apps.core.constants import Status
 from apps.core.factories import PersonFactory
 from apps.info.factories import FestivalFactory, InfoLinkFactory, PlaceFactory
-from apps.library.factories import PlayFactory
+from apps.library.factories import AuthorFactory, PlayFactory, ProgramTypeFactory
 from apps.library.models import ProgramType
 from apps.main.factories import BannerFactory
 
@@ -31,18 +31,33 @@ def links(festival):
 
 
 @pytest.fixture
-def play(festival):
+def program_types():
+    return ProgramTypeFactory.create_batch(5)
+
+
+@pytest.fixture
+def persons_email_city_image():
+    return PersonFactory.create_batch(10, add_city=True, add_email=True, add_image=True)
+
+
+@pytest.fixture
+def authors(persons_email_city_image, festival, program_types):
+    return AuthorFactory.complex_create(5)
+
+
+@pytest.fixture
+def play(authors, festival):
     return PlayFactory(published=True)
 
 
 @pytest.fixture
-def play_in_short_list(festival):
+def play_in_short_list(authors, festival):
     short_list_program_type = ProgramType.objects.get(slug="short-list")
     return PlayFactory(published=True, program=short_list_program_type)
 
 
 @pytest.fixture
-def plays(festival):
+def plays(authors, festival):
     return PlayFactory.create_batch(4, year=festival.year)
 
 

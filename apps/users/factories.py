@@ -128,3 +128,18 @@ class ObserverUserFactory(UserFactory):
     def create(cls, **kwargs):
         kwargs["role_type"] = "observer"
         return super().create(**kwargs)
+
+
+class SuperUserFactory(factory.django.DjangoModelFactory):
+    """Create Superuser."""
+
+    class Meta:
+        model = User
+        django_get_or_create = ("username",)
+
+    first_name = factory.LazyAttribute(lambda _: fake.first_name())
+    last_name = factory.LazyAttribute(lambda _: fake.last_name())
+    email = factory.LazyAttribute(lambda _: fake.unique.email())
+    password = factory.PostGenerationMethodCall("set_password", "superadmin")
+    username = "superadmin"
+    is_superuser = True

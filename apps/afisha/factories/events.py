@@ -5,8 +5,9 @@ import factory
 from django.conf import settings
 
 from apps.afisha.models import CommonEvent, Event
-from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
+from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
+from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 
 
 @restrict_factory(general=(CommonEvent,))
@@ -34,17 +35,17 @@ class EventFactory(factory.django.DjangoModelFactory):
         )
         masterclass = factory.Trait(
             common_event=factory.LazyFunction(
-                lambda: CommonEvent.objects.exclude(masterclass__isnull=True).order_by("?").first()
+                lambda: get_random_objects_by_queryset(CommonEvent.objects.exclude(masterclass__isnull=True))
             ),
         )
         reading = factory.Trait(
             common_event=factory.LazyFunction(
-                lambda: CommonEvent.objects.exclude(reading__isnull=True).order_by("?").first()
+                lambda: get_random_objects_by_queryset(CommonEvent.objects.exclude(reading__isnull=True))
             ),
         )
         performance = factory.Trait(
             common_event=factory.LazyFunction(
-                lambda: CommonEvent.objects.exclude(performance__isnull=True).order_by("?").first()
+                lambda: get_random_objects_by_queryset(CommonEvent.objects.exclude(performance__isnull=True))
             ),
         )
 
@@ -61,4 +62,4 @@ class EventFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def common_event(self):
-        return CommonEvent.objects.order_by("?").first()
+        return get_random_objects_by_model(CommonEvent)
