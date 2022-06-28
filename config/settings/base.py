@@ -206,8 +206,7 @@ CKEDITOR_BASE = {
     "extraPlugins": (",").join(("autogrow",)),
     "basicEntities": False,
     "stylesSet": (
-        {"name": "Заголовок", "element": "h2"},
-        {"name": "Подзаголовок", "element": "h3"},
+        {"name": "Подзаголовок", "element": "h2"},
         {"name": "Обычный", "element": "p"}
     ),
     "toolbar": "base",
