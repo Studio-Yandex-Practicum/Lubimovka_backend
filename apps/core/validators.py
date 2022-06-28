@@ -31,3 +31,15 @@ def nickname_validator(nickname):
             "Это поле может содержать только буквы русского или английского алфавита, "
             "цифры, тире и подчеркивания, между ними может присутствовать пробел"
         )
+
+
+class MaximumLengthValidator:
+    def __init__(self, max_length=16):
+        self.max_length = max_length
+
+    def validate(self, password, user=None):
+        if len(password) > self.max_length:
+            raise ValidationError((f"Длина пароля не должна превышать {self.max_length} символов."))
+
+    def get_help_text(self):
+        return f"Длина пароль не должна превышать {self.max_length} символов."
