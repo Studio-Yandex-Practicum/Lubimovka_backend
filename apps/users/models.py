@@ -3,6 +3,8 @@ from django.contrib.auth.models import AbstractUser, Group
 from django.db import models
 from django.utils import timezone
 
+from apps.core.validators import email_validator
+
 
 class UserManager(BaseUserManager):
     def _create_user(self, email, password, is_staff, is_superuser, **extra_fields):
@@ -35,7 +37,7 @@ class User(AbstractUser):
     username = models.CharField(max_length=150, blank=True, null=True, verbose_name="Имя пользователя", unique=True)
     first_name = models.CharField(max_length=30, verbose_name="Имя")
     last_name = models.CharField(max_length=150, verbose_name="Фамилия")
-    email = models.EmailField(unique=True, verbose_name="Электронная почта")
+    email = models.EmailField(unique=True, validators=(email_validator,), verbose_name="Электронная почта")
 
     objects = UserManager()
 
