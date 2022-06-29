@@ -109,8 +109,8 @@ class AuthorAdmin(admin.ModelAdmin):
     list_display = (
         "person",
         "quote",
-        "short_bio",
         "slug",
+        "number_of_plays",
     )
     inlines = (
         PlayInline,
