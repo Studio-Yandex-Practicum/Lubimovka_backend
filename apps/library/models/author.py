@@ -1,7 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
-from django.template.defaultfilters import truncatechars
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
@@ -71,9 +70,10 @@ class Author(BaseModel):
         )
 
     @property
-    def short_bio(self):
-        """Get short biography."""
-        return truncatechars(self.biography, 50)
+    def number_of_plays(self):
+        return self.plays.count()
+
+    number_of_plays.fget.short_description = "Количество пьес"
 
 
 class AuthorPlay(models.Model):

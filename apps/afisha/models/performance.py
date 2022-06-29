@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.template.defaultfilters import truncatechars
 
 from apps.content_pages.querysets import PublishedContentQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
@@ -120,3 +121,16 @@ class Performance(BaseModel):
     def event_team(self):
         """Return directors and dramatists related with Performance."""
         return get_team_roles(self, {"team_members__performance": self, "slug__in": ["director", "dramatist"]})
+
+    @property
+    def short_name(self):
+        """Get short performace name."""
+        return truncatechars(self.name, 70)
+
+    @property
+    def short_description(self):
+        """Get short description."""
+        return truncatechars(self.description, 70)
+
+    short_name.fget.short_description = "Название cпектакля"
+    short_description.fget.short_description = "Краткое описание"

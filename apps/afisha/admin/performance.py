@@ -35,8 +35,8 @@ class PerformanceReviewInline(InlineReadOnlyMixin, admin.TabularInline):
 @admin.register(Performance)
 class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, admin.ModelAdmin):
     list_display = (
-        "name",
-        "description",
+        "short_name",
+        "short_description",
         "play",
         "status",
         "creator_name",
