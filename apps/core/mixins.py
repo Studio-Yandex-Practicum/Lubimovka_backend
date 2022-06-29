@@ -61,7 +61,10 @@ class StatusButtonMixin:
         if user_level >= STATUS_INFO[obj.status]["min_level_to_change"]:
             for status in STATUS_INFO:
                 if status in request.POST:
-                    if not obj.play.published and status == "PUBLISHED":
+                    print(obj._meta.model_name)
+                    if (
+                        obj._meta.model_name in ["blogitem", "newsitem", "project"] or not obj.play.published
+                    ) and status == "PUBLISHED":
                         self.message_user(
                             request, "Статус спектакля не обновлён. Пьеса должна быть опубликована!", messages.ERROR
                         )
