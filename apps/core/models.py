@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.utils import slugify
-from apps.core.validators import name_validator, nickname_validator
+from apps.core.validators import email_validator, name_validator, nickname_validator
 
 NEWS_HELP_TEXT = (
     "При включении данной настройки, автоматический будет "
@@ -78,6 +78,7 @@ class Person(BaseModel):
     )
     email = models.EmailField(
         max_length=200,
+        validators=(email_validator,),
         verbose_name="Электронная почта",
         null=True,
         blank=True,
