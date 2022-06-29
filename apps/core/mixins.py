@@ -2,7 +2,7 @@ from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
-from apps.core.constants import STATUS_INFO
+from apps.core.constants import STATUS_INFO, Status
 from apps.core.utils import get_object, get_user_change_perms_for_status, get_user_perms_level
 
 
@@ -61,7 +61,11 @@ class StatusButtonMixin:
         if user_level >= STATUS_INFO[obj.status]["min_level_to_change"]:
             for status in STATUS_INFO:
                 if status in request.POST:
-                    if not obj.play.published and status == "PUBLISHED":
+                    if (
+                        obj._meta.model_name == "perfomance"
+                        and not obj.play.published
+                        and status == Status.PUBLISHED.value
+                    ):
                         self.message_user(
                             request, "Статус спектакля не обновлён. Пьеса должна быть опубликована!", messages.ERROR
                         )
