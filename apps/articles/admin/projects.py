@@ -30,7 +30,6 @@ class ProjectAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
                     "pub_date",
                     "description",
                     ("image_preview_change_page", "image"),
-                    "creator_name",
                 ),
             },
         ),
@@ -38,7 +37,6 @@ class ProjectAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
     readonly_fields = (
         "status",
         "image_preview_change_page",
-        "creator_name",
     )
     inlines = (ProjectContentInline,)
     other_readonly_fields = (

@@ -54,7 +54,6 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
         "project",
         "duration",
         "block_images_description",
-        "creator_name",
     )
     list_filter = (
         "age_limit",
@@ -69,7 +68,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
         "creator__first_name",
         "creator__last_name",
     )
-    readonly_fields = ("status", "creator_name")
+    readonly_fields = ("status",)
     other_readonly_fields = (
         "status",
         "name",
