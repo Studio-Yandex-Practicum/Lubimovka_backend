@@ -22,6 +22,7 @@ class NewsItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin)
     readonly_fields = (
         "status",
         "image_preview_change_page",
+        "creator_name",
     )
     inlines = (NewsItemContentInline,)
     fieldsets = (
@@ -34,6 +35,7 @@ class NewsItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin)
                     "pub_date",
                     "description",
                     ("image_preview_change_page", "image"),
+                    "creator_name",
                 )
             },
         ),

@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.core.exceptions import ValidationError
 
 
 class SaveCreatorMixin:
@@ -13,10 +12,7 @@ class SaveCreatorMixin:
 
     def save_model(self, request, obj, form, change):
         """При создании записи сохраняем ее создателя."""
-        if form.is_valid():
-            if obj.creator is None:
-                creator = request.user
-                obj.creator = creator
-            obj = form.save()
-        else:
-            raise ValidationError("Заполните поля корректно")
+        if not change:
+            creator = request.user
+            obj.creator = creator
+        super().save_model(request, obj, form, change)
