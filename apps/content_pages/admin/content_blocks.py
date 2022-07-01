@@ -67,6 +67,7 @@ class ExtendedPersonInline(OrderedInline):
     model = ExtendedPerson
     show_change_link = True
     readonly_fields = ("person_roles",)
+    extra = 0
 
 
 @admin.register(ExtendedPerson)
