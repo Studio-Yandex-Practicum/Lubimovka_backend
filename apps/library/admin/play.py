@@ -75,18 +75,29 @@ class PlayAdmin(admin.ModelAdmin):
 
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super().get_search_results(request, queryset, search_term)
+
         # custom queryset for autocomplete requests
-        if "autocomplete" in request.path and request.GET.get("field_name") == "play":
+        if "autocomplete" in request.path:
+
             # queryset with only main Plays for request autocomplete from reading, performance and
             # author's inline Plays
-            if (
+            if request.GET.get("field_name") == "play" and (
                 request.GET.get("model_name") == "reading"
                 or request.GET.get("model_name") == "performance"
                 or (request.GET.get("model_name") == "authorplay" and request.GET.get("play_type") == "main")
             ):
                 queryset = queryset.filter(other_play=False)
+
+            # queryset with only main Plays for request autocomplete from OrderedPlay inline in Block
+            elif request.GET.get("field_name") == "item" and request.GET.get("model_name") == "orderedplay":
+                queryset = queryset.filter(other_play=False)
+
             # queryset with only Other Plays for request autocomplete from author's inline Other Plays
-            elif request.GET.get("model_name") == "authorplay" and request.GET.get("play_type") == "other":
+            elif (
+                request.GET.get("field_name") == "play"
+                and request.GET.get("model_name") == "authorplay"
+                and request.GET.get("play_type") == "other"
+            ):
                 queryset = queryset.filter(other_play=True)
         return queryset, use_distinct
 
