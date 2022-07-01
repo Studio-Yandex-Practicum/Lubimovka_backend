@@ -33,7 +33,8 @@ class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def role(self):
-        return get_random_objects_by_model(Role)
+        allowable_roles = Role.objects.filter(types="blog_persons_role")
+        return get_random_objects_by_queryset(allowable_roles)
 
     @factory.lazy_attribute
     def extended_person(self):
