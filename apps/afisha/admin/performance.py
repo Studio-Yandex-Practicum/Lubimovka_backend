@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from apps.afisha.forms import PerformanceForm
 from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaReview, PerformanceReview
 from apps.content_pages.filters import CreatorFilter
 from apps.content_pages.mixins import SaveCreatorMixin
@@ -34,6 +35,7 @@ class PerformanceReviewInline(InlineReadOnlyMixin, admin.TabularInline):
 
 @admin.register(Performance)
 class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, admin.ModelAdmin):
+    form = PerformanceForm
     list_display = (
         "short_name",
         "short_description",
