@@ -9,7 +9,6 @@ class PressReleaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = PressRelease
         fields = (
-            "title",
             "text",
             "press_release_image",
         )
