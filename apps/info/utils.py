@@ -34,7 +34,7 @@ def link_callback(uri, rel):
     return str(path)
 
 
-def get_pdf_response(press_release_instance, path_to_font):
+def get_pdf_response(press_release_instance):
     press_release_year = press_release_instance.festival.year
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f"attachment; filename=press-release_{press_release_year}.pdf"
