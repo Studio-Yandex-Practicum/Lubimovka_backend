@@ -32,42 +32,13 @@ p {
 }
 
 
-h1 {
-    text-align: center;
-    font-family: "PP Neue Machina";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 3.5rem;
-    line-height: 0.7rem;
-    letter-spacing: -0.01em;
-
-    /* Adjust block margin */
-    margin-block-start: 0em;
-    margin-block-end: 4.75rem;
-}
-
-h2 {
-    /* Style from figma */
-    font-family: "PP Neue Machina";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 2.25rem;
-    line-height: 2.375rem;
-    letter-spacing: -0.01em;
-
-    /* Adjust block margin */
-    margin-block-start: 0rem;
-    margin-block-end: 1.5rem;
-}
-
 h3 {
     /* Style from figma */
-    padding: 0px;
     font-family: "PP Neue Machina";
     font-style: normal;
     font-weight: 400;
-    font-size: 28px;
-    line-height: 32px;
+    font-size: 40px;
+    line-height: 40px;
     letter-spacing: -0.01em;
 
     /* Adjust block margin */
