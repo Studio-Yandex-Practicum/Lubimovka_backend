@@ -11,7 +11,7 @@
 p {
     font-family: "Formular";
     font-size: 2rem;
-    line-height: 0.7rem;
+    line-height: 2rem;
     letter-spacing: -0.01em;
     font-feature-settings: 'ss01' on;
 
@@ -27,7 +27,7 @@ h1 {
     font-style: normal;
     font-weight: 600;
     font-size: 3.5rem;
-    line-height: 0.7rem;
+    line-height: 3.5rem;
     letter-spacing: -0.01em;
 
     /* Adjust block margin */
@@ -40,7 +40,7 @@ h2 {
     font-style: normal;
     font-weight: 600;
     font-size: 2.25rem;
-    line-height: 0.7rem;
+    line-height: 2.25rem;
     letter-spacing: -0.01em;
 
     /* Adjust block margin */
@@ -53,7 +53,7 @@ blockquote {
     font-style: normal;
     font-weight: 400;
     font-size: 2rem;
-    line-height: 0.7rem;
+    line-height: 2rem;
     letter-spacing: -0.01em;
 
     /* Adjust block style */
