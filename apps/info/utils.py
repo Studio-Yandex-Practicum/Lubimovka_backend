@@ -1,5 +1,5 @@
-import os
 import random
+from pathlib import Path
 
 from django.conf import settings
 from django.http import HttpResponse
@@ -22,16 +22,16 @@ def link_callback(uri, rel):
     mRoot = settings.MEDIA_ROOT  # Typically /home/userX/project_static/media/
 
     if uri.startswith(mUrl):
-        path = os.path.join(mRoot, uri.replace(mUrl, ""))
+        path = Path(mRoot).joinpath(Path(uri.replace(mUrl, "")))
     elif uri.startswith(sUrl):
-        path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        path = Path(sRoot).joinpath(Path(uri.replace(sUrl, "")))
     else:
         return uri
 
     # make sure that file exists
-    if not os.path.isfile(path):
+    if not path.is_file():
         raise Exception("media URI must start with %s or %s" % (sUrl, mUrl))
-    return path
+    return str(path)
 
 
 def get_pdf_response(press_release_instance, path_to_font):
@@ -39,7 +39,8 @@ def get_pdf_response(press_release_instance, path_to_font):
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f"attachment; filename=press-release_{press_release_year}.pdf"
     template = get_template("press_release.html")
-    with open(f"{settings.STATIC_ROOT}/core/ckeditor/press-release-styles.css", "r") as file:
+    style_file = Path(settings.STATIC_ROOT).joinpath("core/ckeditor/press-release-styles.css")
+    with style_file.open() as file:
         styles = file.read()
     content = template.render(
         {
@@ -47,7 +48,6 @@ def get_pdf_response(press_release_instance, path_to_font):
             "styles": styles,
         }
     )
-    print(content)
     pisa_status = pisa.CreatePDF(content, dest=response, encoding="UTF-8", link_callback=link_callback)
     if pisa_status.err:
         return Response(
