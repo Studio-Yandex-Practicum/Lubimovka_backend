@@ -39,12 +39,15 @@ def get_pdf_response(press_release_instance, path_to_font):
     response = HttpResponse(content_type="application/pdf")
     response["Content-Disposition"] = f"attachment; filename=press-release_{press_release_year}.pdf"
     template = get_template("press_release.html")
+    with open(f"{settings.STATIC_ROOT}/core/ckeditor/press-release-styles.css", "r") as file:
+        styles = file.read()
     content = template.render(
         {
             "press_release": press_release_instance,
-            "path_to_font": path_to_font,
+            "styles": styles,
         }
     )
+    print(content)
     pisa_status = pisa.CreatePDF(content, dest=response, encoding="UTF-8", link_callback=link_callback)
     if pisa_status.err:
         return Response(

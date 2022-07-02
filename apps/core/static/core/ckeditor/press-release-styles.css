@@ -1,0 +1,75 @@
+@font-face {
+    font-family: "PP Neue Machina";
+    src: url(/static/fonts/PPNeueMachina/PPNeueMachina-Regular.ttf);
+}
+
+@font-face {
+    font-family: Formular;
+    src: url(/static/fonts/Formular/Formular-Light.ttf);
+}
+
+p {
+    font-family: "Formular";
+    font-size: 2rem;
+    line-height: 0.7rem;
+    letter-spacing: -0.01em;
+    font-feature-settings: 'ss01' on;
+
+    /* Adjust block margin */
+    margin-block-start: 0.5em;
+    margin-block-end: 0.5em;
+}
+
+
+h1 {
+    text-align: center;
+    font-family: "PP Neue Machina";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 3.5rem;
+    line-height: 0.7rem;
+    letter-spacing: -0.01em;
+
+    /* Adjust block margin */
+    margin-block-start: 0em;
+    margin-block-end: 4.75rem;
+}
+
+h2 {
+    font-family: "PP Neue Machina";
+    font-style: normal;
+    font-weight: 600;
+    font-size: 2.25rem;
+    line-height: 0.7rem;
+    letter-spacing: -0.01em;
+
+    /* Adjust block margin */
+    margin-block-start: 0rem;
+    margin-block-end: 1.5rem;
+}
+
+blockquote {
+    font-family: "PP Neue Machina";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 2rem;
+    line-height: 0.7rem;
+    letter-spacing: -0.01em;
+
+    /* Adjust block style */
+    border-style: solid;
+    border-color: #ccc;
+    border-width: 0 0 0 5px;
+    padding: 0 12px 0 8px;
+}
+
+a {
+    /* Adjust link color */
+    color: #242424;
+}
+
+ol,ul,dl {
+    /* Adjust block style */
+    font-family: "PP Neue Machina";
+    font-size: 2rem;
+}
