@@ -210,11 +210,6 @@ class InfoLink(BaseModel):
 
 
 class PressRelease(BaseModel):
-    title = models.CharField(
-        max_length=500,
-        unique=True,
-        verbose_name="Заголовок",
-    )
     text = RichTextField(
         config_name="press_release_styles",
         verbose_name="Текст",
