@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from xhtml2pdf import pisa
 
 
+#  xhtml2pdf.readthedocs.io/en/latest/usage.html#using-xhtml2pdf-in-django
 def link_callback(uri, rel):
     """Convert links.
 
