@@ -205,10 +205,6 @@ CKEDITOR_BASE = {
     "autoGrow_maxHeight": 500,
     "extraPlugins": (",").join(("autogrow",)),
     "basicEntities": False,
-    "stylesSet": (
-        {"name": "Подзаголовок", "element": "h2"},
-        {"name": "Обычный", "element": "p"}
-    ),
     "toolbar": "base",
     "toolbar_base": CKEDITOR_TOOLBAR_BASE,
 }
@@ -216,7 +212,18 @@ CKEDITOR_CONFIGS = {
     "default": CKEDITOR_BASE,
     "lubimovka_styles": CKEDITOR_BASE | {
         "contentsCss": "/static/core/ckeditor/lubimovka_styles.css",
+        "stylesSet": (
+            {"name": "Заголовок", "element": "h3"},
+            {"name": "Подзаголовок", "element": "h4"},
+        ),
     },
+    "press_release_styles": CKEDITOR_BASE | {
+        "contentsCss": "/static/core/ckeditor/press-release-styles.css",
+        "stylesSet": (
+            {"name": "Подзаголовок", "element": "h2"},
+            {"name": "Обычный", "element": "p"}
+        ),
+    }
 }
 
 # Google Sheets Export integration keys
