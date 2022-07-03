@@ -142,6 +142,9 @@ class Volunteer(BaseModel):
             errors.append("Для волонтёра необходимо выбрать его фото")
         if not self.person.city:
             errors.append("Укажите город проживания волонтёра")
+        if (self.review_title and not self.review_text) or (self.review_text and not self.review_title):
+            errors.append("Нельзя сделать отзыв без заголовка или заголовок без отзыва")
+
         if errors:
             raise ValidationError(errors)
 
