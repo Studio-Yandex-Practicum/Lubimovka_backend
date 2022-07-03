@@ -8,6 +8,7 @@ from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify as django_slugify
 from rest_framework.response import Response
 
+from apps.articles.utils import check_journalist_perms
 from apps.core.constants import ALPHABET, STATUS_INFO
 from apps.core.decorators.cache import cache_user
 
@@ -49,6 +50,8 @@ def get_user_perms_level(request, obj):
     """Return user's access level for using in StatusButtonMixin."""
     app_name = obj._meta.app_label
     perms = request.user.get_all_permissions()
+    if not check_journalist_perms(request, obj):
+        return 0
     if f"{app_name}.access_level_3" in perms:
         return 3
     if f"{app_name}.access_level_2" in perms:

@@ -1,6 +1,8 @@
 from django.contrib import admin
+from django.core.exceptions import ValidationError
 
 from apps.articles.models import BlogItem, BlogItemContent
+from apps.articles.utils import check_journalist_perms
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 from apps.core.mixins import InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
 
@@ -57,3 +59,8 @@ class BlogItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin)
         "image_preview_change_page",
         "image",
     )
+
+    def save_model(self, request, obj, form, change):
+        if not check_journalist_perms(request, obj):
+            raise ValidationError({"status": "У вас нет прав на редактирование объекта"})
+        obj.save()
