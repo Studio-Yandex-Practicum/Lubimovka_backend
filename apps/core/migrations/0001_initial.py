@@ -87,7 +87,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(max_length=50, unique=True, verbose_name='Название')),
                 ('name_plural', models.CharField(max_length=50, unique=True, verbose_name='Название во множественном числе')),
-                ('slug', models.SlugField(help_text='Если пустое, то заполняется автоматически', max_length=60, unique=True, verbose_name='Код-имя латиницей')),
+                ('slug', models.SlugField(help_text='Заполняется автоматически', max_length=60, unique=True, verbose_name='Код-имя латиницей')),
                 ('types', models.ManyToManyField(related_name='type_roles', to='core.RoleType', verbose_name='Типы ролей')),
             ],
             options={
