@@ -25,10 +25,12 @@ class BlogItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin)
         "pub_date",
         "image_preview_list_page",
         "status",
+        "creator_name",
     )
     readonly_fields = (
         "status",
         "image_preview_change_page",
+        "creator_name",
     )
     inlines = (
         BlogPersonInline,
@@ -45,6 +47,7 @@ class BlogItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin)
                     "pub_date",
                     "description",
                     ("image_preview_change_page", "image"),
+                    "creator_name",
                 )
             },
         ),

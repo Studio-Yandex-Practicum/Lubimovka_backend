@@ -3,12 +3,14 @@ from zoneinfo import ZoneInfo
 import factory
 from django.conf import settings
 
+from apps.afisha.factories import creator_field
 from apps.afisha.models import Event, Performance
 from apps.articles.models import NewsItem, NewsItemContent
 from apps.content_pages.factories import AbstractContentFactory
 from apps.core.constants import Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
+from apps.info.utils import get_random_objects_by_model
 from apps.library.models import Play
 
 
@@ -26,7 +28,7 @@ class NewsItemContentModuleFactory(AbstractContentFactory):
 
     @factory.lazy_attribute
     def content_page(self):
-        return NewsItemContent.objects.order_by("?").first()
+        return get_random_objects_by_model(NewsItemContent)
 
 
 @restrict_factory(
@@ -58,6 +60,7 @@ class NewsItemFactory(factory.django.DjangoModelFactory):
     pub_date = factory.Faker("date_time", tzinfo=ZoneInfo(settings.TIME_ZONE))
     title = factory.Faker("text", locale="ru_RU", max_nb_chars=50)
     status = factory.Iterator(Status.values)
+    creator = factory.LazyFunction(creator_field)
 
     @factory.post_generation
     def add_several_eventsblock(self, created, count, **kwargs):

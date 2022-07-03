@@ -3,6 +3,8 @@ from django.contrib import admin
 from django.db import models
 
 from apps.content_pages.admin.widgets import GfkHiddenInput, GfkSelect
+from apps.content_pages.filters import CreatorFilter
+from apps.content_pages.mixins import SaveCreatorMixin
 from apps.content_pages.models import AbstractContent
 from apps.core.mixins import AdminImagePreview
 
@@ -32,7 +34,7 @@ class BaseContentInline(SortableInlineAdminMixin, admin.TabularInline):
     }
 
 
-class BaseContentPageAdmin(AdminImagePreview, admin.ModelAdmin):
+class BaseContentPageAdmin(AdminImagePreview, SaveCreatorMixin, admin.ModelAdmin):
     """Base admin class for ContentPage objects."""
 
     list_display = (
@@ -41,7 +43,7 @@ class BaseContentPageAdmin(AdminImagePreview, admin.ModelAdmin):
         "pub_date",
         "image_preview_list_page",
     )
-    list_filter = ("status",)
+    list_filter = ("status", CreatorFilter)
     fieldsets = (
         (
             None,
@@ -59,5 +61,7 @@ class BaseContentPageAdmin(AdminImagePreview, admin.ModelAdmin):
     search_fields = (
         "title",
         "description",
+        "creator__first_name",
+        "creator__last_name",
     )
     readonly_fields = ("image_preview_change_page", "pub_date")

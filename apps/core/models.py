@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.utils import slugify
-from apps.core.validators import name_validator
+from apps.core.validators import email_validator, name_validator, nickname_validator
 
 NEWS_HELP_TEXT = (
     "При включении данной настройки, автоматический будет "
@@ -55,13 +55,14 @@ class Image(BaseModel):
 class Person(BaseModel):
     first_name = models.CharField(
         max_length=50,
-        validators=(name_validator,),
+        validators=(nickname_validator,),
         verbose_name="Имя",
     )
     last_name = models.CharField(
         max_length=50,
-        validators=(name_validator,),
+        validators=(nickname_validator,),
         verbose_name="Фамилия",
+        blank=True,
     )
     middle_name = models.CharField(
         max_length=50,
@@ -77,6 +78,7 @@ class Person(BaseModel):
     )
     email = models.EmailField(
         max_length=200,
+        validators=(email_validator,),
         verbose_name="Электронная почта",
         null=True,
         blank=True,
@@ -220,10 +222,7 @@ class Setting(BaseModel):
         SettingFieldType.IMAGE: "image",
         SettingFieldType.EMAIL: "email",
     }
-    RELATED_SETTINGS = {
-        "main_add_blog": "main_add_news",
-        "main_add_news": "main_add_blog",
-    }
+
     HELP_TEXT = {
         "main_add_blog": BLOG_HELP_TEXT,
         "main_add_news": NEWS_HELP_TEXT,
@@ -291,10 +290,6 @@ class Setting(BaseModel):
                 {"image": "Изображение должно присутствовать на странице. Оставьте или замените на другое."}
             )
 
-    def save(self, *args, **kwargs):
-        self._check_related_settings(self)
-        super().save(*args, **kwargs)
-
     @property
     def value(self):
         return getattr(
@@ -331,14 +326,7 @@ class Setting(BaseModel):
 
         return settings_dict
 
-    @classmethod
-    def _turn_off_setting(cls, setting):
-        if cls.objects.filter(settings_key=setting).exists():
-            setting = cls.objects.get(settings_key=setting)
-            setting.boolean = False
-            setting.save()
-
-    @classmethod
-    def _check_related_settings(cls, setting):
-        if setting.settings_key in cls.RELATED_SETTINGS and setting.boolean:
-            cls._turn_off_setting(cls.RELATED_SETTINGS[setting.settings_key])
+    def _set_settings(self, settings):
+        for key, value in settings.items():
+            count = Setting.objects.filter(settings_key=key).update(boolean=value)
+            assert count == 1, f"Количество записей с ключом '{key}' оказалось равно {count} (ожидалось 1)"

@@ -1,12 +1,16 @@
 from datetime import timedelta
 
+from django.contrib.auth import get_user_model
 from django.db import models
+from django.template.defaultfilters import truncatechars
 
 from apps.content_pages.querysets import PublishedContentQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
 from apps.core.models import BaseModel, Person
 from apps.library.utilities import get_team_roles
+
+User = get_user_model()
 
 
 class Performance(BaseModel):
@@ -87,6 +91,11 @@ class Performance(BaseModel):
         help_text="Опишите блок с фотографиями",
     )
     objects = PublishedContentQuerySet.as_manager()
+    creator = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        verbose_name="Создатель",
+    )
 
     class Meta:
         ordering = ("-created",)
@@ -112,3 +121,16 @@ class Performance(BaseModel):
     def event_team(self):
         """Return directors and dramatists related with Performance."""
         return get_team_roles(self, {"team_members__performance": self, "slug__in": ["director", "dramatist"]})
+
+    @property
+    def short_name(self):
+        """Get short performace name."""
+        return truncatechars(self.name, 70)
+
+    @property
+    def short_description(self):
+        """Get short description."""
+        return truncatechars(self.description, 70)
+
+    short_name.fget.short_description = "Название cпектакля"
+    short_description.fget.short_description = "Краткое описание"

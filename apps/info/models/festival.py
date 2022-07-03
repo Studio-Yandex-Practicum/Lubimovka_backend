@@ -67,6 +67,13 @@ class FestivalTeamMember(BaseModel):
             raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
+        if not self.is_pr_director:
+            hasAnotherPrDirector = FestivalTeamMember.objects.filter(is_pr_director=True, person=self.person).exists()
+            if hasAnotherPrDirector:
+                raise ValidationError(
+                    "Для того чтобы снять с должности PR-директора, "
+                    "нужно назначить другого человека на эту должность"
+                )
 
     def delete(self, *args, **kwargs):
         if self.is_pr_director:
@@ -210,13 +217,8 @@ class InfoLink(BaseModel):
 
 
 class PressRelease(BaseModel):
-    title = models.CharField(
-        max_length=500,
-        unique=True,
-        verbose_name="Заголовок",
-    )
     text = RichTextField(
-        config_name="lubimovka_styles",
+        config_name="press_release_styles",
         verbose_name="Текст",
     )
     festival = models.OneToOneField(

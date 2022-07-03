@@ -3,7 +3,6 @@ import random
 import factory
 from faker import Faker
 
-from apps.core.constants import YOUTUBE_VIDEO_LINKS
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
 from apps.core.utils import get_picsum_image
@@ -19,6 +18,8 @@ from apps.info.models import (
     Sponsor,
     Volunteer,
 )
+from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
+from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 
 fake = Faker(locale="en_US")
 
@@ -56,7 +57,7 @@ class SponsorFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def person(self):
         queryset = Person.objects.filter(city__exact="").exclude(image__exact="")
-        person = queryset.order_by("?").first()
+        person = get_random_objects_by_queryset(queryset)
         return person
 
 
@@ -66,14 +67,14 @@ class VolunteerFactory(factory.django.DjangoModelFactory):
         model = Volunteer
         django_get_or_create = ("person", "festival")
 
-    festival = factory.Iterator(Festival.objects.all())
+    festival = factory.LazyFunction(lambda: get_random_objects_by_model(Festival))
     review_title = factory.Faker("text", max_nb_chars=50, locale="ru_RU")
     review_text = factory.Faker("text", max_nb_chars=1000, locale="ru_RU")
 
     @factory.lazy_attribute
     def person(self):
         queryset = Person.objects.filter(email__isnull=False).exclude(image__exact="")
-        person = queryset.order_by("?").first()
+        person = get_random_objects_by_queryset(queryset)
         return person
 
 
@@ -83,13 +84,13 @@ class SelectorFactory(factory.django.DjangoModelFactory):
         model = Selector
         django_get_or_create = ("person", "festival")
 
-    festival = factory.Iterator(Festival.objects.all())
+    festival = factory.LazyFunction(lambda: get_random_objects_by_queryset(Festival.objects.all()))
     position = factory.Faker("job", locale="ru_RU")
 
     @factory.lazy_attribute
     def person(self):
         queryset = Person.objects.filter(email__isnull=False).exclude(image__exact="")
-        person = queryset.order_by("?").first()
+        person = get_random_objects_by_queryset(queryset)
         return person
 
 
@@ -106,7 +107,7 @@ class FestivalTeamFactory(factory.django.DjangoModelFactory):
     @factory.lazy_attribute
     def person(self):
         queryset = Person.objects.filter(city__isnull=False, email__isnull=False).exclude(image__exact="")
-        person = queryset.order_by("?").first()
+        person = get_random_objects_by_queryset(queryset)
         return person
 
 
@@ -120,7 +121,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     start_date = factory.Faker("past_date")
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
-    year = factory.Iterator(range(1990, 2022))
+    year = factory.Faker("random_int", min=1990, max=2022, step=1)
 
     @factory.post_generation
     def images(self, create, extracted, **kwargs):
@@ -163,7 +164,7 @@ class FestivalImageFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def festival(self):
-        return Festival.objects.order_by("?").first()
+        return get_random_objects_by_model(Festival)
 
 
 @restrict_factory(general=(Festival,))
@@ -179,7 +180,7 @@ class InfoLinkFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def festival(self):
-        return Festival.objects.order_by("?").first()
+        return get_random_objects_by_model(Festival)
 
 
 @restrict_factory(general=(Festival,))
@@ -194,7 +195,7 @@ class PressReleaseFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def festival(self):
-        return Festival.objects.order_by("?").first()
+        return get_random_objects_by_model(Festival)
 
 
 class PlaceFactory(factory.django.DjangoModelFactory):

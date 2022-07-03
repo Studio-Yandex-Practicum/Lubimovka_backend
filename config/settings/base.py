@@ -112,6 +112,12 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+        "OPTIONS": {
+            "min_length": 6,
+        }
+    },
+    {
+        "NAME": "apps.core.validators.MaximumLengthValidator",
     },
     {
         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
@@ -194,7 +200,7 @@ EMAIL_TIMEOUT = 5
 CKEDITOR_TOOLBAR_BASE = (
     ("Undo", "Redo"),
     ("Bold", "Italic", "Link", "Unlink", "RemoveFormat"),
-    ("Styles",),
+    ("Styles", "Font", "FontSize"),
     ("Blockquote",),
     ("NumberedList", "BulletedList"),
 )
@@ -205,10 +211,6 @@ CKEDITOR_BASE = {
     "autoGrow_maxHeight": 500,
     "extraPlugins": (",").join(("autogrow",)),
     "basicEntities": False,
-    "stylesSet": (
-        {"name": "Заголовок", "element": "h3"},
-        {"name": "Подзаголовок", "element": "h4"},
-    ),
     "toolbar": "base",
     "toolbar_base": CKEDITOR_TOOLBAR_BASE,
 }
@@ -216,7 +218,18 @@ CKEDITOR_CONFIGS = {
     "default": CKEDITOR_BASE,
     "lubimovka_styles": CKEDITOR_BASE | {
         "contentsCss": "/static/core/ckeditor/lubimovka_styles.css",
+        "stylesSet": (
+            {"name": "Заголовок", "element": "h3"},
+            {"name": "Подзаголовок", "element": "h4"},
+        ),
     },
+    "press_release_styles": CKEDITOR_BASE | {
+        "contentsCss": "/static/core/ckeditor/press-release-styles.css",
+        "stylesSet": (
+            {"name": "Подзаголовок", "element": "h2"},
+            {"name": "Обычный", "element": "p"}
+        ),
+    }
 }
 
 # Google Sheets Export integration keys

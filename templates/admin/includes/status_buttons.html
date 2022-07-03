@@ -9,6 +9,9 @@
             {% endif %}
         {% endfor %}
     {% endif%}
-    {% include "admin/includes/preview_unpublished_button.html" %}
+    <!-- Прячем кнопку если статья не опубликована. Ждем когда предпросмотр будет реализован на фронтенде -->
+    {% if preview_button_context %}
+        {% include "admin/includes/preview_unpublished_button.html" %}
+    {% endif %}
 </div>
 {% endif %}

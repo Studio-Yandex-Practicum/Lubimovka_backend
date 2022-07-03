@@ -14,6 +14,7 @@ class Command(BaseCommand):
             "info.Sponsor",
             "info.Place",
             "main.Banner",
+            "library.AuthorPlay",
         )
         try:
             for model in models:

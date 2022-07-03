@@ -78,6 +78,30 @@ class SettingGeneral(Setting):
         verbose_name = "Общие настройки"
         verbose_name_plural = "Общие настройки"
 
+    def save(self, *args, **kwargs):
+        if self.settings_key == "festival_status":
+            if self.boolean:
+                self._set_settings(
+                    {
+                        "main_add_blog": True,
+                        "main_add_news": False,
+                        "main_add_places": True,
+                        "main_add_short_list": False,
+                        "main_show_afisha_only_for_today": True,
+                    }
+                )
+            else:
+                self._set_settings(
+                    {
+                        "main_add_blog": False,
+                        "main_add_news": True,
+                        "main_add_places": False,
+                        "main_add_short_list": True,
+                        "main_show_afisha_only_for_today": False,
+                    }
+                )
+        return super().save(*args, **kwargs)
+
 
 class SettingMain(Setting):
     objects = SettingGroupManager()
@@ -87,6 +111,24 @@ class SettingMain(Setting):
         proxy = True
         verbose_name = "Настройки главной страницы"
         verbose_name_plural = "Настройки главной страницы"
+
+    def save(self, *args, **kwargs):
+        if self.settings_key == "main_add_news":
+            if self.boolean:
+                self._set_settings(
+                    {
+                        "main_add_blog": False,
+                    }
+                )
+        if self.settings_key == "main_add_blog":
+            if self.boolean:
+                self._set_settings(
+                    {
+                        "main_add_news": False,
+                    }
+                )
+
+        return super().save(*args, **kwargs)
 
 
 class SettingFirstScreen(Setting):
