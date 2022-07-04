@@ -47,6 +47,7 @@
     font-weight: normal;
     font-size: 20px;
     line-height: 28px;
+    text-indent: 50px;
     letter-spacing: -0.01em;
     font-feature-settings: 'ss01' on;
 
@@ -119,10 +120,11 @@ a {
 ol,ul,dl {
     /* Adjust block style */
     font-family: "Formular";
-        font-style: normal;
+    font-style: normal;
     font-weight: normal;
     font-size: 20px;
     line-height: 28px;
+    text-indent: 0%;
 }
 
 strong { font-weight: bold; }
