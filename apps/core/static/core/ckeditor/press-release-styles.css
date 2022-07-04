@@ -84,9 +84,9 @@ h1 {
 }
 
 h2 {
-    font-family: "PP Neue Machina";
+    font-family: "Formular";
     font-style: normal;
-    font-weight: normal;
+    font-weight: bold;
     font-size: 26px;
     line-height: 28px;
     letter-spacing: -0.01em;
@@ -118,7 +118,7 @@ a {
 
 ol,ul,dl {
     /* Adjust block style */
-    font-family: "PP Neue Machina";
+    font-family: "Formular";
         font-style: normal;
     font-weight: normal;
     font-size: 20px;
