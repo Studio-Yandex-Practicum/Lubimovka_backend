@@ -1,3 +1,13 @@
+@page {
+    size: A4;
+    @frame content_frame {
+        left: 2cm;
+        width: 17.5cm;
+        top: 1.5cm;
+        height: 26cm;
+    }
+}
+
 @font-face {
     font-family: "PP Neue Machina";
     font-style: normal;
@@ -47,13 +57,9 @@
     font-weight: normal;
     font-size: 20px;
     line-height: 28px;
-    text-indent: 50px;
+    text-indent: 20px;
     letter-spacing: -0.01em;
     font-feature-settings: 'ss01' on;
-
-    /* Adjust block margin */
-    margin-block-start: 0.5em;
-    margin-block-end: 0.5em;
 }
 
 
@@ -66,9 +72,6 @@ p {
     letter-spacing: -0.01em;
     font-feature-settings: 'ss01' on;
 
-    /* Adjust block margin */
-    margin-block-start: 0.5em;
-    margin-block-end: 0.5em;
 }
 
 h1 {
