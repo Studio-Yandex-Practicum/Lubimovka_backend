@@ -24,6 +24,7 @@ class RoleAdmin(admin.ModelAdmin):
         "slug",
     )
     search_fields = ("role",)
+    prepopulated_fields = {"slug": ("name",)}
     list_filter = ("types",)
     formfield_overrides = {
         models.ManyToManyField: {"widget": CheckboxSelectMultiple},
