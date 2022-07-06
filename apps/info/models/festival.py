@@ -226,6 +226,7 @@ class PressRelease(BaseModel):
         on_delete=models.CASCADE,
         related_name="press_releases",
         verbose_name="Фестиваль",
+        limit_choices_to={"press_releases": None},
     )
     press_release_image = models.ImageField(
         upload_to=path_by_app_label_and_class_name,
