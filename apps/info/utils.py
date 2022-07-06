@@ -1,4 +1,5 @@
 import random
+import unicodedata
 from pathlib import Path
 
 from django.conf import settings
@@ -44,7 +45,7 @@ def get_pdf_response(press_release_instance):
         styles = file.read()
     content = template.render(
         {
-            "press_release": press_release_instance,
+            "text": unicodedata.normalize("NFC", press_release_instance.text),
             "styles": styles,
         }
     )
