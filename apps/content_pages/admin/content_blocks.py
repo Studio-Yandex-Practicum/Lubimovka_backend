@@ -1,5 +1,6 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
+from nested_inline.admin import NestedModelAdmin, NestedStackedInline
 
 from apps.afisha.models import Event
 from apps.content_pages.models import (
@@ -20,9 +21,10 @@ from apps.core.models import Role
 from apps.library.models import Play
 
 
-class ContentPersonRoleInline(admin.TabularInline):
+class ContentPersonRoleInline(NestedStackedInline):
     model = ContentPersonRole
-    extra = 0
+    extra = 1
+    fk_name = "extended_person"
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Restricts role types for the model where inline is used."""
@@ -34,6 +36,11 @@ class ContentPersonRoleInline(admin.TabularInline):
 class OrderedInline(SortableInlineAdminMixin, admin.TabularInline):
     min_num = 1
     extra = 0
+
+
+class OrderedNestedInline(SortableInlineAdminMixin, NestedStackedInline):
+    min_num = 1
+    extra = 1
 
 
 class OrderedEventInline(OrderedInline):
@@ -63,11 +70,12 @@ class OrderedPlayInline(OrderedInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
-class ExtendedPersonInline(OrderedInline):
+class ExtendedPersonInline(NestedStackedInline):
     model = ExtendedPerson
     show_change_link = True
     readonly_fields = ("person_roles",)
-    extra = 0
+    fk_name = "block"
+    inlines = (ContentPersonRoleInline,)
 
 
 @admin.register(ExtendedPerson)
@@ -100,7 +108,7 @@ class EventsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 
 
 @admin.register(PersonsBlock)
-class PersonsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
+class PersonsBlockAdmin(HideOnNavPanelAdminModelMixin, NestedModelAdmin):
     inlines = (ExtendedPersonInline,)
 
 

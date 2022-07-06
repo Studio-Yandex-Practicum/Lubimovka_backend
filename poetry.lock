@@ -348,6 +348,14 @@ Django = ">=2.2"
 tests = ["coverage"]
 
 [[package]]
+name = "django-nested-inline"
+version = "0.4.5"
+description = "Recursive nesting of inline forms for Django Admin"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "django-phonenumber-field"
 version = "5.2.0"
 description = "An international phone number field for django models."
@@ -1539,7 +1547,7 @@ requests = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "f3627ec037962324ae30e73e1c058283f63d616d5ef33b14bd73b6afe74890f3"
+content-hash = "d4f6baeda904ec30579d5a9d3021c27c4d1a99798cb7eda305f0d47b45257598"
 
 [metadata.files]
 appnope = [
@@ -1799,6 +1807,10 @@ django-filter = [
 django-js-asset = [
     {file = "django_js_asset-2.0.0-py3-none-any.whl", hash = "sha256:86f9f300d682537ddaf0487dc2ab356581b8f50c069bdba91d334a46e449f923"},
     {file = "django_js_asset-2.0.0.tar.gz", hash = "sha256:adc1ee1efa853fad42054b540c02205344bb406c9bddf87c9e5377a41b7db90f"},
+]
+django-nested-inline = [
+    {file = "django-nested-inline-0.4.5.tar.gz", hash = "sha256:d7e51dc1ebf805df53ec7ff9b4108dfe1dfb8a7e02212700a4e467f2caafe34b"},
+    {file = "django_nested_inline-0.4.5-py3-none-any.whl", hash = "sha256:fc6998e7d607c1414e25897ae1a544105ada93d63c5cff3ac9582fbf14d8ec63"},
 ]
 django-phonenumber-field = [
     {file = "django-phonenumber-field-5.2.0.tar.gz", hash = "sha256:52b2e5970133ec5ab701218b802f7ab237229854dc95fd239b7e9e77dc43731d"},

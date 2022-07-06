@@ -46,6 +46,7 @@ THIRD_PARTY_APPS = [
     "drf_multiple_model",
     "ckeditor",
     "anymail",
+    "nested_inline",
 ]
 LOCAL_APPS = [
     "apps.users",
