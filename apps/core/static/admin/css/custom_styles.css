@@ -18,3 +18,11 @@
 .related-widget-wrapper-link > img {
     height:16px
 }
+
+.cke_combopanel{
+    width: 250px !important;
+}
+
+.cke_combopanel__styles {
+    width: 350px !important;
+}

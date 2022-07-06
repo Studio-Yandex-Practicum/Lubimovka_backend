@@ -57,6 +57,7 @@ class OrderedVideoInline(OrderedInline):
 
 class OrderedPlayInline(OrderedInline):
     model = OrderedPlay
+    autocomplete_fields = ("item",)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         kwargs["queryset"] = Play.objects.filter(other_play=False)
@@ -67,7 +68,7 @@ class ExtendedPersonInline(OrderedInline):
     model = ExtendedPerson
     show_change_link = True
     readonly_fields = ("person_roles",)
-    extra = 0
+    autocomplete_fields = ("person",)
 
 
 @admin.register(ExtendedPerson)
