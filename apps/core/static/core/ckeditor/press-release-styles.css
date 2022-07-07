@@ -1,35 +1,77 @@
+@page {
+    size: A4;
+    @frame content_frame {
+        left: 2cm;
+        width: 17.5cm;
+        top: 1.5cm;
+        height: 26cm;
+    }
+}
+
 @font-face {
     font-family: "PP Neue Machina";
+    font-style: normal;
+    font-weight: normal;
     src: url(/static/fonts/PPNeueMachina/PPNeueMachina-Regular.ttf);
 }
 
 @font-face {
+    font-family: "PP Neue Machina";
+    font-style: normal;
+    font-weight: bold;
+    src: url(/static/fonts/PPNeueMachina/PPNeueMachina-Ultrabold.ttf);
+}
+
+@font-face {
     font-family: Formular;
+    font-style: normal;
+    font-weight: normal;
     src: url(/static/fonts/Formular/Formular-Light.ttf);
 }
 
+@font-face {
+    font-family: Formular;
+    font-style: normal;
+    font-weight: bold;
+    src: url(/static/fonts/Formular/Formular-Bold.ttf);
+}
+
+@font-face {
+    font-family: Formular;
+    font-style: italic;
+    font-weight: normal;
+    src: url(/static/fonts/Formular/Formular-Italic.ttf);
+}
+
+@font-face {
+    font-family: Formular;
+    font-style: italic;
+    font-weight: bold;
+    src: url(/static/fonts/Formular/Formular-BoldItalic.ttf);
+}
+
+
 .text {
     font-family: "Formular";
+    font-style: normal;
+    font-weight: normal;
     font-size: 20px;
     line-height: 28px;
+    text-indent: 20px;
     letter-spacing: -0.01em;
     font-feature-settings: 'ss01' on;
-
-    /* Adjust block margin */
-    margin-block-start: 0.5em;
-    margin-block-end: 0.5em;
 }
+
 
 p {
     font-family: "Formular";
+    font-style: normal;
+    font-weight: normal;
     font-size: 20px;
     line-height: 28px;
     letter-spacing: -0.01em;
     font-feature-settings: 'ss01' on;
 
-    /* Adjust block margin */
-    margin-block-start: 0.5em;
-    margin-block-end: 0.5em;
 }
 
 h1 {
@@ -46,8 +88,9 @@ h1 {
 }
 
 h2 {
-    font-family: "PP Neue Machina";
+    font-family: "Formular";
     font-style: normal;
+    font-weight: bold;
     font-size: 26px;
     line-height: 28px;
     letter-spacing: -0.01em;
@@ -60,6 +103,7 @@ h2 {
 blockquote {
     font-family: "PP Neue Machina";
     font-style: normal;
+    font-weight: normal;
     font-size: 20px;
     line-height: 28px;
     letter-spacing: -0.01em;
@@ -78,7 +122,12 @@ a {
 
 ol,ul,dl {
     /* Adjust block style */
-    font-family: "PP Neue Machina";
+    font-family: "Formular";
+    font-style: normal;
+    font-weight: normal;
     font-size: 20px;
     line-height: 28px;
+    text-indent: 0%;
 }
+
+strong { font-weight: bold; }

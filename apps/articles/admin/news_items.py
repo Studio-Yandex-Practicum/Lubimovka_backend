@@ -49,6 +49,7 @@ class NewsItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin)
         "description",
         "image_preview_change_page",
         "image",
+        "creator_name",
     )
 
     def save_model(self, request, obj, form, change):
