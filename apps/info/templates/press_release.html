@@ -5,33 +5,12 @@
 <head>
     <meta charset="utf-8">
     <style type="text/css">
-
-        @font-face {
-            font-family: "PP Neue Machina";
-            src: url("{{ path_to_font }}");
-        }
-
-        .title {
-            font-family: "PP Neue Machina";
-            font-size: 20px;
-        }
-
-        .text {
-            font-family: "PP Neue Machina";
-            font-size: 14px;
-        }
-
-        h2 {
-            text-align: center;
-        }
-
+        {{ styles | safe }}
     </style>
 </head>
 
 <body>
-    <div class="title"><h2>{{ press_release.title | safe }}</h2></div>
-    <div class="text">{{ press_release.text | safe }}</div>
-
+    <div class="text">{{ text | safe }}</div>
 </body>
 
 </html>

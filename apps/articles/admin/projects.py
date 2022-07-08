@@ -49,4 +49,5 @@ class ProjectAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
         "description",
         "image_preview_change_page",
         "image",
+        "creator_name",
     )
