@@ -52,6 +52,7 @@ class EventAdmin(admin.ModelAdmin):
         "common_event",
         "status",
         "date_time",
+        "is_archived",
         "paid",
         "pinned_on_main",
     )
@@ -74,7 +75,7 @@ class EventAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "date_time",
-                    "paid",
+                    ("is_archived", "paid"),
                     "url",
                     "place",
                     "pinned_on_main",
@@ -113,11 +114,15 @@ class EventAdmin(admin.ModelAdmin):
         def icon(status, lable):
             return mark_safe(f"<img src='/static/admin/img/{status}.svg' title='{lable}'/>")
 
-        if obj.date_time.date() > date_now:
-            return icon("upcoming", "Предстоящее")
-        elif obj.date_time.date() < date_now:
-            return icon("past", "Прошедшее")
-        return icon("today", "Cегодняшнее")
+        if obj.date_time:
+            if obj.is_archived:
+                return icon("past", "Прошедшее")
+            if obj.date_time.date() > date_now:
+                return icon("upcoming", "Предстоящее")
+            elif obj.date_time.date() < date_now:
+                return icon("past", "Прошедшее")
+            return icon("today", "Cегодняшнее")
+        return icon("past", "Прошедшее")
 
     class Media:
 
