@@ -14,7 +14,7 @@
         var error = document.createElement('div');
         error.className='durationError';
         error.style.color = 'red';
-        error.innerHTML = 'Введите продолжительность в формате ЧЧ:ММ:СС';
+        error.innerHTML = 'Введите продолжительность в формате ЧЧ:ММ:СС, не более 09:59:59';
         input.parentElement.insertBefore(error, input);
     };
 
