@@ -81,6 +81,7 @@ class Performance(BaseModel):
     duration = models.DurationField(
         default=timedelta(minutes=85),
         verbose_name="Продолжительность",
+        help_text="Введите продолжительность в формате ЧЧ:ММ:СС",
     )
     block_images_description = models.CharField(
         max_length=200,
