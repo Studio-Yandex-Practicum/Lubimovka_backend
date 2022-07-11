@@ -217,13 +217,8 @@ class InfoLink(BaseModel):
 
 
 class PressRelease(BaseModel):
-    title = models.CharField(
-        max_length=500,
-        unique=True,
-        verbose_name="Заголовок",
-    )
     text = RichTextField(
-        config_name="lubimovka_styles",
+        config_name="press_release_styles",
         verbose_name="Текст",
     )
     festival = models.OneToOneField(
@@ -231,6 +226,7 @@ class PressRelease(BaseModel):
         on_delete=models.CASCADE,
         related_name="press_releases",
         verbose_name="Фестиваль",
+        limit_choices_to={"press_releases": None},
     )
     press_release_image = models.ImageField(
         upload_to=path_by_app_label_and_class_name,

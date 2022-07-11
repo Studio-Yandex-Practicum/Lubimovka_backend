@@ -82,6 +82,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
         "age_limit",
         "project",
         "duration",
+        "creator_name",
     )
     inlines = (
         ImagesInBlockInline,

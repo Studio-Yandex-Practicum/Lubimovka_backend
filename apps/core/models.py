@@ -151,7 +151,7 @@ class Role(BaseModel):
         max_length=60,
         unique=True,
         verbose_name="Код-имя латиницей",
-        help_text="Если пустое, то заполняется автоматически",
+        help_text="Заполняется автоматически",
     )
     types = models.ManyToManyField(
         "RoleType",
