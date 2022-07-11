@@ -14,6 +14,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='performance',
             name='duration',
-            field=models.DurationField(default=datetime.timedelta(seconds=5100), help_text='Введите продолжительность в формате ЧЧ:ММ:СС', verbose_name='Продолжительность'),
+            field=models.DurationField(default=datetime.timedelta(seconds=5100), help_text='Введите продолжительность в формате ЧЧ:ММ', verbose_name='Продолжительность'),
         ),
     ]
