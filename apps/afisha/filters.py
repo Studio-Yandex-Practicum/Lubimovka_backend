@@ -32,8 +32,6 @@ class StatusOfEvent(admin.SimpleListFilter):
     def queryset(self, request, queryset):
         date_now = timezone.now().date()
         date_tomorrow = date_now + timedelta(days=1)
-        if self.value() is None:
-            return queryset
         if self.value() == "all" or self.value() is None:
             return queryset
         if self.value() == "upcoming":
