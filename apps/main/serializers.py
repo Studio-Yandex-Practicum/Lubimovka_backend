@@ -80,11 +80,7 @@ class MainPlacesSerializer(serializers.Serializer):
 
 
 class MainShortListSerializer(serializers.Serializer):
-    """Returns title and items for `short_list` block on main page.
-
-    items: returns 4 last `Play` objects that have program="short_list" from
-    the last festival.
-    """
+    """Returns title and items for `short_list` block on main page."""
 
     title = serializers.CharField()
     items = PlaySerializer(many=True)
