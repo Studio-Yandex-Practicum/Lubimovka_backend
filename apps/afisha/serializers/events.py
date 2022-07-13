@@ -41,6 +41,7 @@ class AfishaEventSerializer(serializers.ModelSerializer):
             "id",
             "type",
             "event_body",
+            "is_archived",
             "date_time",
             "paid",
             "url",
