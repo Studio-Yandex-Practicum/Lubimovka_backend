@@ -90,3 +90,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
         PerformanceReviewInline,
         TeamMemberInlineCollapsible,
     )
+
+    class Media:
+
+        js = ("admin/afisha/js/DurationValidation.js",)
