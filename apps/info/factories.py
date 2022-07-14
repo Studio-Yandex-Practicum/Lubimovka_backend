@@ -189,7 +189,6 @@ class PressReleaseFactory(factory.django.DjangoModelFactory):
         model = PressRelease
         django_get_or_create = ("festival",)
 
-    title = factory.Faker("sentence", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
     press_release_image = factory.django.ImageField(color=factory.Faker("color"))
 

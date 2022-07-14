@@ -63,6 +63,8 @@ class Event(BaseModel):
     )
     date_time = models.DateTimeField(
         verbose_name="Дата и время",
+        blank=True,
+        null=True,
     )
     paid = models.BooleanField(
         verbose_name="Платное",
@@ -80,6 +82,10 @@ class Event(BaseModel):
         default=False,
         verbose_name="Закрепить на главной",
     )
+    is_archived = models.BooleanField(
+        default=False,
+        verbose_name="В архиве",
+    )
 
     class Meta:
         ordering = ("-date_time",)
@@ -89,9 +95,11 @@ class Event(BaseModel):
     def __str__(self):
         event_name = self.common_event.target_model
         event_label = self.EventType(self.type).label
-        event_date = self.date_time.date().strftime("%d.%m.%Y")
-        event_time = self.date_time.time().strftime("%H:%M")
-        return f'{event_label} - "{event_name}". Дата: {event_date}. Время: {event_time}'
+        if self.date_time is not None:
+            event_date = self.date_time.date().strftime("%d.%m.%Y")
+            event_time = self.date_time.time().strftime("%H:%M")
+            return f'{event_label} - "{event_name}". Дата: {event_date}. Время: {event_time}'
+        return f'{event_label} - "{event_name}". (В архиве)'
 
     def save(self, *args, **kwargs):
         allowed_event_types = {
@@ -103,8 +111,8 @@ class Event(BaseModel):
         super().save(*args, **kwargs)
 
     def clean(self):
-        if self.date_time is None:
-            raise ValidationError("Невозможно создать событие без указания даты и времени.")
+        if not self.date_time and not self.is_archived:
+            raise ValidationError("Необходимо предоставить дату события, " "либо поставить отметку 'В архиве'")
         return super().clean()
 
 

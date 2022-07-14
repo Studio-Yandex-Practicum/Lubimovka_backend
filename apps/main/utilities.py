@@ -99,7 +99,7 @@ class MainObject:
                 program=program,
                 festival=festival,
                 published=True,
-            )[:4]
+            )
             title = Setting.get_setting("main_short_list_title")
             self.short_list = {
                 "title": title,
