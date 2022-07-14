@@ -33,7 +33,7 @@ CONTENT_OBJECT_SERIALIZER_PAIRS = {
 
 @extend_schema_field(
     PolymorphicProxySerializer(
-        component_name="Content object",
+        component_name="Content_object",
         serializers=CONTENT_OBJECT_SERIALIZER_PAIRS.values(),
         resource_type_field_name=None,
     )
