@@ -33,7 +33,6 @@ class RoleAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request, obj=None):
         """Only superusers can edit slug field."""
         if not request.user.is_superuser:
-            self.prepopulated_fields = {}
             return ("slug",)
         return super().get_readonly_fields(request, obj)
 
