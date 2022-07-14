@@ -73,7 +73,7 @@ class VolunteerFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def person(self):
-        queryset = Person.objects.filter(email__isnull=False).exclude(image__exact="")
+        queryset = Person.objects.filter(city__isnull=False).exclude(image__exact="")
         person = get_random_objects_by_queryset(queryset)
         return person
 
@@ -189,7 +189,6 @@ class PressReleaseFactory(factory.django.DjangoModelFactory):
         model = PressRelease
         django_get_or_create = ("festival",)
 
-    title = factory.Faker("sentence", locale="ru_RU")
     text = factory.Faker("text", locale="ru_RU")
     press_release_image = factory.django.ImageField(color=factory.Faker("color"))
 

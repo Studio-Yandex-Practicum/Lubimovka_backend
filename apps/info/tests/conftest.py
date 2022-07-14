@@ -49,7 +49,7 @@ def festival_team(persons_with_image):
 
 
 @pytest.fixture
-def festival_teams(persons_with_image):
+def festival_teams(persons_with_image_email_city):
     return FestivalTeamFactory.create_batch(5)
 
 

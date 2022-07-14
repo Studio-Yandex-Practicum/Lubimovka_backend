@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
@@ -14,6 +15,7 @@ class ProjectListAPI(APIView):
 
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
 
+    @extend_schema(responses=ProjectListSerializer(many=True))
     def get(self, request):
         return get_paginated_response(
             pagination_class=self.pagination_class,
@@ -27,6 +29,7 @@ class ProjectListAPI(APIView):
 class ProjectDetailAPI(APIView):
     """Returns object `Project`."""
 
+    @extend_schema(responses=ProjectSerializer)
     def get(self, request, id):
         news_items = Project.objects.published()
         news_item_detail = get_object_or_404(news_items, id=id)
@@ -38,6 +41,7 @@ class ProjectDetailAPI(APIView):
 class ProjectsPreviewDetailAPI(APIView):
     """Returns preview page `Projects`."""
 
+    @extend_schema(responses=ProjectSerializer)
     def get(self, request, id):
         hash_sum = request.GET.get("hash", None)
         project_item_detail = selectors.preview_item_detail_get(Project, id, hash_sum)
