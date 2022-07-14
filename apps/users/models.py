@@ -64,11 +64,6 @@ class User(AbstractUser):
             self.is_staff = True
         super().save(*args, **kwargs)
 
-    def clean(self):
-        if not self.username:
-            self.username = self.email
-        return super().clean()
-
 
 class ProxyGroup(Group):
     """Ordinary django's Group. The class is required to register model in `users` app."""

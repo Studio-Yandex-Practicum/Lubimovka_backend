@@ -21,6 +21,14 @@ class UserAdminForm(UserChangeForm):
     username = UsernameField(label="Имя пользователя", required=False)
     password = forms.CharField(widget=forms.HiddenInput())
 
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if not user.username:
+            user.username = user.email
+        user.save()
+        return user
+
     def clean(self):
         groups = self.cleaned_data["groups"]
         if groups.count() > 1:
