@@ -100,7 +100,7 @@ class MainObject:
                 festival=festival,
                 published=True,
             ).order_by("?")
-            
+
             title = Setting.get_setting("main_short_list_title")
             self.short_list = {
                 "title": title,
