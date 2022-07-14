@@ -44,6 +44,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
     fields = (
         "status",
         "name",
+        "slug",
         "play",
         "main_image",
         "bottom_image",
@@ -84,6 +85,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
         "duration",
         "creator_name",
     )
+    prepopulated_fields = {"slug": ("name",)}
     inlines = (
         ImagesInBlockInline,
         PerformanceMediaReviewInline,
