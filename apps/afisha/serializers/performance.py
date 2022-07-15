@@ -56,6 +56,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
         model = Performance
         fields = (
             "id",
+            "slug",
             "name",
             "description",
             "team",

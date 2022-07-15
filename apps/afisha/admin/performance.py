@@ -74,6 +74,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
     other_readonly_fields = (
         "status",
         "name",
+        "slug",
         "play",
         "main_image",
         "bottom_image",

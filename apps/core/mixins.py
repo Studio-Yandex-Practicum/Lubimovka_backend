@@ -2,6 +2,7 @@ from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
+from apps.afisha.models.performance import Performance
 from apps.core.constants import STATUS_INFO, Status
 from apps.core.utils import get_object, get_user_change_perms_for_status, get_user_perms_level
 
@@ -24,6 +25,8 @@ class StatusButtonMixin:
 
     def get_readonly_fields(self, request, obj=None):
         if not get_user_change_perms_for_status(request, obj):
+            if self.model._meta.object_name == "Performance":
+                self.prepopulated_fields = {}
             return self.other_readonly_fields
         return super().get_readonly_fields(request, obj=obj)
 
@@ -88,9 +91,13 @@ class PreviewButtonMixin:
             "BlogItem": "blog",
             "NewsItem": "news",
             "Project": "projects",
-            "Performance": "library/performances",
+            "Performance": "performances",
         }
-        link = f"/{string_url[self.model._meta.object_name]}/{object_id}"
+        if self.model._meta.object_name == "Performance":
+            performance = Performance.objects.get(id=object_id)
+            link = f"/{string_url[self.model._meta.object_name]}/{performance.slug}"
+        else:
+            link = f"/{string_url[self.model._meta.object_name]}/{object_id}"
         # add hash for unpublished pages and change button name
         preview_button_context = {}
         if self.model.objects.is_published(object_id):

@@ -21,9 +21,10 @@ class PerformancePreviewDetailAPI(APIView):
     """Returns preview page `Performance`."""
 
     @extend_schema(responses=PerformanceSerializer)
-    def get(self, request, id):
+    def get(self, request, slug):
         hash_sum = request.GET.get("hash", None)
-        performance_item_detail = selectors.preview_item_detail_get(Performance, id, hash_sum)
+        obj = get_object_or_404(Performance, slug=slug)
+        performance_item_detail = selectors.preview_item_detail_get(Performance, obj.id, hash_sum)
         context = {"request": request}
         serializer = PerformanceSerializer(performance_item_detail, context=context)
         return Response(serializer.data)
