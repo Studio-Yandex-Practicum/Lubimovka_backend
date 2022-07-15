@@ -1,3 +1,5 @@
+import unicodedata
+
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
@@ -9,14 +11,29 @@ from django.utils.crypto import get_random_string
 User = get_user_model()
 
 
+class UsernameField(forms.CharField):
+    def to_python(self, value):
+        value = super().to_python(value)
+        return None if value is None else unicodedata.normalize("NFKC", value)
+
+
 class UserAdminForm(UserChangeForm):
+    username = UsernameField(label="Имя пользователя", required=False)
     password = forms.CharField(widget=forms.HiddenInput())
+
+    def save(self, commit=True):
+        user = super().save(commit=False)
+        user.email = self.cleaned_data["email"]
+        if not user.username:
+            user.username = user.email
+        user.save()
+        return user
 
     def clean(self):
         groups = self.cleaned_data["groups"]
-
         if groups.count() > 1:
             raise ValidationError("Выбрать можно только одну группу.")
+        return super().clean()
 
 
 class UserAdminCreationForm(UserCreationForm):

@@ -73,7 +73,7 @@ class VolunteerFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def person(self):
-        queryset = Person.objects.filter(email__isnull=False).exclude(image__exact="")
+        queryset = Person.objects.filter(city__isnull=False).exclude(image__exact="")
         person = get_random_objects_by_queryset(queryset)
         return person
 

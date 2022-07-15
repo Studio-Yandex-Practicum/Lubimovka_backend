@@ -17,12 +17,19 @@ from apps.content_pages.models import (
     VideosBlock,
 )
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
+from apps.core.models import Role
 from apps.library.models import Play
 
 
 class ContentPersonRoleInline(admin.TabularInline):
     model = ContentPersonRole
     extra = 0
+
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        """Restricts role types for the model where inline is used."""
+        if db_field.name == "role":
+            kwargs["queryset"] = Role.objects.filter(types__role_type="blog_persons_role")
+        return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
 class OrderedInline(SortableInlineAdminMixin, admin.TabularInline):
