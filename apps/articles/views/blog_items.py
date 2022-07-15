@@ -67,6 +67,7 @@ class BlogItemDetailAPI(APIView):
 class BlogItemPreviewDetailAPI(APIView):
     """Return detailed preview `BlogItem` object."""
 
+    @extend_schema(responses=BlogItemDetailOutputSerializer)
     def get(self, request, id):
         hash_sum = request.GET.get("hash", None)
         item_detail = preview_item_detail_get(BlogItem, id, hash_sum)

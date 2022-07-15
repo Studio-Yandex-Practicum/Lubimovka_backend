@@ -33,6 +33,7 @@ class NewsItemsListAPI(PubDateSchemaMixin, generics.ListAPIView):
 class NewsItemsDetailAPI(APIView):
     """Returns object `NewsItems`."""
 
+    @extend_schema(responses=NewsItemDetailSerializer)
     def get(self, request, id):
         news_item_detail = selectors.item_detail_get(NewsItem, id)
         context = {"request": request}
@@ -43,6 +44,7 @@ class NewsItemsDetailAPI(APIView):
 class NewsItemsPreviewDetailAPI(APIView):
     """Returns preview page `NewsItems`."""
 
+    @extend_schema(responses=NewsItemDetailSerializer)
     def get(self, request, id):
         hash_sum = request.GET.get("hash", None)
         item_detail = selectors.preview_item_detail_get(NewsItem, id, hash_sum)

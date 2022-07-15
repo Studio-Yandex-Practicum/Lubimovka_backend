@@ -20,6 +20,7 @@ class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 class PerformancePreviewDetailAPI(APIView):
     """Returns preview page `Performance`."""
 
+    @extend_schema(responses=PerformanceSerializer)
     def get(self, request, id):
         hash_sum = request.GET.get("hash", None)
         performance_item_detail = selectors.preview_item_detail_get(Performance, id, hash_sum)
