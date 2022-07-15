@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.afisha.models import Event
-from apps.afisha.serializers import EventPerformanceSerializer
+from apps.afisha.serializers import EventSerializer
 from apps.content_pages.models import EventsBlock, ImagesBlock, PersonsBlock, PlaysBlock, VideosBlock
 from apps.content_pages.serializers.content_items import (
     ExtendedPersonSerializer,
@@ -14,7 +14,7 @@ from apps.content_pages.serializers.content_items import (
 class EventInBlockSerializer(serializers.ModelSerializer):
     """Returns Performance in EventsBlock."""
 
-    event_body = EventPerformanceSerializer(
+    event_body = EventSerializer(
         source="common_event.target_model",
     )
 

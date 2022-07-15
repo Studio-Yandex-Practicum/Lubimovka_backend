@@ -1,5 +1,6 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
+from django.db.models import Q
 
 from apps.afisha.models import Event
 from apps.content_pages.models import (
@@ -34,7 +35,11 @@ class OrderedEventInline(OrderedInline):
     max_num = 3
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Event.objects.filter(common_event__performance__isnull=False)
+        kwargs["queryset"] = Event.objects.filter(
+            Q(common_event__performance__isnull=False)
+            | Q(common_event__reading__isnull=False)
+            | Q(common_event__masterclass__isnull=False)
+        )
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
