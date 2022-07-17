@@ -57,7 +57,6 @@ class EventFactory(factory.django.DjangoModelFactory):
     )
     paid = factory.Faker("boolean", chance_of_getting_true=50)
     url = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
-    place = factory.Faker("address", locale="ru_RU")
     pinned_on_main = factory.Faker("boolean", chance_of_getting_true=80)
 
     @factory.lazy_attribute

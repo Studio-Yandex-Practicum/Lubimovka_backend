@@ -54,7 +54,6 @@ def test_afisha_event_list_date_filter(client, dates_query_param, expected_count
         "date_time",
         "paid",
         "url",
-        "place",
     ),
 )
 def test_afisha_event_list_results_level_expected_fields(client, expected_field, four_events_october):
