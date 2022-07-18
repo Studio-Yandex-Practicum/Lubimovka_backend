@@ -74,10 +74,6 @@ class Event(BaseModel):
         max_length=200,
         verbose_name="Ссылка",
     )
-    place = models.CharField(
-        verbose_name="Место",
-        max_length=200,
-    )
     pinned_on_main = models.BooleanField(
         default=False,
         verbose_name="Закрепить на главной",
