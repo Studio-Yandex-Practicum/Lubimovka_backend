@@ -11,7 +11,7 @@ from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaRe
 from apps.core.constants import AgeLimit, Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
-from apps.core.utils import get_picsum_image
+from apps.core.utils import get_picsum_image, slugify
 from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.factories import TeamMemberFactory
 from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
@@ -107,6 +107,12 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
         factory_related_name="performance",
         set_role_with_slug="director",
     )
+
+    @factory.lazy_attribute
+    def slug(self):
+        name_with_underscore = self.name.replace(" ", "_")
+        slug = slugify(name_with_underscore)
+        return slug
 
     @factory.post_generation
     def add_images_in_block(self, created: bool, extracted: bool, **kwargs):

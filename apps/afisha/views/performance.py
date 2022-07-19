@@ -14,15 +14,17 @@ class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
 
     queryset = Performance.objects.published()
     serializer_class = PerformanceSerializer
+    lookup_field = "slug"
 
 
 class PerformancePreviewDetailAPI(APIView):
     """Returns preview page `Performance`."""
 
     @extend_schema(responses=PerformanceSerializer)
-    def get(self, request, id):
+    def get(self, request, slug):
         hash_sum = request.GET.get("hash", None)
-        performance_item_detail = selectors.preview_item_detail_get(Performance, id, hash_sum)
+        obj = get_object_or_404(Performance, slug=slug)
+        performance_item_detail = selectors.preview_item_detail_get(Performance, obj.id, hash_sum)
         context = {"request": request}
         serializer = PerformanceSerializer(performance_item_detail, context=context)
         return Response(serializer.data)
@@ -30,11 +32,11 @@ class PerformancePreviewDetailAPI(APIView):
 
 @extend_schema_view(
     list=extend_schema(
-        parameters=[OpenApiParameter("performance_id", type=int, location="path")],
+        parameters=[OpenApiParameter("performance_slug", type=str, location="path")],
     ),
     retrieve=extend_schema(
         parameters=[
-            OpenApiParameter("performance_id", type=int, location="path"),
+            OpenApiParameter("performance_slug", type=str, location="path"),
             OpenApiParameter("id", type=int, location="path"),
         ],
     ),
@@ -48,18 +50,18 @@ class PerformanceReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
     def get_queryset(self):
         performance = get_object_or_404(
             Performance,
-            pk=self.kwargs.get("performance_id"),
+            slug=self.kwargs.get("performance_slug"),
         )
         return performance.reviews.all()
 
 
 @extend_schema_view(
     list=extend_schema(
-        parameters=[OpenApiParameter("performance_id", type=int, location="path")],
+        parameters=[OpenApiParameter("performance_slug", type=str, location="path")],
     ),
     retrieve=extend_schema(
         parameters=[
-            OpenApiParameter("performance_id", type=int, location="path"),
+            OpenApiParameter("performance_slug", type=str, location="path"),
             OpenApiParameter("id", type=int, location="path"),
         ],
     ),
@@ -73,6 +75,6 @@ class PerformanceMediaReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelM
     def get_queryset(self):
         performance = get_object_or_404(
             Performance,
-            pk=self.kwargs.get("performance_id"),
+            slug=self.kwargs.get("performance_slug"),
         )
         return performance.media_reviews.all()
