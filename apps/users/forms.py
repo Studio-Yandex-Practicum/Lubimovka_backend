@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.core.exceptions import ValidationError
 from django.utils.crypto import get_random_string
 
@@ -86,7 +86,13 @@ class GroupAdminForm(forms.ModelForm):
     users = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple("users", False),
+        widget=FilteredSelectMultiple("пользователи", False),
+        label="Пользователи",
+    )
+    permissions = forms.ModelMultipleChoiceField(
+        Permission.objects.exclude(content_type__app_label="feedback", codename__icontains="add"),
+        widget=FilteredSelectMultiple("права", False),
+        label="Права",
     )
 
     def __init__(self, *args, **kwargs):
