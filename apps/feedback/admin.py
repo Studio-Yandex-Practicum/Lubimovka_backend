@@ -1,7 +1,7 @@
 import datetime
 
 from django.contrib import admin
-from django.utils import formats, timezone
+from django.utils import timezone
 
 from apps.feedback.models import ParticipationApplicationFestival, Question
 
@@ -44,7 +44,7 @@ class ParticipationAdmin(admin.ModelAdmin):
         "exported_to_google",
         "saved_to_storage",
         "sent_to_email",
-        "created_datetime",
+        "created",
     )
     list_filter = (
         "exported_to_google",
@@ -54,13 +54,8 @@ class ParticipationAdmin(admin.ModelAdmin):
         LookBackDateListFilter,
     )
 
-    readonly_fields = ("created_datetime",)
+    readonly_fields = ("created",)
     search_fields = ("title", "first_name", "last_name", "city", "year")
-
-    # TODO: добавить verbose_name к полю created и избавиться от этого метода
-    @admin.display(description="Создана")
-    def created_datetime(self, obj):
-        return formats.localize(timezone.localtime(obj.created))
 
     def has_add_permission(self, request):
         return False

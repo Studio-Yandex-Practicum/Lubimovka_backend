@@ -29,6 +29,10 @@ ALLOWED_FORMATS_FILE_FOR_PARTICIPATION = (
 class ParticipationApplicationFestival(BaseModel):
     """Заявки на участие в фестивале."""
 
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Создана",
+    )
     first_name = models.CharField(
         max_length=50,
         verbose_name="Имя",
@@ -80,10 +84,20 @@ class ParticipationApplicationFestival(BaseModel):
         verbose_name="Проверена?",
         choices=BOOL_CHOICES,
     )
-    exported_to_google = models.BooleanField(default=False, verbose_name="Выгружена в Google-таблицу", editable=False)
-    saved_to_storage = models.BooleanField(default=False, verbose_name="Файл сохранен на Диске", editable=False)
+    exported_to_google = models.BooleanField(
+        default=False,
+        verbose_name="Выгружена в Google-таблицу",
+        editable=False,
+    )
+    saved_to_storage = models.BooleanField(
+        default=False,
+        verbose_name="Файл сохранен на Диске",
+        editable=False,
+    )
     sent_to_email = models.BooleanField(
-        default=False, verbose_name="Подтверждение получения отправлено на почту", editable=False
+        default=False,
+        verbose_name="Подтверждение отправлено",
+        editable=False,
     )
     festival_year = models.PositiveSmallIntegerField(
         default=get_festival_year,
