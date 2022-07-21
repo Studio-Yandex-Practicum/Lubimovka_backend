@@ -13,7 +13,7 @@ from apps.content_pages.models import (
     PersonsBlock,
 )
 from apps.core.decorators import restrict_factory
-from apps.core.models import Person, Role
+from apps.core.models import Person, Role, RoleType
 from apps.core.utils import get_picsum_image
 from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
@@ -33,7 +33,9 @@ class ContentPersonRoleFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def role(self):
-        return get_random_objects_by_model(Role)
+        role_type = RoleType.objects.filter(role_type="blog_persons_role")
+        allowable_roles = Role.objects.filter(types__in=role_type)
+        return get_random_objects_by_queryset(allowable_roles)
 
     @factory.lazy_attribute
     def extended_person(self):

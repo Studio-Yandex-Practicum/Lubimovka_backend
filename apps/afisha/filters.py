@@ -26,19 +26,20 @@ class StatusOfEvent(admin.SimpleListFilter):
             ("upcoming", _("Предстоящие")),
             ("today", _("Сегодня")),
             ("past", _("Прошедшие")),
+            ("archived", _("В архиве")),
         )
 
     def queryset(self, request, queryset):
         date_now = timezone.now().date()
         date_tomorrow = date_now + timedelta(days=1)
-        if self.value() is None:
-            return queryset.filter(date_time__gt=date_now)
-        if self.value() == "all":
+        if self.value() == "all" or self.value() is None:
             return queryset
         if self.value() == "upcoming":
             return queryset.filter(date_time__gt=date_now).exclude(date_time__range=[date_now, date_tomorrow])
         if self.value() == "past":
             return queryset.filter(date_time__lt=date_now)
+        if self.value() == "archived":
+            return queryset.filter(is_archived=True)
         return queryset.filter(date_time__range=[date_now, date_tomorrow])
 
     def choices(self, changelist):

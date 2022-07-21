@@ -1,6 +1,7 @@
 from django_filters import rest_framework as filters
 from drf_spectacular.utils import extend_schema
 from rest_framework import filters as rest_filters
+from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
@@ -10,10 +11,9 @@ from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
 from apps.articles.serializers import NewsItemDetailSerializer, NewsItemListSerializer, YearMonthSerializer
-from apps.core.utils import get_paginated_response
 
 
-class NewsItemsListAPI(PubDateSchemaMixin, APIView):
+class NewsItemsListAPI(PubDateSchemaMixin, generics.ListAPIView):
     """Returns published News items."""
 
     filter_backends = (
@@ -26,20 +26,14 @@ class NewsItemsListAPI(PubDateSchemaMixin, APIView):
         "pub_date__month",
     )
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
-
-    def get(self, request):
-        return get_paginated_response(
-            pagination_class=self.pagination_class,
-            serializer_class=NewsItemListSerializer,
-            queryset=NewsItem.objects.published(),
-            request=request,
-            view=self,
-        )
+    serializer_class = NewsItemListSerializer
+    queryset = NewsItem.objects.published()
 
 
 class NewsItemsDetailAPI(APIView):
     """Returns object `NewsItems`."""
 
+    @extend_schema(responses=NewsItemDetailSerializer)
     def get(self, request, id):
         news_item_detail = selectors.item_detail_get(NewsItem, id)
         context = {"request": request}
@@ -50,6 +44,7 @@ class NewsItemsDetailAPI(APIView):
 class NewsItemsPreviewDetailAPI(APIView):
     """Returns preview page `NewsItems`."""
 
+    @extend_schema(responses=NewsItemDetailSerializer)
     def get(self, request, id):
         hash_sum = request.GET.get("hash", None)
         item_detail = selectors.preview_item_detail_get(NewsItem, id, hash_sum)

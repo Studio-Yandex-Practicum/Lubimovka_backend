@@ -21,7 +21,7 @@ class AfishaEventSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(
         PolymorphicProxySerializer(
-            component_name="Event Type objects",
+            component_name="Event_Type_objects",
             serializers=AFISHA_EVENTS_SERIALIZER_PAIRS.values(),
             resource_type_field_name=None,
         )
@@ -41,8 +41,8 @@ class AfishaEventSerializer(serializers.ModelSerializer):
             "id",
             "type",
             "event_body",
+            "is_archived",
             "date_time",
             "paid",
             "url",
-            "place",
         )
