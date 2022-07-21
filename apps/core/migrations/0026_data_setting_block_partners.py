@@ -8,9 +8,16 @@ def setting_for_partner_block(apps, schema_editor):
     Setting.objects.get_or_create(
         field_type="BOOLEAN",
         group="GENERAL",
-        settings_key="partner_block_on_main_and_festival_pages",
+        settings_key="show_general_partners",
         boolean=True,
-        description="Отображать блок партнёров на главной и странице о фестивале",
+        description="Отображать генеральных партнёров",
+    )
+    Setting.objects.get_or_create(
+        field_type="BOOLEAN",
+        group="GENERAL",
+        settings_key="show_info_partners_and_festival_partners",
+        boolean=True,
+        description="Отображать информационных партнёров и партнёров фестиваля",
     )
 
 class Migration(migrations.Migration):

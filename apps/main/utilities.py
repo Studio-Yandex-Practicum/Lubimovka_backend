@@ -34,7 +34,8 @@ class MainObject:
             "main_video_archive_url",
             "main_video_archive_photo",
             "main_add_places",
-            "partner_block_on_main_and_festival_pages",
+            "show_general_partners",
+            "show_info_partners_and_festival_partners",
         )
         self.settings = Setting.get_settings(settings_keys=setting_keys)
 
@@ -149,4 +150,7 @@ class MainObject:
             self.places = {"items": items}
 
     def show_partners(self):
-        self.show_partners_block = self.settings.get("partner_block_on_main_and_festival_pages")
+        self.show_partners = {
+            "show_general_partners": self.settings.get("show_general_partners"),
+            "show_info_partners_and_festival_partners": self.settings.get("show_info_partners_and_festival_partners"),
+        }
