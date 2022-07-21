@@ -182,7 +182,7 @@ class TestMainAPIViews:
         places,
     ):
         """Checks data["afisha"]["items"] in response."""
-        fields = ["id", "type", "event_body", "date_time", "paid", "url", "place"]
+        fields = ["id", "type", "event_body", "date_time", "paid", "url"]
         response = client.get(MAIN_URL)
         for field in fields:
             assert (

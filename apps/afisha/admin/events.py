@@ -77,7 +77,6 @@ class EventAdmin(admin.ModelAdmin):
                     "date_time",
                     ("is_archived", "paid"),
                     "url",
-                    "place",
                     "pinned_on_main",
                 ),
             },
