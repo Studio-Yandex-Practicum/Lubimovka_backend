@@ -18,6 +18,7 @@ class MainView(APIView):
         main.add_short_list()
         main.add_video_archive()
         main.add_places()
+        main.show_partners()
         # Common access to context. It's required to return correct url links
         context = {
             "request": self.request,

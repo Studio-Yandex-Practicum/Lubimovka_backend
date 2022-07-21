@@ -15,7 +15,16 @@ pytestmark = pytest.mark.django_db
 class TestMainAPIViews:
     def test_get_main_fields(self, client):
         """Checks fields in response."""
-        fields = ["first_screen", "news", "afisha", "banners", "short_list", "places", "video_archive"]
+        fields = [
+            "first_screen",
+            "news",
+            "afisha",
+            "banners",
+            "short_list",
+            "places",
+            "video_archive",
+            "show_partners",
+        ]
         response = client.get(MAIN_URL)
         for field in fields:
             assert field in response.data, f"Проверьте, что при GET запросе {MAIN_URL} data содержит {field}"
@@ -79,6 +88,18 @@ class TestMainAPIViews:
             assert (
                 field in response.data["video_archive"]
             ), f"Проверьте, что при GET запросе {MAIN_URL} data[video_archive] содержит items"
+
+    def test_get_main_settings_fields(self, client):
+        """Checks data["show_partners"] fields in response."""
+        fields = [
+            "show_general_partners",
+            "show_info_partners_and_festival_partners",
+        ]
+        response = client.get(MAIN_URL)
+        for field in fields:
+            assert (
+                field in response.data["show_partners"]
+            ), f"Проверьте, что при GET запросе {MAIN_URL} data[show_partners] содержит {field}"
 
     def test_news_count_in_response_matches_count_in_db(self, client, news_items_with_content):
         """Checks that count news in response matches count in db."""

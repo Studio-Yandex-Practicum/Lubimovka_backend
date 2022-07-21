@@ -13,13 +13,39 @@ from apps.main.models import Banner
 
 
 class MainObject:
+    def __init__(self) -> None:
+        setting_keys = (
+            "main_add_first_screen",
+            "main_first_screen_title",
+            "main_first_screen_url_title",
+            "main_first_screen_url",
+            "main_first_screen_image",
+            "main_add_blog",
+            "main_blog_title",
+            "main_add_news",
+            "main_news_title",
+            "main_add_afisha",
+            "main_show_afisha_only_for_today",
+            "afisha_description",
+            "main_add_banners",
+            "main_add_short_list",
+            "main_short_list_title",
+            "main_add_video_archive",
+            "main_video_archive_url",
+            "main_video_archive_photo",
+            "main_add_places",
+            "show_general_partners",
+            "show_info_partners_and_festival_partners",
+        )
+        self.settings = Setting.get_settings(settings_keys=setting_keys)
+
     def add_first_screen_data(self):
-        main_add_first_screen = Setting.get_setting("main_add_first_screen")
+        main_add_first_screen = self.settings.get("main_add_first_screen")
         if main_add_first_screen:
-            title = Setting.get_setting("main_first_screen_title")
-            url_title = Setting.get_setting("main_first_screen_url_title")
-            url = Setting.get_setting("main_first_screen_url")
-            image = Setting.get_setting("main_first_screen_image")
+            title = self.settings.get("main_first_screen_title")
+            url_title = self.settings.get("main_first_screen_url_title")
+            url = self.settings.get("main_first_screen_url")
+            image = self.settings.get("main_first_screen_image")
             self.first_screen = {
                 "title": title,
                 "url_title": url_title,
@@ -28,9 +54,9 @@ class MainObject:
             }
 
     def add_blog_data(self):
-        main_add_blog = Setting.get_setting("main_add_blog")
+        main_add_blog = self.settings.get("main_add_blog")
         if main_add_blog:
-            title = Setting.get_setting("main_blog_title")
+            title = self.settings.get("main_blog_title")
             items = BlogItem.objects.published()[:6]
             self.blog = {
                 "title": title,
@@ -38,9 +64,9 @@ class MainObject:
             }
 
     def add_news_data(self):
-        main_add_news = Setting.get_setting("main_add_news")
+        main_add_news = self.settings.get("main_add_news")
         if main_add_news:
-            title = Setting.get_setting("main_news_title")
+            title = self.settings.get("main_news_title")
             items = NewsItem.objects.published()[:6]
             self.news = {
                 "title": title,
@@ -48,9 +74,9 @@ class MainObject:
             }
 
     def add_afisha(self):
-        main_add_afisha = Setting.get_setting("main_add_afisha")
+        main_add_afisha = self.settings.get("main_add_afisha")
         if main_add_afisha:
-            main_show_afisha_only_for_today = Setting.get_setting("main_show_afisha_only_for_today")
+            main_show_afisha_only_for_today = self.settings.get("main_show_afisha_only_for_today")
 
             if main_show_afisha_only_for_today:
                 today = timezone.now()
@@ -76,7 +102,7 @@ class MainObject:
                     .order_by("date_time")[:6]
                 )
 
-            description = Setting.get_setting("afisha_description")
+            description = self.settings.get("afisha_description")
 
             self.afisha = {
                 "afisha_today": main_show_afisha_only_for_today,
@@ -85,13 +111,13 @@ class MainObject:
             }
 
     def add_banners(self):
-        main_add_banners = Setting.get_setting("main_add_banners")
+        main_add_banners = self.settings.get("main_add_banners")
         if main_add_banners:
             items = Banner.objects.all()
             self.banners = {"items": items}
 
     def add_short_list(self):
-        main_add_short_list = Setting.get_setting("main_add_short_list")
+        main_add_short_list = self.settings.get("main_add_short_list")
         if main_add_short_list:
             program = ProgramType.objects.get(slug="short-list")
             festival = Festival.objects.all().order_by("-year").first()
@@ -101,24 +127,30 @@ class MainObject:
                 published=True,
             ).order_by("?")
 
-            title = Setting.get_setting("main_short_list_title")
+            title = self.settings.get("main_short_list_title")
             self.short_list = {
                 "title": title,
                 "items": items,
             }
 
     def add_video_archive(self):
-        main_add_video_archive = Setting.get_setting("main_add_video_archive")
+        main_add_video_archive = self.settings.get("main_add_video_archive")
         if main_add_video_archive:
-            url = Setting.get_setting("main_video_archive_url")
-            photo = Setting.get_setting("main_video_archive_photo")
+            url = self.settings.get("main_video_archive_url")
+            photo = self.settings.get("main_video_archive_photo")
             self.video_archive = {
                 "url": url,
                 "photo": photo,
             }
 
     def add_places(self):
-        main_add_places = Setting.get_setting("main_add_places")
+        main_add_places = self.settings.get("main_add_places")
         if main_add_places:
             items = Place.objects.all()
             self.places = {"items": items}
+
+    def show_partners(self):
+        self.show_partners = {
+            "show_general_partners": self.settings.get("show_general_partners"),
+            "show_info_partners_and_festival_partners": self.settings.get("show_info_partners_and_festival_partners"),
+        }
