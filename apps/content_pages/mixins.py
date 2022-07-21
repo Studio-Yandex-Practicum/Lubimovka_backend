@@ -1,7 +1,4 @@
 from django.contrib import admin
-from rest_framework.exceptions import PermissionDenied
-
-from apps.articles.utils import journalist_has_not_perms
 
 
 class SaveCreatorMixin:
@@ -21,6 +18,4 @@ class SaveCreatorMixin:
         if not change:
             creator = request.user
             obj.creator = creator
-        if journalist_has_not_perms(request, obj):
-            raise PermissionDenied()
         super().save_model(request, obj, form, change)
