@@ -1,4 +1,3 @@
-from xmlrpc.client import boolean
 from django.db import migrations
 
 
