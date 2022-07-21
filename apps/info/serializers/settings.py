@@ -25,4 +25,3 @@ class SettingsSerializer(serializers.Serializer):
     url_to_privacy_policy = serializers.URLField()
     for_press = ForPressSerializer()
     plays_reception_is_open = serializers.BooleanField()
-    partner_block_on_main_and_festival_pages = serializers.BooleanField()

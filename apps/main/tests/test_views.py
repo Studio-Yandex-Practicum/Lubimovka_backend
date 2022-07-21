@@ -15,7 +15,16 @@ pytestmark = pytest.mark.django_db
 class TestMainAPIViews:
     def test_get_main_fields(self, client):
         """Checks fields in response."""
-        fields = ["first_screen", "news", "afisha", "banners", "short_list", "places", "video_archive"]
+        fields = [
+            "first_screen",
+            "news",
+            "afisha",
+            "banners",
+            "short_list",
+            "places",
+            "video_archive",
+            "show_partners_block",
+        ]
         response = client.get(MAIN_URL)
         for field in fields:
             assert field in response.data, f"Проверьте, что при GET запросе {MAIN_URL} data содержит {field}"

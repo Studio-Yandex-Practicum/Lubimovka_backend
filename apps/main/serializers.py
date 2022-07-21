@@ -109,3 +109,4 @@ class MainSerializer(serializers.Serializer):
     short_list = MainShortListSerializer(required=False)
     places = MainPlacesSerializer(required=False)
     video_archive = MainVideoArchiveSerializer(required=False)
+    show_partners_block = serializers.BooleanField()
