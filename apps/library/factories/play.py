@@ -82,3 +82,23 @@ class OtherPlayFactory(factory.django.DjangoModelFactory):
     published = factory.Faker("boolean", chance_of_getting_true=50)
     url_download = factory.django.FileField()
     other_play = True
+
+    @factory.post_generation
+    def authors(self, created: bool, extracted: Iterable[Author], **kwargs):
+        """Add a Author(s) to play.
+
+        To add concrete authors use
+        OtherPlayFactory.create(authors=(author1, author2, ...))
+        and they will get to 'extracted' argument.
+        """
+        if not created:
+            return
+        if extracted:
+            authors = extracted
+            self.authors.add(*authors)
+            return
+
+        how_many = random.choice(AUTHORS_COUNT)
+
+        authors = get_random_objects_by_model(Author, how_many)
+        self.authors.add(*authors)

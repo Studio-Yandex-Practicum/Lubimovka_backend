@@ -222,7 +222,7 @@ class Command(FillDbLogsMixin, BaseCommand):
             used_links = Play.objects.filter(other_play=False).values_list("url_reading", flat=True)
             return (link for link in YOUTUBE_VIDEO_LINKS if link not in used_links)
 
-        links = _get_video_links()
+        links = list(_get_video_links())
         for link in links:
             url_reading = random.choice([None, link])
             PlayFactory.create(url_reading=url_reading)
