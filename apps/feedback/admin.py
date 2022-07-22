@@ -68,6 +68,6 @@ class ParticipationAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ("author_name", "author_email", "question", "sent_to_email")
+    list_display = ("author_name", "author_email", "short_question_text", "sent_to_email")
     list_filter = ("sent_to_email",)
     search_fields = ("author_name", "author_email", "question")
