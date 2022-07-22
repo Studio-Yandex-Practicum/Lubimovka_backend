@@ -1,5 +1,6 @@
 from rest_framework import serializers
 
+from apps.core.utils import get_domain
 from apps.library.models import Author, Play
 
 
@@ -22,11 +23,11 @@ class PlaySerializer(serializers.ModelSerializer):
     url_reading = serializers.URLField(required=False)
     url_download = serializers.SerializerMethodField()
 
-    def get_url_download(self, obj):
+    def get_url_download(self, obj) -> str:
         if obj.url_download_from:
             return obj.url_download_from
         else:
-            return self.context["request"].build_absolute_uri(obj.url_download)
+            return get_domain(self.context["request"]) + obj.url_download.url
 
     class Meta:
         fields = (
@@ -54,14 +55,14 @@ class AuthorPlaySerializer(serializers.Serializer):
     year = serializers.IntegerField(
         source="play.year", required=False, min_value=0, max_value=32767, label="Год написания пьесы"
     )
-    url_reading = serializers.URLField(source="play.url_reading", required=False)
     url_download = serializers.SerializerMethodField()
+    url_reading = serializers.URLField(source="play.url_reading", required=False)
 
-    def get_url_download(self, obj):
+    def get_url_download(self, obj) -> str:
         if obj.play.url_download_from:
             return obj.play.url_download_from
         else:
-            return self.context["request"].build_absolute_uri(obj.play.url_download)
+            return get_domain(self.context["request"]) + obj.play.url_download.url
 
 
 class AuthorOtherPlaySerializer(serializers.Serializer):
@@ -75,8 +76,8 @@ class AuthorOtherPlaySerializer(serializers.Serializer):
     authors = AuthorForPlaySerializer(source="play.authors", many=True)
     url_download = serializers.SerializerMethodField()
 
-    def get_url_download(self, obj):
+    def get_url_download(self, obj) -> str:
         if obj.play.url_download_from:
             return obj.play.url_download_from
         else:
-            return self.context["request"].build_absolute_uri(obj.play.url_download)
+            return get_domain(self.context["request"]) + obj.play.url_download.url
