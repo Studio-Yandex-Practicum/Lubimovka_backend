@@ -62,6 +62,7 @@ class PlayAdmin(admin.ModelAdmin):
         "city",
         "year",
         "url_download",
+        "url_download_from",
         "url_reading",
         "festival",
         "published",

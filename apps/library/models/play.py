@@ -64,9 +64,17 @@ class Play(BaseModel):
     url_download = models.FileField(
         validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PLAY),),
         max_length=200,
+        blank=True,
+        null=True,
         upload_to=path_by_media_and_class_name,
         verbose_name="Текст пьесы",
         help_text=f"Файл пьесы должен быть в одном из следующих форматов: " f"{ALLOWED_FORMATS_FILE_FOR_PLAY}",
+    )
+    url_download_from = models.URLField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на скачивание",
     )
     url_reading = models.URLField(
         max_length=200,
@@ -129,4 +137,6 @@ class Play(BaseModel):
             raise ValidationError({"program": "У пьесы Любимовки должна быть программа"})
         elif not self.festival:
             raise ValidationError({"festival": "У пьесы Любимовки должен быть фестиваль"})
+        if (self.url_download and self.url_download_from) or (not self.url_download and not self.url_download_from):
+            raise ValidationError({"url_download": "", "url_download_from": "Одно из полей должно быть заполнено!"})
         return super().clean()
