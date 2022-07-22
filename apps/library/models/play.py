@@ -57,7 +57,7 @@ class Play(BaseModel):
     )
     year = models.PositiveSmallIntegerField(
         validators=[year_validator],
-        verbose_name="Год написания пьесы",
+        verbose_name="Год представления пьесы",
         blank=True,
         null=True,
     )

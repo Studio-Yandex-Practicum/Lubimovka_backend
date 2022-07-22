@@ -22,4 +22,9 @@ class Migration(migrations.Migration):
             name='url_download',
             field=models.FileField(blank=True, help_text="Файл пьесы должен быть в одном из следующих форматов: ('doc', 'docx', 'txt', 'odt', 'pdf')", max_length=200, null=True, upload_to=apps.content_pages.utilities.path_by_media_and_class_name, validators=[django.core.validators.FileExtensionValidator(('doc', 'docx', 'txt', 'odt', 'pdf'))], verbose_name='Текст пьесы'),
         ),
+        migrations.AlterField(
+            model_name='play',
+            name='year',
+            field=models.PositiveSmallIntegerField(blank=True, null=True, validators=[apps.library.validators.year_validator], verbose_name='Год представления пьесы'),
+        ),
     ]
