@@ -23,6 +23,7 @@ class ProgramType(BaseModel):
     )
 
     class Meta:
+        ordering = ("id",)
         verbose_name = "Программа"
         verbose_name_plural = "Программы"
 

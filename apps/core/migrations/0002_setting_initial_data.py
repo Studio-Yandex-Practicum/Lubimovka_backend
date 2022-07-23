@@ -318,6 +318,20 @@ def add_general_settings(apps, schema_editor):
         url="https://www.facebook.com/festival.lubimovka/photos",
         description="Ссылка на фотоальбомы в Facebook на странице для прессы",
     )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="GENERAL",
+        settings_key="show_general_partners",
+        boolean=True,
+        description="Отображать генеральных партнёров",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="GENERAL",
+        settings_key="show_info_partners_and_festival_partners",
+        boolean=True,
+        description="Отображать информационных партнёров и партнёров фестиваля",
+    )
 
 
 def add_main_settings(apps, schema_editor):

@@ -10,7 +10,7 @@ class LocalEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ("id", "date_time", "paid", "url", "place", "pinned_on_main")
+        fields = ("id", "date_time", "paid", "url", "pinned_on_main")
 
 
 class BlockImagesSerializer(serializers.ModelSerializer):
@@ -58,6 +58,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
+            "supplemental_text",
             "team",
             "image",
             "project_title",
