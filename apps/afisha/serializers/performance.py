@@ -58,6 +58,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
+            "supplemental_text",
             "team",
             "image",
             "project_title",
