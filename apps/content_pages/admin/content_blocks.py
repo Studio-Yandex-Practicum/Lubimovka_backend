@@ -1,4 +1,5 @@
 from adminsortable2.admin import SortableInlineAdminMixin
+from django import forms
 from django.contrib import admin
 
 from apps.afisha.models import Event
@@ -64,10 +65,25 @@ class OrderedPlayInline(OrderedInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class ExtendedPersonModelForm(forms.ModelForm):
+    roles = forms.MultipleChoiceField(
+        choices=((role.id, role.name) for role in Role.objects.all()),
+    )
+
+    def get_initial_for_field(self, field, field_name):
+        if self.instance.pk and field is self.fields["roles"]:
+            return list(self.instance.roles.values_list("pk", flat=True))
+        return super().get_initial_for_field(field, field_name)
+
+    class Meta:
+        model = ExtendedPerson
+        fields = "__all__"
+
+
 class ExtendedPersonInline(OrderedInline):
     model = ExtendedPerson
+    form = ExtendedPersonModelForm
     show_change_link = True
-    readonly_fields = ("person_roles",)
     autocomplete_fields = ("person",)
 
 
