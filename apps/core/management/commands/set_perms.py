@@ -47,7 +47,7 @@ class Command(BaseCommand):
             journalist_permissions = Permission.objects.filter(
                 Q(codename__endswith="access_level_1")
                 # permissions for blog and news
-                | Q(codename__endswith="view_blogitem")
+                | Q(codename__endswith="_blogitem")
                 | Q(codename__endswith="_blogitemcontent")
                 | Q(codename__endswith="_blogperson")
                 | Q(codename__endswith="_contentpersonrole")
@@ -56,7 +56,7 @@ class Command(BaseCommand):
                 | Q(codename__endswith="_extendedperson")
                 | Q(codename__endswith="_imagesblock")
                 | Q(codename__endswith="_link")
-                | Q(codename__endswith="view_newsitem")
+                | Q(codename__endswith="_newsitem")
                 | Q(codename__endswith="_newsitemcontent")
                 | Q(codename__endswith="_orderedevent")
                 | Q(codename__endswith="_orderedimage")
