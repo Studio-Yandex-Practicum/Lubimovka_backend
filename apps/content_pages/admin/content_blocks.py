@@ -16,6 +16,7 @@ from apps.content_pages.models import (
     PlaysBlock,
     VideosBlock,
 )
+from apps.content_pages.services import choices_for_blog_person
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 from apps.core.models import Role
 from apps.library.models import Play
@@ -67,7 +68,7 @@ class OrderedPlayInline(OrderedInline):
 
 class ExtendedPersonModelForm(forms.ModelForm):
     roles = forms.MultipleChoiceField(
-        choices=((role.id, role.name) for role in Role.objects.all()),
+        choices=choices_for_blog_person,
     )
 
     def get_initial_for_field(self, field, field_name):
