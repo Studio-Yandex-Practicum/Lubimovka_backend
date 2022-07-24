@@ -38,6 +38,12 @@ class Reading(BaseModel):
         null=True,
         verbose_name="Главное изображение",
     )
+    supplemental_text = models.TextField(
+        max_length=500,
+        verbose_name="Дополнительное описание",
+        blank=True,
+        help_text="Описание, расположенное под изображением",
+    )
     project = models.ForeignKey(
         "articles.Project",
         null=True,
