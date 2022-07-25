@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_media_and_class_name
 from apps.core.models import BaseModel
@@ -141,9 +142,8 @@ class Play(BaseModel):
             raise ValidationError(
                 {
                     "url_download": "",
-                    "url_download_from": (
-                        "Необходимо либо загрузить файл с текстом Пьесы,",
-                        " либо указать ссылку на скачивание",
+                    "url_download_from": _(
+                        "Необходимо либо загрузить файл с текстом Пьесы, либо указать ссылку на скачивание",
                     ),
                 }
             )
