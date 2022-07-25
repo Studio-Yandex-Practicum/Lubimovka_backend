@@ -4,7 +4,7 @@ from apps.core.models import Person, Setting
 
 
 def info_settings_get() -> dict[str, Union[str, bool, dict[str, str]]]:
-    """Return feedback settings (mostly related to emails) dictionary."""
+    """Return settings (mostly related to emails) dictionary."""
     settings_keys = (
         "email_on_project_page",
         "email_on_what_we_do_page",
