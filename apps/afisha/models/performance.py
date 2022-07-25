@@ -99,7 +99,7 @@ class Performance(BaseModel):
     )
 
     class Meta:
-        ordering = ("-created",)
+        ordering = ("name",)
         verbose_name = "Спектакль"
         verbose_name_plural = "Спектакли"
         permissions = (

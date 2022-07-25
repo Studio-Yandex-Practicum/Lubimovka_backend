@@ -37,6 +37,7 @@ class PlayAdmin(admin.ModelAdmin):
         "name",
         "city",
         "program",
+        "year",
         "festival",
         "published",
     )
@@ -66,6 +67,7 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "published",
     )
+    ordering = ("-year",)
 
     def get_search_fields(self, request):
         # if request is for autocomplete, search only in names

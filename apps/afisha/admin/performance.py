@@ -40,6 +40,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
         "play",
         "status",
         "creator_name",
+        "created",
     )
     fields = (
         "status",
