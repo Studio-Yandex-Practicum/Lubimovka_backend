@@ -92,6 +92,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
         PerformanceReviewInline,
         TeamMemberInlineCollapsible,
     )
+    ordering = ("-created",)
 
     class Media:
 
