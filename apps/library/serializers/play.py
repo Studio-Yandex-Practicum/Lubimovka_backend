@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.core.utils import get_domain
-from apps.library.models import Author, Play
+from apps.library.models import Author, AuthorPlay, Play
 
 
 class AuthorForPlaySerializer(serializers.ModelSerializer):
@@ -42,7 +42,7 @@ class PlaySerializer(serializers.ModelSerializer):
         model = Play
 
 
-class AuthorPlaySerializer(serializers.Serializer):
+class AuthorPlaySerializer(serializers.ModelSerializer):
     """Сериализатор Пьесы из промежуточной модели м2м Автор-Пьеса.
 
     Используется для сортировки выдачи пьес.
@@ -64,20 +64,30 @@ class AuthorPlaySerializer(serializers.Serializer):
         else:
             return get_domain(self.context["request"]) + obj.play.url_download.url
 
+    class Meta:
+        fields = (
+            "id",
+            "name",
+            "authors",
+            "city",
+            "year",
+            "url_download",
+            "url_reading",
+        )
+        model = AuthorPlay
 
-class AuthorOtherPlaySerializer(serializers.Serializer):
+
+class AuthorOtherPlaySerializer(AuthorPlaySerializer):
     """Сериализатор Пьесы из промежуточной модели м2м Автор-Пьеса.
 
     Используется для сортировки выдачи других пьес (не пьес Любимовки).
     """
 
-    id = serializers.IntegerField(source="play.id")
-    name = serializers.CharField(source="play.name")
-    authors = AuthorForPlaySerializer(source="play.authors", many=True)
-    url_download = serializers.SerializerMethodField()
-
-    def get_url_download(self, obj) -> str:
-        if obj.play.url_download_from:
-            return obj.play.url_download_from
-        else:
-            return get_domain(self.context["request"]) + obj.play.url_download.url
+    class Meta:
+        fields = (
+            "id",
+            "name",
+            "authors",
+            "url_download",
+        )
+        model = AuthorPlay

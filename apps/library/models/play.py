@@ -138,5 +138,13 @@ class Play(BaseModel):
         elif not self.festival:
             raise ValidationError({"festival": "У пьесы Любимовки должен быть фестиваль"})
         if (self.url_download and self.url_download_from) or (not self.url_download and not self.url_download_from):
-            raise ValidationError({"url_download": "", "url_download_from": "Одно из полей должно быть заполнено!"})
+            raise ValidationError(
+                {
+                    "url_download": "",
+                    "url_download_from": (
+                        "Необходимо либо загрузить файл с текстом Пьесы,",
+                        " либо указать ссылку на скачивание",
+                    ),
+                }
+            )
         return super().clean()
