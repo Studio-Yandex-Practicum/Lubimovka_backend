@@ -1,6 +1,5 @@
 from django.core.validators import MinLengthValidator
 from django.db import models
-from django.template.defaultfilters import truncatechars
 
 from apps.core.models import BaseModel
 
@@ -27,10 +26,3 @@ class Question(BaseModel):
 
     def __str__(self):
         return f"{self.author_name} {self.question}"
-
-    @property
-    def short_question_text(self):
-        """Get short question text."""
-        return truncatechars(self.question, 70)
-
-    short_question_text.fget.short_description = "Текст вопроса"

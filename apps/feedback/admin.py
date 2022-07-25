@@ -1,6 +1,7 @@
 import datetime
 
 from django.contrib import admin
+from django.template.defaultfilters import truncatechars
 from django.utils import formats, timezone
 
 from apps.feedback.models import ParticipationApplicationFestival, Question
@@ -71,3 +72,10 @@ class QuestionAdmin(admin.ModelAdmin):
     list_display = ("author_name", "author_email", "short_question_text", "sent_to_email")
     list_filter = ("sent_to_email",)
     search_fields = ("author_name", "author_email", "question")
+
+    @admin.display(
+        description="Текст вопроса",
+    )
+    def short_question_text(self, obj):
+        """Возвращает текст вопроса, обрезанный до 70 знаков."""
+        return truncatechars(obj.question, 70)
