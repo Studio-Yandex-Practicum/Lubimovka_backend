@@ -40,6 +40,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
         "play",
         "status",
         "creator_name",
+        "created",
     )
     fields = (
         "status",
@@ -91,6 +92,7 @@ class PerformanceAdmin(StatusButtonMixin, PreviewButtonMixin, SaveCreatorMixin, 
         PerformanceReviewInline,
         TeamMemberInlineCollapsible,
     )
+    ordering = ("-created",)
 
     class Media:
 
