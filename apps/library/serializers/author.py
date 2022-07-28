@@ -78,6 +78,8 @@ class AuthorSearchSerializer(serializers.ModelSerializer):
     first_letter = serializers.SerializerMethodField()
 
     def get_first_letter(self, obj) -> str:
+        if not obj.person.last_name:
+            return obj.person.first_name[0].upper()
         return obj.person.last_name[0].upper()
 
     class Meta:

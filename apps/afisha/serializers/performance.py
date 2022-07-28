@@ -58,10 +58,23 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "id",
             "name",
             "description",
+            "supplemental_text",
             "team",
             "image",
             "project_title",
         )
+
+
+class EventSerializer(serializers.Serializer):
+    """Event content serializer for afisha page."""
+
+    id = serializers.IntegerField()
+    name = serializers.CharField(max_length=200)
+    description = serializers.CharField(max_length=500)
+    supplemental_text = serializers.CharField(max_length=500)
+    team = RoleSerializer(source="event_team", many=True)
+    image = serializers.ImageField(source="main_image", allow_null=True, required=False)
+    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
 
 class PerformanceMediaReviewSerializer(serializers.ModelSerializer):

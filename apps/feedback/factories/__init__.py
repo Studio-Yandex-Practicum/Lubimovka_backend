@@ -1,1 +1,2 @@
 from apps.feedback.factories.participation_application import ParticipationApplicationFestivalFactory
+from apps.feedback.factories.questions import QuestionFactory

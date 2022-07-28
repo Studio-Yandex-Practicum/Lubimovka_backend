@@ -54,6 +54,13 @@ class Performance(BaseModel):
     description = models.TextField(
         max_length=500,
         verbose_name="Краткое описание",
+        blank=True,
+    )
+    supplemental_text = models.TextField(
+        max_length=500,
+        verbose_name="Дополнительное описание",
+        blank=True,
+        help_text="Описание, расположенное под изображением",
     )
     text = models.TextField(
         max_length=2000,
@@ -99,7 +106,7 @@ class Performance(BaseModel):
     )
 
     class Meta:
-        ordering = ("-created",)
+        ordering = ("name",)
         verbose_name = "Спектакль"
         verbose_name_plural = "Спектакли"
         permissions = (

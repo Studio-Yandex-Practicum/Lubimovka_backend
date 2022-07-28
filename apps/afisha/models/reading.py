@@ -1,5 +1,6 @@
 from django.db import models
 
+from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Person
 from apps.library.utilities import get_team_roles
 
@@ -30,6 +31,18 @@ class Reading(BaseModel):
         on_delete=models.PROTECT,
         related_name="reading",
         verbose_name="События",
+    )
+    main_image = models.ImageField(
+        upload_to=path_by_app_label_and_class_name,
+        blank=True,
+        null=True,
+        verbose_name="Главное изображение",
+    )
+    supplemental_text = models.TextField(
+        max_length=500,
+        verbose_name="Дополнительное описание",
+        blank=True,
+        help_text="Описание, расположенное под изображением",
     )
     project = models.ForeignKey(
         "articles.Project",
