@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import UniqueConstraint
+from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_media_and_class_name
 from apps.core.models import BaseModel
@@ -58,16 +59,24 @@ class Play(BaseModel):
     )
     year = models.PositiveSmallIntegerField(
         validators=[year_validator],
-        verbose_name="Год написания пьесы",
+        verbose_name="Год представления пьесы",
         blank=True,
         null=True,
     )
     url_download = models.FileField(
         validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PLAY),),
         max_length=200,
+        blank=True,
+        null=True,
         upload_to=path_by_media_and_class_name,
         verbose_name="Текст пьесы",
         help_text=f"Файл пьесы должен быть в одном из следующих форматов: " f"{ALLOWED_FORMATS_FILE_FOR_PLAY}",
+    )
+    url_download_from = models.URLField(
+        max_length=200,
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на скачивание",
     )
     url_reading = models.URLField(
         max_length=200,
@@ -130,4 +139,13 @@ class Play(BaseModel):
             raise ValidationError({"program": "У пьесы Любимовки должна быть программа"})
         elif not self.festival:
             raise ValidationError({"festival": "У пьесы Любимовки должен быть фестиваль"})
+        if (self.url_download and self.url_download_from) or (not self.url_download and not self.url_download_from):
+            raise ValidationError(
+                {
+                    "url_download": "",
+                    "url_download_from": _(
+                        "Необходимо либо загрузить файл с текстом Пьесы, либо указать ссылку на скачивание",
+                    ),
+                }
+            )
         return super().clean()
