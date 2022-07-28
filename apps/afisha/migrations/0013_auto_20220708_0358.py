@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('afisha', '0011_again_overwrite_creators_articles'),
+        ('afisha', '0012_alter_performance_duration'),
     ]
 
     operations = [

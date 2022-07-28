@@ -15,7 +15,7 @@ def delete_permission(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('afisha', '0012_alter_performance_duration'),
+        ('afisha', '0013_auto_20220708_0358'),
     ]
 
     operations = [

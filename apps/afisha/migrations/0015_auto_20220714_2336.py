@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('afisha', '0013_delete_permission_preamble_title_text_qoute'),
+        ('afisha', '0014_delete_permission_preamble_title_text_qoute'),
     ]
 
     operations = [
