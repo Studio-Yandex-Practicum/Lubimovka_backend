@@ -51,3 +51,4 @@ class ProjectAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
         "image",
         "creator_name",
     )
+    ordering = ("-created",)
