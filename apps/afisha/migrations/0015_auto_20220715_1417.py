@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('afisha', '0014_merge_20220713_1716'),
+        ('afisha', '0014_auto_20220714_2336'),
     ]
 
     operations = [

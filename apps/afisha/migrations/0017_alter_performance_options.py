@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('afisha', '0016_merge_0015_auto_20220714_2336_0015_remove_event_place'),
+        ('afisha', '0016_remove_event_place'),
     ]
 
     operations = [
