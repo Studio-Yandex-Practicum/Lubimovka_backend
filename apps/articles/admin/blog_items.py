@@ -61,3 +61,13 @@ class BlogItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin)
         "image",
         "creator_name",
     )
+
+    def has_change_permission(self, request, obj=None):
+        if obj and obj.creator == request.user:
+            return True
+        return super().has_change_permission(request, obj=None)
+
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.creator == request.user:
+            return True
+        return super().has_delete_permission(request, obj=None)

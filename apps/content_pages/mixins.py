@@ -11,7 +11,10 @@ class SaveCreatorMixin:
         return f"{obj.creator.first_name} {obj.creator.last_name}"
 
     def save_model(self, request, obj, form, change):
-        """При создании записи сохраняем ее создателя."""
+        """При создании записи сохраняем ее создателя.
+
+        Журналист может редактировать только свои записи.
+        """
         if not change:
             creator = request.user
             obj.creator = creator
