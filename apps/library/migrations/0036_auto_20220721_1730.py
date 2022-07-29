@@ -8,7 +8,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0034_alter_programtype_options'),
+        ('library', '0035_alter_play_options'),
     ]
 
     operations = [
