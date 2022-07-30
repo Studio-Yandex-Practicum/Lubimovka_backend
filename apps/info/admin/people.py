@@ -43,7 +43,10 @@ class PartnerAdmin(SortableAdminMixin, AdminImagePreview, admin.ModelAdmin):
         (
             None,
             {
-                "fields": ("in_footer_partner",),
+                "fields": (
+                    "in_footer_partner",
+                    "is_general",
+                ),
                 "classes": ("depended_on_partner_type",),
             },
         ),
