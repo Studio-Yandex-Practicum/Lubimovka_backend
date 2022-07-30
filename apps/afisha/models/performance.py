@@ -119,7 +119,7 @@ class Performance(BaseModel):
         if len(self.name) >= 25:
             return self.name[:25] + "..."
         return self.name
-    
+
     def save(self, *args, **kwargs):
         this = Performance.objects.filter(id=self.id).first()
         if this:

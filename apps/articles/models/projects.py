@@ -27,7 +27,7 @@ class Project(AbstractContentPage):
             ("access_level_2", "Права редактора"),
             ("access_level_3", "Права главреда"),
         )
-    
+
     def save(self, *args, **kwargs):
         this = Project.objects.filter(id=self.id).first()
         if this:

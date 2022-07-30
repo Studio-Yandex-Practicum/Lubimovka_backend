@@ -53,7 +53,7 @@ class PerformanceMediaReview(BaseModel):
 
     def __str__(self):
         return self.media_name
-    
+
     def save(self, *args, **kwargs):
         this = PerformanceMediaReview.objects.filter(id=self.id).first()
         if this:

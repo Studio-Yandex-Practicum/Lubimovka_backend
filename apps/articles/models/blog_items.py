@@ -77,7 +77,7 @@ class BlogItem(AbstractContentPage):
 
     def __str__(self):
         return f"Запись блога {self.title}"
-    
+
     def save(self, *args, **kwargs):
         this = BlogItem.objects.filter(id=self.id).first()
         if this:

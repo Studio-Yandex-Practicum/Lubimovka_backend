@@ -16,7 +16,7 @@ class NewsItem(AbstractContentPage):
             ("access_level_2", "Права редактора"),
             ("access_level_3", "Права главреда"),
         )
-    
+
     def save(self, *args, **kwargs):
         this = NewsItem.objects.filter(id=self.id).first()
         if this:
