@@ -16,6 +16,13 @@ class NewsItem(AbstractContentPage):
             ("access_level_2", "Права редактора"),
             ("access_level_3", "Права главреда"),
         )
+    
+    def save(self, *args, **kwargs):
+        this = NewsItem.objects.filter(id=self.id).first()
+        if this:
+            if this.image != self.image:
+                this.image.delete(save=False)
+        return super().save(*args, **kwargs)
 
 
 class NewsItemContent(AbstractContent):

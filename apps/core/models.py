@@ -289,6 +289,13 @@ class Setting(BaseModel):
             raise ValidationError(
                 {"image": "Изображение должно присутствовать на странице. Оставьте или замените на другое."}
             )
+    
+    def save(self, *args, **kwargs):
+        this = Setting.objects.filter(id=self.id).first()
+        if this:
+            if this.image != self.image:
+                this.image.delete(save=False)
+        return super().save(*args, **kwargs)
 
     @property
     def value(self):

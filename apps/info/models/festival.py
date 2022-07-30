@@ -165,6 +165,10 @@ class Festival(BaseModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
+        this = Festival.objects.filter(id=self.id).first()
+        if this:
+            if this.festival_image != self.festival_image:
+                this.festival_image.delete(save=False)
         return super().save(*args, **kwargs)
 
     def clean(self):

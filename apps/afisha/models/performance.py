@@ -119,6 +119,15 @@ class Performance(BaseModel):
         if len(self.name) >= 25:
             return self.name[:25] + "..."
         return self.name
+    
+    def save(self, *args, **kwargs):
+        this = Performance.objects.filter(id=self.id).first()
+        if this:
+            if this.main_image != self.main_image:
+                this.main_image.delete(save=False)
+            if this.bottom_image != self.bottom_image:
+                this.bottom_image.delete(save=False)
+        return super().save(*args, **kwargs)
 
     @property
     def team(self):

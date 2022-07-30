@@ -53,6 +53,13 @@ class Banner(BaseModel):
         if Banner.objects.count() >= 3 and not self.id:
             raise ValidationError("Нельзя создать более 3-х банеров")
 
+    def save(self, *args, **kwargs):
+        this = Banner.objects.filter(id=self.id).first()
+        if this:
+            if this.image != self.image:
+                this.image.delete(save=False)
+        return super().save(*args, **kwargs)
+
 
 class SettingGroupManager(models.Manager):
     def get_queryset(self):
