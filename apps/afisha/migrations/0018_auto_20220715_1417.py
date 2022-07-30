@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('afisha', '0014_merge_20220713_1716'),
+        ('afisha', '0017_alter_performance_options'),
     ]
 
     operations = [
@@ -20,5 +20,15 @@ class Migration(migrations.Migration):
             model_name='reading',
             name='main_image',
             field=models.ImageField(blank=True, null=True, upload_to=apps.content_pages.utilities.path_by_app_label_and_class_name, verbose_name='Главное изображение'),
+        ),
+        migrations.AddField(
+            model_name='masterclass',
+            name='supplemental_text',
+            field=models.TextField(blank=True, help_text='Описание, расположенное под изображением', max_length=500, verbose_name='Дополнительное описание'),
+        ),
+        migrations.AddField(
+            model_name='reading',
+            name='supplemental_text',
+            field=models.TextField(blank=True, help_text='Описание, расположенное под изображением', max_length=500, verbose_name='Дополнительное описание'),
         ),
     ]
