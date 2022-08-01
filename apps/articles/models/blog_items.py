@@ -4,6 +4,7 @@ from django.db.models.constraints import UniqueConstraint
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Person, Role
+from apps.core.utils import delete_image_with_model
 
 
 class BlogPerson(BaseModel):
@@ -84,6 +85,9 @@ class BlogItem(AbstractContentPage):
             if this.image != self.image:
                 this.image.delete(save=False)
         return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        delete_image_with_model(self, BlogItem, *args, **kwargs)
 
 
 class BlogItemContent(AbstractContent):

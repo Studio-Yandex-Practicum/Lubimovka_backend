@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Image, Person
+from apps.core.utils import delete_image_with_model
 
 
 class FestivalTeamMember(BaseModel):
@@ -170,6 +171,9 @@ class Festival(BaseModel):
             if this.festival_image != self.festival_image:
                 this.festival_image.delete(save=False)
         return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        delete_image_with_model(self, Festival, *args, **kwargs)
 
     def clean(self):
         if self.end_date and self.start_date and self.end_date <= self.start_date:

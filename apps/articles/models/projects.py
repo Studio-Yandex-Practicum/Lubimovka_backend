@@ -2,6 +2,7 @@ from django.db import models
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 from apps.content_pages.utilities import path_by_app_label_and_class_name
+from apps.core.utils import delete_image_with_model
 
 
 class Project(AbstractContentPage):
@@ -34,6 +35,9 @@ class Project(AbstractContentPage):
             if this.image != self.image:
                 this.image.delete(save=False)
         return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        delete_image_with_model(self, Project, *args, **kwargs)
 
 
 class ProjectContent(AbstractContent):

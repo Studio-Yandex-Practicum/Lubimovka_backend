@@ -4,6 +4,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Setting
+from apps.core.utils import delete_image_with_model
 
 
 class Banner(BaseModel):
@@ -59,6 +60,9 @@ class Banner(BaseModel):
             if this.image != self.image:
                 this.image.delete(save=False)
         return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        delete_image_with_model(self, Banner, *args, **kwargs)
 
 
 class SettingGroupManager(models.Manager):
