@@ -11,12 +11,12 @@ PARTNERS_URL = reverse("partners")
 
 @pytest.fixture
 def in_footer_general_partner():
-    return PartnerFactory(type="general", in_footer_partner=True)
+    return PartnerFactory(is_general=True, type="festival", in_footer_partner=True)
 
 
 @pytest.fixture
 def general_partner():
-    return PartnerFactory(type="general")
+    return PartnerFactory(is_general=True, type="festival")
 
 
 @pytest.fixture()
@@ -42,7 +42,7 @@ def test_partner_list_count_in_response_matches_count_in_db(client, partners):
 
 @pytest.mark.parametrize(
     "expected_attribute",
-    ("id", "name", "type", "url", "image", "in_footer_partner"),
+    ("id", "name", "type", "description", "url", "image", "in_footer_partner"),
 )
 def test_partner_list_fields(client, general_partner, expected_attribute):
     """Check whether expected attribute found in returned object."""
@@ -69,10 +69,9 @@ def test_partner_list_in_footer_partner_filter(client, in_footer_partner_param, 
 @pytest.mark.parametrize(
     "types_param, expected_count",
     (
-        ("general", 2),
-        ("general,info", 3),
-        ("info,festival", 2),
-        ("general,info,festival", 4),
+        ("info", 1),
+        ("festival", 3),
+        ("info,festival", 4),
     ),
 )
 def test_partner_list_in_types_filter(client, types_param, expected_count, partners):
