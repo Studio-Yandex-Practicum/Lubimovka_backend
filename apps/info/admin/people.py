@@ -23,12 +23,16 @@ class PartnerAdmin(SortableAdminMixin, AdminImagePreview, admin.ModelAdmin):
     list_display = (
         "order",
         "name",
+        "description",
         "type",
         "get_partner_url",
         "image_preview_list_page",
     )
     list_display_links = ("name",)
-    list_filter = (PartnerTypeFilter,)
+    list_filter = (
+        PartnerTypeFilter,
+        "is_general",
+    )
     search_fields = ("name",)
     fieldsets = (
         (
@@ -36,6 +40,7 @@ class PartnerAdmin(SortableAdminMixin, AdminImagePreview, admin.ModelAdmin):
             {
                 "fields": (
                     "name",
+                    "description",
                     "type",
                 ),
             },

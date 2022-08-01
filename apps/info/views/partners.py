@@ -29,6 +29,7 @@ class PartnerListAPIView(APIView):
                 "type",
                 "url",
                 "image",
+                "description",
                 "in_footer_partner",
             )
 

@@ -48,17 +48,17 @@ class PartnerTypeFilter(admin.SimpleListFilter):
 
     def lookups(self, request, model_admin):
         partner_types_list = [
-            (None, _("Партнер фестиваля")),  # default lookup which is used instead of 'All' ('Все')
-            (Partner.PartnerType.GENERAL_PARTNER, _("Генеральный партнер")),
+            (None, _("Все")),
+            (Partner.PartnerType.FESTIVAL_PARTNER, _("Партнер фестиваля")),
             (Partner.PartnerType.INFO_PARTNER, _("Информационный партнер")),
         ]
         return partner_types_list
 
     def queryset(self, request, queryset):
         if self.value() is None:  # get qs for new default lookup
+            return Partner.objects.all()
+        if self.value() == Partner.PartnerType.FESTIVAL_PARTNER:
             return Partner.objects.filter(type=Partner.PartnerType.FESTIVAL_PARTNER)
-        if self.value() == Partner.PartnerType.GENERAL_PARTNER:
-            return Partner.objects.filter(type=Partner.PartnerType.GENERAL_PARTNER)
         if self.value() == Partner.PartnerType.INFO_PARTNER:
             return Partner.objects.filter(type=Partner.PartnerType.INFO_PARTNER)
 

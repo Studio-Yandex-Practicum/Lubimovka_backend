@@ -9,7 +9,6 @@ from apps.info.models import Festival
 
 class Partner(BaseModel):
     class PartnerType(models.TextChoices):
-        # GENERAL_PARTNER = "general", _("Генеральный партнер")
         FESTIVAL_PARTNER = "festival", _("Партнер фестиваля")
         INFO_PARTNER = "info", _("Информационный партнер")
 
