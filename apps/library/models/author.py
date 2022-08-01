@@ -79,7 +79,7 @@ class Author(BaseModel):
 class AuthorPlay(models.Model):
     author = models.ForeignKey(
         Author,
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         related_name="author_plays",
         verbose_name="Автор",
     )
