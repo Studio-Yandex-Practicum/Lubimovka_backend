@@ -139,6 +139,7 @@ def calculate_hash(object_id):
 
 
 def delete_image_with_model(self, model, *args, **kwargs):
+    """Remove image from media while deleting the object."""
     storage, path = self.image.storage, self.image.path
     super(model, self).delete(*args, **kwargs)
     storage.delete(path)
