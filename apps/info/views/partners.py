@@ -10,6 +10,10 @@ from apps.info.models import Partner
 
 class PartnerListAPIView(APIView):
     class PartnerListFilterSerializer(serializers.Serializer):
+        is_general = serializers.BooleanField(
+            required=False,
+            help_text="Генеральный партнер",
+        )
         in_footer_partner = serializers.BooleanField(
             required=False,
             help_text="Партнер отображается в футере",
@@ -27,6 +31,7 @@ class PartnerListAPIView(APIView):
                 "id",
                 "name",
                 "type",
+                "is_general",
                 "url",
                 "image",
                 "description",

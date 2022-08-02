@@ -21,6 +21,7 @@ class PartnerFilterSet(django_filters.FilterSet):
         model = Partner
         fields = (
             "types",
+            "is_general",
             "in_footer_partner",
         )
 
