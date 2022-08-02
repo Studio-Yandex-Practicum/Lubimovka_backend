@@ -7,7 +7,7 @@ from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.utils import slugify
+from apps.core.utils import delete_image_with_model, slugify
 from apps.core.validators import email_validator, name_validator, nickname_validator
 
 NEWS_HELP_TEXT = (
@@ -289,6 +289,16 @@ class Setting(BaseModel):
             raise ValidationError(
                 {"image": "Изображение должно присутствовать на странице. Оставьте или замените на другое."}
             )
+
+    def save(self, *args, **kwargs):
+        this = Setting.objects.filter(id=self.id).first()
+        if this:
+            if this.image != self.image:
+                this.image.delete(save=False)
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        delete_image_with_model(self, Setting, *args, **kwargs)
 
     @property
     def value(self):
