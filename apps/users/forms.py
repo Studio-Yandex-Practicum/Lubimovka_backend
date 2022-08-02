@@ -6,6 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.contrib.auth.models import Group, Permission
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.utils.crypto import get_random_string
 
 User = get_user_model()
@@ -20,6 +21,14 @@ class UsernameField(forms.CharField):
 class UserAdminForm(UserChangeForm):
     username = UsernameField(label="Имя пользователя", required=False)
     password = forms.CharField(widget=forms.HiddenInput())
+    user_permissions = forms.ModelMultipleChoiceField(
+        Permission.objects.exclude(
+            Q(content_type__app_label="feedback", codename__icontains="add_question")
+            | Q(content_type__app_label="feedback", codename__icontains="add_participationapplicationfestival")
+        ),
+        widget=FilteredSelectMultiple("права", False),
+        label="Права",
+    )
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -90,7 +99,10 @@ class GroupAdminForm(forms.ModelForm):
         label="Пользователи",
     )
     permissions = forms.ModelMultipleChoiceField(
-        Permission.objects.exclude(content_type__app_label="feedback", codename__icontains="add"),
+        Permission.objects.exclude(
+            Q(content_type__app_label="feedback", codename__icontains="add_question")
+            | Q(content_type__app_label="feedback", codename__icontains="add_participationapplicationfestival")
+        ),
         widget=FilteredSelectMultiple("права", False),
         label="Права",
     )
