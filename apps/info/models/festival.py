@@ -176,6 +176,15 @@ class Festival(BaseModel):
         delete_image_with_model(self, Festival, *args, **kwargs)
 
     def clean(self):
+        future_year = timezone.now().year + 1
+        if self.start_date.year < 1990 or self.start_date.year > future_year:
+            raise ValidationError(
+                {"start_date": _(f"Год начала фестиваля должен быть в промежутке 1990 - {future_year}.")}
+            )
+        if self.end_date.year < 1990 or self.end_date.year > future_year:
+            raise ValidationError(
+                {"end_date": _(f"Год окончания фестиваля должен быть в промежутке 1990 - {future_year}.")}
+            )
         if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError({"end_date": _("Дата окончания фестиваля должна быть позже даты его начала.")})
         return super().clean()
