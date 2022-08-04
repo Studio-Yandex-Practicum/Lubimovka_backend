@@ -67,7 +67,7 @@ class OrderedPlayInline(OrderedInline):
 
 
 class ExtendedPersonModelForm(forms.ModelForm):
-    roles = forms.MultipleChoiceField(choices=choices_for_blog_person)
+    roles = forms.MultipleChoiceField(choices=choices_for_blog_person())
 
     def get_initial_for_field(self, field, field_name):
         if self.instance.pk and field is self.fields["roles"]:
