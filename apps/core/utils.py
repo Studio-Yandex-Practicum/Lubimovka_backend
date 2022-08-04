@@ -143,3 +143,27 @@ def delete_image_with_model(self, model, *args, **kwargs):
     storage, path = self.image.storage, self.image.path
     super(model, self).delete(*args, **kwargs)
     storage.delete(path)
+
+
+def check_status_plays(obj, name):
+    """Провверка статуса пьесы: опубликована или нет."""
+    articles = {"blogitem", "newsitem", "project"}
+    if name in articles:
+        unpublished_play = [
+            element
+            for element in obj.contents.filter(content_type__model="playsblock")
+            if element.item.items.filter(published=False).exists()
+        ]
+        if unpublished_play:
+            return False
+    if name == "performance" and not obj.play.published:
+        return False
+    return True
+
+
+def add_message_error(name):
+    """Добавляет сообщение об ошибке."""
+    articles = {"blogitem": "блога", "newsitem": "новости", "project": "проекта"}
+    if name in articles:
+        return f"Статус {articles[name]} не обновлён. В блоке/элемент (блок пьес) пьесы должна быть опубликованы!"
+    return "Статус спектакля не обновлён. Пьеса должна быть опубликована!"
