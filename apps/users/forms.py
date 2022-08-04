@@ -21,6 +21,8 @@ class UsernameField(forms.CharField):
 class UserAdminForm(UserChangeForm):
     username = UsernameField(label="Имя пользователя", required=False)
     password = forms.CharField(widget=forms.HiddenInput())
+    is_staff = forms.CharField(widget=forms.HiddenInput())
+    is_superuser = forms.CharField(widget=forms.HiddenInput())
     user_permissions = forms.ModelMultipleChoiceField(
         Permission.objects.exclude(
             Q(content_type__app_label="feedback", codename__icontains="add_question")
@@ -28,6 +30,7 @@ class UserAdminForm(UserChangeForm):
         ),
         widget=FilteredSelectMultiple("права", False),
         label="Права",
+        required=False,
     )
 
     def save(self, commit=True):
