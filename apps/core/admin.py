@@ -23,7 +23,7 @@ class RoleAdmin(admin.ModelAdmin):
         "name",
         "slug",
     )
-    search_fields = ("role", "name")
+    search_fields = ("role",)
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ("types",)
     formfield_overrides = {
