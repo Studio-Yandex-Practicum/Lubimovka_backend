@@ -62,8 +62,6 @@ class FestivalTeamMember(BaseModel):
             raise ValidationError("Необходимо указать человека для создания команды фестиваля")
         if not self.person.email:
             raise ValidationError("Для члена команды необходимо указать email")
-        if not self.person.city:
-            raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
         if not self.is_pr_director:
