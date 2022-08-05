@@ -74,7 +74,6 @@ class Person(BaseModel):
         max_length=50,
         verbose_name="Город проживания",
         blank=True,
-        help_text="Обязательно указать для: членов команды, волонтёров и авторов.",
     )
     email = models.EmailField(
         max_length=200,

@@ -1,3 +1,6 @@
+from apps.core.models import Role
+
+
 def content_delete_generic_related_items(content_module, super_delete_result) -> tuple[int, dict[str, int]]:
     """Take deleted `ContentModule` and delete generic related item. Return updated delete() result.
 
@@ -12,3 +15,7 @@ def content_delete_generic_related_items(content_module, super_delete_result) ->
         dict_deleted.update(dict_generic_deleted)
 
     return count_deleted, dict_deleted
+
+
+def choices_for_blog_person():
+    return ((role.id, role.name) for role in Role.objects.filter(types__role_type="blog_persons_role"))

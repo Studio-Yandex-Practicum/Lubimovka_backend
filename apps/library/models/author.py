@@ -47,11 +47,6 @@ class Author(BaseModel):
         self.full_clean()
         return super().save(*args, **kwargs)
 
-    def clean(self):
-        if self._has_person_before_saving():
-            if not self.person.city:
-                raise ValidationError("Для автора необходимо указать город")
-
     def _has_person_before_saving(self):
         return self.person_id is not None
 
