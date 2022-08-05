@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core.mail import EmailMessage
 
 from apps.core.models import Setting
@@ -15,12 +16,12 @@ def send_question(instance):
         "email_send_from",
         "email_send_to",
     )
-    settings = Setting.get_settings(settings_keys=settings_keys)
+    email_settings = Setting.get_settings(settings_keys=settings_keys)
 
     message = EmailMessage(
-        subject=settings.get("email_subject_for_question"),
-        from_email=settings.get("email_send_from"),
-        to=(settings.get("email_send_to"),),
+        subject=email_settings.get("email_subject_for_question"),
+        from_email=email_settings.get("email_send_from"),
+        to=(email_settings.get("email_send_to"),),
     )
 
     message.template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
