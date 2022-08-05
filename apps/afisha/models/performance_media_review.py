@@ -26,7 +26,7 @@ class PerformanceMediaReview(BaseModel):
     )
     image = models.ImageField(
         upload_to=path_by_app_label_and_class_name,
-        verbose_name="Изображение",
+        verbose_name="Логотип медиа ресурса",
     )
     performance = models.ForeignKey(
         Performance,

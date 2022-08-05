@@ -48,6 +48,10 @@ class UserAdmin(DjangoUserAdmin):
         "username",
         "full_name",
     )
+    readonly_fields = (
+        "date_joined",
+        "last_login",
+    )
 
     @admin.display(description="Дата последней авторизации")
     def get_last_login(self, obj):
@@ -56,16 +60,6 @@ class UserAdmin(DjangoUserAdmin):
     @admin.display(description="Имя и фамилия")
     def full_name(self, obj):
         return f"{obj.first_name} {obj.last_name}"
-
-    def get_readonly_fields(self, request, obj=None):
-        """Only superusers can edit `is_superuser` field."""
-        readonly_fields = (
-            "date_joined",
-            "last_login",
-        )
-        if not request.user.is_superuser:
-            readonly_fields += ("is_superuser",)
-        return readonly_fields
 
     @admin.display(description="Роль")
     def role(self, obj):
