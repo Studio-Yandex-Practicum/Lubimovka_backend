@@ -4,8 +4,8 @@ from django.utils.html import format_html
 
 from apps.core.constants import STATUS_INFO, Status
 from apps.core.utils import (
-    add_message_error,
-    check_status_plays,
+    add_error_message,
+    check_plays_status,
     get_object,
     get_user_change_perms_for_status,
     get_user_perms_level,
@@ -68,8 +68,8 @@ class StatusButtonMixin:
             for status in STATUS_INFO:
                 if status in request.POST:
                     model_name = obj._meta.model_name
-                    if status == Status.PUBLISHED.value and not check_status_plays(obj, model_name):
-                        self.message_user(request, add_message_error(model_name), messages.ERROR)
+                    if status == Status.PUBLISHED.value and not check_plays_status(obj, model_name):
+                        self.message_user(request, add_error_message(model_name), messages.ERROR)
                         return HttpResponseRedirect(".")
                     obj.status = status
                     obj.save()

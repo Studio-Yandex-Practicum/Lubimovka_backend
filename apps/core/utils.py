@@ -145,8 +145,8 @@ def delete_image_with_model(self, model, *args, **kwargs):
     storage.delete(path)
 
 
-def check_status_plays(obj, name):
-    """Провверка статуса пьесы: опубликована или нет."""
+def check_plays_status(obj, name):
+    """Проверка статуса пьесы: опубликована или нет."""
     articles = {"blogitem", "newsitem", "project"}
     if name in articles:
         unpublished_play = [
@@ -161,9 +161,9 @@ def check_status_plays(obj, name):
     return True
 
 
-def add_message_error(name):
+def add_error_message(name):
     """Добавляет сообщение об ошибке."""
     articles = {"blogitem": "блога", "newsitem": "новости", "project": "проекта"}
     if name in articles:
-        return f"Статус {articles[name]} не обновлён. В блоке/элемент (блок пьес) пьесы должна быть опубликованы!"
+        return f"Статус {articles[name]} не обновлён. В блоке пьес все пьесы должна быть опубликованы!"
     return "Статус спектакля не обновлён. Пьеса должна быть опубликована!"
