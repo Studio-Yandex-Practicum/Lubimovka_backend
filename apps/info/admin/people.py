@@ -29,10 +29,7 @@ class PartnerAdmin(SortableAdminMixin, AdminImagePreview, admin.ModelAdmin):
         "image_preview_list_page",
     )
     list_display_links = ("name",)
-    list_filter = (
-        PartnerTypeFilter,
-        "is_general",
-    )
+    list_filter = (PartnerTypeFilter,)
     search_fields = ("name",)
     fieldsets = (
         (
