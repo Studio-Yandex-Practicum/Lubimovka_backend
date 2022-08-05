@@ -57,7 +57,7 @@ class Performance(BaseModel):
         verbose_name="Краткое описание",
         blank=True,
     )
-    supplemental_text = models.TextField(
+    intro = models.TextField(
         max_length=500,
         verbose_name="Дополнительное описание",
         blank=True,
