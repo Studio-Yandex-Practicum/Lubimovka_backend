@@ -122,6 +122,7 @@ class FestivalFactory(factory.django.DjangoModelFactory):
     end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2022, step=1)
+    selectors_page_link = factory.Faker("url")
 
     @factory.post_generation
     def images(self, create, extracted, **kwargs):
