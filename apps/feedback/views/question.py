@@ -26,12 +26,17 @@ class QuestionCreateAPIView(APIView):
         },
     )
     def post(self, request):
+        settings_keys = (
+            "email_send_from",
+            "email_to_send_questions",
+        )
+        email_settings = Setting.get_settings(settings_keys=settings_keys)
         serializer = self.QuestionSerializer(data=request.data)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         instance = serializer.save()
-        from_email = Setting.get_setting("email_send_from")
-        to_emails = (Setting.get_setting("email_to_send_questions"),)
+        from_email = email_settings.get("email_send_from")
+        to_emails = (email_settings.get("email_to_send_questions"),)
         template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
         context = {
             "question": instance.question,

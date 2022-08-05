@@ -10,6 +10,13 @@ logger = logging.getLogger("django")
 
 
 class ParticipationApplicationExport:
+    def __init__(self):
+        settings_keys = (
+            "email_send_from",
+            "email_to_send_participations",
+        )
+        self.settings = Setting.get_settings(settings_keys=settings_keys)
+
     def yandex_disk_export(self, instance):
         download_link_in_yandex_disk = services.yandex_disk_export(instance)
         if download_link_in_yandex_disk:
@@ -27,8 +34,8 @@ class ParticipationApplicationExport:
             instance.save()
 
     def mail_send_export(self, instance, file_link):
-        from_email = Setting.get_setting("email_send_from")
-        to_emails = (Setting.get_setting("email_to_send_participations"),)
+        from_email = self.settings.get("email_send_from")
+        to_emails = (self.settings.get("email_to_send_participations"),)
         template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
         context = {
             "year": instance.year,
@@ -47,7 +54,7 @@ class ParticipationApplicationExport:
             instance.save()
 
     def export_application(self, instance, file_link):
-        """Функция объндиняющая экспорт в диск, таблицу и отправку на почту."""
+        """Функция объединяющая экспорт на диск, в таблицу и отправку на почту."""
         yandex_disk_link = self.yandex_disk_export(instance)
         if yandex_disk_link is not None:
             file_link = yandex_disk_link
