@@ -47,6 +47,7 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
 
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
+    form = PlayInlineForm
     model = AuthorPlay
     extra = 0
     verbose_name = "Другая пьеса"
