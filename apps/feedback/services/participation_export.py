@@ -10,13 +10,6 @@ logger = logging.getLogger("django")
 
 
 class ParticipationApplicationExport:
-    def __init__(self):
-        settings_keys = (
-            "email_send_from",
-            "email_to_send_participations",
-        )
-        self.email_settings = Setting.get_settings(settings_keys=settings_keys)
-
     def yandex_disk_export(self, instance):
         download_link_in_yandex_disk = services.yandex_disk_export(instance)
         if download_link_in_yandex_disk:
@@ -33,9 +26,17 @@ class ParticipationApplicationExport:
             instance.exported_to_google = True
             instance.save()
 
+    def get_email_settings(self):
+        settings_keys = (
+            "email_send_from",
+            "email_to_send_participations",
+        )
+        return Setting.get_settings(settings_keys=settings_keys)
+
     def mail_send_export(self, instance, file_link):
-        from_email = self.email_settings.get("email_send_from")
-        to_emails = (self.email_settings.get("email_to_send_participations"),)
+        email_settings = self.get_email_settings(self)
+        from_email = email_settings.get("email_send_from")
+        to_emails = (email_settings.get("email_to_send_participations"),)
         template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
         context = {
             "year": instance.year,
