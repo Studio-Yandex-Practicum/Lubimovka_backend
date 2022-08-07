@@ -121,6 +121,11 @@ class Festival(BaseModel):
         default=1,
         verbose_name="Количество отборщиков пьес",
     )
+    selectors_page_link = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на новость об отборщиках",
+    )
     volunteers_count = models.PositiveSmallIntegerField(
         default=1,
         verbose_name="Количество волонтёров фестиваля",
