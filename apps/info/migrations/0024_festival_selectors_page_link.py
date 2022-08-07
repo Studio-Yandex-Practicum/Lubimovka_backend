@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='festival',
             name='selectors_page_link',
-            field=models.URLField(blank=True, verbose_name='Ссылка на новость об отборщиках'),
+            field=models.URLField(blank=True, null=True, verbose_name='Ссылка на новость об отборщиках'),
         ),
     ]
