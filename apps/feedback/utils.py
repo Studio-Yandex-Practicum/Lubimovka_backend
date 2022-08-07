@@ -11,10 +11,17 @@ def send_question(instance):
     For more information please read the documentation:
     https://anymail.readthedocs.io/en/stable/esps/mailjet//
     """
+    settings_keys = (
+        "email_subject_for_question",
+        "email_send_from",
+        "email_send_to",
+    )
+    email_settings = Setting.get_settings(settings_keys=settings_keys)
+
     message = EmailMessage(
-        subject=Setting.get_setting("email_subject_for_question"),
-        from_email=Setting.get_setting("email_send_from"),
-        to=(Setting.get_setting("email_send_to"),),
+        subject=email_settings.get("email_subject_for_question"),
+        from_email=email_settings.get("email_send_from"),
+        to=(email_settings.get("email_send_to"),),
     )
 
     message.template_id = settings.MAILJET_TEMPLATE_ID_QUESTION
