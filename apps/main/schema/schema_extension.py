@@ -51,7 +51,6 @@ MAIN_SCHEMA_SUCCESS_MESSAGE = {
                 "date_time": "2022-01-16T14:39:25.453Z",
                 "paid": True,
                 "url": "string",
-                "place": "string",
             }
         ],
     },

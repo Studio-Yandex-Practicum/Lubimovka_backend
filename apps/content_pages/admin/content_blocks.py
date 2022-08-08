@@ -1,7 +1,7 @@
 from adminsortable2.admin import SortableInlineAdminMixin
+from django import forms
 from django.contrib import admin
 
-from apps.afisha.models import Event
 from apps.content_pages.models import (
     ContentPersonRole,
     EventsBlock,
@@ -15,6 +15,7 @@ from apps.content_pages.models import (
     PlaysBlock,
     VideosBlock,
 )
+from apps.content_pages.services import choices_for_blog_person
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 from apps.core.models import Role
 from apps.library.models import Play
@@ -40,10 +41,6 @@ class OrderedEventInline(OrderedInline):
     model = OrderedEvent
     max_num = 3
 
-    def formfield_for_foreignkey(self, db_field, request, **kwargs):
-        kwargs["queryset"] = Event.objects.filter(common_event__performance__isnull=False)
-        return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
 
 class OrderedImageInline(AdminImagePreview, OrderedInline):
     readonly_fields = ("image_preview_change_page",)
@@ -64,10 +61,23 @@ class OrderedPlayInline(OrderedInline):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class ExtendedPersonModelForm(forms.ModelForm):
+    roles = forms.MultipleChoiceField(choices=choices_for_blog_person)
+
+    def get_initial_for_field(self, field, field_name):
+        if self.instance.pk and field is self.fields["roles"]:
+            return list(self.instance.roles.values_list("pk", flat=True))
+        return super().get_initial_for_field(field, field_name)
+
+    class Meta:
+        model = ExtendedPerson
+        fields = "__all__"
+
+
 class ExtendedPersonInline(OrderedInline):
     model = ExtendedPerson
+    form = ExtendedPersonModelForm
     show_change_link = True
-    readonly_fields = ("person_roles",)
     autocomplete_fields = ("person",)
 
 

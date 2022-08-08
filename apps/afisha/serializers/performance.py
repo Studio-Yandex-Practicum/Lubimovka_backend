@@ -10,7 +10,7 @@ class LocalEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ("id", "date_time", "paid", "url", "place", "pinned_on_main")
+        fields = ("id", "date_time", "paid", "url", "pinned_on_main")
 
 
 class BlockImagesSerializer(serializers.ModelSerializer):
@@ -63,6 +63,17 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "image",
             "project_title",
         )
+
+
+class EventSerializer(serializers.Serializer):
+    """Event content serializer for afisha page."""
+
+    id = serializers.IntegerField()
+    name = serializers.CharField(max_length=200)
+    description = serializers.CharField(max_length=500)
+    team = RoleSerializer(source="event_team", many=True)
+    image = serializers.ImageField(source="main_image", allow_null=True, required=False)
+    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
 
 class PerformanceMediaReviewSerializer(serializers.ModelSerializer):

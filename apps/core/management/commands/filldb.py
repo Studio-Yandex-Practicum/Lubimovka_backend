@@ -8,7 +8,7 @@ from apps.afisha.factories import MasterClassFactory, PerformanceFactory, Readin
 from apps.afisha.factories.events import EventFactory
 from apps.core.factories import PersonFactory
 from apps.core.models import Setting
-from apps.feedback.factories import ParticipationApplicationFestivalFactory
+from apps.feedback.factories import ParticipationApplicationFestivalFactory, QuestionFactory
 from apps.info.factories import (
     FestivalFactory,
     FestivalTeamFactory,
@@ -204,10 +204,13 @@ class Command(FillDbLogsMixin, BaseCommand):
             self.log_success_creation(events, "событий")
 
             # Other factories
-            self.log_info("Создаю баннеры и заявки на участие...")
+            self.log_info("Создаю баннеры, вопросы и заявки на участие...")
 
             participations = ParticipationApplicationFestivalFactory.create_batch(5)
             self.log_success_creation(participations, "заявок на участие в фестивале")
+
+            questions = QuestionFactory.create_batch(5)
+            self.log_success_creation(questions, "вопросов")
 
             main_banners = MainBannerFactory.create_batch(3, add_real_image=True)
             self.log_success_creation(main_banners, "баннера на главную страницу (с картинкой)")
@@ -222,7 +225,7 @@ class Command(FillDbLogsMixin, BaseCommand):
             used_links = Play.objects.filter(other_play=False).values_list("url_reading", flat=True)
             return (link for link in YOUTUBE_VIDEO_LINKS if link not in used_links)
 
-        links = _get_video_links()
+        links = list(_get_video_links())
         for link in links:
             url_reading = random.choice([None, link])
             PlayFactory.create(url_reading=url_reading)

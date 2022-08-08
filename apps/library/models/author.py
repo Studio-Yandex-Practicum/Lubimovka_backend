@@ -47,11 +47,6 @@ class Author(BaseModel):
         self.full_clean()
         return super().save(*args, **kwargs)
 
-    def clean(self):
-        if self._has_person_before_saving():
-            if not self.person.city:
-                raise ValidationError("Для автора необходимо указать город")
-
     def _has_person_before_saving(self):
         return self.person_id is not None
 
@@ -79,7 +74,7 @@ class Author(BaseModel):
 class AuthorPlay(models.Model):
     author = models.ForeignKey(
         Author,
-        on_delete=models.CASCADE,
+        on_delete=models.RESTRICT,
         related_name="author_plays",
         verbose_name="Автор",
     )

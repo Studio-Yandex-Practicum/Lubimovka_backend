@@ -4,8 +4,9 @@ from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.core.exceptions import ValidationError
+from django.db.models import Q
 from django.utils.crypto import get_random_string
 
 User = get_user_model()
@@ -20,6 +21,17 @@ class UsernameField(forms.CharField):
 class UserAdminForm(UserChangeForm):
     username = UsernameField(label="Имя пользователя", required=False)
     password = forms.CharField(widget=forms.HiddenInput())
+    is_staff = forms.CharField(widget=forms.HiddenInput())
+    is_superuser = forms.CharField(widget=forms.HiddenInput())
+    user_permissions = forms.ModelMultipleChoiceField(
+        Permission.objects.exclude(
+            Q(content_type__app_label="feedback", codename__icontains="add_question")
+            | Q(content_type__app_label="feedback", codename__icontains="add_participationapplicationfestival")
+        ),
+        widget=FilteredSelectMultiple("права", False),
+        label="Права",
+        required=False,
+    )
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -86,7 +98,16 @@ class GroupAdminForm(forms.ModelForm):
     users = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(),
         required=False,
-        widget=FilteredSelectMultiple("users", False),
+        widget=FilteredSelectMultiple("пользователи", False),
+        label="Пользователи",
+    )
+    permissions = forms.ModelMultipleChoiceField(
+        Permission.objects.exclude(
+            Q(content_type__app_label="feedback", codename__icontains="add_question")
+            | Q(content_type__app_label="feedback", codename__icontains="add_participationapplicationfestival")
+        ),
+        widget=FilteredSelectMultiple("права", False),
+        label="Права",
     )
 
     def __init__(self, *args, **kwargs):

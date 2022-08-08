@@ -38,8 +38,7 @@ jQuery(document).ready(function ($) {
     jQuery(function($) {
         $('#id_person').on('select2:select', function() {
             var fullName = $('#id_person').select2('data')[0].text;
-            var lastName = fullName.replace(/ .*/,'');
-            $('#id_slug').val(URLify(lastName));
+            $('#id_slug').val(URLify(fullName));
         });
     });
 });
