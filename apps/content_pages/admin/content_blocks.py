@@ -85,6 +85,9 @@ class ExtendedPersonInline(OrderedInline):
     show_change_link = True
     autocomplete_fields = ("person",)
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("roles")
+
 
 @admin.register(ExtendedPerson)
 class ExtendedPersonAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
@@ -118,6 +121,11 @@ class EventsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 @admin.register(PersonsBlock)
 class PersonsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
     inlines = (ExtendedPersonInline,)
+
+    def get_inline_instances(self, request, obj=None):
+        #  Used just as a hook to place function call
+        choices_for_blog_person(update=True)
+        return super().get_inline_instances(request, obj)
 
 
 @admin.register(PlaysBlock)
