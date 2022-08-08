@@ -17,7 +17,7 @@ def set_slug(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('afisha', '0014_merge_20220713_1716'),
+        ('afisha', '0020_auto_20220806_0111'),
     ]
 
     operations = [

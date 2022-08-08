@@ -5,7 +5,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('afisha', '0015_performance_slug'),
+        ('afisha', '0021_performance_slug'),
     ]
 
     operations = [
