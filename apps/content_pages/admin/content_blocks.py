@@ -71,7 +71,7 @@ class ExtendedPersonModelForm(forms.ModelForm):
 
     def get_initial_for_field(self, field, field_name):
         if self.instance.pk and field is self.fields["roles"]:
-            return list(self.instance.roles.values_list("pk", flat=True))
+            return [role.id for role in self.instance.roles.all()]
         return super().get_initial_for_field(field, field_name)
 
     class Meta:
@@ -86,7 +86,7 @@ class ExtendedPersonInline(OrderedInline):
     autocomplete_fields = ("person",)
 
     def get_queryset(self, request):
-        return super().get_queryset(request).prefetch_related("roles")
+        return super().get_queryset(request).prefetch_related("roles").select_related("person")
 
 
 @admin.register(ExtendedPerson)
