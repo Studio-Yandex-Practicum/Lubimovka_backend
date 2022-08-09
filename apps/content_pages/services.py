@@ -17,5 +17,8 @@ def content_delete_generic_related_items(content_module, super_delete_result) ->
     return count_deleted, dict_deleted
 
 
-def choices_for_blog_person():
-    return ((role.id, role.name) for role in Role.objects.filter(types__role_type="blog_persons_role"))
+def choices_for_blog_person(update=False, choices=[]):
+    if update:
+        choices.clear()
+        choices.extend((role.id, role.name) for role in Role.objects.filter(types__role_type="blog_persons_role"))
+    return choices
