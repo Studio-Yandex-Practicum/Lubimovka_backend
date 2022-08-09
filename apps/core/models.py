@@ -1,3 +1,4 @@
+import os
 from typing import Any, Union
 
 from django.contrib import admin
@@ -294,6 +295,9 @@ class Setting(BaseModel):
         if this:
             if this.image != self.image:
                 this.image.delete(save=False)
+        if self.settings_key == "background_color" or self.settings_key == "accent_color":
+            if self.text:
+                self._generate_css()
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -339,3 +343,22 @@ class Setting(BaseModel):
         for key, value in settings.items():
             count = Setting.objects.filter(settings_key=key).update(boolean=value)
             assert count == 1, f"Количество записей с ключом '{key}' оказалось равно {count} (ожидалось 1)"
+
+    def _generate_css(self):
+        """
+        Generate CSS file with colors.
+
+        :param main_color:
+        :param secondary_color:
+        """
+        main_color = self.get_setting("background_color")
+        secondary_color = self.get_setting("accent_color")
+        if self.settings_key == "background_color":
+            main_color = self.text
+        elif self.settings_key == "accent_color":
+            secondary_color = self.text
+        filename = "apps/core/static/site_colors.css"
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
+        with open(filename, "w") as f:
+            css_file_contents = f":root {{\n--background-color: {main_color};\n--accent-color: {secondary_color};\n}}\n"
+            f.write(css_file_contents)
