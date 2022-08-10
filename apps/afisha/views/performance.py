@@ -30,6 +30,13 @@ class MultipleFieldLookupMixin:
         return obj
 
 
+@extend_schema_view(
+    retrieve=extend_schema(
+        parameters=[
+            OpenApiParameter("identifier", type=str, location="path"),
+        ],
+    ),
+)
 class PerformanceViewSet(MultipleFieldLookupMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """Returns published Performance items."""
 
