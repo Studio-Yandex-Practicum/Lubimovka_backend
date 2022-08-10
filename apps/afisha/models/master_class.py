@@ -32,7 +32,7 @@ class MasterClass(BaseModel):
         null=True,
         verbose_name="Главное изображение",
     )
-    supplemental_text = models.TextField(
+    intro = models.TextField(
         max_length=500,
         verbose_name="Дополнительное описание",
         blank=True,

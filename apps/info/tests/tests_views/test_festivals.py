@@ -21,6 +21,7 @@ class TestFestivalAPIViews:
             "plays_count",
             "selected_plays_count",
             "selectors_count",
+            "selectors_page_link",
             "volunteers_count",
             "events_count",
             "cities_count",
