@@ -17,12 +17,12 @@ router.register(
     basename="performance",
 )
 router.register(
-    r"performances/(?P<performance_slug>\S+)/media-reviews",
+    r"performances/(?P<identifier>\S+)/media-reviews",
     PerformanceMediaReviewViewSet,
     basename="performance-media-reviews",
 )
 router.register(
-    r"performances/(?P<performance_slug>\S+)/reviews",
+    r"performances/(?P<identifier>\S+)/reviews",
     PerformanceReviewViewSet,
     basename="performance-reviews",
 )
@@ -30,7 +30,7 @@ router.register(
 performance_item_urls = [
     path("", include(router.urls)),
     path(
-        route="performances/<str:slug>/preview/",
+        route="performances/<str:identifier>/preview/",
         view=PerformancePreviewDetailAPI.as_view(),
         name="performance-detail-preview",
     ),

@@ -9,21 +9,43 @@ from apps.afisha.serializers import PerformanceMediaReviewSerializer, Performanc
 from apps.articles import selectors
 
 
-class PerformanceViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+def get_performance_obj(queryset, identifier):
+    list_of_ids = Performance.objects.all().values_list("id", flat=True)
+    if identifier.isdigit() and int(identifier) in list_of_ids:
+        obj = get_object_or_404(queryset, id=int(identifier))
+    else:
+        obj = get_object_or_404(queryset, slug=identifier)
+    return obj
+
+
+class MultipleFieldLookupMixin:
+    """Needs to serve both routes - performances/{id} and performances/{slug}."""
+
+    def get_object(self):
+        queryset = self.get_queryset()
+        queryset = self.filter_queryset(queryset)
+        identifier = self.kwargs["identifier"]
+        obj = get_performance_obj(queryset, identifier)
+        self.check_object_permissions(self.request, obj)
+        return obj
+
+
+class PerformanceViewSet(MultipleFieldLookupMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
     """Returns published Performance items."""
 
     queryset = Performance.objects.published()
     serializer_class = PerformanceSerializer
-    lookup_field = "slug"
+    lookup_field = "identifier"
 
 
 class PerformancePreviewDetailAPI(APIView):
     """Returns preview page `Performance`."""
 
     @extend_schema(responses=PerformanceSerializer)
-    def get(self, request, slug):
+    def get(self, request, identifier):
         hash_sum = request.GET.get("hash", None)
-        obj = get_object_or_404(Performance, slug=slug)
+        queryset = Performance.objects.all()
+        obj = get_performance_obj(queryset, identifier)
         performance_item_detail = selectors.preview_item_detail_get(Performance, obj.id, hash_sum)
         context = {"request": request}
         serializer = PerformanceSerializer(performance_item_detail, context=context)
@@ -32,11 +54,11 @@ class PerformancePreviewDetailAPI(APIView):
 
 @extend_schema_view(
     list=extend_schema(
-        parameters=[OpenApiParameter("performance_slug", type=str, location="path")],
+        parameters=[OpenApiParameter("identifier", type=str, location="path")],
     ),
     retrieve=extend_schema(
         parameters=[
-            OpenApiParameter("performance_slug", type=str, location="path"),
+            OpenApiParameter("identifier", type=str, location="path"),
             OpenApiParameter("id", type=int, location="path"),
         ],
     ),
@@ -48,20 +70,17 @@ class PerformanceReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelMixin,
     serializer_class = PerformanceReviewSerializer
 
     def get_queryset(self):
-        performance = get_object_or_404(
-            Performance,
-            slug=self.kwargs.get("performance_slug"),
-        )
+        performance = get_performance_obj(Performance.objects.published(), self.kwargs.get("identifier"))
         return performance.reviews.all()
 
 
 @extend_schema_view(
     list=extend_schema(
-        parameters=[OpenApiParameter("performance_slug", type=str, location="path")],
+        parameters=[OpenApiParameter("identifier", type=str, location="path")],
     ),
     retrieve=extend_schema(
         parameters=[
-            OpenApiParameter("performance_slug", type=str, location="path"),
+            OpenApiParameter("identifier", type=str, location="path"),
             OpenApiParameter("id", type=int, location="path"),
         ],
     ),
@@ -73,8 +92,5 @@ class PerformanceMediaReviewViewSet(mixins.RetrieveModelMixin, mixins.ListModelM
     serializer_class = PerformanceMediaReviewSerializer
 
     def get_queryset(self):
-        performance = get_object_or_404(
-            Performance,
-            slug=self.kwargs.get("performance_slug"),
-        )
+        performance = get_performance_obj(Performance.objects.published(), self.kwargs.get("identifier"))
         return performance.media_reviews.all()
