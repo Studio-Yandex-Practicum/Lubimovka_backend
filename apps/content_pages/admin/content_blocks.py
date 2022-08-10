@@ -66,7 +66,7 @@ class ExtendedPersonModelForm(forms.ModelForm):
 
     def get_initial_for_field(self, field, field_name):
         if self.instance.pk and field is self.fields["roles"]:
-            return list(self.instance.roles.values_list("pk", flat=True))
+            return [role.id for role in self.instance.roles.all()]
         return super().get_initial_for_field(field, field_name)
 
     class Meta:
@@ -79,6 +79,9 @@ class ExtendedPersonInline(OrderedInline):
     form = ExtendedPersonModelForm
     show_change_link = True
     autocomplete_fields = ("person",)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("roles").select_related("person")
 
 
 @admin.register(ExtendedPerson)
@@ -113,6 +116,11 @@ class EventsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 @admin.register(PersonsBlock)
 class PersonsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
     inlines = (ExtendedPersonInline,)
+
+    def get_inline_instances(self, request, obj=None):
+        #  Used just as a hook to place function call
+        choices_for_blog_person(update=True)
+        return super().get_inline_instances(request, obj)
 
 
 @admin.register(PlaysBlock)
