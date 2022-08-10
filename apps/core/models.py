@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from typing import Any, Union
 
 from django.contrib import admin
@@ -292,12 +292,11 @@ class Setting(BaseModel):
 
     def save(self, *args, **kwargs):
         this = Setting.objects.filter(id=self.id).first()
-        if this:
-            if this.image != self.image:
-                this.image.delete(save=False)
-        if self.settings_key == "background_color" or self.settings_key == "accent_color":
-            if self.text:
-                self._generate_css()
+        colors_settings_keys = ("background_color", "accent_color")
+        if this and (this.image != self.image):
+            this.image.delete(save=False)
+        if self.settings_key in colors_settings_keys and self.text:
+            self._generate_css()
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -345,20 +344,14 @@ class Setting(BaseModel):
             assert count == 1, f"Количество записей с ключом '{key}' оказалось равно {count} (ожидалось 1)"
 
     def _generate_css(self):
-        """
-        Generate CSS file with colors.
-
-        :param main_color:
-        :param secondary_color:
-        """
-        main_color = self.get_setting("background_color")
-        secondary_color = self.get_setting("accent_color")
-        if self.settings_key == "background_color":
-            main_color = self.text
-        elif self.settings_key == "accent_color":
-            secondary_color = self.text
-        filename = "apps/core/static/site_colors.css"
-        os.makedirs(os.path.dirname(filename), exist_ok=True)
-        with open(filename, "w") as f:
-            css_file_contents = f":root {{\n--background-color: {main_color};\n--accent-color: {secondary_color};\n}}\n"
+        """Generate CSS file with colors."""
+        Setting.objects.filter(settings_key=self.settings_key).update(text=self.text)
+        colors = self.get_settings(("background_color", "accent_color"))
+        filename = Path("apps/core/static/site_colors.css")
+        with open(filename, "w+") as f:
+            # fmt: off
+            css_file_contents = (":root {{\n"
+                                 "--background-color-primary-season: {};\n"
+                                 "--background-color-secondary-season: {};\n}}\n"
+                                 ).format(colors["background_color"], colors["accent_color"])
             f.write(css_file_contents)
