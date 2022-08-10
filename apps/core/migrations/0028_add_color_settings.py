@@ -17,7 +17,7 @@ def add_general_settings(apps, schema_editor):
         settings_key="site_color",
         defaults=values_for_site_color,
     )
-    Setting.objects.create(
+    Setting.objects.get_or_create(
         field_type="TEXT",
         group="GENERAL",
         settings_key="accent_color",

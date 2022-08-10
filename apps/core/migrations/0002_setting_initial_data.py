@@ -300,9 +300,16 @@ def add_general_settings(apps, schema_editor):
     Setting.objects.create(
         field_type="TEXT",
         group="GENERAL",
-        settings_key="site_color",
-        text="green",
-        description="Цвет сайта",
+        settings_key="background_color",
+        text="#ECEBE8",
+        description="Цвет основного фона сайта",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="GENERAL",
+        settings_key="accent_color",
+        text="#B7C09D",
+        description="Цвет акцента сайта",
     )
     Setting.objects.create(
         field_type="URL",
