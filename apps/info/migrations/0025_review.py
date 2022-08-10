@@ -6,7 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('info', '0023_alter_festivalteammember_person'),
+        ('info', '0024_festival_selectors_page_link'),
     ]
 
     operations = [
