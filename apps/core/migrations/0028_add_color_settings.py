@@ -5,17 +5,15 @@ def add_general_settings(apps, schema_editor):
 
     Setting = apps.get_model("core", "Setting")
 
-    values_for_site_color = {
-        "settings_key": "background_color",
-        "text": "#ECEBE8",
-        "description": "Цвет основного фона сайта",
-    }
     values_for_pr_director_name = {
         "description": "Имя PR директора на странице для прессы (в дательном падеже)"
     }
-    Setting.objects.update_or_create(
-        settings_key="site_color",
-        defaults=values_for_site_color,
+    Setting.objects.get_or_create(
+        field_type="TEXT",
+        group="GENERAL",
+        settings_key="background_color",
+        text="#ECEBE8",
+        description="Цвет основного фона сайта",
     )
     Setting.objects.get_or_create(
         field_type="TEXT",
