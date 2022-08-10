@@ -4,7 +4,7 @@ from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
-from apps.info.models import Festival
+from apps.info.models.festival import Festival
 
 
 class Partner(BaseModel):
@@ -188,3 +188,10 @@ class Selector(BaseModel):
     def clean(self):
         if self.person_id and not self.person.image:
             raise ValidationError("Для отборщика необходимо выбрать его фото")
+
+
+class Review(Volunteer):
+    class Meta:
+        proxy = True
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"
