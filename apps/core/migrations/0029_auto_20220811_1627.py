@@ -3,6 +3,12 @@
 from django.db import migrations, models
 
 
+def delete_site_color_setting(apps, schema_editor):
+
+    Setting = apps.get_model("core", "Setting")
+    Setting.objects.filter(settings_key="site_color").delete()
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -25,4 +31,7 @@ class Migration(migrations.Migration):
             name='middle_name',
             field=models.CharField(blank=True, max_length=50, verbose_name='Отчество'),
         ),
+        migrations.RunPython(
+            delete_site_color_setting,
+        )
     ]
