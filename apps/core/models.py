@@ -9,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.utils import delete_image_with_model, slugify
-from apps.core.validators import email_validator, name_validator, nickname_validator
+from apps.core.validators import email_validator
 
 NEWS_HELP_TEXT = (
     "При включении данной настройки, автоматический будет "
@@ -56,18 +56,15 @@ class Image(BaseModel):
 class Person(BaseModel):
     first_name = models.CharField(
         max_length=50,
-        validators=(nickname_validator,),
         verbose_name="Имя",
     )
     last_name = models.CharField(
         max_length=50,
-        validators=(nickname_validator,),
         verbose_name="Фамилия",
         blank=True,
     )
     middle_name = models.CharField(
         max_length=50,
-        validators=(name_validator,),
         verbose_name="Отчество",
         blank=True,
     )
