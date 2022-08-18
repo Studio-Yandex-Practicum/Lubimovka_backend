@@ -41,6 +41,7 @@ class PlayAdmin(admin.ModelAdmin):
         "festival",
         "published",
     )
+    list_select_related = ("program", "festival")
     inlines = (AuthorInline,)
     list_filter = (
         PlayTypeFilter,

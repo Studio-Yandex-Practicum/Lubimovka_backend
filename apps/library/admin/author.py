@@ -1,5 +1,6 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
+from django.db.models import Count
 from django.forms import ModelForm, ValidationError
 
 from apps.library.forms import OtherLinkForm
@@ -34,7 +35,8 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=False).select_related(
             "author__person",
-            "play",
+            "play__festival",
+            "play__program",
         )
 
     @admin.display(description="Год участия в фестивале")
@@ -111,7 +113,7 @@ class AuthorAdmin(admin.ModelAdmin):
         "person",
         "quote",
         "slug",
-        "number_of_plays",
+        "plays_count",
     )
     inlines = (
         PlayInline,
@@ -138,7 +140,15 @@ class AuthorAdmin(admin.ModelAdmin):
     empty_value_display = "-пусто-"
 
     def get_queryset(self, request):
-        return super().get_queryset(request).select_related("person")
+        queryset = super().get_queryset(request).select_related("person")
+        queryset = queryset.annotate(
+            _plays_count=Count("plays", distinct=True),
+        )
+        return queryset
+
+    @admin.display(description="Количество пьес")
+    def plays_count(self, obj):
+        return obj._plays_count
 
     class Media:
         js = ("admin/author_admin.js",)
