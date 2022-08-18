@@ -35,7 +35,8 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     def get_queryset(self, request):
         return AuthorPlay.objects.filter(play__other_play=False).select_related(
             "author__person",
-            "play",
+            "play__festival",
+            "play__program",
         )
 
     @admin.display(description="Год участия в фестивале")
@@ -145,10 +146,9 @@ class AuthorAdmin(admin.ModelAdmin):
         )
         return queryset
 
+    @admin.display(description="Количество пьес")
     def plays_count(self, obj):
         return obj._plays_count
-
-    plays_count.short_description = "Количество пьес"
 
     class Media:
         js = ("admin/author_admin.js",)
