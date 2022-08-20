@@ -1,3 +1,4 @@
+from pathlib import Path
 from typing import Any, Union
 
 from django.contrib import admin
@@ -8,7 +9,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.utils import delete_image_with_model, slugify
-from apps.core.validators import email_validator, name_validator, nickname_validator
+from apps.core.validators import email_validator
 
 NEWS_HELP_TEXT = (
     "При включении данной настройки, автоматический будет "
@@ -55,18 +56,15 @@ class Image(BaseModel):
 class Person(BaseModel):
     first_name = models.CharField(
         max_length=50,
-        validators=(nickname_validator,),
         verbose_name="Имя",
     )
     last_name = models.CharField(
         max_length=50,
-        validators=(nickname_validator,),
         verbose_name="Фамилия",
         blank=True,
     )
     middle_name = models.CharField(
         max_length=50,
-        validators=(name_validator,),
         verbose_name="Отчество",
         blank=True,
     )
@@ -291,9 +289,11 @@ class Setting(BaseModel):
 
     def save(self, *args, **kwargs):
         this = Setting.objects.filter(id=self.id).first()
-        if this:
-            if this.image != self.image:
-                this.image.delete(save=False)
+        colors_settings_keys = ("background_color", "accent_color")
+        if this and (this.image != self.image):
+            this.image.delete(save=False)
+        if self.settings_key in colors_settings_keys and self.text:
+            self._generate_css()
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -339,3 +339,16 @@ class Setting(BaseModel):
         for key, value in settings.items():
             count = Setting.objects.filter(settings_key=key).update(boolean=value)
             assert count == 1, f"Количество записей с ключом '{key}' оказалось равно {count} (ожидалось 1)"
+
+    def _generate_css(self):
+        """Generate CSS file with colors."""
+        Setting.objects.filter(settings_key=self.settings_key).update(text=self.text)
+        colors = self.get_settings(("background_color", "accent_color"))
+        filename = Path("apps/core/static/site_colors.css")
+        with open(filename, "w+") as f:
+            # fmt: off
+            css_file_contents = (":root {{\n"
+                                 "--background-color-primary-season: {};\n"
+                                 "--background-color-secondary-season: {};\n}}\n"
+                                 ).format(colors["background_color"], colors["accent_color"])
+            f.write(css_file_contents)

@@ -9,7 +9,6 @@ from apps.info.models.festival import Festival
 
 class Partner(BaseModel):
     class PartnerType(models.TextChoices):
-        GENERAL_PARTNER = "general", _("Генеральный партнер")
         FESTIVAL_PARTNER = "festival", _("Партнер фестиваля")
         INFO_PARTNER = "info", _("Информационный партнер")
 
@@ -21,6 +20,17 @@ class Partner(BaseModel):
         max_length=8,
         choices=PartnerType.choices,
         verbose_name="Тип",
+    )
+    is_general = models.BooleanField(
+        default=False,
+        verbose_name="Генеральный партнер",
+        help_text="Поставьте галочку, чтобы сделать партнёра генеральным",
+    )
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name="Описание",
+        help_text="Поле не обязательное",
     )
     url = models.URLField(
         max_length=200,

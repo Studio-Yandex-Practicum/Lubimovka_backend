@@ -62,7 +62,7 @@ class StatusButtonMixin:
             for status in STATUS_INFO:
                 if status in request.POST:
                     if (
-                        obj._meta.model_name == "perfomance"
+                        obj._meta.model_name == "performance"
                         and not obj.play.published
                         and status == Status.PUBLISHED.value
                     ):
