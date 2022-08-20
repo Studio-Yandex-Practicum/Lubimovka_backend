@@ -7,7 +7,7 @@ from django.utils.translation import gettext_lazy as _
 from apps.content_pages.utilities import path_by_media_and_class_name
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
-from apps.info.models.festival import Festival
+from apps.info.models import Festival
 from apps.library.validators import year_validator
 
 
