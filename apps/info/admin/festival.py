@@ -1,6 +1,9 @@
 from adminsortable2.admin import SortableAdminMixin, SortableInlineAdminMixin
+from django import forms
 from django.contrib import admin, messages
 from django.core.exceptions import ValidationError
+from django.urls import reverse
+from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview
 from apps.core.models import Setting
@@ -19,16 +22,26 @@ from apps.info.models import (
 
 
 class VolunteerInline(SortableInlineAdminMixin, admin.TabularInline):
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        if db_field.name == "review_text":
+            kwargs["widget"] = forms.Textarea(
+                attrs={
+                    "style": "width:400px; height:60px;",
+                    "readonly": "readonly",
+                }
+            )
+        return super(VolunteerInline, self).formfield_for_dbfield(db_field, **kwargs)
+
     model = Volunteer
     autocomplete_fields = ("person",)
-    readonly_fields = ("is_review",)
+    readonly_fields = (
+        "is_review",
+        "change_review",
+    )
     verbose_name = "Волонтёр"
     verbose_name_plural = "Волонтёры"
     extra = 1
-    exclude = (
-        "review_title",
-        "review_text",
-    )
+    exclude = ("review_title",)
     classes = ("collapsible",)
 
     @admin.display(
@@ -40,6 +53,20 @@ class VolunteerInline(SortableInlineAdminMixin, admin.TabularInline):
         if obj.review_text:
             return True
         return False
+
+    @admin.display(
+        description="",
+    )
+    def change_review(self, obj):
+        if obj.pk:
+            opts = self.model._meta
+            redirect_url = reverse(
+                "admin:%s_%s_change" % (opts.app_label, "review"),
+                args=(obj.pk,),
+                current_app=self.admin_site.name,
+            )
+            return format_html(f"<a href='{redirect_url}'>Изменить отзыв</a>")
+        return None
 
 
 class SelectorInline(SortableInlineAdminMixin, admin.TabularInline):

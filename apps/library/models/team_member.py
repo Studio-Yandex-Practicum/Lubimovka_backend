@@ -42,8 +42,16 @@ class TeamMember(BaseModel):
         verbose_name="Роль",
     )
 
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядок",
+        db_index=True,
+    )
+
     class Meta:
-        ordering = ("role",)
+        ordering = ("order",)
         verbose_name = "Член команды"
         verbose_name_plural = "Члены команды"
         constraints = (

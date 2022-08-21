@@ -64,12 +64,6 @@ class Author(BaseModel):
             .distinct("festival__year", "program__name")
         )
 
-    @property
-    def number_of_plays(self):
-        return self.plays.count()
-
-    number_of_plays.fget.short_description = "Количество пьес"
-
 
 class AuthorPlay(models.Model):
     author = models.ForeignKey(
