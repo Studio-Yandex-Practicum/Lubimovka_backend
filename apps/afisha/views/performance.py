@@ -10,8 +10,7 @@ from apps.articles import selectors
 
 
 def get_performance_obj(queryset, identifier):
-    list_of_ids = Performance.objects.all().values_list("id", flat=True)
-    if identifier.isdigit() and int(identifier) in list_of_ids:
+    if identifier.isdigit():
         obj = get_object_or_404(queryset, id=int(identifier))
     else:
         obj = get_object_or_404(queryset, slug=identifier)
