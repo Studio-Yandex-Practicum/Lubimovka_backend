@@ -9,6 +9,7 @@ from apps.library.serializers.author import (
     AuthorListSerializer,
     AuthorRetrieveSerializer,
     AuthorSearchSerializer,
+    AuthorTypedSerializer,
 )
 from apps.library.serializers.play_filters import PlayFiltersSerializer
 from apps.library.serializers.role import RoleSerializer

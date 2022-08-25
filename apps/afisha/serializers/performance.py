@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.afisha.models import Event, Performance, PerformanceMediaReview, PerformanceReview
@@ -35,12 +36,24 @@ class PerformanceSerializer(serializers.ModelSerializer):
     events = LocalEventSerializer(source="events.body", many=True)
 
     class Meta:
-        exclude = (
-            "created",
-            "modified",
-            "project",
-            "persons",
-            "block_images_description",
+        fields = (
+            "id",
+            "play",
+            "team",
+            "images_in_block",
+            "events",
+            "status",
+            "name",
+            "main_image",
+            "bottom_image",
+            "video",
+            "description",
+            "intro",
+            "text",
+            "age_limit",
+            "duration",
+            "slug",
+            "creator",
         )
         model = Performance
 
@@ -94,3 +107,16 @@ class PerformanceReviewSerializer(serializers.ModelSerializer):
             "modified",
             "performance",
         )
+
+
+class PerformanceTypedSerializer(PerformanceSerializer):
+    """Performance serializer for slug determine view."""
+
+    type = serializers.SerializerMethodField()
+
+    @extend_schema_field(str)
+    def get_type(self, obj):
+        return "performance"
+
+    class Meta(PerformanceSerializer.Meta):
+        fields = ("type",) + PerformanceSerializer.Meta.fields
