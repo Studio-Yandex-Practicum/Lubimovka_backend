@@ -19,7 +19,6 @@ class SettingsSerializer(serializers.Serializer):
     volunteer_email = serializers.EmailField()
     trustee_email = serializers.EmailField()
     press_email = serializers.EmailField()
-    info_email = serializers.EmailField()
     submit_play_email = serializers.EmailField()
     url_to_privacy_policy = serializers.URLField()
     for_press = ForPressSerializer()

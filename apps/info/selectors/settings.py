@@ -12,7 +12,6 @@ def info_settings_get() -> dict[str, Union[str, bool, dict[str, str]]]:
         "volunteer_email",
         "trustee_email",
         "press_email",
-        "info_email",
         "submit_play_email",
         "photo_gallery_facebook",
         "pr_director_name",

@@ -7,9 +7,8 @@ def rename_email_settings(apps, schema_editor):
     old_email_keys = (
         "email_on_project_page",
         "email_on_about_festival_page",
-        "email_on_support_page",
-        "email_send_from",
         "email_to_send_participations",
+        "email_on_support_page",
     )
 
     Setting.objects.filter(settings_key__in=old_email_keys).delete()
@@ -36,10 +35,6 @@ def rename_email_settings(apps, schema_editor):
     Setting.objects.filter(settings_key="email_on_what_we_do_page").update(
         settings_key="reading_email",
         description="Email для режиссёров и актёров для читок (страницы 'О фестивале – Что мы делаем' и 'Проект – Открыть проект')"
-    )
-    Setting.objects.filter(settings_key="email_to_send_questions").update(
-        settings_key="info_email",
-        description="Email для вопросов (страница 'Контакты')"
     )
     Setting.objects.get_or_create(
         field_type="EMAIL",
