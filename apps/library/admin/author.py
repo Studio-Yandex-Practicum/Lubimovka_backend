@@ -64,7 +64,7 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
         )
 
 
-class AchivementInline(admin.TabularInline):
+class AchievementInline(admin.TabularInline):
     model = AuthorPlay
     extra = 0
     verbose_name = "Достижение"
@@ -120,7 +120,7 @@ class AuthorAdmin(admin.ModelAdmin):
         OtherPlayInline,
         SocialNetworkLinkInline,
         OtherLinkInline,
-        AchivementInline,
+        AchievementInline,
     )
     exclude = (
         "plays",

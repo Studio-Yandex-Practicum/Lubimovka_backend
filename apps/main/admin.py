@@ -39,6 +39,7 @@ class SettingAdmin(admin.ModelAdmin):
         "settings_key",
         "description",
     )
+    ordering = ("field_type", "description")
 
     def get_form(self, request, obj=None, **kwargs):
         form = super().get_form(request, obj, **kwargs)
