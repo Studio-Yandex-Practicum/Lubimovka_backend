@@ -7,6 +7,6 @@ def filter_by_name_predicate(queryset, name, value):
 
 
 class AuthorFilter(django_filters.FilterSet):
-    """Фильтрует по начальным буквам в фамелии и имени."""
+    """Фильтрует по начальным буквам в фамилии и имени."""
 
     letter = django_filters.CharFilter(method=filter_by_name_predicate)
