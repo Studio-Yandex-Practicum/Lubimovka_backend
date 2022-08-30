@@ -63,7 +63,10 @@ class UserAdmin(DjangoUserAdmin):
 
     @admin.display(description="Роль")
     def role(self, obj):
-        return obj.groups.first()
+        return obj.groups.all()[:1]
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).prefetch_related("groups")
 
     def save_model(self, request, obj, form, change):
         super().save_model(request, obj, form, change)
