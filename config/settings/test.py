@@ -1,11 +1,4 @@
 """With these settings, tests run faster."""
-from pathlib import Path
-
-import environ
-
-ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-environ.Env.read_env(ROOT_DIR / ".env_local")
-
 from .base import *  # noqa
 
 # GENERAL
@@ -38,3 +31,6 @@ DATABASES = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+DJANGO_SUPERUSER_USERNAME = "user"
+DJANGO_SUPERUSER_EMAIL = "e@mail.com"
+DJANGO_SUPERUSER_PASSWORD = "password"
