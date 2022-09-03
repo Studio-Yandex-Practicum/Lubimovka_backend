@@ -8,6 +8,9 @@ SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="p6kew3&vhfm^stv7v8t6(v(^eare9+820#yb^zv8=j!2z6k!_p",
 )
+
+ALLOWED_HOSTS += ["test.dev.lubimovka.ru"]
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#test-runner
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
@@ -31,6 +34,6 @@ DATABASES = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-DJANGO_SUPERUSER_USERNAME = "user"
-DJANGO_SUPERUSER_EMAIL = "e@mail.com"
-DJANGO_SUPERUSER_PASSWORD = "password"
+DJANGO_SUPERUSER_USERNAME = "admin"
+DJANGO_SUPERUSER_EMAIL = "admin@admin.com"
+DJANGO_SUPERUSER_PASSWORD = "admin"

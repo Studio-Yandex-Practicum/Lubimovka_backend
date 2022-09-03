@@ -4,7 +4,10 @@ from pathlib import Path
 import environ
 
 ROOT_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
-environ.Env.read_env(ROOT_DIR / ".env_local")
+if (ROOT_DIR / ".env").is_file():
+    environ.Env.read_env(ROOT_DIR / ".env")
+else:
+    environ.Env.read_env(ROOT_DIR / ".env_local")
 
 from .base import *  # noqa
 
@@ -15,6 +18,8 @@ SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
     default="&m&ip^h2lp5xypo^pb1^il!9lsp+7ay2p1hw1ke+l5cn91+2+a",
 )
+
+ALLOWED_HOSTS += ["127.0.0.1"]
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
