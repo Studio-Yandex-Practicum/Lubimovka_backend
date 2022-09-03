@@ -48,8 +48,7 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "drf_multiple_model",
     "ckeditor",
-    "anymail",
-    "debug_toolbar"
+    "anymail"
 ]
 LOCAL_APPS = [
     "apps.users",

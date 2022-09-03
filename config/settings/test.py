@@ -11,6 +11,8 @@ SECRET_KEY = env(
 
 ALLOWED_HOSTS += ["test.dev.lubimovka.ru"]
 
+DEBUG = False
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#test-runner
 TEST_RUNNER = "django.test.runner.DiscoverRunner"
 
