@@ -49,6 +49,7 @@ THIRD_PARTY_APPS = [
     "drf_multiple_model",
     "ckeditor",
     "anymail",
+    "debug_toolbar"
 ]
 LOCAL_APPS = [
     "apps.users",
