@@ -34,6 +34,3 @@ DATABASES = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-DJANGO_SUPERUSER_USERNAME = "admin"
-DJANGO_SUPERUSER_EMAIL = "admin@admin.com"
-DJANGO_SUPERUSER_PASSWORD = "admin"

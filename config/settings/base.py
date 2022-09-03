@@ -332,9 +332,9 @@ CSRF_FAILURE_VIEW = 'apps.core.views.csrf_failure'
 SERVER_EMAIL = env("SERVER_EMAIL", default=None)
 
 # https://docs.djangoproject.com/en/3.0/ref/django-admin/#django-admin-createsuperuser
-DJANGO_SUPERUSER_USERNAME = env("DJANGO_SUPERUSER_USERNAME")
-DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL")
-DJANGO_SUPERUSER_PASSWORD = env("DJANGO_SUPERUSER_PASSWORD")
+DJANGO_SUPERUSER_USERNAME = env("DJANGO_SUPERUSER_USERNAME", default="admin")
+DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL", default="admin@admin.com")
+DJANGO_SUPERUSER_PASSWORD = env("DJANGO_SUPERUSER_PASSWORD", default="admin")
 
 # Use PostgreSQL
 # ------------------------------------------------------------------------------

@@ -7,7 +7,7 @@ from .base import *  # noqa
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY")
 
-ALLOWED_HOSTS += ["stage.dev.lubimovka.ru",]
+ALLOWED_HOSTS += ["stage.dev.lubimovka.ru"]
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
