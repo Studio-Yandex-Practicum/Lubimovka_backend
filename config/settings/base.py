@@ -48,7 +48,7 @@ THIRD_PARTY_APPS = [
     "phonenumber_field",
     "drf_multiple_model",
     "ckeditor",
-    "anymail"
+    "anymail",
 ]
 LOCAL_APPS = [
     "apps.users",
