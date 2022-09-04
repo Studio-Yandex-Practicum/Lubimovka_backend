@@ -232,4 +232,5 @@ class FestTeamMemberAdmin(SortableAdminMixin, admin.ModelAdmin):
     class Media:
         """Adds a script that displays the field ```pr_director_name``` if ```is_pr_director``` is selected."""
 
+        css = {"all": ("admin/info/css/pr.css",)}
         js = ("admin/info/js/FestivalTeamFooter.js",)
