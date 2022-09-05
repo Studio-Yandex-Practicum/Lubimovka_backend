@@ -21,7 +21,6 @@ class ImageAdmin(HideOnNavPanelAdminModelMixin, AdminImagePreview, admin.ModelAd
 @admin.register(Role)
 class RoleAdmin(SortableAdminMixin, admin.ModelAdmin):
     list_display = ("name", "slug", "priority")
-    # list_editable = ("priority",)
     search_fields = ("role",)
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ("types",)
