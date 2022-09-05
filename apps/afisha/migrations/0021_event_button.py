@@ -17,7 +17,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='event',
             name='button',
-            field=models.CharField(choices=[('REGISTRATION', 'Регистрация'), ('TICKETS', 'Билеты'), ('STREAM', 'Трансляция')], default='REGISTRATION', help_text='Выберите описание действия кнопки, соответсвующее ссылке', max_length=50, verbose_name='Тип кнопки'),
+            field=models.CharField(choices=[('REGISTRATION', 'Регистрация'), ('TICKETS', 'Билеты'), ('STREAM', 'Трансляция')], default='REGISTRATION', help_text='Выберите описание действия кнопки, соответсвующее ссылке', max_length=50, verbose_name='Имя кнопки'),
         ),
         migrations.RunPython(move_paid_field_info),
         migrations.RemoveField(
