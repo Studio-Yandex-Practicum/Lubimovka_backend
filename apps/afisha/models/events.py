@@ -71,10 +71,6 @@ class Event(BaseModel):
         blank=True,
         null=True,
     )
-    paid = models.BooleanField(
-        verbose_name="Платное",
-        default=False,
-    )
     url = models.URLField(
         max_length=200,
         verbose_name="Ссылка",
@@ -83,7 +79,7 @@ class Event(BaseModel):
         choices=ButtonType.choices,
         default="REGISTRATION",
         max_length=50,
-        verbose_name="Тип кнопки",
+        verbose_name="Имя кнопки",
         help_text="Выберите описание действия кнопки, соответсвующее ссылке",
     )
     pinned_on_main = models.BooleanField(
