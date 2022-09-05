@@ -44,4 +44,5 @@ class AfishaEventSerializer(serializers.ModelSerializer):
             "date_time",
             "paid",
             "url",
+            "button",
         )

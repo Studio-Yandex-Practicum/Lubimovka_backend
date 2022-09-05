@@ -46,6 +46,11 @@ class Event(BaseModel):
         MASTERCLASS = "MASTERCLASS", "Мастер-класс"
         READING = "READING", "Читка"
 
+    class ButtonType(models.TextChoices):
+        REGISTRATION = "REGISTRATION", "Регистрация"
+        TICKETS = "TICKETS", "Билеты"
+        STREAM = "STREAM", "Трансляция"
+
     common_event = models.ForeignKey(
         CommonEvent,
         on_delete=models.CASCADE,
@@ -73,6 +78,13 @@ class Event(BaseModel):
     url = models.URLField(
         max_length=200,
         verbose_name="Ссылка",
+    )
+    button = models.CharField(
+        choices=ButtonType.choices,
+        default="REGISTRATION",
+        max_length=50,
+        verbose_name="Тип кнопки",
+        help_text="Выберите описание действия кнопки, соответсвующее ссылке",
     )
     pinned_on_main = models.BooleanField(
         default=False,

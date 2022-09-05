@@ -76,7 +76,8 @@ class EventAdmin(admin.ModelAdmin):
                 "fields": (
                     "date_time",
                     ("is_archived", "paid"),
-                    "url",
+                    ("url", "button"),
+                    # "button",
                     "pinned_on_main",
                 ),
             },
