@@ -52,3 +52,6 @@ class ProjectAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
         "creator_name",
     )
     ordering = ("-created",)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("creator")

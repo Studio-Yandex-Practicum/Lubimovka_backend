@@ -62,6 +62,9 @@ class BlogItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin)
         "creator_name",
     )
 
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related("creator")
+
     def has_change_permission(self, request, obj=None):
         if obj and obj.creator == request.user:
             return True

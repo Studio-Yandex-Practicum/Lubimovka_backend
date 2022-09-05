@@ -1,11 +1,14 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from django.utils.html import format_html
 
-from apps.core.mixins import AdminImagePreview
+from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 from apps.core.models import Person
 from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
 from apps.info.models import Partner, Selector, Sponsor, Volunteer
+from apps.info.models.people import Review
 
 
 @admin.register(Partner)
@@ -169,3 +172,21 @@ class SelectorAdmin(admin.ModelAdmin):
     def get_year(self, obj):
         """Возвращает год фестиваля."""
         return obj.festival.year
+
+
+@admin.register(Review)
+class ReviewAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
+    fields = (
+        "review_title",
+        "review_text",
+    )
+
+    def response_change(self, request, obj):
+        super().response_change(request, obj)
+        opts = self.model._meta
+        redirect_url = reverse(
+            "admin:%s_%s_change" % (opts.app_label, "festival"),
+            args=(obj.festival_id,),
+            current_app=self.admin_site.name,
+        )
+        return HttpResponseRedirect(redirect_url)
