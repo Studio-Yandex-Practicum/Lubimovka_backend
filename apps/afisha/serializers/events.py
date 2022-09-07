@@ -14,6 +14,9 @@ AFISHA_EVENTS_SERIALIZER_PAIRS = {
 class AfishaEventSerializer(serializers.ModelSerializer):
     """Afisha event Output serializer."""
 
+    action_url = serializers.URLField(source="url")
+    action_text = serializers.CharField(source="get_button_display")
+
     event_body = serializers.SerializerMethodField(
         help_text="The response is different based on event type.",
     )
@@ -42,6 +45,6 @@ class AfishaEventSerializer(serializers.ModelSerializer):
             "type",
             "event_body",
             "date_time",
-            "url",
-            "button",
+            "action_url",
+            "action_text",
         )
