@@ -52,6 +52,6 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.RunPython(
-            rename_email_settings,
+            rename_email_settings, migrations.RunPython.noop
         ),
     ]
