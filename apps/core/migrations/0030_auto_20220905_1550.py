@@ -6,7 +6,7 @@ from django.db import migrations, models
 def reorder(apps, schema_editor):
     Role = apps.get_model("core", "Role")
     for order, item in enumerate(Role.objects.all().order_by("name"), 1):
-        item.priority = order
+        item.order = order
         item.save(update_fields=['order'])
 
 
