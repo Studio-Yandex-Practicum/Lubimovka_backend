@@ -7,7 +7,7 @@ def reorder(apps, schema_editor):
     Role = apps.get_model("core", "Role")
     for order, item in enumerate(Role.objects.all().order_by("name"), 1):
         item.priority = order
-        item.save(update_fields=['priority'])
+        item.save(update_fields=['order'])
 
 
 class Migration(migrations.Migration):
@@ -19,12 +19,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='role',
-            options={'ordering': ('priority',), 'verbose_name': 'Должность/позиция', 'verbose_name_plural': 'Должности/позиции'},
+            options={'ordering': ('order',), 'verbose_name': 'Должность/позиция', 'verbose_name_plural': 'Должности/позиции'},
         ),
         migrations.AddField(
             model_name='role',
-            name='priority',
-            field=models.PositiveSmallIntegerField(db_index=True, default=0, help_text='Определяет очередность вывода (1 - самый важный)', verbose_name='Место по важности'),
+            name='order',
+            field=models.PositiveSmallIntegerField(db_index=True, default=0, help_text='Определяет очередность вывода', verbose_name='Порядок'),
         ),
         migrations.RunPython(reorder, reverse_code=migrations.RunPython.noop),
     ]
