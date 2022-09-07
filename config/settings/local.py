@@ -16,8 +16,6 @@ from .base import *  # noqa
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = "&m&ip^h2lp5xypo^pb1^il!9lsp+7ay2p1hw1ke+l5cn91+2+a"
 
-ALLOWED_HOSTS += ["127.0.0.1", "localhost"]
-
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#prerequisites
