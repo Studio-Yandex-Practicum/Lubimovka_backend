@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.contrib.auth.models import Group
 from django.db import models
@@ -18,11 +19,10 @@ class ImageAdmin(HideOnNavPanelAdminModelMixin, AdminImagePreview, admin.ModelAd
 
 
 @admin.register(Role)
-class RoleAdmin(admin.ModelAdmin):
-    list_display = (
-        "name",
-        "slug",
-    )
+class RoleAdmin(SortableAdminMixin, admin.ModelAdmin):
+    list_display = ("order", "name", "slug")
+    list_display_links = ("name",)
+    sortable_by = []
     search_fields = ("role",)
     prepopulated_fields = {"slug": ("name",)}
     list_filter = ("types",)
