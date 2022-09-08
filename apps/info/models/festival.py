@@ -1,6 +1,5 @@
 from ckeditor.fields import RichTextField
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.db.models import F, Q, UniqueConstraint
 from django.utils import timezone
@@ -103,12 +102,6 @@ class Festival(BaseModel):
         max_length=200,
         verbose_name="Описание фестиваля",
     )
-    year = models.PositiveSmallIntegerField(
-        default=timezone.now().year,
-        validators=[MinValueValidator(1990), MaxValueValidator(2500)],
-        unique=True,
-        verbose_name="Год фестиваля",
-    )
     plays_count = models.PositiveIntegerField(
         default=1,
         verbose_name="Общее количество пьес",
@@ -156,13 +149,17 @@ class Festival(BaseModel):
     class Meta:
         verbose_name = "Фестиваль"
         verbose_name_plural = "Фестивали"
-        ordering = ["-year"]
+        ordering = ["-start_date"]
         constraints = [
             models.CheckConstraint(
                 name="start_date_before_end_date",
                 check=Q(start_date__lt=F("end_date")),
             )
         ]
+
+    @property
+    def year(self):
+        return self.start_date.year
 
     def __str__(self):
         return f"Фестиваль {self.year} года"
