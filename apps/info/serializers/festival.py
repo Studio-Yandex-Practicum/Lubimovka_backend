@@ -21,7 +21,6 @@ class FestivalSerializer(serializers.ModelSerializer):
             "start_date",
             "end_date",
             "description",
-            "year",
             "plays_count",
             "selected_plays_count",
             "selectors_count",
@@ -36,6 +35,7 @@ class FestivalSerializer(serializers.ModelSerializer):
             "plays_links",
             "additional_links",
         )
+        read_only_fields = ("year",)
 
 
 class YearsSerializer(serializers.Serializer):
