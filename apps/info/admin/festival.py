@@ -127,7 +127,12 @@ class FestivalAdmin(admin.ModelAdmin):
         "sponsors",
         "images",
     )
+    readonly_fields = ("_year",)
     empty_value_display = "-пусто-"
+
+    @admin.display(description="Год фестиваля")
+    def _year(self, obj):
+        return obj.year
 
 
 @admin.register(PressRelease)
