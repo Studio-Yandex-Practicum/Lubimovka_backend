@@ -161,6 +161,10 @@ class Festival(BaseModel):
     def year(self):
         return self.start_date.year
 
+    @year.setter
+    def year(self, value):
+        pass
+
     def __str__(self):
         return f"Фестиваль {self.year} года"
 
