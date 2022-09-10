@@ -93,13 +93,6 @@ class MainVideoArchiveSerializer(serializers.Serializer):
     photo = serializers.ImageField()
 
 
-class PartnersSettingsSerializer(serializers.Serializer):
-    """Returns settings defining to show or not Partners."""
-
-    show_general_partners = serializers.BooleanField()
-    show_info_partners_and_festival_partners = serializers.BooleanField()
-
-
 @extend_schema_serializer(
     OpenApiExample(
         name="Schema for main",
@@ -116,4 +109,3 @@ class MainSerializer(serializers.Serializer):
     short_list = MainShortListSerializer(required=False)
     places = MainPlacesSerializer(required=False)
     video_archive = MainVideoArchiveSerializer(required=False)
-    show_partners = PartnersSettingsSerializer(required=True)

@@ -1,9 +1,7 @@
-from typing import Union
-
 from apps.core.models import Person, Setting
 
 
-def info_settings_get() -> dict[str, Union[str, bool, dict[str, str]]]:
+def info_settings_get() -> object:
     """Return settings (mostly related to emails) dictionary."""
     settings_keys = (
         "play_author_email",

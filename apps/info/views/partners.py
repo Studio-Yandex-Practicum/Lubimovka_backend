@@ -14,10 +14,6 @@ class PartnerListAPIView(APIView):
             required=False,
             help_text="Генеральный партнер",
         )
-        in_footer_partner = serializers.BooleanField(
-            required=False,
-            help_text="Партнер отображается в футере",
-        )
         types = CharacterSeparatedSerializerField(
             child=serializers.ChoiceField(choices=Partner.PartnerType.choices),
             required=False,
@@ -35,7 +31,6 @@ class PartnerListAPIView(APIView):
                 "url",
                 "image",
                 "description",
-                "in_footer_partner",
             )
 
     @extend_schema(
