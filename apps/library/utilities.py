@@ -23,7 +23,7 @@ def has_cyrillic(text):
 def filter_letter_values(queryset):
     """Возвращает список всех начльных букв в имени и фамилии.
 
-    Если имя или фамилилия не на кирилице, используется символ '$'.
+    Если имя или фамилилия не на кирилице, используется символ '#'.
     """
     letters_values_set = set()
     for author in queryset:
@@ -31,6 +31,6 @@ def filter_letter_values(queryset):
         if has_cyrillic(letter):
             letters_values_set.add(letter)
         if not has_cyrillic(letter):
-            letter = "$"
+            letter = "#"
             letters_values_set.add(letter)
-    return list(letters_values_set)
+    return sorted(letters_values_set)
