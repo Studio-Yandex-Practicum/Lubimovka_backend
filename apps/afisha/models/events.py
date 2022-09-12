@@ -46,7 +46,7 @@ class Event(BaseModel):
         MASTERCLASS = "MASTERCLASS", "Мастер-класс"
         READING = "READING", "Читка"
 
-    class ButtonType(models.TextChoices):
+    class ActionType(models.TextChoices):
         REGISTRATION = "REGISTRATION", "Регистрация"
         TICKETS = "TICKETS", "Билеты"
         STREAM = "STREAM", "Трансляция"
@@ -75,12 +75,12 @@ class Event(BaseModel):
         max_length=200,
         verbose_name="Ссылка",
     )
-    button = models.CharField(
-        choices=ButtonType.choices,
+    action = models.CharField(
+        choices=ActionType.choices,
         default="REGISTRATION",
         max_length=50,
-        verbose_name="Имя кнопки",
-        help_text="Выберите описание действия кнопки, соответсвующее ссылке",
+        verbose_name="Название действия",
+        help_text="Выберите название действия, соответсвующее содержанию ссылки",
     )
     pinned_on_main = models.BooleanField(
         default=False,

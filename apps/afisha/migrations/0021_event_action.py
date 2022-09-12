@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 def move_paid_field_info(apps, schema_editor):
     Event = apps.get_model("afisha", "Event")
-    Event.objects.filter(paid=True).update(button="TICKETS")
+    Event.objects.filter(paid=True).update(action="TICKETS")
 
 class Migration(migrations.Migration):
 
@@ -16,8 +16,8 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='event',
-            name='button',
-            field=models.CharField(choices=[('REGISTRATION', 'Регистрация'), ('TICKETS', 'Билеты'), ('STREAM', 'Трансляция')], default='REGISTRATION', help_text='Выберите описание действия кнопки, соответсвующее ссылке', max_length=50, verbose_name='Имя кнопки'),
+            name='action',
+            field=models.CharField(choices=[('REGISTRATION', 'Регистрация'), ('TICKETS', 'Билеты'), ('STREAM', 'Трансляция')], default='REGISTRATION', help_text='Выберите название действия, соответсвующее содержанию ссылки', max_length=50, verbose_name='Название действия'),
         ),
         migrations.RunPython(move_paid_field_info),
         migrations.RemoveField(

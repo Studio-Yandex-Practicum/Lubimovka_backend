@@ -76,7 +76,7 @@ class EventAdmin(admin.ModelAdmin):
                 "fields": (
                     "date_time",
                     "is_archived",
-                    ("url", "button"),
+                    ("url", "action"),
                     "pinned_on_main",
                 ),
             },
@@ -121,7 +121,7 @@ class EventAdmin(admin.ModelAdmin):
 
     @admin.display(boolean=True, description="Платное")
     def is_paid(self, obj):
-        if obj.button == "TICKETS":
+        if obj.action == "TICKETS":
             return True
         return False
 
