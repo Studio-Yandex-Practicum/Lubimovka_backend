@@ -15,6 +15,8 @@ class Command(BaseCommand):
             "info.Place",
             "main.Banner",
             "library.AuthorPlay",
+            "library.TeamMember",
+            "core.Role",
         )
         try:
             for model in models:

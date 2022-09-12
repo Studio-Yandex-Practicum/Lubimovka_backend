@@ -156,10 +156,19 @@ class Role(BaseModel):
         verbose_name="Типы ролей",
     )
 
+    order = models.PositiveSmallIntegerField(
+        "Порядок",
+        default=0,
+        db_index=True,
+        blank=False,
+        null=False,
+        help_text="Определяет очередность вывода",
+    )
+
     class Meta:
         verbose_name = "Должность/позиция"
         verbose_name_plural = "Должности/позиции"
-        ordering = ("name",)
+        ordering = ("order",)
 
     def __str__(self):
         return self.name

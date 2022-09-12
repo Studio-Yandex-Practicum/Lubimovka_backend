@@ -42,28 +42,13 @@ def test_partner_list_count_in_response_matches_count_in_db(client, partners):
 
 @pytest.mark.parametrize(
     "expected_attribute",
-    ("id", "name", "type", "description", "url", "image", "in_footer_partner"),
+    ("id", "name", "type", "description", "url", "image"),
 )
 def test_partner_list_fields(client, general_partner, expected_attribute):
     """Check whether expected attribute found in returned object."""
     response_data = client.get(PARTNERS_URL).data
     partner_data = response_data[0]
     assert expected_attribute in partner_data
-
-
-@pytest.mark.parametrize(
-    "in_footer_partner_param, expected_count",
-    (
-        (True, 1),
-        (False, 3),
-    ),
-)
-def test_partner_list_in_footer_partner_filter(client, in_footer_partner_param, expected_count, partners):
-    """Compare amount of objects in response with expected when `in_footer_partner` filter applied."""
-    query_params = {"in_footer_partner": in_footer_partner_param}
-
-    response_data = client.get(PARTNERS_URL, query_params).data
-    assert len(response_data) == expected_count
 
 
 @pytest.mark.parametrize(

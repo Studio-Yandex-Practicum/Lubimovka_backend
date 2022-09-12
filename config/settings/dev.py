@@ -2,18 +2,7 @@ import os  # noqa
 
 from .base import *  # noqa
 
-# GENERAL
-# ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env("DEBUG", default=True)
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = env("DJANGO_SECRET_KEY")
-# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list(
-    "DJANGO_ALLOWED_HOSTS",
-    default=["127.0.0.1"],
-)
+ALLOWED_HOSTS += ["stage.dev.lubimovka.ru"]
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------
@@ -29,10 +18,8 @@ DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG,
 }
 
-INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
-
 # Add in INTERNAL_IPS internal IP of the docker container if DEGUG == True.
-if env("DEBUG"):
+if DEBUG:
     import socket
 
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
@@ -43,32 +30,3 @@ if env("DEBUG"):
     except socket.gaierror:
         # The node container isn't started (yet?)
         pass
-
-# Use PostgreSQL
-# ------------------------------------------------------------------------------
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("POSTGRES_DB"),
-        "USER": os.environ.get("POSTGRES_USER"),
-        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
-        "HOST": os.environ.get("POSTGRES_HOST"),
-        "PORT": os.environ.get("POSTGRES_PORT"),
-    }
-}
-
-# SECURE_PROXY_SSL_HEADER
-# -----------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/3.2/ref/settings/#secure-proxy-ssl-header
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-# https://docs.djangoproject.com/en/3.0/ref/django-admin/#django-admin-createsuperuser
-DJANGO_SUPERUSER_USERNAME = env("DJANGO_SUPERUSER_USERNAME")
-DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL")
-DJANGO_SUPERUSER_PASSWORD = env("DJANGO_SUPERUSER_PASSWORD")
-
-# https://anymail.readthedocs.io/en/stable/esps/mailjet/#settings
-ANYMAIL = {
-    "MAILJET_API_KEY": env("MAILJET_API_KEY", default=None),
-    "MAILJET_SECRET_KEY": env("MAILJET_SECRET_KEY", default=None),
-}
