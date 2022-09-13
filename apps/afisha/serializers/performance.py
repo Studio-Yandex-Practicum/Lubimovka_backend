@@ -10,7 +10,7 @@ class LocalEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ("id", "date_time", "paid", "url", "pinned_on_main")
+        fields = ("id", "date_time", "url", "pinned_on_main")
 
 
 class BlockImagesSerializer(serializers.ModelSerializer):

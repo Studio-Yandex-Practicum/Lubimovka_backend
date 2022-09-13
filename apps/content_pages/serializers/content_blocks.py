@@ -25,8 +25,8 @@ class EventInBlockSerializer(serializers.ModelSerializer):
             "type",
             "event_body",
             "date_time",
-            "paid",
             "url",
+            "button",
         )
 
 

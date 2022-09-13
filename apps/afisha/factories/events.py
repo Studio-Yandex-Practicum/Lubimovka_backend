@@ -55,7 +55,7 @@ class EventFactory(factory.django.DjangoModelFactory):
         after_now=True,
         tzinfo=ZoneInfo(settings.TIME_ZONE),
     )
-    paid = factory.Faker("boolean", chance_of_getting_true=50)
+    action = factory.Iterator(Event.ActionType.values)
     url = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
     pinned_on_main = factory.Faker("boolean", chance_of_getting_true=80)
 
