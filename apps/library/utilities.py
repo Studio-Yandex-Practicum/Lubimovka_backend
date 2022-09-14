@@ -26,10 +26,9 @@ def filter_letter_values(queryset):
     Если имя или фамилилия не на кирилице, используется символ '#'.
     """
     letters_values_set = set()
-    for author in queryset:
-        letter = author.get("letter").upper()
+    for letter in queryset:
         if has_cyrillic(letter):
-            letters_values_set.add(letter)
+            letters_values_set.add(letter.upper())
         if not has_cyrillic(letter):
             letter = "#"
             letters_values_set.add(letter)
