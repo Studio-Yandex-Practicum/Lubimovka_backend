@@ -93,9 +93,7 @@ class FestTeamMember(FestivalTeamMember):
 
 
 class Festival(BaseModel):
-    start_date = models.DateField(
-        verbose_name="Дата начала фестиваля",
-    )
+    start_date = models.DateField(verbose_name="Дата начала фестиваля", unique_for_year="start_date")
     end_date = models.DateField(
         verbose_name="Дата окончания фестиваля",
     )
