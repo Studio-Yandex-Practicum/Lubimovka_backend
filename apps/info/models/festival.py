@@ -93,9 +93,7 @@ class FestTeamMember(FestivalTeamMember):
 
 
 class Festival(BaseModel):
-    start_date = models.DateField(
-        verbose_name="Дата начала фестиваля",
-    )
+    start_date = models.DateField(verbose_name="Дата начала фестиваля", unique_for_year="start_date")
     end_date = models.DateField(
         verbose_name="Дата окончания фестиваля",
     )
@@ -169,6 +167,7 @@ class Festival(BaseModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
+        self.year = self.start_date.year
         this = Festival.objects.filter(id=self.id).first()
         if this:
             if this.festival_image != self.festival_image:

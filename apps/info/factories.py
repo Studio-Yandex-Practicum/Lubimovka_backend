@@ -1,3 +1,4 @@
+import datetime
 import random
 
 import factory
@@ -118,10 +119,10 @@ class FestivalFactory(factory.django.DjangoModelFactory):
         model = Festival
         django_get_or_create = ("year",)
 
-    start_date = factory.Faker("past_date")
-    end_date = factory.Faker("future_date")
     description = factory.Faker("sentence", locale="ru_RU")
     year = factory.Faker("random_int", min=1990, max=2022, step=1)
+    start_date = factory.lazy_attribute(lambda o: datetime.datetime(o.year, 6, 10))
+    end_date = factory.lazy_attribute(lambda o: datetime.datetime(o.year, 9, 20))
     selectors_page_link = factory.Faker("url")
 
     @factory.post_generation
