@@ -1,5 +1,4 @@
 from django.db.models import Prefetch
-from django.db.models.functions import Substr
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from drf_spectacular.utils import extend_schema
@@ -11,6 +10,7 @@ from rest_framework.views import APIView
 from apps.library.filters import AuthorFilter
 from apps.library.models import Author, AuthorPlay
 from apps.library.schema_extension import ERROR_MESSAGES_FOR_AUTHOR_FOR_403
+from apps.library.selectors import author_first_letter
 from apps.library.serializers import AuthorLettersSerializer, AuthorListSerializer, AuthorRetrieveSerializer
 
 
@@ -61,12 +61,11 @@ class AuthorsReadViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class AuthorLettersAPIView(APIView):
-    """Returns a list of the first letters of the available authors' surnames."""
+    """Returns a list of the first letters of the available authors' surnames and names."""
 
     @extend_schema(responses=AuthorLettersSerializer)
     def get(self, request):
-        authors_list = Author.objects.annotate(letter=Substr("person__last_name", pos=1, length=1)).values("letter")
-        letters_values_list = list({author.get("letter") for author in authors_list})
-        letters_instance = {"letters": letters_values_list}
+        letters = author_first_letter()
+        letters_instance = {"letters": letters}
         serializer = AuthorLettersSerializer(instance=letters_instance)
         return Response(serializer.data)
