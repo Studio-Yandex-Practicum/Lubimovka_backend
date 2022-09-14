@@ -127,6 +127,7 @@ class FestivalAdmin(admin.ModelAdmin):
         "sponsors",
         "images",
     )
+    readonly_fields = ("year",)
     empty_value_display = "-пусто-"
 
 

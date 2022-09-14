@@ -169,6 +169,7 @@ class Festival(BaseModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
+        self.year = self.start_date.year
         this = Festival.objects.filter(id=self.id).first()
         if this:
             if this.festival_image != self.festival_image:
