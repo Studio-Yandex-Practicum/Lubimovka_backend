@@ -14,7 +14,7 @@ class TestMainAPIUrls:
         banners,
         plays,
         places,
-        events_pinned_on_main,
+        events_hidden_on_main,
     ):
         """Checks status code for main url."""
         response = client.get(MAIN_URL)

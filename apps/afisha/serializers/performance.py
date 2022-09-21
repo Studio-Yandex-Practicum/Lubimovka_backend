@@ -8,9 +8,14 @@ from apps.library.serializers import PlaySerializer, RoleSerializer
 class LocalEventSerializer(serializers.ModelSerializer):
     """Serializer for performance__events,using only for PerformanceSerializer."""
 
+    pinned_on_main = serializers.SerializerMethodField()
+
     class Meta:
         model = Event
         fields = ("id", "date_time", "url", "pinned_on_main")
+
+    def get_pinned_on_main(self, obj):
+        return not obj.hidden_on_main
 
 
 class BlockImagesSerializer(serializers.ModelSerializer):

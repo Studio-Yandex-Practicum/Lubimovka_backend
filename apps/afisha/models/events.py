@@ -82,9 +82,9 @@ class Event(BaseModel):
         verbose_name="Название действия",
         help_text="Выберите название действия, соответсвующее содержанию ссылки",
     )
-    pinned_on_main = models.BooleanField(
-        default=False,
-        verbose_name="Закрепить на главной",
+    hidden_on_main = models.BooleanField(
+        default=True,
+        verbose_name="Скрыть на главной",
     )
     is_archived = models.BooleanField(
         default=False,
