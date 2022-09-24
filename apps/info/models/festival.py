@@ -93,7 +93,7 @@ class FestTeamMember(FestivalTeamMember):
 
 
 class Festival(BaseModel):
-    start_date = models.DateField(verbose_name="Дата начала фестиваля", unique_for_year="start_date")
+    start_date = models.DateField(verbose_name="Дата начала фестиваля")
     end_date = models.DateField(
         verbose_name="Дата окончания фестиваля",
     )
@@ -166,7 +166,6 @@ class Festival(BaseModel):
         return f"Фестиваль {self.year} года"
 
     def save(self, *args, **kwargs):
-        self.full_clean()
         self.year = self.start_date.year
         this = Festival.objects.filter(id=self.id).first()
         if this:
@@ -189,6 +188,8 @@ class Festival(BaseModel):
             )
         if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError({"end_date": _("Дата окончания фестиваля должна быть позже даты его начала.")})
+        if self.__class__.objects.filter(year=self.start_date.year).exclude(pk=self.pk).exists():
+            raise ValidationError({"start_date": _("Фестиваль с таким годом начала уже существует.")})
         return super().clean()
 
 
