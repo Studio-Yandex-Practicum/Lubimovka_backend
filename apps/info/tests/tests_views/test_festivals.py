@@ -39,7 +39,7 @@ class TestFestivalAPIViews:
         ):
             date = data.get(field)
             festival_field_in_response = datetime.strptime(date, "%Y-%m-%d").date()
-            festival_field_in_db = getattr(festival_2020, field)
+            festival_field_in_db = getattr(festival_2020, field).date()
             assert (
                 festival_field_in_response == festival_field_in_db
             ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение {field} неправильное"
