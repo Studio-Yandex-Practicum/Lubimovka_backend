@@ -122,8 +122,7 @@ class FestivalAdmin(admin.ModelAdmin):
         AdditionalInfoLinkInline,
     )
     form = FestivalForm
-    exclude = ("teams", "sponsors", "images")
-    readonly_fields = ("year",)
+    exclude = ("teams", "sponsors", "images", "year")
     empty_value_display = "-пусто-"
 
 
