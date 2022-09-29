@@ -111,9 +111,9 @@ def four_performance_events(four_performances):
 
 
 @pytest.fixture
-def events_pinned_on_main(freezer, reading, performance, master_class):
+def events_hidden_on_main(freezer, reading, performance, master_class):
     freezer.move_to("2021-05-20 15:42")
-    return EventFactory.create_batch(4, date_time_in_three_hours=True, pinned_on_main=True)
+    return EventFactory.create_batch(4, date_time_in_three_hours=True, hidden_on_main=False)
 
 
 @pytest.fixture

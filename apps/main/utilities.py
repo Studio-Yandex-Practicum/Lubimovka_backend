@@ -82,7 +82,7 @@ class MainObject:
                 today = timezone.now()
                 tomorrow = today.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
                 items = (
-                    Event.objects.filter(date_time__range=(today, tomorrow), pinned_on_main=True)
+                    Event.objects.filter(date_time__range=(today, tomorrow), hidden_on_main=False)
                     .filter(
                         Q(common_event__reading__name__isnull=False)
                         | Q(common_event__masterclass__name__isnull=False)
@@ -93,7 +93,7 @@ class MainObject:
             else:
                 items = (
                     Event.objects.filter(date_time__gte=timezone.now())
-                    .filter(pinned_on_main=True)
+                    .filter(hidden_on_main=False)
                     .filter(
                         Q(common_event__reading__name__isnull=False)
                         | Q(common_event__masterclass__name__isnull=False)
