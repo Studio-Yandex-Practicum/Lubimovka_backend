@@ -365,7 +365,7 @@ python-versions = "*"
 
 [[package]]
 name = "djangorestframework"
-version = "3.14.0"
+version = "3.13.1"
 description = "Web APIs for Django, made easy."
 category = "main"
 optional = false
