@@ -1,0 +1,65 @@
+{
+  "name": "typograf",
+  "description": "The client and server typographer",
+  "version": "5.5.3",
+  "author": {
+    "name": "Denis Seleznev",
+    "email": "hcodes@yandex.ru",
+    "url": "https://github.com/typograf/typograf"
+  },
+  "main": "dist/typograf.js",
+  "homepage": "https://github.com/typograf",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/typograf/typograf.git"
+  },
+  "keywords": [
+    "typo",
+    "text",
+    "typograf",
+    "typographer",
+    "typography"
+  ],
+  "engines": {
+    "node": ">= 0.10"
+  },
+  "files": [
+    "dist",
+    "docs",
+    "bin",
+    "LICENSE",
+    "typograf.d.ts"
+  ],
+  "devDependencies": {
+    "chai": "~3.5.0",
+    "gulp": "~3.9.1",
+    "gulp-concat": "~2.6.0",
+    "gulp-filter": "~4.0.0",
+    "gulp-jsonlint": "^1.1.2",
+    "gulp-rename": "~1.2.0",
+    "gulp-replace": "^0.5.4",
+    "gulp-uglify": "~2.0.0",
+    "gulp-util": "~3.0.2",
+    "istanbul": "~0.4.4",
+    "eslint": "~3.3.0",
+    "jscs": "~3.0.7",
+    "mocha": "~3.0.1",
+    "sort-keys": "~1.1.2",
+    "through": "~2.3.6",
+    "yaspeller": "~2.9.1"
+  },
+  "scripts": {
+    "benchmark": "node benchmark/test.js",
+    "dist": "gulp dist",
+    "jscs": "jscs .",
+    "eslint": "eslint .",
+    "prepublish": "npm run dist",
+    "rebuild": "gulp",
+    "test": "npm run rebuild && npm run eslint && npm run jscs && npm run unit-test-coverage",
+    "unit-test": "mocha -u bdd -R spec --recursive test",
+    "unit-test-coverage": "istanbul cover ./node_modules/mocha/bin/_mocha -- -u bdd -R spec --recursive test",
+    "yaspeller": "yaspeller ."
+  },
+  "typings": "./typograf.d.ts"
+}

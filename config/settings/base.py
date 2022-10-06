@@ -168,6 +168,7 @@ STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
     "django.contrib.staticfiles.finders.AppDirectoriesFinder",
 ]
+STATICFILES_DIRS = ["distr"]
 
 # MEDIA
 # ------------------------------------------------------------------------------
@@ -207,6 +208,7 @@ EMAIL_TIMEOUT = 5
 # https://django-ckeditor.readthedocs.io/en/latest/#
 CKEDITOR_TOOLBAR_BASE = (
     ("Undo", "Redo"),
+    ("Typograf",),
     ("Bold", "Italic", "Link", "Unlink", "RemoveFormat"),
     ("Styles", "Font", "FontSize"),
     ("Blockquote",),
@@ -217,7 +219,7 @@ CKEDITOR_BASE = {
     "autoGrow_bottomSpace": 30,
     "autoGrow_minHeight": 300,
     "autoGrow_maxHeight": 500,
-    "extraPlugins": (",").join(("autogrow",)),
+    "extraPlugins": ("autogrow", "typograf"),
     "basicEntities": False,
     "toolbar": "base",
     "toolbar_base": CKEDITOR_TOOLBAR_BASE,
