@@ -43,7 +43,15 @@ api_schema_patterns = [
     ),
 ]
 
-urlpatterns = [
+urlpatterns = []
+if "debug_toolbar" in settings.INSTALLED_APPS:
+    import debug_toolbar
+
+    urlpatterns += [
+        path("admin/__debug__/", include(debug_toolbar.urls)),
+    ]
+
+urlpatterns += [
     path(
         route="admin/reset/done/",
         view=views.PasswordResetCompleteView.as_view(),
@@ -67,11 +75,3 @@ urlpatterns = [
         view=include(api_schema_patterns),
     ),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
-
-
-if "debug_toolbar" in settings.INSTALLED_APPS:
-    import debug_toolbar
-
-    urlpatterns += [
-        path("__debug__/", include(debug_toolbar.urls)),
-    ]
