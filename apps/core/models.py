@@ -288,7 +288,7 @@ class Setting(BaseModel):
 
     def clean(self):
         if (
-            self.group == self.SettingGroup.FIRST_SCREEN
+            self.group in {self.SettingGroup.FIRST_SCREEN, self.SettingGroup.MAIN}
             and self.field_type == self.SettingFieldType.IMAGE
             and not self.image
         ):

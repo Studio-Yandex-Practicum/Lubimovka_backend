@@ -54,7 +54,7 @@ class EventAdmin(admin.ModelAdmin):
         "date_time",
         "is_archived",
         "is_paid",
-        "pinned_on_main",
+        "hidden_on_main",
     )
     fieldsets = (
         (
@@ -77,7 +77,7 @@ class EventAdmin(admin.ModelAdmin):
                     "date_time",
                     "is_archived",
                     ("url", "action"),
-                    "pinned_on_main",
+                    "hidden_on_main",
                 ),
             },
         ),

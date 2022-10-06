@@ -69,7 +69,7 @@ urlpatterns = [
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
 
 
-if DEBUG:
+if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar
 
     urlpatterns += [

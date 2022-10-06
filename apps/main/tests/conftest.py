@@ -1,3 +1,5 @@
+from datetime import datetime
+
 import pytest
 from django.conf import settings
 from django.urls import reverse
@@ -22,7 +24,9 @@ def set_media_temp_folder(tmpdir):
 
 @pytest.fixture
 def festival():
-    return FestivalFactory(start_date="2021-07-14", end_date="2021-07-15", year="2021")
+    start_date = datetime(2021, 7, 14)
+    end_date = datetime(2021, 7, 15)
+    return FestivalFactory(start_date=start_date, end_date=end_date, year=2021)
 
 
 @pytest.fixture
@@ -107,9 +111,9 @@ def four_performance_events(four_performances):
 
 
 @pytest.fixture
-def events_pinned_on_main(freezer, reading, performance, master_class):
+def events_hidden_on_main(freezer, reading, performance, master_class):
     freezer.move_to("2021-05-20 15:42")
-    return EventFactory.create_batch(4, date_time_in_three_hours=True, pinned_on_main=True)
+    return EventFactory.create_batch(4, date_time_in_three_hours=True, hidden_on_main=False)
 
 
 @pytest.fixture
