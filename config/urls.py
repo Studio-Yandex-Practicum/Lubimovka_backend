@@ -8,6 +8,7 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, Spec
 from apps.core.views import error400, error404, error500
 
 DEBUG = settings.DEBUG
+FORCE_DEBUG_TOOLBAR_URLS = settings.FORCE_DEBUG_TOOLBAR_URLS
 MEDIA_URL = settings.MEDIA_URL
 MEDIA_ROOT = settings.MEDIA_ROOT
 
@@ -69,7 +70,7 @@ urlpatterns = [
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
 
 
-if DEBUG:
+if DEBUG or FORCE_DEBUG_TOOLBAR_URLS:
     import debug_toolbar
 
     urlpatterns += [

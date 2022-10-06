@@ -16,6 +16,7 @@ APPS_DIR = ROOT_DIR / "apps"
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool("DJANGO_DEBUG", default=True)
+FORCE_DEBUG_TOOLBAR_URLS = env.bool("FORCE_DEBUG_TOOLBAR_URLS", default=False)
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env("DJANGO_SECRET_KEY", default="")
