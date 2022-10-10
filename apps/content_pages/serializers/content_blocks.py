@@ -14,8 +14,7 @@ from apps.content_pages.serializers.content_items import (
 class EventInBlockSerializer(serializers.ModelSerializer):
     """Returns Performance in EventsBlock."""
 
-    action_url = serializers.URLField(source="url")
-    action_text = serializers.CharField(source="get_action_display")
+    action_text = serializers.CharField(source="get_action_text_display")
 
     event_body = EventSerializer(
         source="common_event.target_model",

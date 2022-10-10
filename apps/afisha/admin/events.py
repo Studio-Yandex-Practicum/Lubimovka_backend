@@ -121,7 +121,7 @@ class EventAdmin(admin.ModelAdmin):
 
     @admin.display(boolean=True, description="Платное")
     def is_paid(self, obj):
-        if obj.action == "TICKETS":
+        if obj.action_text == "TICKETS":
             return True
         return False
 

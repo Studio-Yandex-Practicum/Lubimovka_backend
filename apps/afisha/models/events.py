@@ -71,11 +71,11 @@ class Event(BaseModel):
         blank=True,
         null=True,
     )
-    url = models.URLField(
+    action_url = models.URLField(
         max_length=200,
         verbose_name="Ссылка",
     )
-    action = models.CharField(
+    action_text = models.CharField(
         choices=ActionType.choices,
         default="REGISTRATION",
         max_length=50,
