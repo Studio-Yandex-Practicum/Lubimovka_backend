@@ -55,8 +55,8 @@ class EventFactory(factory.django.DjangoModelFactory):
         after_now=True,
         tzinfo=ZoneInfo(settings.TIME_ZONE),
     )
-    action = factory.Iterator(Event.ActionType.values)
-    url = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
+    action_text = factory.Iterator(Event.ActionType.values)
+    action_url = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
     hidden_on_main = factory.Faker("boolean", chance_of_getting_true=20)
 
     @factory.lazy_attribute
