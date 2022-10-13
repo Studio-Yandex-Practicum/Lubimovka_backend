@@ -2,7 +2,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views
-from django.urls import include, path
+from django.urls import include, path, re_path
 from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 from apps.core.views import error400, error404, error500
@@ -73,5 +73,9 @@ urlpatterns += [
     path(
         route="api/v1/schema/",
         view=include(api_schema_patterns),
+    ),
+    re_path(
+        route=r"^filer/",
+        view=include("filer.urls"),
     ),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
