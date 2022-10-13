@@ -1,3 +1,6 @@
+// JS-based Typograf: https://github.com/typograf/typograf
+// ckeditor plugin integration provided by: https://github.com/vgrish/ckeditor-plugin-typograf/
+
 (function () {
 
 	if (CKEDITOR.plugins.get('typograf')) {
