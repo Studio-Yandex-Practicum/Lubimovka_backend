@@ -53,4 +53,3 @@ class RoleTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = "Администрирование сайта"
-# admin.site.unregister(Group)
