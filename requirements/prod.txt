@@ -14,6 +14,7 @@ django-admin-sortable2==1.0.4
 django-anymail==8.6; python_version >= "3.5"
 django-ckeditor==6.5.1; python_version >= "3.8"
 django-cors-headers==3.13.0; python_version >= "3.7"
+django-debug-toolbar==3.7.0; python_version >= "3.7"
 django-environ==0.8.1; python_version >= "3.4" and python_version < "4"
 django-filer==2.2.3; python_version >= "3.6"
 django-filter==21.1; python_version >= "3.6"
