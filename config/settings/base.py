@@ -370,4 +370,6 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 # DJANGO-FILER
 FILER_CANONICAL_URL = 'sharing/'
-LOCALE_PATHS = [ROOT_DIR / "locale",]
+
+# Translations
+LOCALE_PATHS = [ROOT_DIR / "locale", ]
