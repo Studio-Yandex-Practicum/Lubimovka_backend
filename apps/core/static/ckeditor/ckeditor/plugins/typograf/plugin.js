@@ -29,7 +29,7 @@
 			}
 
 			if (!config['pathTypograf']) {
-				config['pathTypograf'] = 'vendor/typograf/dist/typograf.min.js';
+				config['pathTypograf'] = 'vendor/typograf/typograf.min.js';
 			}
 
 			CKEDITOR.scriptLoader.load(CKEDITOR.plugins.getPath(pluginName) + config['pathTypograf'], function () {
