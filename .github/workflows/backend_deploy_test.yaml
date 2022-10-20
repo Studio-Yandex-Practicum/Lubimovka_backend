@@ -184,26 +184,3 @@ jobs:
             # После установки удаляем файлы
             rm ${{ env.DEPLOY_PATH }}/test/lubimovka-backend.service
             rm ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend.service
-
-  send_message:
-    name: Send message in telegram group
-    runs-on: ubuntu-latest
-    environment:
-      name: test_deploy
-    needs: deploy
-    steps:
-      - name: send message
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-                  Новая ветка в тестировании:
-                  ${{ secrets.HUB_URL }}/${{ github.repository }}/tree/${{ github.ref_name }}
-                  Тестирует - ${{ github.event.inputs.name }}
-                  Сайт доступен по адресу:
-                  https://${{ secrets.SUBDOMAIN }}.${{ secrets.URL }}
-                  Сcылка на документацию в Swagger:
-                  ${{ secrets.DEVELOP_SWAGGER_URL }}
-                  Панель администратора:
-                  ${{ secrets.DEVELOP_ADMIN_URL }}
