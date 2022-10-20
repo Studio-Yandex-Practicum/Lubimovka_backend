@@ -372,4 +372,4 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 FILER_CANONICAL_URL = 'sharing/'
 
 # Translations
-LOCALE_PATHS = [ROOT_DIR / "locale", ]
+LOCALE_PATHS = [Path(STATIC_ROOT) / "core" / "locale", ]
