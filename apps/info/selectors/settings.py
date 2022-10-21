@@ -1,3 +1,4 @@
+from apps.articles.models import Project
 from apps.core.models import Person, Setting
 
 
@@ -31,7 +32,9 @@ def info_settings_get() -> object:
         },
         "photo_gallery_facebook_link": photo_gallery_facebook,
     }
+    projects = Project.objects.published()
 
     info_settings_data["for_press"] = for_press
+    info_settings_data["projects"] = projects
 
     return info_settings_data

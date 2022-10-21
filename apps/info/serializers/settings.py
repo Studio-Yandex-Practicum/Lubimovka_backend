@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from apps.articles.serializers.projects import ProjectListSerializer
+
 
 class PRDirectorSerializer(serializers.Serializer):
     pr_director_name = serializers.CharField(max_length=60)
@@ -23,3 +25,4 @@ class SettingsSerializer(serializers.Serializer):
     url_to_privacy_policy = serializers.URLField()
     for_press = ForPressSerializer()
     plays_reception_is_open = serializers.BooleanField()
+    projects = ProjectListSerializer(many=True)
