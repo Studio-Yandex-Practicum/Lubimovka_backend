@@ -1,11 +1,12 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.contrib.auth.models import Group
+from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.forms.widgets import CheckboxSelectMultiple
 
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
-from apps.core.models import Image, Role, RoleType
+from apps.core.models import CORE_ROLES, Image, Role, RoleType
 from apps.core.utils import get_app_list
 
 admin.AdminSite.get_app_list = get_app_list
@@ -36,6 +37,17 @@ class RoleAdmin(SortableAdminMixin, admin.ModelAdmin):
             self.prepopulated_fields = {}
             return ("slug",)
         return super().get_readonly_fields(request, obj)
+
+    def protected_role(self, obj):
+        """Check if the role is protected."""
+        if obj.slug in CORE_ROLES:
+            return True
+
+    def delete_queryset(self, request, queryset) -> None:
+        for object in queryset:
+            if self.protected_role(object):
+                raise PermissionDenied(f'Удаление роли "{object.name}" невозможно.')
+        return super().delete_queryset(request, queryset)
 
 
 @admin.register(RoleType)
