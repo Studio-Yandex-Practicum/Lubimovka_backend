@@ -19,6 +19,7 @@ BLOG_HELP_TEXT = (
     "При включении данной настройки, автоматический будет "
     "выключена настройка 'Отображение новостей на главной странице'"
 )
+CORE_ROLES = ("director", "directress", "dramatist", "dramatess")
 
 
 class BaseModel(models.Model):
