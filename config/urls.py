@@ -75,7 +75,7 @@ urlpatterns += [
         view=include(api_schema_patterns),
     ),
     re_path(
-        route=r"^media/",
+        route=r"^files/",
         view=include("filer.urls"),
     ),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
