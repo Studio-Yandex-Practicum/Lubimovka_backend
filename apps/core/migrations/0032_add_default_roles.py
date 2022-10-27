@@ -26,5 +26,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(create_roles),
+        migrations.RunPython(create_roles, reverse_code=migrations.RunPython.noop),
     ]
