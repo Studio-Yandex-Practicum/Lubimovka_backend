@@ -8,6 +8,7 @@ from apps.content_pages.querysets import PublishedContentQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
 from apps.core.models import BaseModel, Person
+from apps.core.utils import delete_image_with_model
 from apps.library.utilities import get_team_roles
 
 User = get_user_model()
@@ -54,6 +55,13 @@ class Performance(BaseModel):
     description = models.TextField(
         max_length=500,
         verbose_name="Краткое описание",
+        blank=True,
+    )
+    intro = models.TextField(
+        max_length=500,
+        verbose_name="Дополнительное описание",
+        blank=True,
+        help_text="Описание, расположенное под изображением",
     )
     text = models.TextField(
         max_length=2000,
@@ -99,7 +107,7 @@ class Performance(BaseModel):
     )
 
     class Meta:
-        ordering = ("-created",)
+        ordering = ("name",)
         verbose_name = "Спектакль"
         verbose_name_plural = "Спектакли"
         permissions = (
@@ -112,6 +120,18 @@ class Performance(BaseModel):
         if len(self.name) >= 25:
             return self.name[:25] + "..."
         return self.name
+
+    def save(self, *args, **kwargs):
+        this = Performance.objects.filter(id=self.id).first()
+        if this:
+            if this.main_image != self.main_image:
+                this.main_image.delete(save=False)
+            if this.bottom_image != self.bottom_image:
+                this.bottom_image.delete(save=False)
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        delete_image_with_model(self, Performance, *args, **kwargs)
 
     @property
     def team(self):

@@ -15,7 +15,15 @@ pytestmark = pytest.mark.django_db
 class TestMainAPIViews:
     def test_get_main_fields(self, client):
         """Checks fields in response."""
-        fields = ["first_screen", "news", "afisha", "banners", "short_list", "places", "video_archive"]
+        fields = [
+            "first_screen",
+            "news",
+            "afisha",
+            "banners",
+            "short_list",
+            "places",
+            "video_archive",
+        ]
         response = client.get(MAIN_URL)
         for field in fields:
             assert field in response.data, f"Проверьте, что при GET запросе {MAIN_URL} data содержит {field}"
@@ -177,12 +185,12 @@ class TestMainAPIViews:
         self,
         client,
         news_items_with_content,
-        events_pinned_on_main,
+        events_hidden_on_main,
         banners,
         places,
     ):
         """Checks data["afisha"]["items"] in response."""
-        fields = ["id", "type", "event_body", "date_time", "paid", "url"]
+        fields = ["id", "type", "event_body", "date_time", "action_url", "action_text"]
         response = client.get(MAIN_URL)
         for field in fields:
             assert (
@@ -193,7 +201,7 @@ class TestMainAPIViews:
         self,
         client,
         news_items_with_content,
-        events_pinned_on_main,
+        events_hidden_on_main,
     ):
         """Checks data["afisha"]["items"]["event_body"] in response."""
         fields = ["id", "name", "description", "team", "project_title"]
@@ -203,7 +211,7 @@ class TestMainAPIViews:
                 field in response.data["afisha"]["items"][0]["event_body"]
             ), f"Проверьте, что при GET запросе {MAIN_URL} data[afisha][items][0][event_body] содержит {field}"
 
-    def test_get_main_afisha_items_event_body_team_fields(self, client, news_items_with_content, events_pinned_on_main):
+    def test_get_main_afisha_items_event_body_team_fields(self, client, news_items_with_content, events_hidden_on_main):
         """Get `team` in response (response -> afisha -> items -> event_body -> team) and look for expected fields."""
         expected_fields_set = {
             "name",
@@ -231,13 +239,13 @@ class TestMainAPIViews:
         client,
         news_items_with_content,
         blog_items_with_content,
-        events_pinned_on_main,
+        events_hidden_on_main,
     ):
         """Checks that count afisha items in response matches count in db."""
         today = timezone.now()
         tomorrow = today.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
         objects_count_in_db = (
-            Event.objects.filter(date_time__range=(today, tomorrow), pinned_on_main=True)
+            Event.objects.filter(date_time__range=(today, tomorrow), hidden_on_main=False)
             .filter(
                 Q(common_event__reading__name__isnull=False)
                 | Q(common_event__masterclass__name__isnull=False)

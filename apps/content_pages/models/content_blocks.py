@@ -233,5 +233,5 @@ class EventsBlock(AbstractItemWithTitle):
     )
 
     class Meta:
-        verbose_name = "Блок спектаклей"
-        verbose_name_plural = "Блоки спектаклей"
+        verbose_name = "Блок событий"
+        verbose_name_plural = "Блоки событий"

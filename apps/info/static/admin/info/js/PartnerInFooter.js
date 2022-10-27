@@ -8,16 +8,18 @@
 jQuery(document).ready(function ($) {
     let partnerTypeSelectField = $('#id_type');
     let inFooterPartnerField = $("#id_in_footer_partner");
+    let isGeneralPartnerField = $("#id_is_general")
     let divDependedOnPartnerType = $(".depended_on_partner_type");
 
     function toggleDivDependedOnPartnerType(partnerType, isFirstLoad) {
-        if (partnerType === 'general') {
+        if (partnerType === 'festival') {
             divDependedOnPartnerType.slideDown();
         } else {
             if (isFirstLoad) {
                 divDependedOnPartnerType.hide();
             } else {
                 inFooterPartnerField.prop("checked", false);
+                isGeneralPartnerField.prop("checked", false);
                 divDependedOnPartnerType.slideUp();
             }
         }

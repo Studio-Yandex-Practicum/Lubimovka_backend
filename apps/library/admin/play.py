@@ -37,9 +37,11 @@ class PlayAdmin(admin.ModelAdmin):
         "name",
         "city",
         "program",
+        "year",
         "festival",
         "published",
     )
+    list_select_related = ("program", "festival")
     inlines = (AuthorInline,)
     list_filter = (
         PlayTypeFilter,
@@ -62,10 +64,12 @@ class PlayAdmin(admin.ModelAdmin):
         "city",
         "year",
         "url_download",
+        "url_download_from",
         "url_reading",
         "festival",
         "published",
     )
+    ordering = ("-year",)
 
     def get_search_fields(self, request):
         # if request is for autocomplete, search only in names

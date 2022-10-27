@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 
 from apps.afisha.models import MasterClass, Performance, Reading
@@ -6,7 +7,7 @@ from apps.core.models import Role
 from apps.library.models import Play, TeamMember
 
 
-class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
+class TeamMemberInline(SortableInlineAdminMixin, InlineReadOnlyMixin, admin.TabularInline):
     model = TeamMember
     fields = (
         "person",
@@ -14,6 +15,9 @@ class TeamMemberInline(InlineReadOnlyMixin, admin.TabularInline):
     )
     autocomplete_fields = ("person",)
     extra = 0
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).order_by("role", "order")
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         """Restricts role types for the model where inline is used."""

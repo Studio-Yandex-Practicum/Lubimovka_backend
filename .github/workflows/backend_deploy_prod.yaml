@@ -180,37 +180,3 @@ jobs:
             # После установки удаляем файлы
             rm ${{ env.DEPLOY_PATH }}/prod/lubimovka-backend.service
             rm ${{ env.DEPLOY_PATH }}/prod/lubimovka-frontend.service
-
-  send_message:
-    name: Send message in telegram group
-    runs-on: ubuntu-latest
-    environment:
-      name: prod_deploy
-    needs: deploy
-    steps:
-      - name: check repository
-        uses: actions/checkout@v1
-      - name: find the PR associated with this push, if there is one
-        uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-        with:
-          state: closed
-      - run: echo "PR=${PR}" >> $GITHUB_ENV
-        if: success() && steps.findPr.outputs.number
-        env:
-          PR: ${{ steps.findPr.outputs.pr }}
-      - name: send message
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_ID }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          message: |
-                  Код на PROD сервере обновлён!
-                  Изменения можно посмотреть в PR:
-                  ${{ secrets.HUB_URL }}/${{ github.repository }}/pull/${{env.PR}}
-                  Сайт доступен по адресу:
-                  https://${{ secrets.URL }}
-                  Сcылка на документацию в Swagger:
-                  ${{ secrets.DEVELOP_SWAGGER_URL }}
-                  Панель администратора:
-                  ${{ secrets.DEVELOP_ADMIN_URL }}

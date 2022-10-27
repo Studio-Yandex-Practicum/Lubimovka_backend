@@ -55,9 +55,9 @@ class EventFactory(factory.django.DjangoModelFactory):
         after_now=True,
         tzinfo=ZoneInfo(settings.TIME_ZONE),
     )
-    paid = factory.Faker("boolean", chance_of_getting_true=50)
-    url = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
-    pinned_on_main = factory.Faker("boolean", chance_of_getting_true=80)
+    action_text = factory.Iterator(Event.ActionType.values)
+    action_url = factory.LazyFunction(lambda: random.choice(YOUTUBE_VIDEO_LINKS))
+    hidden_on_main = factory.Faker("boolean", chance_of_getting_true=20)
 
     @factory.lazy_attribute
     def common_event(self):

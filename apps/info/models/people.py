@@ -4,12 +4,11 @@ from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
-from apps.info.models import Festival
+from apps.info.models.festival import Festival
 
 
 class Partner(BaseModel):
     class PartnerType(models.TextChoices):
-        GENERAL_PARTNER = "general", _("Генеральный партнер")
         FESTIVAL_PARTNER = "festival", _("Партнер фестиваля")
         INFO_PARTNER = "info", _("Информационный партнер")
 
@@ -21,6 +20,17 @@ class Partner(BaseModel):
         max_length=8,
         choices=PartnerType.choices,
         verbose_name="Тип",
+    )
+    is_general = models.BooleanField(
+        default=False,
+        verbose_name="Генеральный партнер",
+        help_text="Поставьте галочку, чтобы сделать партнёра генеральным",
+    )
+    description = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name="Описание",
+        help_text="Поле не обязательное",
     )
     url = models.URLField(
         max_length=200,
@@ -140,8 +150,6 @@ class Volunteer(BaseModel):
             return
         if not self.person.image:
             errors.append("Для волонтёра необходимо выбрать его фото")
-        if not self.person.city:
-            errors.append("Укажите город проживания волонтёра")
         if (self.review_title and not self.review_text) or (self.review_text and not self.review_title):
             errors.append("Нельзя сделать отзыв без заголовка или заголовок без отзыва")
 
@@ -190,3 +198,10 @@ class Selector(BaseModel):
     def clean(self):
         if self.person_id and not self.person.image:
             raise ValidationError("Для отборщика необходимо выбрать его фото")
+
+
+class Review(Volunteer):
+    class Meta:
+        proxy = True
+        verbose_name = "Отзыв"
+        verbose_name_plural = "Отзывы"

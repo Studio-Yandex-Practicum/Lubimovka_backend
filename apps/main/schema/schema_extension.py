@@ -49,8 +49,8 @@ MAIN_SCHEMA_SUCCESS_MESSAGE = {
                     "project_title": "string",
                 },
                 "date_time": "2022-01-16T14:39:25.453Z",
-                "paid": True,
                 "url": "string",
+                "button": "STREAM",
             }
         ],
     },

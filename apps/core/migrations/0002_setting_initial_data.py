@@ -305,6 +305,20 @@ def add_general_settings(apps, schema_editor):
         description="Цвет сайта",
     )
     Setting.objects.create(
+        field_type="TEXT",
+        group="GENERAL",
+        settings_key="background_color",
+        text="#ECEBE8",
+        description="Цвет основного фона сайта",
+    )
+    Setting.objects.create(
+        field_type="TEXT",
+        group="GENERAL",
+        settings_key="accent_color",
+        text="#B7C09D",
+        description="Цвет акцента сайта",
+    )
+    Setting.objects.create(
         field_type="URL",
         group="GENERAL",
         settings_key="url_to_privacy_policy",
@@ -317,6 +331,20 @@ def add_general_settings(apps, schema_editor):
         settings_key="photo_gallery_facebook",
         url="https://www.facebook.com/festival.lubimovka/photos",
         description="Ссылка на фотоальбомы в Facebook на странице для прессы",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="GENERAL",
+        settings_key="show_general_partners",
+        boolean=True,
+        description="Отображать генеральных партнёров",
+    )
+    Setting.objects.create(
+        field_type="BOOLEAN",
+        group="GENERAL",
+        settings_key="show_info_partners_and_festival_partners",
+        boolean=True,
+        description="Отображать информационных партнёров и партнёров фестиваля",
     )
 
 
@@ -453,7 +481,7 @@ def add_press_release_setting(apps, schema_editor):
         group="EMAIL",
         settings_key="pr_director_name",
         text="Имя Фамилия в дательном падеже (пример: Анне Загородниковой)",
-        description="Имя PR деректора на странице для прессы (в дательном падеже)",
+        description="Имя PR директора на странице для прессы (в дательном падеже)",
     )
 
 

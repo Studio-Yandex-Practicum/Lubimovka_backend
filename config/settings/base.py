@@ -15,7 +15,15 @@ APPS_DIR = ROOT_DIR / "apps"
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = env.bool("DJANGO_DEBUG", False)
+DEBUG = env.bool("DJANGO_DEBUG", default=True)
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
+SECRET_KEY = env("DJANGO_SECRET_KEY", default="")
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=[]) + ["127.0.0.1", "localhost", "backend"]
+
+INTERNAL_IPS = ["127.0.0.1", "10.0.2.2", "localhost"]
 
 # URLS
 # ------------------------------------------------------------------------------
@@ -199,6 +207,7 @@ EMAIL_TIMEOUT = 5
 # https://django-ckeditor.readthedocs.io/en/latest/#
 CKEDITOR_TOOLBAR_BASE = (
     ("Undo", "Redo"),
+    ("Typograf",),
     ("Bold", "Italic", "Link", "Unlink", "RemoveFormat"),
     ("Styles", "Font", "FontSize"),
     ("Blockquote",),
@@ -209,7 +218,7 @@ CKEDITOR_BASE = {
     "autoGrow_bottomSpace": 30,
     "autoGrow_minHeight": 300,
     "autoGrow_maxHeight": 500,
-    "extraPlugins": (",").join(("autogrow",)),
+    "extraPlugins": ("autogrow", "typograf"),
     "basicEntities": False,
     "toolbar": "base",
     "toolbar_base": CKEDITOR_TOOLBAR_BASE,
@@ -248,6 +257,12 @@ YNDX_DISK_TOKEN = env("YNDX_DISK_TOKEN", default="yndx_token")
 LOGGING = LOGGING_SETTINGS
 
 LOGIN_URL = "/admin/login/"
+
+# https://anymail.readthedocs.io/en/stable/esps/mailjet/#settings
+ANYMAIL = {
+    "MAILJET_API_KEY": env("MAILJET_API_KEY", default=None),
+    "MAILJET_SECRET_KEY": env("MAILJET_SECRET_KEY", default=None),
+}
 
 # Templates for mailjet
 # ------------------------------------------------------------------------------
@@ -327,3 +342,26 @@ CSRF_FAILURE_VIEW = 'apps.core.views.csrf_failure'
 
 # https://anymail.readthedocs.io/en/stable/installation/?highlight=SERVER_EMAIL#configuring-django-s-email-backend
 SERVER_EMAIL = env("SERVER_EMAIL", default=None)
+
+# https://docs.djangoproject.com/en/3.0/ref/django-admin/#django-admin-createsuperuser
+DJANGO_SUPERUSER_USERNAME = env("DJANGO_SUPERUSER_USERNAME", default="admin")
+DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL", default="admin@admin.com")
+DJANGO_SUPERUSER_PASSWORD = env("DJANGO_SUPERUSER_PASSWORD", default="admin")
+
+# Use PostgreSQL
+# ------------------------------------------------------------------------------
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": os.environ.get("POSTGRES_PORT"),
+    }
+}
+
+# SECURE_PROXY_SSL_HEADER
+# -----------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/3.2/ref/settings/#secure-proxy-ssl-header
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

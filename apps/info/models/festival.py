@@ -8,6 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.models import BaseModel, Image, Person
+from apps.core.utils import delete_image_with_model
 
 
 class FestivalTeamMember(BaseModel):
@@ -61,8 +62,6 @@ class FestivalTeamMember(BaseModel):
             raise ValidationError("Необходимо указать человека для создания команды фестиваля")
         if not self.person.email:
             raise ValidationError("Для члена команды необходимо указать email")
-        if not self.person.city:
-            raise ValidationError("Для члена команды необходимо указать город")
         if not self.person.image:
             raise ValidationError("Для члена команды необходимо выбрать фото")
         if not self.is_pr_director:
@@ -94,9 +93,7 @@ class FestTeamMember(FestivalTeamMember):
 
 
 class Festival(BaseModel):
-    start_date = models.DateField(
-        verbose_name="Дата начала фестиваля",
-    )
+    start_date = models.DateField(verbose_name="Дата начала фестиваля")
     end_date = models.DateField(
         verbose_name="Дата окончания фестиваля",
     )
@@ -121,6 +118,11 @@ class Festival(BaseModel):
     selectors_count = models.PositiveSmallIntegerField(
         default=1,
         verbose_name="Количество отборщиков пьес",
+    )
+    selectors_page_link = models.URLField(
+        blank=True,
+        null=True,
+        verbose_name="Ссылка на новость об отборщиках",
     )
     volunteers_count = models.PositiveSmallIntegerField(
         default=1,
@@ -164,12 +166,30 @@ class Festival(BaseModel):
         return f"Фестиваль {self.year} года"
 
     def save(self, *args, **kwargs):
-        self.full_clean()
+        self.year = self.start_date.year
+        this = Festival.objects.filter(id=self.id).first()
+        if this:
+            if this.festival_image != self.festival_image:
+                this.festival_image.delete(save=False)
         return super().save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        delete_image_with_model(self, Festival, *args, **kwargs)
+
     def clean(self):
+        future_year = timezone.now().year + 1
+        if self.start_date.year < 1990 or self.start_date.year > future_year:
+            raise ValidationError(
+                {"start_date": _(f"Год начала фестиваля должен быть в промежутке 1990 - {future_year}.")}
+            )
+        if self.end_date.year < 1990 or self.end_date.year > future_year:
+            raise ValidationError(
+                {"end_date": _(f"Год окончания фестиваля должен быть в промежутке 1990 - {future_year}.")}
+            )
         if self.end_date and self.start_date and self.end_date <= self.start_date:
             raise ValidationError({"end_date": _("Дата окончания фестиваля должна быть позже даты его начала.")})
+        if self.__class__.objects.filter(year=self.start_date.year).exclude(pk=self.pk).exists():
+            raise ValidationError({"start_date": _("Фестиваль с таким годом начала уже существует.")})
         return super().clean()
 
 

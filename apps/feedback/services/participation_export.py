@@ -26,9 +26,17 @@ class ParticipationApplicationExport:
             instance.exported_to_google = True
             instance.save()
 
+    def get_email_settings(self):
+        settings_keys = (
+            "email_send_from",
+            "email_to_send_participations",
+        )
+        return Setting.get_settings(settings_keys=settings_keys)
+
     def mail_send_export(self, instance, file_link):
-        from_email = Setting.get_setting("email_send_from")
-        to_emails = (Setting.get_setting("email_to_send_participations"),)
+        email_settings = self.get_email_settings(self)
+        from_email = email_settings.get("email_send_from")
+        to_emails = (email_settings.get("email_to_send_participations"),)
         template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
         context = {
             "year": instance.year,
@@ -47,7 +55,7 @@ class ParticipationApplicationExport:
             instance.save()
 
     def export_application(self, instance, file_link):
-        """Функция объндиняющая экспорт в диск, таблицу и отправку на почту."""
+        """Функция, объединяющая экспорт на диск, в таблицу и отправку на почту."""
         yandex_disk_link = self.yandex_disk_export(instance)
         if yandex_disk_link is not None:
             file_link = yandex_disk_link

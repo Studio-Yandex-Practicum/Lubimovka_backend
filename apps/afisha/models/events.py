@@ -46,6 +46,11 @@ class Event(BaseModel):
         MASTERCLASS = "MASTERCLASS", "Мастер-класс"
         READING = "READING", "Читка"
 
+    class ActionType(models.TextChoices):
+        REGISTRATION = "REGISTRATION", "Регистрация"
+        TICKETS = "TICKETS", "Билеты"
+        STREAM = "STREAM", "Трансляция"
+
     common_event = models.ForeignKey(
         CommonEvent,
         on_delete=models.CASCADE,
@@ -66,17 +71,20 @@ class Event(BaseModel):
         blank=True,
         null=True,
     )
-    paid = models.BooleanField(
-        verbose_name="Платное",
-        default=False,
-    )
-    url = models.URLField(
+    action_url = models.URLField(
         max_length=200,
         verbose_name="Ссылка",
     )
-    pinned_on_main = models.BooleanField(
-        default=False,
-        verbose_name="Закрепить на главной",
+    action_text = models.CharField(
+        choices=ActionType.choices,
+        default=ActionType.REGISTRATION,
+        max_length=50,
+        verbose_name="Название действия",
+        help_text="Выберите название действия, соответсвующее содержанию ссылки",
+    )
+    hidden_on_main = models.BooleanField(
+        default=True,
+        verbose_name="Скрыть на главной",
     )
     is_archived = models.BooleanField(
         default=False,

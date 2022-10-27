@@ -53,8 +53,8 @@ class EventAdmin(admin.ModelAdmin):
         "status",
         "date_time",
         "is_archived",
-        "paid",
-        "pinned_on_main",
+        "is_paid",
+        "hidden_on_main",
     )
     fieldsets = (
         (
@@ -75,9 +75,9 @@ class EventAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "date_time",
-                    ("is_archived", "paid"),
-                    "url",
-                    "pinned_on_main",
+                    "is_archived",
+                    ("action_url", "action_text"),
+                    "hidden_on_main",
                 ),
             },
         ),
@@ -118,6 +118,10 @@ class EventAdmin(admin.ModelAdmin):
         elif obj.date_time.date() > date_now:
             return icon("upcoming", "Предстоящее")
         return icon("today", "Cегодняшнее")
+
+    @admin.display(boolean=True, description="Платное")
+    def is_paid(self, obj):
+        return obj.action_text == "TICKETS"
 
     class Media:
 

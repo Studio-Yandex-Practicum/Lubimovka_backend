@@ -1,20 +1,17 @@
-from typing import Union
-
+from apps.articles.models import Project
 from apps.core.models import Person, Setting
 
 
-def info_settings_get() -> dict[str, Union[str, bool, dict[str, str]]]:
-    """Return feedback settings (mostly related to emails) dictionary."""
+def info_settings_get() -> object:
+    """Return settings (mostly related to emails) dictionary."""
     settings_keys = (
-        "email_on_project_page",
-        "email_on_what_we_do_page",
-        "email_on_trustees_page",
-        "email_on_about_festival_page",
-        "email_on_acceptance_of_plays_page",
-        "email_on_author_page",
-        "email_on_volunteers_page",
-        "email_on_blog_page",
-        "email_on_support_page",
+        "play_author_email",
+        "blog_author_email",
+        "reading_email",
+        "volunteer_email",
+        "trustee_email",
+        "press_email",
+        "submit_play_email",
         "photo_gallery_facebook",
         "pr_director_name",
         "url_to_privacy_policy",
@@ -35,7 +32,9 @@ def info_settings_get() -> dict[str, Union[str, bool, dict[str, str]]]:
         },
         "photo_gallery_facebook_link": photo_gallery_facebook,
     }
+    projects = Project.objects.published()
 
     info_settings_data["for_press"] = for_press
+    info_settings_data["projects"] = projects
 
     return info_settings_data

@@ -8,6 +8,7 @@ from django.core.files.base import ContentFile
 from django.template.defaultfilters import slugify as django_slugify
 from rest_framework.response import Response
 
+from apps.articles.utils import journalist_has_not_perms
 from apps.core.constants import ALPHABET, STATUS_INFO
 from apps.core.decorators.cache import cache_user
 
@@ -49,6 +50,8 @@ def get_user_perms_level(request, obj):
     """Return user's access level for using in StatusButtonMixin."""
     app_name = obj._meta.app_label
     perms = request.user.get_all_permissions()
+    if journalist_has_not_perms(request, obj):
+        return 0
     if f"{app_name}.access_level_3" in perms:
         return 3
     if f"{app_name}.access_level_2" in perms:
@@ -120,7 +123,10 @@ def get_app_list(self, request):
 
 def get_domain(request):
     server_protocol = request.META["SERVER_PROTOCOL"].split("/1.1")[0].lower()
-    domain = server_protocol + "://" + request.META["HTTP_HOST"]
+    if "HTTP_HOST" in request.META:
+        domain = server_protocol + "://" + request.META["HTTP_HOST"]
+    else:
+        domain = ""
     return domain
 
 
@@ -130,3 +136,10 @@ def calculate_hash(object_id):
     hash_object = hashlib.sha1(hash_string.encode())
     hexadecimal_digits = hash_object.hexdigest()
     return hexadecimal_digits[0:5]
+
+
+def delete_image_with_model(self, model, *args, **kwargs):
+    """Remove image from media while deleting the object."""
+    storage, path = self.image.storage, self.image.path
+    super(model, self).delete(*args, **kwargs)
+    storage.delete(path)

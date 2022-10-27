@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from apps.articles.serializers.projects import ProjectListSerializer
+
 
 class PRDirectorSerializer(serializers.Serializer):
     pr_director_name = serializers.CharField(max_length=60)
@@ -13,15 +15,14 @@ class ForPressSerializer(serializers.Serializer):
 
 
 class SettingsSerializer(serializers.Serializer):
-    email_on_project_page = serializers.EmailField()
-    email_on_what_we_do_page = serializers.EmailField()
-    email_on_trustees_page = serializers.EmailField()
-    email_on_about_festival_page = serializers.EmailField()
-    email_on_acceptance_of_plays_page = serializers.EmailField()
-    email_on_author_page = serializers.EmailField()
-    email_on_volunteers_page = serializers.EmailField()
-    email_on_blog_page = serializers.EmailField()
-    email_on_support_page = serializers.EmailField()
+    play_author_email = serializers.EmailField()
+    blog_author_email = serializers.EmailField()
+    reading_email = serializers.EmailField()
+    volunteer_email = serializers.EmailField()
+    trustee_email = serializers.EmailField()
+    press_email = serializers.EmailField()
+    submit_play_email = serializers.EmailField()
     url_to_privacy_policy = serializers.URLField()
     for_press = ForPressSerializer()
     plays_reception_is_open = serializers.BooleanField()
+    projects = ProjectListSerializer(many=True)
