@@ -141,7 +141,7 @@ class Performance(BaseModel):
     @property
     def event_team(self):
         """Return team members filtered by roles specified in this method."""
-        return get_team_roles(self, {"team_members__reading": self, "slug__in": CORE_ROLES})
+        return get_team_roles(self, {"team_members__performance": self, "slug__in": CORE_ROLES})
 
     @property
     def short_name(self):
