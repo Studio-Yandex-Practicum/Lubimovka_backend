@@ -38,7 +38,7 @@ class RoleAdmin(SortableAdminMixin, admin.ModelAdmin):
             return ("slug",)
         return super().get_readonly_fields(request, obj)
 
-    def delete_queryset(self, request, queryset) -> None:
+    def delete_queryset(self, request, queryset):
         for object in queryset:
             if object.slug in CORE_ROLES:
                 raise PermissionDenied(f'Удаление роли "{object.name}" невозможно.')
