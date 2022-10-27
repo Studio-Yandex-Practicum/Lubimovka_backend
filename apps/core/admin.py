@@ -1,6 +1,5 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
-from django.contrib.auth.models import Group
 from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.forms.widgets import CheckboxSelectMultiple
@@ -61,4 +60,3 @@ class RoleTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = "Администрирование сайта"
-admin.site.unregister(Group)

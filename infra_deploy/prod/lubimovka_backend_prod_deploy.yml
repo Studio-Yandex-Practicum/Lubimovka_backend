@@ -39,6 +39,7 @@ services:
         python manage.py migrate &&
         python manage.py set_perms &&
         python manage.py collectstatic --noinput &&
+        python manage.py compilemessages --noinput &&
       "
     depends_on:
       - backend

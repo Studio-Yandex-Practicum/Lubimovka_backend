@@ -54,6 +54,9 @@ THIRD_PARTY_APPS = [
     "drf_multiple_model",
     "ckeditor",
     "anymail",
+    "easy_thumbnails",
+    "filer",
+    "mptt",
 ]
 LOCAL_APPS = [
     "apps.users",
@@ -365,3 +368,9 @@ DATABASES = {
 # -----------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/3.2/ref/settings/#secure-proxy-ssl-header
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+# DJANGO-FILER
+FILER_CANONICAL_URL = 'sharing/'
+
+# Translations
+LOCALE_PATHS = [Path(STATIC_ROOT) / "core" / "locale", ]
