@@ -7,7 +7,7 @@ from django.template.defaultfilters import truncatechars
 from apps.content_pages.querysets import PublishedContentQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
-from apps.core.models import BaseModel, Person
+from apps.core.models import CORE_ROLES, BaseModel, Person
 from apps.core.utils import delete_image_with_model
 from apps.library.utilities import get_team_roles
 
@@ -140,8 +140,8 @@ class Performance(BaseModel):
 
     @property
     def event_team(self):
-        """Return directors and dramatists related with Performance."""
-        return get_team_roles(self, {"team_members__performance": self, "slug__in": ["director", "dramatist"]})
+        """Return team members filtered by roles specified in this method."""
+        return get_team_roles(self, {"team_members__performance": self, "slug__in": CORE_ROLES})
 
     @property
     def short_name(self):
