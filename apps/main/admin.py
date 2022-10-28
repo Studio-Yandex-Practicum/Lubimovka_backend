@@ -76,3 +76,8 @@ class SettingAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         """Remove the delete button."""
         return False
+
+    def has_change_permission(self, request, obj=None) -> bool:
+        if obj and obj.settings_key == "email_send_from":
+            return False
+        return super().has_change_permission(request)
