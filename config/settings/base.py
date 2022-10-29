@@ -55,7 +55,7 @@ THIRD_PARTY_APPS = [
     "ckeditor",
     "anymail",
     "easy_thumbnails",
-    "filer",
+    "apps.filer.apps.FilerCustomConfig",
     "mptt",
 ]
 LOCAL_APPS = [
