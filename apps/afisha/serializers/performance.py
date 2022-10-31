@@ -8,9 +8,11 @@ from apps.library.serializers import PlaySerializer, RoleSerializer
 class LocalEventSerializer(serializers.ModelSerializer):
     """Serializer for performance__events,using only for PerformanceSerializer."""
 
+    action_text = serializers.CharField(source="get_action_text_display")
+
     class Meta:
         model = Event
-        fields = ("id", "date_time", "action_url")
+        fields = ("id", "date_time", "action_url", "action_text")
 
 
 class BlockImagesSerializer(serializers.ModelSerializer):
