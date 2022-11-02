@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.afisha.models import Event, Performance, PerformanceMediaReview, PerformanceReview
@@ -35,6 +36,12 @@ class PerformanceSerializer(serializers.ModelSerializer):
     team = RoleSerializer(many=True)
     images_in_block = BlockImagesSerializer(many=True)
     events = LocalEventSerializer(source="events.body", many=True)
+    duration = serializers.SerializerMethodField()
+
+    @extend_schema_field(int)
+    def get_duration(self, obj):
+        """Retruns duration in seconds instead of default HH:MM:SS format."""
+        return obj.duration.seconds
 
     class Meta:
         exclude = (
