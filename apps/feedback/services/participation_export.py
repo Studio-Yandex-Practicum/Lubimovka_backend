@@ -34,7 +34,7 @@ class ParticipationApplicationExport:
         return Setting.get_settings(settings_keys=settings_keys)
 
     def mail_send_export(self, instance, file_link):
-        email_settings = self.get_email_settings(self)
+        email_settings = self.get_email_settings()
         from_email = email_settings.get("email_send_from")
         to_emails = (email_settings.get("submit_play_email"),)
         template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
