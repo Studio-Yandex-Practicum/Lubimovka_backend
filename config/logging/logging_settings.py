@@ -38,8 +38,8 @@ LOGGING_SETTINGS = {
             "filename": DEBUG_LOGS_DIR / "debug.log",
             "when": "midnight",
             "interval": 1,
-            "backupCount": 5,
-            "oldbackupCount": 60,
+            "backupCount": 3,
+            "oldbackupCount": 10,
             "formatter": "verbose",
         },
         "errors_to_file": {
@@ -48,8 +48,8 @@ LOGGING_SETTINGS = {
             "filename": ERROR_LOGS_DIR / "error.log",
             "when": "midnight",
             "interval": 1,
-            "backupCount": 5,
-            "oldbackupCount": 60,
+            "backupCount": 3,
+            "oldbackupCount": 10,
             "formatter": "verbose",
         },
         "console": {

@@ -1,11 +1,11 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
-from django.contrib.auth.models import Group
+from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.forms.widgets import CheckboxSelectMultiple
 
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
-from apps.core.models import Image, Role, RoleType
+from apps.core.models import CORE_ROLES, Image, Role, RoleType
 from apps.core.utils import get_app_list
 
 admin.AdminSite.get_app_list = get_app_list
@@ -37,6 +37,12 @@ class RoleAdmin(SortableAdminMixin, admin.ModelAdmin):
             return ("slug",)
         return super().get_readonly_fields(request, obj)
 
+    def delete_queryset(self, request, queryset):
+        for object in queryset:
+            if object.slug in CORE_ROLES:
+                raise PermissionDenied(f'Удаление роли "{object.name}" невозможно.')
+        return super().delete_queryset(request, queryset)
+
 
 @admin.register(RoleType)
 class RoleTypeAdmin(admin.ModelAdmin):
@@ -54,4 +60,3 @@ class RoleTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = "Администрирование сайта"
-admin.site.unregister(Group)

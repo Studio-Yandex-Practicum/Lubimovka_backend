@@ -38,7 +38,7 @@ services:
         sleep 5;
         python manage.py migrate &&
         python manage.py set_perms &&
-        python manage.py collectstatic --noinput &&
+        python manage.py collectstatic --noinput
       "
     depends_on:
       - backend
