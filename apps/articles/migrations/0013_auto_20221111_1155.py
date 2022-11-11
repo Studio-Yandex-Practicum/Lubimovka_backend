@@ -17,14 +17,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterModelOptions(
-            name='project',
-            options={'ordering': ('order',), 'permissions': (('access_level_1', 'Права журналиста'), ('access_level_2', 'Права редактора'), ('access_level_3', 'Права главреда')), 'verbose_name': 'Проект', 'verbose_name_plural': 'Проекты'},
-        ),
         migrations.AddField(
             model_name='project',
             name='order',
             field=models.PositiveSmallIntegerField(db_index=True, default=0, verbose_name='Порядок'),
         ),
         migrations.RunPython(reorder, reverse_code=migrations.RunPython.noop),
+        migrations.AlterModelOptions(
+            name='project',
+            options={'ordering': ('order',), 'permissions': (('access_level_1', 'Права журналиста'), ('access_level_2', 'Права редактора'), ('access_level_3', 'Права главреда')), 'verbose_name': 'Проект', 'verbose_name_plural': 'Проекты'},
+        ),
     ]
