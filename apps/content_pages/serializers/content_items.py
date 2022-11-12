@@ -100,6 +100,16 @@ class OrderedPlaySerializer(serializers.Serializer):
         required=False,
         label="Год написания пьесы",
     )
+    url_download = serializers.IntegerField(
+        source="item.url_download",
+        label="Ссылка на читку",
+        max_length=200,
+    )
+    url_download_from = serializers.IntegerField(
+        source="item.url_download_from",
+        label="Ссылка на скачивание",
+        max_length=200,
+    )
 
 
 class OrderedVideoSerializer(serializers.ModelSerializer):
