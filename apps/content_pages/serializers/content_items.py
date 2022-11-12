@@ -100,9 +100,9 @@ class OrderedPlaySerializer(serializers.Serializer):
         required=False,
         label="Год написания пьесы",
     )
-    url_reading = serializers.URLField(
-        source="item.url_reading",
-        label="Ссылка на читку",
+    url_download = serializers.URLField(
+        source="item.url_download",
+        label="Текст пьесы",
         max_length=200,
     )
     url_download_from = serializers.URLField(
