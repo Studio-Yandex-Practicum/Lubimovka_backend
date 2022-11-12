@@ -104,7 +104,7 @@ def test_blog_item_detail_plays_block_content_fields(client, complex_blog_item):
         "authors",
         "city",
         "year",
-        "url_download",
+        "url_reading",
         "url_download_from",
     )
 
