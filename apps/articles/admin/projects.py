@@ -1,3 +1,4 @@
+from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 
 from apps.articles.models import Project, ProjectContent
@@ -10,8 +11,9 @@ class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
 
 
 @admin.register(Project)
-class ProjectAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
+class ProjectAdmin(SortableAdminMixin, StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
     list_display = (
+        "order",
         "title",
         "description",
         "pub_date",
@@ -19,6 +21,7 @@ class ProjectAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
         "status",
         "creator_name",
     )
+    sortable_by = []
     fieldsets = (
         (
             None,
@@ -51,7 +54,6 @@ class ProjectAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
         "image",
         "creator_name",
     )
-    ordering = ("-created",)
 
     def get_queryset(self, request):
         return super().get_queryset(request).select_related("creator")

@@ -16,11 +16,19 @@ class Project(AbstractContentPage):
         help_text="Короткое интро к проекту. Показывается в списке проектов с заголовком.",
     )
 
+    order = models.PositiveSmallIntegerField(
+        default=0,
+        blank=False,
+        null=False,
+        verbose_name="Порядок",
+        db_index=True,
+    )
+
     def __str__(self):
         return f"Проект {self.title}"
 
     class Meta:
-        ordering = ("title",)
+        ordering = ("order",)
         verbose_name = "Проект"
         verbose_name_plural = "Проекты"
         permissions = (
