@@ -64,7 +64,12 @@ class RoleTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = "Администрирование сайта"
+
+# Отключение раздела "Опции миниатюр"
 admin.site.unregister(ThumbnailOption)
+
+# Замена страниц изменения файла (рисунка) в разделе "Файлы" на вариант,
+# скрывающий форму редактирования метаинформации
 admin.site.unregister(FilerImage)
 admin.site.register(FilerImage, NonEditableImageAdmin)
 admin.site.unregister(FilerFile)
