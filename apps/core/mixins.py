@@ -88,7 +88,7 @@ class PreviewButtonMixin:
             "BlogItem": "blog",
             "NewsItem": "news",
             "Project": "projects",
-            "Performance": "library/performances",
+            "Performance": "performances",
         }
         link = f"/{string_url[self.model._meta.object_name]}/{object_id}"
         # add hash for unpublished pages and change button name
