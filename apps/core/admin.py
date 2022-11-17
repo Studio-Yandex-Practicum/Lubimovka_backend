@@ -3,10 +3,14 @@ from django.contrib import admin
 from django.core.exceptions import PermissionDenied
 from django.db import models
 from django.forms.widgets import CheckboxSelectMultiple
+from filer.admin.fileadmin import File as FilerFile
+from filer.admin.imageadmin import Image as FilerImage
+from filer.models import ThumbnailOption
 
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 from apps.core.models import CORE_ROLES, Image, Role, RoleType
 from apps.core.utils import get_app_list
+from apps.filer.admin import NonEditableFileAdmin, NonEditableImageAdmin
 
 admin.AdminSite.get_app_list = get_app_list
 
@@ -60,3 +64,8 @@ class RoleTypeAdmin(admin.ModelAdmin):
 
 
 admin.site.site_header = "Администрирование сайта"
+admin.site.unregister(ThumbnailOption)
+admin.site.unregister(FilerImage)
+admin.site.register(FilerImage, NonEditableImageAdmin)
+admin.site.unregister(FilerFile)
+admin.site.register(FilerFile, NonEditableFileAdmin)
