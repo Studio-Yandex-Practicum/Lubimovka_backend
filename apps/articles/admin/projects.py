@@ -21,6 +21,7 @@ class ProjectAdmin(SortableAdminMixin, StatusButtonMixin, PreviewButtonMixin, Ba
         "status",
         "creator_name",
     )
+    list_display_links = ("title",)
     sortable_by = []
     fieldsets = (
         (
