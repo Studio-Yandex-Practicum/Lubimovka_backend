@@ -34,4 +34,4 @@ def authors(persons_email_city_image, festivals, program_types):
 
 @pytest.fixture
 def plays(authors, festivals, program_types):
-    return PlayFactory.create_batch(10)
+    return PlayFactory.create_batch(10, programs=program_types)

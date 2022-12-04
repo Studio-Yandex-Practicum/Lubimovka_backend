@@ -57,7 +57,7 @@ def play(authors, festival):
 @pytest.fixture
 def play_in_short_list(authors, festival):
     short_list_program_type = ProgramType.objects.get(slug="short-list")
-    return PlayFactory(published=True, program=short_list_program_type)
+    return PlayFactory(published=True, programs=[short_list_program_type])
 
 
 @pytest.fixture
