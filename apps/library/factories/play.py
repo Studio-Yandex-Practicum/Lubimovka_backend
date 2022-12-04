@@ -42,9 +42,17 @@ class PlayFactory(factory.django.DjangoModelFactory):
     other_play = False
     url_reading = factory.Iterator(YOUTUBE_VIDEO_LINKS)
 
-    @factory.lazy_attribute
-    def program(self):
-        return get_random_objects_by_model(ProgramType)
+    @factory.post_generation
+    def programs(self, create, extracted, **kwargs):
+        if not create:
+            return
+
+        if extracted:
+            program = random.choice(extracted)
+        else:
+            program = get_random_objects_by_model(ProgramType)
+
+        self.programs.add(program)
 
     @factory.lazy_attribute
     def festival(self):
