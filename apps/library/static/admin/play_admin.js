@@ -4,7 +4,7 @@ $(document).ready(function(jQuery) {
         let yearField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-year');
         let urlReadingField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-url_reading');
         let festivalField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-festival');
-        let programField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-program');
+        let programField = $('#play_form > div > fieldset.module.aligned > div.form-row.field-programs');
 
         var mainFieldsArray = [cityField, yearField, urlReadingField, festivalField, programField];
 
