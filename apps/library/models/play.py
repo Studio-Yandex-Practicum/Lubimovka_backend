@@ -85,15 +85,21 @@ class Play(BaseModel):
         verbose_name="Ссылка на читку",
         unique=True,
     )
-    program = models.ForeignKey(
+    programs = models.ManyToManyField(
         ProgramType,
-        on_delete=models.PROTECT,
         related_name="plays",
         verbose_name="Программа",
-        blank=True,
-        null=True,
-        help_text="Для пьес Любимовки должна быть выбрана Программа",
+        help_text="Для пьес Любимовки должна быть выбрана Программа.",
     )
+    # models.ForeignKey(
+    #     ProgramType,
+    #     on_delete=models.PROTECT,
+    #     related_name="plays",
+    #     verbose_name="Программа",
+    #     blank=True,
+    #     null=True,
+    #     help_text="Для пьес Любимовки должна быть выбрана Программа",
+    # )
     festival = models.ForeignKey(
         Festival,
         on_delete=models.PROTECT,
@@ -133,9 +139,9 @@ class Play(BaseModel):
     def clean(self):
         if self.other_play:
             self.festival = None
-            self.program = None
+            self.programs.clear()
             self.url_reading = None
-        elif not self.program:
+        elif not self.programs:
             raise ValidationError({"program": "У пьесы Любимовки должна быть программа"})
         elif not self.festival:
             raise ValidationError({"festival": "У пьесы Любимовки должен быть фестиваль"})
