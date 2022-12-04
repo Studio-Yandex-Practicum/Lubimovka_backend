@@ -89,17 +89,9 @@ class Play(BaseModel):
         ProgramType,
         related_name="plays",
         verbose_name="Программа",
-        help_text="Для пьес Любимовки должна быть выбрана Программа.",
+        help_text="Для пьес Любимовки должна быть выбрана хотя бы одна Программа.",
     )
-    # models.ForeignKey(
-    #     ProgramType,
-    #     on_delete=models.PROTECT,
-    #     related_name="plays",
-    #     verbose_name="Программа",
-    #     blank=True,
-    #     null=True,
-    #     help_text="Для пьес Любимовки должна быть выбрана Программа",
-    # )
+
     festival = models.ForeignKey(
         Festival,
         on_delete=models.PROTECT,
@@ -139,9 +131,10 @@ class Play(BaseModel):
     def clean(self):
         if self.other_play:
             self.festival = None
-            self.programs.clear()
+            if self.pk:
+                self.programs.clear()
             self.url_reading = None
-        elif not self.programs:
+        elif self.pk and not self.programs:
             raise ValidationError({"program": "У пьесы Любимовки должна быть программа"})
         elif not self.festival:
             raise ValidationError({"festival": "У пьесы Любимовки должен быть фестиваль"})
