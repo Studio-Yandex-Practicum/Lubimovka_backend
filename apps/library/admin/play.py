@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.contrib.postgres.aggregates import StringAgg
 from django.forms import ValidationError
@@ -31,8 +32,20 @@ class AuthorInline(admin.TabularInline):
     fields = ("author",)
 
 
+class PlayForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("other_play", False):
+            cleaned_data.pop("programs", None)
+        elif not cleaned_data.get("programs", False):
+            raise ValidationError("У пьесы Любимовки должна быть программа.")
+
+        return cleaned_data
+
+
 @admin.register(Play)
 class PlayAdmin(admin.ModelAdmin):
+    form = PlayForm
     filter_horizontal = ("authors",)
     list_display = (
         "name",
