@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='play',
             name='programs',
-            field=models.ManyToManyField(help_text='Для пьес Любимовки должна быть выбрана Программа.', related_name='plays', to='library.ProgramType', verbose_name='Программа'),
+            field=models.ManyToManyField(help_text='Для пьес Любимовки должна быть выбрана хотя бы одна Программа.', related_name='plays', to='library.ProgramType', verbose_name='Программа'),
         ),
         migrations.RunPython(expand_programs, shrink_programs),
         migrations.RemoveField(
