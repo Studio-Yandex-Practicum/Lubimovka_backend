@@ -89,6 +89,7 @@ class Play(BaseModel):
         ProgramType,
         related_name="plays",
         verbose_name="Программа",
+        blank=True,
         help_text="Для пьес Любимовки должна быть выбрана хотя бы одна Программа.",
     )
 
@@ -130,12 +131,10 @@ class Play(BaseModel):
 
     def clean(self):
         if self.other_play:
-            self.festival = None
             if self.pk:
                 self.programs.clear()
+            self.festival = None
             self.url_reading = None
-        elif self.pk and not self.programs:
-            raise ValidationError({"program": "У пьесы Любимовки должна быть программа"})
         elif not self.festival:
             raise ValidationError({"festival": "У пьесы Любимовки должен быть фестиваль"})
         if (self.url_download and self.url_download_from) or (not self.url_download and not self.url_download_from):
