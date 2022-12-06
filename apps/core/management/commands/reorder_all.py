@@ -9,6 +9,7 @@ class Command(BaseCommand):
 
     def handle(self, *args: Any, **options: Any) -> Optional[str]:
         models = (
+            "articles.Project",
             "info.FestTeamMember",
             "info.Partner",
             "info.Sponsor",

@@ -1,8 +1,9 @@
 from django.conf import settings
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import GroupAdmin as DjangoGroupAdmin
 from django.contrib.auth.admin import UserAdmin as DjangoUserAdmin
-from django.contrib.auth.models import Permission
+from django.contrib.auth.models import Group, Permission
 from django.http import HttpResponseRedirect
 from django.utils.crypto import get_random_string
 
@@ -83,6 +84,21 @@ class UserAdmin(DjangoUserAdmin):
             self.message_user(request, "Пароль был сброшен. Пользователю отправлена ссылка для смены пароля.")
             return HttpResponseRedirect(".")
         return super().response_change(request, obj)
+
+
+class HiddenAdmin(DjangoGroupAdmin):
+    """Удаление модели из панели администратора.
+
+    Необходимость регистрации модели в панели администратора
+    вызвана применением пакета django-filer
+    """
+
+    def has_module_permission(self, request):
+        return False
+
+
+admin.site.unregister(Group)
+admin.site.register(Group, HiddenAdmin)
 
 
 class GroupAdmin(admin.ModelAdmin):

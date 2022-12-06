@@ -2,8 +2,6 @@ from django.contrib import admin
 from django.utils.translation import gettext_lazy as _
 from django_filters import rest_framework as filters
 
-from apps.library.models import Play
-
 
 class NumberInFilter(filters.BaseInFilter, filters.NumberFilter):
     pass
@@ -11,7 +9,7 @@ class NumberInFilter(filters.BaseInFilter, filters.NumberFilter):
 
 class PlayFilter(filters.FilterSet):
     program = NumberInFilter(
-        field_name="program__pk",
+        field_name="programs__pk",
         label="Программа",
         lookup_expr="in",
     )
@@ -20,13 +18,6 @@ class PlayFilter(filters.FilterSet):
         label="Год фестиваля",
         lookup_expr="in",
     )
-
-    class Meta:
-        model = Play
-        fields = (
-            "program",
-            "festival",
-        )
 
 
 class PlayTypeFilter(admin.SimpleListFilter):
@@ -43,9 +34,9 @@ class PlayTypeFilter(admin.SimpleListFilter):
 
     def queryset(self, request, queryset):
         if self.value() is None:  # get qs for new default lookup
-            return Play.objects.filter(other_play=False)
+            return queryset.filter(other_play=False)
         if self.value() == "others":
-            return Play.objects.filter(other_play=True)
+            return queryset.filter(other_play=True)
 
     def choices(self, changelist):
         for lookup, title in self.lookup_choices:

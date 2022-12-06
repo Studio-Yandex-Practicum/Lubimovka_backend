@@ -15,10 +15,7 @@ class RoleSerializer(serializers.ModelSerializer):
 
     @extend_schema_field(list[str])
     def get_persons(self, obj):
-        persons = []
-        for team_member in obj.team_members.all():
-            persons.append(team_member.person.full_name)
-        return persons
+        return [_.person.full_name for _ in obj.team_members.all()]
 
     def to_representation(self, instance):
         if instance.team_members.count() > 1:

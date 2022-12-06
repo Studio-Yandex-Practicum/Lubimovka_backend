@@ -128,7 +128,7 @@ class TestMainAPIViews:
         """Checks that count play in short list in response matches count in db."""
         response = client.get(MAIN_URL)
         objects_count_in_response = len(response.data["short_list"]["items"])
-        objects_count_in_db = Play.objects.filter(published=True, program__slug="short-list").count()
+        objects_count_in_db = Play.objects.filter(published=True, programs__slug="short-list").count()
         assert (
             objects_count_in_db == objects_count_in_response
         ), f"Проверьте, что при GET запросе {MAIN_URL} возвращаются все объекты"

@@ -1,4 +1,6 @@
+from django import forms
 from django.contrib import admin
+from django.contrib.postgres.aggregates import StringAgg
 from django.forms import ValidationError
 from django.forms.models import BaseInlineFormSet
 
@@ -30,23 +32,35 @@ class AuthorInline(admin.TabularInline):
     fields = ("author",)
 
 
+class PlayForm(forms.ModelForm):
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("other_play", False):
+            cleaned_data.pop("programs", None)
+        elif not cleaned_data.get("programs", False):
+            raise ValidationError("У пьесы Любимовки должна быть программа.")
+
+        return cleaned_data
+
+
 @admin.register(Play)
 class PlayAdmin(admin.ModelAdmin):
+    form = PlayForm
     filter_horizontal = ("authors",)
     list_display = (
         "name",
         "city",
-        "program",
+        "program_list",
         "year",
         "festival",
         "published",
     )
-    list_select_related = ("program", "festival")
+    list_select_related = ("festival",)
     inlines = (AuthorInline,)
     list_filter = (
         PlayTypeFilter,
         "festival",
-        "program",
+        "programs",
         "published",
     )
     search_fields = (
@@ -54,13 +68,13 @@ class PlayAdmin(admin.ModelAdmin):
         "authors__person__last_name",
         "name",
         "city",
-        "program__name",
+        "programs__name",
         "festival__year",
     )
     fields = (
         "other_play",
         "name",
-        "program",
+        "programs",
         "city",
         "year",
         "url_download",
@@ -70,6 +84,16 @@ class PlayAdmin(admin.ModelAdmin):
         "published",
     )
     ordering = ("-year",)
+
+    @admin.display(description="Программы")
+    def program_list(self, play):
+        return play.program_list
+
+    def get_queryset(self, request):
+        qs = super().get_queryset(request)
+        if request.resolver_match.view_name.endswith("changelist"):
+            return qs.annotate(program_list=StringAgg("programs__name", ", "))
+        return qs
 
     def get_search_fields(self, request):
         # if request is for autocomplete, search only in names

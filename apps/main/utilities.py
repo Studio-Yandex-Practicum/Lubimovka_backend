@@ -122,7 +122,7 @@ class MainObject:
             program = ProgramType.objects.get(slug="short-list")
             festival = Festival.objects.all().order_by("-year").first()
             items = Play.objects.filter(
-                program=program,
+                programs=program,
                 festival=festival,
                 published=True,
             ).order_by("?")
