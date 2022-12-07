@@ -24,9 +24,9 @@ class SocialNetworkSerializer(serializers.ModelSerializer):
 
 
 class AchievementSerializer(serializers.Serializer):
-    id = serializers.IntegerField(source="program__id", read_only=True)
-    name = serializers.CharField(source="program__name", read_only=True)
-    year = serializers.IntegerField(source="festival__year", read_only=True)
+    id = serializers.IntegerField(read_only=True)
+    name = serializers.CharField(read_only=True)
+    year = serializers.IntegerField(source="plays__festival__year", read_only=True)
 
 
 class AuthorRetrieveSerializer(serializers.ModelSerializer):
