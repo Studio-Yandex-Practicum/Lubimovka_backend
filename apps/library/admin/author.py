@@ -1,5 +1,6 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
+from django.contrib.postgres.aggregates import StringAgg
 from django.db.models import Count
 from django.forms import ModelForm, ValidationError
 
@@ -29,23 +30,26 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     autocomplete_fields = ("play",)
     readonly_fields = (
         "play_festival_year",
-        "play_program",
+        "play_programs",
     )
 
     def get_queryset(self, request):
-        return AuthorPlay.objects.filter(play__other_play=False).select_related(
-            "author__person",
-            "play__festival",
-            "play__program",
+        return (
+            AuthorPlay.objects.filter(play__other_play=False)
+            .select_related(
+                "author__person",
+                "play__festival",
+            )
+            .annotate(program_list=StringAgg("play__programs__name", ", "))
         )
 
     @admin.display(description="Год участия в фестивале")
     def play_festival_year(self, obj):
         return f"{obj.play.festival.year}"
 
-    @admin.display(description="Программа")
-    def play_program(self, obj):
-        return f"{obj.play.program}"
+    @admin.display(description="Программы")
+    def play_programs(self, obj):
+        return f"{obj.program_list}"
 
 
 class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
@@ -77,14 +81,14 @@ class AchievementInline(admin.TabularInline):
         description="Достижения",
     )
     def achievement(self, obj):
-        return f"{obj.play.program} - {obj.play.festival.year}"
+        return f"{obj.program_list} - {obj.play.festival.year}"
 
     def get_queryset(self, request):
         return (
             AuthorPlay.objects.filter(play__other_play=False)
-            .select_related("author__person", "play__program", "play__festival")
+            .select_related("author__person", "play__festival")
             .order_by("-play__festival__year")
-            .distinct("play__festival__year", "play__program")
+            .annotate(program_list=StringAgg("play__programs__name", ", "))
         )
 
     def has_add_permission(self, request, obj=None):
