@@ -4,6 +4,7 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from apps.core.models import BaseModel, Person
+from apps.library.models.play import ProgramType
 
 
 class Author(BaseModel):
@@ -58,10 +59,10 @@ class Author(BaseModel):
     def achievements(self):
         """Get queryset with info about achievements."""
         return (
-            self.plays.filter(program__isnull=False)
-            .values("program__id", "program__name", "festival__year")
-            .order_by("-festival__year")
-            .distinct("festival__year", "program__name")
+            ProgramType.objects.filter(plays__authors=self)
+            .order_by("-plays__festival__year", "name")
+            .distinct("plays__festival__year", "name")
+            .values("id", "name", "plays__festival__year")
         )
 
 
