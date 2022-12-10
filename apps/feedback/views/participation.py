@@ -22,6 +22,12 @@ logger = logging.getLogger("django")
 
 class ParticipationViewSet(APIView):
     permission_classes = [SettingsPlayReceptionPermission]
+    # Django REST Framework проверяет CSRF токен для всех запросов,
+    # если включена аутентификация по сессии
+    # https://www.django-rest-framework.org/topics/ajax-csrf-cors/#csrf-protection
+    # Пока Frontend не научится прикреплять заголовок X-CSRFToken к этому запросу
+    # аутентификацию для него придется отключить
+    authentication_classes = []
 
     class ParticipationSerializer(serializers.ModelSerializer):
         year = serializers.IntegerField(

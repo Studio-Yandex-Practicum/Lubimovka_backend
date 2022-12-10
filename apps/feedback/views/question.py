@@ -13,6 +13,13 @@ from apps.feedback.schema.schema_extension import ERROR_MESSAGES_FOR_QUESTION_FO
 class QuestionCreateAPIView(APIView):
     """Create Question."""
 
+    # Django REST Framework проверяет CSRF токен для всех запросов,
+    # если включена аутентификация по сессии
+    # https://www.django-rest-framework.org/topics/ajax-csrf-cors/#csrf-protection
+    # Пока Frontend не научится прикреплять заголовок X-CSRFToken к этому запросу
+    # аутентификацию для него придется отключить
+    authentication_classes = []
+
     class QuestionSerializer(serializers.ModelSerializer):
         class Meta:
             model = Question
