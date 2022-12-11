@@ -17,14 +17,7 @@ User = get_user_model()
 @admin.register(User)
 class UserAdmin(DjangoUserAdmin):
     form = UserAdminForm
-    list_display = (
-        "full_name",
-        "username",
-        "email",
-        "is_active",
-        "role",
-        "get_last_login",
-    )
+    list_display = ("full_name", "username", "email", "is_active", "role", "last_login")
     list_filter = (
         "groups",
         "is_active",
@@ -53,10 +46,6 @@ class UserAdmin(DjangoUserAdmin):
         "date_joined",
         "last_login",
     )
-
-    @admin.display(description="Дата последней авторизации")
-    def get_last_login(self, obj):
-        return obj.last_login
 
     @admin.display(description="Имя и фамилия")
     def full_name(self, obj):
