@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from apps.content_pages.models import Link, OrderedImage, OrderedVideo
 from apps.core.serializers import PersonRoleSerializer
+from apps.core.utils import get_domain
 from apps.library.serializers import AuthorForPlaySerializer as LibraryPlayAuthorSerializer
 
 
@@ -100,16 +101,18 @@ class OrderedPlaySerializer(serializers.Serializer):
         required=False,
         label="Год написания пьесы",
     )
-    url_download = serializers.URLField(
-        source="item.url_download",
-        label="Текст пьесы",
+    url_download = serializers.SerializerMethodField()
+    url_reading = serializers.URLField(
+        source="item.url_reading",
+        label="Ссылка на читку",
         max_length=200,
     )
-    url_download_from = serializers.URLField(
-        source="item.url_download_from",
-        label="Ссылка на скачивание",
-        max_length=200,
-    )
+
+    def get_url_download(self, obj) -> str:
+        if obj.item.url_download_from:
+            return obj.item.url_download_from
+        else:
+            return get_domain(self.context["request"]) + obj.item.url_download.url
 
 
 class OrderedVideoSerializer(serializers.ModelSerializer):
