@@ -19,14 +19,11 @@ class LocalEventSerializer(serializers.ModelSerializer):
 class BlockImagesSerializer(serializers.ModelSerializer):
     """Сериализатор блока изображений."""
 
-    block_images_description = serializers.CharField(source="performance.block_images_description")
+    url = serializers.CharField(source="image")
 
     class Meta:
         model = Image
-        fields = (
-            "block_images_description",
-            "image",
-        )
+        fields = ("url",)
 
 
 class PerformanceSerializer(serializers.ModelSerializer):
@@ -34,7 +31,8 @@ class PerformanceSerializer(serializers.ModelSerializer):
 
     play = PlaySerializer()
     team = RoleSerializer(many=True)
-    images_in_block = BlockImagesSerializer(many=True)
+    gallery_title = serializers.CharField(source="block_images_description")
+    gallery_images = BlockImagesSerializer(many=True, source="images_in_block")
     events = LocalEventSerializer(source="events.body", many=True)
     duration = serializers.SerializerMethodField()
 
