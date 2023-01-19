@@ -11,6 +11,7 @@ from django.utils.timezone import get_current_timezone, make_aware
 
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.models import ContentUnitRichText, ImagesBlock, OrderedImage
+from apps.core.constants import Status
 
 User = get_user_model()
 
@@ -45,6 +46,9 @@ class Command(BaseCommand):
             item.title = entry["title"]
             item.description = re_tags.sub("", entry["introtext"])
             item.pub_date = make_aware(datetime.fromisoformat(entry["created"]), get_current_timezone())
+            item.author_url_title = entry["created_by_alias"][:50]
+            item.author_url = "https://lubimovka.ru/blog"
+            item.status = Status.PUBLISHED
             item.creator = archivarius
             if intro_image:
                 image_path = BASE_PATH / intro_image
