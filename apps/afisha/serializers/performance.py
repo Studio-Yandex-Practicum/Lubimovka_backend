@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from apps.afisha.models import Event, Performance, PerformanceMediaReview, PerformanceReview
 from apps.core.models import Image
+from apps.core.utils import get_domain
 from apps.library.serializers import PlaySerializer, RoleSerializer
 
 
@@ -19,7 +20,10 @@ class LocalEventSerializer(serializers.ModelSerializer):
 class BlockImagesSerializer(serializers.ModelSerializer):
     """Сериализатор блока изображений."""
 
-    url = serializers.CharField(source="image")
+    url = serializers.SerializerMethodField()
+
+    def get_url(self, obj) -> str:
+        return get_domain(self.context["request"]) + str(obj.image.url)
 
     class Meta:
         model = Image
