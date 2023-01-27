@@ -1,8 +1,8 @@
 from rest_framework import serializers
 
 from apps.content_pages.models import Link, OrderedImage, OrderedVideo
+from apps.core.mixins import GetDomainMixin
 from apps.core.serializers import PersonRoleSerializer
-from apps.core.utils import get_domain
 from apps.library.serializers import AuthorForPlaySerializer as LibraryPlayAuthorSerializer
 
 
@@ -75,7 +75,7 @@ class OrderedImageSerializer(serializers.ModelSerializer):
         )
 
 
-class OrderedPlaySerializer(serializers.Serializer):
+class OrderedPlaySerializer(GetDomainMixin, serializers.Serializer):
     id = serializers.IntegerField(
         source="item.id",
         label="ID",
@@ -112,7 +112,7 @@ class OrderedPlaySerializer(serializers.Serializer):
         if obj.item.url_download_from:
             return obj.item.url_download_from
         else:
-            return get_domain(self.context["request"]) + obj.item.url_download.url
+            return self.prepend_domain(obj.item.url_download.url)
 
 
 class OrderedVideoSerializer(serializers.ModelSerializer):

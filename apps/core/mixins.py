@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
 from apps.core.constants import STATUS_INFO, Status
-from apps.core.utils import get_object, get_user_change_perms_for_status, get_user_perms_level
+from apps.core.utils import get_domain, get_object, get_user_change_perms_for_status, get_user_perms_level
 
 
 class StatusButtonMixin:
@@ -147,3 +147,10 @@ class HideOnNavPanelAdminModelMixin:
 
     def has_module_permission(self, request):
         return False
+
+
+class GetDomainMixin:
+    """Serializer mixin to generate URLs with domain."""
+
+    def prepend_domain(self, url):
+        return get_domain(self.context["request"]) + str(url)

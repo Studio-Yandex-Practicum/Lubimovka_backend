@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.core.utils import get_domain
+from apps.core.mixins import GetDomainMixin
 from apps.library.models import Author, Play
 
 
@@ -14,7 +14,7 @@ class AuthorForPlaySerializer(serializers.ModelSerializer):
         fields = ("name", "slug")
 
 
-class PlaySerializer(serializers.ModelSerializer):
+class PlaySerializer(GetDomainMixin, serializers.ModelSerializer):
     """Сериализатор Пьесы."""
 
     authors = AuthorForPlaySerializer(many=True)
@@ -27,7 +27,7 @@ class PlaySerializer(serializers.ModelSerializer):
         if obj.url_download_from:
             return obj.url_download_from
         else:
-            return get_domain(self.context["request"]) + obj.url_download.url
+            return self.prepend_domain(obj.url_download.url)
 
     class Meta:
         fields = (
