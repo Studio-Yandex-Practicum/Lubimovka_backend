@@ -2,8 +2,8 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.afisha.models import Event, Performance, PerformanceMediaReview, PerformanceReview
+from apps.core.fields import DomainPrependField
 from apps.core.models import Image
-from apps.core.utils import get_domain
 from apps.library.serializers import PlaySerializer, RoleSerializer
 
 
@@ -20,10 +20,7 @@ class LocalEventSerializer(serializers.ModelSerializer):
 class BlockImagesSerializer(serializers.ModelSerializer):
     """Сериализатор блока изображений."""
 
-    url = serializers.SerializerMethodField()
-
-    def get_url(self, obj) -> str:
-        return get_domain(self.context["request"]) + str(obj.image.url)
+    url = DomainPrependField(source="image", slug_field="url", read_only=True)
 
     class Meta:
         model = Image

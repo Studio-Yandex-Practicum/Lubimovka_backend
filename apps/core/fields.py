@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from apps.core.utils import get_domain
+
 
 class CharacterSeparatedSerializerField(serializers.ListField):
     """Character separated ListField.
@@ -30,3 +32,8 @@ class CharacterSeparatedSerializerField(serializers.ListField):
     def to_representation(self, data):
         data = super().to_representation(data)
         return self.separator.join(data)
+
+
+class DomainPrependField(serializers.SlugRelatedField):
+    def to_representation(self, obj):
+        return get_domain(self.context["request"]) + str(super().to_representation(obj))
