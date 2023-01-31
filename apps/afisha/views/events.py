@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from apps.afisha import selectors
 from apps.afisha.serializers import AfishaEventSerializer
 from apps.core.fields import CharacterSeparatedSerializerField
+from apps.core.models import Setting
 from apps.core.utils import get_paginated_response
 
 
@@ -42,6 +43,7 @@ class AfishaEventListAPIView(APIView):
             queryset=filtered_events,
             request=request,
             view=self,
+            extra_context={"festival_status": Setting.get_setting("festival_status")},
         )
 
 
