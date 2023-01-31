@@ -14,12 +14,20 @@ AFISHA_EVENTS_SERIALIZER_PAIRS = {
 class AfishaEventSerializer(serializers.ModelSerializer):
     """Afisha event Output serializer."""
 
-    action_text = serializers.CharField(source="get_action_text_display")
+    # action_text = serializers.CharField(source="get_action_text_display")
+    action_text = serializers.SerializerMethodField()
+    action_url = serializers.SerializerMethodField()
 
     event_body = serializers.SerializerMethodField(
         help_text="The response is different based on event type.",
     )
     date_time = serializers.DateTimeField()
+
+    def get_action_text(self, obj):
+        return obj.get_action_text_display() if obj.registration_open() else None
+
+    def get_action_url(self, obj):
+        return obj.action_url if obj.registration_open() else None
 
     @extend_schema_field(
         PolymorphicProxySerializer(

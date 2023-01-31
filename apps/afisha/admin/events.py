@@ -75,6 +75,7 @@ class EventAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "date_time",
+                    "opening_interval",
                     "is_archived",
                     ("action_url", "action_text"),
                     "hidden_on_main",
