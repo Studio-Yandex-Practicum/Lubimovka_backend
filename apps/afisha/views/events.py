@@ -1,5 +1,5 @@
 from django.db.models import F
-from django.db.models.functions import Extract, Now
+from django.db.models.functions import Now
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers
 from rest_framework.response import Response
@@ -42,7 +42,7 @@ class AfishaEventListAPIView(APIView):
         return get_paginated_response(
             pagination_class=self.pagination_class,
             serializer_class=self.AfishaEventListOutputSerializer,
-            queryset=filtered_events.annotate(time_left=Extract(F("date_time") - Now(), "epoch") / 60),
+            queryset=filtered_events.annotate(time_left=F("date_time") - Now()),
             request=request,
             view=self,
             extra_context={"festival_status": Setting.get_setting("festival_status")},
