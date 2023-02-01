@@ -1,9 +1,6 @@
-from datetime import timedelta
-
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
-from django.utils import timezone
 
 from apps.afisha.models import MasterClass, Performance, Reading
 from apps.core.models import BaseModel
@@ -128,13 +125,6 @@ class Event(BaseModel):
         if not self.date_time and not self.is_archived:
             raise ValidationError("Необходимо предоставить дату события, " "либо поставить отметку 'В архиве'")
         return super().clean()
-
-    def registration_open(self):
-        return (
-            self.date_time is not None
-            and self.opening_interval is not None
-            and timezone.now() > self.date_time - timedelta(minutes=self.opening_interval)
-        )
 
 
 def create_common_event(sender, instance, **kwargs):

@@ -23,14 +23,17 @@ class AfishaEventSerializer(serializers.ModelSerializer):
     date_time = serializers.DateTimeField()
 
     def get_action_text(self, obj):
+        print("Time left:", obj.time_left)
         return (
             obj.get_action_text_display()
-            if not self.context.get("festival_status") or obj.registration_open()
+            if not self.context.get("festival_status") or obj.time_left < obj.opening_interval
             else None
         )
 
     def get_action_url(self, obj):
-        return obj.action_url if not self.context.get("festival_status") or obj.registration_open() else None
+        return (
+            obj.action_url if not self.context.get("festival_status") or obj.time_left < obj.opening_interval else None
+        )
 
     @extend_schema_field(
         PolymorphicProxySerializer(
