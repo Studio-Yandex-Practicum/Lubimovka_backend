@@ -26,11 +26,13 @@ def get_picsum_image(width: int = 1024, height: int = 768) -> ContentFile:
     return ContentFile(image)
 
 
-def get_paginated_response(pagination_class, serializer_class, queryset, request, view):
+def get_paginated_response(pagination_class, serializer_class, queryset, request, view, extra_context=None):
     """Return paginated response. Use it with `list` views based on APIView."""
     paginator = pagination_class()
     page = paginator.paginate_queryset(queryset, request, view=view)
     context = {"request": request}
+    if extra_context is not None:
+        context |= extra_context
 
     if page is not None:
         serializer = serializer_class(page, context=context, many=True)
