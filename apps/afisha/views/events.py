@@ -1,3 +1,7 @@
+from datetime import timedelta
+
+from django.db.models.functions import TruncDay
+from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers
 from rest_framework.response import Response
@@ -7,6 +11,7 @@ from rest_framework.views import APIView
 from apps.afisha import selectors
 from apps.afisha.serializers import AfishaEventSerializer
 from apps.core.fields import CharacterSeparatedSerializerField
+from apps.core.models import Setting
 from apps.core.utils import get_paginated_response
 
 
@@ -36,12 +41,24 @@ class AfishaEventListAPIView(APIView):
         filters_serializer.is_valid(raise_exception=True)
         filtered_events = selectors.afisha_event_list_get(filters=filters_serializer.data)
 
+        settings = Setting.get_settings(
+            ("festival_status", "afisha_registration_opens_days_before", "afisha_registration_open_hour")
+        )
+
         return get_paginated_response(
             pagination_class=self.pagination_class,
             serializer_class=self.AfishaEventListOutputSerializer,
-            queryset=filtered_events,
+            queryset=filtered_events.annotate(event_day=TruncDay("date_time")),
             request=request,
             view=self,
+            extra_context={
+                "festival_status": settings.get("festival_status", False),
+                "time_point": timezone.now()
+                - timedelta(
+                    days=-int(settings.get("afisha_registration_opens_days_before", 0)),
+                    hours=int(settings.get("afisha_registration_open_hour", 0)),
+                ),
+            },
         )
 
 
