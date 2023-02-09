@@ -1,7 +1,6 @@
 import logging
 import threading
 
-from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers, status
 from rest_framework.response import Response
@@ -31,13 +30,9 @@ class ParticipationViewSet(APIView):
 
     class ParticipationSerializer(serializers.ModelSerializer):
         year = serializers.IntegerField(
-            min_value=1900,
-            max_value=timezone.now().year,
             label="Год написания",
         )
         birth_year = serializers.IntegerField(
-            min_value=1900,
-            max_value=timezone.now().year,
             label="Год рождения",
         )
         url_file_in_storage = serializers.URLField(read_only=True)

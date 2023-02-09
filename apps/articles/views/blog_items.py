@@ -1,4 +1,3 @@
-from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers
 from rest_framework.response import Response
@@ -20,8 +19,6 @@ class BlogItemListAPI(APIView):
 
     class BlogItemListFilterSerializer(serializers.Serializer):
         year = serializers.IntegerField(
-            min_value=1970,
-            max_value=timezone.now().year,
             required=False,
             help_text="Фильтр по году",
         )
