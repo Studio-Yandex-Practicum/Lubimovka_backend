@@ -11,7 +11,7 @@ logger = logging.getLogger("django")
 
 def yandex_disk_export(instance) -> Optional[bool]:
     try:
-        yndx: yadisk.YaDisk = yadisk.YaDisk(token=settings.YNDX_DISK_TOKEN)
+        yndx = yadisk.YaDisk(token=settings.YNDX_DISK_TOKEN)
         _, year, name = Path(str(instance.file)).parts
         to_dir = f"{year}/{name}"
         from_dir = (settings.MEDIA_ROOT / instance.file.name).as_posix()
