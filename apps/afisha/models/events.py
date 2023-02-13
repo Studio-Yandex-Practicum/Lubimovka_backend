@@ -74,6 +74,8 @@ class Event(BaseModel):
     action_url = models.URLField(
         max_length=200,
         verbose_name="Ссылка",
+        blank=True,
+        null=True,
     )
     action_text = models.CharField(
         choices=ActionType.choices,
