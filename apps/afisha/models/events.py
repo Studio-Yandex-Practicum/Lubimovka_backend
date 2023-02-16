@@ -79,7 +79,7 @@ class Event(BaseModel):
     )
     action_text = models.CharField(
         choices=ActionType.choices,
-        default=ActionType.REGISTRATION,
+        blank=True,
         max_length=50,
         verbose_name="Название действия",
         help_text="Выберите название действия, соответсвующее содержанию ссылки",
