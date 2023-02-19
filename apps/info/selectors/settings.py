@@ -16,6 +16,7 @@ def info_settings_get() -> object:
         "pr_director_name",
         "url_to_privacy_policy",
         "plays_reception_is_open",
+        "email_to_send_questions",
     )
     info_settings_data = Setting.get_settings(settings_keys)
 

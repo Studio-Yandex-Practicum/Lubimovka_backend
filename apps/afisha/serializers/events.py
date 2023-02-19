@@ -14,8 +14,6 @@ AFISHA_EVENTS_SERIALIZER_PAIRS = {
 class AfishaEventSerializer(serializers.ModelSerializer):
     """Afisha event Output serializer."""
 
-    action_text = serializers.CharField(source="get_action_text_display")
-
     event_body = serializers.SerializerMethodField(
         help_text="The response is different based on event type.",
     )

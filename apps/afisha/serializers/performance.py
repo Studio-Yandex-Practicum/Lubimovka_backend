@@ -57,7 +57,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
     """Performance serializer for afisha page."""
 
     team = RoleSerializer(source="event_team", many=True)
-    image = serializers.ImageField(source="main_image")
+    image = serializers.ImageField(required=False, source="main_image")
     project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     class Meta:
