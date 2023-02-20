@@ -1,7 +1,6 @@
 from datetime import timedelta
 
 from django.conf import settings
-from django.db.models.functions import TruncDay
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers
 from rest_framework.response import Response
@@ -46,7 +45,7 @@ class AfishaEventListAPIView(APIView):
         return get_paginated_response(
             pagination_class=self.pagination_class,
             serializer_class=self.AfishaEventListOutputSerializer,
-            queryset=filtered_events.annotate(event_day=TruncDay("date_time")),
+            queryset=filtered_events,
             request=request,
             view=self,
             extra_context={

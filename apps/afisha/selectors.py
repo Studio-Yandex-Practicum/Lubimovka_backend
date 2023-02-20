@@ -1,6 +1,7 @@
 from typing import Any, Union
 
 from django.db.models import F, Q, QuerySet
+from django.db.models.functions import TruncDay
 from django.utils import timezone
 
 from apps.afisha.filters import AfishaEventsDateInFilter
@@ -47,6 +48,7 @@ def afisha_event_list_get(filters: dict[str, str] = None) -> QuerySet:
     filters = filters or {}
     afisha_events = (
         Event.objects.filter(date_time__gte=timezone.now())
+        .annotate(event_day=TruncDay("date_time"))
         .select_related(
             "common_event__masterclass",
             "common_event__reading",
