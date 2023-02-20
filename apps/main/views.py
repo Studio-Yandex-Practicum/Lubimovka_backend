@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+from django.conf import settings
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -21,6 +24,11 @@ class MainView(APIView):
         # Common access to context. It's required to return correct url links
         context = {
             "request": self.request,
+            "festival_status": main.settings.get("festival_status"),
+            "time_delta": timedelta(
+                days=-settings.AFISHA_REGISTRATION_OPENS_DAYS_BEFORE,
+                hours=settings.AFISHA_REGISTRATION_OPEN_HOUR,
+            ),
         }
         main_serializer = MainSerializer(main, context=context)
         return Response(main_serializer.data)

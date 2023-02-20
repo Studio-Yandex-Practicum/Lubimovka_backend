@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.db.models import Q
+from django.db.models.functions import TruncDay
 from django.utils import timezone
 
 from apps.afisha.models import Event
@@ -36,6 +37,7 @@ class MainObject:
             "main_add_places",
             "show_general_partners",
             "show_info_partners_and_festival_partners",
+            "festival_status",
         )
         self.settings = Setting.get_settings(settings_keys=setting_keys)
 
@@ -107,7 +109,7 @@ class MainObject:
             self.afisha = {
                 "afisha_today": main_show_afisha_only_for_today,
                 "description": description,
-                "items": items,
+                "items": items.annotate(event_day=TruncDay("date_time")),
             }
 
     def add_banners(self):
