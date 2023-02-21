@@ -24,16 +24,16 @@ class AfishaEventSerializer(serializers.ModelSerializer):
     date_time = serializers.DateTimeField()
     opening_date_time = serializers.SerializerMethodField()
 
-    def show_links(self, obj):
+    def registration_is_open(self, obj):
         return not self.context.get("festival_status") or timezone.now() > obj.event_day + self.context.get(
             "time_delta"
         )
 
     def get_action_text(self, obj):
-        return obj.get_action_text_display() if self.show_links(obj) else None
+        return obj.get_action_text_display() if self.registration_is_open(obj) else None
 
     def get_action_url(self, obj):
-        return obj.action_url if self.show_links(obj) else None
+        return obj.action_url if self.registration_is_open(obj) else None
 
     def get_opening_date_time(self, obj):
         return obj.event_day + self.context.get("time_delta")
