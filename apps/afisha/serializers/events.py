@@ -24,6 +24,7 @@ class AfishaEventSerializer(serializers.ModelSerializer):
     opening_date_time = serializers.DateTimeField()
 
     def registration_is_open(self, obj):
+        """Condition to output registration link and text with the response."""
         return not self.context.get("festival_status") or obj.now > obj.opening_date_time
 
     def get_action_text(self, obj):
