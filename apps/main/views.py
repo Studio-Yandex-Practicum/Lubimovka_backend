@@ -1,6 +1,3 @@
-from datetime import timedelta
-
-from django.conf import settings
 from drf_spectacular.utils import extend_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -25,7 +22,6 @@ class MainView(APIView):
         context = {
             "request": self.request,
             "festival_status": main.settings.get("festival_status"),
-            "time_delta": timedelta(hours=-settings.AFISHA_REGISTRATION_OPENS_HOURS_BEFORE),
         }
         main_serializer = MainSerializer(main, context=context)
         return Response(main_serializer.data)

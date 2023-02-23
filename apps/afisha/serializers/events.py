@@ -1,4 +1,3 @@
-from django.utils import timezone
 from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_field
 from rest_framework import serializers
 
@@ -22,21 +21,16 @@ class AfishaEventSerializer(serializers.ModelSerializer):
         help_text="The response is different based on event type.",
     )
     date_time = serializers.DateTimeField()
-    opening_date_time = serializers.SerializerMethodField()
+    opening_date_time = serializers.DateTimeField()
 
     def registration_is_open(self, obj):
-        return not self.context.get("festival_status") or timezone.now() > obj.event_day + self.context.get(
-            "time_delta"
-        )
+        return not self.context.get("festival_status") or obj.now > obj.opening_date_time
 
     def get_action_text(self, obj):
         return obj.get_action_text_display() if self.registration_is_open(obj) else None
 
     def get_action_url(self, obj):
         return obj.action_url if self.registration_is_open(obj) else None
-
-    def get_opening_date_time(self, obj):
-        return obj.event_day + self.context.get("time_delta")
 
     @extend_schema_field(
         PolymorphicProxySerializer(

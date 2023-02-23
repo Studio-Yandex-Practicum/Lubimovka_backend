@@ -1,6 +1,3 @@
-from datetime import timedelta
-
-from django.conf import settings
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers
 from rest_framework.response import Response
@@ -50,9 +47,6 @@ class AfishaEventListAPIView(APIView):
             view=self,
             extra_context={
                 "festival_status": festival_status,
-                "time_delta": timedelta(
-                    hours=-settings.AFISHA_REGISTRATION_OPENS_HOURS_BEFORE,
-                ),
             },
         )
 
