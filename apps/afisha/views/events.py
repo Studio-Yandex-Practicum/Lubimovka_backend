@@ -51,8 +51,7 @@ class AfishaEventListAPIView(APIView):
             extra_context={
                 "festival_status": festival_status,
                 "time_delta": timedelta(
-                    days=-settings.AFISHA_REGISTRATION_OPENS_DAYS_BEFORE,
-                    hours=settings.AFISHA_REGISTRATION_OPEN_HOUR,
+                    hours=-settings.AFISHA_REGISTRATION_OPENS_HOURS_BEFORE,
                 ),
             },
         )

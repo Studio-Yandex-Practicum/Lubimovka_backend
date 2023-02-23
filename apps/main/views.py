@@ -25,10 +25,7 @@ class MainView(APIView):
         context = {
             "request": self.request,
             "festival_status": main.settings.get("festival_status"),
-            "time_delta": timedelta(
-                days=-settings.AFISHA_REGISTRATION_OPENS_DAYS_BEFORE,
-                hours=settings.AFISHA_REGISTRATION_OPEN_HOUR,
-            ),
+            "time_delta": timedelta(hours=-settings.AFISHA_REGISTRATION_OPENS_HOURS_BEFORE),
         }
         main_serializer = MainSerializer(main, context=context)
         return Response(main_serializer.data)
