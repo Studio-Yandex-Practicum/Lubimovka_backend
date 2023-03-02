@@ -21,6 +21,7 @@ class MainView(APIView):
         # Common access to context. It's required to return correct url links
         context = {
             "request": self.request,
+            "festival_status": main.settings.get("festival_status"),
         }
         main_serializer = MainSerializer(main, context=context)
         return Response(main_serializer.data)

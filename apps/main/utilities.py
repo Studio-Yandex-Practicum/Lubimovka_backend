@@ -1,6 +1,8 @@
 from datetime import timedelta
 
-from django.db.models import Q
+from django.conf import settings
+from django.db.models import DateTimeField, ExpressionWrapper, Q
+from django.db.models.functions import Now, TruncDay, TruncSecond
 from django.utils import timezone
 
 from apps.afisha.models import Event
@@ -36,6 +38,7 @@ class MainObject:
             "main_add_places",
             "show_general_partners",
             "show_info_partners_and_festival_partners",
+            "festival_status",
         )
         self.settings = Setting.get_settings(settings_keys=setting_keys)
 
@@ -107,7 +110,18 @@ class MainObject:
             self.afisha = {
                 "afisha_today": main_show_afisha_only_for_today,
                 "description": description,
-                "items": items,
+                "items": items.annotate(
+                    opening_date_time=ExpressionWrapper(
+                        TruncDay(
+                            "date_time",
+                        )
+                        - timedelta(hours=settings.AFISHA_REGISTRATION_OPENS_HOURS_BEFORE),
+                        output_field=DateTimeField(),
+                    )
+                )
+                # TruncDay functions produces DateTime without timezone when wrapped with ExpressionWrapper;
+                # to have Now without timezone as well, use TruncSecond here
+                .annotate(now=ExpressionWrapper(TruncSecond(Now()), output_field=DateTimeField())),
             }
 
     def add_banners(self):

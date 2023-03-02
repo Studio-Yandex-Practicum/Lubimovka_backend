@@ -14,10 +14,24 @@ AFISHA_EVENTS_SERIALIZER_PAIRS = {
 class AfishaEventSerializer(serializers.ModelSerializer):
     """Afisha event Output serializer."""
 
+    action_text = serializers.SerializerMethodField()
+    action_url = serializers.SerializerMethodField()
+
     event_body = serializers.SerializerMethodField(
         help_text="The response is different based on event type.",
     )
     date_time = serializers.DateTimeField()
+    opening_date_time = serializers.DateTimeField()
+
+    def registration_is_open(self, obj):
+        """Condition to output registration link and text with the response."""
+        return not self.context.get("festival_status") or obj.now > obj.opening_date_time
+
+    def get_action_text(self, obj):
+        return obj.get_action_text_display() if self.registration_is_open(obj) else None
+
+    def get_action_url(self, obj):
+        return obj.action_url if self.registration_is_open(obj) else None
 
     @extend_schema_field(
         PolymorphicProxySerializer(
@@ -37,11 +51,4 @@ class AfishaEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = (
-            "id",
-            "type",
-            "event_body",
-            "date_time",
-            "action_url",
-            "action_text",
-        )
+        fields = ("id", "type", "event_body", "date_time", "action_url", "action_text", "opening_date_time")
