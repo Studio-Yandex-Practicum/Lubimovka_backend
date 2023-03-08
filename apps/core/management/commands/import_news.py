@@ -46,8 +46,6 @@ class Command(BaseCommand):
             item.title = entry["title"]
             item.description = re_tags.sub("", entry["introtext"])
             item.pub_date = make_aware(datetime.fromisoformat(entry["created"]), get_current_timezone())
-            # item.author_url_title = entry["created_by_alias"][:50]
-            # item.author_url = f"https://lubimovka.ru/blog/{entry['id']}/"
             item.status = Status.PUBLISHED
             item.creator = archivarius
             if intro_image:
