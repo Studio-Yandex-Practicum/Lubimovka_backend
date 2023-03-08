@@ -227,3 +227,30 @@ class GoogleSpreadsheets:
         except (ValueError, Exception) as error:
             msg = f"Не удалось выгрузить данные заявки от {instance.email} на Google Sheets."
             logger.critical(msg, error, exc_info=True)
+
+    def find_and_replace(self, find, replacement):
+        try:
+            self._get_settings()
+            service = self._build_service()
+            request = service.spreadsheets().batchUpdate(
+                spreadsheetId=self.spreadsheet_id,
+                body={
+                    "requests": [
+                        {
+                            "findReplace": {
+                                "find": find,
+                                "replacement": replacement,
+                                "matchEntireCell": True,
+                                "allSheets": True,
+                            },
+                        }
+                    ]
+                },
+            )
+            response = request.execute()
+            find_replace = response.get("findReplace")
+            service.spreadsheets().close()
+            return find_replace.get("rowsChanged") if find_replace else 0
+        except (ValueError, Exception) as error:
+            msg = f"Не удалось произвести замену {find} на Google Sheets."
+            logger.critical(msg, error, exc_info=True)
