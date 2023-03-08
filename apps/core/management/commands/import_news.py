@@ -14,7 +14,7 @@ from apps.articles.models import NewsItem, NewsItemContent
 from apps.content_pages.models import ContentUnitRichText, ImagesBlock, OrderedImage
 from apps.core.constants import Status
 
-GENERAL_FAILURE = "Unexpected error for entrt {entry}"
+GENERAL_FAILURE = "Unexpected error for entry {entry}"
 
 logger = logging.getLogger("django")
 

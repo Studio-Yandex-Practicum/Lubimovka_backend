@@ -1,4 +1,5 @@
 import json
+import logging
 import re
 from datetime import datetime
 from pathlib import Path
@@ -12,6 +13,10 @@ from django.utils.timezone import get_current_timezone, make_aware
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.models import ContentUnitRichText, ImagesBlock, OrderedImage
 from apps.core.constants import Status
+
+GENERAL_FAILURE = "Unexpected error for entry {entry}"
+
+logger = logging.getLogger("django")
 
 User = get_user_model()
 
@@ -39,68 +44,71 @@ class Command(BaseCommand):
 
         count = 0
         for entry in data:
-            intro_image = Path(json.loads(entry["images"])["image_intro"])
-            full_text = entry["fulltext"]
+            try:
+                intro_image = Path(json.loads(entry["images"])["image_intro"])
+                full_text = entry["fulltext"]
 
-            item = BlogItem()
-            item.title = entry["title"]
-            item.description = re_tags.sub("", entry["introtext"])
-            item.pub_date = make_aware(datetime.fromisoformat(entry["created"]), get_current_timezone())
-            item.author_url_title = entry["created_by_alias"][:50]
-            item.author_url = f"https://lubimovka.ru/blog/{entry['id']}/"
-            item.status = Status.PUBLISHED
-            item.creator = archivarius
-            if intro_image:
-                image_path = BASE_PATH / intro_image
-                if image_path.exists() and image_path.is_file():
-                    with open(image_path, "rb") as file:
-                        image_file = File(file)
-                        item.image.save(image_path.name, image_file, True)
-
-            item.save()
-
-            post_items = re_img.split(full_text)
-
-            order = 1
-            for index, part in enumerate(post_items):
-                if not part:
-                    continue
-                if index % 2 == 0:
-                    rich = ContentUnitRichText()
-                    rich.rich_text = part
-                    rich.save()
-
-                    blog_content = BlogItemContent()
-                    blog_content.order = order
-                    blog_content.item = rich
-                    blog_content.content_page = item
-                    blog_content.content_type = rich_type
-                    blog_content.object_id = rich.pk
-                    blog_content.save()
-                    order += 1
-                else:
-                    image_path = BASE_PATH / part
+                item = BlogItem()
+                item.title = entry["title"]
+                item.description = re_tags.sub("", entry["introtext"])
+                item.pub_date = make_aware(datetime.fromisoformat(entry["created"]), get_current_timezone())
+                item.author_url_title = entry["created_by_alias"][:50]
+                item.author_url = f"https://lubimovka.ru/blog/{entry['id']}/"
+                item.status = Status.PUBLISHED
+                item.creator = archivarius
+                if intro_image:
+                    image_path = BASE_PATH / intro_image
                     if image_path.exists() and image_path.is_file():
-                        image_block = ImagesBlock()
-                        image_block.title = image_path.name
-                        image_block.save()
-                        ordered_image = OrderedImage()
-                        ordered_image.order = 1
-                        ordered_image.block = image_block
                         with open(image_path, "rb") as file:
                             image_file = File(file)
-                            ordered_image.image.save(image_path.name, image_file, True)
-                        ordered_image.save()
+                            item.image.save(image_path.name, image_file, True)
+
+                item.save()
+
+                post_items = re_img.split(full_text)
+
+                order = 1
+                for index, part in enumerate(post_items):
+                    if not part:
+                        continue
+                    if index % 2 == 0:
+                        rich = ContentUnitRichText()
+                        rich.rich_text = part
+                        rich.save()
 
                         blog_content = BlogItemContent()
                         blog_content.order = order
-                        blog_content.item = image_block
+                        blog_content.item = rich
                         blog_content.content_page = item
-                        blog_content.content_type = image_type
-                        blog_content.object_id = image_block.pk
+                        blog_content.content_type = rich_type
+                        blog_content.object_id = rich.pk
                         blog_content.save()
                         order += 1
+                    else:
+                        image_path = BASE_PATH / part
+                        if image_path.exists() and image_path.is_file():
+                            image_block = ImagesBlock()
+                            image_block.title = image_path.name
+                            image_block.save()
+                            ordered_image = OrderedImage()
+                            ordered_image.order = 1
+                            ordered_image.block = image_block
+                            with open(image_path, "rb") as file:
+                                image_file = File(file)
+                                ordered_image.image.save(image_path.name, image_file, True)
+                            ordered_image.save()
 
-            count += 1
+                            blog_content = BlogItemContent()
+                            blog_content.order = order
+                            blog_content.item = image_block
+                            blog_content.content_page = item
+                            blog_content.content_type = image_type
+                            blog_content.object_id = image_block.pk
+                            blog_content.save()
+                            order += 1
+
+                count += 1
+            except Exception:
+                logger.exception(msg=GENERAL_FAILURE.format(entry=str(entry)))
 
         self.stdout.write(self.style.SUCCESS(f"Successfully read {count} blog records"))
