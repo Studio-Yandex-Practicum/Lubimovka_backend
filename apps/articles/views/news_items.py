@@ -10,7 +10,12 @@ from apps.articles import selectors
 from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
-from apps.articles.serializers import NewsItemDetailSerializer, NewsItemListSerializer, YearMonthSerializer
+from apps.articles.serializers import (
+    NewsItemDetailSerializer,
+    NewsItemListSerializer,
+    NewsItemParamsSerializer,
+    YearMonthSerializer,
+)
 
 
 class NewsItemsListAPI(PubDateSchemaMixin, generics.ListAPIView):
@@ -28,6 +33,11 @@ class NewsItemsListAPI(PubDateSchemaMixin, generics.ListAPIView):
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
     serializer_class = NewsItemListSerializer
     queryset = NewsItem.objects.published()
+
+    def get_queryset(self):
+        query_params = NewsItemParamsSerializer(data=self.request.query_params)
+        query_params.is_valid(raise_exception=True)
+        return super().get_queryset()
 
 
 class NewsItemsDetailAPI(APIView):
