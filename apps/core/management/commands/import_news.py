@@ -10,7 +10,7 @@ from django.core.files import File
 from django.core.management.base import BaseCommand
 from django.utils.timezone import get_current_timezone, make_aware
 
-from apps.articles.models import BlogItem, BlogItemContent
+from apps.articles.models import NewsItem, NewsItemContent
 from apps.content_pages.models import ContentUnitRichText, ImagesBlock, OrderedImage
 from apps.core.constants import Status
 
@@ -40,7 +40,7 @@ class Command(BaseCommand):
         rich_type = ContentType.objects.get(app_label="content_pages", model="contentunitrichtext")
         image_type = ContentType.objects.get(app_label="content_pages", model="imagesblock")
 
-        BlogItem.objects.filter(creator=archivarius).delete()
+        NewsItem.objects.filter(creator=archivarius).delete()
 
         count = 0
         for entry in data:
@@ -48,12 +48,10 @@ class Command(BaseCommand):
                 intro_image = Path(json.loads(entry["images"])["image_intro"])
                 full_text = entry["fulltext"]
 
-                item = BlogItem()
+                item = NewsItem()
                 item.title = entry["title"]
                 item.description = re_tags.sub("", entry["introtext"])
                 item.pub_date = make_aware(datetime.fromisoformat(entry["created"]), get_current_timezone())
-                item.author_url_title = entry["created_by_alias"][:50]
-                item.author_url = f"https://lubimovka.ru/blog/{entry['id']}/"
                 item.status = Status.PUBLISHED
                 item.creator = archivarius
                 if intro_image:
@@ -69,6 +67,7 @@ class Command(BaseCommand):
 
                 order = 1
                 for index, part in enumerate(post_items):
+                    part = part.strip("\r\n")
                     if not part:
                         continue
                     if index % 2 == 0:
@@ -76,7 +75,7 @@ class Command(BaseCommand):
                         rich.rich_text = part
                         rich.save()
 
-                        blog_content = BlogItemContent()
+                        blog_content = NewsItemContent()
                         blog_content.order = order
                         blog_content.item = rich
                         blog_content.content_page = item
@@ -98,7 +97,7 @@ class Command(BaseCommand):
                                 ordered_image.image.save(image_path.name, image_file, True)
                             ordered_image.save()
 
-                            blog_content = BlogItemContent()
+                            blog_content = NewsItemContent()
                             blog_content.order = order
                             blog_content.item = image_block
                             blog_content.content_page = item
@@ -111,4 +110,4 @@ class Command(BaseCommand):
             except Exception:
                 logger.exception(msg=GENERAL_FAILURE.format(entry=str(entry)))
 
-        self.stdout.write(self.style.SUCCESS(f"Successfully read {count} blog records"))
+        self.stdout.write(self.style.SUCCESS(f"Successfully read {count} news records"))
