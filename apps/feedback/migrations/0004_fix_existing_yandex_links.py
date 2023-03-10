@@ -12,8 +12,9 @@ from apps.feedback.services.yandex_disk_export import publish_file
 FILENAME_RE = re.compile(r"&filename=(.+?)&")
 FAILED_TO_PUBLISH = "Cannot get public URL for application #{pk}"
 FAILED_TO_UPDATE_SHEET = "Old format link was not found on the sheet for application #{pk}"
+FAILED_TO_FIX_HYPERLINKS = "Error occured while trying to update hyperlinks on google table"
 GENERAL_FAILURE = "An error has occured while trying to fix yandex disk link in the database for application #{pk}"
-SUCCESS = "Link for application #{pk} was successfully updated from {old_url} to {new_url}; {rows} affected in the google table"
+SUCCESS = "Link for application #{pk} was successfully updated from {old_url} to {new_url}; {rows} row(s) affected in the google table"
 
 logger = logging.getLogger("django")
 
@@ -40,6 +41,10 @@ def fix_links(apps, schema_editor):
             logger.debug(msg=SUCCESS.format(pk=application.pk, old_url=old_url, new_url=new_url, rows=rows_changed))
         except Exception:
             logger.exception(msg=GENERAL_FAILURE.format(pk=application.pk))
+    try:
+        gs.update_links(9)
+    except Exception:
+        logger.warning(msg=FAILED_TO_FIX_HYPERLINKS)
 
 
 class Migration(migrations.Migration):

@@ -240,17 +240,59 @@ class GoogleSpreadsheets:
                             "findReplace": {
                                 "find": find,
                                 "replacement": replacement,
-                                "matchEntireCell": True,
+                                "matchEntireCell": False,
                                 "allSheets": True,
+                                "includeFormulas": True,
                             },
                         }
                     ]
                 },
             )
             response = request.execute()
-            find_replace = response.get("findReplace")
+            rows_changed = 0
+            if "replies" in response:
+                replies = response["replies"]
+                for reply in replies:
+                    find_replace = reply.get("findReplace")
+                    if find_replace:
+                        rows_changed = find_replace.get("rowsChanged", 0)
+                        break
             service.spreadsheets().close()
-            return find_replace.get("rowsChanged") if find_replace else 0
+            return rows_changed
         except (ValueError, Exception) as error:
             msg = f"Не удалось произвести замену {find} на Google Sheets."
+            logger.critical(msg, error, exc_info=True)
+
+    def update_links(self, column_index):
+        """Fix hyperlinks after cell text altered by find and replace."""
+        try:
+            self._get_settings()
+            service = self._build_service()
+            sheet_id = self._get_sheet_id_by_title(service)
+            request = service.spreadsheets().batchUpdate(
+                spreadsheetId=self.spreadsheet_id,
+                body={
+                    "requests": [
+                        {
+                            "repeatCell": {
+                                "cell": {
+                                    "userEnteredFormat": {
+                                        "textFormat": {"link": None},
+                                    }
+                                },
+                                "fields": "userEnteredFormat.textFormat.link",
+                                "range": {
+                                    "sheetId": sheet_id,
+                                    "startColumnIndex": column_index,
+                                    "endColumnIndex": column_index + 1,
+                                },
+                            }
+                        },
+                    ]
+                },
+            )
+            request.execute()
+            service.spreadsheets().close()
+        except Exception as error:
+            msg = "Не удалось обновить ссылки на Google Sheets."
             logger.critical(msg, error, exc_info=True)
