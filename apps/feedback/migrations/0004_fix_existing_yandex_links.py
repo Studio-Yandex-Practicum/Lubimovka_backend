@@ -13,6 +13,7 @@ FILENAME_RE = re.compile(r"&filename=(.+?)&")
 FAILED_TO_PUBLISH = "Cannot get public URL for application #{pk}"
 FAILED_TO_UPDATE_SHEET = "Old format link was not found on the sheet for application #{pk}"
 GENERAL_FAILURE = "An error has occured while trying to fix yandex disk link in the database for application #{pk}"
+SUCCESS = "Link for application #{pk} was successfully updated from {old_url} to {new_url}; {rows} affected in the google table"
 
 logger = logging.getLogger("django")
 
@@ -35,10 +36,8 @@ def fix_links(apps, schema_editor):
                 continue
             application.url_file_in_storage = new_url
             rows_changed = gs.find_and_replace(old_url, new_url)
-            if not rows_changed:
-                logger.warning(msg=FAILED_TO_UPDATE_SHEET.format(pk=application.pk))
-                continue
             application.save()
+            logger.debug(msg=SUCCESS.format(pk=application.pk, old_url=old_url, new_url=new_url, rows=rows_changed))
         except Exception:
             logger.exception(msg=GENERAL_FAILURE.format(pk=application.pk))
 
