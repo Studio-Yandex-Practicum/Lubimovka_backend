@@ -240,7 +240,7 @@ class GoogleSpreadsheets:
                             "findReplace": {
                                 "find": find,
                                 "replacement": replacement,
-                                "matchEntireCell": False,
+                                "matchEntireCell": True,
                                 "allSheets": True,
                                 "includeFormulas": True,
                             },
@@ -261,38 +261,4 @@ class GoogleSpreadsheets:
             return rows_changed
         except (ValueError, Exception) as error:
             msg = f"Не удалось произвести замену {find} на Google Sheets."
-            logger.critical(msg, error, exc_info=True)
-
-    def update_links(self, column_index):
-        """Fix hyperlinks after cell text altered by find and replace."""
-        try:
-            self._get_settings()
-            service = self._build_service()
-            sheet_id = self._get_sheet_id_by_title(service)
-            request = service.spreadsheets().batchUpdate(
-                spreadsheetId=self.spreadsheet_id,
-                body={
-                    "requests": [
-                        {
-                            "repeatCell": {
-                                "cell": {
-                                    "userEnteredFormat": {
-                                        "textFormat": {"link": None},
-                                    }
-                                },
-                                "fields": "userEnteredFormat.textFormat.link",
-                                "range": {
-                                    "sheetId": sheet_id,
-                                    "startColumnIndex": column_index,
-                                    "endColumnIndex": column_index + 1,
-                                },
-                            }
-                        },
-                    ]
-                },
-            )
-            request.execute()
-            service.spreadsheets().close()
-        except Exception as error:
-            msg = "Не удалось обновить ссылки на Google Sheets."
             logger.critical(msg, error, exc_info=True)
