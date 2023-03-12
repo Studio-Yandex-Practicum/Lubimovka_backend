@@ -242,15 +242,23 @@ class GoogleSpreadsheets:
                                 "replacement": replacement,
                                 "matchEntireCell": True,
                                 "allSheets": True,
+                                "includeFormulas": True,
                             },
                         }
                     ]
                 },
             )
             response = request.execute()
-            find_replace = response.get("findReplace")
+            rows_changed = 0
+            if "replies" in response:
+                replies = response["replies"]
+                for reply in replies:
+                    find_replace = reply.get("findReplace")
+                    if find_replace:
+                        rows_changed = find_replace.get("rowsChanged", 0)
+                        break
             service.spreadsheets().close()
-            return find_replace.get("rowsChanged") if find_replace else 0
+            return rows_changed
         except (ValueError, Exception) as error:
             msg = f"Не удалось произвести замену {find} на Google Sheets."
             logger.critical(msg, error, exc_info=True)
