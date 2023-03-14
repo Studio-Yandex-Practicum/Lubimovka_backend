@@ -36,7 +36,7 @@ def fix_links(apps, schema_editor):
                 logger.warning(msg=FAILED_TO_PUBLISH.format(pk=application.pk))
                 continue
             application.url_file_in_storage = new_url
-            rows_changed = gs.find_and_replace(old_url, f"=HYPERLINK(\"{new_url}\" , \"{new_url}\")")
+            rows_changed = gs.find_and_replace(old_url, f"=HYPERLINK(\"{new_url}\" ; \"{new_url}\")")
             application.save()
             logger.debug(msg=SUCCESS.format(pk=application.pk, old_url=old_url, new_url=new_url, rows=rows_changed))
         except Exception:
