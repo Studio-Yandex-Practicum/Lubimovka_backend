@@ -1,5 +1,4 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
@@ -9,6 +8,7 @@ from apps.articles.models import BlogItem
 from apps.articles.selectors import preview_item_detail_get
 from apps.articles.serializers import BlogItemListSerializer, YearMonthSerializer
 from apps.articles.serializers.blog_items import BlogItemDetailOutputSerializer
+from apps.articles.serializers.common import QueryYearMonthParamsSerializer
 from apps.core.utils import get_paginated_response
 
 
@@ -17,17 +17,8 @@ class BlogItemListAPI(APIView):
 
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
 
-    class BlogItemListFilterSerializer(serializers.Serializer):
-        year = serializers.IntegerField(
-            required=False,
-            help_text="Фильтр по году",
-        )
-        month = serializers.IntegerField(
-            min_value=1,
-            max_value=12,
-            required=False,
-            help_text="Фильтр по месяцам",
-        )
+    class BlogItemListFilterSerializer(QueryYearMonthParamsSerializer):
+        pass
 
     class BlogItemListOutputSerializer(BlogItemListSerializer):
         pass

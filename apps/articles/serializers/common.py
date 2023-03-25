@@ -26,3 +26,10 @@ class YearMonthSerializer(serializers.Serializer):
         child=MonthField(),
         label="Месяцы",
     )
+
+
+class QueryYearMonthParamsSerializer(serializers.Serializer):
+    """Сериализатор query параметров."""
+
+    year = YearField(required=False)
+    month = MonthField(required=False)
