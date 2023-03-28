@@ -39,7 +39,6 @@ User = get_user_model()
 
 
 def duplicate_image(image: ImageFieldFile):
-    print(type(image))
     image.save(Path(image.name).name, image, False)
 
 
