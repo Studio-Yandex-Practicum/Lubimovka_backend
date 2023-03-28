@@ -1,6 +1,5 @@
 from django.conf import settings
-from django.contrib import admin
-from django.contrib import messages
+from django.contrib import admin, messages
 from django.db import transaction
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 
@@ -89,7 +88,9 @@ class CopyActionMixin:
     def make_copy(self: admin.ModelAdmin, request, queryset):
         count = len(queryset)
         if count > settings.ARTICLES_MAX_ARTICLES_TO_COPY:
-            self.message_user(request, self.AMOUNT_EXCEEDED.format(count=settings.ARTICLES_MAX_ARTICLES_TO_COPY), messages.WARNING)
+            self.message_user(
+                request, self.AMOUNT_EXCEEDED.format(count=settings.ARTICLES_MAX_ARTICLES_TO_COPY), messages.WARNING
+            )
             return
         for obj in queryset:
             with transaction.atomic():
@@ -99,12 +100,12 @@ class CopyActionMixin:
                     article,
                     [
                         {
-                        'added': {
-                            'name': str(article._meta.verbose_name),
-                            'object': str(article),
+                            "added": {
+                                "name": str(article._meta.verbose_name),
+                                "object": str(article),
+                            }
                         }
-                    }
-                    ]
+                    ],
                 )
 
         self.message_user(request, self.SUCCESS.format(count=count, name=self.model._meta.verbose_name))

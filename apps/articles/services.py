@@ -1,13 +1,26 @@
 from pathlib import Path
 from typing import TypeVar, overload
+
 from django.contrib.auth import get_user_model
 from django.db.models.fields.files import ImageFieldFile
 from django.utils import timezone
 
-from apps.articles.models import BlogItem, BlogItemContent, BlogPerson
+from apps.articles.models import BlogItem, BlogPerson
 from apps.articles.models.news_items import NewsItem
 from apps.articles.models.projects import Project
-from apps.content_pages.models.content_blocks import ContentPersonRole, EventsBlock, ExtendedPerson, ImagesBlock, OrderedEvent, OrderedImage, OrderedPlay, OrderedVideo, PersonsBlock, PlaysBlock, VideosBlock
+from apps.content_pages.models.content_blocks import (
+    ContentPersonRole,
+    EventsBlock,
+    ExtendedPerson,
+    ImagesBlock,
+    OrderedEvent,
+    OrderedImage,
+    OrderedPlay,
+    OrderedVideo,
+    PersonsBlock,
+    PlaysBlock,
+    VideosBlock,
+)
 from apps.content_pages.models.content_items import AbstractItemWithTitle, ContentUnitRichText, Link
 from apps.core.constants import Status
 
@@ -31,14 +44,18 @@ def duplicate_image(image: ImageFieldFile):
 
 
 @overload
-def content_block_copy(block: AbstractItemWithTitle) -> AbstractItemWithTitle: ...
+def content_block_copy(block: AbstractItemWithTitle) -> AbstractItemWithTitle:
+    ...
 
 
 @overload
-def content_block_copy(block: ContentUnitRichText) -> ContentUnitRichText: ...
+def content_block_copy(block: ContentUnitRichText) -> ContentUnitRichText:
+    ...
 
 
-def content_block_copy(block: AbstractItemWithTitle | ContentUnitRichText) -> AbstractItemWithTitle | ContentUnitRichText:
+def content_block_copy(
+    block: AbstractItemWithTitle | ContentUnitRichText,
+) -> AbstractItemWithTitle | ContentUnitRichText:
     source_block_id = block.pk
     block.pk = None
     block.save()
@@ -63,16 +80,23 @@ def content_block_copy(block: AbstractItemWithTitle | ContentUnitRichText) -> Ab
                 through_role.save()
     return block
 
+
 ArticleItem = TypeVar("ArticleItem", BlogItem, NewsItem, Project)
 
-@overload
-def article_item_copy(article_item: BlogItem, creator: User) -> BlogItem: ...
 
 @overload
-def article_item_copy(article_item: NewsItem, creator: User) -> NewsItem: ...
+def article_item_copy(article_item: BlogItem, creator: User) -> BlogItem:
+    ...
+
 
 @overload
-def article_item_copy(article_item: Project, creator: User) -> Project: ...
+def article_item_copy(article_item: NewsItem, creator: User) -> NewsItem:
+    ...
+
+
+@overload
+def article_item_copy(article_item: Project, creator: User) -> Project:
+    ...
 
 
 def article_item_copy(article_item: ArticleItem, creator: User) -> ArticleItem:
@@ -98,6 +122,6 @@ def article_item_copy(article_item: ArticleItem, creator: User) -> ArticleItem:
         ContentModel = article_content.content_type.model_class()
         content = ContentModel.objects.get(pk=article_content.object_id)
         block_copy = content_block_copy(content)
-        article_content.object_id = block_copy.pk  
-        article_content.save()      
+        article_content.object_id = block_copy.pk
+        article_content.save()
     return article_item
