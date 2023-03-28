@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import TypeVar, overload
+from typing import TypeVar, Union, overload
 
 from django.contrib.auth import get_user_model
 from django.db.models.fields.files import ImageFieldFile
@@ -54,8 +54,8 @@ def content_block_copy(block: ContentUnitRichText) -> ContentUnitRichText:
 
 
 def content_block_copy(
-    block: AbstractItemWithTitle | ContentUnitRichText,
-) -> AbstractItemWithTitle | ContentUnitRichText:
+    block: Union[AbstractItemWithTitle, ContentUnitRichText]
+) -> Union[AbstractItemWithTitle, ContentUnitRichText]:
     source_block_id = block.pk
     block.pk = None
     block.save()
