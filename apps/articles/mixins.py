@@ -1,4 +1,10 @@
+from django.conf import settings
+from django.contrib import admin
+from django.contrib import messages
+from django.db import transaction
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
+
+from apps.articles.services import article_item_copy
 
 
 class PubDateSchemaMixin:
@@ -71,3 +77,34 @@ class PubDateSchemaMixin:
     )
     def list(self, request):
         return super().list(request)
+
+
+class CopyActionMixin:
+    """Adds copy action to the list view menu."""
+
+    SUCCESS = "Успешно скопированы {count} {name}"
+    AMOUNT_EXCEEDED = "Выберите не более {count} элементов из списка"
+
+    @admin.action(description="Создать копию", permissions=["add"])
+    def make_copy(self: admin.ModelAdmin, request, queryset):
+        count = len(queryset)
+        if count > settings.ARTICLES_MAX_ARTICLES_TO_COPY:
+            self.message_user(request, self.AMOUNT_EXCEEDED.format(count=settings.ARTICLES_MAX_ARTICLES_TO_COPY), messages.WARNING)
+            return
+        for obj in queryset:
+            with transaction.atomic():
+                article = article_item_copy(obj, request.user)
+                self.log_addition(
+                    request,
+                    article,
+                    [
+                        {
+                        'added': {
+                            'name': str(article._meta.verbose_name),
+                            'object': str(article),
+                        }
+                    }
+                    ]
+                )
+
+        self.message_user(request, self.SUCCESS.format(count=count, name=self.model._meta.verbose_name))
