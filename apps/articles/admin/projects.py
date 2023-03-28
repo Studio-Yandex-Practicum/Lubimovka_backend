@@ -1,5 +1,6 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
+from apps.articles.mixins import CopyActionMixin
 
 from apps.articles.models import Project, ProjectContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
@@ -11,7 +12,7 @@ class ProjectContentInline(InlineReadOnlyMixin, BaseContentInline):
 
 
 @admin.register(Project)
-class ProjectAdmin(SortableAdminMixin, StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
+class ProjectAdmin(CopyActionMixin, SortableAdminMixin, StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
     list_display = (
         "order",
         "title",
@@ -54,6 +55,9 @@ class ProjectAdmin(SortableAdminMixin, StatusButtonMixin, PreviewButtonMixin, Ba
         "image_preview_change_page",
         "image",
         "creator_name",
+    )
+    actions = (
+        "make_copy",
     )
 
     def get_queryset(self, request):
