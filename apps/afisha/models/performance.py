@@ -105,6 +105,13 @@ class Performance(BaseModel):
         on_delete=models.CASCADE,
         verbose_name="Создатель",
     )
+    slug = models.SlugField(
+        "Транслит названия для формирования адресной строки",
+        unique=True,
+        max_length=200,
+        help_text="Формируется автоматически, может быть изменен вручную",
+        error_messages={"unique": "Такой транслит уже используется, введите иной"},
+    )
 
     class Meta:
         ordering = ("name",)

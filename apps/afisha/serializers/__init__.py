@@ -5,6 +5,7 @@ from apps.afisha.serializers.performance import (
     PerformanceMediaReviewSerializer,
     PerformanceReviewSerializer,
     PerformanceSerializer,
+    PerformanceTypedSerializer,
 )
 from apps.afisha.serializers.reading import EventReadingSerializer
 

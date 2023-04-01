@@ -43,12 +43,24 @@ class PerformanceSerializer(serializers.ModelSerializer):
         return obj.duration.seconds
 
     class Meta:
-        exclude = (
-            "created",
-            "modified",
-            "project",
-            "persons",
-            "block_images_description",
+        fields = (
+            "id",
+            "play",
+            "team",
+            "images_in_block",
+            "events",
+            "status",
+            "name",
+            "main_image",
+            "bottom_image",
+            "video",
+            "description",
+            "intro",
+            "text",
+            "age_limit",
+            "duration",
+            "slug",
+            "creator",
         )
         model = Performance
 
@@ -64,6 +76,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
         model = Performance
         fields = (
             "id",
+            "slug",
             "name",
             "description",
             "team",
@@ -101,3 +114,16 @@ class PerformanceReviewSerializer(serializers.ModelSerializer):
             "modified",
             "performance",
         )
+
+
+class PerformanceTypedSerializer(PerformanceSerializer):
+    """Performance serializer for slug determine view."""
+
+    type = serializers.SerializerMethodField()
+
+    @extend_schema_field(str)
+    def get_type(self, obj):
+        return "performance"
+
+    class Meta(PerformanceSerializer.Meta):
+        fields = ("type",) + PerformanceSerializer.Meta.fields

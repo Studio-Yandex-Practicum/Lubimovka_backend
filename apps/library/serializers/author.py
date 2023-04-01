@@ -1,3 +1,4 @@
+from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.library.models import Author, OtherLink, SocialNetworkLink
@@ -86,3 +87,16 @@ class AuthorSearchSerializer(serializers.ModelSerializer):
 
 class AuthorLettersSerializer(serializers.Serializer):
     letters = serializers.ListField(child=serializers.CharField())
+
+
+class AuthorTypedSerializer(AuthorRetrieveSerializer):
+    """Author serializer for slug determine view."""
+
+    type = serializers.SerializerMethodField()
+
+    @extend_schema_field(str)
+    def get_type(self, obj):
+        return "author"
+
+    class Meta(AuthorRetrieveSerializer.Meta):
+        fields = ("type",) + AuthorRetrieveSerializer.Meta.fields

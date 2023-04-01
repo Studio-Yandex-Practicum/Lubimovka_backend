@@ -7,6 +7,7 @@ from apps.library.views import (
     PlayFiltersAPIView,
     PlayViewSet,
     SearchResultViewSet,
+    SlugDetermineAPI,
 )
 
 router = DefaultRouter()
@@ -37,6 +38,11 @@ library_urls = [
         "library/playfilters/",
         PlayFiltersAPIView.as_view(),
         name="playfilters",
+    ),
+    path(
+        "library/<str:identifier>/",
+        SlugDetermineAPI.as_view(),
+        name="slug_determine",
     ),
 ]
 
