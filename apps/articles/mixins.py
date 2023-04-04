@@ -1,9 +1,8 @@
-from django.conf import settings
-from django.contrib import admin, messages
-from django.db import transaction
+from django.contrib import admin
+from django.urls import resolve
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 
-from apps.articles.services import article_item_copy
+from apps.articles.services import content_block_copy, copy_image
 
 
 class PubDateSchemaMixin:
@@ -78,34 +77,31 @@ class PubDateSchemaMixin:
         return super().list(request)
 
 
-class CopyActionMixin:
-    """Adds copy action to the list view menu."""
+class ArticleSaveAsMixin:
+    """Align Django save as functionality with Article model."""
 
-    SUCCESS = "Успешно скопированы {count} {name}"
-    AMOUNT_EXCEEDED = "Выберите не более {count} элементов из списка"
+    def get_form(self: admin.ModelAdmin, request, obj, change, **kwargs):
+        """Make image field optional field to allow for successful validation."""
+        form = super().get_form(request, obj, change, **kwargs)
+        if request.method == "POST" and "_saveasnew" in request.POST:
+            form.base_fields["image"].required = False
+        return form
 
-    @admin.action(description="Создать копию", permissions=["add"])
-    def make_copy(self: admin.ModelAdmin, request, queryset):
-        count = len(queryset)
-        if count > settings.ARTICLES_MAX_ARTICLES_TO_COPY:
-            self.message_user(
-                request, self.AMOUNT_EXCEEDED.format(count=settings.ARTICLES_MAX_ARTICLES_TO_COPY), messages.WARNING
-            )
-            return
-        for obj in queryset:
-            with transaction.atomic():
-                article = article_item_copy(obj, request.user)
-                self.log_addition(
-                    request,
-                    article,
-                    [
-                        {
-                            "added": {
-                                "name": str(article._meta.verbose_name),
-                                "object": str(article),
-                            }
-                        }
-                    ],
-                )
+    def save_model(self: admin.ModelAdmin, request, obj, form, change):
+        """Copy image from old object when saving as new."""
+        if "_saveasnew" in request.POST and "image" not in request.FILES:
+            source_pk = resolve(request.path).kwargs["object_id"]
+            source_obj = self.get_object(request, source_pk)
+            copy_image(source_obj.image, obj.image)
+        return super().save_model(request, obj, form, change)
 
-        self.message_user(request, self.SUCCESS.format(count=count, name=self.model._meta.verbose_name))
+    def save_related(self: admin.ModelAdmin, request, form, formsets, change):
+        """Replace blocks with their copies when saving as new."""
+        super().save_related(request, form, formsets, change)
+        if "_saveasnew" in request.POST:
+            obj = form.instance
+            for content in obj.contents.all():
+                BlockModel = content.content_type.model_class()
+                block = BlockModel.objects.get(pk=content.object_id)
+                content.object_id = content_block_copy(block).pk
+                content.save()
