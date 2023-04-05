@@ -30,11 +30,8 @@ class NewsItemsListAPI(PubDateSchemaMixin, generics.ListAPIView):
     serializer_class = NewsItemListSerializer
     queryset = NewsItem.objects.published()
 
-    class NewsItemListFilterSerializer(QueryYearMonthParamsSerializer):
-        pass
-
     def get(self, request, *args, **kwargs):
-        filters_serializer = self.NewsItemListFilterSerializer(data=request.query_params)
+        filters_serializer = QueryYearMonthParamsSerializer(data=request.query_params)
         filters_serializer.is_valid(raise_exception=True)
 
         return super().get(request, *args, **kwargs)

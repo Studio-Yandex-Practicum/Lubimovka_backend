@@ -28,8 +28,13 @@ class YearMonthSerializer(serializers.Serializer):
     )
 
 
-class QueryYearMonthParamsSerializer(serializers.Serializer):
-    """Сериализатор query параметров."""
+class QueryYearParamSerializer(serializers.Serializer):
+    """Сериализатор query параметра year."""
 
     year = YearField(required=False)
+
+
+class QueryYearMonthParamsSerializer(QueryYearParamSerializer):
+    """Сериализатор query параметров year и month."""
+
     month = MonthField(required=False)
