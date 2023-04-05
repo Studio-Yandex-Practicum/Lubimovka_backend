@@ -1,4 +1,8 @@
+from django.contrib import admin
+from django.urls import resolve
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
+
+from apps.articles.services import content_block_copy, copy_image
 
 
 class PubDateSchemaMixin:
@@ -71,3 +75,33 @@ class PubDateSchemaMixin:
     )
     def list(self, request):
         return super().list(request)
+
+
+class ArticleSaveAsMixin:
+    """Align Django save as functionality with Article model."""
+
+    def get_form(self: admin.ModelAdmin, request, obj, change, **kwargs):
+        """Make image field optional field to allow for successful validation."""
+        form = super().get_form(request, obj, change, **kwargs)
+        if request.method == "POST" and "_saveasnew" in request.POST:
+            form.base_fields["image"].required = False
+        return form
+
+    def save_model(self: admin.ModelAdmin, request, obj, form, change):
+        """Copy image from old object when saving as new."""
+        if "_saveasnew" in request.POST and "image" not in request.FILES:
+            source_pk = resolve(request.path).kwargs["object_id"]
+            source_obj = self.get_object(request, source_pk)
+            copy_image(source_obj.image, obj.image)
+        return super().save_model(request, obj, form, change)
+
+    def save_related(self: admin.ModelAdmin, request, form, formsets, change):
+        """Replace blocks with their copies when saving as new."""
+        super().save_related(request, form, formsets, change)
+        if "_saveasnew" in request.POST:
+            obj = form.instance
+            for content in obj.contents.all():
+                BlockModel = content.content_type.model_class()
+                block = BlockModel.objects.get(pk=content.object_id)
+                content.object_id = content_block_copy(block).pk
+                content.save()
