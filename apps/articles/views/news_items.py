@@ -10,8 +10,12 @@ from apps.articles import selectors
 from apps.articles.filters import PubDateFilter
 from apps.articles.mixins import PubDateSchemaMixin
 from apps.articles.models import NewsItem
-from apps.articles.serializers import NewsItemDetailSerializer, NewsItemListSerializer, YearMonthSerializer
-from apps.articles.serializers.common import QueryYearMonthParamsSerializer
+from apps.articles.serializers import (
+    NewsItemDetailSerializer,
+    NewsItemListSerializer,
+    YearListMonthSerializer,
+    YearMonthSerializer,
+)
 
 
 class NewsItemsListAPI(PubDateSchemaMixin, generics.ListAPIView):
@@ -31,9 +35,7 @@ class NewsItemsListAPI(PubDateSchemaMixin, generics.ListAPIView):
     queryset = NewsItem.objects.published()
 
     def get(self, request, *args, **kwargs):
-        filters_serializer = QueryYearMonthParamsSerializer(data=request.query_params)
-        filters_serializer.is_valid(raise_exception=True)
-
+        YearMonthSerializer(data=request.query_params).is_valid(raise_exception=True)
         return super().get(request, *args, **kwargs)
 
 
@@ -64,7 +66,7 @@ class NewsItemsPreviewDetailAPI(APIView):
 class NewsItemYearsMonthsAPI(APIView):
     """Return years and months of published `NewsItem`."""
 
-    class NewsItemYearsMonthsOutputSerializer(YearMonthSerializer):
+    class NewsItemYearsMonthsOutputSerializer(YearListMonthSerializer):
         pass
 
     @extend_schema(responses=NewsItemYearsMonthsOutputSerializer(many=True))
