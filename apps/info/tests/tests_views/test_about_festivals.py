@@ -1,5 +1,6 @@
 import pytest
 from django.urls import reverse
+from rest_framework import status
 
 from apps.info.models import FestivalTeamMember
 
@@ -140,3 +141,81 @@ class TestAboutFestivalAPIViews:
         assert image_url_in_response.endswith(
             image_url_in_db
         ), f"Проверьте, что при GET запросе {url} возвращаются данные объекта. Значение 'image' неправильное"
+
+    def test_selectors_item_by_year_filter(self, client, selector):
+        """Get filtered selectors and compare `count` with expected number of objects in database."""
+        query_params = {"year": "2020"}
+        response = client.get(SELECTORS_URL, query_params)
+        count = len(response.data)
+        assert count == 1, f"Проверьте фильтрацию по году. Ожидалось только {count} объекта в этом году."
+
+    def test_selectors_item_list_bad_year_filter(self, client, selector):
+        """Get filtered response with bad year query params."""
+        bad_query_params = [
+            {"year": "-1"},
+            {"year": "0"},
+            {"year": "1"},
+            {"year": "1950"},
+            {"year": "2775"},
+            {"year": "-1000000000000000"},
+            {"year": "1000000000000000"},
+            {"year": "1995.000000000000000001"},
+            {"year": "1,995e+3"},
+            {"year": "0x7CB"},
+            {"year": "NULL"},
+            {"year": "Test"},
+        ]
+        for query_params in bad_query_params:
+            response = client.get(SELECTORS_URL, query_params)
+            assert response.status_code == status.HTTP_400_BAD_REQUEST, (
+                f"Проверьте валидацию по фильтру year для значения: {query_params['year']}. "
+                "Должен возвращаться код: 400."
+            )
+
+    def test_selectors_item_list_filter_with_server_change_date(self, client, freezer, selector):
+        """Get filtered response with change server date."""
+        query_params = {"year": "2020"}
+        freezer.move_to("1981-10-15 12:00")
+        response = client.get(SELECTORS_URL, query_params)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST, (
+            "Проверьте фильтрацию по году при изменение даты на сервере. " "Должен возвращаться код: 400."
+        )
+
+    def test_volunteers_item_by_year_filter(self, client, volunteer):
+        """Get filtered volunteers and compare `count` with expected number of objects in database."""
+        query_params = {"year": "2020"}
+        response = client.get(VOLUNTEERS_URL, query_params)
+        count = len(response.data)
+        assert count == 1, f"Проверьте фильтрацию по году. Ожидалось только {count} объект в этом году."
+
+    def test_volunteers_item_list_bad_year_filter(self, client, volunteer):
+        """Get filtered response with bad year query params."""
+        bad_query_params = [
+            {"year": "-1"},
+            {"year": "0"},
+            {"year": "1"},
+            {"year": "1950"},
+            {"year": "2775"},
+            {"year": "-1000000000000000"},
+            {"year": "1000000000000000"},
+            {"year": "1995.000000000000000001"},
+            {"year": "1,995e+3"},
+            {"year": "0x7CB"},
+            {"year": "NULL"},
+            {"year": "Test"},
+        ]
+        for query_params in bad_query_params:
+            response = client.get(VOLUNTEERS_URL, query_params)
+            assert response.status_code == status.HTTP_400_BAD_REQUEST, (
+                f"Проверьте валидацию по фильтру year для значения: {query_params['year']}. "
+                "Должен возвращаться код: 400."
+            )
+
+    def test_volunteers_item_list_filter_with_server_change_date(self, client, freezer, volunteer):
+        """Get filtered response with change server date."""
+        query_params = {"year": "2020"}
+        freezer.move_to("1981-10-15 12:00")
+        response = client.get(VOLUNTEERS_URL, query_params)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST, (
+            "Проверьте фильтрацию по году при изменение даты на сервере. " "Должен возвращаться код: 400."
+        )

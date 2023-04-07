@@ -61,9 +61,9 @@ def test_news_item_list_fields(client, expected_field, news_item_published):
     """Take the first `NewsItem` representation and look for expected fields."""
     response = client.get(NEWS_ITEM_LIST_URL)
     results = response.data.get("results")
-    blog_item_data = results[0]
+    news_item_data = results[0]
 
-    assert expected_field in blog_item_data
+    assert expected_field in news_item_data
 
 
 def test_news_item_list_not_published_in_results(client, news_item_not_published):
