@@ -1,11 +1,12 @@
 from django.db import models
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
+from apps.core.mixins import image_clean_up_mixin_factory
 from apps.core.models import BaseModel, Person
 from apps.library.utilities import get_team_roles
 
 
-class MasterClass(BaseModel):
+class MasterClass(image_clean_up_mixin_factory(("main_image",)), BaseModel):
     name = models.CharField(
         max_length=200,
         verbose_name="Название",

@@ -154,3 +154,27 @@ class GetDomainMixin:
 
     def prepend_domain(self, url):
         return get_domain(self.context["request"]) + str(url)
+
+
+def image_clean_up_mixin_factory(fields):
+    """Create image clean up mixin."""
+
+    class ImageCleanUpMixin:
+        def save(self, *args, **kwargs):
+            this = type(self).objects.filter(id=self.id).first()
+            if this:
+                for field in fields:
+                    this_field = getattr(this, field)
+                    if this_field != getattr(self, field):
+                        this_field.delete(save=False)
+
+            return super().save(*args, **kwargs)
+
+        def delete(self, *args, **kwargs):
+            for attr in (getattr(self, field) for field in fields):
+                storage, path = attr.storage, attr.path
+                super().delete(*args, **kwargs)
+                storage.delete(path)
+
+    assert type(fields) is not str, "fields must be a sequence of field names, not string"
+    return ImageCleanUpMixin

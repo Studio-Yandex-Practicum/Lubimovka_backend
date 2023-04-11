@@ -8,7 +8,8 @@ from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.utils import delete_image_with_model, slugify
+from apps.core.mixins import image_clean_up_mixin_factory
+from apps.core.utils import slugify
 from apps.core.validators import email_validator
 
 NEWS_HELP_TEXT = (
@@ -54,7 +55,7 @@ class Image(BaseModel):
         return self.image.url
 
 
-class Person(BaseModel):
+class Person(image_clean_up_mixin_factory(("image",)), BaseModel):
     first_name = models.CharField(
         max_length=50,
         verbose_name="Имя",
@@ -99,13 +100,6 @@ class Person(BaseModel):
                 name="unique_person",
             )
         ]
-
-    def save(self, *args, **kwargs):
-        this = Person.objects.filter(id=self.id).first()
-        if this:
-            if this.image != self.image:
-                this.image.delete(save=False)
-        super(Person, self).save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
@@ -206,7 +200,7 @@ class RoleType(models.Model):
         return str(role_label)
 
 
-class Setting(BaseModel):
+class Setting(image_clean_up_mixin_factory(("image",)), BaseModel):
     class SettingGroup(models.TextChoices):
         EMAIL = "EMAIL", _("Почта")
         MAIN = "MAIN", _("Главная")
@@ -298,16 +292,10 @@ class Setting(BaseModel):
             )
 
     def save(self, *args, **kwargs):
-        this = Setting.objects.filter(id=self.id).first()
         colors_settings_keys = ("background_color", "accent_color")
-        if this and (this.image != self.image):
-            this.image.delete(save=False)
         if self.settings_key in colors_settings_keys and self.text:
             self._generate_css()
         return super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        delete_image_with_model(self, Setting, *args, **kwargs)
 
     @property
     def value(self):

@@ -1,11 +1,12 @@
 from django.db import models
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
+from apps.core.mixins import image_clean_up_mixin_factory
 from apps.core.models import CORE_ROLES, BaseModel, Person
 from apps.library.utilities import get_team_roles
 
 
-class Reading(BaseModel):
+class Reading(image_clean_up_mixin_factory(("main_image",)), BaseModel):
     play = models.ForeignKey(
         "library.Play",
         on_delete=models.PROTECT,

@@ -1,10 +1,10 @@
 from django.db import models
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
-from apps.core.utils import delete_image_with_model
+from apps.core.mixins import image_clean_up_mixin_factory
 
 
-class NewsItem(AbstractContentPage):
+class NewsItem(image_clean_up_mixin_factory(("image",)), AbstractContentPage):
     def __str__(self):
         return f"Новость {self.title}"
 
@@ -17,16 +17,6 @@ class NewsItem(AbstractContentPage):
             ("access_level_2", "Права редактора"),
             ("access_level_3", "Права главреда"),
         )
-
-    def save(self, *args, **kwargs):
-        this = NewsItem.objects.filter(id=self.id).first()
-        if this:
-            if this.image != self.image:
-                this.image.delete(save=False)
-        return super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        delete_image_with_model(self, NewsItem, *args, **kwargs)
 
 
 class NewsItemContent(AbstractContent):

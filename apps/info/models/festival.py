@@ -7,8 +7,8 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
+from apps.core.mixins import image_clean_up_mixin_factory
 from apps.core.models import BaseModel, Image, Person
-from apps.core.utils import delete_image_with_model
 
 
 class FestivalTeamMember(BaseModel):
@@ -92,7 +92,7 @@ class FestTeamMember(FestivalTeamMember):
         verbose_name_plural = "Команда фестиваля"
 
 
-class Festival(BaseModel):
+class Festival(image_clean_up_mixin_factory(("festival_image",)), BaseModel):
     start_date = models.DateField(verbose_name="Дата начала фестиваля")
     end_date = models.DateField(
         verbose_name="Дата окончания фестиваля",
@@ -167,14 +167,7 @@ class Festival(BaseModel):
 
     def save(self, *args, **kwargs):
         self.year = self.start_date.year
-        this = Festival.objects.filter(id=self.id).first()
-        if this:
-            if this.festival_image != self.festival_image:
-                this.festival_image.delete(save=False)
         return super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        delete_image_with_model(self, Festival, *args, **kwargs)
 
     def clean(self):
         future_year = timezone.now().year + 1
@@ -234,7 +227,7 @@ class InfoLink(BaseModel):
         return self.title
 
 
-class PressRelease(BaseModel):
+class PressRelease(image_clean_up_mixin_factory(("press_release_image",)), BaseModel):
     text = RichTextField(
         config_name="press_release_styles",
         verbose_name="Текст",

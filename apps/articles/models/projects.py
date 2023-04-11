@@ -2,10 +2,10 @@ from django.db import models
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.utils import delete_image_with_model
+from apps.core.mixins import image_clean_up_mixin_factory
 
 
-class Project(AbstractContentPage):
+class Project(image_clean_up_mixin_factory(("image",)), AbstractContentPage):
     image = models.ImageField(
         upload_to=path_by_app_label_and_class_name,
         verbose_name="Заглавная картинка",
@@ -36,16 +36,6 @@ class Project(AbstractContentPage):
             ("access_level_2", "Права редактора"),
             ("access_level_3", "Права главреда"),
         )
-
-    def save(self, *args, **kwargs):
-        this = Project.objects.filter(id=self.id).first()
-        if this:
-            if this.image != self.image:
-                this.image.delete(save=False)
-        return super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        delete_image_with_model(self, Project, *args, **kwargs)
 
 
 class ProjectContent(AbstractContent):
