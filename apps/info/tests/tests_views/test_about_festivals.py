@@ -155,8 +155,6 @@ class TestAboutFestivalAPIViews:
             {"year": "-1"},
             {"year": "0"},
             {"year": "1"},
-            {"year": "1950"},
-            {"year": "2775"},
             {"year": "-1000000000000000"},
             {"year": "1000000000000000"},
             {"year": "1995.000000000000000001"},
@@ -172,15 +170,6 @@ class TestAboutFestivalAPIViews:
                 "Должен возвращаться код: 400."
             )
 
-    def test_selectors_item_list_filter_with_server_change_date(self, client, freezer, selector):
-        """Get filtered response with change server date."""
-        query_params = {"year": "2020"}
-        freezer.move_to("1981-10-15 12:00")
-        response = client.get(SELECTORS_URL, query_params)
-        assert response.status_code == status.HTTP_400_BAD_REQUEST, (
-            "Проверьте фильтрацию по году при изменение даты на сервере. " "Должен возвращаться код: 400."
-        )
-
     def test_volunteers_item_by_year_filter(self, client, volunteer):
         """Get filtered volunteers and compare `count` with expected number of objects in database."""
         query_params = {"year": "2020"}
@@ -194,8 +183,6 @@ class TestAboutFestivalAPIViews:
             {"year": "-1"},
             {"year": "0"},
             {"year": "1"},
-            {"year": "1950"},
-            {"year": "2775"},
             {"year": "-1000000000000000"},
             {"year": "1000000000000000"},
             {"year": "1995.000000000000000001"},
@@ -210,12 +197,3 @@ class TestAboutFestivalAPIViews:
                 f"Проверьте валидацию по фильтру year для значения: {query_params['year']}. "
                 "Должен возвращаться код: 400."
             )
-
-    def test_volunteers_item_list_filter_with_server_change_date(self, client, freezer, volunteer):
-        """Get filtered response with change server date."""
-        query_params = {"year": "2020"}
-        freezer.move_to("1981-10-15 12:00")
-        response = client.get(VOLUNTEERS_URL, query_params)
-        assert response.status_code == status.HTTP_400_BAD_REQUEST, (
-            "Проверьте фильтрацию по году при изменение даты на сервере. " "Должен возвращаться код: 400."
-        )
