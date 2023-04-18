@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.urls import resolve
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 
-from apps.articles.services import content_block_copy, copy_image
+from apps.articles.services import COPY_TITLE, content_block_copy, copy_image
 
 
 class PubDateSchemaMixin:
@@ -93,6 +93,8 @@ class ArticleSaveAsMixin:
             source_pk = resolve(request.path).kwargs["object_id"]
             source_obj = self.get_object(request, source_pk)
             copy_image(source_obj.image, obj.image)
+            if obj.title == source_obj.title:
+                obj.title = COPY_TITLE.format(original_title=obj.title)
         return super().save_model(request, obj, form, change)
 
     def save_related(self: admin.ModelAdmin, request, form, formsets, change):
