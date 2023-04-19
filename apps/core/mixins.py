@@ -1,4 +1,8 @@
+from collections.abc import Iterable
+
 from django.contrib import admin, messages
+from django.core import checks
+from django.db.models import FileField
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
@@ -164,6 +168,60 @@ class ImageCleanUpMixin:
     the model's ImageField field names, for which you want to delete the image
     file after the field is altered.
     """
+
+    @classmethod
+    def _check_field_tuple(cls):
+        fields = getattr(cls, "cleanup_fields", None)
+        if not fields:
+            return [
+                checks.Error(
+                    "cleanup_fields attribute is missing",
+                    hint="Add the cleanup_fields attribute to the model class or remove ImageCleanUpMixin",
+                    obj=cls,
+                )
+            ]
+        if isinstance(fields, str):
+            return [
+                checks.Error(
+                    "cleanup_fields attribute must not be a str instance",
+                    hint="It is recommended to assign cleanup_fields a tuple of field names",
+                    obj=cls,
+                )
+            ]
+        if not issubclass(type(fields), Iterable):
+            return [
+                checks.Error(
+                    "cleanup_fields attribute must be iterable",
+                    hint="It is recommended to assign cleanup_fields a tuple of field names",
+                    obj=cls,
+                )
+            ]
+        errors = []
+        for field in fields:
+            if not hasattr(cls, field):
+                errors.append(
+                    checks.Error(
+                        f"{field} is listed in the cleanup_fields, but not found in the model",
+                        hint="Check the field exists in the model",
+                        obj=cls,
+                    )
+                )
+                continue
+            if not issubclass(type(cls._meta.get_field(field)), FileField):
+                errors.append(
+                    checks.Error(
+                        f"{field} is not a FileField or an ImageField",
+                        hint="Remove the field from the cleanup_fields attribute",
+                        obj=cls,
+                    )
+                )
+        return errors
+
+    @classmethod
+    def check(cls, **kwargs):
+        errors = super().check(**kwargs)
+        errors.extend(cls._check_field_tuple())
+        return errors
 
     def save(self, *args, **kwargs):
         this = type(self).objects.filter(id=self.id).first()
