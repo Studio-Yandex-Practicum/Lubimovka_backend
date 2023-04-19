@@ -4,6 +4,8 @@ from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schem
 
 from apps.articles.services import content_block_copy, copy_image
 
+COPY_TITLE = "Копия {original_title}"
+
 
 class PubDateSchemaMixin:
     """Adds examples how `PubDateFilter` (filter by month and year) works."""
@@ -93,6 +95,8 @@ class ArticleSaveAsMixin:
             source_pk = resolve(request.path).kwargs["object_id"]
             source_obj = self.get_object(request, source_pk)
             copy_image(source_obj.image, obj.image)
+            if obj.title == source_obj.title:
+                obj.title = COPY_TITLE.format(original_title=obj.title)
         return super().save_model(request, obj, form, change)
 
     def save_related(self: admin.ModelAdmin, request, form, formsets, change):

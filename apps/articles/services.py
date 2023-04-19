@@ -19,7 +19,6 @@ from apps.content_pages.models.content_blocks import (
 )
 from apps.content_pages.models.content_items import AbstractItemWithTitle, ContentUnitRichText, Link
 
-COPY_TITLE = "Копия {original_title}"
 ITEM_MODEL = {
     EventsBlock: OrderedEvent,
     ImagesBlock: OrderedImage,
