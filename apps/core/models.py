@@ -8,7 +8,7 @@ from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.mixins import image_clean_up_mixin_factory
+from apps.core.mixins import ImageCleanUpMixin
 from apps.core.utils import slugify
 from apps.core.validators import email_validator
 
@@ -55,7 +55,8 @@ class Image(BaseModel):
         return self.image.url
 
 
-class Person(image_clean_up_mixin_factory(("image",)), BaseModel):
+class Person(ImageCleanUpMixin, BaseModel):
+    cleanup_fields = ("image",)
     first_name = models.CharField(
         max_length=50,
         verbose_name="Имя",
@@ -200,7 +201,9 @@ class RoleType(models.Model):
         return str(role_label)
 
 
-class Setting(image_clean_up_mixin_factory(("image",)), BaseModel):
+class Setting(ImageCleanUpMixin, BaseModel):
+    cleanup_fields = ("image",)
+
     class SettingGroup(models.TextChoices):
         EMAIL = "EMAIL", _("Почта")
         MAIN = "MAIN", _("Главная")

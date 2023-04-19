@@ -3,11 +3,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.mixins import image_clean_up_mixin_factory
+from apps.core.mixins import ImageCleanUpMixin
 from apps.core.models import BaseModel, Setting
 
 
-class Banner(image_clean_up_mixin_factory(("image",)), BaseModel):
+class Banner(ImageCleanUpMixin, BaseModel):
+    cleanup_fields = ("image",)
+
     class ButtonType(models.TextChoices):
         TICKETS = "TICKETS", _("Билеты")
         DETAILS = "DETAILS", _("Подробнее")

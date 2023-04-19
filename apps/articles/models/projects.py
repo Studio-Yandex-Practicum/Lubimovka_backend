@@ -2,10 +2,11 @@ from django.db import models
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.mixins import image_clean_up_mixin_factory
+from apps.core.mixins import ImageCleanUpMixin
 
 
-class Project(image_clean_up_mixin_factory(("image",)), AbstractContentPage):
+class Project(ImageCleanUpMixin, AbstractContentPage):
+    cleanup_fields = ("image",)
     image = models.ImageField(
         upload_to=path_by_app_label_and_class_name,
         verbose_name="Заглавная картинка",

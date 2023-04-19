@@ -3,12 +3,14 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
-from apps.core.mixins import image_clean_up_mixin_factory
+from apps.core.mixins import ImageCleanUpMixin
 from apps.core.models import BaseModel, Person
 from apps.info.models.festival import Festival
 
 
-class Partner(image_clean_up_mixin_factory(("image",)), BaseModel):
+class Partner(ImageCleanUpMixin, BaseModel):
+    cleanup_fields = ("image",)
+
     class PartnerType(models.TextChoices):
         FESTIVAL_PARTNER = "festival", _("Партнер фестиваля")
         INFO_PARTNER = "info", _("Информационный партнер")

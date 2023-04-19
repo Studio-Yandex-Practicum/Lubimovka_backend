@@ -1,10 +1,12 @@
 from django.db import models
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
-from apps.core.mixins import image_clean_up_mixin_factory
+from apps.core.mixins import ImageCleanUpMixin
 
 
-class NewsItem(image_clean_up_mixin_factory(("image",)), AbstractContentPage):
+class NewsItem(ImageCleanUpMixin, AbstractContentPage):
+    cleanup_fields = ("image",)
+
     def __str__(self):
         return f"Новость {self.title}"
 

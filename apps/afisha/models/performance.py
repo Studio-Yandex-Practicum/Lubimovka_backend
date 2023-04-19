@@ -7,14 +7,15 @@ from django.template.defaultfilters import truncatechars
 from apps.content_pages.querysets import PublishedContentQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
-from apps.core.mixins import image_clean_up_mixin_factory
+from apps.core.mixins import ImageCleanUpMixin
 from apps.core.models import CORE_ROLES, BaseModel, Person
 from apps.library.utilities import get_team_roles
 
 User = get_user_model()
 
 
-class Performance(image_clean_up_mixin_factory(("main_image", "bottom_image")), BaseModel):
+class Performance(ImageCleanUpMixin, BaseModel):
+    cleanup_fields = ("main_image", "bottom_image")
     status = models.CharField(
         choices=Status.choices,
         default=Status.IN_PROCESS,

@@ -2,7 +2,7 @@ from django.db import models
 
 from apps.afisha.models import Performance
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.mixins import image_clean_up_mixin_factory
+from apps.core.mixins import ImageCleanUpMixin
 from apps.core.models import BaseModel, Image
 
 
@@ -15,7 +15,8 @@ class PerformanceImage(Image):
     )
 
 
-class PerformanceMediaReview(image_clean_up_mixin_factory(("image",)), BaseModel):
+class PerformanceMediaReview(ImageCleanUpMixin, BaseModel):
+    cleanup_fields = ("image",)
     media_name = models.CharField(
         max_length=100,
         verbose_name="Название медиа ресурса",
