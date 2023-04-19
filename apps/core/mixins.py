@@ -157,7 +157,13 @@ class GetDomainMixin:
 
 
 class ImageCleanUpMixin:
-    """Delete old image file when image is changed or deleted."""
+    """Delete old image file when image is changed or deleted.
+
+    Add the mixin to the model class parents and setup the
+    `cleanup_fields` tuple as the model's attribute, containing a sequence of
+    the model's ImageField field names, for which you want to delete the image
+    file after the field is altered.
+    """
 
     def save(self, *args, **kwargs):
         this = type(self).objects.filter(id=self.id).first()
