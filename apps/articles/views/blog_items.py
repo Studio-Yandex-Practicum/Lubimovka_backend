@@ -1,5 +1,4 @@
 from drf_spectacular.utils import extend_schema
-from rest_framework import serializers
 from rest_framework.response import Response
 from rest_framework.settings import api_settings
 from rest_framework.views import APIView
@@ -7,7 +6,7 @@ from rest_framework.views import APIView
 from apps.articles import selectors
 from apps.articles.models import BlogItem
 from apps.articles.selectors import preview_item_detail_get
-from apps.articles.serializers import BlogItemListSerializer, YearMonthSerializer
+from apps.articles.serializers import BlogItemListSerializer, YearListMonthSerializer, YearMonthSerializer
 from apps.articles.serializers.blog_items import BlogItemDetailOutputSerializer
 from apps.core.utils import get_paginated_response
 
@@ -17,29 +16,16 @@ class BlogItemListAPI(APIView):
 
     pagination_class = api_settings.DEFAULT_PAGINATION_CLASS
 
-    class BlogItemListFilterSerializer(serializers.Serializer):
-        year = serializers.IntegerField(
-            required=False,
-            help_text="Фильтр по году",
-        )
-        month = serializers.IntegerField(
-            min_value=1,
-            max_value=12,
-            required=False,
-            help_text="Фильтр по месяцам",
-        )
-
     class BlogItemListOutputSerializer(BlogItemListSerializer):
         pass
 
     @extend_schema(
-        parameters=[BlogItemListFilterSerializer],
+        parameters=[YearMonthSerializer],
         responses=BlogItemListOutputSerializer(many=True),
     )
     def get(self, request):
-        filters_serializer = self.BlogItemListFilterSerializer(data=request.query_params)
+        filters_serializer = YearMonthSerializer(data=request.query_params)
         filters_serializer.is_valid(raise_exception=True)
-
         filtered_blog_items = selectors.blog_item_list_get(filters=filters_serializer.validated_data)
         return get_paginated_response(
             pagination_class=self.pagination_class,
@@ -77,7 +63,7 @@ class BlogItemPreviewDetailAPI(APIView):
 class BlogItemYearsMonthsAPI(APIView):
     """Return years and months of published `BlogItem`."""
 
-    class BlogItemYearsMonthsOutputSerializer(YearMonthSerializer):
+    class BlogItemYearsMonthsOutputSerializer(YearListMonthSerializer):
         pass
 
     @extend_schema(responses=BlogItemYearsMonthsOutputSerializer(many=True))
