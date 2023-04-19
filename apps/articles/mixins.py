@@ -2,7 +2,9 @@ from django.contrib import admin
 from django.urls import resolve
 from drf_spectacular.utils import OpenApiExample, OpenApiParameter, extend_schema
 
-from apps.articles.services import COPY_TITLE, content_block_copy, copy_image
+from apps.articles.services import content_block_copy, copy_image
+
+COPY_TITLE = "Копия {original_title}"
 
 
 class PubDateSchemaMixin:
