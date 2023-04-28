@@ -3,11 +3,13 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
+from apps.core.mixins import ImageCleanUpMixin
 from apps.core.models import BaseModel, Setting
-from apps.core.utils import delete_image_with_model
 
 
-class Banner(BaseModel):
+class Banner(ImageCleanUpMixin, BaseModel):
+    cleanup_fields = ("image",)
+
     class ButtonType(models.TextChoices):
         TICKETS = "TICKETS", _("Билеты")
         DETAILS = "DETAILS", _("Подробнее")
@@ -53,16 +55,6 @@ class Banner(BaseModel):
     def clean(self):
         if Banner.objects.count() >= 3 and not self.id:
             raise ValidationError("Нельзя создать более 3-х банеров")
-
-    def save(self, *args, **kwargs):
-        this = Banner.objects.filter(id=self.id).first()
-        if this:
-            if this.image != self.image:
-                this.image.delete(save=False)
-        return super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        delete_image_with_model(self, Banner, *args, **kwargs)
 
 
 class SettingGroupManager(models.Manager):

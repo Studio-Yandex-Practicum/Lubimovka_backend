@@ -3,8 +3,8 @@ from django.db.models.constraints import UniqueConstraint
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 from apps.content_pages.utilities import path_by_app_label_and_class_name
+from apps.core.mixins import ImageCleanUpMixin
 from apps.core.models import BaseModel, Person, Role
-from apps.core.utils import delete_image_with_model
 
 
 class BlogPerson(BaseModel):
@@ -47,7 +47,8 @@ class BlogPerson(BaseModel):
         return f"{self.role} - {self.person.full_name}"
 
 
-class BlogItem(AbstractContentPage):
+class BlogItem(ImageCleanUpMixin, AbstractContentPage):
+    cleanup_fields = ("image",)
     author_url = models.URLField(
         verbose_name="Ссылка на автора записи",
     )
@@ -78,16 +79,6 @@ class BlogItem(AbstractContentPage):
 
     def __str__(self):
         return f"Запись блога {self.title}"
-
-    def save(self, *args, **kwargs):
-        this = BlogItem.objects.filter(id=self.id).first()
-        if this:
-            if this.image != self.image:
-                this.image.delete(save=False)
-        return super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        delete_image_with_model(self, BlogItem, *args, **kwargs)
 
 
 class BlogItemContent(AbstractContent):
