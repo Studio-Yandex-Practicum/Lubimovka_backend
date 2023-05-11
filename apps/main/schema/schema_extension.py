@@ -48,6 +48,7 @@ MAIN_SCHEMA_SUCCESS_MESSAGE = {
                     "image": "string",
                 },
                 "date_time": "2022-01-16T14:39:25.453Z",
+                "location": "string",
                 "url": "string",
                 "button": "STREAM",
             }
