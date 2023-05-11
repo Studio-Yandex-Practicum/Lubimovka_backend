@@ -51,4 +51,4 @@ class AfishaEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ("id", "type", "event_body", "date_time", "action_url", "action_text", "opening_date_time")
+        fields = ("id", "type", "event_body", "date_time", "location", "action_url", "action_text", "opening_date_time")

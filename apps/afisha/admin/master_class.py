@@ -6,10 +6,7 @@ from apps.library.admin import TeamMemberInline
 
 @admin.register(MasterClass)
 class MasterClassAdmin(admin.ModelAdmin):
-    list_display = ("name", "project")
+    list_display = ("name",)
     exclude = ("events",)
-    search_fields = (
-        "project__title",
-        "name",
-    )
+    search_fields = ("name",)
     inlines = (TeamMemberInline,)

@@ -8,7 +8,6 @@ class EventMasterClassSerializer(serializers.ModelSerializer):
     """Master-class serializer for afisha page."""
 
     team = RoleSerializer(source="event_team", many=True)
-    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     class Meta:
         model = MasterClass
@@ -17,5 +16,4 @@ class EventMasterClassSerializer(serializers.ModelSerializer):
             "name",
             "description",
             "team",
-            "project_title",
         )

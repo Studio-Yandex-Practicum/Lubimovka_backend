@@ -71,6 +71,12 @@ class Event(BaseModel):
         blank=True,
         null=True,
     )
+    location = models.CharField(
+        max_length=200,
+        verbose_name="Место",
+        blank=True,
+        null=False,
+    )
     action_url = models.URLField(
         max_length=200,
         verbose_name="Ссылка",

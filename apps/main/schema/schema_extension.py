@@ -46,7 +46,6 @@ MAIN_SCHEMA_SUCCESS_MESSAGE = {
                         {"name": "string", "persons": ["string"]},
                     ],
                     "image": "string",
-                    "project_title": "string",
                 },
                 "date_time": "2022-01-16T14:39:25.453Z",
                 "url": "string",

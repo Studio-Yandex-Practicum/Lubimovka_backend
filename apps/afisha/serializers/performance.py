@@ -46,7 +46,6 @@ class PerformanceSerializer(serializers.ModelSerializer):
         exclude = (
             "created",
             "modified",
-            "project",
             "persons",
             "block_images_description",
         )
@@ -58,7 +57,6 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
 
     team = RoleSerializer(source="event_team", many=True)
     image = serializers.ImageField(required=False, source="main_image")
-    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     class Meta:
         model = Performance
@@ -68,7 +66,6 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "description",
             "team",
             "image",
-            "project_title",
         )
 
 
@@ -80,7 +77,6 @@ class EventSerializer(serializers.Serializer):
     description = serializers.CharField(max_length=500)
     team = RoleSerializer(source="event_team", many=True)
     image = serializers.ImageField(source="main_image", allow_null=True, required=False)
-    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
 
 class PerformanceMediaReviewSerializer(serializers.ModelSerializer):

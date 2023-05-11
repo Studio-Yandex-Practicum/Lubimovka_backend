@@ -204,7 +204,7 @@ class TestMainAPIViews:
         events_hidden_on_main,
     ):
         """Checks data["afisha"]["items"]["event_body"] in response."""
-        fields = ["id", "name", "description", "team", "project_title"]
+        fields = ["id", "name", "description", "team"]
         response = client.get(MAIN_URL)
         for field in fields:
             assert (
