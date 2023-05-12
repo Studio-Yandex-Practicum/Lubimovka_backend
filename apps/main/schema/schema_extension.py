@@ -49,8 +49,9 @@ MAIN_SCHEMA_SUCCESS_MESSAGE = {
                 },
                 "date_time": "2022-01-16T14:39:25.453Z",
                 "location": "string",
-                "url": "string",
-                "button": "STREAM",
+                "action_url": "https://www.youtube.com/watch?v=71BMILWHntc",
+                "action_text": "Билеты",
+                "opening_date_time": "2022-01-15T12:00:00",
             }
         ],
     },
