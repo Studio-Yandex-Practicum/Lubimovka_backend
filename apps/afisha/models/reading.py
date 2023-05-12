@@ -46,14 +46,6 @@ class Reading(ImageCleanUpMixin, BaseModel):
         blank=True,
         help_text="Описание, расположенное под изображением",
     )
-    project = models.ForeignKey(
-        "articles.Project",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="readings",
-        verbose_name="Проект",
-    )
 
     class Meta:
         ordering = ("-created",)

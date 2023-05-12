@@ -79,14 +79,6 @@ class Performance(ImageCleanUpMixin, BaseModel):
         related_name="performances",
         verbose_name="Члены команды",
     )
-    project = models.ForeignKey(
-        "articles.Project",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="performances",
-        verbose_name="Проект",
-    )
     duration = models.DurationField(
         default=timedelta(minutes=85),
         verbose_name="Продолжительность",
