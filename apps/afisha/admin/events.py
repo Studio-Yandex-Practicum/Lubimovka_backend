@@ -15,7 +15,6 @@ from apps.core.mixins import HideOnNavPanelAdminModelMixin
 @admin.register(CommonEvent)
 class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
     search_fields = (
-        "masterclass__name",
         "reading__name",
         "performance__name",
     )
@@ -91,7 +90,6 @@ class EventAdmin(admin.ModelAdmin):
     autocomplete_fields = ("common_event",)
     search_fields = (
         "common_event__reading__name",
-        "common_event__masterclass__name",
         "common_event__performance__name",
     )
     empty_value_display = "-пусто-"
@@ -99,7 +97,6 @@ class EventAdmin(admin.ModelAdmin):
     def get_queryset(self, request):
         qs = super().get_queryset(request)
         qs = qs.select_related(
-            "common_event__masterclass",
             "common_event__reading",
             "common_event__performance",
         ).order_by("-date_time")

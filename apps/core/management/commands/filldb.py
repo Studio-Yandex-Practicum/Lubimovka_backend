@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 from django.core.management.base import BaseCommand, CommandError
 
-from apps.afisha.factories import MasterClassFactory, PerformanceFactory, ReadingFactory
+from apps.afisha.factories import PerformanceFactory, ReadingFactory
 from apps.afisha.factories.events import EventFactory
 from apps.core.factories import PersonFactory
 from apps.core.models import Setting
@@ -190,9 +190,6 @@ class Command(FillDbLogsMixin, BaseCommand):
 
             perfomances = PerformanceFactory.complex_create(10)
             self.log_success_creation(perfomances, "спектаклей")
-
-            masterclasses = MasterClassFactory.create_batch(10)
-            self.log_success_creation(masterclasses, "мастер-классов")
 
             readings = ReadingFactory.create_batch(10)
             self.log_success_creation(readings, "читок")

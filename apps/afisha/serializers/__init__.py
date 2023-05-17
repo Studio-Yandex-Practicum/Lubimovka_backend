@@ -1,4 +1,3 @@
-from apps.afisha.serializers.master_class import EventMasterClassSerializer
 from apps.afisha.serializers.performance import (
     EventPerformanceSerializer,
     EventSerializer,

@@ -88,7 +88,6 @@ class MainObject:
                     Event.objects.filter(date_time__range=(today, tomorrow), hidden_on_main=False)
                     .filter(
                         Q(common_event__reading__name__isnull=False)
-                        | Q(common_event__masterclass__name__isnull=False)
                         | Q(common_event__performance__status=Status.PUBLISHED)
                     )
                     .order_by("date_time")
@@ -99,7 +98,6 @@ class MainObject:
                     .filter(hidden_on_main=False)
                     .filter(
                         Q(common_event__reading__name__isnull=False)
-                        | Q(common_event__masterclass__name__isnull=False)
                         | Q(common_event__performance__status=Status.PUBLISHED)
                     )
                     .order_by("date_time")[:6]

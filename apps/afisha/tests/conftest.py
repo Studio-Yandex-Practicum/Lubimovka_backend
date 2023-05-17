@@ -5,7 +5,7 @@ import pytest
 from django.conf import settings
 from rest_framework.test import APIClient
 
-from apps.afisha.factories import EventFactory, MasterClassFactory, PerformanceFactory, ReadingFactory
+from apps.afisha.factories import EventFactory, PerformanceFactory, ReadingFactory
 from apps.core.constants import Status
 from apps.core.factories import PersonFactory
 from apps.core.models import Setting
@@ -66,11 +66,6 @@ def plays(authors, festivals, program_types):
 
 
 @pytest.fixture
-def masterclasses(persons_email_city_image):
-    return MasterClassFactory.create_batch(5)
-
-
-@pytest.fixture
 def readings(persons_email_city_image, plays):
     return ReadingFactory.create_batch(5)
 
@@ -81,7 +76,7 @@ def performances(persons_email_city_image, plays):
 
 
 @pytest.fixture
-def four_events_october(freezer, masterclasses, readings, performances):
+def four_events_october(freezer, readings, performances):
     freezer.move_to("2021-09-01")
     event_oct_17 = EventFactory(date_time=datetime(2021, 10, 17, 23, 43, tzinfo=ZoneInfo("Europe/Moscow")))
     event_oct_5 = EventFactory(date_time=datetime(2021, 10, 5, 17, 43, tzinfo=ZoneInfo("Europe/Moscow")))
