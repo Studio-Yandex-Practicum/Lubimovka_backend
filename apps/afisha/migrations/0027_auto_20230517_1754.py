@@ -25,4 +25,9 @@ class Migration(migrations.Migration):
         migrations.DeleteModel(
             name='MasterClass',
         ),
+        migrations.AlterField(
+            model_name='reading',
+            name='play',
+            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.PROTECT, related_name='readings', to='library.play', verbose_name='Пьеса'),
+        ),
     ]

@@ -10,6 +10,8 @@ class Reading(ImageCleanUpMixin, BaseModel):
     cleanup_fields = ("main_image",)
     play = models.ForeignKey(
         "library.Play",
+        null=True,
+        blank=True,
         on_delete=models.PROTECT,
         related_name="readings",
         verbose_name="Пьеса",
