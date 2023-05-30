@@ -2,6 +2,7 @@ import hashlib
 import logging
 import urllib
 from datetime import date
+from urllib.request import Request
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -22,7 +23,8 @@ def slugify(name):
 
 def get_picsum_image(width: int = 1024, height: int = 768) -> ContentFile:
     """Return real image from picsum.photos. Supports width and height arguments."""
-    image = urllib.request.urlopen(f"https://picsum.photos/{width}/{height}").read()
+    req = Request(url=f"https://loremflickr.com/{width}/{height}/", headers={"User-Agent": "Mozilla/5.0"})
+    image = urllib.request.urlopen(req).read()
     return ContentFile(image)
 
 
