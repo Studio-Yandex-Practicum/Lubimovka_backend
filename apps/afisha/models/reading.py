@@ -33,7 +33,7 @@ class Reading(ImageCleanUpMixin, BaseModel):
     events = models.OneToOneField(
         "afisha.CommonEvent",
         on_delete=models.PROTECT,
-        related_name="reading",
+        related_name="custom",
         verbose_name="События",
     )
     main_image = models.ImageField(
@@ -48,11 +48,17 @@ class Reading(ImageCleanUpMixin, BaseModel):
         blank=True,
         help_text="Описание, расположенное под изображением",
     )
+    custom_type = models.CharField(
+        max_length=200,
+        null=True,
+        blank=True,
+        verbose_name="Описание вида события",
+    )
 
     class Meta:
         ordering = ("-created",)
-        verbose_name = "Читка"
-        verbose_name_plural = "Читки"
+        verbose_name = "событие"
+        verbose_name_plural = "события"
 
     def __str__(self):
         if len(self.name) >= 25:

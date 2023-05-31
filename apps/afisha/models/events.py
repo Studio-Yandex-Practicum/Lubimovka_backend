@@ -29,8 +29,8 @@ class CommonEvent(BaseModel):
 
     @property
     def target_model(self):
-        if getattr(self, "reading", None) is not None:
-            return self.reading
+        if getattr(self, "custom", None) is not None:
+            return self.custom
         if getattr(self, "performance", None) is not None:
             return self.performance
         return None
@@ -41,7 +41,7 @@ class CommonEvent(BaseModel):
 class Event(BaseModel):
     class EventType(models.TextChoices):
         PERFORMANCE = "PERFORMANCE", "Спектакль"
-        READING = "READING", "Читка"
+        CUSTOM = "CUSTOM", "Событие"
 
     class ActionType(models.TextChoices):
         REGISTRATION = "REGISTRATION", "Регистрация"
@@ -52,14 +52,14 @@ class Event(BaseModel):
         CommonEvent,
         on_delete=models.CASCADE,
         related_name="body",
-        verbose_name="Событие",
-        help_text=("Создайте спектакль или читку чтобы получить возможность создать соответствующее событие"),
+        verbose_name="название",
+        help_text=("Создайте спектакль или другое событие чтобы получить возможность создать соответствующее название"),
     )
     type = models.CharField(
         choices=EventType.choices,
         max_length=50,
-        verbose_name="Тип события",
-        help_text="Выберите тип события",
+        verbose_name="Тип ",
+        help_text="Выберите тип пункта афиши",
     )
     date_time = models.DateTimeField(
         verbose_name="Дата и время",
@@ -96,8 +96,8 @@ class Event(BaseModel):
 
     class Meta:
         ordering = ("-date_time",)
-        verbose_name = "Событие"
-        verbose_name_plural = "События"
+        verbose_name = "пункт афиши"
+        verbose_name_plural = "пункты афиши"
 
     def __str__(self):
         event_name = self.common_event.target_model
@@ -111,7 +111,7 @@ class Event(BaseModel):
     def save(self, *args, **kwargs):
         allowed_event_types = {
             Performance: self.EventType.PERFORMANCE,
-            Reading: self.EventType.READING,
+            Reading: self.EventType.CUSTOM,
         }
         self.type = allowed_event_types[type(self.common_event.target_model)]
         super().save(*args, **kwargs)

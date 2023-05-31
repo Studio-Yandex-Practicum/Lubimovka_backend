@@ -246,9 +246,7 @@ class TestMainAPIViews:
         tomorrow = today.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
         objects_count_in_db = (
             Event.objects.filter(date_time__range=(today, tomorrow), hidden_on_main=False)
-            .filter(
-                Q(common_event__reading__name__isnull=False) | Q(common_event__performance__status=Status.PUBLISHED)
-            )
+            .filter(Q(common_event__custom__name__isnull=False) | Q(common_event__performance__status=Status.PUBLISHED))
             .count()
         )
 

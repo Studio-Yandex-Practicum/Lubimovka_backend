@@ -43,7 +43,6 @@ class AfishaEventSerializer(serializers.ModelSerializer):
         """Get event body type and return serialized data based on it type."""
         event_body = obj.common_event.target_model
         event_model = event_body._meta.model
-
         serializer_class = AFISHA_EVENTS_SERIALIZER_PAIRS[event_model]
         serializer = serializer_class(event_body, context=self.context)
         return serializer.data
