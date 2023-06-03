@@ -81,7 +81,7 @@ jobs:
     name: Deploy changes on server
     runs-on: ubuntu-latest
     environment:
-      name: stage_deploy
+      name: test_deploy
     needs: build-and-push-image-to-github-packages
     steps:
       -
