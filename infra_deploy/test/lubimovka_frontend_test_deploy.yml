@@ -22,8 +22,8 @@ services:
       - static_value_test:/config/test/static/
       - ./media:/config/test/media/
     ports:
-      - 443:443
-      - 80:80
+      - 4443:443
+      - 8080:80
     restart: unless-stopped
   frontend_test:
     image: "${IMAGE_FRONT}:${IMAGE_FRONT_TAG}"
