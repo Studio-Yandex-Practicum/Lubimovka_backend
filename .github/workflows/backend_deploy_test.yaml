@@ -162,7 +162,7 @@ jobs:
 
             # Уделение старых данных
             systemctl stop lubimovka-frontend.service
-            systemctl stop lubimovka-backend.service
+            systemctl stop lubimovka-backend-test.service
             docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
             # Очистка неиспользуемых контейнеров, образов, сетей
             docker system prune --force
@@ -172,9 +172,9 @@ jobs:
             docker network create test_swag_network || true
 
             # Установка приложения - backend
-            cp -rf ${{ env.DEPLOY_PATH }}/test/lubimovka-backend.service /etc/systemd/system/lubimovka-backend.service
+            cp -rf ${{ env.DEPLOY_PATH }}/test/lubimovka-backend-test.service /etc/systemd/system/lubimovka-backend-test.service
             systemctl daemon-reload
-            systemctl restart lubimovka-backend.service
+            systemctl restart lubimovka-backend-test.service
 
             # Установка приложения - frontend
             cp -rf ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend.service /etc/systemd/system/lubimovka-frontend.service
@@ -182,5 +182,5 @@ jobs:
             systemctl restart lubimovka-frontend.service
 
             # После установки удаляем файлы
-            rm ${{ env.DEPLOY_PATH }}/test/lubimovka-backend.service
+            rm ${{ env.DEPLOY_PATH }}/test/lubimovka-backend-test.service
             rm ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend.service
