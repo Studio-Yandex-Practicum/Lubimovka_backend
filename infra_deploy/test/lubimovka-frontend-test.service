@@ -12,7 +12,7 @@ User=root
 WorkingDirectory=/LUBIMOVKA/test/
 
 # Remove old containers and networks
-ExecStartPre=docker-compose -f lubimovka_frontend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars pull swag
+ExecStartPre=docker-compose -f lubimovka_frontend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars pull nginx
 ExecStartPre=docker-compose -f lubimovka_frontend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars pull frontend_test
 ExecStartPre=docker-compose -f lubimovka_frontend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down
 
