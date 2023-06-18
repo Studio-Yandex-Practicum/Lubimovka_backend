@@ -165,7 +165,7 @@ jobs:
             systemctl stop lubimovka-backend-test.service
             docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
             # Очистка неиспользуемых контейнеров, образов, сетей
-            docker system prune --force
+            # docker system prune --force
 
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create test_db_network || true
