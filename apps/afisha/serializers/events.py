@@ -22,6 +22,13 @@ class AfishaEventSerializer(serializers.ModelSerializer):
     date_time = serializers.DateTimeField()
     opening_date_time = serializers.DateTimeField()
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        body = ret.pop("event_body")
+        body.pop("id")
+        ret.update(body)
+        return ret
+
     def registration_is_open(self, obj):
         """Condition to output registration link and text with the response."""
         return not self.context.get("festival_status") or obj.now > obj.opening_date_time
@@ -49,4 +56,4 @@ class AfishaEventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ("id", "type", "event_body", "date_time", "location", "action_url", "action_text", "opening_date_time")
+        fields = ("id", "event_body", "date_time", "location", "action_url", "action_text", "opening_date_time")
