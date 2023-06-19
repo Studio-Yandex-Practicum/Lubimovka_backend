@@ -4,7 +4,7 @@ from faker import Faker
 
 from apps.core.decorators import restrict_factory
 from apps.core.models import Image, Person, Role, RoleType
-from apps.core.utils import get_picsum_image, slugify
+from apps.core.utils import get_random_image, slugify
 
 fake = Faker(locale="ru_RU")
 
@@ -34,7 +34,7 @@ class PersonFactory(factory.django.DjangoModelFactory):
             image=factory.django.ImageField(color=factory.Faker("color")),
         )
         add_real_image = factory.Trait(
-            image=factory.django.ImageField(from_func=get_picsum_image),
+            image=factory.django.ImageField(from_func=get_random_image),
         )
         add_city = factory.Trait(
             city=factory.Faker("city_name", locale="ru_RU"),

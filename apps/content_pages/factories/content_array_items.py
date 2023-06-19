@@ -14,7 +14,7 @@ from apps.content_pages.models import (
 )
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role, RoleType
-from apps.core.utils import get_picsum_image
+from apps.core.utils import get_random_image
 from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
 from apps.library.models import Play
@@ -87,7 +87,7 @@ class OrderedImageFactory(factory.django.DjangoModelFactory):
     class Params:
         empty_title = factory.Trait(title="")
         add_real_image = factory.Trait(
-            image=factory.django.ImageField(from_func=get_picsum_image),
+            image=factory.django.ImageField(from_func=get_random_image),
         )
 
     title = factory.Faker("sentence", locale="ru_RU")

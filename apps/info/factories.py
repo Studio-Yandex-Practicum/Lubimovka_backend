@@ -6,7 +6,7 @@ from faker import Faker
 
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person
-from apps.core.utils import get_picsum_image
+from apps.core.utils import get_random_image
 from apps.info.models import (
     Festival,
     FestivalImage,
@@ -38,7 +38,7 @@ class PartnerFactory(factory.django.DjangoModelFactory):
 
     class Params:
         add_real_image = factory.Trait(
-            image=factory.django.ImageField(from_func=get_picsum_image),
+            image=factory.django.ImageField(from_func=get_random_image),
         )
 
     name = factory.Faker("company", locale="ru_RU")

@@ -1,6 +1,6 @@
 import factory
 
-from apps.core.utils import get_picsum_image
+from apps.core.utils import get_random_image
 from apps.main.models import Banner
 
 
@@ -20,7 +20,7 @@ class BannerFactory(factory.django.DjangoModelFactory):
 
     class Params:
         add_real_image = factory.Trait(
-            image=factory.django.ImageField(from_func=get_picsum_image),
+            image=factory.django.ImageField(from_func=get_random_image),
         )
 
     id = factory.Iterator(range(1, 4))

@@ -21,8 +21,8 @@ def slugify(name):
     return django_slugify("".join(ALPHABET.get(char, char) for char in name.lower()))
 
 
-def get_picsum_image(width: int = 1024, height: int = 768) -> ContentFile:
-    """Return real image from picsum.photos. Supports width and height arguments."""
+def get_random_image(width: int = 1024, height: int = 768) -> ContentFile:
+    """Return random image from online image generator. Supports width and height arguments."""
     req = Request(url=f"https://loremflickr.com/{width}/{height}/", headers={"User-Agent": "Mozilla/5.0"})
     image = urllib.request.urlopen(req).read()
     return ContentFile(image)
