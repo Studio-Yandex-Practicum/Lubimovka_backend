@@ -49,16 +49,19 @@ def test_afisha_event_list_date_filter(client, dates_query_param, expected_count
     "expected_field",
     (
         "id",
-        "type",
-        "event_body",
         "date_time",
         "action_url",
         "action_text",
+        "custom_type",
+        "name",
+        "description",
+        "team",
     ),
 )
 def test_afisha_event_list_results_level_expected_fields(client, expected_field, four_events_october):
     """Check all expected fields persists in `results`."""
     response_data = client.get(AFISHA_EVENTS_URL).data
+    print(response_data)
     first_event = response_data.get("results")[0]
 
     assert expected_field in first_event
