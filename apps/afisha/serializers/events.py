@@ -27,6 +27,7 @@ class AfishaEventSerializer(serializers.ModelSerializer):
         body = ret.pop("event_body")
         body.pop("id")
         ret.update(body)
+        ret.setdefault("custom_type")
         return ret
 
     def registration_is_open(self, obj):
