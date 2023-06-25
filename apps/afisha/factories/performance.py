@@ -11,7 +11,7 @@ from apps.afisha.models import Performance, PerformanceImage, PerformanceMediaRe
 from apps.core.constants import AgeLimit, Status
 from apps.core.decorators import restrict_factory
 from apps.core.models import Person, Role
-from apps.core.utils import get_picsum_image
+from apps.core.utils import get_random_image
 from apps.info.utils import get_random_objects_by_model, get_random_objects_by_queryset
 from apps.library.factories import TeamMemberFactory
 from apps.library.factories.constants import YOUTUBE_VIDEO_LINKS
@@ -71,8 +71,8 @@ class PerformanceFactory(factory.django.DjangoModelFactory):
             video=None,
         )
         add_real_images = factory.Trait(
-            main_image=factory.django.ImageField(from_func=get_picsum_image),
-            bottom_image=factory.django.ImageField(from_func=get_picsum_image),
+            main_image=factory.django.ImageField(from_func=get_random_image),
+            bottom_image=factory.django.ImageField(from_func=get_random_image),
         )
 
     name = factory.Faker("text", max_nb_chars=150, locale="ru_RU")
@@ -192,7 +192,7 @@ class PerformanceMediaReviewFactory(factory.django.DjangoModelFactory):
 
     class Params:
         add_real_image = factory.Trait(
-            image=factory.django.ImageField(from_func=get_picsum_image),
+            image=factory.django.ImageField(from_func=get_random_image),
         )
 
     media_name = factory.LazyFunction(lambda: fake.sentence(nb_words=random.choice([1, 2, 3])).capitalize())
