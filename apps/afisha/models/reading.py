@@ -57,8 +57,8 @@ class Reading(ImageCleanUpMixin, BaseModel):
 
     class Meta:
         ordering = ("-created",)
-        verbose_name = "событие"
-        verbose_name_plural = "события"
+        verbose_name = "специальное событие"
+        verbose_name_plural = "специальные события"
 
     def __str__(self):
         if len(self.name) >= 25:

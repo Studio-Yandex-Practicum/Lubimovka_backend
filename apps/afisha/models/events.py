@@ -41,7 +41,7 @@ class CommonEvent(BaseModel):
 class Event(BaseModel):
     class EventType(models.TextChoices):
         PERFORMANCE = "PERFORMANCE", "Спектакль"
-        CUSTOM = "CUSTOM", "Событие"
+        CUSTOM = "CUSTOM", "Специальное событие"
 
     class ActionType(models.TextChoices):
         REGISTRATION = "REGISTRATION", "Регистрация"

@@ -27,7 +27,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterModelOptions(
             name='reading',
-            options={'ordering': ('-created',), 'verbose_name': 'событие', 'verbose_name_plural': 'события'},
+            options={'ordering': ('-created',), 'verbose_name': 'специальное событие', 'verbose_name_plural': 'специальные события'},
         ),
         migrations.AddField(
             model_name='reading',
@@ -42,7 +42,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='event',
             name='type',
-            field=models.CharField(choices=[('PERFORMANCE', 'Спектакль'), ('CUSTOM', 'Событие')], help_text='Выберите тип пункта афиши', max_length=50, verbose_name='Тип '),
+            field=models.CharField(choices=[('PERFORMANCE', 'Спектакль'), ('CUSTOM', 'Специальное событие')], help_text='Выберите тип пункта афиши', max_length=50, verbose_name='Тип '),
         ),
         migrations.AlterField(
             model_name='reading',
