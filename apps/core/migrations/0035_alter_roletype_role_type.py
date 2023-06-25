@@ -19,6 +19,11 @@ def merge_masterclass_roles_to_readings(apps, schema_editor):
     RoleType.objects.filter(role_type=MASTERCLASS_ROLE).delete()
 
 
+def restore_roles_in_masterclass(apps, schema_editor):
+    RoleType = apps.get_model("core", "RoleType")
+    RoleType.objects.get_or_create(role_type=MASTERCLASS_ROLE)
+
+
 class Migration(migrations.Migration):
 
     dependencies = [
@@ -26,7 +31,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RunPython(merge_masterclass_roles_to_readings, migrations.RunPython.noop),
+        migrations.RunPython(merge_masterclass_roles_to_readings, restore_roles_in_masterclass),
         migrations.AlterField(
             model_name='roletype',
             name='role_type',
