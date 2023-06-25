@@ -52,10 +52,12 @@ def test_afisha_event_list_date_filter(client, dates_query_param, expected_count
         "date_time",
         "action_url",
         "action_text",
-        "custom_type",
+        "type",
         "name",
         "description",
         "team",
+        "location",
+        "opening_date_time",
     ),
 )
 def test_afisha_event_list_results_level_expected_fields(client, expected_field, four_events_october):
