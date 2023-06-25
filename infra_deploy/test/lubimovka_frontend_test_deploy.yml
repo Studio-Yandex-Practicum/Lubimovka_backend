@@ -1,9 +1,9 @@
 version: '3.8'
 
 services:
-  swag:
-    image: linuxserver/swag:1.26.0
-    container_name: swag_test
+  nginx:
+    image: nginx:latest
+    container_name: nginx_test
     cap_add:
       - NET_ADMIN
     environment:
@@ -14,16 +14,14 @@ services:
     env_file:
       - .env-test
     networks:
-      - test_swag_network
+      - test_nginx_network
     volumes:
-      - ./swag/swag_nginx_test.conf:/config/nginx/site-confs/default
-      - swag_volume_test:/config
-      - ./logs/swag_logs/:/config/log/
+      - ./nginx/nginx_test.conf:/etc/nginx/conf.d/default.conf
+      - ./logs/nginx_logs/:/var/log/nginx/
       - static_value_test:/config/test/static/
       - ./media:/config/test/media/
     ports:
-      - 443:443
-      - 80:80
+      - 8080:80
     restart: unless-stopped
   frontend_test:
     image: "${IMAGE_FRONT}:${IMAGE_FRONT_TAG}"
@@ -32,18 +30,16 @@ services:
       BASE_URL: ${FRONT_BASE_URL}
       API_BASE_URL: ${API_BASE_URL}
     networks:
-      - test_swag_network
+      - test_nginx_network
     restart: always
     depends_on:
-      - swag
+      - nginx
 
 networks:
-  test_swag_network:
-    name: test_swag_network
+  test_nginx_network:
+    name: test_nginx_network
     external: true
 
 volumes:
   static_value_test:
     name: static_value_test
-  swag_volume_test:
-    name: swag_volume_test

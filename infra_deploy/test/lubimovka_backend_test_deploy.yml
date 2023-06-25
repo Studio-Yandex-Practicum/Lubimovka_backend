@@ -8,7 +8,7 @@ services:
     volumes:
       - postgres_data_test:/var/lib/postgresql/data
     ports:
-      - 5432:5432
+      - 5433:5432
     env_file:
       - .env-test
     networks:
@@ -27,7 +27,7 @@ services:
       - .env-test
     networks:
       - test_db_network
-      - test_swag_network
+      - test_nginx_network
   migrations:
     image: "${IMAGE_BACK}:${IMAGE_BACK_TAG}"
     container_name: migrations_test
@@ -54,8 +54,8 @@ networks:
   test_db_network:
     name: test_db_network
     external: true
-  test_swag_network:
-    name: test_swag_network
+  test_nginx_network:
+    name: test_nginx_network
     external: true
 
 volumes:
