@@ -30,6 +30,6 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='roletype',
             name='role_type',
-            field=models.CharField(choices=[('blog_persons_role', 'Роль в блоге'), ('performanse_role', 'Роль в спектаклях'), ('play_role', 'Роль в пьесах'), ('reading_role', 'Роль в читках')], default='blog_persons_role', help_text='Укажите, где будет использована роль', max_length=20, unique=True, verbose_name='Тип роли'),
+            field=models.CharField(choices=[('blog_persons_role', 'Роль в блоге'), ('performanse_role', 'Роль в спектаклях'), ('play_role', 'Роль в пьесах'), ('reading_role', 'Роль в специальных событиях')], default='blog_persons_role', help_text='Укажите, где будет использована роль', max_length=20, unique=True, verbose_name='Тип роли'),
         ),
     ]
