@@ -53,7 +53,7 @@ def test_afisha_event_list_date_filter(client, dates_query_param, expected_count
         "action_url",
         "action_text",
         "type",
-        "name",
+        "title",
         "description",
         "team",
         "location",
