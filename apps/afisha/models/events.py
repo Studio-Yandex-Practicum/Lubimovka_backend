@@ -70,7 +70,7 @@ class Event(BaseModel):
         max_length=200,
         verbose_name="Место",
         blank=True,
-        null=False,
+        null=True,
     )
     action_url = models.URLField(
         max_length=200,

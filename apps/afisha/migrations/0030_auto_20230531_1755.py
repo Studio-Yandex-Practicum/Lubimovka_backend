@@ -45,6 +45,11 @@ class Migration(migrations.Migration):
             field=models.CharField(choices=[('PERFORMANCE', 'Спектакль'), ('CUSTOM', 'Специальное событие')], help_text='Выберите тип пункта афиши', max_length=50, verbose_name='Тип '),
         ),
         migrations.AlterField(
+            model_name='event',
+            name='location',
+            field=models.CharField(blank=True, max_length=200, null=True, verbose_name='Место'),
+        ),
+        migrations.AlterField(
             model_name='reading',
             name='events',
             field=models.OneToOneField(on_delete=django.db.models.deletion.PROTECT, related_name='custom', to='afisha.commonevent', verbose_name='События'),
