@@ -36,10 +36,12 @@ class BaseEventSerializer(serializers.ModelSerializer):
         model = Event
         fields = (
             "id",
-            "type",
             "title",
+            "type",
             "description",
             "image",
+            "date_time",
+            "location",
             "more_info_type",
             "more_info_performance_id",
             "team",
@@ -69,8 +71,8 @@ class AfishaEventSerializer(BaseEventSerializer):
         model = Event
         fields = (
             "id",
-            "type",
             "title",
+            "type",
             "description",
             "image",
             "date_time",
