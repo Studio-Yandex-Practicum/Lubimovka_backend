@@ -50,8 +50,8 @@ class Reading(ImageCleanUpMixin, BaseModel):
     )
     custom_type = models.CharField(
         max_length=200,
-        null=True,
-        blank=True,
+        null=False,
+        blank=False,
         verbose_name="Описание вида события",
     )
 

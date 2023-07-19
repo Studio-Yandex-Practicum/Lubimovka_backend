@@ -12,6 +12,7 @@ def reading_to_custom(apps, schema_editor):
 def custom_to_reading(apps, schema_editor):
     Event = apps.get_model("afisha", "Event")
     Event.objects.filter(type="CUSTOM").update(type="READING")
+    Event.objects.filter(location__isnull=True).update(location="")
 
 
 class Migration(migrations.Migration):
@@ -32,7 +33,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='reading',
             name='custom_type',
-            field=models.CharField(blank=True, max_length=200, null=True, verbose_name='Описание вида события'),
+            field=models.CharField(blank=False, max_length=200, null=False, verbose_name='Описание вида события', default="Специальное событие"),
+            preserve_default=False,
         ),
         migrations.AlterField(
             model_name='event',
