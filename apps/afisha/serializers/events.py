@@ -18,7 +18,7 @@ class BaseEventSerializer(serializers.ModelSerializer):
     more_info_type = serializers.SerializerMethodField()
     more_info_performance_id = serializers.SerializerMethodField()
 
-    type = serializers.CharField(source="common_event.target_model.custom_type", read_only=True, default=None)
+    type = serializers.CharField(source="common_event.target_model.custom_type", read_only=True)
     title = serializers.CharField(source="common_event.target_model.name", read_only=True, default=None)
     description = serializers.CharField(source="common_event.target_model.description", read_only=True, default=None)
     team = RoleSerializer(source="common_event.target_model.event_team", many=True)
