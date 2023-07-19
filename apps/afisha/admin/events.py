@@ -48,6 +48,7 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = (
+        "type",
         "common_event",
         "status",
         "date_time",
@@ -55,6 +56,7 @@ class EventAdmin(admin.ModelAdmin):
         "is_paid",
         "hidden_on_main",
     )
+    list_display_links = ("common_event",)
     fieldsets = (
         (
             None,
