@@ -15,7 +15,6 @@ AFISHA_EVENTS_SERIALIZER_PAIRS = {
 class BaseEventSerializer(serializers.ModelSerializer):
     """Base event info for afisha and content blocks."""
 
-    more_info_type = serializers.SerializerMethodField()
     more_info_performance_id = serializers.SerializerMethodField()
 
     type = serializers.CharField(source="common_event.target_model.custom_type", read_only=True)
@@ -23,10 +22,6 @@ class BaseEventSerializer(serializers.ModelSerializer):
     description = serializers.CharField(source="common_event.target_model.description", read_only=True, default=None)
     team = RoleSerializer(source="common_event.target_model.event_team", many=True)
     image = serializers.ImageField(source="common_event.target_model.main_image", read_only=True, default=None)
-
-    def get_more_info_type(self, obj) -> Optional[str]:
-        if isinstance(obj.common_event.target_model, Performance):
-            return "performance"
 
     def get_more_info_performance_id(self, obj) -> Optional[int]:
         if isinstance(obj.common_event.target_model, Performance):
@@ -42,7 +37,6 @@ class BaseEventSerializer(serializers.ModelSerializer):
             "image",
             "date_time",
             "location",
-            "more_info_type",
             "more_info_performance_id",
             "team",
         )
@@ -80,7 +74,6 @@ class AfishaEventSerializer(BaseEventSerializer):
             "action_url",
             "action_text",
             "opening_date_time",
-            "more_info_type",
             "more_info_performance_id",
             "team",
         )
