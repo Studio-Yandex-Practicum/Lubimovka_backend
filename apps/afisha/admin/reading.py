@@ -7,8 +7,8 @@ from apps.library.admin import TeamMemberInline
 @admin.register(Reading)
 class ReadingAdmin(admin.ModelAdmin):
     list_display = (
-        "play",
         "name",
+        "play",
     )
     exclude = ("events",)
     search_fields = (

@@ -8,6 +8,16 @@ from apps.library.utilities import get_team_roles
 
 class Reading(ImageCleanUpMixin, BaseModel):
     cleanup_fields = ("main_image",)
+    name = models.CharField(
+        max_length=200,
+        verbose_name="Название",
+    )
+    custom_type = models.CharField(
+        max_length=200,
+        null=False,
+        blank=False,
+        verbose_name="Описание вида события",
+    )
     play = models.ForeignKey(
         "library.Play",
         null=True,
@@ -15,10 +25,6 @@ class Reading(ImageCleanUpMixin, BaseModel):
         on_delete=models.PROTECT,
         related_name="readings",
         verbose_name="Пьеса",
-    )
-    name = models.CharField(
-        max_length=200,
-        verbose_name="Название",
     )
     description = models.TextField(
         max_length=500,
@@ -47,12 +53,6 @@ class Reading(ImageCleanUpMixin, BaseModel):
         verbose_name="Дополнительное описание",
         blank=True,
         help_text="Описание, расположенное под изображением",
-    )
-    custom_type = models.CharField(
-        max_length=200,
-        null=False,
-        blank=False,
-        verbose_name="Описание вида события",
     )
 
     class Meta:
