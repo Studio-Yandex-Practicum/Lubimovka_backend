@@ -190,26 +190,12 @@ class TestMainAPIViews:
         places,
     ):
         """Checks data["afisha"]["items"] in response."""
-        fields = ["id", "type", "event_body", "date_time", "action_url", "action_text"]
+        fields = ["id", "date_time", "action_url", "action_text"]
         response = client.get(MAIN_URL)
         for field in fields:
             assert (
                 field in response.data["afisha"]["items"][0]
             ), f"Проверьте, что при GET запросе {MAIN_URL} data[afisha][items] содержит {field}"
-
-    def test_get_main_afisha_items_event_body_fields(
-        self,
-        client,
-        news_items_with_content,
-        events_hidden_on_main,
-    ):
-        """Checks data["afisha"]["items"]["event_body"] in response."""
-        fields = ["id", "name", "description", "team"]
-        response = client.get(MAIN_URL)
-        for field in fields:
-            assert (
-                field in response.data["afisha"]["items"][0]["event_body"]
-            ), f"Проверьте, что при GET запросе {MAIN_URL} data[afisha][items][0][event_body] содержит {field}"
 
     def test_get_main_afisha_items_event_body_team_fields(self, client, news_items_with_content, events_hidden_on_main):
         """Get `team` in response (response -> afisha -> items -> event_body -> team) and look for expected fields."""
@@ -225,10 +211,9 @@ class TestMainAPIViews:
         assert len(events_in_afisha) > 0, "В блоке `afisha` -> `items` должны быть объекты."
 
         first_event_in_afisha = events_in_afisha[0]
-        event_body = first_event_in_afisha.get("event_body")
-        team_in_event_body = event_body.get("team")
+        team_in_event_body = first_event_in_afisha.get("team")
 
-        assert len(team_in_event_body) > 0, f"Блок `team` у {event_body} ожидался непустым"
+        assert len(team_in_event_body) > 0, f"Блок `team` у {first_event_in_afisha} ожидался непустым"
 
         first_team_member = team_in_event_body[0]
         team_keys_set = set(first_team_member.keys())
@@ -246,11 +231,7 @@ class TestMainAPIViews:
         tomorrow = today.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
         objects_count_in_db = (
             Event.objects.filter(date_time__range=(today, tomorrow), hidden_on_main=False)
-            .filter(
-                Q(common_event__reading__name__isnull=False)
-                | Q(common_event__masterclass__name__isnull=False)
-                | Q(common_event__performance__status=Status.PUBLISHED)
-            )
+            .filter(Q(common_event__custom__name__isnull=False) | Q(common_event__performance__status=Status.PUBLISHED))
             .count()
         )
 

@@ -1,7 +1,7 @@
 import pytest
 from django.db import IntegrityError
 
-from apps.afisha.factories import MasterClassFactory, PerformanceFactory, ReadingFactory
+from apps.afisha.factories import PerformanceFactory, ReadingFactory
 from apps.core.factories import PersonFactory, RoleFactory
 from apps.library.models import TeamMember
 
@@ -19,11 +19,6 @@ def person_email_city_image():
 
 
 @pytest.fixture
-def masterclass_without_team_members():
-    return MasterClassFactory(host_person=None)
-
-
-@pytest.fixture
 def reading_without_team_members(plays):
     return ReadingFactory(dramatist_person=None, director_person=None)
 
@@ -35,27 +30,21 @@ def performance_without_team_members(plays):
 
 @pytest.mark.parametrize(
     "related_objects",
-    (
-        ("reading", "performance"),
-        ("reading", "masterclass"),
-        ("performance", "masterclass"),
-    ),
+    (("reading", "performance"),),
 )
 def test_team_member_with_two_related_objects_raise_error(
     some_role,
     person_email_city_image,
     related_objects,
-    masterclass_without_team_members,
     reading_without_team_members,
     performance_without_team_members,
 ):
-    """Try to save `team_member` with two of performance, masterclass, reading and look for IntegrityError."""
+    """Try to save `team_member` with two of performance, reading and look for IntegrityError."""
     first_related_object_key = related_objects[0]
     second_related_object_key = related_objects[1]
 
     fixtures_mapping = {
         "reading": reading_without_team_members,
-        "masterclass": masterclass_without_team_members,
         "performance": performance_without_team_members,
     }
     dict_to_create_team_member_with_one_related_object = {

@@ -13,6 +13,7 @@ class EventReadingSerializer(serializers.ModelSerializer):
         model = Reading
         fields = (
             "id",
+            "custom_type",
             "name",
             "description",
             "team",

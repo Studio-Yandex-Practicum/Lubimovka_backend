@@ -99,6 +99,10 @@ class Performance(ImageCleanUpMixin, BaseModel):
         verbose_name="Создатель",
     )
 
+    @property
+    def custom_type(self):
+        return "Спектакль"
+
     class Meta:
         ordering = ("name",)
         verbose_name = "Спектакль"

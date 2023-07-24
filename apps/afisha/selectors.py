@@ -63,15 +63,10 @@ def afisha_event_list_get(filters: dict[str, str] = None) -> QuerySet:
         # to have Now without timezone as well, use TruncSecond here
         .annotate(now=ExpressionWrapper(TruncSecond(Now()), output_field=DateTimeField()))
         .select_related(
-            "common_event__masterclass",
-            "common_event__reading",
+            "common_event__custom",
             "common_event__performance",
         )
-        .filter(
-            Q(common_event__reading__name__isnull=False)
-            | Q(common_event__masterclass__name__isnull=False)
-            | Q(common_event__performance__status=Status.PUBLISHED)
-        )
+        .filter(Q(common_event__custom__name__isnull=False) | Q(common_event__performance__status=Status.PUBLISHED))
         .order_by("date_time")
     )
     filtered_afisha_events = AfishaEventsDateInFilter(filters, afisha_events).qs

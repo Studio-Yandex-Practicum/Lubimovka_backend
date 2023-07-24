@@ -21,14 +21,7 @@ class TeamMember(BaseModel):
         related_name="team_members",
         verbose_name="Читка",
     )
-    masterclass = models.ForeignKey(
-        "afisha.MasterClass",
-        null=True,
-        blank=True,
-        on_delete=models.CASCADE,
-        related_name="team_members",
-        verbose_name="Мастер-класс",
-    )
+
     person = models.ForeignKey(
         Person,
         on_delete=models.PROTECT,
@@ -71,31 +64,16 @@ class TeamMember(BaseModel):
                 ),
                 name="unique_person_role_per_reading",
             ),
-            models.UniqueConstraint(
-                fields=(
-                    "person",
-                    "role",
-                    "masterclass",
-                ),
-                name="unique_person_role_per_masterclass",
-            ),
             models.CheckConstraint(
-                name="%(app_label)s_%(class)s_only_one_of_reading_masterclass_performance",
+                name="%(app_label)s_%(class)s_only_one_of_reading_performance",
                 check=(
                     Q(
                         performance__isnull=False,
                         reading__isnull=True,
-                        masterclass__isnull=True,
                     )
                     | Q(
                         performance__isnull=True,
                         reading__isnull=False,
-                        masterclass__isnull=True,
-                    )
-                    | Q(
-                        performance__isnull=True,
-                        reading__isnull=True,
-                        masterclass__isnull=False,
                     )
                 ),
             ),

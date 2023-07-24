@@ -180,8 +180,7 @@ class RoleType(models.Model):
         BLOG_PERSONS_ROLE = "blog_persons_role", _("Роль в блоге")
         PERFORMANCE_ROLE = "performanse_role", _("Роль в спектаклях")
         PLAY_ROLE = "play_role", _("Роль в пьесах")
-        MASTER_CLASS_ROLE = "master_class_role", _("Роль в мастер классах")
-        READING_ROLE = "reading_role", _("Роль в читках")
+        READING_ROLE = "reading_role", _("Роль в специальных событиях")
 
     role_type = models.CharField(
         max_length=20,

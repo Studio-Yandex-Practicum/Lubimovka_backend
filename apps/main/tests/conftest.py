@@ -4,7 +4,7 @@ import pytest
 from django.conf import settings
 from django.urls import reverse
 
-from apps.afisha.factories import EventFactory, MasterClassFactory, PerformanceFactory, ReadingFactory
+from apps.afisha.factories import EventFactory, PerformanceFactory, ReadingFactory
 from apps.articles.factories import BlogItemFactory, NewsItemFactory
 from apps.content_pages.factories import ImagesBlockFactory
 from apps.core.constants import Status
@@ -86,11 +86,6 @@ def places():
 
 
 @pytest.fixture
-def master_class(persons):
-    return MasterClassFactory()
-
-
-@pytest.fixture
 def reading(plays, persons):
     return ReadingFactory()
 
@@ -111,7 +106,7 @@ def four_performance_events(four_performances):
 
 
 @pytest.fixture
-def events_hidden_on_main(freezer, reading, performance, master_class):
+def events_hidden_on_main(freezer, reading, performance):
     freezer.move_to("2021-05-20 15:42")
     return EventFactory.create_batch(4, date_time_in_three_hours=True, hidden_on_main=False)
 

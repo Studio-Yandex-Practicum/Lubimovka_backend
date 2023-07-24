@@ -1,25 +1,53 @@
-from drf_spectacular.utils import PolymorphicProxySerializer, extend_schema_field
+from typing import Optional
+
 from rest_framework import serializers
 
-from apps.afisha.models import Event, MasterClass, Performance, Reading
-from apps.afisha.serializers import EventMasterClassSerializer, EventPerformanceSerializer, EventReadingSerializer
+from apps.afisha.models import Event, Performance, Reading
+from apps.afisha.serializers import EventPerformanceSerializer, EventReadingSerializer
+from apps.library.serializers.role import RoleSerializer
 
 AFISHA_EVENTS_SERIALIZER_PAIRS = {
-    MasterClass: EventMasterClassSerializer,
     Performance: EventPerformanceSerializer,
     Reading: EventReadingSerializer,
 }
 
 
-class AfishaEventSerializer(serializers.ModelSerializer):
+class BaseEventSerializer(serializers.ModelSerializer):
+    """Base event info for afisha and content blocks."""
+
+    performance_id = serializers.SerializerMethodField()
+
+    type = serializers.CharField(source="common_event.target_model.custom_type", read_only=True)
+    title = serializers.CharField(source="common_event.target_model.name", read_only=True, default=None)
+    description = serializers.CharField(source="common_event.target_model.description", read_only=True, default=None)
+    team = RoleSerializer(source="common_event.target_model.event_team", many=True)
+    image = serializers.ImageField(source="common_event.target_model.main_image", read_only=True, default=None)
+
+    def get_performance_id(self, obj) -> Optional[int]:
+        if isinstance(obj.common_event.target_model, Performance):
+            return obj.common_event.target_model.pk
+
+    class Meta:
+        model = Event
+        fields = (
+            "id",
+            "title",
+            "type",
+            "description",
+            "image",
+            "date_time",
+            "location",
+            "performance_id",
+            "team",
+        )
+
+
+class AfishaEventSerializer(BaseEventSerializer):
     """Afisha event Output serializer."""
 
     action_text = serializers.SerializerMethodField()
     action_url = serializers.SerializerMethodField()
 
-    event_body = serializers.SerializerMethodField(
-        help_text="The response is different based on event type.",
-    )
     date_time = serializers.DateTimeField()
     opening_date_time = serializers.DateTimeField()
 
@@ -27,28 +55,25 @@ class AfishaEventSerializer(serializers.ModelSerializer):
         """Condition to output registration link and text with the response."""
         return not self.context.get("festival_status") or obj.now > obj.opening_date_time
 
-    def get_action_text(self, obj):
+    def get_action_text(self, obj) -> Optional[str]:
         return obj.get_action_text_display() if self.registration_is_open(obj) else None
 
-    def get_action_url(self, obj):
+    def get_action_url(self, obj) -> Optional[str]:
         return obj.action_url if self.registration_is_open(obj) else None
-
-    @extend_schema_field(
-        PolymorphicProxySerializer(
-            component_name="Event_Type_objects",
-            serializers=AFISHA_EVENTS_SERIALIZER_PAIRS.values(),
-            resource_type_field_name=None,
-        )
-    )
-    def get_event_body(self, obj):
-        """Get event body type and return serialized data based on it type."""
-        event_body = obj.common_event.target_model
-        event_model = event_body._meta.model
-
-        serializer_class = AFISHA_EVENTS_SERIALIZER_PAIRS[event_model]
-        serializer = serializer_class(event_body, context=self.context)
-        return serializer.data
 
     class Meta:
         model = Event
-        fields = ("id", "type", "event_body", "date_time", "location", "action_url", "action_text", "opening_date_time")
+        fields = (
+            "id",
+            "title",
+            "type",
+            "description",
+            "image",
+            "date_time",
+            "location",
+            "action_url",
+            "action_text",
+            "opening_date_time",
+            "performance_id",
+            "team",
+        )

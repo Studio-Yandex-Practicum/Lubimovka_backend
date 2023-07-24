@@ -8,15 +8,23 @@ from apps.library.utilities import get_team_roles
 
 class Reading(ImageCleanUpMixin, BaseModel):
     cleanup_fields = ("main_image",)
-    play = models.ForeignKey(
-        "library.Play",
-        on_delete=models.PROTECT,
-        related_name="readings",
-        verbose_name="Пьеса",
-    )
     name = models.CharField(
         max_length=200,
         verbose_name="Название",
+    )
+    custom_type = models.CharField(
+        max_length=200,
+        null=False,
+        blank=False,
+        verbose_name="Описание вида события",
+    )
+    play = models.ForeignKey(
+        "library.Play",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="readings",
+        verbose_name="Пьеса",
     )
     description = models.TextField(
         max_length=500,
@@ -31,7 +39,7 @@ class Reading(ImageCleanUpMixin, BaseModel):
     events = models.OneToOneField(
         "afisha.CommonEvent",
         on_delete=models.PROTECT,
-        related_name="reading",
+        related_name="custom",
         verbose_name="События",
     )
     main_image = models.ImageField(
@@ -49,8 +57,8 @@ class Reading(ImageCleanUpMixin, BaseModel):
 
     class Meta:
         ordering = ("-created",)
-        verbose_name = "Читка"
-        verbose_name_plural = "Читки"
+        verbose_name = "специальное событие"
+        verbose_name_plural = "специальные события"
 
     def __str__(self):
         if len(self.name) >= 25:

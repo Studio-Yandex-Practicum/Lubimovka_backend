@@ -13,7 +13,7 @@ fake = Faker("ru_RU")
 class TeamMemberFactory(factory.django.DjangoModelFactory):
     """Create TeamMember object.
 
-    The factory will fail if non of `performance` or `reading` or `masterclass`
+    The factory will fail if non of `performance` or `reading`
     is set during call.
 
     Default behavior: the factory sets random but permitted roles based on the
@@ -34,12 +34,10 @@ class TeamMemberFactory(factory.django.DjangoModelFactory):
             "role",
             "performance",
             "reading",
-            "masterclass",
         )
 
     performance = None
     reading = None
-    masterclass = None
 
     @factory.lazy_attribute
     def person(self):
@@ -51,8 +49,6 @@ class TeamMemberFactory(factory.django.DjangoModelFactory):
             role_type = RoleType.objects.filter(role_type="performanse_role")
         if self.reading:
             role_type = RoleType.objects.filter(role_type="reading_role")
-        if self.masterclass:
-            role_type = RoleType.objects.filter(role_type="master_class_role")
 
         allowable_roles = Role.objects.filter(types__in=role_type)
         allowable_random_role = get_random_objects_by_queryset(allowable_roles)

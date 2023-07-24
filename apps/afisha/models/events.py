@@ -2,7 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
 
-from apps.afisha.models import MasterClass, Performance, Reading
+from apps.afisha.models import Performance, Reading
 from apps.core.models import BaseModel
 
 
@@ -29,10 +29,8 @@ class CommonEvent(BaseModel):
 
     @property
     def target_model(self):
-        if getattr(self, "masterclass", None) is not None:
-            return self.masterclass
-        if getattr(self, "reading", None) is not None:
-            return self.reading
+        if getattr(self, "custom", None) is not None:
+            return self.custom
         if getattr(self, "performance", None) is not None:
             return self.performance
         return None
@@ -43,8 +41,7 @@ class CommonEvent(BaseModel):
 class Event(BaseModel):
     class EventType(models.TextChoices):
         PERFORMANCE = "PERFORMANCE", "Спектакль"
-        MASTERCLASS = "MASTERCLASS", "Мастер-класс"
-        READING = "READING", "Читка"
+        CUSTOM = "CUSTOM", "Специальное событие"
 
     class ActionType(models.TextChoices):
         REGISTRATION = "REGISTRATION", "Регистрация"
@@ -55,16 +52,14 @@ class Event(BaseModel):
         CommonEvent,
         on_delete=models.CASCADE,
         related_name="body",
-        verbose_name="Событие",
-        help_text=(
-            "Создайте спектакль, читку или мастер-класс чтобы получить возможность создать соответствующее событие"
-        ),
+        verbose_name="название",
+        help_text=("Создайте спектакль или другое событие чтобы получить возможность создать соответствующее название"),
     )
     type = models.CharField(
         choices=EventType.choices,
         max_length=50,
-        verbose_name="Тип события",
-        help_text="Выберите тип события",
+        verbose_name="Тип ",
+        help_text="Выберите тип пункта афиши",
     )
     date_time = models.DateTimeField(
         verbose_name="Дата и время",
@@ -75,7 +70,7 @@ class Event(BaseModel):
         max_length=200,
         verbose_name="Место",
         blank=True,
-        null=False,
+        null=True,
     )
     action_url = models.URLField(
         max_length=200,
@@ -101,8 +96,8 @@ class Event(BaseModel):
 
     class Meta:
         ordering = ("-date_time",)
-        verbose_name = "Событие"
-        verbose_name_plural = "События"
+        verbose_name = "афиша"
+        verbose_name_plural = "афиша"
 
     def __str__(self):
         event_name = self.common_event.target_model
@@ -116,8 +111,7 @@ class Event(BaseModel):
     def save(self, *args, **kwargs):
         allowed_event_types = {
             Performance: self.EventType.PERFORMANCE,
-            MasterClass: self.EventType.MASTERCLASS,
-            Reading: self.EventType.READING,
+            Reading: self.EventType.CUSTOM,
         }
         self.type = allowed_event_types[type(self.common_event.target_model)]
         super().save(*args, **kwargs)
@@ -133,6 +127,5 @@ def create_common_event(sender, instance, **kwargs):
         instance.events_id = CommonEvent.objects.create().id
 
 
-pre_save.connect(create_common_event, sender=MasterClass)
 pre_save.connect(create_common_event, sender=Reading)
 pre_save.connect(create_common_event, sender=Performance)
