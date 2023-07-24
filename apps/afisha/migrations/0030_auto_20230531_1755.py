@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AlterModelOptions(
             name='event',
-            options={'ordering': ('-date_time',), 'verbose_name': 'пункт афиши', 'verbose_name_plural': 'пункты афиши'},
+            options={'ordering': ('-date_time',), 'verbose_name': 'афиша', 'verbose_name_plural': 'афиша'},
         ),
         migrations.AlterModelOptions(
             name='reading',

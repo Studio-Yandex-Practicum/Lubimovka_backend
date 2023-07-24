@@ -96,8 +96,8 @@ class Event(BaseModel):
 
     class Meta:
         ordering = ("-date_time",)
-        verbose_name = "пункт афиши"
-        verbose_name_plural = "пункты афиши"
+        verbose_name = "афиша"
+        verbose_name_plural = "афиша"
 
     def __str__(self):
         event_name = self.common_event.target_model
