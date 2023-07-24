@@ -48,7 +48,7 @@ class CommonEventAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
 @admin.register(Event)
 class EventAdmin(admin.ModelAdmin):
     list_display = (
-        "type",
+        "custom_type",
         "common_event",
         "status",
         "date_time",
@@ -122,6 +122,10 @@ class EventAdmin(admin.ModelAdmin):
     @admin.display(boolean=True, description="Платное")
     def is_paid(self, obj):
         return obj.action_text == "TICKETS"
+
+    @admin.display(description="Тип")
+    def custom_type(self, obj):
+        return obj.common_event.target_model.custom_type
 
     class Media:
 
