@@ -33,7 +33,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='reading',
             name='custom_type',
-            field=models.CharField(blank=False, max_length=200, null=False, verbose_name='Описание вида события', default="Специальное событие"),
+            field=models.CharField(blank=False, max_length=200, null=False, verbose_name='Описание вида события', default="Читка"),
             preserve_default=False,
         ),
         migrations.AlterField(
