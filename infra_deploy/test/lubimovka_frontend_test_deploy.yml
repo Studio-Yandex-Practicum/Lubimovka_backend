@@ -16,6 +16,7 @@ services:
     networks:
       - test_nginx_network
     volumes:
+      - ./nginx/nginx_top_test.conf:/etc/nginx/nginx.conf
       - ./nginx/nginx_test.conf:/etc/nginx/conf.d/default.conf
       - ./logs/nginx_logs/:/var/log/nginx/
       - static_value_test:/config/test/static/
