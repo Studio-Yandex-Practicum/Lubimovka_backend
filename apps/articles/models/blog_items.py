@@ -3,7 +3,7 @@ from django.db.models.constraints import UniqueConstraint
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.mixins import ImageCleanUpMixin
+from apps.core.mixins import FileCleanUpMixin
 from apps.core.models import BaseModel, Person, Role
 
 
@@ -47,7 +47,7 @@ class BlogPerson(BaseModel):
         return f"{self.role} - {self.person.full_name}"
 
 
-class BlogItem(ImageCleanUpMixin, AbstractContentPage):
+class BlogItem(FileCleanUpMixin, AbstractContentPage):
     cleanup_fields = ("image",)
     author_url = models.URLField(
         verbose_name="Ссылка на автора записи",

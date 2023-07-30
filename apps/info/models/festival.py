@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.mixins import ImageCleanUpMixin
+from apps.core.mixins import FileCleanUpMixin
 from apps.core.models import BaseModel, Image, Person
 
 
@@ -92,7 +92,7 @@ class FestTeamMember(FestivalTeamMember):
         verbose_name_plural = "Команда фестиваля"
 
 
-class Festival(ImageCleanUpMixin, BaseModel):
+class Festival(FileCleanUpMixin, BaseModel):
     cleanup_fields = ("festival_image",)
     start_date = models.DateField(verbose_name="Дата начала фестиваля")
     end_date = models.DateField(
@@ -228,7 +228,7 @@ class InfoLink(BaseModel):
         return self.title
 
 
-class PressRelease(ImageCleanUpMixin, BaseModel):
+class PressRelease(FileCleanUpMixin, BaseModel):
     cleanup_fields = ("press_release_image",)
     text = RichTextField(
         config_name="press_release_styles",

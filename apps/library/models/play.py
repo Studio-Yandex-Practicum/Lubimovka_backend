@@ -5,7 +5,7 @@ from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from apps.content_pages.utilities import path_by_media_and_class_name
-from apps.core.mixins import ImageCleanUpMixin
+from apps.core.mixins import FileCleanUpMixin
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.info.models import Festival
@@ -47,7 +47,7 @@ ALLOWED_FORMATS_FILE_FOR_PLAY = (
 )
 
 
-class Play(ImageCleanUpMixin, BaseModel):
+class Play(FileCleanUpMixin, BaseModel):
     cleanup_fields = ("url_download",)
     name = models.CharField(
         max_length=200,

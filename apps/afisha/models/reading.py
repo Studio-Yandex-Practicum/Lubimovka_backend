@@ -1,12 +1,12 @@
 from django.db import models
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
-from apps.core.mixins import ImageCleanUpMixin
+from apps.core.mixins import FileCleanUpMixin
 from apps.core.models import CORE_ROLES, BaseModel, Person
 from apps.library.utilities import get_team_roles
 
 
-class Reading(ImageCleanUpMixin, BaseModel):
+class Reading(FileCleanUpMixin, BaseModel):
     cleanup_fields = ("main_image",)
     name = models.CharField(
         max_length=200,
