@@ -56,7 +56,6 @@ THIRD_PARTY_APPS = [
     "anymail",
     "easy_thumbnails",
     "apps.filer.apps.FilerCustomConfig",
-    "mptt",
 ]
 LOCAL_APPS = [
     "apps.users",
