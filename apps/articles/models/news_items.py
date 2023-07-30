@@ -1,10 +1,10 @@
 from django.db import models
 
 from apps.content_pages.models import AbstractContent, AbstractContentPage
-from apps.core.mixins import ImageCleanUpMixin
+from apps.core.mixins import FileCleanUpMixin
 
 
-class NewsItem(ImageCleanUpMixin, AbstractContentPage):
+class NewsItem(FileCleanUpMixin, AbstractContentPage):
     cleanup_fields = ("image",)
 
     def __str__(self):
