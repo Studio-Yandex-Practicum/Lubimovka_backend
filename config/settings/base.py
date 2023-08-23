@@ -370,6 +370,13 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # DJANGO-FILER
 FILER_CANONICAL_URL = 'sharing/'
 FILER_ALLOW_REGULAR_USERS_TO_ADD_ROOT_FOLDERS = True
+FILER_STORAGES = {
+    'public': {
+        'main': {
+            'UPLOAD_TO': 'apps.filer.utils.folder_slug',
+        }
+    }
+}
 
 # Translations
 LOCALE_PATHS = [Path(STATIC_ROOT) / "core" / "locale", ]
