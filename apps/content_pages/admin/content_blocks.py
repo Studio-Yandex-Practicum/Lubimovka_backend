@@ -122,6 +122,12 @@ class PersonsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
         choices_for_blog_person(update=True)
         return super().get_inline_instances(request, obj)
 
+    class Media:
+        js = (
+            "admin/js/jquery.init.js",
+            "js/select2_handler.js",
+        )
+
 
 @admin.register(PlaysBlock)
 class PlaysBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
