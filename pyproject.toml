@@ -49,7 +49,7 @@ django-anymail = {extras = ["mailjet"], version = "^8.4"}
 flake8-docstrings = "^1.6.0"
 xhtml2pdf = "^0.2.5"
 google-api-python-client = "^2.36.0"
-GitPython = "^3.1.27"
+GitPython = "^3.1.35"
 reportlab = "3.6.13"
 yadisk = "^1.2.15"
 django-filer = "^3.0.3"
