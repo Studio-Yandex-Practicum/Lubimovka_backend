@@ -3,6 +3,7 @@ from django.conf import settings
 from rest_framework.test import APIClient
 
 from apps.core.factories import PersonFactory
+from apps.core.models import Setting
 from apps.info.factories import (
     FestivalFactory,
     FestivalTeamFactory,
@@ -11,6 +12,12 @@ from apps.info.factories import (
     SponsorFactory,
     VolunteerFactory,
 )
+
+
+@pytest.fixture(autouse=True)
+def set_show_settings():
+    """Show all related people by default."""
+    Setting.objects.filter(settings_key__in=("show_team", "show_sponsors", "show_volunteers")).update(boolean=True)
 
 
 @pytest.fixture(autouse=True)
