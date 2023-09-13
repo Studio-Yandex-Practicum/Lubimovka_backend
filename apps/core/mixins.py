@@ -234,7 +234,7 @@ class FileCleanUpMixin:
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        for attr in (getattr(self, field) for field in self.cleanup_fields):
-            storage, path = attr.storage, attr.path
-            super().delete(*args, **kwargs)
-            storage.delete(path)
+        for file_field in (getattr(self, name) for name in self.cleanup_fields):
+            if file_field:
+                file_field.delete(save=False)
+        super().delete(*args, **kwargs)
