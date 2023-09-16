@@ -171,6 +171,8 @@ class Festival(FileCleanUpMixin, BaseModel):
         return super().save(*args, **kwargs)
 
     def clean(self):
+        if not self.end_date or not self.start_date:
+            return super().clean()
         future_year = timezone.now().year + 1
         if self.start_date.year < 1990 or self.start_date.year > future_year:
             raise ValidationError(
