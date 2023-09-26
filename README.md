@@ -75,17 +75,17 @@ operations = [
     poetry shell
     poetry install
     ```
-3. Разверните базу данных, используя postgres-local.yaml и docker-compose.
+3. Разверните базу данных, используя postgres-local.yaml и docker compose.
     - Разверните
         ```shell
-        docker-compose -f postgres-local.yaml up -d
+        docker compose -f postgres-local.yaml up -d
         ```
     - Остановите или удалите
         ```shell
         # обычная остановка
-        docker-compose -f postgres-local.yaml down
+        docker compose -f postgres-local.yaml down
         # с удалением базы данных
-        docker-compose -f postgres-local.yaml down --volumes
+        docker compose -f postgres-local.yaml down --volumes
         ```
 5. Сделайте миграции
     ```
