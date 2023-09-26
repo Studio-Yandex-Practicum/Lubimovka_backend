@@ -76,11 +76,11 @@ operations = [
     poetry install
     ```
 3. Разверните базу данных, используя postgres-local.yaml и docker-compose.
-    - Разверните базу
+    - Разверните
         ```shell
         docker-compose -f postgres-local.yaml up -d
         ```
-    - Остановите и удалите БД
+    - Остановите или удалите
         ```shell
         # обычная остановка
         docker-compose -f postgres-local.yaml down
