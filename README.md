@@ -75,12 +75,11 @@ operations = [
     poetry shell
     poetry install
     ```
-3. Разверните базу данных, используя postgres-local.yaml и docker compose.
-    - Разверните
-        ```shell
-        docker compose -f postgres-local.yaml up -d
-        ```
-    - Остановите или удалите
+3. Разверните и запустите базу данных, используя postgres-local.yaml и docker compose.
+    ```shell
+    docker compose -f postgres-local.yaml up -d
+    ```
+    - Дополнительно: остановка и удаление и т.д. как с любым контейнером docker
         ```shell
         # обычная остановка
         docker compose -f postgres-local.yaml down
