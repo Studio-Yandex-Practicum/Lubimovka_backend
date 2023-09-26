@@ -79,13 +79,11 @@ operations = [
     ```shell
     docker compose -f postgres-local.yaml up -d
     ```
-    - Дополнительно: остановка и удаление и т.д. как с любым контейнером docker
-        ```shell
-        # обычная остановка
-        docker compose -f postgres-local.yaml down
-        # с удалением базы данных
-        docker compose -f postgres-local.yaml down --volumes
-        ```
+4. Дополнительно: остановка и удаление и т.д. как с любым контейнером docker, например:
+    ```shell
+    docker compose -f postgres-local.yaml down  # остановить
+    docker compose -f postgres-local.yaml down --volumes  # остановить и удалить базу
+    ```
 5. Сделайте миграции
     ```
     python manage.py migrate
