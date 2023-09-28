@@ -114,7 +114,7 @@ class ExtendedPerson(AbstractOrderedItemBase):
     class Meta:
         ordering = ("order",)
         verbose_name = "Элемент блока персон"
-        verbose_name_plural = "Элементы блоков песроны"
+        verbose_name_plural = "Элементы блоков персоны"
         constraints = (
             UniqueConstraint(
                 fields=(
