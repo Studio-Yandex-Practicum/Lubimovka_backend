@@ -4,6 +4,7 @@ import threading
 from django.utils import timezone
 from drf_spectacular.utils import extend_schema
 from rest_framework import serializers, status
+from rest_framework.parsers import FormParser, MultiPartParser
 from rest_framework.response import Response
 from rest_framework.validators import UniqueTogetherValidator
 from rest_framework.views import APIView
@@ -28,6 +29,7 @@ class ParticipationViewSet(APIView):
     # Пока Frontend не научится прикреплять заголовок X-CSRFToken к этому запросу
     # аутентификацию для него придется отключить
     authentication_classes = []
+    parser_classes = (FormParser, MultiPartParser)
 
     class ParticipationSerializer(serializers.ModelSerializer):
         year = serializers.IntegerField(
