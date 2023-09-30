@@ -336,7 +336,8 @@ SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
         "event_type": "apps.afisha.models.events.Event.EventType",
         "partner_type": "apps.info.models.people.Partner.PartnerType",
-    }
+    },
+    'COMPONENT_SPLIT_REQUEST': True,
 }
 
 CSRF_FAILURE_VIEW = 'apps.core.views.csrf_failure'
