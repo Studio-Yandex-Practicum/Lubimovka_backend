@@ -4,7 +4,7 @@ Requires=docker.service
 After=docker.service
 
 [Service]
-Restart=always
+Restart=no
 RestartSec=5
 TimeoutStartSec=1200
 User=root
