@@ -13,6 +13,7 @@ MIDDLEWARE += ["debug_toolbar.middleware.DebugToolbarMiddleware"]  # noqa: F405
 # https://django-debug-toolbar.readthedocs.io/en/latest/configuration.html#debug-toolbar-config
 DEBUG_TOOLBAR_CONFIG = {
     "DISABLE_PANELS": ["debug_toolbar.panels.redirects.RedirectsPanel"],
+    "RENDER_PANELS": True,
     "SHOW_COLLAPSED": True,
     "SHOW_TEMPLATE_CONTEXT": True,
     "SHOW_TOOLBAR_CALLBACK": lambda _request: DEBUG,
