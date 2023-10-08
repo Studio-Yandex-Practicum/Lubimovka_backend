@@ -1,0 +1,4 @@
+lubimovka:
+  hosts:
+    stage_and_test:
+      ansible_host: stage.dev.lubimovka.ru
