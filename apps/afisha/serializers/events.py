@@ -4,6 +4,7 @@ from rest_framework import serializers
 
 from apps.afisha.models import Event, Performance, Reading
 from apps.afisha.serializers import EventPerformanceSerializer, EventReadingSerializer
+from apps.core.constants import Status
 from apps.library.serializers.role import RoleSerializer
 
 AFISHA_EVENTS_SERIALIZER_PAIRS = {
@@ -24,7 +25,8 @@ class BaseEventSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(source="common_event.target_model.main_image", read_only=True, default=None)
 
     def get_performance_id(self, obj) -> Optional[int]:
-        if isinstance(obj.common_event.target_model, Performance):
+        target_model = obj.common_event.target_model
+        if isinstance(target_model, Performance) and target_model.status == Status.PUBLISHED:
             return obj.common_event.target_model.pk
 
     class Meta:
