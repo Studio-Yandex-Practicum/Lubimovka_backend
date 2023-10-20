@@ -4,7 +4,7 @@ from filer.admin.imageadmin import ImageAdminForm
 
 
 class ShortImageAdminForm(ImageAdminForm):
-    class Media(ImageAdminForm.Media):
+    class Media:
         css = {"all": ("custom_filer.css",)}
 
 
