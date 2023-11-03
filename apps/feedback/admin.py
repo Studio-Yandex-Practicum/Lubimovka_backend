@@ -29,7 +29,7 @@ class ParticipationAdmin(admin.ModelAdmin):
     readonly_fields = ("created",)
     search_fields = ("title", "first_name", "last_name", "city", "year")
 
-    def has_add_permission(self, request):
+    def has_add_permission(self, _):
         return False
 
 
