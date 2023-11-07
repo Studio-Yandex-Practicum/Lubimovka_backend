@@ -1,0 +1,21 @@
+services:
+  postfix:
+    build:
+      context: .
+      args:
+        - POSTFIX_HOSTNAME=mail.lubimovka.ru
+        - DEBIAN_MAILNAME=lubimovka.ru
+    container_name: postfix
+    ports:
+      - 25:25
+    volumes:
+      - ./mail:/var/spool/mail
+    networks:
+      - prod_db_network
+    logging:
+      driver: journald
+    restart: unless-stopped
+networks:
+  prod_db_network:
+    name: prod_db_network
+    external: true

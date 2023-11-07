@@ -1,0 +1,17 @@
+#
+# pgsql config file for virtual lookups
+#
+
+#
+# The hosts that Postfix will try to connect to
+hosts = localhost postgres
+
+# The user name and password to log into the pgsql server.
+user = postfix
+password = password
+
+# The database name on the servers.
+dbname = lyubimovka
+
+# Postfix 2.2 and later The SQL query template. See pgsql_table(5).
+query = select pr.email from postfix_recipient pr join postfix_virtual pv on pv.id = pr.virtual_id  where pv.email = '%s';
