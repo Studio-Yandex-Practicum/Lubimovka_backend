@@ -11,11 +11,11 @@ services:
     volumes:
       - ./mail:/var/spool/mail
     networks:
-      - prod_db_network
+      - test_db_network
     logging:
       driver: journald
     restart: unless-stopped
 networks:
   prod_db_network:
-    name: prod_db_network
+    name: test_db_network
     external: true
