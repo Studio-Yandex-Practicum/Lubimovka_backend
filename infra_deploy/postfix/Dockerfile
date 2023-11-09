@@ -13,6 +13,7 @@ RUN echo ${DEBIAN_MAILNAME} > /etc/mailname
 
 # Install packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y postfix postfix-policyd-spf-python
+RUN apt install postfix-pgsql
 
 # This is default for Debian machines
 RUN postconf myorigin=/etc/mailname
@@ -58,6 +59,9 @@ RUN postfix-add-policy policyd-spf policyd-spf /usr/bin/policyd-spf
 
 # Chroot is not necessary inside container
 RUN postconf -eF */*/chroot=n
+
+# Copy forwarding config
+COPY --chmod=644 pgsql-virtual.cf /etc/postfix/pgsql-virtual.cf
 
 # Setup forwarding table
 RUN postconf virtual_alias_maps=pgsql:/etc/postfix/pgsql-virtual.cf
