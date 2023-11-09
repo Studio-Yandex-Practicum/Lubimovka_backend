@@ -16,6 +16,6 @@ services:
       driver: journald
     restart: unless-stopped
 networks:
-  prod_db_network:
+  test_db_network:
     name: test_db_network
     external: true
