@@ -13,7 +13,7 @@ class RecipientsInline(admin.TabularInline):
 
 @admin.register(Virtual)
 class VirtualAdmin(admin.ModelAdmin):
-    list_display = ("enabled", "email", "list_recipients")
+    list_display = ("enabled", "author", "email", "list_recipients")
     list_display_links = ("email",)
     list_editable = ("enabled",)
     inlines = (RecipientsInline,)
