@@ -18,6 +18,8 @@ class VirtualAdmin(admin.ModelAdmin):
     list_editable = ("enabled",)
     inlines = (RecipientsInline,)
 
+    search_fields = ("author__person__first_name", "author__person__last_name", "email", "recipients__email")
+
     @admin.display(description="получатели")
     def list_recipients(self, obj: Virtual):
         return ", ".join(recipient.email for recipient in obj.recipients.all())
