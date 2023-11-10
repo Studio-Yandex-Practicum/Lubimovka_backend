@@ -1,11 +1,13 @@
 from django.db import models
 
 from apps.core.models import BaseModel
+from apps.library.models import Author
 
 
 class Virtual(BaseModel):
     enabled = models.BooleanField(verbose_name="включено", default=True)
-    email = models.EmailField(verbose_name="виртуальный адрес")
+    author = models.ForeignKey(Author, verbose_name="автор", on_delete=models.CASCADE, null=True)
+    email = models.EmailField(verbose_name="виртуальный адрес", unique=True)
 
     class Meta:
         verbose_name = "виртуальный адрес"

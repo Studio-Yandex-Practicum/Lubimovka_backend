@@ -2,6 +2,28 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
+from django.conf import settings
+
+
+CREATE_USER = """DO
+$$
+BEGIN
+  IF NOT EXISTS (SELECT * FROM pg_user WHERE usename = 'postfix') THEN
+     CREATE USER postfix;
+  END IF;
+END
+$$
+;
+GRANT CONNECT ON DATABASE {db_name} TO postfix;
+GRANT USAGE ON SCHEMA public TO postfix;
+GRANT SELECT ON postfix_virtual TO postfix;
+GRANT SELECT ON postfix_recipient TO postfix;
+"""
+REMOVE_USER = """REVOKE ALL PRIVILEGES ON ALL TABLES IN SCHEMA public FROM postfix;
+REVOKE ALL PRIVILEGES ON SCHEMA public FROM postfix;
+REVOKE ALL PRIVILEGES ON DATABASE {db_name} FROM postfix;
+DROP USER postfix;
+"""
 
 
 class Migration(migrations.Migration):
@@ -19,7 +41,8 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('enabled', models.BooleanField(default=True, verbose_name='включено')),
-                ('email', models.EmailField(max_length=254, verbose_name='виртуальный адрес')),
+                ('email', models.EmailField(max_length=254, verbose_name='виртуальный адрес', unique=True)),
+                ('author', models.ForeignKey(to='library.author', verbose_name='автор', on_delete=models.CASCADE, null=True)),
             ],
             options={
                 'verbose_name': 'виртуальный адрес',
@@ -39,5 +62,9 @@ class Migration(migrations.Migration):
                 'verbose_name': 'адрес назначения',
                 'verbose_name_plural': 'адреса назначения',
             },
+        ),
+        migrations.RunSQL(
+            sql=CREATE_USER.format(db_name=settings.DATABASES["default"]["NAME"]),
+            reverse_sql=REMOVE_USER.format(db_name=settings.DATABASES["default"]["NAME"]),
         ),
     ]
