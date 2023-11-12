@@ -29,7 +29,7 @@ authors = ["Ya.Practicum Students"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
-Django = "3.2.21"
+Django = "~3.2.22"
 django-environ = "^0.8.1"
 django-cors-headers = "^3.11.0"
 djangorestframework = "^3.13.1"
