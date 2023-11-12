@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.template.defaultfilters import truncatechars
-from django.utils import formats
 
 from apps.feedback.filters import LookBackDateListFilter
 from apps.feedback.models import ParticipationApplicationFestival, Question
@@ -35,17 +34,10 @@ class ParticipationAdmin(admin.ModelAdmin):
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
-    list_display = ("author_name", "author_email", "short_question_text", "sent_to_email", "created_display")
+    list_display = ("author_name", "author_email", "short_question_text", "sent_to_email", "created")
     list_filter = ("sent_to_email", LookBackDateListFilter)
     search_fields = ("author_name", "author_email", "question")
-    readonly_fields = ("question", "author_name", "author_email", "sent_to_email", "created_display")
-
-    @admin.display(
-        description="Дата создания",
-    )
-    def created_display(self, obj):
-        """Возвращает дату создания объекта."""
-        return formats.date_format(obj.created, format="DATETIME_FORMAT", use_l10n=True)
+    readonly_fields = ("question", "author_name", "author_email", "sent_to_email", "created")
 
     @admin.display(
         description="Текст вопроса",
