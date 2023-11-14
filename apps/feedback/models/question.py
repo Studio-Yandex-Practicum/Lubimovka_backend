@@ -7,7 +7,7 @@ from apps.core.models import BaseModel
 class Question(BaseModel):
     created = models.DateTimeField(
         auto_now_add=True,
-        verbose_name="Создана",
+        verbose_name="Создан",
     )
     question = models.TextField(
         max_length=500,
