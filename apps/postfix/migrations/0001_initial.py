@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('enabled', models.BooleanField(default=True, verbose_name='включено')),
                 ('email', models.EmailField(max_length=254, verbose_name='виртуальный адрес', unique=True)),
-                ('author', models.ForeignKey(to='library.author', verbose_name='автор', on_delete=models.CASCADE, null=True, blank=True)),
+                ('author', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='virtual_email', to='library.author', verbose_name='автор')),
             ],
             options={
                 'verbose_name': 'виртуальный адрес',
@@ -74,19 +74,6 @@ class Migration(migrations.Migration):
                 'verbose_name': 'адрес назначения',
                 'verbose_name_plural': 'адреса назначения',
             },
-        ),
-        migrations.CreateModel(
-            name='VirtualAuthor',
-            fields=[
-            ],
-            options={
-                'proxy': True,
-                'indexes': [],
-                'constraints': [],
-                'verbose_name': "адрес для автора",
-                'verbose_name_plural': "адреса для авторов",
-            },
-            bases=('postfix.virtual',),
         ),
         migrations.RunPython(create_user, remove_user),
     ]

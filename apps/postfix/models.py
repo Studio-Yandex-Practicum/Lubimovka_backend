@@ -6,7 +6,9 @@ from apps.library.models import Author
 
 class Virtual(BaseModel):
     enabled = models.BooleanField(verbose_name="включено", default=True)
-    author = models.ForeignKey(Author, verbose_name="автор", on_delete=models.CASCADE, null=True, blank=True)
+    author = models.OneToOneField(
+        Author, verbose_name="автор", on_delete=models.CASCADE, related_name="virtual_email", null=True, blank=True
+    )
     email = models.EmailField(verbose_name="виртуальный адрес", unique=True)
 
     class Meta:
@@ -15,16 +17,6 @@ class Virtual(BaseModel):
 
     def __str__(self):
         return self.email
-
-
-class VirtualAuthor(Virtual):
-    class Meta:
-        proxy = True
-        verbose_name = "адрес для автора"
-        verbose_name_plural = "адреса для авторов"
-
-    def slug(self):
-        return self.author.slug
 
 
 class Recipient(BaseModel):

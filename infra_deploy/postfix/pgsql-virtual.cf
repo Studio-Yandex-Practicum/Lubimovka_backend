@@ -14,5 +14,5 @@ password = password
 dbname = lyubimovka
 
 # Postfix 2.2 and later The SQL query template. See pgsql_table(5).
-# query = select pr.email from postfix_recipient pr join postfix_virtual pv on pv.id = pr.virtual_id  where pv.email = '%s';
-query = select pr.email from postfix_recipient pr join postfix_virtual pv on pv.id = pr.virtual_id  where pv.email = '%s' union all select cp.email from core_person cp join library_author la on cp.id = la.person_id join postfix_virtual pv2 on pv2.author_id = la.id where pv2.email = '%s';
+query = select pr.email from postfix_recipient pr join postfix_virtual pv on pv.id = pr.virtual_id where pv.enabled and pv.email = '%s';
+#query = select pr.email from postfix_recipient pr join postfix_virtual pv on pv.id = pr.virtual_id  where pv.email = '%s' union all select cp.email from core_person cp join library_author la on cp.id = la.person_id join postfix_virtual pv2 on pv2.author_id = la.id where pv2.email = '%s';
