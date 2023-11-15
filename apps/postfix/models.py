@@ -17,6 +17,16 @@ class Virtual(BaseModel):
         return self.email
 
 
+class VirtualAuthor(Virtual):
+    class Meta:
+        proxy = True
+        verbose_name = "адрес для автора"
+        verbose_name_plural = "адреса для авторов"
+
+    def slug(self):
+        return self.author.slug
+
+
 class Recipient(BaseModel):
     email = models.EmailField(verbose_name="получатель")
     virtual = models.ForeignKey(Virtual, on_delete=models.CASCADE, related_name="recipients")
