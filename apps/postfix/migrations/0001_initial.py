@@ -75,5 +75,18 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'адреса назначения',
             },
         ),
+        migrations.CreateModel(
+            name='VirtualAuthor',
+            fields=[
+            ],
+            options={
+                'proxy': True,
+                'indexes': [],
+                'constraints': [],
+                'verbose_name': "адрес для автора",
+                'verbose_name_plural': "адреса для авторов",
+            },
+            bases=('postfix.virtual',),
+        ),
         migrations.RunPython(create_user, remove_user),
     ]
