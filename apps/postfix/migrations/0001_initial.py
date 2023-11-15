@@ -26,6 +26,18 @@ DROP USER postfix;
 """
 
 
+def create_user(apps, schema_editor):
+    if not schema_editor.connection.vendor.startswith('postgres'):
+        return
+    schema_editor.execute(CREATE_USER.format(db_name=settings.DATABASES["default"]["NAME"]))
+
+
+def remove_user(apps, schema_editor):
+    if not schema_editor.connection.vendor.startswith('postgres'):
+        return
+    schema_editor.execute(REMOVE_USER.format(db_name=settings.DATABASES["default"]["NAME"]))
+
+
 class Migration(migrations.Migration):
 
     initial = True
@@ -63,8 +75,5 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'адреса назначения',
             },
         ),
-        migrations.RunSQL(
-            sql=CREATE_USER.format(db_name=settings.DATABASES["default"]["NAME"]),
-            reverse_sql=REMOVE_USER.format(db_name=settings.DATABASES["default"]["NAME"]),
-        ),
+        migrations.RunPython(create_user, remove_user),
     ]
