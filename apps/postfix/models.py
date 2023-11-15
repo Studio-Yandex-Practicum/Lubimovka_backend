@@ -6,7 +6,7 @@ from apps.library.models import Author
 
 class Virtual(BaseModel):
     enabled = models.BooleanField(verbose_name="включено", default=True)
-    author = models.ForeignKey(Author, verbose_name="автор", on_delete=models.CASCADE, null=True)
+    author = models.ForeignKey(Author, verbose_name="автор", on_delete=models.CASCADE, null=True, blank=True)
     email = models.EmailField(verbose_name="виртуальный адрес", unique=True)
 
     class Meta:

@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('enabled', models.BooleanField(default=True, verbose_name='включено')),
                 ('email', models.EmailField(max_length=254, verbose_name='виртуальный адрес', unique=True)),
-                ('author', models.ForeignKey(to='library.author', verbose_name='автор', on_delete=models.CASCADE, null=True)),
+                ('author', models.ForeignKey(to='library.author', verbose_name='автор', on_delete=models.CASCADE, null=True, blank=True)),
             ],
             options={
                 'verbose_name': 'виртуальный адрес',
