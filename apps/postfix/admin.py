@@ -25,4 +25,4 @@ class VirtualAdmin(admin.ModelAdmin):
         return ", ".join(recipient.email for recipient in obj.recipients.all())
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
-        return super().get_queryset(request).filter(author__isnull=True).prefetch_related("recipients")
+        return super().get_queryset(request).prefetch_related("recipients").select_related("author")

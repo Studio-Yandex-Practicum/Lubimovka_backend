@@ -7,9 +7,14 @@ from apps.library.models import Author
 class Virtual(BaseModel):
     enabled = models.BooleanField(verbose_name="включено", default=True)
     author = models.OneToOneField(
-        Author, verbose_name="автор", on_delete=models.CASCADE, related_name="virtual_email", null=True, blank=True
+        Author,
+        verbose_name="автор",
+        on_delete=models.CASCADE,
+        related_name="virtual_email",
+        null=True,
+        blank=True,
     )
-    email = models.EmailField(verbose_name="виртуальный адрес", unique=True)
+    email = models.EmailField(verbose_name="виртуальный адрес", unique=True, help_text="address@lubimovka.art")
 
     class Meta:
         verbose_name = "виртуальный адрес"
