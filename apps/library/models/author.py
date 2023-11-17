@@ -46,7 +46,11 @@ class Author(BaseModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
+        if self._has_person_before_saving() and hasattr(self, "virtual_email"):
+            self.virtual_email.save()
+            self.virtual_email.recipients.all().delete()
+            self.virtual_email.recipients.create(email=self.person.email)
 
     def _has_person_before_saving(self):
         return self.person_id is not None
@@ -64,6 +68,10 @@ class Author(BaseModel):
             .distinct("plays__festival__year", "name")
             .values("id", "name", "plays__festival__year")
         )
+
+    @property
+    def forward_email(self):
+        return getattr(self, "virtual_email", False)
 
 
 class AuthorPlay(models.Model):

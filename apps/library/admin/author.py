@@ -6,6 +6,7 @@ from django.forms import ModelForm, ValidationError
 
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
+from apps.postfix.models import Virtual
 
 
 class PlayInlineForm(ModelForm):
@@ -111,15 +112,22 @@ class OtherLinkInline(SortableInlineAdminMixin, admin.TabularInline):
     classes = ("collapsible",)
 
 
+class MailInline(admin.TabularInline):
+    model = Virtual
+    extra = 0
+
+
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
     list_display = (
         "person",
         "quote",
         "slug",
+        "virtual_email",
         "plays_count",
     )
     inlines = (
+        MailInline,
         PlayInline,
         OtherPlayInline,
         SocialNetworkLinkInline,
