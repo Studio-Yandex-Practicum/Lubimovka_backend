@@ -2,7 +2,7 @@ FROM debian:bookworm-slim
 ARG PASSWORD
 ARG POSTFIX_HOSTNAME
 ARG DEBIAN_MAILNAME=${POSTFIX_HOSTNAME}
-ENV MY_DOMAIN=${DEBIAN_MAILNAME}
+ENV MY_MAIL_DOMAIN=${DEBIAN_MAILNAME}
 
 # Add locale (https://hub.docker.com/_/debian)
 # RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
