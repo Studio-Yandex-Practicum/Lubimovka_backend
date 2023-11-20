@@ -1,4 +1,5 @@
 FROM debian:bookworm-slim
+ARG PASSWORD
 ARG POSTFIX_HOSTNAME
 ARG DEBIAN_MAILNAME=${POSTFIX_HOSTNAME}
 ENV MY_DOMAIN=${DEBIAN_MAILNAME}
@@ -13,7 +14,7 @@ RUN echo ${DEBIAN_MAILNAME} > /etc/mailname
 
 # Install packages
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y postfix postfix-policyd-spf-python
-RUN apt install postfix-pgsql
+RUN apt install postfix-pgsql -y
 
 # This is default for Debian machines
 RUN postconf myorigin=/etc/mailname
@@ -81,5 +82,8 @@ RUN chown filter:filter /home/filter/filter.sh
 RUN postconf -M filter/unix="filter unix - n n - 10 pipe flags=Rq user=filter null_sender= argv=/home/filter/filter.sh \${sender} -- \${recipient}"
 RUN postconf -eP smtp/inet/content_filter=filter:dummy
 
+# Copy init script
+COPY --chmod=770 init.sh /
+
 EXPOSE 25/tcp
-CMD ["postfix","start-fg"]
+CMD ["sh", "-c", "/init.sh; exec postfix start-fg"]

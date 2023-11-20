@@ -9,7 +9,7 @@ CREATE_USER = """DO
 $$
 BEGIN
   IF NOT EXISTS (SELECT * FROM pg_user WHERE usename = 'postfix') THEN
-     CREATE USER postfix;
+     CREATE USER postfix WITH PASSWORD '{db_password}';
   END IF;
 END
 $$
@@ -29,7 +29,7 @@ DROP USER postfix;
 def create_user(apps, schema_editor):
     if not schema_editor.connection.vendor.startswith('postgres'):
         return
-    schema_editor.execute(CREATE_USER.format(db_name=settings.DATABASES["default"]["NAME"]))
+    schema_editor.execute(CREATE_USER.format(db_name=settings.DATABASES["default"]["NAME"], db_password=settings.POSTFIX_DB_PASSWORD))
 
 
 def remove_user(apps, schema_editor):

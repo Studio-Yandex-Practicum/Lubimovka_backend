@@ -4,14 +4,14 @@
 
 #
 # The hosts that Postfix will try to connect to
-hosts = localhost postgres
+hosts = postgres localhost
 
 # The user name and password to log into the pgsql server.
 user = postfix
 password = password
 
 # The database name on the servers.
-dbname = lyubimovka
+dbname = database
 
 # Postfix 2.2 and later The SQL query template. See pgsql_table(5).
 query = select pr.email from postfix_recipient pr join postfix_virtual pv on pv.id = pr.virtual_id where pv.enabled and pv.email = '%s';
