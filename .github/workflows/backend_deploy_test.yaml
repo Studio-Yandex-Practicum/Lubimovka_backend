@@ -132,7 +132,11 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-test
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-test
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-test
+
+            # Postfix settings
             echo POSTFIX_DB_PASSWORD=${{ secrets.POSTFIX_DB_PASSWORD }} >> .env-test
+            echo POSTFIX_HOSTNAME=${{ secrets.POSTFIX_HOSTNAME }} >> .env-test
+            echo POSTFIX_MAIL_DOMAIN=${{ secrets.POSTFIX_MAIL_DOMAIN }} >> .env-test
 
             # Django environment variables
             echo DEBUG=${{ secrets.DEBUG }} >> .env-test

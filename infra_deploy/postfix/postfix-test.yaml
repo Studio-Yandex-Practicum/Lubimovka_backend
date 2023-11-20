@@ -3,8 +3,8 @@ services:
     build:
       context: .
       args:
-        - POSTFIX_HOSTNAME=mail.lubimovka.ru
-        - DEBIAN_MAILNAME=lubimovka.ru
+        - POSTFIX_HOSTNAME=$POSTFIX_HOSTNAME
+        - DEBIAN_MAILNAME=$POSTFIX_MAIL_DOMAIN
     env_file:
       - ../test/.env-test
     container_name: postfix
