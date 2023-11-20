@@ -159,6 +159,7 @@ jobs:
             echo PGID=${{ secrets.PGID }} >> .env-test
             echo URL=${{ secrets.URL }} >> .env-test
             echo EMAIL=${{ secrets.SSL_EMAIL }} >> .env-test
+            echo POSTFIX_DB_PASSWORD=${{ secrets.POSTFIX_DB_PASSWORD }} >> .env-test
 
             # Token for yandex disk
             echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK_TOKEN }} >> .env-test
