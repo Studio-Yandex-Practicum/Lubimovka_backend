@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('enabled', models.BooleanField(default=True, verbose_name='включено')),
-                ('email', models.EmailField(max_length=254, verbose_name='виртуальный адрес', unique=True)),
+                ('email', models.EmailField(help_text='address@lubimovka.art', max_length=254, verbose_name='виртуальный адрес', unique=True)),
                 ('author', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='virtual_email', to='library.author', verbose_name='автор')),
             ],
             options={
