@@ -171,6 +171,7 @@ jobs:
             # Уделение старых данных
             systemctl stop lubimovka-frontend-test.service
             systemctl stop lubimovka-backend-test.service
+            docker compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
             
             # Очистка неиспользуемых контейнеров, образов, сетей
             # docker system prune --force
