@@ -23,6 +23,8 @@ cat >in.$$ || {
 # filter <in.$$ || {
 #   echo Message content rejected; exit $EX_UNAVAILABLE; }
 
-$SENDMAIL "-f filter@"$MY_MAIL_DOMAIN -- ${@:3} <in.$$
+MY_DOMAIN=domain
+
+$SENDMAIL "-f filter@$MY_DOMAIN" -- ${@:3} <in.$$
 
 exit 0

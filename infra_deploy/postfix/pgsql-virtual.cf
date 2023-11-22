@@ -4,7 +4,7 @@
 
 #
 # The hosts that Postfix will try to connect to
-hosts = postgres localhost
+hosts = postgres
 
 # The user name and password to log into the pgsql server.
 user = postfix

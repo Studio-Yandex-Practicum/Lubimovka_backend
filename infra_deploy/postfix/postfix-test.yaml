@@ -12,6 +12,8 @@ services:
       - 25:25
     volumes:
       - ./mail:/var/spool/mail
+      - ./blacklist:/etc/postfix/blacklist
+      - ./whitelist:/etc/postfix/whitelist
     networks:
       - test_db_network
     logging:
