@@ -2,6 +2,7 @@ from django.db import models
 
 from apps.core.models import BaseModel
 from apps.library.models import Author
+from apps.postfix.validators import VirtualNameValidator
 
 
 class Virtual(BaseModel):
@@ -14,7 +15,13 @@ class Virtual(BaseModel):
         null=True,
         blank=True,
     )
-    email = models.EmailField(verbose_name="виртуальный адрес", unique=True, help_text="address@lubimovka.art")
+    email = models.CharField(
+        verbose_name="почтовый ящик",
+        unique=True,
+        max_length=320,
+        help_text="имя почтового ящика до знака @",
+        validators=(VirtualNameValidator(),),
+    )
 
     class Meta:
         verbose_name = "виртуальный адрес"
