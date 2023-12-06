@@ -42,10 +42,3 @@ jQuery(document).ready(function ($) {
         });
     });
 });
-
-jQuery(document).on('formset:added', function(event, $row, formsetName) {
-    if (formsetName == "virtual_email") {
-        let slug = jQuery("#id_slug").val();
-        jQuery("#id_virtual_email-0-email").val(slug);
-    }
-});

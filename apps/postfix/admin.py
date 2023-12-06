@@ -9,16 +9,18 @@ from apps.postfix.models import Recipient, Virtual
 
 class RecipientsInline(admin.TabularInline):
     model = Recipient
+    extra = 1
 
 
 @admin.register(Virtual)
 class VirtualAdmin(admin.ModelAdmin):
-    list_display = ("enabled", "author", "email", "list_recipients")
+    list_display = ("enabled", "email", "author", "list_recipients")
     list_display_links = ("email",)
     list_editable = ("enabled",)
     inlines = (RecipientsInline,)
 
     search_fields = ("author__person__first_name", "author__person__last_name", "email", "recipients__email")
+    readonly_fields = ("author",)
 
     @admin.display(description="получатели")
     def list_recipients(self, obj: Virtual):
