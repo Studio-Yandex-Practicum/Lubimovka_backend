@@ -69,10 +69,6 @@ class Author(BaseModel):
             .values("id", "name", "plays__festival__year")
         )
 
-    @property
-    def forward_email(self):
-        return getattr(self, "virtual_email", False)
-
 
 class AuthorPlay(models.Model):
     author = models.ForeignKey(
