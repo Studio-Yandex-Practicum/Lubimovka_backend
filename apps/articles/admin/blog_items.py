@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from apps.articles.mixins import ArticleSaveAsMixin
 from apps.articles.models import BlogItem, BlogItemContent
 from apps.content_pages.admin import BaseContentInline, BaseContentPageAdmin
 from apps.core.mixins import InlineReadOnlyMixin, PreviewButtonMixin, StatusButtonMixin
@@ -16,7 +17,8 @@ class BlogItemContentInline(InlineReadOnlyMixin, BaseContentInline):
 
 
 @admin.register(BlogItem)
-class BlogItemAdmin(StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
+class BlogItemAdmin(ArticleSaveAsMixin, StatusButtonMixin, PreviewButtonMixin, BaseContentPageAdmin):
+    save_as = True
     list_display = (
         "title",
         "description",

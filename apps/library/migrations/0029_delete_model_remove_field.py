@@ -7,6 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
+        ('content_pages', '0004_added_eventsblock'),
         ('afisha', '0006_masterclass_performance'),
         ('library', '0028_auto_20220426_1807'),
     ]

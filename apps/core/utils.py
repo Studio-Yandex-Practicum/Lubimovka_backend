@@ -2,6 +2,7 @@ import hashlib
 import logging
 import urllib
 from datetime import date
+from urllib.request import Request
 
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -20,17 +21,20 @@ def slugify(name):
     return django_slugify("".join(ALPHABET.get(char, char) for char in name.lower()))
 
 
-def get_picsum_image(width: int = 1024, height: int = 768) -> ContentFile:
-    """Return real image from picsum.photos. Supports width and height arguments."""
-    image = urllib.request.urlopen(f"https://picsum.photos/{width}/{height}").read()
+def get_random_image(width: int = 1024, height: int = 768) -> ContentFile:
+    """Return random image from online image generator. Supports width and height arguments."""
+    req = Request(url=f"https://loremflickr.com/{width}/{height}/", headers={"User-Agent": "Mozilla/5.0"})
+    image = urllib.request.urlopen(req).read()
     return ContentFile(image)
 
 
-def get_paginated_response(pagination_class, serializer_class, queryset, request, view):
+def get_paginated_response(pagination_class, serializer_class, queryset, request, view, extra_context=None):
     """Return paginated response. Use it with `list` views based on APIView."""
     paginator = pagination_class()
     page = paginator.paginate_queryset(queryset, request, view=view)
     context = {"request": request}
+    if extra_context is not None:
+        context |= extra_context
 
     if page is not None:
         serializer = serializer_class(page, context=context, many=True)

@@ -9,6 +9,12 @@ from yadisk.exceptions import YaDiskError
 logger = logging.getLogger("django")
 
 
+def publish_file(yndx, path):
+    if yndx.exists(path):
+        yndx.publish(path)
+        return yndx.get_meta(path, fields=["public_url"]).public_url
+
+
 def yandex_disk_export(instance) -> Optional[bool]:
     try:
         yndx = yadisk.YaDisk(token=settings.YNDX_DISK_TOKEN)
@@ -20,9 +26,7 @@ def yandex_disk_export(instance) -> Optional[bool]:
             yndx.mkdir(year)
         yndx.upload(from_dir, to_dir)
 
-        if yndx.exists(to_dir):
-            download_link = yndx.get_download_link(to_dir)
-            return download_link
+        return publish_file(yndx, to_dir)
     except (ValueError, YaDiskError) as error:
         msg = f"Не удалось загрузить пьесу {instance.title} от {instance.email} на Яндекс диск."
         logger.critical(msg, error, exc_info=True)

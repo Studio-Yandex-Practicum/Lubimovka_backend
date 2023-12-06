@@ -26,3 +26,7 @@ class SettingsSerializer(serializers.Serializer):
     for_press = ForPressSerializer()
     plays_reception_is_open = serializers.BooleanField()
     projects = ProjectListSerializer(many=True)
+    email_to_send_questions = serializers.EmailField()
+    show_team = serializers.BooleanField()
+    show_sponsors = serializers.BooleanField()
+    show_volunteers = serializers.BooleanField()

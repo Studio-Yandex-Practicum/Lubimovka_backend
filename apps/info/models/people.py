@@ -3,11 +3,14 @@ from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
+from apps.core.mixins import FileCleanUpMixin
 from apps.core.models import BaseModel, Person
 from apps.info.models.festival import Festival
 
 
-class Partner(BaseModel):
+class Partner(FileCleanUpMixin, BaseModel):
+    cleanup_fields = ("image",)
+
     class PartnerType(models.TextChoices):
         FESTIVAL_PARTNER = "festival", _("Партнер фестиваля")
         INFO_PARTNER = "info", _("Информационный партнер")
@@ -58,12 +61,6 @@ class Partner(BaseModel):
         verbose_name = "Партнер"
         verbose_name_plural = "Партнеры"
         ordering = ("order",)
-
-    def save(self, *args, **kwargs):
-        this = Partner.objects.filter(id=self.id).first()
-        if this and this.image != self.image:
-            this.image.delete(save=False)
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} - {self.type}"

@@ -7,14 +7,15 @@ from django.template.defaultfilters import truncatechars
 from apps.content_pages.querysets import PublishedContentQuerySet
 from apps.content_pages.utilities import path_by_app_label_and_class_name
 from apps.core.constants import AgeLimit, Status
+from apps.core.mixins import FileCleanUpMixin
 from apps.core.models import CORE_ROLES, BaseModel, Person
-from apps.core.utils import delete_image_with_model
 from apps.library.utilities import get_team_roles
 
 User = get_user_model()
 
 
-class Performance(BaseModel):
+class Performance(FileCleanUpMixin, BaseModel):
+    cleanup_fields = ("main_image", "bottom_image")
     status = models.CharField(
         choices=Status.choices,
         default=Status.IN_PROCESS,
@@ -78,14 +79,6 @@ class Performance(BaseModel):
         related_name="performances",
         verbose_name="Члены команды",
     )
-    project = models.ForeignKey(
-        "articles.Project",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="performances",
-        verbose_name="Проект",
-    )
     duration = models.DurationField(
         default=timedelta(minutes=85),
         verbose_name="Продолжительность",
@@ -106,6 +99,10 @@ class Performance(BaseModel):
         verbose_name="Создатель",
     )
 
+    @property
+    def custom_type(self):
+        return "Спектакль"
+
     class Meta:
         ordering = ("name",)
         verbose_name = "Спектакль"
@@ -120,18 +117,6 @@ class Performance(BaseModel):
         if len(self.name) >= 25:
             return self.name[:25] + "..."
         return self.name
-
-    def save(self, *args, **kwargs):
-        this = Performance.objects.filter(id=self.id).first()
-        if this:
-            if this.main_image != self.main_image:
-                this.main_image.delete(save=False)
-            if this.bottom_image != self.bottom_image:
-                this.bottom_image.delete(save=False)
-        return super().save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        delete_image_with_model(self, Performance, *args, **kwargs)
 
     @property
     def team(self):

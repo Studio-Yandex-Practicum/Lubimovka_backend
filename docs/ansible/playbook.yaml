@@ -1,0 +1,173 @@
+- name: Ping hosts
+  hosts: lubimovka
+  tasks:
+    - name: Ping hosts
+      ansible.builtin.ping:
+
+- name: SSH Configuration
+  hosts: lubimovka
+  become: true
+  tasks:
+    - name: Disable password login
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: "^PasswordAuthentication"
+        line: "PasswordAuthentication no"
+        state: present
+        backup: true
+        validate: sshd -t -f %s
+      register: password_login
+    - name: Restart sshd
+      service:
+        name: ssh
+        state: restarted
+      when: password_login.changed
+
+- name: Setup firewall
+  hosts: lubimovka
+  become: true
+  tasks:
+    - name: Install ufw
+      apt:
+       name: ufw
+       state: latest
+       update_cache: true
+    - name: Add rules
+      ufw:
+        rule: allow
+        direction: in
+        port: "{{ item }}"
+      loop:
+        - ssh
+        - http
+        - https
+        - smtp
+    - name: Enable UFW
+      ufw:
+        state: enabled
+
+- name: Setup fail2ban
+  hosts: lubimovka
+  become: true
+  tasks:
+    - name: Install fail2ban
+      apt:
+        name: fail2ban
+        state: present
+        update_cache: true
+    - name: Start and enable fail2ban
+      service:
+        name: fail2ban
+        state: started
+        enabled: true
+
+- name: Setup Docker
+  hosts: lubimovka
+  become: true
+  tasks:
+    - name: Install system packages
+      apt:
+        pkg:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: latest
+        update_cache: true
+    - name: Add Docker GPG apy keys
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    - name: Add Docker repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu jammy stable
+        state: present
+    - name: Update apt and install Docker
+      apt:
+        pkg:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: latest
+        update_cache: true
+- name: Create user for Github Actions
+  hosts: lubimovka
+  become: true
+  tasks:
+    - name: Add servicemanagers group
+      group:
+        name: servicemanagers
+        state: present
+    - name: Add www-data group
+      group:
+        name: www-data
+        state: present
+    - name: Add user
+      user:
+        name: github
+        groups: docker,servicemanagers,www-data
+        group: docker
+        state: present
+        generate_ssh_key: true
+        ssh_key_bits: 4096
+        ssh_key_comment: Github
+        ssh_key_file: .ssh/id_github_rsa
+      register: user
+    # Если версия пакета polkit на сервере не поддерживает конфигурирование
+    # с помощью файлов .pkla, Github не сможет запустить сервисы,
+    # обеспечивающие работу контейнеров Docker проекта
+    - name: Setup polkit part 1
+      copy:
+        owner: github
+        content: |
+          [Configuration]
+          AdminIdentities=unix-group:servicemanagers
+        dest: /etc/polkit-1/localauthority.conf.d/60-github-service.conf
+    - name: Setup polkit part 2
+      copy:
+        owner: github
+        content: |
+          [Allow_service_operations]
+          Identity=unix-group:servicemanagers
+          Action=org.freedesktop.systemd1.*
+          ResultAny=yes
+        dest:  /etc/polkit-1/localauthority/50-local.d/10-com.lubimovka.github.service.pkla
+    - name: Copy public key
+      copy:
+        owner: "{{ user.name }}"
+        content: "{{ user.ssh_public_key }}"
+        dest: "{{ user.home }}/.ssh/authorized_keys"
+    - name: Fetch private key
+      fetch:
+        src: "{{ user.ssh_key_file }}"
+        dest: key/
+        flat: true
+
+- name: Create folder for the website"
+  hosts: lubimovka
+  become: true
+  tasks:
+    - name: Create folder
+      file:
+        path: /LUBIMOVKA
+        owner: github
+        group: docker
+        mode: u=rwx,g=rx,o=rx
+        state: directory
+
+- name: Give github access to service folder
+  hosts: lubimovka
+  become: true
+  tasks:
+    - name: Install acl
+      apt:
+        name: acl
+        state: present
+    - name: Setup permissions
+      ansible.posix.acl:
+        path: /etc/systemd/system
+        entity: github
+        etype: user
+        permissions: rwx
+        state: present

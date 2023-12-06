@@ -56,7 +56,6 @@ THIRD_PARTY_APPS = [
     "anymail",
     "easy_thumbnails",
     "apps.filer.apps.FilerCustomConfig",
-    "mptt",
 ]
 LOCAL_APPS = [
     "apps.users",
@@ -293,10 +292,9 @@ ADMIN_SITE_MODELS_ORDER = {
         "Программы",
     ],
     "Афиша": [
-        "События",
+        "Афиша",
         "Спектакли",
-        "Мастер-классы",
-        "Читки",
+        "Специальные события",
         "Медиа отзывы на спектакль",
         "Отзывы зрителей на спектакль",
     ],
@@ -338,7 +336,8 @@ SPECTACULAR_SETTINGS = {
     "ENUM_NAME_OVERRIDES": {
         "event_type": "apps.afisha.models.events.Event.EventType",
         "partner_type": "apps.info.models.people.Partner.PartnerType",
-    }
+    },
+    'COMPONENT_SPLIT_REQUEST': True,
 }
 
 CSRF_FAILURE_VIEW = 'apps.core.views.csrf_failure'
@@ -372,6 +371,17 @@ SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 # DJANGO-FILER
 FILER_CANONICAL_URL = 'sharing/'
 FILER_ALLOW_REGULAR_USERS_TO_ADD_ROOT_FOLDERS = True
+FILER_STORAGES = {
+    'public': {
+        'main': {
+            'UPLOAD_TO': 'apps.filer.utils.folder_slug',
+        }
+    }
+}
 
 # Translations
 LOCALE_PATHS = [Path(STATIC_ROOT) / "core" / "locale", ]
+
+
+# APP SETTINGS
+AFISHA_REGISTRATION_OPENS_HOURS_BEFORE = 12

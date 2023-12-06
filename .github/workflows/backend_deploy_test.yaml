@@ -149,7 +149,7 @@ jobs:
 
             # Secrets variables for google sheets in Django:
             echo GOOGLE_PRIVATE_KEY_ID=${{ secrets.GOOGLE_PRIVATE_KEY_ID }} >> .env-test
-            echo GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }} >> .env-test
+            echo GOOGLE_PRIVATE_KEY=\"${{ secrets.GOOGLE_PRIVATE_KEY }}\" >> .env-test
 
             # Swag environment variables
             echo PUID=${{ secrets.PUID }} >> .env-test
@@ -161,26 +161,26 @@ jobs:
             echo YNDX_DISK_TOKEN=${{ secrets.YNDX_DISK_TOKEN }} >> .env-test
 
             # Уделение старых данных
-            systemctl stop lubimovka-frontend.service
-            systemctl stop lubimovka-backend.service
+            systemctl stop lubimovka-frontend-test.service
+            systemctl stop lubimovka-backend-test.service
             docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
             # Очистка неиспользуемых контейнеров, образов, сетей
-            docker system prune --force
+            # docker system prune --force
 
             # Создание сети вынесено отдельно для возможности независимо перезапускать контейнеры (через external networks)
             docker network create test_db_network || true
-            docker network create test_swag_network || true
+            docker network create test_nginx_network || true
 
             # Установка приложения - backend
-            cp -rf ${{ env.DEPLOY_PATH }}/test/lubimovka-backend.service /etc/systemd/system/lubimovka-backend.service
+            cp -rf ${{ env.DEPLOY_PATH }}/test/lubimovka-backend-test.service /etc/systemd/system/lubimovka-backend-test.service
             systemctl daemon-reload
-            systemctl restart lubimovka-backend.service
+            systemctl restart lubimovka-backend-test.service
 
             # Установка приложения - frontend
-            cp -rf ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend.service /etc/systemd/system/lubimovka-frontend.service
+            cp -rf ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend-test.service /etc/systemd/system/lubimovka-frontend-test.service
             systemctl daemon-reload
-            systemctl restart lubimovka-frontend.service
+            systemctl restart lubimovka-frontend-test.service
 
             # После установки удаляем файлы
-            rm ${{ env.DEPLOY_PATH }}/test/lubimovka-backend.service
-            rm ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend.service
+            rm ${{ env.DEPLOY_PATH }}/test/lubimovka-backend-test.service
+            rm ${{ env.DEPLOY_PATH }}/test/lubimovka-frontend-test.service

@@ -67,6 +67,7 @@ class ParticipationApplicationFestival(BaseModel):
     )
     file = models.FileField(
         validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PARTICIPATION),),
+        max_length=350,
         verbose_name="Файл",
         upload_to=generate_upload_path,
         help_text=f"Файл должен быть в одном из поддерживаемых форматов: " f"{ALLOWED_FORMATS_FILE_FOR_PARTICIPATION}",

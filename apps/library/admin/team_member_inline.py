@@ -1,7 +1,7 @@
 from adminsortable2.admin import SortableInlineAdminMixin
 from django.contrib import admin
 
-from apps.afisha.models import MasterClass, Performance, Reading
+from apps.afisha.models import Performance, Reading
 from apps.core.mixins import InlineReadOnlyMixin
 from apps.core.models import Role
 from apps.library.models import Play, TeamMember
@@ -24,7 +24,6 @@ class TeamMemberInline(SortableInlineAdminMixin, InlineReadOnlyMixin, admin.Tabu
         LIMIT_ROLES = {
             Performance: "performanse_role",
             Play: "play_role",
-            MasterClass: "master_class_role",
             Reading: "reading_role",
         }
         if db_field.name == "role":

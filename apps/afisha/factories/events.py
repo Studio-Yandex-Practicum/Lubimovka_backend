@@ -17,9 +17,8 @@ class EventFactory(factory.django.DjangoModelFactory):
     Parameters:
     1. `date_time_in_three_hours=True`: create event at random time but not
     more than 3 hours from now.
-    2. `masterclass=True`: bind event with random `master class`
-    3. `reading=True`: bind event with random `reading`
-    4. `performance=True`: bind event with random `performance`.
+    2. `custom=True`: bind event with random `custom` activity
+    3. `performance=True`: bind event with random `performance`.
     """
 
     class Meta:
@@ -33,14 +32,9 @@ class EventFactory(factory.django.DjangoModelFactory):
                 tzinfo=ZoneInfo(settings.TIME_ZONE),
             ),
         )
-        masterclass = factory.Trait(
+        custom = factory.Trait(
             common_event=factory.LazyFunction(
-                lambda: get_random_objects_by_queryset(CommonEvent.objects.exclude(masterclass__isnull=True))
-            ),
-        )
-        reading = factory.Trait(
-            common_event=factory.LazyFunction(
-                lambda: get_random_objects_by_queryset(CommonEvent.objects.exclude(reading__isnull=True))
+                lambda: get_random_objects_by_queryset(CommonEvent.objects.exclude(custom__isnull=True))
             ),
         )
         performance = factory.Trait(

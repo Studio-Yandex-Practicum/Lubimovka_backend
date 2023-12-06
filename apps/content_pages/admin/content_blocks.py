@@ -84,23 +84,6 @@ class ExtendedPersonInline(OrderedInline):
         return super().get_queryset(request).prefetch_related("roles").select_related("person")
 
 
-@admin.register(ExtendedPerson)
-class ExtendedPersonAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
-    list_display = (
-        "person",
-        "block",
-    )
-    list_filter = (
-        ("block", admin.RelatedOnlyFieldListFilter),
-        ("person", admin.RelatedOnlyFieldListFilter),
-    )
-    search_fields = (
-        "block",
-        "person",
-    )
-    inlines = (ContentPersonRoleInline,)
-
-
 @admin.register(ImagesBlock)
 class ImagesBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
     list_display = ("title",)
@@ -121,6 +104,12 @@ class PersonsBlockAdmin(HideOnNavPanelAdminModelMixin, admin.ModelAdmin):
         #  Used just as a hook to place function call
         choices_for_blog_person(update=True)
         return super().get_inline_instances(request, obj)
+
+    class Media:
+        js = (
+            "admin/js/jquery.init.js",
+            "js/select2_handler.js",
+        )
 
 
 @admin.register(PlaysBlock)

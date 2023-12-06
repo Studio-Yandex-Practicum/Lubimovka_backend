@@ -105,7 +105,7 @@ def test_blog_item_detail_plays_block_content_fields(client, complex_blog_item):
         "city",
         "year",
         "url_download",
-        "url_download_from",
+        "url_reading",
     )
 
     for order, field in enumerate(first_play):

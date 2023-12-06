@@ -2,6 +2,7 @@ from drf_spectacular.utils import extend_schema_field
 from rest_framework import serializers
 
 from apps.afisha.models import Event, Performance, PerformanceMediaReview, PerformanceReview
+from apps.core.fields import DomainPrependField
 from apps.core.models import Image
 from apps.library.serializers import PlaySerializer, RoleSerializer
 
@@ -19,14 +20,11 @@ class LocalEventSerializer(serializers.ModelSerializer):
 class BlockImagesSerializer(serializers.ModelSerializer):
     """Сериализатор блока изображений."""
 
-    block_images_description = serializers.CharField(source="performance.block_images_description")
+    url = DomainPrependField(source="image", slug_field="url", read_only=True)
 
     class Meta:
         model = Image
-        fields = (
-            "block_images_description",
-            "image",
-        )
+        fields = ("url",)
 
 
 class PerformanceSerializer(serializers.ModelSerializer):
@@ -34,7 +32,8 @@ class PerformanceSerializer(serializers.ModelSerializer):
 
     play = PlaySerializer()
     team = RoleSerializer(many=True)
-    images_in_block = BlockImagesSerializer(many=True)
+    gallery_title = serializers.CharField(source="block_images_description")
+    gallery_images = BlockImagesSerializer(many=True, source="images_in_block")
     events = LocalEventSerializer(source="events.body", many=True)
     duration = serializers.SerializerMethodField()
 
@@ -47,7 +46,6 @@ class PerformanceSerializer(serializers.ModelSerializer):
         exclude = (
             "created",
             "modified",
-            "project",
             "persons",
             "block_images_description",
         )
@@ -58,8 +56,7 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
     """Performance serializer for afisha page."""
 
     team = RoleSerializer(source="event_team", many=True)
-    image = serializers.ImageField(source="main_image")
-    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
+    image = serializers.ImageField(required=False, source="main_image")
 
     class Meta:
         model = Performance
@@ -69,7 +66,6 @@ class EventPerformanceSerializer(serializers.ModelSerializer):
             "description",
             "team",
             "image",
-            "project_title",
         )
 
 
@@ -81,7 +77,6 @@ class EventSerializer(serializers.Serializer):
     description = serializers.CharField(max_length=500)
     team = RoleSerializer(source="event_team", many=True)
     image = serializers.ImageField(source="main_image", allow_null=True, required=False)
-    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
 
 class PerformanceMediaReviewSerializer(serializers.ModelSerializer):

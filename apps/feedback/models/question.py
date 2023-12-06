@@ -5,6 +5,10 @@ from apps.core.models import BaseModel
 
 
 class Question(BaseModel):
+    created = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Создан",
+    )
     question = models.TextField(
         max_length=500,
         validators=[MinLengthValidator(2, "Вопрос должен состоять более чем из 2 символов")],

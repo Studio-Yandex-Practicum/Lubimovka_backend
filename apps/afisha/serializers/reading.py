@@ -8,14 +8,13 @@ class EventReadingSerializer(serializers.ModelSerializer):
     """Reading serializer for afisha page."""
 
     team = RoleSerializer(source="event_team", many=True)
-    project_title = serializers.SlugRelatedField(slug_field="title", read_only=True, source="project")
 
     class Meta:
         model = Reading
         fields = (
             "id",
+            "custom_type",
             "name",
             "description",
             "team",
-            "project_title",
         )

@@ -1,6 +1,9 @@
+from datetime import timedelta
 from typing import Any, Union
 
-from django.db.models import F, Q, QuerySet
+from django.conf import settings
+from django.db.models import DateTimeField, ExpressionWrapper, F, Q, QuerySet
+from django.db.models.functions import Now, TruncDay, TruncSecond
 from django.utils import timezone
 
 from apps.afisha.filters import AfishaEventsDateInFilter
@@ -47,16 +50,23 @@ def afisha_event_list_get(filters: dict[str, str] = None) -> QuerySet:
     filters = filters or {}
     afisha_events = (
         Event.objects.filter(date_time__gte=timezone.now())
+        .annotate(
+            opening_date_time=ExpressionWrapper(
+                TruncDay(
+                    "date_time",
+                )
+                - timedelta(hours=settings.AFISHA_REGISTRATION_OPENS_HOURS_BEFORE),
+                output_field=DateTimeField(),
+            )
+        )
+        # TruncDay functions produces DateTime without timezone when wrapped with ExpressionWrapper;
+        # to have Now without timezone as well, use TruncSecond here
+        .annotate(now=ExpressionWrapper(TruncSecond(Now()), output_field=DateTimeField()))
         .select_related(
-            "common_event__masterclass",
-            "common_event__reading",
+            "common_event__custom",
             "common_event__performance",
         )
-        .filter(
-            Q(common_event__reading__name__isnull=False)
-            | Q(common_event__masterclass__name__isnull=False)
-            | Q(common_event__performance__status=Status.PUBLISHED)
-        )
+        .filter(Q(common_event__custom__name__isnull=False) | Q(common_event__performance__status=Status.PUBLISHED))
         .order_by("date_time")
     )
     filtered_afisha_events = AfishaEventsDateInFilter(filters, afisha_events).qs

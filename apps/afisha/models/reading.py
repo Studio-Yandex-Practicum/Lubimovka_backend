@@ -1,20 +1,30 @@
 from django.db import models
 
 from apps.content_pages.utilities import path_by_app_label_and_class_name
+from apps.core.mixins import FileCleanUpMixin
 from apps.core.models import CORE_ROLES, BaseModel, Person
 from apps.library.utilities import get_team_roles
 
 
-class Reading(BaseModel):
-    play = models.ForeignKey(
-        "library.Play",
-        on_delete=models.PROTECT,
-        related_name="readings",
-        verbose_name="Пьеса",
-    )
+class Reading(FileCleanUpMixin, BaseModel):
+    cleanup_fields = ("main_image",)
     name = models.CharField(
         max_length=200,
         verbose_name="Название",
+    )
+    custom_type = models.CharField(
+        max_length=200,
+        null=False,
+        blank=False,
+        verbose_name="Описание вида события",
+    )
+    play = models.ForeignKey(
+        "library.Play",
+        null=True,
+        blank=True,
+        on_delete=models.PROTECT,
+        related_name="readings",
+        verbose_name="Пьеса",
     )
     description = models.TextField(
         max_length=500,
@@ -29,7 +39,7 @@ class Reading(BaseModel):
     events = models.OneToOneField(
         "afisha.CommonEvent",
         on_delete=models.PROTECT,
-        related_name="reading",
+        related_name="custom",
         verbose_name="События",
     )
     main_image = models.ImageField(
@@ -44,19 +54,11 @@ class Reading(BaseModel):
         blank=True,
         help_text="Описание, расположенное под изображением",
     )
-    project = models.ForeignKey(
-        "articles.Project",
-        null=True,
-        blank=True,
-        on_delete=models.SET_NULL,
-        related_name="readings",
-        verbose_name="Проект",
-    )
 
     class Meta:
         ordering = ("-created",)
-        verbose_name = "Читка"
-        verbose_name_plural = "Читки"
+        verbose_name = "специальное событие"
+        verbose_name_plural = "специальные события"
 
     def __str__(self):
         if len(self.name) >= 25:

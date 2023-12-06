@@ -1,9 +1,13 @@
+from collections.abc import Iterable
+
 from django.contrib import admin, messages
+from django.core import checks
+from django.db.models import FileField
 from django.http import HttpResponseRedirect
 from django.utils.html import format_html
 
 from apps.core.constants import STATUS_INFO, Status
-from apps.core.utils import get_object, get_user_change_perms_for_status, get_user_perms_level
+from apps.core.utils import get_domain, get_object, get_user_change_perms_for_status, get_user_perms_level
 
 
 class StatusButtonMixin:
@@ -147,3 +151,90 @@ class HideOnNavPanelAdminModelMixin:
 
     def has_module_permission(self, request):
         return False
+
+
+class GetDomainMixin:
+    """Serializer mixin to generate URLs with domain."""
+
+    def prepend_domain(self, url):
+        return get_domain(self.context["request"]) + str(url)
+
+
+class FileCleanUpMixin:
+    """Delete old image/file file when image/file is changed or deleted.
+
+    Add the mixin to the model class parents and setup the
+    `cleanup_fields` tuple as the model's attribute, containing a sequence of
+    the model's ImageField field names, for which you want to delete the
+    file after the field is altered.
+    """
+
+    @classmethod
+    def _check_field_tuple(cls):
+        fields = getattr(cls, "cleanup_fields", None)
+        if not fields:
+            return [
+                checks.Error(
+                    "cleanup_fields attribute is missing",
+                    hint="Add the cleanup_fields attribute to the model class or remove ImageCleanUpMixin",
+                    obj=cls,
+                )
+            ]
+        if isinstance(fields, str):
+            return [
+                checks.Error(
+                    "cleanup_fields attribute must not be a str instance",
+                    hint="It is recommended to assign cleanup_fields a tuple of field names",
+                    obj=cls,
+                )
+            ]
+        if not issubclass(type(fields), Iterable):
+            return [
+                checks.Error(
+                    "cleanup_fields attribute must be iterable",
+                    hint="It is recommended to assign cleanup_fields a tuple of field names",
+                    obj=cls,
+                )
+            ]
+        errors = []
+        for field in fields:
+            if not hasattr(cls, field):
+                errors.append(
+                    checks.Error(
+                        f"{field} is listed in the cleanup_fields, but not found in the model",
+                        hint="Check the field exists in the model",
+                        obj=cls,
+                    )
+                )
+                continue
+            if not issubclass(type(cls._meta.get_field(field)), FileField):
+                errors.append(
+                    checks.Error(
+                        f"{field} is not a FileField or an ImageField",
+                        hint="Remove the field from the cleanup_fields attribute",
+                        obj=cls,
+                    )
+                )
+        return errors
+
+    @classmethod
+    def check(cls, **kwargs):
+        errors = super().check(**kwargs)
+        errors.extend(cls._check_field_tuple())
+        return errors
+
+    def save(self, *args, **kwargs):
+        this = type(self).objects.filter(id=self.id).first()
+        if this:
+            for field in self.cleanup_fields:
+                attr = getattr(this, field)
+                if attr != getattr(self, field):
+                    attr.delete(save=False)
+
+        return super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        for file_field in (getattr(self, name) for name in self.cleanup_fields):
+            if file_field:
+                file_field.delete(save=False)
+        super().delete(*args, **kwargs)

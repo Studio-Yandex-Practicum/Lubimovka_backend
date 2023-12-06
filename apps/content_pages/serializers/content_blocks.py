@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.afisha.models import Event
-from apps.afisha.serializers import EventSerializer
+from apps.afisha.serializers import BaseEventSerializer, EventSerializer
 from apps.content_pages.models import EventsBlock, ImagesBlock, PersonsBlock, PlaysBlock, VideosBlock
 from apps.content_pages.serializers.content_items import (
     ExtendedPersonSerializer,
@@ -33,7 +33,8 @@ class EventInBlockSerializer(serializers.ModelSerializer):
 
 
 class EventsBlockSerializer(serializers.ModelSerializer):
-    items = EventInBlockSerializer(
+
+    items = BaseEventSerializer(
         many=True,
     )
 

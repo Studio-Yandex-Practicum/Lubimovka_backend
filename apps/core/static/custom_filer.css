@@ -1,2 +1,8 @@
-form {display: none;}
+div.field-name {display: none;}
+div.field-owner {display: none;}
+div.field-description {display: none;}
+div.field-author {display: none;}
+div.field-default_alt_text {display: none;}
+div.field-default_caption {display: none;}
+
 div.image-preview-circle {display: none;}
