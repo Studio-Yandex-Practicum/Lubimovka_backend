@@ -161,8 +161,8 @@ class AuthorAdmin(admin.ModelAdmin):
         "person",
         "quote",
         "slug",
-        "virtual_email",
         "plays_count",
+        "forwarding",
     )
     inlines = (
         PlayInline,
@@ -194,7 +194,7 @@ class AuthorAdmin(admin.ModelAdmin):
         return super().get_form(request, obj, change, **kwargs)
 
     def get_queryset(self, request):
-        queryset = super().get_queryset(request).select_related("person")
+        queryset = super().get_queryset(request).select_related("person").select_related("virtual_email")
         queryset = queryset.annotate(
             _plays_count=Count("plays", distinct=True),
         )
@@ -203,6 +203,10 @@ class AuthorAdmin(admin.ModelAdmin):
     @admin.display(description="Количество пьес")
     def plays_count(self, obj):
         return obj._plays_count
+
+    @admin.display(description="Почта", boolean=True)
+    def forwarding(self, obj):
+        return hasattr(obj, "virtual_email") and obj.virtual_email.enabled
 
     class Media:
         js = ("admin/author_admin.js",)
