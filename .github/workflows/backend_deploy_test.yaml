@@ -105,7 +105,7 @@ jobs:
         run: scp -r infra_deploy/test/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
       -
         name: Copy postfix setup
-        run: scp -r infra_deploy/postfix/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
+        run: scp -r infra_deploy/postfix/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}/test/
       -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -172,7 +172,7 @@ jobs:
             systemctl stop lubimovka-frontend-test.service
             systemctl stop lubimovka-backend-test.service
             docker compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
-            
+
             # Очистка неиспользуемых контейнеров, образов, сетей
             # docker system prune --force
 

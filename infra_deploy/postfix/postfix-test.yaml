@@ -6,7 +6,7 @@ services:
         - POSTFIX_HOSTNAME=$POSTFIX_HOSTNAME
         - DEBIAN_MAILNAME=$POSTFIX_MAIL_DOMAIN
     env_file:
-      - ../test/.env-test
+      - ../.env-test
     container_name: postfix
     ports:
       - 25:25
