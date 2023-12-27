@@ -105,6 +105,11 @@ jobs:
       -
         name: Deploy with scp
         run: scp -r infra_deploy/stage/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
+
+      -
+        name: Copy postfix setup
+        run: scp -r infra_deploy/postfix/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}/stage/
+
       -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
@@ -131,6 +136,11 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-stage
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-stage
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-stage
+
+            # Postfix settings
+            echo POSTFIX_DB_PASSWORD=${{ secrets.POSTFIX_DB_PASSWORD }} >> .env-stage
+            echo POSTFIX_HOSTNAME=${{ secrets.POSTFIX_HOSTNAME }} >> .env-stage
+            echo POSTFIX_MAIL_DOMAIN=${{ secrets.POSTFIX_MAIL_DOMAIN }} >> .env-stage
 
             # Django environment variables
             echo DEBUG=${{ secrets.DEBUG }} >> .env-stage
