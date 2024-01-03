@@ -9,7 +9,7 @@ from apps.postfix.models import Recipient, Virtual
 
 class RecipientsInline(admin.TabularInline):
     model = Recipient
-    extra = 1
+    extra = 0
 
     def get_readonly_fields(self, request: HttpRequest, obj: Virtual | None) -> list[str] | tuple[Any, ...]:
         fields = super().get_readonly_fields(request, obj)
