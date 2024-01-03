@@ -11,6 +11,10 @@ class RecipientsInline(admin.TabularInline):
     model = Recipient
     extra = 1
 
+    def get_readonly_fields(self, request: HttpRequest, obj: Virtual | None) -> list[str] | tuple[Any, ...]:
+        fields = super().get_readonly_fields(request, obj)
+        return tuple(fields) + (("email",) if obj and obj.author else ())
+
 
 @admin.register(Virtual)
 class VirtualAdmin(admin.ModelAdmin):
@@ -28,3 +32,7 @@ class VirtualAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         return super().get_queryset(request).prefetch_related("recipients").select_related("author")
+
+    def get_readonly_fields(self, request: HttpRequest, obj: Virtual | None) -> list[str] | tuple[Any, ...]:
+        fields = super().get_readonly_fields(request, obj)
+        return tuple(fields) + (("email",) if obj and obj.author else ())
