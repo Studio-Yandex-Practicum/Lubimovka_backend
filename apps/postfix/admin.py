@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Union
 
 from django.contrib import admin
 from django.db.models.query import QuerySet
@@ -11,7 +11,7 @@ class RecipientsInline(admin.TabularInline):
     model = Recipient
     extra = 0
 
-    def get_readonly_fields(self, request: HttpRequest, obj: Virtual | None) -> list[str] | tuple[Any, ...]:
+    def get_readonly_fields(self, request: HttpRequest, obj: Union[Virtual, None]) -> tuple[Any, ...]:
         fields = super().get_readonly_fields(request, obj)
         return tuple(fields) + (("email",) if obj and obj.author else ())
 
@@ -33,6 +33,6 @@ class VirtualAdmin(admin.ModelAdmin):
     def get_queryset(self, request: HttpRequest) -> QuerySet[Any]:
         return super().get_queryset(request).prefetch_related("recipients").select_related("author")
 
-    def get_readonly_fields(self, request: HttpRequest, obj: Virtual | None) -> list[str] | tuple[Any, ...]:
+    def get_readonly_fields(self, request: HttpRequest, obj: Union[Virtual, None]) -> tuple[Any, ...]:
         fields = super().get_readonly_fields(request, obj)
         return tuple(fields) + (("email",) if obj and obj.author else ())
