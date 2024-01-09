@@ -105,7 +105,7 @@ class Person(FileCleanUpMixin, BaseModel):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         # Сохранение связанного автора для обновления таблицы переадресации почты
-        if self.authors:
+        if hasattr(self, "authors"):
             self.authors.save()
 
     def __str__(self):
