@@ -190,7 +190,7 @@ class AuthorAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, change=False, **kwargs) -> Any:
         if request.user.has_perm("postfix.add_virtual") and request.user.has_perm("postfix.change_virtual"):
-            return AuthorAdminForm
+            kwargs["form"] = AuthorAdminForm
         return super().get_form(request, obj, change, **kwargs)
 
     def get_queryset(self, request):
