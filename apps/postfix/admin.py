@@ -6,6 +6,9 @@ from django.http.request import HttpRequest
 
 from apps.postfix.models import Recipient, Virtual
 
+ENABLE_SUMMARY = "Включена переадресация для {count} адресов"
+DISABLE_SUMMARY = "Отключена переадресация для {count} адресов"
+
 
 class RecipientsInline(admin.TabularInline):
     model = Recipient
@@ -22,6 +25,7 @@ class VirtualAdmin(admin.ModelAdmin):
     list_display_links = ("mailbox",)
     list_editable = ("enabled",)
     inlines = (RecipientsInline,)
+    actions = ("enable_selected", "disable_selected")
 
     search_fields = ("author__person__first_name", "author__person__last_name", "mailbox", "recipients__email")
     readonly_fields = ("author",)
@@ -36,3 +40,13 @@ class VirtualAdmin(admin.ModelAdmin):
     def get_readonly_fields(self, request: HttpRequest, obj: Union[Virtual, None]) -> tuple[Any, ...]:
         fields = super().get_readonly_fields(request, obj)
         return tuple(fields) + (("mailbox",) if obj and obj.author else ())
+
+    @admin.action(description="Включить переадресацию электронной почты")
+    def enable_selected(modeladmin, request, queryset):
+        queryset.update(enabled=True)
+        modeladmin.message_user(request, ENABLE_SUMMARY.format(count=len(queryset)))
+
+    @admin.action(description="Отключить переадресацию электронной почты")
+    def disable_selected(modeladmin, request, queryset):
+        queryset.update(enabled=False)
+        modeladmin.message_user(request, DISABLE_SUMMARY.format(count=len(queryset)))
