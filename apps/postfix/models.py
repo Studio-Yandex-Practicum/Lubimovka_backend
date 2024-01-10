@@ -15,10 +15,10 @@ class Virtual(BaseModel):
         null=True,
         blank=True,
     )
-    email = models.CharField(
+    mailbox = models.CharField(
         verbose_name="почтовый ящик",
         unique=True,
-        max_length=320,
+        max_length=64,
         help_text="имя почтового ящика до знака @",
         validators=(VirtualNameValidator(),),
     )
@@ -28,7 +28,7 @@ class Virtual(BaseModel):
         verbose_name_plural = "виртуальные адреса"
 
     def __str__(self):
-        return self.email
+        return self.mailbox
 
 
 class Recipient(BaseModel):

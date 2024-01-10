@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('modified', models.DateTimeField(auto_now=True)),
                 ('enabled', models.BooleanField(default=True, verbose_name='включено')),
-                ('email', models.CharField(help_text='имя почтового ящика до знака @', max_length=320, unique=True, validators=[apps.postfix.validators.VirtualNameValidator()], verbose_name='почтовый ящик')),
+                ('mailbox', models.CharField(help_text='имя почтового ящика до знака @', max_length=64, unique=True, validators=[apps.postfix.validators.VirtualNameValidator()], verbose_name='почтовый ящик')),
                 ('author', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='virtual_email', to='library.author', verbose_name='автор')),
             ],
             options={

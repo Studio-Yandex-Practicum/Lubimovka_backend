@@ -18,12 +18,12 @@ class RecipientsInline(admin.TabularInline):
 
 @admin.register(Virtual)
 class VirtualAdmin(admin.ModelAdmin):
-    list_display = ("enabled", "email", "author", "list_recipients")
-    list_display_links = ("email",)
+    list_display = ("enabled", "mailbox", "author", "list_recipients")
+    list_display_links = ("mailbox",)
     list_editable = ("enabled",)
     inlines = (RecipientsInline,)
 
-    search_fields = ("author__person__first_name", "author__person__last_name", "email", "recipients__email")
+    search_fields = ("author__person__first_name", "author__person__last_name", "mailbox", "recipients__email")
     readonly_fields = ("author",)
 
     @admin.display(description="получатели")
@@ -35,4 +35,4 @@ class VirtualAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request: HttpRequest, obj: Union[Virtual, None]) -> tuple[Any, ...]:
         fields = super().get_readonly_fields(request, obj)
-        return tuple(fields) + (("email",) if obj and obj.author else ())
+        return tuple(fields) + (("mailbox",) if obj and obj.author else ())

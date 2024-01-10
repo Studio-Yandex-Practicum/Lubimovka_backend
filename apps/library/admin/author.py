@@ -130,11 +130,11 @@ class AuthorAdminForm(forms.ModelForm):
         author = self.instance
 
         if hasattr(author, "virtual_email"):
-            author.virtual_email.email = self.cleaned_data.get("slug")
+            author.virtual_email.mailbox = self.cleaned_data.get("slug")
             author.virtual_email.enabled = self.cleaned_data.get("enable_email", False)
 
         if self.cleaned_data.get("enable_email", False) and not hasattr(author, "virtual_email"):
-            virtual = Virtual(author=author, email=self.cleaned_data.get("slug"))
+            virtual = Virtual(author=author, mailbox=self.cleaned_data.get("slug"))
             author.virtual_email = virtual
 
         return super().save(commit=commit)
@@ -148,10 +148,6 @@ class AuthorAdminForm(forms.ModelForm):
                 raise ValidationError(
                     "Нельзя включить перенаправление электронной почты так как у персоны не указан адрес"
                 )
-
-    class Meta:
-        model = Author
-        fields = "__all__"
 
 
 @admin.register(Author)
