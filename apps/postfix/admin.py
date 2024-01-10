@@ -18,6 +18,12 @@ class RecipientsInline(admin.TabularInline):
         fields = super().get_readonly_fields(request, obj)
         return tuple(fields) + (("email",) if obj and obj.author else ())
 
+    def has_add_permission(self, request: HttpRequest, obj: Virtual) -> bool:
+        return False if obj.author else super().has_add_permission(request, obj)
+
+    def has_delete_permission(self, request: HttpRequest, obj: Virtual) -> bool:
+        return False if obj.author else super().has_add_permission(request, obj)
+
 
 @admin.register(Virtual)
 class VirtualAdmin(admin.ModelAdmin):
