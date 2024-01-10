@@ -47,6 +47,8 @@ class Author(BaseModel):
     def save(self, *args, **kwargs):
         self.full_clean()
         super().save(*args, **kwargs)
+        # Если у автора включено перенаправление электронной почты,
+        # обновить данные в таблицах переадресации
         if self._has_person_before_saving() and hasattr(self, "virtual_email"):
             self.virtual_email.save()
             self.virtual_email.recipients.all().delete()
