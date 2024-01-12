@@ -1,6 +1,7 @@
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.http import HttpResponseRedirect
+from django.http.request import HttpRequest
 from django.urls import reverse
 from django.utils.html import format_html
 
@@ -107,6 +108,13 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
             person_authors = Person.objects.filter(authors__isnull=False)
             queryset = queryset.difference(person_authors).order_by("last_name", "first_name")
         return queryset, use_distinct
+
+    def get_readonly_fields(self, request: HttpRequest, person: Person) -> tuple[str]:
+        return tuple(super().get_readonly_fields(request, person)) + (
+            ("email",)
+            if not request.user.has_perm("postfix.change_virtual") and person and person.mail_forwarding_enabled
+            else ()
+        )
 
 
 @admin.register(Volunteer)

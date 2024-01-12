@@ -120,6 +120,12 @@ class Person(FileCleanUpMixin, BaseModel):
     def reversed_full_name(self):
         return f"{self.last_name} {self.first_name}".strip()
 
+    @property
+    def mail_forwarding_enabled(self):
+        if hasattr(self, "authors") and hasattr(self.authors, "virtual_email"):
+            return self.authors.virtual_email.enabled
+        return False
+
 
 class Role(BaseModel):
     """Role for `Person`.
