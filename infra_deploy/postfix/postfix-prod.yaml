@@ -6,7 +6,7 @@ services:
         - POSTFIX_HOSTNAME=$POSTFIX_HOSTNAME
         - DEBIAN_MAILNAME=$POSTFIX_MAIL_DOMAIN
     env_file:
-      - ../.env-test
+      - ../.env-prod
     container_name: postfix
     ports:
       - 25:25
@@ -20,6 +20,6 @@ services:
       driver: journald
     restart: unless-stopped
 networks:
-  test_db_network:
+  prod_db_network:
     name: prod_db_network
     external: true
