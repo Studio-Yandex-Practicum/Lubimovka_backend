@@ -20,6 +20,6 @@ services:
       driver: journald
     restart: unless-stopped
 networks:
-  test_db_network:
+  stage_db_network:
     name: stage_db_network
     external: true
