@@ -1,0 +1,25 @@
+services:
+  postfix:
+    build:
+      context: .
+      args:
+        - POSTFIX_HOSTNAME=$POSTFIX_HOSTNAME
+        - DEBIAN_MAILNAME=$POSTFIX_MAIL_DOMAIN
+    env_file:
+      - ../.env-test
+    container_name: postfix
+    ports:
+      - 25:25
+    volumes:
+      - ./mail:/var/spool/mail
+      - ./blacklist:/etc/postfix/blacklist
+      - ./whitelist:/etc/postfix/whitelist
+    networks:
+      - test_db_network
+    logging:
+      driver: journald
+    restart: unless-stopped
+networks:
+  test_db_network:
+    name: test_db_network
+    external: true

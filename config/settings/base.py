@@ -67,6 +67,7 @@ LOCAL_APPS = [
     "apps.info",
     "apps.content_pages",
     "apps.feedback",
+    "apps.postfix",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -385,3 +386,5 @@ LOCALE_PATHS = [Path(STATIC_ROOT) / "core" / "locale", ]
 
 # APP SETTINGS
 AFISHA_REGISTRATION_OPENS_HOURS_BEFORE = 12
+POSTFIX_MAIL_DOMAIN = os.environ.get("POSTFIX_MAIL_DOMAIN")
+POSTFIX_DB_PASSWORD = os.environ.get("POSTFIX_DB_PASSWORD")

@@ -104,6 +104,9 @@ jobs:
         name: Deploy with scp
         run: scp -r infra_deploy/test/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}
       -
+        name: Copy postfix setup
+        run: scp -r infra_deploy/postfix/ ${{ secrets.USERNAME }}@${{ secrets.HOST }}:${{ env.DEPLOY_PATH }}/test/
+      -
         name: executing remote ssh commands to deploy
         uses: appleboy/ssh-action@master
         with:
@@ -129,6 +132,11 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env-test
             echo POSTGRES_HOST=${{ secrets.POSTGRES_HOST }} >> .env-test
             echo POSTGRES_PORT=${{ secrets.POSTGRES_PORT }} >> .env-test
+
+            # Postfix settings
+            echo POSTFIX_DB_PASSWORD=${{ secrets.POSTFIX_DB_PASSWORD }} >> .env-test
+            echo POSTFIX_HOSTNAME=${{ secrets.POSTFIX_HOSTNAME }} >> .env-test
+            echo POSTFIX_MAIL_DOMAIN=${{ secrets.POSTFIX_MAIL_DOMAIN }} >> .env-test
 
             # Django environment variables
             echo DEBUG=${{ secrets.DEBUG }} >> .env-test
@@ -163,7 +171,8 @@ jobs:
             # Уделение старых данных
             systemctl stop lubimovka-frontend-test.service
             systemctl stop lubimovka-backend-test.service
-            docker-compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
+            docker compose -f lubimovka_backend_test_deploy.yml --env-file /LUBIMOVKA/test/.github_vars down -v
+
             # Очистка неиспользуемых контейнеров, образов, сетей
             # docker system prune --force
 
