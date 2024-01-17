@@ -12,12 +12,19 @@ services:
       - 25:25
     volumes:
       - ./mail:/var/spool/mail
-      - ./config:/etc/postfix
+      - config:/etc/postfix
     networks:
       - stage_db_network
     logging:
       driver: journald
     restart: unless-stopped
+volumes:
+  config:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./config
+      o: bind
 networks:
   stage_db_network:
     name: stage_db_network

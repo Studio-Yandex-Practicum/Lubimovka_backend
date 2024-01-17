@@ -12,12 +12,19 @@ services:
       - 25:25
     volumes:
       - ./mail:/var/spool/mail
-      - ./config:/etc/postfix
+      - config:/etc/postfix
     networks:
       - test_db_network
     logging:
       driver: journald
     restart: unless-stopped
+volumes:
+  config:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./config
+      o: bind
 networks:
   test_db_network:
     name: test_db_network
