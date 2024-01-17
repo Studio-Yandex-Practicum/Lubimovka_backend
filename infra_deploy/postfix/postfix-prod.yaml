@@ -12,8 +12,7 @@ services:
       - 25:25
     volumes:
       - ./mail:/var/spool/mail
-      - ./blacklist:/etc/postfix/blacklist
-      - ./whitelist:/etc/postfix/whitelist
+      - ./config:/etc/postfix
     networks:
       - prod_db_network
     logging:
