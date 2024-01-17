@@ -70,12 +70,6 @@ RUN postconf virtual_alias_maps=pgsql:/etc/postfix/pgsql-virtual.cf
 # Write hostname to helo restrictions
 RUN echo "${POSTFIX_HOSTNAME} REJECT Forged helo" > /etc/postfix/helo_access
 
-# Copy blacklist table to container
-COPY --chmod=644 blacklist /etc/postfix/blacklist
-
-# Copy whitelist table to container
-COPY --chmod=644 whitelist /etc/postfix/whitelist
-
 # Process helo access table
 RUN postmap /etc/postfix/helo_access
 
