@@ -8,6 +8,8 @@ from apps.feedback import services
 
 logger = logging.getLogger("django")
 
+NOT_UPLOADED = "Файл не был загружен в облако"
+
 
 class ParticipationApplicationExport:
     def yandex_disk_export(self, instance):
@@ -56,7 +58,7 @@ class ParticipationApplicationExport:
 
     def export_application(self, instance, file_link):
         """Функция, объединяющая экспорт на диск, в таблицу и отправку на почту."""
-        yandex_disk_link = self.yandex_disk_export(instance)
+        yandex_disk_link = self.yandex_disk_export(instance) if Setting.get_setting("yandex_upload") else NOT_UPLOADED
         if yandex_disk_link is not None:
             file_link = yandex_disk_link
         self.google_sheets_export(instance, file_link)
