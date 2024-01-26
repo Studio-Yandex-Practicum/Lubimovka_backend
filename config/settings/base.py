@@ -387,9 +387,9 @@ LOCALE_PATHS = [Path(STATIC_ROOT) / "core" / "locale", ]
 
 # Private storage settings
 PRIVATE_STORAGE_ROOT = ROOT_DIR / "protected_media"
-PRIVATE_STORAGE_AUTH_FUNCTION = 'private_storage.permissions.allow_staff'
-PRIVATE_STORAGE_SERVER = 'nginx'
-PRIVATE_STORAGE_INTERNAL_URL = '/private-redirect/'
+PRIVATE_STORAGE_AUTH_FUNCTION = "private_storage.permissions.allow_staff"
+PRIVATE_STORAGE_SERVER = "nginx"
+PRIVATE_STORAGE_INTERNAL_URL = "/private-redirect/"
 
 # APP SETTINGS
 AFISHA_REGISTRATION_OPENS_HOURS_BEFORE = 12
