@@ -2,9 +2,24 @@
 
 import apps.content_pages.utilities
 import django.core.validators
+from django.conf import settings
 from django.db import migrations
 import private_storage.fields
 import private_storage.storage.files
+from shutil import copytree, move
+
+REGULAR_MEDIA = settings.MEDIA_ROOT / "plays"
+PROTECTED_MEDIA = settings.PRIVATE_STORAGE_ROOT / "plays"
+
+
+def move_to_protected_media(apps, schema_editor):
+    if REGULAR_MEDIA.exists():
+        copytree(REGULAR_MEDIA, PROTECTED_MEDIA, copy_function=move, dirs_exist_ok=True)
+
+
+def move_from_protected_media(apps, schema_editor):
+    if PROTECTED_MEDIA.exists():
+        copytree(PROTECTED_MEDIA, REGULAR_MEDIA, copy_function=move, dirs_exist_ok=True)
 
 
 class Migration(migrations.Migration):
@@ -19,4 +34,5 @@ class Migration(migrations.Migration):
             name='url_download',
             field=private_storage.fields.PrivateFileField(blank=True, help_text="Файл пьесы должен быть в одном из следующих форматов: ('doc', 'docx', 'txt', 'odt', 'pdf')", max_length=200, null=True, storage=private_storage.storage.files.PrivateFileSystemStorage(), upload_to=apps.content_pages.utilities.path_by_media_and_class_name, validators=[django.core.validators.FileExtensionValidator(('doc', 'docx', 'txt', 'odt', 'pdf'))], verbose_name='Текст пьесы'),
         ),
+        migrations.RunPython(move_to_protected_media, move_from_protected_media),
     ]
