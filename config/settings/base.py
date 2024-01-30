@@ -387,7 +387,7 @@ LOCALE_PATHS = [Path(STATIC_ROOT) / "core" / "locale", ]
 
 # Private storage settings
 PRIVATE_STORAGE_ROOT = ROOT_DIR / "protected_media"
-PRIVATE_STORAGE_AUTH_FUNCTION = "private_storage.permissions.allow_staff"
+PRIVATE_STORAGE_AUTH_FUNCTION = "apps.core.services.file_access.has_download_permission"
 PRIVATE_STORAGE_SERVER = "nginx"
 PRIVATE_STORAGE_INTERNAL_URL = "/private-redirect/"
 
