@@ -20,6 +20,7 @@ services:
     volumes:
       - static_value_test:/code/staticfiles/
       - ./media:/code/media/
+      - ./protected_media:/code/protected_media/
       - ./logs/backend_logs/:/code/logs/
     depends_on:
       - postgres
