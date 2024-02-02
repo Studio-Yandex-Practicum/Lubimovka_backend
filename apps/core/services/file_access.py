@@ -13,5 +13,4 @@ def has_download_permission(private_file: PrivateFile) -> bool:
         return True
 
     relative_path = Path(private_file.full_path).relative_to(settings.PRIVATE_STORAGE_ROOT)
-    print("!--Relative path:", relative_path)
     return Play.objects.filter(url_download=relative_path, published=True).exists()
