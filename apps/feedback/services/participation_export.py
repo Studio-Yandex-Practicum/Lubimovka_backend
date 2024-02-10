@@ -8,18 +8,22 @@ from apps.feedback import services
 
 logger = logging.getLogger("django")
 
-NOT_UPLOADED = "Файл не был загружен в облако"
-
 
 class ParticipationApplicationExport:
     def yandex_disk_export(self, instance):
-        download_link_in_yandex_disk = services.yandex_disk_export(instance)
+        download_link_in_yandex_disk = (
+            services.yandex_disk_export(instance) if Setting.get_setting("yandex_upload") else None
+        )
         if download_link_in_yandex_disk:
             instance.url_file_in_storage = download_link_in_yandex_disk
             instance.saved_to_storage = True
+            instance.save()
+        return download_link_in_yandex_disk
+
+    def manage_local_file(self, instance):
+        if instance.saved_to_storage:
             instance.file.delete()
             instance.save()
-            return download_link_in_yandex_disk
 
     def google_sheets_export(self, instance, file_link):
         gs = services.GoogleSpreadsheets()
@@ -50,16 +54,18 @@ class ParticipationApplicationExport:
             "email": instance.email,
             "title": instance.title,
             "file_link": file_link,
+            "file_path": instance.file.path,
         }
-        send_email_success = send_email(from_email, to_emails, template_id, context)
+        send_email_success = send_email(from_email, to_emails, template_id, context, attach_file=True)
         if send_email_success:
             instance.sent_to_email = True
             instance.save()
 
     def export_application(self, instance, file_link):
         """Функция, объединяющая экспорт на диск, в таблицу и отправку на почту."""
-        yandex_disk_link = self.yandex_disk_export(instance) if Setting.get_setting("yandex_upload") else NOT_UPLOADED
+        yandex_disk_link = self.yandex_disk_export(instance)
         if yandex_disk_link is not None:
             file_link = yandex_disk_link
         self.google_sheets_export(instance, file_link)
         self.mail_send_export(instance, file_link)
+        self.manage_local_file(instance)
