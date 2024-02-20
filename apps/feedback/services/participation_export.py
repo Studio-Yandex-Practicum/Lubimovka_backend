@@ -11,6 +11,7 @@ logger = logging.getLogger("django")
 
 class ParticipationApplicationExport:
     def _yandex_disk_export(self, instance):
+        """Загрузка файла пьесы на Яндекс.Диск."""
         download_link_in_yandex_disk = (
             services.yandex_disk_export(instance) if Setting.get_setting("yandex_upload") else None
         )
@@ -21,11 +22,13 @@ class ParticipationApplicationExport:
         return download_link_in_yandex_disk
 
     def _manage_local_file(self, instance):
+        """Удаление файла на сервере, если его копия есть в облаке."""
         if instance.saved_to_storage:
             instance.file.delete()
             instance.save()
 
     def _google_sheets_export(self, instance, file_link):
+        """Занесение сведений о заявке на участие в Google-таблицу."""
         gs = services.GoogleSpreadsheets()
         export_to_google_sheets_success = gs.export(instance, file_link)
         if export_to_google_sheets_success:
@@ -33,6 +36,7 @@ class ParticipationApplicationExport:
             instance.save()
 
     def _get_email_settings(self):
+        """Получение настроек, необходимых для отправки почтового уведомления."""
         settings_keys = (
             "email_send_from",
             "submit_play_email",
@@ -40,6 +44,7 @@ class ParticipationApplicationExport:
         return Setting.get_settings(settings_keys=settings_keys)
 
     def _mail_send_export(self, instance, file_link):
+        """Отправка почтового уведомления о новой заявке на участие."""
         email_settings = self._get_email_settings()
         from_email = email_settings.get("email_send_from")
         to_emails = (email_settings.get("submit_play_email"),)
