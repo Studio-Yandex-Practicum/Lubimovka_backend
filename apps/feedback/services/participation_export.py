@@ -10,7 +10,7 @@ logger = logging.getLogger("django")
 
 
 class ParticipationApplicationExport:
-    def yandex_disk_export(self, instance):
+    def _yandex_disk_export(self, instance):
         download_link_in_yandex_disk = (
             services.yandex_disk_export(instance) if Setting.get_setting("yandex_upload") else None
         )
@@ -20,27 +20,27 @@ class ParticipationApplicationExport:
             instance.save()
         return download_link_in_yandex_disk
 
-    def manage_local_file(self, instance):
+    def _manage_local_file(self, instance):
         if instance.saved_to_storage:
             instance.file.delete()
             instance.save()
 
-    def google_sheets_export(self, instance, file_link):
+    def _google_sheets_export(self, instance, file_link):
         gs = services.GoogleSpreadsheets()
         export_to_google_sheets_success = gs.export(instance, file_link)
         if export_to_google_sheets_success:
             instance.exported_to_google = True
             instance.save()
 
-    def get_email_settings(self):
+    def _get_email_settings(self):
         settings_keys = (
             "email_send_from",
             "submit_play_email",
         )
         return Setting.get_settings(settings_keys=settings_keys)
 
-    def mail_send_export(self, instance, file_link):
-        email_settings = self.get_email_settings()
+    def _mail_send_export(self, instance, file_link):
+        email_settings = self._get_email_settings()
         from_email = email_settings.get("email_send_from")
         to_emails = (email_settings.get("submit_play_email"),)
         template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
@@ -63,9 +63,9 @@ class ParticipationApplicationExport:
 
     def export_application(self, instance, file_link):
         """Функция, объединяющая экспорт на диск, в таблицу и отправку на почту."""
-        yandex_disk_link = self.yandex_disk_export(instance)
+        yandex_disk_link = self._yandex_disk_export(instance)
         if yandex_disk_link is not None:
             file_link = yandex_disk_link
-        self.google_sheets_export(instance, file_link)
-        self.mail_send_export(instance, file_link)
-        self.manage_local_file(instance)
+        self._google_sheets_export(instance, file_link)
+        self._mail_send_export(instance, file_link)
+        self._manage_local_file(instance)
