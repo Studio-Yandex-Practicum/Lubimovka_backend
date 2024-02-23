@@ -131,6 +131,7 @@ dmypy.json
 # Media and Static Django
 /media
 /staticfiles
+/protected_media
 
 # Logs Django
 /logs
