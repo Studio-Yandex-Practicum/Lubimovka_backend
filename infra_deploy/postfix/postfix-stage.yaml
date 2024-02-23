@@ -1,0 +1,31 @@
+services:
+  postfix:
+    build:
+      context: .
+      args:
+        - POSTFIX_HOSTNAME=$POSTFIX_HOSTNAME
+        - DEBIAN_MAILNAME=$POSTFIX_MAIL_DOMAIN
+    env_file:
+      - ../.env-stage
+    container_name: postfix
+    ports:
+      - 25:25
+    volumes:
+      - ./mail:/var/spool/mail
+      - config:/etc/postfix
+    networks:
+      - stage_db_network
+    logging:
+      driver: journald
+    restart: unless-stopped
+volumes:
+  config:
+    driver: local
+    driver_opts:
+      type: none
+      device: ./config
+      o: bind
+networks:
+  stage_db_network:
+    name: stage_db_network
+    external: true

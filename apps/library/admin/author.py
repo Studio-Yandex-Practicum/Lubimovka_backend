@@ -1,11 +1,16 @@
+from typing import Any
+
 from adminsortable2.admin import SortableInlineAdminMixin
+from django import forms
 from django.contrib import admin
 from django.contrib.postgres.aggregates import StringAgg
 from django.db.models import Count
 from django.forms import ModelForm, ValidationError
+from django.forms.fields import Field
 
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
+from apps.postfix.models import Virtual
 
 
 class PlayInlineForm(ModelForm):
@@ -111,13 +116,49 @@ class OtherLinkInline(SortableInlineAdminMixin, admin.TabularInline):
     classes = ("collapsible",)
 
 
+class AuthorAdminForm(forms.ModelForm):
+    enable_email = forms.BooleanField(required=False, initial=False, label="Включить переадресацию почты")
+
+    def get_initial_for_field(self, field: Field, field_name: str) -> Any:
+        if self.instance.pk and field is self.fields["enable_email"]:
+            if hasattr(self.instance, "virtual_email"):
+                return self.instance.virtual_email.enabled
+            return False
+        return super().get_initial_for_field(field, field_name)
+
+    def save(self, commit: bool = True) -> Any:
+        author = self.instance
+
+        if hasattr(author, "virtual_email"):
+            author.virtual_email.mailbox = self.cleaned_data.get("slug")
+            author.virtual_email.enabled = self.cleaned_data.get("enable_email", False)
+
+        if self.cleaned_data.get("enable_email", False) and not hasattr(author, "virtual_email"):
+            virtual = Virtual(author=author, mailbox=self.cleaned_data.get("slug"))
+            author.virtual_email = virtual
+
+        return super().save(commit=commit)
+
+    def clean(self):
+        cleaned_data = super().clean()
+        enable_email = cleaned_data.get("enable_email")
+        person = cleaned_data.get("person")
+        if enable_email and person:
+            if not person.email:
+                raise ValidationError(
+                    "Нельзя включить перенаправление электронной почты так как у персоны не указан адрес"
+                )
+
+
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):
+    # form = AuthorAdminForm
     list_display = (
         "person",
         "quote",
         "slug",
         "plays_count",
+        "forwarding",
     )
     inlines = (
         PlayInline,
@@ -143,8 +184,13 @@ class AuthorAdmin(admin.ModelAdmin):
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
 
+    def get_form(self, request, obj=None, change=False, **kwargs) -> Any:
+        if request.user.has_perm("postfix.add_virtual") and request.user.has_perm("postfix.change_virtual"):
+            kwargs["form"] = AuthorAdminForm
+        return super().get_form(request, obj, change, **kwargs)
+
     def get_queryset(self, request):
-        queryset = super().get_queryset(request).select_related("person")
+        queryset = super().get_queryset(request).select_related("person").select_related("virtual_email")
         queryset = queryset.annotate(
             _plays_count=Count("plays", distinct=True),
         )
@@ -153,6 +199,10 @@ class AuthorAdmin(admin.ModelAdmin):
     @admin.display(description="Количество пьес")
     def plays_count(self, obj):
         return obj._plays_count
+
+    @admin.display(description="Почта", boolean=True)
+    def forwarding(self, obj):
+        return hasattr(obj, "virtual_email") and obj.virtual_email.enabled
 
     class Media:
         js = ("admin/author_admin.js",)

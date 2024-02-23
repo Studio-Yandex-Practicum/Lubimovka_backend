@@ -30,7 +30,7 @@ class Author(BaseModel):
         through="AuthorPlay",
     )
     slug = models.SlugField(
-        "Транслит фамилии для формирования адресной строки",
+        "Транслит фамилии для формирования адресной строки и e-mail",
         unique=True,
         help_text="Формируется автоматически, может быть изменен вручную",
         error_messages={"unique": "Такой транслит уже используется, введите иной"},
@@ -46,7 +46,13 @@ class Author(BaseModel):
 
     def save(self, *args, **kwargs):
         self.full_clean()
-        return super().save(*args, **kwargs)
+        super().save(*args, **kwargs)
+        # Если у автора включено перенаправление электронной почты,
+        # обновить данные в таблицах переадресации
+        if self._has_person_before_saving() and hasattr(self, "virtual_email"):
+            self.virtual_email.save()
+            self.virtual_email.recipients.all().delete()
+            self.virtual_email.recipients.create(email=self.person.email)
 
     def _has_person_before_saving(self):
         return self.person_id is not None

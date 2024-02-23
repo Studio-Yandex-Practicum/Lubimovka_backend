@@ -102,8 +102,13 @@ class Festival(FileCleanUpMixin, BaseModel):
         max_length=200,
         verbose_name="Описание фестиваля",
     )
+
+    # https://docs.djangoproject.com/en/3.2/ref/models/fields/#default
+    def current_year():
+        return timezone.now().year
+
     year = models.PositiveSmallIntegerField(
-        default=timezone.now().year,
+        default=current_year,
         validators=[MinValueValidator(1990), MaxValueValidator(2500)],
         unique=True,
         verbose_name="Год фестиваля",
