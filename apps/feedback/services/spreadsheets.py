@@ -54,6 +54,7 @@ class GoogleSpreadsheets:
                     instance.year,
                     instance.title,
                     file_link,
+                    instance.pseudonym,
                 ]
             ]
         }
@@ -82,7 +83,7 @@ class GoogleSpreadsheets:
                             "startRowIndex": 0,
                             "endRowIndex": 1000,
                             "startColumnIndex": 0,
-                            "endColumnIndex": 10,
+                            "endColumnIndex": 11,
                         },
                         "bottom": {
                             "style": "SOLID",
@@ -147,7 +148,7 @@ class GoogleSpreadsheets:
                             "sheetId": sheet_id,
                             "dimension": "COLUMNS",
                             "startIndex": 0,
-                            "endIndex": 10,
+                            "endIndex": 11,
                         }
                     }
                 }
@@ -176,6 +177,7 @@ class GoogleSpreadsheets:
                             "Год написания",
                             "Название",
                             "Ссылка на файл",
+                            "Псевдоним",
                         ]
                     ],
                 }
