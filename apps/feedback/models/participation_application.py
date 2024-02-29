@@ -41,6 +41,12 @@ class ParticipationApplicationFestival(BaseModel):
         max_length=50,
         verbose_name="Фамилия",
     )
+    pseudonym = models.CharField(
+        max_length=30,
+        verbose_name="Псевдоним",
+        null=True,
+        blank=True,
+    )
     birth_year = models.PositiveSmallIntegerField(
         validators=(year_validator,),
         verbose_name="Год рождения",
