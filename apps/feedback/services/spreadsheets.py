@@ -54,7 +54,7 @@ class GoogleSpreadsheets:
                     instance.year,
                     instance.title,
                     file_link,
-                    instance.pseudonym,
+                    instance.nickname,
                 ]
             ]
         }
