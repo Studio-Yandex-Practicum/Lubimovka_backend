@@ -25,6 +25,13 @@ class Project(FileCleanUpMixin, AbstractContentPage):
         db_index=True,
     )
 
+    description_caption = models.CharField(
+        max_length=80,
+        verbose_name="Заголовок описания",
+        blank=True,
+        null=True,
+    )
+
     def __str__(self):
         return f"Проект {self.title}"
 
