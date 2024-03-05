@@ -28,6 +28,7 @@ class Project(FileCleanUpMixin, AbstractContentPage):
     description_caption = models.CharField(
         max_length=80,
         verbose_name="Заголовок описания",
+        default="О проекте",
         blank=True,
         null=True,
     )

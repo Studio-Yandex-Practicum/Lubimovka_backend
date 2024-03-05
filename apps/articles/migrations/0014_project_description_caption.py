@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='project',
             name='description_caption',
-            field=models.CharField(blank=True, max_length=80, null=True, verbose_name='Заголовок описания'),
+            field=models.CharField(blank=True, default='О проекте', max_length=80, null=True, verbose_name='Заголовок описания'),
         ),
     ]
