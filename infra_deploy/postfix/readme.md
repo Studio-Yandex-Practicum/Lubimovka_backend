@@ -66,13 +66,21 @@ Postfix обращается непосредственно к базе данн
 Сервер запускается одной из команд
 
 ```bash
-sudo docker compose -f postfix-test.yaml --env-file ../.env-test up
+sudo docker compose -f postfix-test.yaml --env-file ../.env-test up --build
 ```
 ```bash
-sudo docker compose -f postfix-stage.yaml --env-file ../.env-stage up
+sudo docker compose -f postfix-stage.yaml --env-file ../.env-stage up --build
 ```
 ```bash
-sudo docker-compose -f postfix-prod.yaml --env-file ../.env-prod up
+sudo docker-compose -f postfix-prod.yaml --env-file ../.env-prod up --build
 ```
 
 Файл с переменными `.env-...` указывается в командной строке, чтобы значения переменных из него были доступны внутри `compose`-файла.
+Раздел `env_file` в `compose`-файле делает значения этих же переменных доступными внутри контейнера.
+Ключ `--build` можно опустить, если `Dockerfile` не менялся.
+
+## Локальный сервер DNS
+
+Если в конфигурации `Postfix` используется бесплатный сервис проверки сервера отправителя `spamhaus.org`, нельзя использовать публичные сервера DNS, например, 8.8.8.8, принадлежащие Google, так как запрос по системе DNSBL придет от имени этого публичного DNS и с высокой вероятностью будет заблокирован. Для решения этой проблемы можно установить локальный сервер DNS, например, `Unbound`.
+
+Проверить текущие настройки DNS на сервере можно путём изучения содержимого файла `/etc/resolv.conf`.

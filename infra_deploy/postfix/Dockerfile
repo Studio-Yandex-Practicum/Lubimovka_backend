@@ -33,7 +33,7 @@ RUN postconf policyd-spf_time_limit=3600
 RUN postconf -e "smtpd_helo_required=yes"
 RUN postconf -e "smtpd_helo_restrictions=reject_non_fqdn_helo_hostname, reject_invalid_helo_hostname, permit_mynetworks, check_helo_access hash:/etc/postfix/helo_access"
 RUN postconf -e "smtpd_sender_restrictions=reject_non_fqdn_sender, reject_unknown_sender_domain"
-RUN postconf -e "smtpd_recipient_restrictions=reject_unauth_pipelining, reject_non_fqdn_recipient, reject_unknown_recipient_domain, permit_mynetworks, reject_unauth_destination, check_sender_access hash:/etc/postfix/whitelist, check_client_access hash:/etc/postfix/blacklist, reject_rbl_client b.barracudacentral.org, check_policy_service unix:private/policyd-spf"
+RUN postconf -e "smtpd_recipient_restrictions=reject_unauth_pipelining, reject_non_fqdn_recipient, reject_unknown_recipient_domain, permit_mynetworks, reject_unauth_destination, check_sender_access hash:/etc/postfix/whitelist, check_client_access hash:/etc/postfix/blacklist, reject_rbl_client b.barracudacentral.org, reject_rbl_client zen.spamhaus.org=127.0.0.[2..11], reject_rhsbl_sender dbl.spamhaus.org=127.0.1.[2..99], reject_rhsbl_helo dbl.spamhaus.org=127.0.1.[2..99], reject_rhsbl_reverse_client dbl.spamhaus.org=127.0.1.[2..99], warn_if_reject reject_rbl_client zen.spamhaus.org=127.255.255.[1..255], check_policy_service unix:private/policyd-spf"
 RUN postconf -e "smtpd_relay_restrictions=reject_unknown_client_hostname reject_unauth_destination"
 
 # Limit message rate
