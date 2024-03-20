@@ -1,4 +1,4 @@
-from django.core.validators import FileExtensionValidator
+from django.core.validators import FileExtensionValidator, MinLengthValidator
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -40,6 +40,13 @@ class ParticipationApplicationFestival(BaseModel):
     last_name = models.CharField(
         max_length=50,
         verbose_name="Фамилия",
+    )
+    nickname = models.CharField(
+        max_length=30,
+        verbose_name="Псевдоним",
+        null=True,
+        blank=True,
+        validators=[MinLengthValidator(3)],
     )
     birth_year = models.PositiveSmallIntegerField(
         validators=(year_validator,),
