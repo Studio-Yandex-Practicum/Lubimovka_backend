@@ -1,6 +1,6 @@
-sed -i "/dbname = database/c\\dbname = $POSTGRES_DB" /etc/postfix/pgsql-virtual.cf
-sed -i "/password = password/c\\password = $POSTFIX_DB_PASSWORD" /etc/postfix/pgsql-virtual.cf
-sed -i "/MY_DOMAIN=domain/c\\MY_DOMAIN=$POSTFIX_MAIL_DOMAIN" /home/filter/filter.sh
+sed -i "s/^dbname = .*$/dbname = $POSTGRES_DB/g" /etc/postfix/pgsql-virtual.cf
+sed -i "s/^password = .*$/password = $POSTFIX_DB_PASSWORD/g" /etc/postfix/pgsql-virtual.cf
+sed -i "s/^MY_DOMAIN=.*$/MY_DOMAIN=$POSTFIX_MAIL_DOMAIN/g" /home/filter/filter.sh
 
 touch /etc/postfix/blacklist
 touch /etc/postfix/whitelist

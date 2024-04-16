@@ -11,6 +11,7 @@ class ProjectSerializer(BaseContentPageSerializer, serializers.ModelSerializer):
             "id",
             "title",
             "intro",
+            "description_caption",
             "description",
             "image",
             "contents",
