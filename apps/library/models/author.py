@@ -116,6 +116,8 @@ class SocialNetworkLink(BaseModel):
         YOUTUBE = "ytube", _("YouTube")
         TELEGRAM = "tlgrm", _("Telegram")
         VKONTAKTE = "vk", _("Вконтакте")
+        WIKIPEDIA = "wiki", _("Википедия")
+        WEBSITE = "web", _("Вебсайт")
 
     author = models.ForeignKey(
         Author,
