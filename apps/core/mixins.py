@@ -104,7 +104,7 @@ class PreviewButtonMixin:
         if extra_context is None:
             extra_context = {}
         preview_button_context = {}
-        if not hasattr(self.model, "is_published") or self.model.objects.is_published(object_id):
+        if not hasattr(self.model.objects, "is_published") or self.model.objects.is_published(object_id):
             preview_button_context["button_name"] = "Просмотр страницы"
             preview_button_context["link"] = link
         # FIXME: Ждем когда функционал для предпросмотра будет готов на фронтенде
