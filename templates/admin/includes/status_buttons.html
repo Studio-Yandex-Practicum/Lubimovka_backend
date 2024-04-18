@@ -1,6 +1,6 @@
 {% load i18n %}
-{% if original.status %}
 <div class="submit-row">
+{% if original.status %}
     <strong> текущий статус: {{ original.get_status_display }} </strong>
     {% if user_level >= level_to_change %}
         {% for status, params in possible_statuses.items %}
@@ -9,9 +9,9 @@
             {% endif %}
         {% endfor %}
     {% endif%}
-    <!-- Прячем кнопку если статья не опубликована. Ждем когда предпросмотр будет реализован на фронтенде -->
-    {% if preview_button_context %}
-        {% include "admin/includes/preview_unpublished_button.html" %}
-    {% endif %}
-</div>
 {% endif %}
+<!-- Прячем кнопку если статья не опубликована. Ждем когда предпросмотр будет реализован на фронтенде -->
+{% if preview_button_context %}
+    {% include "admin/includes/preview_unpublished_button.html" %}
+{% endif %}
+</div>
