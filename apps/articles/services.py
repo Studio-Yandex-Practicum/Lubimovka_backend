@@ -44,12 +44,12 @@ def duplicate_image(image: ImageFieldFile):
 
 @overload
 def content_block_copy(block: AbstractItemWithTitle) -> AbstractItemWithTitle:
-    ...
+    pass
 
 
 @overload
 def content_block_copy(block: ContentUnitRichText) -> ContentUnitRichText:
-    ...
+    pass
 
 
 def content_block_copy(

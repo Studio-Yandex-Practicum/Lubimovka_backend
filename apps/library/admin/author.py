@@ -8,6 +8,7 @@ from django.db.models import Count
 from django.forms import ModelForm, ValidationError
 from django.forms.fields import Field
 
+from apps.core.mixins import PreviewButtonMixin
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 from apps.postfix.models import Virtual
@@ -151,7 +152,7 @@ class AuthorAdminForm(forms.ModelForm):
 
 
 @admin.register(Author)
-class AuthorAdmin(admin.ModelAdmin):
+class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
     # form = AuthorAdminForm
     list_display = (
         "person",
