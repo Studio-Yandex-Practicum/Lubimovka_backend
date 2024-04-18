@@ -62,6 +62,7 @@ cryptography = "^42.0.5"
 sqlparse = "^0.5.0"
 easy-thumbnails = "^2.8.5"
 idna = "^3.7"
+black = "^24.4.0"
 
 [tool.poetry.dev-dependencies]
 pre-commit = "^2.15.0"
