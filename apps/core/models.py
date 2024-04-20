@@ -80,6 +80,7 @@ class Person(FileCleanUpMixin, BaseModel):
         max_length=200,
         validators=(email_validator,),
         verbose_name="Электронная почта",
+        help_text="Необходим, если для связанного автора создан виртуальный адрес",
         null=True,
         blank=True,
         unique=True,
@@ -125,6 +126,10 @@ class Person(FileCleanUpMixin, BaseModel):
         if hasattr(self, "authors") and hasattr(self.authors, "virtual_email"):
             return self.authors.virtual_email.enabled
         return False
+
+    @property
+    def mail_forwarding_created(self):
+        return hasattr(self, "authors") and hasattr(self.authors, "virtual_email")
 
 
 class Role(BaseModel):

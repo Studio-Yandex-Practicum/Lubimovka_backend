@@ -1,3 +1,5 @@
+from typing import Any
+
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
 from django.http import HttpResponseRedirect
@@ -115,6 +117,12 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
             if not request.user.has_perm("postfix.change_virtual") and person and person.mail_forwarding_enabled
             else ()
         )
+
+    def get_form(self, request: Any, obj: Person | None = ..., change: bool = ..., **kwargs: Any) -> Any:
+        form = super().get_form(request, obj, change, **kwargs)
+        if change and obj and obj.mail_forwarding_created:
+            form.base_fields["email"].required = True
+        return form
 
 
 @admin.register(Volunteer)
