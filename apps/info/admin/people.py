@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 from adminsortable2.admin import SortableAdminMixin
 from django.contrib import admin
@@ -118,7 +118,7 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
             else ()
         )
 
-    def get_form(self, request: Any, obj: Person | None = ..., change: bool = ..., **kwargs: Any) -> Any:
+    def get_form(self, request: Any, obj: Optional[Person] = ..., change: bool = ..., **kwargs: Any) -> Any:
         form = super().get_form(request, obj, change, **kwargs)
         if change and obj and obj.mail_forwarding_created:
             form.base_fields["email"].required = True
