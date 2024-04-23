@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 from apps.core.models import BaseModel
@@ -28,7 +29,7 @@ class Virtual(BaseModel):
         verbose_name_plural = "виртуальные адреса"
 
     def __str__(self):
-        return self.mailbox
+        return f"{self.mailbox}@{settings.POSTFIX_MAIL_DOMAIN}"
 
 
 class Recipient(BaseModel):

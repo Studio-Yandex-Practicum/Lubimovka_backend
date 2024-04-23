@@ -1,5 +1,7 @@
+from typing import Any
+
 from adminsortable2.admin import SortableAdminMixin
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.http import HttpResponseRedirect
 from django.http.request import HttpRequest
 from django.urls import reverse
@@ -7,6 +9,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 from apps.core.models import Person
+from apps.core.services.mail_forwarding import create_forwarding, delete_forwarding
 from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
 from apps.info.models import Partner, Selector, Sponsor, Volunteer
 from apps.info.models.people import Review
@@ -112,9 +115,23 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     def get_readonly_fields(self, request: HttpRequest, person: Person) -> tuple[str]:
         return tuple(super().get_readonly_fields(request, person)) + (
             ("email",)
-            if not request.user.has_perm("postfix.change_virtual") and person and person.mail_forwarding_enabled
+            if not request.user.has_perms(("postfix.change_virtual", "postfix.delete_virtual", "postfix.add_virtual"))
+            and person
+            and person.mail_forwarding_enabled
             else ()
         )
+
+    def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
+        person: Person = form.instance
+        if "email" in form.changed_data and person.mail_forwarding_enabled:
+            author = person.authors
+            if person.email:
+                virtual_email = create_forwarding(author)
+                messages.add_message(request, messages.INFO, f"Создан виртуальный адрес '{virtual_email}'")
+            else:
+                virtual_email = delete_forwarding(author)
+                messages.add_message(request, messages.INFO, f"Виртуальный адрес '{virtual_email}' был удален")
+        super().save_related(request, form, formsets, change)
 
 
 @admin.register(Volunteer)

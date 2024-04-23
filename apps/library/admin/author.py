@@ -2,13 +2,15 @@ from typing import Any
 
 from adminsortable2.admin import SortableInlineAdminMixin
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.postgres.aggregates import StringAgg
 from django.db.models import Count
 from django.forms import ModelForm, ValidationError
 from django.forms.fields import Field
+from django.http.request import HttpRequest
 
 from apps.core.mixins import PreviewButtonMixin
+from apps.core.services.mail_forwarding import create_forwarding, delete_forwarding
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 from apps.postfix.models import Virtual
@@ -127,23 +129,15 @@ class AuthorAdminForm(forms.ModelForm):
             return False
         return super().get_initial_for_field(field, field_name)
 
-    def save(self, commit: bool = True) -> Any:
-        author = self.instance
-
-        if hasattr(author, "virtual_email"):
-            author.virtual_email.mailbox = self.cleaned_data.get("slug")
-            author.virtual_email.enabled = self.cleaned_data.get("enable_email", False)
-
-        if self.cleaned_data.get("enable_email", False) and not hasattr(author, "virtual_email"):
-            virtual = Virtual(author=author, mailbox=self.cleaned_data.get("slug"))
-            author.virtual_email = virtual
-
-        return super().save(commit=commit)
-
     def clean(self):
         cleaned_data = super().clean()
         enable_email = cleaned_data.get("enable_email")
         person = cleaned_data.get("person")
+        slug = cleaned_data.get("slug")
+        if enable_email and Virtual.objects.filter(mailbox=slug).exists():
+            raise ValidationError(
+                "Такой почтовый ящик уже существует. Измените транслит фамилии или отключите переадресацию."
+            )
         if enable_email and person:
             if not person.email:
                 raise ValidationError(
@@ -185,6 +179,12 @@ class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
 
+    def get_readonly_fields(self, request: HttpRequest, obj: Any | None = ...) -> list[str] | tuple[Any, ...]:
+        fields = super().get_readonly_fields(request, obj)
+        if hasattr(obj, "virtual_email") and not request.user.has_perm("postfix.change_virtual"):
+            fields = list(fields) + ["person", "slug"]
+        return fields
+
     def get_form(self, request, obj=None, change=False, **kwargs) -> Any:
         if request.user.has_perm("postfix.add_virtual") and request.user.has_perm("postfix.change_virtual"):
             kwargs["form"] = AuthorAdminForm
@@ -196,6 +196,20 @@ class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
             _plays_count=Count("plays", distinct=True),
         )
         return queryset
+
+    def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
+        enable_email_changed = "enable_email" in form.changed_data
+        person_changed = "person" in form.changed_data
+        slug_changed = "slug" in form.changed_data
+        enable_checkbox = form.cleaned_data.get("enable_email", False)
+        if enable_checkbox and (enable_email_changed or person_changed or slug_changed):
+            virtual_email = create_forwarding(form.instance)
+            messages.add_message(request, messages.INFO, f"Создан виртуальный адрес '{virtual_email}'")
+        if not enable_checkbox and enable_email_changed:
+            virtual_email = delete_forwarding(form.instance)
+            if virtual_email:
+                messages.add_message(request, messages.INFO, f"Виртуальный адрес '{virtual_email}' был удален")
+        return super().save_related(request, form, formsets, change)
 
     @admin.display(description="Количество пьес")
     def plays_count(self, obj):
