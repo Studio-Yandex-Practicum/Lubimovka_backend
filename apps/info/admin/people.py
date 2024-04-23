@@ -130,7 +130,8 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
                 messages.add_message(request, messages.INFO, f"Создан виртуальный адрес '{virtual_email}'")
             else:
                 virtual_email = delete_forwarding(author)
-                messages.add_message(request, messages.INFO, f"Виртуальный адрес '{virtual_email}' был удален")
+                if virtual_email:
+                    messages.add_message(request, messages.INFO, f"Виртуальный адрес '{virtual_email}' был удален")
         super().save_related(request, form, formsets, change)
 
 
