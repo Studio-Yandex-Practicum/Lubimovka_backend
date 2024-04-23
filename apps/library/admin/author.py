@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional, Union
 
 from adminsortable2.admin import SortableInlineAdminMixin
 from django import forms
@@ -179,7 +179,7 @@ class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
 
-    def get_readonly_fields(self, request: HttpRequest, obj: Any | None = ...) -> list[str] | tuple[Any, ...]:
+    def get_readonly_fields(self, request: HttpRequest, obj: Optional[Any] = ...) -> Union[list[str], tuple[Any, ...]]:
         fields = super().get_readonly_fields(request, obj)
         if hasattr(obj, "virtual_email") and not request.user.has_perm("postfix.change_virtual"):
             fields = list(fields) + ["person", "slug"]
