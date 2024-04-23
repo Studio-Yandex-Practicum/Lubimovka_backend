@@ -115,10 +115,8 @@ class Person(FileCleanUpMixin, BaseModel):
         return f"{self.last_name} {self.first_name}".strip()
 
     @property
-    def mail_forwarding_enabled(self):
-        if hasattr(self, "authors") and hasattr(self.authors, "virtual_email"):
-            return self.authors.virtual_email.enabled
-        return False
+    def has_mail_forwarding(self):
+        return hasattr(self, "authors") and hasattr(self.authors, "virtual_email")
 
 
 class Role(BaseModel):

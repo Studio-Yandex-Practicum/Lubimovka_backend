@@ -117,13 +117,13 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
             ("email",)
             if not request.user.has_perms(("postfix.change_virtual", "postfix.delete_virtual", "postfix.add_virtual"))
             and person
-            and person.mail_forwarding_enabled
+            and person.has_mail_forwarding
             else ()
         )
 
     def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
         person: Person = form.instance
-        if "email" in form.changed_data and person.mail_forwarding_enabled:
+        if "email" in form.changed_data and person.has_mail_forwarding:
             author = person.authors
             if person.email:
                 virtual_email = create_forwarding(author)
