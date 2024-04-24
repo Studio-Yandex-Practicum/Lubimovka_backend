@@ -1,3 +1,4 @@
+from functools import partial
 from typing import Any, Optional, Union
 
 from adminsortable2.admin import SortableInlineAdminMixin
@@ -10,7 +11,7 @@ from django.forms.fields import Field
 from django.http.request import HttpRequest
 
 from apps.core.mixins import PreviewButtonMixin
-from apps.core.services.mail_forwarding import create_forwarding, delete_forwarding
+from apps.core.services.mail_forwarding import on_change
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 from apps.postfix.models import Virtual
@@ -198,17 +199,14 @@ class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
         return queryset
 
     def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
-        enable_email_changed = "enable_email" in form.changed_data
-        person_changed = "person" in form.changed_data
-        slug_changed = "slug" in form.changed_data
-        enable_checkbox = form.cleaned_data.get("enable_email", False)
-        if enable_checkbox and (enable_email_changed or person_changed or slug_changed):
-            virtual_email = create_forwarding(form.instance)
-            messages.add_message(request, messages.INFO, f"Создан виртуальный адрес '{virtual_email}'")
-        if not enable_checkbox and enable_email_changed:
-            virtual_email = delete_forwarding(form.instance)
-            if virtual_email:
-                messages.add_message(request, messages.INFO, f"Виртуальный адрес '{virtual_email}' был удален")
+        author: Author = form.instance
+        has_changes = any(field_name in form.changed_data for field_name in ["enable_email", "person", "slug"])
+        if has_changes:
+            on_change(
+                author,
+                create=form.cleaned_data.get("enable_email", False),
+                message=partial(messages.add_message, request, messages.INFO),
+            )
         return super().save_related(request, form, formsets, change)
 
     @admin.display(description="Количество пьес")

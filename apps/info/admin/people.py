@@ -1,3 +1,4 @@
+from functools import partial
 from typing import Any
 
 from adminsortable2.admin import SortableAdminMixin
@@ -9,7 +10,7 @@ from django.utils.html import format_html
 
 from apps.core.mixins import AdminImagePreview, HideOnNavPanelAdminModelMixin
 from apps.core.models import Person
-from apps.core.services.mail_forwarding import create_forwarding, delete_forwarding
+from apps.core.services.mail_forwarding import on_change
 from apps.info.filters import HasReviewAdminFilter, PartnerTypeFilter
 from apps.info.models import Partner, Selector, Sponsor, Volunteer
 from apps.info.models.people import Review
@@ -124,14 +125,11 @@ class PersonAdmin(AdminImagePreview, admin.ModelAdmin):
     def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
         person: Person = form.instance
         if "email" in form.changed_data and person.has_mail_forwarding:
-            author = person.authors
-            if person.email:
-                virtual_email = create_forwarding(author)
-                messages.add_message(request, messages.INFO, f"Создан виртуальный адрес '{virtual_email}'")
-            else:
-                virtual_email = delete_forwarding(author)
-                if virtual_email:
-                    messages.add_message(request, messages.INFO, f"Виртуальный адрес '{virtual_email}' был удален")
+            on_change(
+                instance=person.authors,
+                create=bool(person.email),
+                message=partial(messages.add_message, request, messages.INFO),
+            )
         super().save_related(request, form, formsets, change)
 
 

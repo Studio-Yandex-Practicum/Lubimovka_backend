@@ -1,9 +1,12 @@
 """Управление записями переадресации электронной почты."""
 
-from typing import Optional
+from typing import Callable, Optional
 
 from apps.library.models.author import Author
 from apps.postfix.models import Virtual
+
+MAIL_CREATED = "Создан или обновлен виртуальный адрес '{virtual_email}'"
+MAIL_DELETED = "Виртуальный адрес '{virtual_email}' был удален"
 
 
 def create_forwarding(author: Author) -> Virtual:
@@ -24,4 +27,15 @@ def delete_forwarding(author: Author) -> Optional[Virtual]:
     if virtual_email:
         virtual_email.delete()
     author.virtual_email = None
+    return virtual_email
+
+
+def on_change(instance: Author, create: bool, message: Callable[[str], None]) -> Optional[Virtual]:
+    if create:
+        virtual_email = create_forwarding(instance)
+        message(MAIL_CREATED.format(virtual_email=virtual_email))
+    else:
+        virtual_email = delete_forwarding(instance)
+        if virtual_email:
+            message(MAIL_DELETED.format(virtual_email=virtual_email))
     return virtual_email
