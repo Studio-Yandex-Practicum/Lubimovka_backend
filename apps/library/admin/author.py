@@ -1,14 +1,17 @@
-from typing import Any
+from functools import partial
+from typing import Any, Optional, Union
 
 from adminsortable2.admin import SortableInlineAdminMixin
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.postgres.aggregates import StringAgg
 from django.db.models import Count
 from django.forms import ModelForm, ValidationError
 from django.forms.fields import Field
+from django.http.request import HttpRequest
 
 from apps.core.mixins import PreviewButtonMixin
+from apps.core.services.mail_forwarding import on_change
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 from apps.postfix.models import Virtual
@@ -127,23 +130,15 @@ class AuthorAdminForm(forms.ModelForm):
             return False
         return super().get_initial_for_field(field, field_name)
 
-    def save(self, commit: bool = True) -> Any:
-        author = self.instance
-
-        if hasattr(author, "virtual_email"):
-            author.virtual_email.mailbox = self.cleaned_data.get("slug")
-            author.virtual_email.enabled = self.cleaned_data.get("enable_email", False)
-
-        if self.cleaned_data.get("enable_email", False) and not hasattr(author, "virtual_email"):
-            virtual = Virtual(author=author, mailbox=self.cleaned_data.get("slug"))
-            author.virtual_email = virtual
-
-        return super().save(commit=commit)
-
     def clean(self):
         cleaned_data = super().clean()
         enable_email = cleaned_data.get("enable_email")
         person = cleaned_data.get("person")
+        slug = cleaned_data.get("slug")
+        if enable_email and Virtual.objects.filter(mailbox=slug).exists():
+            raise ValidationError(
+                "Такой почтовый ящик уже существует. Измените транслит фамилии или отключите переадресацию."
+            )
         if enable_email and person:
             if not person.email:
                 raise ValidationError(
@@ -185,6 +180,12 @@ class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
 
+    def get_readonly_fields(self, request: HttpRequest, obj: Optional[Any] = ...) -> Union[list[str], tuple[Any, ...]]:
+        fields = super().get_readonly_fields(request, obj)
+        if hasattr(obj, "virtual_email") and not request.user.has_perm("postfix.change_virtual"):
+            fields = list(fields) + ["person", "slug"]
+        return fields
+
     def get_form(self, request, obj=None, change=False, **kwargs) -> Any:
         if request.user.has_perm("postfix.add_virtual") and request.user.has_perm("postfix.change_virtual"):
             kwargs["form"] = AuthorAdminForm
@@ -196,6 +197,17 @@ class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
             _plays_count=Count("plays", distinct=True),
         )
         return queryset
+
+    def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
+        author: Author = form.instance
+        has_changes = any(field_name in form.changed_data for field_name in ["enable_email", "person", "slug"])
+        if has_changes:
+            on_change(
+                author,
+                create=form.cleaned_data.get("enable_email", False),
+                message=partial(messages.add_message, request, messages.INFO),
+            )
+        return super().save_related(request, form, formsets, change)
 
     @admin.display(description="Количество пьес")
     def plays_count(self, obj):
