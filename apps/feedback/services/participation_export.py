@@ -66,6 +66,8 @@ class ParticipationApplicationExport:
         if send_email_success:
             instance.sent_to_email = True
             instance.save()
+            # Отправка подтверждения участнику
+            send_email(from_email, (instance.email,), template_id, context, attach_file=True)
 
     def export_application(self, instance, file_link):
         """Функция, объединяющая экспорт на диск, в таблицу и отправку на почту."""
