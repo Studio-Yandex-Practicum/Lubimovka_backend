@@ -42,7 +42,7 @@ class SearchResultViewSet(ObjectMultipleModelAPIViewSet):
         if q:
             plays_queryset = Play.objects.filter(other_play=False, published=True).filter(name__icontains=q)
             authors_queryset = Author.objects.filter(
-                Q(person__first_name__icontains=q) | Q(person__last_name__icontains=q)
+                Q(person__first_name__unaccent__icontains=q) | Q(person__last_name__unaccent__icontains=q)
             )
         else:
             plays_queryset = Play.objects.none()
