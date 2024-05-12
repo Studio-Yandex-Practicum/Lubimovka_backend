@@ -171,9 +171,9 @@ class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
     search_fields = (
         "biography",
         "slug",
-        "person__first_name",
-        "person__last_name",
-        "person__middle_name",
+        "person__first_name__unaccent",
+        "person__last_name__unaccent",
+        "person__middle_name__unaccent",
         "person__email",
         "plays__name",
     )
