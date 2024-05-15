@@ -89,15 +89,22 @@ class PreviewButtonMixin:
 
     def change_view(self, request, object_id, form_url="", extra_context=None):
         string_url = {
-            "BlogItem": "blog",
-            "NewsItem": "news",
-            "Project": "projects",
-            "Performance": "performances",
+            "BlogItem": "/blog",
+            "NewsItem": "/news",
+            "Project": "/projects",
+            "Performance": "/performances",
+            "Author": "",
         }
-        link = f"/{string_url[self.model._meta.object_name]}/{object_id}"
+        if hasattr(self.model, "slug"):
+            identity = self.get_object(request, object_id).slug
+        else:
+            identity = object_id
+        link = f"{string_url[self.model._meta.object_name]}/{identity}"
         # add hash for unpublished pages and change button name
+        if extra_context is None:
+            extra_context = {}
         preview_button_context = {}
-        if self.model.objects.is_published(object_id):
+        if not hasattr(self.model.objects, "is_published") or self.model.objects.is_published(object_id):
             preview_button_context["button_name"] = "Просмотр страницы"
             preview_button_context["link"] = link
         # FIXME: Ждем когда функционал для предпросмотра будет готов на фронтенде
