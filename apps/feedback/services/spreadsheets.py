@@ -226,9 +226,9 @@ class GoogleSpreadsheets:
                 self._set_borders(service)
                 self._set_header(service)
             return self._export_new_object(instance, service, file_url)
-        except (ValueError, Exception) as error:
+        except (ValueError, Exception):
             msg = f"Не удалось выгрузить данные заявки от {instance.email} на Google Sheets."
-            logger.critical(msg, error, exc_info=True)
+            logger.critical(msg, exc_info=True)
 
     def find_and_replace(self, find, replacement):
         try:
@@ -261,6 +261,6 @@ class GoogleSpreadsheets:
                         break
             service.spreadsheets().close()
             return rows_changed
-        except (ValueError, Exception) as error:
+        except (ValueError, Exception):
             msg = f"Не удалось произвести замену {find} на Google Sheets."
-            logger.critical(msg, error, exc_info=True)
+            logger.critical(msg, exc_info=True)
