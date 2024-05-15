@@ -56,7 +56,7 @@ class ParticipationApplicationExport:
             "nickname": instance.nickname,
             "last_name": instance.last_name,
             "city": instance.city,
-            "phone_number": instance.phone_number.as_international,
+            "phone_number": instance.phone_number.as_international if instance.phone_number else "",
             "email": instance.email,
             "title": instance.title,
             "file_link": file_link,
