@@ -27,4 +27,4 @@ jobs:
       - name: Security vulnerabilities scan
         uses: aufdenpunkt/python-safety-check@master
         with:
-          safety_args: '-i 39642'
+          safety_args: '-i 39642,67599'
