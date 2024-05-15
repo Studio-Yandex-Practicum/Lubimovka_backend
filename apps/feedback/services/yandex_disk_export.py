@@ -27,6 +27,6 @@ def yandex_disk_export(instance) -> Optional[bool]:
         yndx.upload(from_dir, to_dir)
 
         return publish_file(yndx, to_dir)
-    except (ValueError, YaDiskError) as error:
+    except (ValueError, YaDiskError):
         msg = f"Не удалось загрузить пьесу {instance.title} от {instance.email} на Яндекс диск."
-        logger.critical(msg, error, exc_info=True)
+        logger.critical(msg, exc_info=True)

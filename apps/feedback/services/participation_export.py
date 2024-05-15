@@ -45,29 +45,32 @@ class ParticipationApplicationExport:
 
     def _mail_send_export(self, instance, file_link):
         """Отправка почтового уведомления о новой заявке на участие."""
-        email_settings = self._get_email_settings()
-        from_email = email_settings.get("email_send_from")
-        to_emails = (email_settings.get("submit_play_email"),)
-        template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
-        context = {
-            "year": instance.year,
-            "birth_year": instance.birth_year,
-            "first_name": instance.first_name,
-            "nickname": instance.nickname,
-            "last_name": instance.last_name,
-            "city": instance.city,
-            "phone_number": instance.phone_number.as_international,
-            "email": instance.email,
-            "title": instance.title,
-            "file_link": file_link,
-            "file_path": instance.file.path,
-        }
-        send_email_success = send_email(from_email, to_emails, template_id, context, attach_file=True)
-        if send_email_success:
-            instance.sent_to_email = True
-            instance.save()
-        # Отправка подтверждения участнику
-        send_email(from_email, (instance.email,), template_id, context, attach_file=True)
+        try:
+            email_settings = self._get_email_settings()
+            from_email = email_settings.get("email_send_from")
+            to_emails = (email_settings.get("submit_play_email"),)
+            template_id = settings.MAILJET_TEMPLATE_ID_PARTICIPATION_APPLICATION
+            context = {
+                "year": instance.year,
+                "birth_year": instance.birth_year,
+                "first_name": instance.first_name,
+                "nickname": instance.nickname,
+                "last_name": instance.last_name,
+                "city": instance.city,
+                "phone_number": instance.phone_number.as_international,
+                "email": instance.email,
+                "title": instance.title,
+                "file_link": file_link,
+                "file_path": instance.file.path,
+            }
+            send_email_success = send_email(from_email, to_emails, template_id, context, attach_file=True)
+            if send_email_success:
+                instance.sent_to_email = True
+                instance.save()
+            # Отправка подтверждения участнику
+            send_email(from_email, (instance.email,), template_id, context, attach_file=True)
+        except Exception:
+            logger.critical(msg="Ошибка при подготовке сообщения электронной почты", exc_info=True)
 
     def export_application(self, instance, file_link):
         """Функция, объединяющая экспорт на диск, в таблицу и отправку на почту."""

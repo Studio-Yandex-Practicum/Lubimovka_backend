@@ -30,18 +30,18 @@ def send_email(from_email: str, to_emails: tuple, template_id: str, context: dic
         elif message.anymail_status.esp_response.status_code == status.HTTP_200_OK:
             return True
         return False
-    except AnymailConfigurationError as error:
+    except AnymailConfigurationError:
         msg = f"Неверные настройки Mailjet. Не удалось отправить письмо на почтовые адреса - {to_emails}."
-        logger.critical(msg, error, exc_info=True)
-    except (AnymailRequestsAPIError, AnymailInvalidAddress) as error:
+        logger.critical(msg, exc_info=True)
+    except (AnymailRequestsAPIError, AnymailInvalidAddress):
         msg = (
             f"Не указан адрес электронной почты отправителя."
             f"Не удалось отправить письмо на почтовые адреса - {to_emails}."
         )
-        logger.critical(msg, error, exc_info=True)
-    except ValueError as error:
+        logger.critical(msg, exc_info=True)
+    except ValueError:
         msg = f"Неверный ID шаблона Mailjet. Не удалось отправить письмо на почтовые адреса - {to_emails}."
-        logger.critical(msg, error, exc_info=True)
-    except AnymailError as error:
+        logger.critical(msg, exc_info=True)
+    except AnymailError:
         msg = "Ooops, something goes wrong! :("
-        logger.critical(msg, error, exc_info=True)
+        logger.critical(msg, exc_info=True)
