@@ -137,7 +137,7 @@ class ParticipationApplicationFestival(BaseModel):
 
     def save(self, *args, **kwargs):
         """Save generated filename."""
-        if self.file and not self.saved_to_storage:
+        if self.file and not self.saved_to_storage and not self.pk:
             self.file.name = self.generate_filename()
         super().save(*args, **kwargs)
 
