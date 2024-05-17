@@ -9,6 +9,7 @@ from apps.feedback.models import ParticipationApplicationFestival, Question
 class ParticipationAdmin(admin.ModelAdmin):
     list_display = (
         "title",
+        "anonym",
         "first_name",
         "last_name",
         "festival_year",
