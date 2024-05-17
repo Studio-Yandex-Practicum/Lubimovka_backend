@@ -55,6 +55,7 @@ class GoogleSpreadsheets:
                     instance.title,
                     file_link,
                     instance.nickname,
+                    instance.anonym,
                 ]
             ]
         }
@@ -83,7 +84,7 @@ class GoogleSpreadsheets:
                             "startRowIndex": 0,
                             "endRowIndex": 1000,
                             "startColumnIndex": 0,
-                            "endColumnIndex": 11,
+                            "endColumnIndex": 12,
                         },
                         "bottom": {
                             "style": "SOLID",
@@ -148,7 +149,7 @@ class GoogleSpreadsheets:
                             "sheetId": sheet_id,
                             "dimension": "COLUMNS",
                             "startIndex": 0,
-                            "endIndex": 11,
+                            "endIndex": 12,
                         }
                     }
                 }
@@ -178,6 +179,7 @@ class GoogleSpreadsheets:
                             "Название",
                             "Ссылка на файл",
                             "Псевдоним",
+                            "Анонимность",
                         ]
                     ],
                 }

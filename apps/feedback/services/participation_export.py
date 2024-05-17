@@ -54,6 +54,7 @@ class ParticipationApplicationExport:
                 "year": instance.year,
                 "birth_year": instance.birth_year,
                 "first_name": instance.first_name,
+                "anonym": instance.anonym,
                 "nickname": instance.nickname,
                 "last_name": instance.last_name,
                 "city": instance.city,
