@@ -41,6 +41,10 @@ class ParticipationApplicationFestival(BaseModel):
         max_length=50,
         verbose_name="Фамилия",
     )
+    anonym = models.BooleanField(
+        verbose_name="Анонимность",
+        default=False,
+    )
     nickname = models.CharField(
         max_length=30,
         verbose_name="Псевдоним",
