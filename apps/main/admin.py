@@ -67,6 +67,8 @@ class SettingAdmin(admin.ModelAdmin):
             return format_html('<a href="{}">{}</a>'.format(obj.image.url, obj.value))
         if obj.field_type == "URL":
             return format_html('<a href="{}">{}</a>'.format(obj.url, obj.value))
+        if obj.html_template:
+            return format_html(obj.html_template, obj.value)
         return obj.value
 
     def has_add_permission(self, request, obj=None):
