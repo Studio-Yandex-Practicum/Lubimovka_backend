@@ -278,6 +278,11 @@ class Setting(FileCleanUpMixin, BaseModel):
         blank=True,
         verbose_name="Email",
     )
+    html_template = models.CharField(
+        max_length=128,
+        default="",
+        verbose_name="Шаблон для вывода значения",
+    )
 
     class Meta:
         ordering = ("group", "settings_key")
