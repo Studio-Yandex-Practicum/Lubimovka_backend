@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import datetime as dt
 from typing import Optional
 
@@ -26,6 +27,9 @@ KEYS = {
 }
 
 
+SHEET_ID = re.compile(r"\/spreadsheets\/d\/(?P<id>.+)\/")
+
+
 class GoogleSpreadsheets:
     def __init__(self) -> None:
         self.keys = KEYS
@@ -35,7 +39,7 @@ class GoogleSpreadsheets:
         self.range = None
 
     def _get_settings(self):
-        self.spreadsheet_id = SettingPlaySupply.get_setting("SPREADSHEET_ID")
+        self.spreadsheet_id = SHEET_ID.search(SettingPlaySupply.get_setting("SPREADSHEET_ID")).group("id")
         self.sheet = SettingPlaySupply.get_setting("SHEET")
         self.range = self.sheet + "!A1"
 
