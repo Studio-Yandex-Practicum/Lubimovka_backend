@@ -175,7 +175,7 @@ class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
         "person__last_name__unaccent",
         "person__middle_name__unaccent",
         "person__email",
-        "plays__name",
+        "plays__name__unaccent",
     )
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
