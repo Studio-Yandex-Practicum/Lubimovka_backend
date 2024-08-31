@@ -125,7 +125,8 @@ class EventAdmin(admin.ModelAdmin):
 
     @admin.display(description="Тип")
     def custom_type(self, obj):
-        return obj.common_event.target_model.custom_type
+        model = obj.common_event.target_model
+        return model.custom_type if model else ""
 
     class Media:
 
