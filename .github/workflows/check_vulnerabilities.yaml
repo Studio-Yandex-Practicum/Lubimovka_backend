@@ -10,12 +10,11 @@ env:
   DEVELOP: requirements/dev.txt
   PRODUCTION: requirements/prod.txt
 
-pip-audit:
+jobs:
+  pip-audit:
     steps:
     - name: Check out
       uses: actions/checkout@v4
     - uses: pypa/gh-action-pip-audit@v1.1.0
       with:
         inputs: $PRODUCTION $DEVELOP
-
-    inputs: requirements.txt dev-requirements.txt
