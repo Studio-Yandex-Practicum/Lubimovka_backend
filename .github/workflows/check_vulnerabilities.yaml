@@ -12,6 +12,8 @@ env:
 
 jobs:
   pip-audit:
+    name: Dependency test with pip audit
+    runs-on: ubuntu-latest
     steps:
     - name: Check out
       uses: actions/checkout@v4
