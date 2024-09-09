@@ -113,7 +113,7 @@ class OrderedEventFactory(factory.django.DjangoModelFactory):
 
 
 @restrict_factory(general=(Play,))
-class OrderedPlayFactory(factory.django.DjangoModelFactory):
+class PublishedOrderedPlayFactory(factory.django.DjangoModelFactory):
     """Create Play with order for block.
 
     Order in factory assume that there are not more than 3 ordered plays in a block.
@@ -126,7 +126,24 @@ class OrderedPlayFactory(factory.django.DjangoModelFactory):
 
     @factory.lazy_attribute
     def item(self):
-        return get_random_objects_by_queryset(Play.objects.filter(other_play=False))
+        return get_random_objects_by_queryset(Play.objects.filter(other_play=False, published=True))
+
+
+@restrict_factory(general=(Play,))
+class NonpublishedOrderedPlayFactory(factory.django.DjangoModelFactory):
+    """Create Play with order for block.
+
+    Order in factory assume that there are not more than 3 ordered plays in a block.
+    """
+
+    class Meta:
+        model = OrderedPlay
+
+    order = factory.Sequence(lambda n: (n % 3 + 1))
+
+    @factory.lazy_attribute
+    def item(self):
+        return get_random_objects_by_queryset(Play.objects.filter(other_play=False, published=False))
 
 
 class OrderedVideoFactory(factory.django.DjangoModelFactory):
