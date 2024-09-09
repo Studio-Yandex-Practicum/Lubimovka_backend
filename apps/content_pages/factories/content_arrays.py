@@ -2,10 +2,11 @@ import factory
 
 from apps.content_pages.factories import (
     ExtendedPersonFactory,
+    NonpublishedOrderedPlayFactory,
     OrderedEventFactory,
     OrderedImageFactory,
-    OrderedPlayFactory,
     OrderedVideoFactory,
+    PublishedOrderedPlayFactory,
 )
 from apps.content_pages.models import EventsBlock, ImagesBlock, PersonsBlock, PlaysBlock, VideosBlock
 
@@ -64,7 +65,7 @@ class PersonsBlockFactory(factory.django.DjangoModelFactory):
 class PlaysBlockFactory(factory.django.DjangoModelFactory):
     """Create content block Play for blog, news or projects.
 
-    Block creates with 3 ordered plays.
+    Block creates with 5 ordered plays.
     """
 
     class Meta:
@@ -75,7 +76,8 @@ class PlaysBlockFactory(factory.django.DjangoModelFactory):
     @factory.post_generation
     def add_play(self, created, extracted, **kwargs):
         if created:
-            OrderedPlayFactory.create_batch(3, block=self)
+            PublishedOrderedPlayFactory.create_batch(3, block=self)
+            NonpublishedOrderedPlayFactory.create_batch(2, block=self)
 
 
 class VideosBlockFactory(factory.django.DjangoModelFactory):
