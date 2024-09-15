@@ -62,7 +62,7 @@ def play_in_short_list(authors, festival):
 
 @pytest.fixture
 def plays(authors, festival):
-    return PlayFactory.create_batch(4, year=festival.year)
+    return PlayFactory.create_batch(10, year=festival.year)
 
 
 @pytest.fixture

@@ -1,10 +1,11 @@
 from apps.content_pages.factories.content_array_items import (
     ContentPersonRoleFactory,
     ExtendedPersonFactory,
+    NonpublishedOrderedPlayFactory,
     OrderedEventFactory,
     OrderedImageFactory,
-    OrderedPlayFactory,
     OrderedVideoFactory,
+    PublishedOrderedPlayFactory,
 )
 from apps.content_pages.factories.content_arrays import (
     EventsBlockFactory,

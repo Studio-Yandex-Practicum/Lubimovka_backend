@@ -216,6 +216,13 @@ class PlaysBlock(AbstractItemWithTitle):
         verbose_name = "Блок пьес"
         verbose_name_plural = "Блоки пьес"
 
+    def published_ordered_plays(self):
+        """Filter published plays.
+
+        ordered_plays attribute is a related name added from OrderedPlay model
+        """
+        return self.ordered_plays.filter(item__published=True)
+
 
 class VideosBlock(AbstractItemWithTitle):
     """Model to store and organize OrderedVideos objects."""

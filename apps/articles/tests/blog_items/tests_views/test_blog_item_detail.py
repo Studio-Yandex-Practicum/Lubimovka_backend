@@ -95,7 +95,7 @@ def test_blog_item_detail_plays_block_content_fields(client, complex_blog_item):
 
     assert playsblock_content_item.get("title"), "У блока с пьесами должен быть заголовок."
     assert playsblock_content_item.get("items"), "У блока с пьесами должен быть массив элементов (пьес)."
-    assert len(playsblock_content_item.get("items")) == 3, "Ожидалось 3 пьесы в блоке с пьесами."
+    assert len(playsblock_content_item.get("items")) == 3, "Ожидалось 3 опубликованные пьесы в блоке с пьесами."
 
     first_play = playsblock_content_item.get("items")[0]
     expected_play_fields_in_order = (

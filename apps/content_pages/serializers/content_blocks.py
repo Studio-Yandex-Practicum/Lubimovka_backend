@@ -90,7 +90,7 @@ class PersonsBlockSerializer(serializers.ModelSerializer):
 
 class PlaysBlockSerializer(serializers.ModelSerializer):
     items = OrderedPlaySerializer(
-        source="ordered_plays",
+        source="published_ordered_plays",
         many=True,
     )
 
