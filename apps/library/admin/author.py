@@ -23,7 +23,9 @@ class PlayInlineForm(ModelForm):
     def clean_DELETE(self):
         data = self.cleaned_data["DELETE"]
         if data and self.instance.play.author_plays.count() == 1:
-            error = ValidationError("Эта пьеса не может быть удалена, так как это единственный её автор")
+            error = ValidationError(
+                "Отказаться от авторства нельзя, так как это единственный автор. Удалить пьесу можно в разделе пьес."
+            )
             self.add_error(field=None, error=error)
             raise error
         return data
