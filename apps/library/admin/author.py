@@ -33,8 +33,8 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     form = PlayInlineForm
     model = AuthorPlay
     extra = 0
-    verbose_name = "Пьеса"
-    verbose_name_plural = "Пьесы"
+    verbose_name = "Авторство в пьесе"
+    verbose_name_plural = "Авторство в пьесах"
     classes = ("collapsible",)
     autocomplete_fields = ("play",)
     readonly_fields = (
@@ -65,8 +65,8 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     form = PlayInlineForm
     model = AuthorPlay
     extra = 0
-    verbose_name = "Другая пьеса"
-    verbose_name_plural = "Другие пьесы"
+    verbose_name = "Авторство в другой пьесе"
+    verbose_name_plural = "Авторство в других пьесах"
     classes = ("collapsible",)
     autocomplete_fields = ("play",)
 
