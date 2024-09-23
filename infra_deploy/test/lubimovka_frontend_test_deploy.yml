@@ -21,6 +21,7 @@ services:
       - ./logs/nginx_logs/:/var/log/nginx/
       - static_value_test:/config/test/static/
       - ./media:/config/test/media/
+      - ./protected_media:/config/test/protected_media/
     ports:
       - 8080:80
     restart: unless-stopped

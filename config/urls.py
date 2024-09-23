@@ -1,3 +1,4 @@
+import private_storage.urls
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
@@ -79,3 +80,7 @@ urlpatterns += [
         view=include("filer.urls"),
     ),
 ] + static(MEDIA_URL, document_root=MEDIA_ROOT)
+
+urlpatterns += [
+    path("private-media/", include(private_storage.urls)),
+]

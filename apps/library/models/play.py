@@ -3,6 +3,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
+from private_storage.fields import PrivateFileField
 
 from apps.content_pages.utilities import path_by_media_and_class_name
 from apps.core.mixins import FileCleanUpMixin
@@ -65,7 +66,7 @@ class Play(FileCleanUpMixin, BaseModel):
         blank=True,
         null=True,
     )
-    url_download = models.FileField(
+    url_download = PrivateFileField(
         validators=(FileExtensionValidator(ALLOWED_FORMATS_FILE_FOR_PLAY),),
         max_length=200,
         blank=True,

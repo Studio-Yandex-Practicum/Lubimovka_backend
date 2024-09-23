@@ -57,6 +57,7 @@ THIRD_PARTY_APPS = [
     "anymail",
     "easy_thumbnails",
     "apps.filer.apps.FilerCustomConfig",
+    "private_storage",
 ]
 LOCAL_APPS = [
     "apps.users",
@@ -384,6 +385,12 @@ FILER_STORAGES = {
 # Translations
 LOCALE_PATHS = [Path(STATIC_ROOT) / "core" / "locale", ]
 
+
+# Private storage settings
+PRIVATE_STORAGE_ROOT = ROOT_DIR / "protected_media"
+PRIVATE_STORAGE_AUTH_FUNCTION = "apps.core.services.file_access.has_download_permission"
+PRIVATE_STORAGE_SERVER = "nginx"
+PRIVATE_STORAGE_INTERNAL_URL = "/private-redirect/"
 
 # APP SETTINGS
 AFISHA_REGISTRATION_OPENS_HOURS_BEFORE = 12

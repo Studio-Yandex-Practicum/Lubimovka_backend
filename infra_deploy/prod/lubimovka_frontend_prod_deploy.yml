@@ -21,6 +21,7 @@ services:
       - ./logs/swag_logs/:/config/log/
       - static_value_prod:/config/prod/static/
       - ./media:/config/prod/media/
+      - ./protected_media:/config/prod/protected_media/
     ports:
       - 443:443
       - 80:80
