@@ -34,6 +34,7 @@ class ProjectAdmin(ArticleSaveAsMixin, SortableAdminMixin, StatusButtonMixin, Pr
                     "title",
                     "intro",
                     "pub_date",
+                    "description_caption",
                     "description",
                     ("image_preview_change_page", "image"),
                     "creator_name",

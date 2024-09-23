@@ -64,9 +64,9 @@ class PlayAdmin(admin.ModelAdmin):
         "published",
     )
     search_fields = (
-        "authors__person__first_name",
-        "authors__person__last_name",
-        "name",
+        "authors__person__first_name__unaccent",
+        "authors__person__last_name__unaccent",
+        "name__unaccent",
         "city",
         "programs__name",
         "festival__year",

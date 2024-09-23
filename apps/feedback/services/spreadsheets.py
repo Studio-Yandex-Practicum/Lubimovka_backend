@@ -1,4 +1,5 @@
 import logging
+import re
 from datetime import datetime as dt
 from typing import Optional
 
@@ -26,6 +27,9 @@ KEYS = {
 }
 
 
+SHEET_ID = re.compile(r"\/spreadsheets\/d\/(?P<id>.+)\/")
+
+
 class GoogleSpreadsheets:
     def __init__(self) -> None:
         self.keys = KEYS
@@ -35,7 +39,7 @@ class GoogleSpreadsheets:
         self.range = None
 
     def _get_settings(self):
-        self.spreadsheet_id = SettingPlaySupply.get_setting("SPREADSHEET_ID")
+        self.spreadsheet_id = SHEET_ID.search(SettingPlaySupply.get_setting("SPREADSHEET_ID")).group("id")
         self.sheet = SettingPlaySupply.get_setting("SHEET")
         self.range = self.sheet + "!A1"
 
@@ -54,6 +58,8 @@ class GoogleSpreadsheets:
                     instance.year,
                     instance.title,
                     file_link,
+                    instance.nickname,
+                    instance.anonym,
                 ]
             ]
         }
@@ -82,7 +88,7 @@ class GoogleSpreadsheets:
                             "startRowIndex": 0,
                             "endRowIndex": 1000,
                             "startColumnIndex": 0,
-                            "endColumnIndex": 10,
+                            "endColumnIndex": 12,
                         },
                         "bottom": {
                             "style": "SOLID",
@@ -147,7 +153,7 @@ class GoogleSpreadsheets:
                             "sheetId": sheet_id,
                             "dimension": "COLUMNS",
                             "startIndex": 0,
-                            "endIndex": 10,
+                            "endIndex": 12,
                         }
                     }
                 }
@@ -176,6 +182,8 @@ class GoogleSpreadsheets:
                             "Год написания",
                             "Название",
                             "Ссылка на файл",
+                            "Псевдоним",
+                            "Анонимность",
                         ]
                     ],
                 }
@@ -224,9 +232,9 @@ class GoogleSpreadsheets:
                 self._set_borders(service)
                 self._set_header(service)
             return self._export_new_object(instance, service, file_url)
-        except (ValueError, Exception) as error:
+        except (ValueError, Exception):
             msg = f"Не удалось выгрузить данные заявки от {instance.email} на Google Sheets."
-            logger.critical(msg, error, exc_info=True)
+            logger.critical(msg, exc_info=True)
 
     def find_and_replace(self, find, replacement):
         try:
@@ -259,6 +267,6 @@ class GoogleSpreadsheets:
                         break
             service.spreadsheets().close()
             return rows_changed
-        except (ValueError, Exception) as error:
+        except (ValueError, Exception):
             msg = f"Не удалось произвести замену {find} на Google Sheets."
-            logger.critical(msg, error, exc_info=True)
+            logger.critical(msg, exc_info=True)

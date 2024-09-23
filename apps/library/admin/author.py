@@ -1,13 +1,17 @@
-from typing import Any
+from functools import partial
+from typing import Any, Optional, Union
 
 from adminsortable2.admin import SortableInlineAdminMixin
 from django import forms
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.contrib.postgres.aggregates import StringAgg
 from django.db.models import Count
 from django.forms import ModelForm, ValidationError
 from django.forms.fields import Field
+from django.http.request import HttpRequest
 
+from apps.core.mixins import PreviewButtonMixin
+from apps.core.services.mail_forwarding import on_change
 from apps.library.forms import OtherLinkForm
 from apps.library.models import Author, AuthorPlay, OtherLink, SocialNetworkLink
 from apps.postfix.models import Virtual
@@ -19,7 +23,9 @@ class PlayInlineForm(ModelForm):
     def clean_DELETE(self):
         data = self.cleaned_data["DELETE"]
         if data and self.instance.play.author_plays.count() == 1:
-            error = ValidationError("Эта пьеса не может быть удалена, так как это единственный её автор")
+            error = ValidationError(
+                "Отказаться от авторства нельзя, так как это единственный автор. Удалить пьесу можно в разделе пьес."
+            )
             self.add_error(field=None, error=error)
             raise error
         return data
@@ -29,8 +35,8 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     form = PlayInlineForm
     model = AuthorPlay
     extra = 0
-    verbose_name = "Пьеса"
-    verbose_name_plural = "Пьесы"
+    verbose_name = "Авторство в пьесе"
+    verbose_name_plural = "Авторство в пьесах"
     classes = ("collapsible",)
     autocomplete_fields = ("play",)
     readonly_fields = (
@@ -61,8 +67,8 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     form = PlayInlineForm
     model = AuthorPlay
     extra = 0
-    verbose_name = "Другая пьеса"
-    verbose_name_plural = "Другие пьесы"
+    verbose_name = "Авторство в другой пьесе"
+    verbose_name_plural = "Авторство в других пьесах"
     classes = ("collapsible",)
     autocomplete_fields = ("play",)
 
@@ -126,23 +132,15 @@ class AuthorAdminForm(forms.ModelForm):
             return False
         return super().get_initial_for_field(field, field_name)
 
-    def save(self, commit: bool = True) -> Any:
-        author = self.instance
-
-        if hasattr(author, "virtual_email"):
-            author.virtual_email.mailbox = self.cleaned_data.get("slug")
-            author.virtual_email.enabled = self.cleaned_data.get("enable_email", False)
-
-        if self.cleaned_data.get("enable_email", False) and not hasattr(author, "virtual_email"):
-            virtual = Virtual(author=author, mailbox=self.cleaned_data.get("slug"))
-            author.virtual_email = virtual
-
-        return super().save(commit=commit)
-
     def clean(self):
         cleaned_data = super().clean()
         enable_email = cleaned_data.get("enable_email")
         person = cleaned_data.get("person")
+        slug = cleaned_data.get("slug")
+        if enable_email and Virtual.objects.filter(mailbox=slug).exists():
+            raise ValidationError(
+                "Такой почтовый ящик уже существует. Измените транслит фамилии или отключите переадресацию."
+            )
         if enable_email and person:
             if not person.email:
                 raise ValidationError(
@@ -151,7 +149,7 @@ class AuthorAdminForm(forms.ModelForm):
 
 
 @admin.register(Author)
-class AuthorAdmin(admin.ModelAdmin):
+class AuthorAdmin(PreviewButtonMixin, admin.ModelAdmin):
     # form = AuthorAdminForm
     list_display = (
         "person",
@@ -175,14 +173,20 @@ class AuthorAdmin(admin.ModelAdmin):
     search_fields = (
         "biography",
         "slug",
-        "person__first_name",
-        "person__last_name",
-        "person__middle_name",
+        "person__first_name__unaccent",
+        "person__last_name__unaccent",
+        "person__middle_name__unaccent",
         "person__email",
-        "plays__name",
+        "plays__name__unaccent",
     )
     autocomplete_fields = ("person",)
     empty_value_display = "-пусто-"
+
+    def get_readonly_fields(self, request: HttpRequest, obj: Optional[Any] = ...) -> Union[list[str], tuple[Any, ...]]:
+        fields = super().get_readonly_fields(request, obj)
+        if hasattr(obj, "virtual_email") and not request.user.has_perm("postfix.change_virtual"):
+            fields = list(fields) + ["person", "slug"]
+        return fields
 
     def get_form(self, request, obj=None, change=False, **kwargs) -> Any:
         if request.user.has_perm("postfix.add_virtual") and request.user.has_perm("postfix.change_virtual"):
@@ -195,6 +199,17 @@ class AuthorAdmin(admin.ModelAdmin):
             _plays_count=Count("plays", distinct=True),
         )
         return queryset
+
+    def save_related(self, request: Any, form: Any, formsets: Any, change: Any) -> None:
+        author: Author = form.instance
+        has_changes = any(field_name in form.changed_data for field_name in ["enable_email", "person", "slug"])
+        if has_changes:
+            on_change(
+                author,
+                create=form.cleaned_data.get("enable_email", False),
+                message=partial(messages.add_message, request, messages.INFO),
+            )
+        return super().save_related(request, form, formsets, change)
 
     @admin.display(description="Количество пьес")
     def plays_count(self, obj):

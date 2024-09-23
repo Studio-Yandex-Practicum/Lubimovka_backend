@@ -1,6 +1,6 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import post_delete, pre_save
 
 from apps.afisha.models import Performance, Reading
 from apps.core.models import BaseModel
@@ -127,5 +127,12 @@ def create_common_event(sender, instance, **kwargs):
         instance.events_id = CommonEvent.objects.create().id
 
 
+def delete_common_event(sender, instance, **kwargs):
+    if instance.events_id:
+        instance.events.delete()
+
+
 pre_save.connect(create_common_event, sender=Reading)
 pre_save.connect(create_common_event, sender=Performance)
+post_delete.connect(delete_common_event, sender=Reading)
+post_delete.connect(delete_common_event, sender=Performance)
