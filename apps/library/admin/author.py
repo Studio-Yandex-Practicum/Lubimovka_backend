@@ -23,7 +23,9 @@ class PlayInlineForm(ModelForm):
     def clean_DELETE(self):
         data = self.cleaned_data["DELETE"]
         if data and self.instance.play.author_plays.count() == 1:
-            error = ValidationError("Эта пьеса не может быть удалена, так как это единственный её автор")
+            error = ValidationError(
+                "Отказаться от авторства нельзя, так как это единственный автор. Удалить пьесу можно в разделе пьес."
+            )
             self.add_error(field=None, error=error)
             raise error
         return data
@@ -33,8 +35,8 @@ class PlayInline(SortableInlineAdminMixin, admin.TabularInline):
     form = PlayInlineForm
     model = AuthorPlay
     extra = 0
-    verbose_name = "Пьеса"
-    verbose_name_plural = "Пьесы"
+    verbose_name = "Авторство в пьесе"
+    verbose_name_plural = "Авторство в пьесах"
     classes = ("collapsible",)
     autocomplete_fields = ("play",)
     readonly_fields = (
@@ -65,8 +67,8 @@ class OtherPlayInline(SortableInlineAdminMixin, admin.TabularInline):
     form = PlayInlineForm
     model = AuthorPlay
     extra = 0
-    verbose_name = "Другая пьеса"
-    verbose_name_plural = "Другие пьесы"
+    verbose_name = "Авторство в другой пьесе"
+    verbose_name_plural = "Авторство в других пьесах"
     classes = ("collapsible",)
     autocomplete_fields = ("play",)
 
