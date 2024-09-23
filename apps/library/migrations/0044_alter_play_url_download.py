@@ -25,7 +25,7 @@ def move_from_protected_media(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('library', '0042_alter_author_slug'),
+        ('library', '0043_alter_socialnetworklink_name'),
     ]
 
     operations = [
