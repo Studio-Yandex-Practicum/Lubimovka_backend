@@ -1,3 +1,6 @@
+from pathlib import Path
+
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
@@ -149,3 +152,17 @@ class Play(FileCleanUpMixin, BaseModel):
                 }
             )
         return super().clean()
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        if not self.url_download.path:
+            return
+        regular_play_file = Path(self.url_download.path)
+        hidden_play_file: Path = settings.HIDDEN_MEDIA_ROOT / regular_play_file.relative_to(settings.MEDIA_ROOT)
+        if self.published and not regular_play_file.is_file() and hidden_play_file.is_file():
+            # Вернуть файл из скрытого хранилища в общее
+            hidden_play_file.replace(regular_play_file)
+        elif not self.published and regular_play_file.is_file():
+            # Переместить файл из общего хранилища в скрытое
+            regular_play_file.replace(hidden_play_file)
+        return super().save(*args, **kwargs)
