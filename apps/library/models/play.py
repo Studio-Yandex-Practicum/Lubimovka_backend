@@ -153,16 +153,45 @@ class Play(FileCleanUpMixin, BaseModel):
             )
         return super().clean()
 
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        if not self.url_download.path:
+    @property
+    def _hidden_path(self) -> Path:
+        return settings.HIDDEN_MEDIA_ROOT / Path(self.url_download.path).relative_to(settings.MEDIA_ROOT)
+
+    def restore_play_file(self):
+        if not self.url_download:
             return
         regular_play_file = Path(self.url_download.path)
-        hidden_play_file: Path = settings.HIDDEN_MEDIA_ROOT / regular_play_file.relative_to(settings.MEDIA_ROOT)
-        if self.published and not regular_play_file.is_file() and hidden_play_file.is_file():
+        hidden_play_file = self._hidden_path
+        if hidden_play_file.is_file():
             # Вернуть файл из скрытого хранилища в общее
             hidden_play_file.replace(regular_play_file)
-        elif not self.published and regular_play_file.is_file():
+
+    def hide_play_file(self):
+        if not self.url_download:
+            return
+        regular_play_file = Path(self.url_download.path)
+        hidden_play_file = self._hidden_path
+        if regular_play_file.is_file():
             # Переместить файл из общего хранилища в скрытое
             regular_play_file.replace(hidden_play_file)
-        return super().save(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        this = type(self).objects.filter(id=self.id).first()
+        if this and not this.published:
+            # Восстановить файл предыдущей версии пьесы, чтобы он мог быть обработан нормальным образом
+            this.restore_play_file()
+
+        super().save(*args, **kwargs)
+
+        if self.published:
+            self.restore_play_file()
+        else:
+            self.hide_play_file()
+        return
+
+    def delete(self, *args, **kwargs):
+        this = type(self).objects.filter(id=self.id).first()
+        if this and not this.published:
+            # Восстановить файл предыдущей версии пьесы, чтобы он мог быть обработан нормальным образом
+            this.restore_play_file()
+        return super().delete(*args, **kwargs)
