@@ -1,6 +1,3 @@
-from pathlib import Path
-
-from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
 from django.db import models
@@ -12,6 +9,7 @@ from apps.core.mixins import FileCleanUpMixin
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.info.models import Festival
+from apps.library.services import hide_play_file, restore_play_file
 from apps.library.validators import year_validator
 
 
@@ -156,45 +154,23 @@ class Play(FileCleanUpMixin, BaseModel):
             )
         return super().clean()
 
-    @property
-    def _hidden_path(self) -> Path:
-        return settings.HIDDEN_MEDIA_ROOT / Path(self.url_download.path).relative_to(settings.MEDIA_ROOT)
-
-    def restore_play_file(self):
-        if not self.url_download:
-            return
-        regular_play_file = Path(self.url_download.path)
-        hidden_play_file = self._hidden_path
-        if hidden_play_file.is_file():
-            # Вернуть файл из скрытого хранилища в общее
-            hidden_play_file.replace(regular_play_file)
-
-    def hide_play_file(self):
-        if not self.url_download:
-            return
-        regular_play_file = Path(self.url_download.path)
-        hidden_play_file = self._hidden_path
-        if regular_play_file.is_file():
-            # Переместить файл из общего хранилища в скрытое
-            regular_play_file.replace(hidden_play_file)
-
     def save(self, *args, **kwargs):
         this = type(self).objects.filter(id=self.id).first()
         if this and not this.published:
             # Восстановить файл предыдущей версии пьесы, чтобы он мог быть обработан нормальным образом
-            this.restore_play_file()
+            restore_play_file(this)
 
         super().save(*args, **kwargs)
 
         if self.published:
-            self.restore_play_file()
+            restore_play_file(this)
         else:
-            self.hide_play_file()
+            hide_play_file(this)
         return
 
     def delete(self, *args, **kwargs):
         this = type(self).objects.filter(id=self.id).first()
         if this and not this.published:
             # Восстановить файл предыдущей версии пьесы, чтобы он мог быть обработан нормальным образом
-            this.restore_play_file()
+            restore_play_file(this)
         return super().delete(*args, **kwargs)
