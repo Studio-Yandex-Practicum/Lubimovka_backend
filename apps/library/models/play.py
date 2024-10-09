@@ -75,7 +75,10 @@ class Play(FileCleanUpMixin, BaseModel):
         null=True,
         upload_to=path_by_media_and_class_name,
         verbose_name="Текст пьесы",
-        help_text=f"Файл пьесы должен быть в одном из следующих форматов: " f"{ALLOWED_FORMATS_FILE_FOR_PLAY}",
+        help_text=(
+            f"Файл пьесы должен быть в одном из следующих форматов: {ALLOWED_FORMATS_FILE_FOR_PLAY}. "
+            f"Если пьеса не опубликована, файл скачать нельзя."
+        ),
     )
     url_download_from = models.URLField(
         max_length=200,
