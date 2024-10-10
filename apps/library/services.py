@@ -10,7 +10,7 @@ def _hidden_path(play) -> Path:
 
 def restore_play_file(play):
     """Вернуть файл из скрытого хранилища в общее."""
-    if not play.url_download:
+    if not play or not play.url_download:
         return
     regular_play_file = Path(play.url_download.path)
     hidden_play_file = _hidden_path(play)
@@ -20,7 +20,7 @@ def restore_play_file(play):
 
 def hide_play_file(play):
     """Переместить файл из общего хранилища в скрытое."""
-    if not play.url_download:
+    if not play or not play.url_download:
         return
     regular_play_file = Path(play.url_download.path)
     hidden_play_file = _hidden_path(play)
