@@ -1,7 +1,6 @@
 from datetime import datetime
 
 import pytest
-from django.conf import settings
 from django.urls import reverse
 
 from apps.afisha.factories import EventFactory, PerformanceFactory, ReadingFactory
@@ -18,8 +17,10 @@ MAIN_URL = reverse("main:main_page")
 
 
 @pytest.fixture(autouse=True)
-def set_media_temp_folder(tmpdir):
-    settings.MEDIA_ROOT = tmpdir.mkdir("media")
+def set_media_temp_folder(settings, tmp_path_factory):
+    settings.MEDIA_ROOT = tmp_path_factory.mktemp("media")
+    settings.HIDDEN_MEDIA_ROOT = tmp_path_factory.mktemp("hidden")
+    (settings.HIDDEN_MEDIA_ROOT / "plays").mkdir()
 
 
 @pytest.fixture

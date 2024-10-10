@@ -177,6 +177,7 @@ STATICFILES_FINDERS = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-root
 MEDIA_ROOT = ROOT_DIR / "media"
+HIDDEN_MEDIA_ROOT = ROOT_DIR / "hidden"
 # https://docs.djangoproject.com/en/dev/ref/settings/#media-url
 MEDIA_URL = "/media/"
 

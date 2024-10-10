@@ -1,5 +1,4 @@
 import pytest
-from django.conf import settings
 from rest_framework.test import APIClient
 
 from apps.afisha.factories import EventFactory, PerformanceFactory
@@ -16,8 +15,10 @@ def client():
 
 
 @pytest.fixture(autouse=True)
-def set_media_temp_folder(tmpdir):
-    settings.MEDIA_ROOT = tmpdir.mkdir("media")
+def set_media_temp_folder(settings, tmp_path_factory):
+    settings.MEDIA_ROOT = tmp_path_factory.mktemp("media")
+    settings.HIDDEN_MEDIA_ROOT = tmp_path_factory.mktemp("hidden")
+    (settings.HIDDEN_MEDIA_ROOT / "plays").mkdir()
 
 
 @pytest.fixture

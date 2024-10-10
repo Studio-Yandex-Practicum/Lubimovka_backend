@@ -7,6 +7,13 @@ from apps.library.factories import AuthorFactory, PlayFactory, ProgramTypeFactor
 pytestmark = [pytest.mark.django_db]
 
 
+@pytest.fixture(autouse=True)
+def set_media_temp_folder(settings, tmp_path_factory):
+    settings.MEDIA_ROOT = tmp_path_factory.mktemp("media")
+    settings.HIDDEN_MEDIA_ROOT = tmp_path_factory.mktemp("hidden")
+    (settings.HIDDEN_MEDIA_ROOT / "plays").mkdir()
+
+
 @pytest.fixture
 def program_types():
     return ProgramTypeFactory.create_batch(5)
