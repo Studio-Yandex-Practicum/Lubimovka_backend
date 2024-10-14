@@ -6,11 +6,6 @@ concurrency:
 
 on:
   workflow_dispatch:
-    inputs:
-      name:
-        description: 'Please, enter your name and surname'
-        default: 'Имя Фамилия'
-        required: true
 
 env:
   REGISTRY: ghcr.io
