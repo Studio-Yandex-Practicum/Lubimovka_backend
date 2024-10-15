@@ -9,8 +9,6 @@ from apps.library.services import hide_play_file, restore_play_file
 
 
 def hide_plays(apps, schema_editor):
-    play_path: Path = settings.HIDDEN_MEDIA_ROOT / "plays"
-    play_path.mkdir(parents=True, exist_ok=True)
     Play = apps.get_model("library", "play")
     plays = Play.objects.filter(published=False)
     for play in plays:
