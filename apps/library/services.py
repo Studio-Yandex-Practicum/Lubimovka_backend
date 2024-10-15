@@ -1,4 +1,5 @@
 from pathlib import Path
+from shutil import move
 
 from django.conf import settings
 
@@ -15,7 +16,7 @@ def restore_play_file(play):
     regular_play_file = Path(play.url_download.path)
     hidden_play_file = _hidden_path(regular_play_file)
     if hidden_play_file.is_file():
-        hidden_play_file.replace(regular_play_file)
+        move(hidden_play_file, regular_play_file)
 
 
 def hide_play_file(play):
@@ -25,4 +26,4 @@ def hide_play_file(play):
     regular_play_file = Path(play.url_download.path)
     hidden_play_file = _hidden_path(regular_play_file)
     if regular_play_file.is_file():
-        regular_play_file.replace(hidden_play_file)
+        move(regular_play_file, hidden_play_file)
