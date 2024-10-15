@@ -9,6 +9,7 @@ from apps.core.mixins import FileCleanUpMixin
 from apps.core.models import BaseModel
 from apps.core.utils import slugify
 from apps.info.models import Festival
+from apps.library.services import hide_play_file, restore_play_file
 from apps.library.validators import year_validator
 
 
@@ -72,7 +73,10 @@ class Play(FileCleanUpMixin, BaseModel):
         null=True,
         upload_to=path_by_media_and_class_name,
         verbose_name="Текст пьесы",
-        help_text=f"Файл пьесы должен быть в одном из следующих форматов: " f"{ALLOWED_FORMATS_FILE_FOR_PLAY}",
+        help_text=(
+            f"Файл пьесы должен быть в одном из следующих форматов: {ALLOWED_FORMATS_FILE_FOR_PLAY}. "
+            f"Если пьеса не опубликована, файл скачать нельзя."
+        ),
     )
     url_download_from = models.URLField(
         max_length=200,
@@ -149,3 +153,24 @@ class Play(FileCleanUpMixin, BaseModel):
                 }
             )
         return super().clean()
+
+    def save(self, *args, **kwargs):
+        this = type(self).objects.filter(id=self.id).first()
+        if this and not this.published:
+            # Восстановить файл предыдущей версии пьесы, чтобы он мог быть обработан нормальным образом
+            restore_play_file(this)
+
+        super().save(*args, **kwargs)
+
+        if self.published:
+            restore_play_file(self)
+        else:
+            hide_play_file(self)
+        return
+
+    def delete(self, *args, **kwargs):
+        this = type(self).objects.filter(id=self.id).first()
+        if this and not this.published:
+            # Восстановить файл предыдущей версии пьесы, чтобы он мог быть обработан нормальным образом
+            restore_play_file(this)
+        return super().delete(*args, **kwargs)

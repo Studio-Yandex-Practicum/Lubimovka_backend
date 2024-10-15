@@ -22,3 +22,5 @@ jobs:
         inputs: $PRODUCTION $DEVELOP
         ignore-vulns: |
           GHSA-gw84-84pc-xp82  # requires DRF 3.15 and Django 4
+          GHSA-rrqc-c2jx-6jgv  # requires Django 4
+          GHSA-jj5c-hhrg-vv5h  # there is no update available for xhtml2pdf so far

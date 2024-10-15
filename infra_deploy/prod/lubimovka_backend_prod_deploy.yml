@@ -18,6 +18,7 @@ services:
     volumes:
       - static_value_prod:/code/staticfiles/
       - ./media:/code/media/
+      - ./hidden:/code/hidden/
       - ./logs/backend_logs/:/code/logs/
     depends_on:
       - postgres
@@ -32,6 +33,7 @@ services:
     volumes:
       - static_value_prod:/code/staticfiles/
       - ./media:/code/media/
+      - ./hidden:/code/hidden/
       - ./logs/backend_logs/:/code/logs/
     command: >
       sh -c "
