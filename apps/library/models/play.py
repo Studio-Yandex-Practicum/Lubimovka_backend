@@ -163,9 +163,9 @@ class Play(FileCleanUpMixin, BaseModel):
         super().save(*args, **kwargs)
 
         if self.published:
-            restore_play_file(this)
+            restore_play_file(self)
         else:
-            hide_play_file(this)
+            hide_play_file(self)
         return
 
     def delete(self, *args, **kwargs):
