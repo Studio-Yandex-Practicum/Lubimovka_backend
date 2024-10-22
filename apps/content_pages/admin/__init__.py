@@ -10,5 +10,5 @@ from apps.content_pages.admin.content_blocks import (
     PlaysBlockAdmin,
     VideosBlockAdmin,
 )
-from apps.content_pages.admin.content_items import Link
+from apps.content_pages.admin.content_items import EmbedCode, Link
 from apps.content_pages.admin.contents import BaseContentInline, BaseContentPageAdmin

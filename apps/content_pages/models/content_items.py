@@ -53,3 +53,13 @@ class Link(AbstractItemWithTitle):
     class Meta:
         verbose_name = "Ссылка с описанием"
         verbose_name_plural = "Ссылки с описанием"
+
+
+class EmbedCode(AbstractItemWithTitle):
+    """Embeddable iframe link."""
+
+    code = models.TextField(max_length=500, verbose_name="Тег iframe для встраиваемого содержимого")
+
+    class Meta:
+        verbose_name = "Встраиваемое содержимое"
+        verbose_name_plural = "Встраиваемое содержимое"

@@ -104,7 +104,7 @@ class AbstractContent(models.Model):
             "app_label": "content_pages",
             "model__in": (
                 "contentunitrichtext",
-                "eventsblock",
+                "embedcode" "eventsblock",
                 "imagesblock",
                 "link",
                 "personsblock",

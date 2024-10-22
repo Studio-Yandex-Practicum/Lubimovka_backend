@@ -7,6 +7,7 @@ from apps.content_pages.serializers.content_blocks import (
 )
 from apps.content_pages.serializers.content_items import (
     ContentUnitRichTextSerializer,
+    EmbdedCodeSerializer,
     ExtendedPersonSerializer,
     LinkSerializer,
     OrderedImageSerializer,

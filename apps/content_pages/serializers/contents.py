@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 from apps.content_pages.models import (
     ContentUnitRichText,
+    EmbedCode,
     EventsBlock,
     ImagesBlock,
     Link,
@@ -12,6 +13,7 @@ from apps.content_pages.models import (
 )
 from apps.content_pages.serializers import (
     ContentUnitRichTextSerializer,
+    EmbdedCodeSerializer,
     EventsBlockSerializer,
     ImagesBlockSerializer,
     LinkSerializer,
@@ -22,6 +24,7 @@ from apps.content_pages.serializers import (
 
 CONTENT_OBJECT_SERIALIZER_PAIRS = {
     ContentUnitRichText: ContentUnitRichTextSerializer,
+    EmbedCode: EmbdedCodeSerializer,
     EventsBlock: EventsBlockSerializer,
     ImagesBlock: ImagesBlockSerializer,
     Link: LinkSerializer,
