@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from apps.content_pages.models import Link, OrderedImage, OrderedVideo
+from apps.content_pages.models import EmbedCode, Link, OrderedImage, OrderedVideo
 from apps.core.mixins import GetDomainMixin
 from apps.core.serializers import PersonRoleSerializer
 from apps.library.serializers import AuthorForPlaySerializer as LibraryPlayAuthorSerializer
@@ -63,6 +63,15 @@ class LinkSerializer(serializers.ModelSerializer):
             "title",
             "description",
             "url",
+        )
+
+
+class EmbdedCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmbedCode
+        fields = (
+            "title",
+            "code",
         )
 
 
