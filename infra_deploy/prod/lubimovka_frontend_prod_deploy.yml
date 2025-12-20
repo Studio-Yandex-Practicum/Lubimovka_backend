@@ -10,7 +10,7 @@ services:
       - TZ=Europe/Moscow
       - VALIDATION=http
       - SUBDOMAINS=www
-      - EXTRA_DOMAINS=2022.lubimovka.ru
+      - EXTRA_DOMAINS=2022.lubimovka.ru,lubimovka.ru,www.lubimovka.ru
     env_file:
       - .env-prod
     networks:
