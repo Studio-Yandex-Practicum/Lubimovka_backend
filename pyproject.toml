@@ -28,7 +28,7 @@ description = "Lubimovka + Ya.Practicum backend"
 authors = ["Ya.Practicum Students"]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.9.2"
 Django = "3.2.25"
 django-environ = "^0.8.1"
 django-cors-headers = "^3.11.0"
@@ -57,15 +57,16 @@ certifi = "^2024.8.30"
 pip = "^24.0"
 werkzeug = "3.1.4"
 urllib3 = "^2.6.0"
-requests = "^2.32.3"
-cryptography = "^43.0.1"
+requests = "^2.32.4"
+cryptography = "^44.0.1"
 sqlparse = "^0.5.0"
 easy-thumbnails = "^2.8.5"
 idna = "^3.7"
 black = "^24.4.0"
+protobuf = "4.25.8"
 
 [tool.poetry.dev-dependencies]
-pre-commit = "^2.15.0"
+pre-commit = "^3.8.0"
 isort = "^5.9.3"
 flake8 = "^3.9.2"
 ipython = "^8.10.0"
