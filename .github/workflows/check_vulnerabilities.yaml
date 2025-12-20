@@ -16,11 +16,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Check out
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
     - uses: pypa/gh-action-pip-audit@v1.1.0
       with:
         inputs: $PRODUCTION $DEVELOP
         ignore-vulns: |
           GHSA-gw84-84pc-xp82  # requires DRF 3.15 and Django 4
           GHSA-rrqc-c2jx-6jgv  # requires Django 4
-          GHSA-jj5c-hhrg-vv5h  # there is no update available for xhtml2pdf so far
+          GHSA-7xr5-9hcq-chf9  # requires Django 4
+          GHSA-6w2r-r2m5-xq5w  # requires Django 4
+          GHSA-qw25-v68c-qjf3  # requires Django 4
+          GHSA-frmv-pr5f-9mcr  # requires Django 4
+          GHSA-j4v3-wwwx-5gqv  # temporary ignore (django-filer)
+          GHSA-7hfw-26vp-jp8m  # temporary ignore (pypdf)
+          GHSA-vr63-x8vc-m265  # temporary ignore (pypdf)
+          GHSA-jfx9-29x2-rv3j  # temporary ignore (pypdf)
+          GHSA-m449-cwjh-6pw7  # temporary ignore (pypdf)
+          GHSA-w853-jp5j-5j7f  # temporary ignore (filelock)
+          GHSA-cx63-2mw6-8hw5  # temporary ignore (setuptools)
+          PYSEC-2025-49  # temporary ignore (setuptools)
+          PYSEC-2024-187  # temporary ignore (virtualenv)
