@@ -114,9 +114,12 @@
         ssh_key_comment: Github
         ssh_key_file: .ssh/id_github_rsa
       register: user
-    # Если версия пакета polkit на сервере не поддерживает конфигурирование
-    # с помощью файлов .pkla, Github не сможет запустить сервисы,
-    # обеспечивающие работу контейнеров Docker проекта
+    # Пакет polkit нужен для предоставления пользователю github доступа к запуску сервисов
+    # Сценарий для версии polkit, работающей с файлами rules
+    - name: Lookup Polkit .pkla folder
+      ansible.builtin.stat:
+        path: /etc/polkit-1/localauthority.conf.d/
+      register: polkit_pkla_folder
     - name: Setup polkit part 1
       copy:
         owner: github
@@ -124,6 +127,7 @@
           [Configuration]
           AdminIdentities=unix-group:servicemanagers
         dest: /etc/polkit-1/localauthority.conf.d/60-github-service.conf
+      when: polkit_pkla_folder.stat.exists
     - name: Setup polkit part 2
       copy:
         owner: github
@@ -133,6 +137,29 @@
           Action=org.freedesktop.systemd1.*
           ResultAny=yes
         dest:  /etc/polkit-1/localauthority/50-local.d/10-com.lubimovka.github.service.pkla
+      when: polkit_pkla_folder.stat.exists
+    # Сценарий для версии polkit, работающей с файлами rules
+    - name: Lookup Polkit rules folder
+      ansible.builtin.stat:
+        path: /etc/polkit-1/rules.d/
+      register: polkit_rules_folder
+    - name: Setup polkit with rules
+      copy:
+        owner: github
+        content: |
+          polkit.addRule(function(action, subject) {
+              if (action.id.startsWith("org.freedesktop.systemd1.") &&
+                  subject.isInGroup("servicemanagers")){
+                  return polkit.Result.YES;
+              }
+          });
+        dest: /etc/polkit-1/rules.d/10-com.lubimovka.github.service.rules
+      when: polkit_rules_folder.stat.exists
+    - name: Assert some polkit installation was found
+      ansible.builtin.assert:
+        that: polkit_pkla_folder.stat.exists or polkit_rules_folder.stat.exists
+        fail_msg: "No Polkit installation found. Install Polkit on the server manually."
+        success_msg: "Polkit folder found"
     - name: Copy public key
       copy:
         owner: "{{ user.name }}"

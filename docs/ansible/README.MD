@@ -59,7 +59,12 @@ ansible-playbook --ask-become-pass --user <username> -i inventory.yaml playbook.
 
 В результате работы сценария на локальной машине в папке `key` будет получен приватный ключ машины, которой разрешен доступ к серверу. Его нужно поместить в секрет Github под именем `SSH_PRIVATE_KEY` среды `stage` или `test`, а с локальной машины полностью удалить.
 
-В секрет Github под именем `SSH_KNOWN_HOSTS` нужно поместить электронную подпись (fingerprint) виртуальной машины. Её можно найти в файле `known_hosts` на машине, с которой вы подключались к серверу. В начале подписи имя или IP-адрес сервера должны совпадать с указанным в секрете `HOST`.
+В секрет Github под именем `SSH_KNOWN_HOSTS` нужно поместить электронную подпись (fingerprint) виртуальной машины. Её можно найти в файле `known_hosts` на машине, с которой вы подключались к серверу. Если имена серверов в файле захешированы, можно воспользоваться командой
+```bash
+ssh-keygen -F stage.dev.lubimovka.ru
+```
+
+В начале подписи имя или IP-адрес сервера должны совпадать с указанным в секрете `HOST`.
 Пример электронной подписи сайта:
 ```
 stage.dev.lubimovka.ru ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQCSwnogrjphZAEaBZtK4HrkO2Y7VuDBuWvibLSXgVR0o/d7SrNSaj9TFbAhkKBQAhZ8TH9MCbr9D54HSoj0Drv0ihIe+2RYkEK10bMrllc42EIycSCiXhEi2T4lrvOBx/QOxUJYv0J8GnakI/v/TkMVQRXmzxT/apZtElc6VsMcVsuMUf1WcHxzb5NBrdCIaQbA0uh5yFotLw9TZgXMomjEcjNTb+rcbNDcppqJ34M+m2Wr825A6s+O6PU2hwm1TDTNFseeQ/HNnjtic/kT/OWql1q2NABZXoJUvrMe5UYa4EkTyPaM9R/cbSBJeub+Z2r7eqEWqlJCgrPsyXLZz5hLw2Ufa6nB8YYNdkoZaAlR1ZxY8RON4nSSWbFVJTCkElcebnc8nCRXPNAZZZ4fQ+LObC+H87/1XwlnKZndd7HYYNo5hYE2ZzEPrDdhw3LiaaSjdqC6nv/sDRH6NfLcdxTttlFM82tUFqMRMo/hS9ejH3BxLfxhUIIZVla0ad6izGU=
