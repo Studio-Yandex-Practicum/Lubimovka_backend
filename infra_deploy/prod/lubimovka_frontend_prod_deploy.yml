@@ -10,17 +10,20 @@ services:
       - TZ=Europe/Moscow
       - VALIDATION=http
       - SUBDOMAINS=www
-      - EXTRA_DOMAINS=2022.lubimovka.ru,lubimovka.ru,www.lubimovka.ru
+      - EXTRA_DOMAINS=2022.lubimovka.ru,lubimovka.ru,www.lubimovka.ru,readers.lubimovka.art
     env_file:
       - .env-prod
     networks:
       - prod_swag_network
+      - readers_network
     volumes:
       - ./swag/swag_nginx_prod.conf:/config/nginx/site-confs/default
+      - ./swag/readers_prod.conf:/config/nginx/site-confs/readers_prod.conf
       - swag_volume_prod:/config
       - ./logs/swag_logs/:/config/log/
       - static_value_prod:/config/prod/static/
       - ./media:/config/prod/media/
+      - /lubimovka-readers/static_content/:/lubimovka-readers/static_content/
     ports:
       - 443:443
       - 80:80
@@ -40,6 +43,9 @@ services:
 networks:
   prod_swag_network:
     name: prod_swag_network
+    external: true
+  readers_network:
+    name: readers_network
     external: true
 
 volumes:

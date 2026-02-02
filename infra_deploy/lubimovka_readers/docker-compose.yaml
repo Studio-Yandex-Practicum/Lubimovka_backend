@@ -1,0 +1,16 @@
+    services:
+      lubimovka-readers:
+        image: ghcr.io/alytidae/lubimovka-readers:latest
+        container_name: lubimovka_readers
+        restart: always
+        volumes:
+          - ./data/db.sqlite3:/app/db.sqlite3
+          - ./secrets/google.json:/app/google.json
+          - ./static_content:/app/staticfiles
+        env_file:
+          - .env
+        networks:
+          - readers_network
+    networks:
+      readers_network:
+        name: readers_network
