@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+    nginx:
+        build: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      - stage_swag_network
+      - test_swag_network
+
+networks:
+    stage_swag_network:
+        external: true
+    test_swag_network:
+        external: true
